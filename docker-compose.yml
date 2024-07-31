@@ -12,8 +12,16 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
-
+      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0       
+  redis:
+    image: 'redis:6.2'
+    networks:
+      - hmpps
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
   app:
     build:
       context: .
@@ -28,6 +36,7 @@ services:
     environment:
       - PRODUCT_ID=UNASSIGNED
       - REDIS_ENABLED=false
+      - REDIS_HOST=localhost
       - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
       # These will need to match new creds in the seed auth service auth
@@ -39,6 +48,7 @@ services:
       - TOKEN_VERIFICATION_API_URL=http://hmpps-auth:8080/auth
       - TOKEN_VERIFICATION_ENABLED=false
       - INGRESS_URL=http://localhost:3000
+      - AUDIT_ENABLED=false
 
 networks:
   hmpps:
