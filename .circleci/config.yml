@@ -124,10 +124,10 @@ workflows:
           name: helm_lint
       - hmpps/build_docker:
           name: build_docker
-          # filters:
-          #   branches:
-          #     only:
-          #       - main
+          filters:
+            branches:
+              only:
+                - main
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -135,10 +135,10 @@ workflows:
           pipeline_id: <<pipeline.id>>
           pipeline_number: <<pipeline.number>>
           context: hmpps-common-vars
-          # filters:
-          #   branches:
-          #     only:
-          #       - main
+          filters:
+            branches:
+              only:
+                - main
           requires:
             - helm_lint
             - unit_test

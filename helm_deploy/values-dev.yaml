@@ -13,8 +13,6 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
-    REDIS_HOST: "no_value"
-    REDIS_AUTH_TOKEN: "no_value"
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
