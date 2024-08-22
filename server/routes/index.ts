@@ -11,8 +11,14 @@ export default function routes({ auditService }: Services): Router {
 
   get('/', async (req, res, next) => {
     await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-
-    res.render('pages/index')
+    const orderList = [
+      { title: 'Test Form 1', status: 'Draft' },
+      { title: 'Test Form 2', status: 'Draft' },
+      { title: 'Test Form 3', status: 'Draft' },
+      { title: 'Test Form 4', status: 'Submitted' },
+      { title: 'Test Form 5', status: 'Submitted' },
+    ]
+    res.render('pages/index', { orderList })
   })
 
   return router
