@@ -59,7 +59,6 @@ export default function routes({ auditService }: Services): Router {
   get('/section/:formId/:sectionName', async (req, res, next) => {
     await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
     let section = {}
-    console.log(req.params)
     if (req.params.sectionName === 'identifyNumbers') {
       section = {
         id: '1',
