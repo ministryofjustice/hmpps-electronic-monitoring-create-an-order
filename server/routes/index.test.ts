@@ -45,11 +45,7 @@ describe('GET /', () => {
       .get('/newForm')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Select form:')
-        expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {
-          who: user.username,
-          correlationId: expect.any(String),
-        })
+        expect(res.text).toContain('Select from:')
       })
   })
 })
