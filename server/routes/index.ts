@@ -2,79 +2,30 @@ import { type RequestHandler, Router } from 'express'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
-import { Page } from '../services/auditService'
+import FormController from '../controllers/formController'
+import SectionController from '../controllers/sectionController'
+import QuestionController from '../controllers/questionController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({ auditService }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const formController = new FormController(auditService)
+  const sectionController = new SectionController()
+  const questionController = new QuestionController()
 
-  get('/', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-    const orderList = [
-      { title: 'Test Form 1', status: 'Draft' },
-      { title: 'Test Form 2', status: 'Draft' },
-      { title: 'Test Form 3', status: 'Draft' },
-      { title: 'Test Form 4', status: 'Submitted' },
-      { title: 'Test Form 5', status: 'Submitted' },
-    ]
-    res.render('pages/index', { orderList })
-  })
+  get('/', formController.getForms)
 
-  get('/newForm', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
+  get('/newForm', formController.getNewFormPage)
 
-    res.render('pages/newForm', {})
-  })
+  post('/newForm', formController.postNewForm)
 
-  post('/newForm', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
+  post('/createForm', formController.createForm)
 
-    if (req.body.formType === 'HDC') res.render('pages/hdc')
-    else res.render('pages/WIP', {})
-  })
+  get('/section/:formId/:sectionName', sectionController.getSection)
 
-  post('/createForm', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-    let form = {}
-
-    if (req.body.formType === 'HDC') {
-      form = {
-        id: '1',
-        title: 'Home Detention Curfew (HDC) form',
-        sections: [
-          { ref: '/section/abc/identifyNumbers', description: 'Identify numbers', isComplete: true },
-          { ref: 'x', description: 'About the device wearer', isComplete: false },
-          { ref: 'x', description: 'About the HDC', isComplete: false },
-          { ref: 'x', description: 'Other monitoring conditions', isComplete: false },
-          { ref: 'x', description: 'Installations and risk information', isComplete: false },
-          { ref: 'x', description: 'About organisations', isComplete: false },
-        ],
-      }
-      res.render('pages/details', { form })
-    } else res.render('pages/WIP', {})
-  })
-
-  get('/section/:formId/:sectionName', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-    let section = {}
-    if (req.params.sectionName === 'identifyNumbers') {
-      section = {
-        id: '1',
-        title: 'Identify numbers questions',
-        questions: [
-          { ref: '/sections/identifyNumbers/nomisId', description: 'NOMIS ID' },
-          { ref: 'x', description: 'PNC ID', value: 'mock ID' },
-        ],
-      }
-      res.render('pages/sectionDetails', { section })
-    } else res.render('pages/WIP', {})
-  })
-
-  get('/sections/identifyNumbers/nomisId', async (req, res, next) => {
-    res.render('pages/sections/identifyNumbers/nomisId', {})
-  })
+  get('/sections/:sectionName/:questionName', questionController.getSection)
 
   return router
 }
