@@ -18,12 +18,12 @@ export default class FormController {
   }
 
   getNewFormPage: RequestHandler = (req: Request, res: Response) => {
-    res.render('pages/newForm', {})
+    res.render('pages/newForm')
   }
 
   postNewForm: RequestHandler = (req: Request, res: Response) => {
     if (req.body.formType === 'HDC') res.render('pages/hdc')
-    else res.render('pages/WIP', {})
+    else res.render('pages/WIP')
   }
 
   createForm: RequestHandler = async (req: Request, res: Response): Promise<void> => {
@@ -48,6 +48,6 @@ export default class FormController {
         ],
       }
       res.render('pages/details', { form })
-    } else res.render('pages/WIP', {})
+    } else res.render('pages/WIP')
   }
 }
