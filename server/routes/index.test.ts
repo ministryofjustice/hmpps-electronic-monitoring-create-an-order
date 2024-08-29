@@ -37,7 +37,8 @@ describe('GET /', () => {
         })
       })
   })
-
+})
+describe('GET /newForm', () => {
   it('should render create new form page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
@@ -48,18 +49,8 @@ describe('GET /', () => {
         expect(res.text).toContain('Select from:')
       })
   })
-
-  it('should render create new form page', () => {
-    auditService.logPageView.mockResolvedValue(null)
-
-    return request(app)
-      .get('/newForm')
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Select from:')
-      })
-  })
-
+})
+describe('POST /newForm', () => {
   it('should render form start page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
@@ -73,7 +64,8 @@ describe('GET /', () => {
         )
       })
   })
-
+})
+describe('POST /createForm', () => {
   it('should render form details page after create', () => {
     auditService.logPageView.mockResolvedValue(null)
 
@@ -85,7 +77,8 @@ describe('GET /', () => {
         expect(res.text).toContain('Home Detention Curfew (HDC) form')
       })
   })
-
+})
+describe('GET /section/:formId/:sectionName', () => {
   it('should render section details page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
@@ -96,7 +89,8 @@ describe('GET /', () => {
         expect(res.text).toContain('Identify numbers questions')
       })
   })
-
+})
+describe('GET /section/:sectionName/question/:questionName', () => {
   it('should render question page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
