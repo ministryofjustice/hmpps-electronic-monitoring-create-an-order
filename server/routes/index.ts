@@ -25,7 +25,7 @@ export default function routes({ auditService }: Services): Router {
 
   get('/section/:formId/:sectionName', sectionController.getSection)
 
-  get('/sections/:sectionName/:questionName', questionController.getSection)
+  get('/section/:sectionName/question/:questionName', questionController.getSection)
 
   return router
 }

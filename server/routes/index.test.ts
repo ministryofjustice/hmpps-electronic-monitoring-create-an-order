@@ -38,7 +38,7 @@ describe('GET /', () => {
       })
   })
 
-  it('should render create new form page page', () => {
+  it('should render create new form page', () => {
     auditService.logPageView.mockResolvedValue(null)
 
     return request(app)
@@ -46,6 +46,65 @@ describe('GET /', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Select from:')
+      })
+  })
+
+  it('should render create new form page', () => {
+    auditService.logPageView.mockResolvedValue(null)
+
+    return request(app)
+      .get('/newForm')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Select from:')
+      })
+  })
+
+  it('should render form start page', () => {
+    auditService.logPageView.mockResolvedValue(null)
+
+    return request(app)
+      .post('/newForm')
+      .send({ formType: 'HDC' })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain(
+          'Home Detention Curfew(HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to.',
+        )
+      })
+  })
+
+  it('should render form details page after create', () => {
+    auditService.logPageView.mockResolvedValue(null)
+
+    return request(app)
+      .post('/createForm')
+      .send({ formType: 'HDC' })
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Home Detention Curfew (HDC) form')
+      })
+  })
+
+  it('should render section details page', () => {
+    auditService.logPageView.mockResolvedValue(null)
+
+    return request(app)
+      .get('/section/abc/identifyNumbers')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Identify numbers questions')
+      })
+  })
+
+  it('should render question page', () => {
+    auditService.logPageView.mockResolvedValue(null)
+
+    return request(app)
+      .get('/section/identifyNumbers/question/nomisId')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Identify Numbers')
       })
   })
 })
