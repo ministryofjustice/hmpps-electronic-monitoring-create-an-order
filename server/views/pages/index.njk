@@ -15,6 +15,7 @@
   items: [{
     text: 'New Form',
     classes: 'govuk-button',
+    id: 'btnNewForm',
     href: '/newForm'
   }]
 }) }}
@@ -87,8 +88,8 @@
 <br /> 
 <br /> 
 
-
-  <ul class="govuk-task-list">
+<div id="formList">
+    <ul class="govuk-task-list">
     {% for order in orderList %}
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
@@ -112,5 +113,8 @@
     {% endfor %}
   </ul>
   
+  </div>
+
+
   {{ pagination | safe }}
 {% endblock %}
