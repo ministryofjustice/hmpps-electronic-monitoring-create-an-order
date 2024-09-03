@@ -13,18 +13,16 @@
     text: 'Identify Numbers'
   }
 }) }}
-
-
-
-
- <form action="/newForm" method="post" >
+ <form action="/section/next" method="post" >
 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 {{ govukInput({
   label: {
     text: "National offender management information system (NOMIS ID)"
   },
-  id: "intput-nomisId",
+  id: "input-nomisId",
   name: "nomisId",
+  value: formData.nomisId,
+  errorMessage: error.nomisId,
   classes: "govuk-input--width-10"
 }) }}
 {{govukButton({

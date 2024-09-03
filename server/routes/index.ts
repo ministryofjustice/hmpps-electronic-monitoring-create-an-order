@@ -27,5 +27,7 @@ export default function routes({ auditService }: Services): Router {
 
   get('/section/:sectionName/question/:questionName', questionController.getSection)
 
+  post('/section/next', questionController.postNext)
+
   return router
 }
