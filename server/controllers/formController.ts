@@ -34,6 +34,7 @@ export default class FormController {
     })
     let form = {}
 
+    req.session.formData = { id: '1' }
     if (req.body.formType === 'HDC') {
       form = {
         id: '1',
@@ -47,6 +48,7 @@ export default class FormController {
           { ref: 'x', description: 'About organisations', isComplete: false },
         ],
       }
+
       res.render('pages/details', { form })
     } else res.render('pages/WIP')
   }
