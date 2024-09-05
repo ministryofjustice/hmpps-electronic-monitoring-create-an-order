@@ -3,8 +3,9 @@ import InputValidator from '../services/inputValidator'
 
 export default class QuestionController {
   getSection: RequestHandler = (req: Request, res: Response) => {
-    req.session.returnTo = `pages/sections/${req.params.sectionName}/${req.params.questionName}`
-    res.render(`pages/sections/${req.params.sectionName}/${req.params.questionName}`, {
+    const page = `pages/sections/${req.params.sectionName}/${req.params.questionName}`
+    req.session.returnTo = page
+    res.render(page, {
       formData: req.session.formData,
     })
   }

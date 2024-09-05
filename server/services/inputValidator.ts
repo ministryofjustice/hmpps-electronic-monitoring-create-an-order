@@ -12,7 +12,7 @@ export default class InputValidator {
     const section = currentPage[2]
     const question = currentPage[3]
     const sectionValidator = this.validators[section]
-    const questionValidator = sectionValidator.questionValidators[question]
+    const questionValidator = sectionValidator?.questionValidators[question]
     if (sectionValidator === undefined || questionValidator === undefined) return { success: false }
 
     return questionValidator(req)
