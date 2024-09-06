@@ -95,7 +95,7 @@ describe('GET /section/:sectionName/question/:questionName', () => {
     auditService.logPageView.mockResolvedValue(null)
 
     return request(app)
-      .get('/section/identifyNumbers/question/nomisId')
+      .get('/section/identifynumbers/question/nomisId')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Identify Numbers')

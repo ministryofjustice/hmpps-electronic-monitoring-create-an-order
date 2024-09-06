@@ -131,6 +131,4 @@ context('Sign In', () => {
     cy.get('.govuk-summary-list__key').contains('PND ID').should('exist')
     cy.get('.govuk-summary-list__value').contains('mockPndId').should('exist')
   })
-
-  // TODO test user input validation and next button
 })
