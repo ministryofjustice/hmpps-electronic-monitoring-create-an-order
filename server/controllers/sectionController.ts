@@ -10,11 +10,11 @@ export default class SectionController {
         title: 'Identify numbers questions',
         questions: [
           {
-            ref: '/section/identifyNumbers/question/nomisId',
+            ref: '/section/identifynumbers/question/nomisId',
             description: 'Nomis ID',
             value: req.session.formData.nomisId,
           },
-          { ref: '/section/identifyNumbers/question/pndId', description: 'PND ID', value: req.session.formData.pndId },
+          { ref: '/section/identifynumbers/question/pndId', description: 'PND ID', value: req.session.formData.pndId },
         ],
       }
       res.render('pages/sectionDetails', { section, formData: req.session.formData })
