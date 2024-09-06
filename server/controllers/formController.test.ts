@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import FormController from './formController'
 import AuditService from '../services/auditService'
 
-jest.mock('../services/AuditService')
+jest.mock('../services/auditService')
 describe('Form Controller', () => {
   let formController: FormController
   let mockAuditService: jest.Mocked<AuditService>
