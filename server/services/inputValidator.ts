@@ -4,7 +4,7 @@ import IdentifyNumbersValidators from './validators/IdentifyNumbersValidators'
 
 export default class InputValidator {
   static validators: { [id: string]: SectionValidator } = {
-    identifyNumbers: new IdentifyNumbersValidators(),
+    identifynumbers: new IdentifyNumbersValidators(),
   }
 
   static validateInput(req: Request): ValidationResult {

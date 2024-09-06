@@ -37,7 +37,7 @@ describe('Identify Numbers Validator', () => {
       req.body.nomisId = 'mockNomisId'
       const result = validator.ValidateNomisId(req)
       expect(result.success).toEqual(true)
-      expect(result.nextPath).toEqual('/section/identifyNumbers/question/pndId')
+      expect(result.nextPath).toEqual('/section/identifynumbers/question/pndId')
       expect(req.session.formData.nomisId).toEqual('mockNomisId')
     })
   })

@@ -15,7 +15,7 @@ export default class IdentifyNumbersValidators implements SectionValidator {
     else {
       req.session.formData.nomisId = nomisId
       result.success = true
-      result.nextPath = '/section/identifyNumbers/question/pndId'
+      result.nextPath = '/section/identifynumbers/question/pndId'
     }
     return result
   }
