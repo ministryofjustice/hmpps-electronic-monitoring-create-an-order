@@ -43,7 +43,7 @@ describe('Form Controller', () => {
   })
 
   describe('getForms', () => {
-    it('should return list forms available to user', async () => {
+    it('should return a list of forms available to the user', async () => {
       await formController.getForms(req, res, null)
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
@@ -74,7 +74,7 @@ describe('Form Controller', () => {
       expect(res.render).toHaveBeenCalledWith('pages/hdc')
     })
 
-    it('should redirect to WIP page ', () => {
+    it('should redirect to WIP page', () => {
       req.body = { formType: 'notHDC' }
       formController.postNewForm(req, res, null)
       expect(res.render).toHaveBeenCalledWith('pages/WIP')
@@ -102,7 +102,7 @@ describe('Form Controller', () => {
             id: '1',
             title: 'Home Detention Curfew (HDC) form',
             sections: [
-              { ref: '/section/abc/identifyNumbers', description: 'Identify numbers', isComplete: true },
+              { ref: '/section/abc/identityNumbers', description: 'Identity numbers', isComplete: true },
               { ref: 'x', description: 'About the device wearer', isComplete: false },
               { ref: 'x', description: 'About the HDC', isComplete: false },
               { ref: 'x', description: 'Other monitoring conditions', isComplete: false },
@@ -114,7 +114,7 @@ describe('Form Controller', () => {
       )
     })
 
-    it('should redirect to WIP page ', async () => {
+    it('should redirect to WIP page', async () => {
       req.body = { formType: 'notHDC' }
       await formController.createForm(req, res, null)
       expect(res.render).toHaveBeenCalledWith('pages/WIP')

@@ -60,7 +60,7 @@ describe('POST /newForm', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
-          'Home Detention Curfew(HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to.',
+          'Home Detention Curfew (HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to.',
         )
       })
   })
@@ -83,10 +83,10 @@ describe('GET /section/:formId/:sectionName', () => {
     auditService.logPageView.mockResolvedValue(null)
 
     return request(app)
-      .get('/section/abc/identifyNumbers')
+      .get('/section/abc/identityNumbers')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Identify numbers questions')
+        expect(res.text).toContain('Identity numbers questions')
       })
   })
 })
@@ -95,10 +95,10 @@ describe('GET /section/:sectionName/question/:questionName', () => {
     auditService.logPageView.mockResolvedValue(null)
 
     return request(app)
-      .get('/section/identifynumbers/question/nomisId')
+      .get('/section/identitynumbers/question/nomisId')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Identify Numbers')
+        expect(res.text).toContain('Identity Numbers')
       })
   })
 })

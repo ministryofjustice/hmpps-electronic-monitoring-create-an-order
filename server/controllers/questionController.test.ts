@@ -74,7 +74,7 @@ describe('Question Controller', () => {
       )
     })
 
-    it('should redirect to next page if validator successed', async () => {
+    it('should redirect to next page if validator succeeded', async () => {
       req.session.formData = { id: '1', nomisId: 'mockId' }
       req.session.returnTo = 'pages/sections/mockSection/mockQuestion'
       InputValidator.validateInput = jest

@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import IdentifyNumbersValidators from './validators/IdentifyNumbersValidators'
+import IdentityNumbersValidators from './validators/IdentityNumbersValidators'
 import InputValidator from './inputValidator'
 import { SectionValidator } from '../interfaces/inputValidation'
 
@@ -7,7 +7,7 @@ describe('Input Validator', () => {
   let req: Request
   let sectionValidator: jest.Mocked<SectionValidator>
   beforeEach(() => {
-    sectionValidator = new IdentifyNumbersValidators() as jest.Mocked<SectionValidator>
+    sectionValidator = new IdentityNumbersValidators() as jest.Mocked<SectionValidator>
     InputValidator.validators = {
       mockSection: sectionValidator,
     }

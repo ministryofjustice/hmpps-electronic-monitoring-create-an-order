@@ -4,17 +4,17 @@ export default class SectionController {
   getSection: RequestHandler = (req: Request, res: Response) => {
     if (req.session.formData === undefined) req.session.formData = { id: '1' }
     let section = {}
-    if (req.params.sectionName === 'identifyNumbers') {
+    if (req.params.sectionName === 'identityNumbers') {
       section = {
         id: '1',
-        title: 'Identify numbers questions',
+        title: 'Identity numbers questions',
         questions: [
           {
-            ref: '/section/identifynumbers/question/nomisId',
+            ref: '/section/identitynumbers/question/nomisId',
             description: 'Nomis ID',
             value: req.session.formData.nomisId,
           },
-          { ref: '/section/identifynumbers/question/pndId', description: 'PND ID', value: req.session.formData.pndId },
+          { ref: '/section/identitynumbers/question/pndId', description: 'PND ID', value: req.session.formData.pndId },
         ],
       }
       res.render('pages/sectionDetails', { section, formData: req.session.formData })

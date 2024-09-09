@@ -40,7 +40,7 @@ export default class FormController {
         id: '1',
         title: 'Home Detention Curfew (HDC) form',
         sections: [
-          { ref: '/section/abc/identifyNumbers', description: 'Identify numbers', isComplete: true },
+          { ref: '/section/abc/identityNumbers', description: 'Identity numbers', isComplete: true },
           { ref: 'x', description: 'About the device wearer', isComplete: false },
           { ref: 'x', description: 'About the HDC', isComplete: false },
           { ref: 'x', description: 'Other monitoring conditions', isComplete: false },

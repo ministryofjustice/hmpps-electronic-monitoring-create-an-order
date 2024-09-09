@@ -25,14 +25,14 @@ context('Sign In', () => {
     indexPage.newFormButton().should('exist')
   })
 
-  it('New form button redirect user to new form page', () => {
+  it('New form button redirects user to new form page', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newFormButton().click()
     cy.url().should('to.match', /newForm$/)
   })
 
-  it('Search input and button should exisit', () => {
+  it('Search input and button should exist', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.searchInput().should('exist')
@@ -41,7 +41,7 @@ context('Sign In', () => {
 
   // TODO: test search function working
 
-  it('Form list should exisit', () => {
+  it('Form list should exist', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.formTable().should('exist')

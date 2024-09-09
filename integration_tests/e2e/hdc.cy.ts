@@ -8,7 +8,7 @@ context('Sign In', () => {
     cy.task('stubSignIn')
   })
 
-  it('Should load HDC form start page page', () => {
+  it('Should load HDC form start page', () => {
     cy.signIn()
     cy.visit('/newForm')
     const newformPage = Page.verifyOnPage(NewFormPage)
@@ -17,10 +17,10 @@ context('Sign In', () => {
     newformPage.nextButton().click()
     const hdcPage = Page.verifyOnPage(HDCPage)
     hdcPage.startButton().should('exist')
-    cy.get('h1').contains('Home Detention Curfew(HDC) from').should('exist')
+    cy.get('h1').contains('Home Detention Curfew (HDC) form').should('exist')
     cy.get('p')
       .contains(
-        'Home Detention Curfew(HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to. The person will wear a device which will monitor if they follow the rules set out in their curfew.',
+        'Home Detention Curfew (HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to. The person will wear a device which will monitor if they follow the rules set out in their curfew.',
       )
       .should('exist')
   })
@@ -35,7 +35,7 @@ context('Sign In', () => {
     hdcPage.startButton().click()
     cy.get('h1').contains('Home Detention Curfew (HDC) form').should('exist')
     cy.get('.govuk-task-list').should('exist')
-    cy.get('a:contains("Identify numbers")').should('exist')
+    cy.get('a:contains("Identity numbers")').should('exist')
     cy.get('a:contains("About the device wearer")').should('exist')
     cy.get('a:contains("About the HDC")').should('exist')
     cy.get('a:contains("Other monitoring conditions")').should('exist')
@@ -44,7 +44,7 @@ context('Sign In', () => {
   })
 
   // TODO test each section links
-  it('Should go to Identifify numbers section page', () => {
+  it('Should go to identity numbers section page', () => {
     cy.signIn()
     cy.visit('/newForm')
     const newformPage = Page.verifyOnPage(NewFormPage)
@@ -54,7 +54,7 @@ context('Sign In', () => {
     hdcPage.startButton().click()
     cy.get('h1').contains('Home Detention Curfew (HDC) form').should('exist')
     cy.get('.govuk-task-list').should('exist')
-    cy.get('a:contains("Identify numbers")').click()
-    cy.get('h1').contains('Identify numbers questions').should('exist')
+    cy.get('a:contains("Identity numbers")').click()
+    cy.get('h1').contains('Identity numbers questions').should('exist')
   })
 })

@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { ValidationResult, SectionValidator, IQuestionValidator } from '../../interfaces/inputValidation'
 
-export default class IdentifyNumbersValidators implements SectionValidator {
+export default class IdentityNumbersValidators implements SectionValidator {
   questionValidators: { [id: string]: IQuestionValidator } = {
     nomisId: this.ValidateNomisId,
     pndId: this.ValidatePndID,
@@ -15,7 +15,7 @@ export default class IdentifyNumbersValidators implements SectionValidator {
     else {
       req.session.formData.nomisId = nomisId
       result.success = true
-      result.nextPath = '/section/identifynumbers/question/pndId'
+      result.nextPath = '/section/identitynumbers/question/pndId'
     }
     return result
   }
@@ -28,7 +28,7 @@ export default class IdentifyNumbersValidators implements SectionValidator {
     else {
       req.session.formData.pndId = pndId
       result.success = true
-      result.nextPath = `/section/${req.session.formData.id}/identifyNumbers`
+      result.nextPath = `/section/${req.session.formData.id}/identityNumbers`
     }
     return result
   }

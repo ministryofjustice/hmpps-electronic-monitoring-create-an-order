@@ -42,7 +42,7 @@ context('Sign In', () => {
       .contains('EM Licence Variation Notification Form')
       .should('exist')
     newformPage.radioItem().children('.govuk-radios__label').contains('HDC Agency Notification Form').should('exist')
-    newformPage.radioItem().children('.govuk-radios__label').contains('Master HMCTS EMS form April').should('exist')
+    newformPage.radioItem().children('.govuk-radios__label').contains('Master HMCTS EMS Form April').should('exist')
     newformPage.radioItem().children('.govuk-radios__label').contains('PSCS Address Variation Form').should('exist')
   })
 
@@ -55,6 +55,6 @@ context('Sign In', () => {
     newformPage.nextButton().click()
     cy.url().should('to.match', /newForm$/)
 
-    cy.get('h1').contains('Home Detention Curfew(HDC) from').should('exist')
+    cy.get('h1').contains('Home Detention Curfew (HDC) form').should('exist')
   })
 })

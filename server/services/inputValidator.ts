@@ -1,10 +1,10 @@
 import { Request } from 'express'
 import { SectionValidator, ValidationResult } from '../interfaces/inputValidation'
-import IdentifyNumbersValidators from './validators/IdentifyNumbersValidators'
+import IdentityNumbersValidators from './validators/IdentityNumbersValidators'
 
 export default class InputValidator {
   static validators: { [id: string]: SectionValidator } = {
-    identifynumbers: new IdentifyNumbersValidators(),
+    identitynumbers: new IdentityNumbersValidators(),
   }
 
   static validateInput(req: Request): ValidationResult {
