@@ -1,0 +1,36 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% block content %}
+
+<div class="homepage-content">
+  {{ mojPageHeaderActions({
+  heading: {
+    text: 'Identity Numbers'
+  }
+}) }}
+ <form action="/section/next" method="post" >
+<input type="hidden" name="_csrf" value="{{ csrfToken }}">
+{{ govukInput({
+  label: {
+    text: "Police national database (PND ID)"
+  },
+  id: "input-pndId",
+  name: "pndId",
+  value: formData.pndId,
+  errorMessage: error.pndId,
+  classes: "govuk-input--width-10"
+}) }}
+{{govukButton({
+        text: 'Next',
+        type: 'submit'
+      })}}
+</form>
+
+</div>
+
+{% endblock %}

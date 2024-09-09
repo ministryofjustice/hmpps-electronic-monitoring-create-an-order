@@ -1,0 +1,66 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + "- HDC Form" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block content %}
+{{ govukBackLink({
+  text: "Back",
+  href: "/newForm"
+}) }}
+ {{ mojPageHeaderActions({
+  heading: {
+    text: 'Home Detention Curfew (HDC) form'
+  }  
+}) }}
+
+<div id=''>
+    <h2 id="" tabindex="-1" class="govuk-heading-m"> Overview</h2>
+    <p>
+        Home Detention Curfew (HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to.
+        The person will wear a device which will monitor if they follow the rules set out in their curfew.
+
+    </p>
+    <form action="/createForm" method="post" >
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <input type="hidden" name="formType" value="HDC">
+        {{govukButton({
+            text: 'Start Form',
+            type: 'submit'
+        })}}
+    </form>
+    <br />
+    <h2 tabindex="-1" class="govuk-heading-m">Before submitting a HDC form</h2>
+    <p>
+        Before the HDC form is completed you require:
+        <ul>
+
+            <li>
+                Users to send a copy of the device wearer's licence to sarah.smith@emailaddress.co.uk on the day of release
+            </li>
+        </ul>
+    </p>
+
+    <h2 tabindex="-1" class="govuk-heading-m">Where to send this form</h2>
+    <p>
+        You require users to email the completed HDC form to:
+        <ul>
+            <li>
+                Electronic Monitoring Service (EMS) at LPAdmin@ems.co.uk
+            </li>
+            <li>
+                Probation provider
+            </li>
+            <li>
+            Home police force
+            </li>
+        </ul>
+    </p>
+
+
+</div>
+
+{% endblock %}
