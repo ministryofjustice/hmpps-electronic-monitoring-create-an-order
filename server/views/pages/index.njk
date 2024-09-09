@@ -2,10 +2,119 @@
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
-
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{%- from "moj/components/search/macro.njk" import mojSearch -%}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% block content %}
 
-  <h1>This site is under construction...</h1>
-  <p>Please check back later when there is content to view.</p>
+<div class="homepage-content">
+  {{ mojPageHeaderActions({
+  heading: {
+    text: 'Electronic Monitoring Order'
+  },
+  items: [{
+    text: 'New Form',
+    classes: 'govuk-button',
+    id: 'btnNewForm',
+    href: '/newForm'
+  }]
+}) }}
 
+
+</div>
+{{ mojSearch({
+    action: '#',
+    method: 'get',
+    input: {
+      id: 'keyword',
+      name: 'keyword'
+    },
+    label: {
+      text: 'Find an order',
+      classes: 'govuk-!-font-weight-bold'
+    },
+    hint: {
+      text: 'You can search by subject name'
+    },
+    button: {
+      text: 'Search'
+    }
+  }) }}
+ 
+ {% if previous != 0 %}
+  {% set previousButton = { text: 'Previous', href:'' } %}
+{% endif %}
+
+{% if next != 0 %}
+  {% set nextButton = { text: 'Next', href: ''} %}
+{% endif %}
+
+{% set pagination %}
+  {{ mojPagination({
+  items: [{
+    text: '1',
+    href: '/page=1',
+    selected: true
+  }, {
+    text: '2',
+    href: '/page=2'
+    
+  }, {
+    text: '3',
+    href: '/page=3'
+  }, {
+    type: 'dots'
+  }, {
+    text: '5',
+    href: '/page=5'
+  }],
+  results: {
+    count: 30,
+    from: 10,
+    to: 20,
+    text: 'pages'
+  },
+  previous: {
+    text: 'Previous',
+    href: ''
+  },
+  next: {
+    text: 'Next',
+    href: ''
+  }
+}) }}
+{% endset %}
+
+<br /> 
+<br /> 
+
+<div id="formList">
+    <ul class="govuk-task-list">
+    {% for order in orderList %}
+    <li class="govuk-task-list__item govuk-task-list__item--with-link">
+      <div class="govuk-task-list__name-and-hint">
+        <a class="govuk-link govuk-task-list__link" href="#" aria-describedby="company-details-1-status">
+          {{order.title}}
+        </a>
+      </div>
+      {% if order.status == 'Submitted' %}
+        <div class="govuk-task-list__status" >
+          Submitted
+        </div>
+      {% else %}               
+        <div class="govuk-task-list__status" >
+           <strong class="govuk-tag govuk-tag--grey">
+            Draft
+          </strong>
+        </div>
+      {% endif %}
+      
+    </li>
+    {% endfor %}
+  </ul>
+  
+  </div>
+
+
+  {{ pagination | safe }}
 {% endblock %}
