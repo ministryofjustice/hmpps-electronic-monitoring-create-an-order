@@ -16,7 +16,7 @@
     text: 'New Form',
     classes: 'govuk-button',
     id: 'btnNewForm',
-    href: '/newForm'
+    href: '/order/create'
   }]
 }) }}
 
@@ -93,13 +93,15 @@
     {% for order in orderList %}
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
-        <a class="govuk-link govuk-task-list__link" href="#" aria-describedby="company-details-1-status">
+        <a class="govuk-link govuk-task-list__link" href="/order/{{order.id}}/summary" aria-describedby="company-details-1-status">
           {{order.title}}
         </a>
       </div>
       {% if order.status == 'Submitted' %}
-        <div class="govuk-task-list__status" >
-          Submitted
+        <div class="govuk-task-list__status">
+          <strong class="govuk-tag govuk-tag--green">
+            Submitted
+          </strong>
         </div>
       {% else %}               
         <div class="govuk-task-list__status" >
