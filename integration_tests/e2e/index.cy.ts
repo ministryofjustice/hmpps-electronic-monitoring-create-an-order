@@ -29,7 +29,7 @@ context('Sign In', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newFormButton().click()
-    cy.url().should('to.match', /newForm$/)
+    cy.url().should('to.match', /order\/create$/)
   })
 
   it('Search input and button should exist', () => {
