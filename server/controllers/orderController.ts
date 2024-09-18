@@ -13,7 +13,6 @@ export default class OrderController {
     const order = await this.orderService.getOrder(id)
 
     res.render('pages/order/summary', {
-      title: 'Apply for electronic monitoring',
       order,
     })
   }
