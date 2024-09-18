@@ -1,17 +1,26 @@
 import { dataAccess } from '../data'
 import AuditService from './auditService'
+import OrderSearchService from './orderSearchService'
+import OrderService from './orderService'
+import DeviceWearerService from './deviceWearerService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
+  const orderService = new OrderService()
+  const orderSearchService = new OrderSearchService()
+  const deviceWearerService = new DeviceWearerService()
 
   return {
     applicationInfo,
     auditService,
+    deviceWearerService,
+    orderService,
+    orderSearchService,
   }
 }
 
 export type Services = ReturnType<typeof services>
 
-export { AuditService }
+export { AuditService, DeviceWearerService, OrderService, OrderSearchService }

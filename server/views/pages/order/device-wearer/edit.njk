@@ -1,0 +1,118 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/order/" + deviceWearer.orderId + "/summary"
+}) }}
+
+<div class="homepage-content">
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "About the device wearer"
+    }
+  }) }}
+</div>
+
+{% call govukFieldset({
+  legend: {
+    text: "Name of the device wearer",
+    classes: "govuk-fieldset__legend--l",
+    isPageHeading: false
+  }
+}) %}
+
+  {{ govukInput({
+    label: {
+      text: "First name",
+      classes: "govuk-label--s"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "first-name",
+    name: "firstName",
+    autocomplete: "name given-name",
+    value: deviceWearer.firstName
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Last name",
+      classes: "govuk-label--s"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "last-name",
+    name: "lastName",
+    autocomplete: "name family-name",
+    value: deviceWearer.lastName
+  }) }}
+
+  {{ govukInput({
+    label: {
+      text: "Preferred name",
+      classes: "govuk-label--s"
+    },
+    hint: {
+        text: "For example a nickname or alias the device wearer is known as"
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "preferred-name",
+    name: "preferredName",
+    autocomplete: "name nickname",
+    value: deviceWearer.preferredName
+  }) }}
+
+{% endcall %}
+
+{{ govukRadios({
+  name: "gender",
+  fieldset: {
+    legend: {
+      text: "Gender",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  items: [
+    {
+      value: "male",
+      text: "Male"
+    },
+    {
+      value: "female",
+      text: "Female"
+    },
+    {
+      value: "non-binary",
+      text: "Non-binary"
+    },
+    {
+      value: "unknown",
+      text: "Don't Know"
+    },
+    {
+      value: "self-identify",
+      text: "Self identify"
+    }
+  ],
+  value: deviceWearer.gender
+}) }}
+
+  <div class="govuk-button-group">
+    {{ govukButton({
+        text: "Continue"
+    }) }}
+  
+    <a class="govuk-link" href="/order/{{ deviceWearer.orderId }}/summary">Save and return to order section menu</a>
+  </div>
+
+{% endblock %}
