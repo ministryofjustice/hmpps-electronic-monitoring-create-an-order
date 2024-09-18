@@ -1,0 +1,121 @@
+@startuml
+class Order {
+  id: uuid
+  user_id: string
+  type: string
+  created_date: string
+}
+
+class DeviceWearer {
+   id: uuid
+   order_id: uuid
+   firstName: string
+   lastName: string
+   gender: string
+   date_of_birth: date
+}
+
+class ResponsibleAdult {
+    id: uuid
+    order_id: uuid
+    firstName: string
+    lastName: string
+    relationship: string
+    contact_number: string
+}
+
+class DeviceWearerContactDetails {
+    id: uuid
+    order_id: uuid
+    contact_number: string
+}
+
+class DeviceWearerAddress {
+    id: uuid
+    order_id: uuid
+    address_line_1: string
+    'Add additional attributes
+}
+
+class AlternativeContactDetails {
+    id: uuid
+    order_id: uuid
+    firstName: string
+    lastName: string
+    relationship: string
+    contact_number: string
+}
+
+class MonitoringConditions {
+    id: uuid
+    order_id: uuid
+    acquisitive_crime: boolean
+    dapol: boolean
+    curfew: boolean
+    exclusion_zone: boolean
+    trail: boolean
+    mandatory_attendance: boolean
+    alcohol: boolean
+}
+
+class TrailMonitoringConditions {
+    id: uuid
+    order_id: uuid
+    start_date: string
+    end_date: string
+}
+
+class ExclusionZoneConditions {
+    id: uuid
+    order_id: uuid
+    start_date: string
+    end_date: string
+    description: string
+    'Assume path to S3?
+    file: string
+}
+
+class AttendanceMonitoringConditions {
+    id: uuid
+    order_id: uuid
+    start_date: string
+    end_date: string
+}
+
+class AttendanceMonitoringAppointment {
+    id: uuid
+    order_id: uuid
+    purpose: string
+    day: string
+    start_time: string
+    end_time: string
+    address_line_1: string
+    'Add additional address attributes
+}
+
+class AlcoholMonitoringConditions {
+    id: uuid
+    order_id: uuid
+    type: string
+    start_date: string
+    end_date: string
+    installation_date: string
+    installation_time: string
+    'Foreign key to DeviceWearerAddress?
+    installation_address: uuid
+}
+
+Order "1" *-- "1" DeviceWearer
+Order "1" *-- "1" DeviceWearerContactDetails
+Order "1" *-- "0..1" ResponsibleAdult
+Order "1" *-- "0..1" AlternativeContactDetails
+Order "1" *-- "1..*" DeviceWearerAddress
+Order "1" *-- "1" MonitoringConditions
+Order "1" *-- "0..1" TrailMonitoringConditions
+Order "1" *-- "0..1" ExclusionZoneConditions
+Order "1" *-- "0..1" AttendanceMonitoringConditions
+Order "1" *-- "0..*" AttendanceMonitoringAppointment
+Order "1" *-- "0..1" AlcoholMonitoringConditions
+
+
+@enduml

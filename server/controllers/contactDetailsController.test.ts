@@ -128,7 +128,7 @@ describe('ContactDetailsController', () => {
       )
     })
 
-    it('should redirect to the view page if the order is in the submittted state', async () => {
+    it('should redirect to the view page if the order is in the submitted state', async () => {
       mockOrderService.getOrder.mockResolvedValue(
         Promise.resolve({
           id: '123456789',
