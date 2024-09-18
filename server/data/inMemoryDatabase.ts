@@ -58,6 +58,7 @@ const deviceWearers: Array<DeviceWearer> = [
 export const getOrders = () => orders
 
 export const getOrder = (id: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const order = orders.find(order => order.id === id)
 
   if (order) {
@@ -68,6 +69,7 @@ export const getOrder = (id: string) => {
 }
 
 export const getDeviceWearer = (orderId: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const deviceWearer = deviceWearers.find(deviceWearer => deviceWearer.orderId === orderId)
 
   if (deviceWearer) {
@@ -77,4 +79,4 @@ export const getDeviceWearer = (orderId: string) => {
   throw new Error(`Could not find device wearer for order: ${orderId}`)
 }
 
-export { DeviceWearer }
+export { DeviceWearer, Order }

@@ -2,10 +2,53 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
+import OrderService from '../services/orderService'
+import DeviceWearerService from '../services/deviceWearerService'
+import { DeviceWearer, Order } from '../data/inMemoryDatabase'
+import OrderSearchService from '../services/orderSearchService'
 
 jest.mock('../services/auditService')
+jest.mock('../services/orderService')
+jest.mock('../services/orderSearchService')
+jest.mock('../services/deviceWearerService')
 
 const auditService = new AuditService(null) as jest.Mocked<AuditService>
+const orderSearchService = new OrderSearchService() as jest.Mocked<OrderSearchService>
+const orderService = new OrderService() as jest.Mocked<OrderService>
+const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
+
+const mockSubmittedOrder: Order = {
+  id: '123456789',
+  status: 'Submitted',
+  title: 'My new order',
+  deviceWearer: {
+    isComplete: true,
+  },
+  contactDetails: {
+    isComplete: true,
+  },
+}
+
+const mockDraftOrder: Order = {
+  id: '123456789',
+  status: 'Draft',
+  title: 'My new order',
+  deviceWearer: {
+    isComplete: true,
+  },
+  contactDetails: {
+    isComplete: true,
+  },
+}
+
+const mockDeviceWearer: DeviceWearer = {
+  orderId: '123456789',
+  firstName: 'John',
+  lastName: 'Smith',
+  dateOfBirth: '',
+  preferredName: '',
+  gender: 'male',
+}
 
 let app: Express
 
@@ -13,6 +56,9 @@ beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       auditService,
+      orderService,
+      deviceWearerService,
+      orderSearchService,
     },
     userSupplier: () => user,
   })
@@ -23,82 +69,91 @@ afterEach(() => {
 })
 
 describe('GET /', () => {
-  it('should render index page', () => {
+  it('should render order search page', () => {
     auditService.logPageView.mockResolvedValue(null)
+    orderSearchService.searchOrders.mockResolvedValue([])
 
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Electronic Monitoring Order')
-        expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {
+        expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
           who: user.username,
           correlationId: expect.any(String),
         })
       })
   })
 })
-describe('GET /newForm', () => {
-  it('should render create new form page', () => {
+
+describe('GET /order/:orderId/summary', () => {
+  it('should render order summary page', () => {
     auditService.logPageView.mockResolvedValue(null)
+    orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
     return request(app)
-      .get('/newForm')
+      .get('/order/123456789/summary')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Select from:')
+        expect(res.text).toContain('Apply for electronic monitoring')
       })
   })
 })
-describe('POST /newForm', () => {
-  it('should render form start page', () => {
+
+describe('GET /order/:orderId/device-wearer', () => {
+  it('should render device wearer page', () => {
     auditService.logPageView.mockResolvedValue(null)
+    orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+    deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
 
     return request(app)
-      .post('/newForm')
-      .send({ formType: 'HDC' })
+      .get('/order/123456789/device-wearer')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain(
-          'Home Detention Curfew (HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to.',
-        )
+        expect(res.text).toContain('About the device wearer')
       })
   })
 })
-describe('POST /createForm', () => {
-  it('should render form details page after create', () => {
+
+describe('GET /order/:orderId/device-wearer/edit', () => {
+  it('should render editable device wearer page', () => {
     auditService.logPageView.mockResolvedValue(null)
+    orderService.getOrder.mockResolvedValue(mockDraftOrder)
+    deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
 
     return request(app)
-      .post('/createForm')
-      .send({ formType: 'HDC' })
+      .get('/order/123456789/device-wearer/edit')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Home Detention Curfew (HDC) form')
+        expect(res.text).toContain('About the device wearer')
       })
   })
 })
-describe('GET /section/:formId/:sectionName', () => {
-  it('should render section details page', () => {
+
+describe('GET /order/:orderId/contact-details', () => {
+  it('should render contact details page', () => {
     auditService.logPageView.mockResolvedValue(null)
+    orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
     return request(app)
-      .get('/section/abc/identityNumbers')
+      .get('/order/123456789/contact-details')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Identity numbers questions')
+        expect(res.text).toContain('Contact details')
       })
   })
 })
-describe('GET /section/:sectionName/question/:questionName', () => {
-  it('should render question page', () => {
+
+describe('GET /order/:orderId/contact-details/edit', () => {
+  it('should render editable contact details page', () => {
     auditService.logPageView.mockResolvedValue(null)
+    orderService.getOrder.mockResolvedValue(mockDraftOrder)
 
     return request(app)
-      .get('/section/identitynumbers/question/nomisId')
+      .get('/order/123456789/contact-details/edit')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Identity Numbers')
+        expect(res.text).toContain('Contact details')
       })
   })
 })
