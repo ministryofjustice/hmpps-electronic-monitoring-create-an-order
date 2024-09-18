@@ -15,4 +15,37 @@ export default class OrderController {
       order,
     })
   }
+
+  confirmDelete: RequestHandler = async (req: Request, res: Response) => {
+    const id = req.params.orderId
+    const order = await this.orderService.getOrder(id)
+
+    if (order.status === 'Submitted') {
+      res.redirect('/order/delete/failed')
+    } else {
+      res.render('pages/order/delete-confirm', {
+        order,
+      })
+    }
+  }
+
+  delete: RequestHandler = async (req: Request, res: Response) => {
+    const id = req.params.orderId
+    const order = await this.orderService.getOrder(id)
+
+    if (order.status === 'Submitted') {
+      res.redirect('/order/delete/failed')
+    } else {
+      await this.orderService.deleteOrder(id)
+      res.redirect('/order/delete/success')
+    }
+  }
+
+  deleteFailed: RequestHandler = async (req: Request, res: Response) => {
+    res.render('pages/order/delete-failed')
+  }
+
+  deleteSuccess: RequestHandler = async (req: Request, res: Response) => {
+    res.render('pages/order/delete-success')
+  }
 }
