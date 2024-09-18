@@ -5,6 +5,7 @@ export interface OrderSearchInput {
 }
 
 export default class InMemoryOrderSearchService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async searchOrders(input: OrderSearchInput) {
     return Promise.resolve(getOrders())
   }

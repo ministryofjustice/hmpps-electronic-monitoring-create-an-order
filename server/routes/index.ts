@@ -17,6 +17,7 @@ export default function routes({
   const router = Router()
 
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
