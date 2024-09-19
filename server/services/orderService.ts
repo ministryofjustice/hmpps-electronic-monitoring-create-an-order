@@ -6,7 +6,7 @@ export default class OrderService {
     return Promise.resolve(order)
   }
 
-  // eslint-disable-next-line no-useless-escape
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async deleteOrder(id: string) {
     // Do nothing for now
     return Promise.resolve()
