@@ -100,6 +100,61 @@ describe('GET /order/:orderId/summary', () => {
   })
 })
 
+describe('GET /order/delete/failed', () => {
+  it('should render a failed deletion page', () => {
+    return request(app)
+      .get('/order/delete/failed')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('You cannot delete an application that has been submitted')
+      })
+  })
+})
+
+describe('GET /order/delete/success', () => {
+  it('should render a successful deletion page', () => {
+    return request(app)
+      .get('/order/delete/success')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('The application form has been deleted successfully')
+      })
+  })
+})
+
+describe('GET /order/:orderId/delete', () => {
+  it('should render a confirmation page for a draft order', () => {
+    orderService.getOrder.mockResolvedValue(mockDraftOrder)
+
+    return request(app)
+      .get('/order/123456789/delete')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('Are you sure you want to delete this order?')
+      })
+  })
+
+  it('should redirect to a failed page for a submitted order', () => {
+    orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+
+    return request(app).get('/order/123456789/delete').expect(302).expect('Location', '/order/delete/failed')
+  })
+})
+
+describe('POST /order/:orderId/delete', () => {
+  it('should delete a draft order and redirect to the success page', () => {
+    orderService.getOrder.mockResolvedValue(mockDraftOrder)
+
+    return request(app).post('/order/123456789/delete').expect(302).expect('Location', '/order/delete/success')
+  })
+
+  it('should not delete a submitted order and redirect to the failed page', () => {
+    orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+
+    return request(app).post('/order/123456789/delete').expect(302).expect('Location', '/order/delete/failed')
+  })
+})
+
 describe('GET /order/:orderId/device-wearer', () => {
   it('should render device wearer page', () => {
     auditService.logPageView.mockResolvedValue(null)

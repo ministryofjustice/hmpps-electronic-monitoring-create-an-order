@@ -26,9 +26,19 @@ export default function routes({
   const contactDetailsController = new ContactDetailsController(auditService, orderService)
 
   get('/', orderSearchController.search)
+
+  // Order
+  get('/order/delete/success', orderController.deleteSuccess)
+  get('/order/delete/failed', orderController.deleteFailed)
   get('/order/:orderId/summary', orderController.summary)
+  get('/order/:orderId/delete', orderController.confirmDelete)
+  post('/order/:orderId/delete', orderController.delete)
+
+  // Device Wearer
   get('/order/:orderId/device-wearer', deviceWearerController.view)
   get('/order/:orderId/device-wearer/edit', deviceWearerController.edit)
+
+  // Contact Details
   get('/order/:orderId/contact-details', contactDetailsController.view)
   get('/order/:orderId/contact-details/edit', contactDetailsController.edit)
 
