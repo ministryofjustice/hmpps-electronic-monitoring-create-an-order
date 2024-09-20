@@ -14,9 +14,9 @@ const properCaseName = (name: string): string => (isBlank(name) ? '' : name.spli
 export const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
-export const initialiseName = (fullName?: string): string | null => {
+export const initialiseName = (fullName?: string): string | undefined => {
   // this check is for the authError page
-  if (!fullName) return null
+  if (!fullName) return undefined
 
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`

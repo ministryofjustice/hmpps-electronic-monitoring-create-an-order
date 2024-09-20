@@ -6,13 +6,22 @@ import OrderService from '../services/orderService'
 import DeviceWearerService from '../services/deviceWearerService'
 import { DeviceWearer, Order } from '../data/inMemoryDatabase'
 import OrderSearchService from '../services/orderSearchService'
+import HmppsAuditClient from '../data/hmppsAuditClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../services/orderSearchService')
 jest.mock('../services/deviceWearerService')
+jest.mock('../data/hmppsAuditClient')
+jest.mock('../data/restClient')
 
-const auditService = new AuditService(null) as jest.Mocked<AuditService>
+const hmppsAuditClient = new HmppsAuditClient({
+  queueUrl: '',
+  enabled: true,
+  region: '',
+  serviceName: '',
+}) as jest.Mocked<HmppsAuditClient>
+const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditService>
 const orderSearchService = new OrderSearchService() as jest.Mocked<OrderSearchService>
 const orderService = new OrderService() as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
@@ -70,7 +79,7 @@ afterEach(() => {
 
 describe('GET /', () => {
   it('should render order search page', () => {
-    auditService.logPageView.mockResolvedValue(null)
+    auditService.logPageView.mockResolvedValue()
     orderSearchService.searchOrders.mockResolvedValue([])
 
     return request(app)
@@ -88,7 +97,7 @@ describe('GET /', () => {
 
 describe('GET /order/:orderId/summary', () => {
   it('should render order summary page', () => {
-    auditService.logPageView.mockResolvedValue(null)
+    auditService.logPageView.mockResolvedValue()
     orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
     return request(app)
@@ -157,7 +166,7 @@ describe('POST /order/:orderId/delete', () => {
 
 describe('GET /order/:orderId/device-wearer', () => {
   it('should render device wearer page', () => {
-    auditService.logPageView.mockResolvedValue(null)
+    auditService.logPageView.mockResolvedValue()
     orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
     deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
 
@@ -172,7 +181,7 @@ describe('GET /order/:orderId/device-wearer', () => {
 
 describe('GET /order/:orderId/device-wearer/edit', () => {
   it('should render editable device wearer page', () => {
-    auditService.logPageView.mockResolvedValue(null)
+    auditService.logPageView.mockResolvedValue()
     orderService.getOrder.mockResolvedValue(mockDraftOrder)
     deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
 
@@ -187,7 +196,7 @@ describe('GET /order/:orderId/device-wearer/edit', () => {
 
 describe('GET /order/:orderId/contact-details', () => {
   it('should render contact details page', () => {
-    auditService.logPageView.mockResolvedValue(null)
+    auditService.logPageView.mockResolvedValue()
     orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
     return request(app)
@@ -201,7 +210,7 @@ describe('GET /order/:orderId/contact-details', () => {
 
 describe('GET /order/:orderId/contact-details/edit', () => {
   it('should render editable contact details page', () => {
-    auditService.logPageView.mockResolvedValue(null)
+    auditService.logPageView.mockResolvedValue()
     orderService.getOrder.mockResolvedValue(mockDraftOrder)
 
     return request(app)

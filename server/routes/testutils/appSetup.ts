@@ -10,8 +10,10 @@ import type { Services } from '../../services'
 import AuditService from '../../services/auditService'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
+import HmppsAuditClient from '../../data/hmppsAuditClient'
 
 jest.mock('../../services/auditService')
+jest.mock('../../data/hmppsAuditClient')
 
 export const user: HmppsUser = {
   name: 'FIRST LAST',
@@ -23,6 +25,13 @@ export const user: HmppsUser = {
   staffId: 1234,
   userRoles: [],
 }
+
+const hmppsAuditClient = new HmppsAuditClient({
+  queueUrl: '',
+  enabled: true,
+  region: '',
+  serviceName: '',
+}) as jest.Mocked<HmppsAuditClient>
 
 export const flashProvider = jest.fn()
 
@@ -57,7 +66,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => H
 export function appWithAllRoutes({
   production = false,
   services = {
-    auditService: new AuditService(null) as jest.Mocked<AuditService>,
+    auditService: new AuditService(hmppsAuditClient) as jest.Mocked<AuditService>,
   },
   userSupplier = () => user,
 }: {

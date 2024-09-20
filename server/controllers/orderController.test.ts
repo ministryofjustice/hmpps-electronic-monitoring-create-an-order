@@ -1,8 +1,13 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import AuditService from '../services/auditService'
 import OrderController from './orderController'
 import OrderService from '../services/orderService'
 import { Order } from '../data/inMemoryDatabase'
+import HmppsAuditClient from '../data/hmppsAuditClient'
+
+jest.mock('../services/auditService')
+jest.mock('../services/orderService')
+jest.mock('../data/hmppsAuditClient')
 
 const mockSubmittedOrder: Order = {
   id: '123456789',
@@ -28,17 +33,23 @@ const mockDraftOrder: Order = {
   },
 }
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
 describe('OrderController', () => {
+  let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
   let req: Request
   let res: Response
+  let next: NextFunction
 
   beforeEach(() => {
-    mockAuditService = new AuditService(null) as jest.Mocked<AuditService>
+    mockAuditClient = new HmppsAuditClient({
+      queueUrl: '',
+      enabled: true,
+      region: '',
+      serviceName: '',
+    }) as jest.Mocked<HmppsAuditClient>
+    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService() as jest.Mocked<OrderService>
     orderController = new OrderController(mockAuditService, mockOrderService)
 
@@ -74,13 +85,15 @@ describe('OrderController', () => {
       set: jest.fn(),
       send: jest.fn(),
     }
+
+    jest.fn()
   })
 
   describe('summary', () => {
     it('should render a summary of the order', async () => {
       mockOrderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
-      await orderController.summary(req, res, null)
+      await orderController.summary(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/summary',
@@ -95,7 +108,7 @@ describe('OrderController', () => {
     it('should render a confirmation page for a draft order', async () => {
       mockOrderService.getOrder.mockResolvedValue(mockDraftOrder)
 
-      await orderController.confirmDelete(req, res, null)
+      await orderController.confirmDelete(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-confirm', {
         order: mockDraftOrder,
@@ -105,7 +118,7 @@ describe('OrderController', () => {
     it('should redirect to a failed page for a submitted order', async () => {
       mockOrderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
-      await orderController.confirmDelete(req, res, null)
+      await orderController.confirmDelete(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/delete/failed`)
     })
@@ -115,7 +128,7 @@ describe('OrderController', () => {
     it('should delete the order and redirect to a success page for a draft order', async () => {
       mockOrderService.getOrder.mockResolvedValue(mockDraftOrder)
 
-      await orderController.delete(req, res, null)
+      await orderController.delete(req, res, next)
 
       expect(mockOrderService.deleteOrder).toHaveBeenCalledWith(mockDraftOrder.id)
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/success')
@@ -124,7 +137,7 @@ describe('OrderController', () => {
     it('should not delete the order and reditect to a failed page for a submitted order', async () => {
       mockOrderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
-      await orderController.delete(req, res, null)
+      await orderController.delete(req, res, next)
 
       expect(mockOrderService.deleteOrder).toHaveBeenCalledTimes(0)
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/failed')
@@ -133,14 +146,14 @@ describe('OrderController', () => {
 
   describe('deleteFailed', () => {
     it('should render the failed view', async () => {
-      await orderController.deleteFailed(req, res, null)
+      await orderController.deleteFailed(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-failed')
     })
   })
 
   describe('deleteSuccess', () => {
     it('should render the success view', async () => {
-      await orderController.deleteSuccess(req, res, null)
+      await orderController.deleteSuccess(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-success')
     })
   })

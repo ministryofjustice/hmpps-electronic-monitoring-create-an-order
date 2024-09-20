@@ -1,19 +1,30 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import AuditService from '../services/auditService'
 import ContactDetailsController from './contactDetailsController'
 import OrderService from '../services/orderService'
+import HmppsAuditClient from '../data/hmppsAuditClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
+jest.mock('../data/hmppsAuditClient')
+
 describe('ContactDetailsController', () => {
+  let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let contactDetailsController: ContactDetailsController
   let req: Request
   let res: Response
+  let next: NextFunction
 
   beforeEach(() => {
-    mockAuditService = new AuditService(null) as jest.Mocked<AuditService>
+    mockAuditClient = new HmppsAuditClient({
+      queueUrl: '',
+      enabled: true,
+      region: '',
+      serviceName: '',
+    }) as jest.Mocked<HmppsAuditClient>
+    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService() as jest.Mocked<OrderService>
     contactDetailsController = new ContactDetailsController(mockAuditService, mockOrderService)
 
@@ -30,6 +41,7 @@ describe('ContactDetailsController', () => {
         authSource: 'auth',
       },
     }
+
     // @ts-expect-error stubbing res.render
     res = {
       locals: {
@@ -49,6 +61,8 @@ describe('ContactDetailsController', () => {
       set: jest.fn(),
       send: jest.fn(),
     }
+
+    next = jest.fn()
   })
 
   describe('view contact details', () => {
@@ -67,7 +81,7 @@ describe('ContactDetailsController', () => {
         }),
       )
 
-      await contactDetailsController.view(req, res, null)
+      await contactDetailsController.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/contact-details/view',
@@ -94,7 +108,7 @@ describe('ContactDetailsController', () => {
         }),
       )
 
-      await contactDetailsController.view(req, res, null)
+      await contactDetailsController.view(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-details/edit')
     })
@@ -116,7 +130,7 @@ describe('ContactDetailsController', () => {
         }),
       )
 
-      await contactDetailsController.edit(req, res, null)
+      await contactDetailsController.edit(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/contact-details/edit',
@@ -143,7 +157,7 @@ describe('ContactDetailsController', () => {
         }),
       )
 
-      await contactDetailsController.edit(req, res, null)
+      await contactDetailsController.edit(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-details')
     })
