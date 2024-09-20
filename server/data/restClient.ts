@@ -70,7 +70,7 @@ export default class RestClient {
 
       return raw ? result : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error)
+      const sanitisedError = sanitiseError(error as UnsanitisedError)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
       throw sanitisedError
     }
@@ -100,7 +100,7 @@ export default class RestClient {
 
       return raw ? result : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error)
+      const sanitisedError = sanitiseError(error as UnsanitisedError)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: '${method.toUpperCase()}'`)
       throw sanitisedError
     }
@@ -142,7 +142,7 @@ export default class RestClient {
 
       return raw ? result : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error)
+      const sanitisedError = sanitiseError(error as UnsanitisedError)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
       throw sanitisedError
     }
