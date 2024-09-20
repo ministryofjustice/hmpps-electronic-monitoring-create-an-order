@@ -9,7 +9,7 @@ export default class OrderService {
     const result = await this.apiClient.get({
       path: '/api/CreateForm',
       query: {
-        title: 'MyNewForm'
+        title: 'MyNewForm',
       },
       token: accessToken,
     })

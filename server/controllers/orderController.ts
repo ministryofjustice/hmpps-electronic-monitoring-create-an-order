@@ -8,8 +8,8 @@ export default class OrderController {
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
-    const user = res.locals.user;
-    const token = user.token;
+    const { user } = res.locals
+    const { token } = user
     const order = await this.orderService.createOrder(token)
 
     res.redirect(`/order/${order.id}/summary`)
