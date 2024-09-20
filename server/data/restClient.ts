@@ -148,7 +148,7 @@ export default class RestClient {
     }
   }
 
-  async stream({ path = null, headers = {} }: StreamRequest = {}): Promise<Readable> {
+  async stream({ path = undefined, headers = {}, token }: StreamRequest): Promise<Readable> {
     logger.info(`${this.name} streaming: ${path}`)
     return new Promise((resolve, reject) => {
       superagent
