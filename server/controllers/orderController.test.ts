@@ -4,7 +4,6 @@ import OrderController from './orderController'
 import OrderService from '../services/orderService'
 import { Order } from '../data/inMemoryDatabase'
 import HmppsAuditClient from '../data/hmppsAuditClient'
-import RestClient from '../data/restClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -37,7 +36,6 @@ const mockDraftOrder: Order = {
 describe('OrderController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-  let mockRestClient: jest.Mocked<RestClient>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
   let req: Request
@@ -52,7 +50,7 @@ describe('OrderController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
+    mockOrderService = new OrderService() as jest.Mocked<OrderService>
     orderController = new OrderController(mockAuditService, mockOrderService)
 
     req = {

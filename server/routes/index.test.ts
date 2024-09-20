@@ -7,7 +7,6 @@ import DeviceWearerService from '../services/deviceWearerService'
 import { DeviceWearer, Order } from '../data/inMemoryDatabase'
 import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
-import RestClient from '../data/restClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -16,7 +15,6 @@ jest.mock('../services/deviceWearerService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
 
-const cemoApiClient = new RestClient('', { url: '', timeout: { response: 0, deadline: 0 }, agent: { timeout: 0 } })
 const hmppsAuditClient = new HmppsAuditClient({
   queueUrl: '',
   enabled: true,
@@ -25,7 +23,7 @@ const hmppsAuditClient = new HmppsAuditClient({
 }) as jest.Mocked<HmppsAuditClient>
 const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditService>
 const orderSearchService = new OrderSearchService() as jest.Mocked<OrderSearchService>
-const orderService = new OrderService(cemoApiClient) as jest.Mocked<OrderService>
+const orderService = new OrderService() as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
 
 const mockSubmittedOrder: Order = {

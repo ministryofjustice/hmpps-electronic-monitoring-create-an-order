@@ -3,7 +3,6 @@ import AuditService from '../services/auditService'
 import ContactDetailsController from './contactDetailsController'
 import OrderService from '../services/orderService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
-import RestClient from '../data/restClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -12,7 +11,6 @@ jest.mock('../data/hmppsAuditClient')
 describe('ContactDetailsController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-  let mockRestClient: jest.Mocked<RestClient>
   let mockOrderService: jest.Mocked<OrderService>
   let contactDetailsController: ContactDetailsController
   let req: Request
@@ -27,7 +25,7 @@ describe('ContactDetailsController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
+    mockOrderService = new OrderService() as jest.Mocked<OrderService>
     contactDetailsController = new ContactDetailsController(mockAuditService, mockOrderService)
 
     req = {
