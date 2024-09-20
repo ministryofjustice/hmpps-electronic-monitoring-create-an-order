@@ -14,6 +14,7 @@ interface Request {
   headers?: Record<string, string>
   responseType?: string
   raw?: boolean
+  token: string
 }
 
 interface RequestWithBody extends Request {
@@ -25,6 +26,7 @@ interface StreamRequest {
   path?: string
   headers?: Record<string, string>
   errorLogger?: (e: UnsanitisedError) => void
+  token: string
 }
 
 export default class RestClient {
@@ -33,7 +35,6 @@ export default class RestClient {
   constructor(
     private readonly name: string,
     private readonly config: ApiConfig,
-    private readonly token: string,
   ) {
     this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
   }
@@ -52,6 +53,7 @@ export default class RestClient {
     headers = {},
     responseType = '',
     raw = false,
+    token,
   }: Request): Promise<Response> {
     logger.info(`${this.name} GET: ${path}`)
     try {
@@ -63,7 +65,7 @@ export default class RestClient {
           if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(this.token, { type: 'bearer' })
+        .auth(token, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.timeoutConfig())
@@ -78,7 +80,16 @@ export default class RestClient {
 
   private async requestWithBody<Response = unknown>(
     method: 'patch' | 'post' | 'put',
-    { path, query = {}, headers = {}, responseType = '', data = {}, raw = false, retry = false }: RequestWithBody,
+    {
+      path,
+      query = {},
+      headers = {},
+      responseType = '',
+      data = {},
+      raw = false,
+      token,
+      retry = false,
+    }: RequestWithBody,
   ): Promise<Response> {
     logger.info(`${this.name} ${method.toUpperCase()}: ${path}`)
     try {
@@ -93,7 +104,7 @@ export default class RestClient {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(this.token, { type: 'bearer' })
+        .auth(token, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.timeoutConfig())
@@ -124,6 +135,7 @@ export default class RestClient {
     headers = {},
     responseType = '',
     raw = false,
+    token,
   }: Request): Promise<Response> {
     logger.info(`${this.name} DELETE: ${path}`)
     try {
@@ -135,7 +147,7 @@ export default class RestClient {
           if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(this.token, { type: 'bearer' })
+        .auth(token, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.timeoutConfig())
@@ -148,13 +160,13 @@ export default class RestClient {
     }
   }
 
-  async stream({ path = undefined, headers = {} }: StreamRequest): Promise<Readable> {
+  async stream({ path = undefined, headers = {}, token }: StreamRequest): Promise<Readable> {
     logger.info(`${this.name} streaming: ${path}`)
     return new Promise((resolve, reject) => {
       superagent
         .get(`${this.apiUrl()}${path}`)
         .agent(this.agent)
-        .auth(this.token, { type: 'bearer' })
+        .auth(token, { type: 'bearer' })
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic

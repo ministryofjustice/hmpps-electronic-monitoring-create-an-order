@@ -5,10 +5,10 @@ import OrderService from './orderService'
 import DeviceWearerService from './deviceWearerService'
 
 export const services = () => {
-  const { applicationInfo, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
-  const orderService = new OrderService()
+  const orderService = new OrderService(cemoApiClient)
   const orderSearchService = new OrderSearchService()
   const deviceWearerService = new DeviceWearerService()
 

@@ -53,7 +53,7 @@ const apiChecks = [
         ),
       ]
     : []),
-  service('cemoApi', `${config.apis.cemoApi.url}/health`, config.apis.cemoApi.agent)
+  service('cemoApi', `${config.apis.cemoApi.url}/health`, config.apis.cemoApi.agent),
 ]
 
 export default function healthCheck(

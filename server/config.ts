@@ -97,7 +97,7 @@ export default {
         deadline: Number(get('CEMO_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
       },
       agent: new AgentConfig(Number(get('CEMO_API_TIMEOUT_RESPONSE', 5000))),
-    }
+    },
   },
   sqs: {
     audit: auditConfig(),
