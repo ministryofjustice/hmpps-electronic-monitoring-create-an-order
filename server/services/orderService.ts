@@ -1,11 +1,10 @@
 import RestClient from '../data/restClient'
 import { getOrder } from '../data/inMemoryDatabase'
-import OrderModel, { Order } from '../models/Order'
 
 export default class OrderService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async createOrder(accessToken: string): Promise<Order> {
+  async createOrder(accessToken: string) {
     const result = await this.apiClient.get({
       path: '/api/CreateForm',
       query: {
@@ -14,9 +13,7 @@ export default class OrderService {
       token: accessToken,
     })
 
-    const order = OrderModel.parse(result)
-
-    return order
+    return result
   }
 
   async getOrder(id: string) {
