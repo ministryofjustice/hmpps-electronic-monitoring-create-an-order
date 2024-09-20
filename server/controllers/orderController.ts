@@ -7,6 +7,14 @@ export default class OrderController {
     private readonly orderService: OrderService,
   ) {}
 
+  create: RequestHandler = async (req: Request, res: Response) => {
+    const user = res.locals.user;
+    const token = user.token;
+    const order = await this.orderService.createOrder(token)
+
+    res.redirect(`/order/${order.id}/summary`)
+  }
+
   summary: RequestHandler = async (req: Request, res: Response) => {
     const id = req.params.orderId
     const order = await this.orderService.getOrder(id)

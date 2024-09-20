@@ -1,19 +1,20 @@
 import RestClient from '../data/restClient'
 import { getOrder } from '../data/inMemoryDatabase'
+import OrderModel, { Order } from '../models/Order'
 
 export default class OrderService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async createOrder(accessToken: string) {
+  async createOrder(accessToken: string): Promise<Order> {
     const result = await this.apiClient.get({
       path: '/api/CreateForm',
       query: {
-        title: 'MyNewForm',
+        title: 'MyNewForm'
       },
       token: accessToken,
     })
 
-    return result
+    return OrderModel.parse(result)
   }
 
   async getOrder(id: string) {

@@ -4,13 +4,16 @@ import DeviceWearerController from './deviceWearerController'
 import OrderService from '../services/orderService'
 import DeviceWearerService from '../services/deviceWearerService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
+import RestClient from '../data/restClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../services/deviceWearerService')
 jest.mock('../data/hmppsAuditClient')
+jest.mock('../data/restClient')
 
 describe('DeviceWearerController', () => {
+  let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
@@ -27,8 +30,13 @@ describe('DeviceWearerController', () => {
       region: '',
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockOrderService = new OrderService() as jest.Mocked<OrderService>
+    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockDeviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
     deviceWearerController = new DeviceWearerController(mockAuditService, mockDeviceWearerService, mockOrderService)
 

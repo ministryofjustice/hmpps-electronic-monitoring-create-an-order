@@ -4,10 +4,12 @@ import OrderController from './orderController'
 import OrderService from '../services/orderService'
 import { Order } from '../data/inMemoryDatabase'
 import HmppsAuditClient from '../data/hmppsAuditClient'
+import RestClient from '../data/restClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../data/hmppsAuditClient')
+jest.mock('../data/restClient')
 
 const mockSubmittedOrder: Order = {
   id: '123456789',
@@ -34,6 +36,7 @@ const mockDraftOrder: Order = {
 }
 
 describe('OrderController', () => {
+  let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
@@ -49,8 +52,13 @@ describe('OrderController', () => {
       region: '',
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockOrderService = new OrderService() as jest.Mocked<OrderService>
+    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     orderController = new OrderController(mockAuditService, mockOrderService)
 
     req = {

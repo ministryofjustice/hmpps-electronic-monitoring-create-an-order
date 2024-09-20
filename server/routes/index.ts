@@ -28,6 +28,7 @@ export default function routes({
   get('/', orderSearchController.search)
 
   // Order
+  post('/order/create', orderController.create)
   get('/order/delete/success', orderController.deleteSuccess)
   get('/order/delete/failed', orderController.deleteFailed)
   get('/order/:orderId/summary', orderController.summary)
