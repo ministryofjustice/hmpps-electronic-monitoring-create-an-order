@@ -1,19 +1,30 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import AuditService from '../services/auditService'
 import OrderSearchController from './orderSearchController'
 import OrderSearchService from '../services/orderSearchService'
+import HmppsAuditClient from '../data/hmppsAuditClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
+jest.mock('../data/hmppsAuditClient')
+
 describe('OrderSearchController', () => {
+  let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderSearchService>
   let orderController: OrderSearchController
   let req: Request
   let res: Response
+  let next: NextFunction
 
   beforeEach(() => {
-    mockAuditService = new AuditService(null) as jest.Mocked<AuditService>
+    mockAuditClient = new HmppsAuditClient({
+      queueUrl: '',
+      enabled: true,
+      region: '',
+      serviceName: '',
+    }) as jest.Mocked<HmppsAuditClient>
+    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderSearchService() as jest.Mocked<OrderSearchService>
     orderController = new OrderSearchController(mockAuditService, mockOrderService)
 
@@ -49,6 +60,8 @@ describe('OrderSearchController', () => {
       set: jest.fn(),
       send: jest.fn(),
     }
+
+    next = jest.fn()
   })
 
   describe('search orders', () => {
@@ -67,7 +80,7 @@ describe('OrderSearchController', () => {
         },
       ])
 
-      await orderController.search(req, res, null)
+      await orderController.search(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
