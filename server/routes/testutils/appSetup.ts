@@ -11,6 +11,7 @@ import AuditService from '../../services/auditService'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
+import authorisationMiddleware, { cemoAuthorisedRoles } from '../../middleware/authorisationMiddleware'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -18,7 +19,21 @@ jest.mock('../../data/hmppsAuditClient')
 export const user: HmppsUser = {
   name: 'FIRST LAST',
   userId: 'id',
-  token: 'token',
+  // test jwt with payload { "authorities": ["ROLE_EM_CEMO__CREATE_ORDER"] }
+  token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX0VNX0NFTU9fX0NSRUFURV9PUkRFUiJdfQ.RPy1kR5kwieWlDgW1hw_FmhHwhXW6tISLC78WcwIbzA',
+  username: 'user1',
+  displayName: 'First Last',
+  authSource: 'nomis',
+  staffId: 1234,
+  userRoles: [],
+}
+
+export const unauthorisedUser: HmppsUser = {
+  name: 'FIRST LAST',
+  userId: 'id',
+  // test jwt with payload { authorities: [] }
+  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpdGllcyI6W119.Qrm-hL3OPP21wEG44S6vQX3hxtSJt5VoXH-J2_0jT4A',
   username: 'user1',
   displayName: 'First Last',
   authSource: 'nomis',
@@ -56,6 +71,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => H
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use(authorisationMiddleware(cemoAuthorisedRoles()))
   app.use(routes(services))
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))
