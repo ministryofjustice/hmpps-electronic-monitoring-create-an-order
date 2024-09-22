@@ -2,6 +2,7 @@ import express, { Express } from 'express'
 import { NotFound } from 'http-errors'
 import { v4 as uuidv4 } from 'uuid'
 
+import jwt from 'jsonwebtoken'
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
@@ -16,12 +17,12 @@ import authorisationMiddleware, { cemoAuthorisedRoles } from '../../middleware/a
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
 
+const createToken = (roles: Array<string>): string => jwt.sign({ authorities: roles }, 'secret', { expiresIn: '1h' })
+
 export const user: HmppsUser = {
   name: 'FIRST LAST',
   userId: 'id',
-  // test jwt with payload { "authorities": ["ROLE_EM_CEMO__CREATE_ORDER"] }
-  token:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX0VNX0NFTU9fX0NSRUFURV9PUkRFUiJdfQ.RPy1kR5kwieWlDgW1hw_FmhHwhXW6tISLC78WcwIbzA',
+  token: createToken(['ROLE_EM_CEMO__CREATE_ORDER']),
   username: 'user1',
   displayName: 'First Last',
   authSource: 'nomis',
@@ -32,8 +33,7 @@ export const user: HmppsUser = {
 export const unauthorisedUser: HmppsUser = {
   name: 'FIRST LAST',
   userId: 'id',
-  // test jwt with payload { authorities: [] }
-  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpdGllcyI6W119.Qrm-hL3OPP21wEG44S6vQX3hxtSJt5VoXH-J2_0jT4A',
+  token: createToken([]),
   username: 'user1',
   displayName: 'First Last',
   authSource: 'nomis',
