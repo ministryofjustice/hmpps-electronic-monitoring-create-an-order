@@ -4,6 +4,14 @@ import type { RequestHandler } from 'express'
 import logger from '../../logger'
 import asyncMiddleware from './asyncMiddleware'
 
+export enum HMPPS_AUTH_ROLES {
+  ROLE_EM_CEMO__CREATE_ORDER = 'ROLE_EM_CEMO__CREATE_ORDER',
+}
+
+export const cemoAuthorisedRoles = () => {
+  return Object.keys(HMPPS_AUTH_ROLES).map(key => HMPPS_AUTH_ROLES[key as keyof typeof HMPPS_AUTH_ROLES])
+}
+
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
   return asyncMiddleware((req, res, next) => {
     // authorities in the user token will always be prefixed by ROLE_.

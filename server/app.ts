@@ -5,7 +5,7 @@ import createError from 'http-errors'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
-import authorisationMiddleware from './middleware/authorisationMiddleware'
+import authorisationMiddleware, { cemoAuthorisedRoles } from './middleware/authorisationMiddleware'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
@@ -34,7 +34,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app)
   app.use(setUpAuthentication())
-  app.use(authorisationMiddleware())
+  app.use(authorisationMiddleware(cemoAuthorisedRoles()))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
 

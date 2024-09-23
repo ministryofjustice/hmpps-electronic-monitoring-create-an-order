@@ -4,7 +4,7 @@ import Page from '../pages/page'
 context('Sign In', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
   })
 
   it('User name visible in header', () => {
