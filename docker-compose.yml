@@ -48,6 +48,7 @@ services:
       - TOKEN_VERIFICATION_ENABLED=false
       - INGRESS_URL=http://localhost:3000
       - AUDIT_ENABLED=false
+  
 
 networks:
   hmpps:
