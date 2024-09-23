@@ -11,7 +11,7 @@ export default class ContactDetailsController {
     const { orderId } = req.params
     const order = await this.orderService.getOrder(orderId)
 
-    if (order.status === 'Submitted') {
+    if (order.status === 'SUBMITTED') {
       res.redirect(`/order/${orderId}/contact-details`)
     } else {
       res.render(`pages/order/contact-details/edit`, { contactDetails: { orderId } })
@@ -22,7 +22,7 @@ export default class ContactDetailsController {
     const { orderId } = req.params
     const order = await this.orderService.getOrder(orderId)
 
-    if (order.status === 'Draft') {
+    if (order.status === 'IN_PROGRESS') {
       res.redirect(`/order/${orderId}/contact-details/edit`)
     } else {
       res.render(`pages/order/contact-details/view`, { contactDetails: { orderId } })

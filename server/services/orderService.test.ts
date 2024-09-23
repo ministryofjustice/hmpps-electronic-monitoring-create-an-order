@@ -7,7 +7,6 @@ jest.mock('../data/restClient')
 
 const mockNewOrder = {
   id: uuidv4(),
-  username: 'USERNAME',
   status: 'IN_PROGRESS',
 }
 

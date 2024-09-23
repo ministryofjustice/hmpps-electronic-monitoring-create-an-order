@@ -19,16 +19,16 @@ context('Sign In', () => {
     indexPage.headerPhaseBanner().should('contain.text', 'dev')
   })
 
-  it('New form button should exist', () => {
+  it('Create new form should exist', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newFormButton().should('exist')
+    indexPage.newOrderForm().should('exist')
   })
 
-  it('New form button redirects user to new form page', () => {
+  it('Create new form button redirects user to new form page', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newFormButton().click()
+    indexPage.newOrderFormButton().click()
     cy.url().should('to.match', /order\/create$/)
   })
 

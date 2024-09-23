@@ -9,7 +9,9 @@ export default class IndexPage extends Page {
 
   headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
 
-  newFormButton = (): PageElement => cy.get('a:contains("New Form")')
+  newOrderForm = (): PageElement => cy.get('form[action="/order/create"]')
+
+  newOrderFormButton = (): PageElement => cy.get('form[action="/order/create"] button[type=submit]')
 
   searchInput = (): PageElement => cy.get('#keyword')
 
