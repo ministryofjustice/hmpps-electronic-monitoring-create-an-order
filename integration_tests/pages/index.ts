@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class IndexPage extends Page {
   constructor() {
-    super('Electronic Monitoring Order')
+    super('Electronic Monitoring Application Forms')
   }
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
@@ -17,7 +17,7 @@ export default class IndexPage extends Page {
 
   searchButton = (): PageElement => cy.get('button:contains("Search")')
 
-  formTable = (): PageElement => cy.get('#formList')
+  ordersList = (): PageElement => cy.get('#ordersList')
 
-  formRow = (): PageElement => cy.get('.govuk-task-list').find('.govuk-task-list__item')
+  ordersListItems = (): PageElement => cy.get('#ordersList ul li')
 }
