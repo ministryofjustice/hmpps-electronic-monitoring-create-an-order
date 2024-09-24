@@ -25,11 +25,11 @@ const mockDraftOrder: Order = {
   status: 'IN_PROGRESS',
 }
 
-const mockBadRequest: SanitisedError = {
-  message: 'Bad Request',
-  name: 'BadRequest',
+const mockNotFoundRequest: SanitisedError = {
+  message: 'Not Found',
+  name: 'Not Found',
   stack: '',
-  status: 400,
+  status: 404,
 }
 
 describe('OrderController', () => {
@@ -109,7 +109,7 @@ describe('OrderController', () => {
     })
 
     it('should render an error page if the order cant be found', async () => {
-      mockOrderService.getOrder.mockRejectedValue(mockBadRequest)
+      mockOrderService.getOrder.mockRejectedValue(mockNotFoundRequest)
 
       await orderController.summary(req, res, next)
 
