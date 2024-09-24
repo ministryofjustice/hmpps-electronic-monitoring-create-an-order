@@ -11,7 +11,7 @@
 <div class="homepage-content">
   {{ mojPageHeaderActions({
   heading: {
-    text: 'Electronic Monitoring Order'
+    text: 'Electronic Monitoring Application Forms'
   } }) }}
 
 <form action="/order/create" method="post">
@@ -24,7 +24,7 @@
 </form>
 
 </div>
-{{ mojSearch({
+{# {{ mojSearch({
     action: '#',
     method: 'get',
     input: {
@@ -45,7 +45,7 @@
  
  {% if previous != 0 %}
   {% set previousButton = { text: 'Previous', href:'' } %}
-{% endif %}
+{% endif %} #}
 
 {% if next != 0 %}
   {% set nextButton = { text: 'Next', href: ''} %}
@@ -87,8 +87,7 @@
 }) }}
 {% endset %}
 
-<br /> 
-<br /> 
+<h2>Existing Forms</h2>
 
 <div id="formList">
     <ul class="govuk-task-list">
@@ -96,7 +95,7 @@
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
         <a class="govuk-link govuk-task-list__link" href="/order/{{order.id}}/summary" aria-describedby="company-details-1-status">
-          {{order.title}}
+          {{order.title}} {{order.id}}
         </a>
       </div>
       {% if order.status == 'SUBMITTED' %}
@@ -120,5 +119,5 @@
   </div>
 
 
-  {{ pagination | safe }}
+  {# {{ pagination | safe }} #}
 {% endblock %}

@@ -1,4 +1,3 @@
-import { getOrders } from '../data/inMemoryDatabase'
 import RestClient from '../data/restClient'
 import OrderListModel, { OrderList } from '../models/OrderList'
 
@@ -16,7 +15,7 @@ export default class OrderSearchService {
       token: accessToken,
     })
 
-    const orders = OrderListModel.parse(result);
+    const orders = OrderListModel.parse(result)
 
     return orders
   }
