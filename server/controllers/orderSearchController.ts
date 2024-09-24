@@ -14,7 +14,10 @@ export default class OrderSearchController {
       correlationId: req.id,
     })
 
-    const orders = await this.orderSearchService.searchOrders({
+    const { user } = res.locals
+    const { token } = user
+
+    const orders = await this.orderSearchService.searchOrders(token, {
       searchTerm: '',
     })
 
