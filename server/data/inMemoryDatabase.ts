@@ -1,14 +1,5 @@
-type Order = {
-  id: string
-  title: string
-  deviceWearer: {
-    isComplete: boolean
-  }
-  contactDetails: {
-    isComplete: boolean
-  }
-  status: 'Submitted' | 'Draft'
-}
+import { v4 as uuidv4 } from 'uuid'
+import { Order } from '../models/Order'
 
 type DeviceWearer = {
   orderId: string
@@ -21,26 +12,12 @@ type DeviceWearer = {
 
 const orders: Array<Order> = [
   {
-    id: '0',
-    title: 'My new order',
-    deviceWearer: {
-      isComplete: true,
-    },
-    contactDetails: {
-      isComplete: true,
-    },
-    status: 'Submitted',
+    id: uuidv4(),
+    status: 'SUBMITTED',
   },
   {
-    id: '1',
-    title: 'My new order',
-    deviceWearer: {
-      isComplete: false,
-    },
-    contactDetails: {
-      isComplete: false,
-    },
-    status: 'Draft',
+    id: uuidv4(),
+    status: 'IN_PROGRESS',
   },
 ]
 

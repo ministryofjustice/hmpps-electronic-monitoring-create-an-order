@@ -90,6 +90,14 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    cemoApi: {
+      url: get('CEMO_API_URL', 'http://localhost:8080', requiredInProduction),
+      timeout: {
+        response: Number(get('CEMO_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('CEMO_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('CEMO_API_TIMEOUT_RESPONSE', 5000))),
+    },
   },
   sqs: {
     audit: auditConfig(),

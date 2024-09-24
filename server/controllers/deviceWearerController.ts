@@ -15,7 +15,7 @@ export default class DeviceWearerController {
       this.deviceWearerService.getDeviceWearer(orderId),
     ])
 
-    if (order.status === 'Submitted') {
+    if (order.status === 'SUBMITTED') {
       res.redirect(`/order/${orderId}/device-wearer`)
     } else {
       res.render(`pages/order/device-wearer/edit`, { deviceWearer })
@@ -29,7 +29,7 @@ export default class DeviceWearerController {
       this.deviceWearerService.getDeviceWearer(orderId),
     ])
 
-    if (order.status === 'Draft') {
+    if (order.status === 'IN_PROGRESS') {
       res.redirect(`/order/${orderId}/device-wearer/edit`)
     } else {
       res.render(`pages/order/device-wearer/view`, { deviceWearer })

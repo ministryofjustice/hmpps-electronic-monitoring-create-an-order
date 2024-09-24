@@ -30,7 +30,7 @@
   <ul class="govuk-task-list">
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
-        {% if order.status == "Submitted" %}
+        {% if order.status == "SUBMITTED" %}
             <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/device-wearer" aria-describedby="order-section-device-wearer">
                 About the device wearer
             </a>
@@ -83,7 +83,7 @@
   </ul>
 
   <div class="govuk-button-group">
-    {% if order.status == "Draft" %}
+    {% if order.status == "IN_PROGRESS" %}
 
         {{ govukButton({
             text: "Submit order"

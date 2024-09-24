@@ -1,12 +1,19 @@
 import type { NextFunction, Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
 import AuditService from '../services/auditService'
 import OrderSearchController from './orderSearchController'
 import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
+import { Order } from '../models/Order'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
+
+const mockSubmittedOrder: Order = {
+  id: uuidv4(),
+  status: 'SUBMITTED',
+}
 
 describe('OrderSearchController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
@@ -66,38 +73,14 @@ describe('OrderSearchController', () => {
 
   describe('search orders', () => {
     it('should render a view containing order search results', async () => {
-      mockOrderService.searchOrders.mockResolvedValue([
-        {
-          id: '123456789',
-          status: 'Submitted',
-          title: 'My new order',
-          deviceWearer: {
-            isComplete: true,
-          },
-          contactDetails: {
-            isComplete: true,
-          },
-        },
-      ])
+      mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
 
       await orderController.search(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
-          orderList: [
-            {
-              id: '123456789',
-              status: 'Submitted',
-              title: 'My new order',
-              deviceWearer: {
-                isComplete: true,
-              },
-              contactDetails: {
-                isComplete: true,
-              },
-            },
-          ],
+          orderList: [mockSubmittedOrder],
         }),
       )
     })

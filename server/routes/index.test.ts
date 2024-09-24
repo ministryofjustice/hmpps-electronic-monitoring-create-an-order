@@ -1,12 +1,15 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { v4 as uuidv4 } from 'uuid'
 import { appWithAllRoutes, unauthorisedUser, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import OrderService from '../services/orderService'
 import DeviceWearerService from '../services/deviceWearerService'
-import { DeviceWearer, Order } from '../data/inMemoryDatabase'
+import { DeviceWearer } from '../data/inMemoryDatabase'
 import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
+import RestClient from '../data/restClient'
+import { Order } from '../models/Order'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -21,33 +24,24 @@ const hmppsAuditClient = new HmppsAuditClient({
   region: '',
   serviceName: '',
 }) as jest.Mocked<HmppsAuditClient>
+const restClient = new RestClient('cemoApi', {
+  url: '',
+  timeout: { response: 0, deadline: 0 },
+  agent: { timeout: 0 },
+}) as jest.Mocked<RestClient>
 const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditService>
 const orderSearchService = new OrderSearchService() as jest.Mocked<OrderSearchService>
-const orderService = new OrderService() as jest.Mocked<OrderService>
+const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
 
 const mockSubmittedOrder: Order = {
-  id: '123456789',
-  status: 'Submitted',
-  title: 'My new order',
-  deviceWearer: {
-    isComplete: true,
-  },
-  contactDetails: {
-    isComplete: true,
-  },
+  id: uuidv4(),
+  status: 'SUBMITTED',
 }
 
 const mockDraftOrder: Order = {
-  id: '123456789',
-  status: 'Draft',
-  title: 'My new order',
-  deviceWearer: {
-    isComplete: true,
-  },
-  contactDetails: {
-    isComplete: true,
-  },
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
 }
 
 const mockDeviceWearer: DeviceWearer = {
@@ -102,7 +96,7 @@ describe('authorised user', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
       return request(app)
-        .get('/order/123456789/summary')
+        .get(`/order/${mockSubmittedOrder.id}/summary`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Apply for electronic monitoring')
@@ -137,7 +131,7 @@ describe('authorised user', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
 
       return request(app)
-        .get('/order/123456789/delete')
+        .get(`/order/${mockDraftOrder.id}/delete`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Are you sure you want to delete this order?')
@@ -147,7 +141,10 @@ describe('authorised user', () => {
     it('should redirect to a failed page for a submitted order', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
-      return request(app).get('/order/123456789/delete').expect(302).expect('Location', '/order/delete/failed')
+      return request(app)
+        .get(`/order/${mockSubmittedOrder.id}/delete`)
+        .expect(302)
+        .expect('Location', '/order/delete/failed')
     })
   })
 
@@ -155,13 +152,19 @@ describe('authorised user', () => {
     it('should delete a draft order and redirect to the success page', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
 
-      return request(app).post('/order/123456789/delete').expect(302).expect('Location', '/order/delete/success')
+      return request(app)
+        .post(`/order/${mockDraftOrder.id}/delete`)
+        .expect(302)
+        .expect('Location', '/order/delete/success')
     })
 
     it('should not delete a submitted order and redirect to the failed page', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
-      return request(app).post('/order/123456789/delete').expect(302).expect('Location', '/order/delete/failed')
+      return request(app)
+        .post(`/order/${mockSubmittedOrder.id}/delete`)
+        .expect(302)
+        .expect('Location', '/order/delete/failed')
     })
   })
 
@@ -172,7 +175,7 @@ describe('authorised user', () => {
       deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
 
       return request(app)
-        .get('/order/123456789/device-wearer')
+        .get(`/order/${mockSubmittedOrder.id}/device-wearer`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('About the device wearer')
@@ -187,7 +190,7 @@ describe('authorised user', () => {
       deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
 
       return request(app)
-        .get('/order/123456789/device-wearer/edit')
+        .get(`/order/${mockDraftOrder.id}/device-wearer/edit`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('About the device wearer')
@@ -201,7 +204,7 @@ describe('authorised user', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
       return request(app)
-        .get('/order/123456789/contact-details')
+        .get(`/order/${mockSubmittedOrder.id}/contact-details`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Contact details')
@@ -215,7 +218,7 @@ describe('authorised user', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
 
       return request(app)
-        .get('/order/123456789/contact-details/edit')
+        .get(`/order/${mockDraftOrder.id}/contact-details/edit`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Contact details')

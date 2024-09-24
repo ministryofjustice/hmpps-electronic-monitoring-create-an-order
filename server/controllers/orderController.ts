@@ -7,6 +7,14 @@ export default class OrderController {
     private readonly orderService: OrderService,
   ) {}
 
+  create: RequestHandler = async (req: Request, res: Response) => {
+    const { user } = res.locals
+    const { token } = user
+    const order = await this.orderService.createOrder(token)
+
+    res.redirect(`/order/${order.id}/summary`)
+  }
+
   summary: RequestHandler = async (req: Request, res: Response) => {
     const id = req.params.orderId
     const order = await this.orderService.getOrder(id)
@@ -20,7 +28,7 @@ export default class OrderController {
     const id = req.params.orderId
     const order = await this.orderService.getOrder(id)
 
-    if (order.status === 'Submitted') {
+    if (order.status === 'SUBMITTED') {
       res.redirect('/order/delete/failed')
     } else {
       res.render('pages/order/delete-confirm', {
@@ -33,7 +41,7 @@ export default class OrderController {
     const id = req.params.orderId
     const order = await this.orderService.getOrder(id)
 
-    if (order.status === 'Submitted') {
+    if (order.status === 'SUBMITTED') {
       res.redirect('/order/delete/failed')
     } else {
       await this.orderService.deleteOrder(id)

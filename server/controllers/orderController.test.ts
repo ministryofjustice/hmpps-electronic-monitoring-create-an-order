@@ -1,39 +1,31 @@
 import type { NextFunction, Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
 import AuditService from '../services/auditService'
 import OrderController from './orderController'
 import OrderService from '../services/orderService'
-import { Order } from '../data/inMemoryDatabase'
 import HmppsAuditClient from '../data/hmppsAuditClient'
+import RestClient from '../data/restClient'
+import { Order } from '../models/Order'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../data/hmppsAuditClient')
+jest.mock('../data/restClient')
+
+const mockId = uuidv4()
 
 const mockSubmittedOrder: Order = {
-  id: '123456789',
-  status: 'Submitted',
-  title: 'My new order',
-  deviceWearer: {
-    isComplete: true,
-  },
-  contactDetails: {
-    isComplete: true,
-  },
+  id: mockId,
+  status: 'SUBMITTED',
 }
 
 const mockDraftOrder: Order = {
-  id: '123456789',
-  status: 'Draft',
-  title: 'My new order',
-  deviceWearer: {
-    isComplete: false,
-  },
-  contactDetails: {
-    isComplete: false,
-  },
+  id: mockId,
+  status: 'IN_PROGRESS',
 }
 
 describe('OrderController', () => {
+  let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
@@ -49,8 +41,13 @@ describe('OrderController', () => {
       region: '',
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockOrderService = new OrderService() as jest.Mocked<OrderService>
+    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     orderController = new OrderController(mockAuditService, mockOrderService)
 
     req = {
@@ -58,7 +55,7 @@ describe('OrderController', () => {
       session: {},
       query: {},
       params: {
-        orderId: '123456789',
+        orderId: mockId,
       },
       user: {
         username: 'fakeUserName',
@@ -101,6 +98,17 @@ describe('OrderController', () => {
           order: mockSubmittedOrder,
         }),
       )
+    })
+  })
+
+  describe('create', () => {
+    it('should create an order and redirect to view the order', async () => {
+      mockOrderService.createOrder.mockResolvedValue(mockDraftOrder)
+
+      await orderController.create(req, res, next)
+
+      expect(mockOrderService.createOrder).toHaveBeenCalledWith('fakeUserToken')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockDraftOrder.id}/summary`)
     })
   })
 

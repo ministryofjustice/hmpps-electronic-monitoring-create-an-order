@@ -5,21 +5,23 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/search/macro.njk" import mojSearch -%}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% block content %}
 
 <div class="homepage-content">
   {{ mojPageHeaderActions({
   heading: {
     text: 'Electronic Monitoring Order'
-  },
-  items: [{
-    text: 'New Form',
-    classes: 'govuk-button',
-    id: 'btnNewForm',
-    href: '/order/create'
-  }]
-}) }}
+  } }) }}
 
+<form action="/order/create" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  <div class="govuk-button-group">
+      {{ govukButton({
+          text: "Create new form"
+      }) }}
+  </div>
+</form>
 
 </div>
 {{ mojSearch({
@@ -97,7 +99,7 @@
           {{order.title}}
         </a>
       </div>
-      {% if order.status == 'Submitted' %}
+      {% if order.status == 'SUBMITTED' %}
         <div class="govuk-task-list__status">
           <strong class="govuk-tag govuk-tag--green">
             Submitted
