@@ -9,7 +9,7 @@ export default class ContactDetailsController {
 
   edit: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const order = await this.orderService.getOrder(orderId)
+    const order = await this.orderService.getOrder({ accessToken: res.locals.user.token, orderId })
 
     if (order.status === 'SUBMITTED') {
       res.redirect(`/order/${orderId}/contact-details`)
@@ -20,7 +20,7 @@ export default class ContactDetailsController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const order = await this.orderService.getOrder(orderId)
+    const order = await this.orderService.getOrder({ accessToken: res.locals.user.token, orderId })
 
     if (order.status === 'IN_PROGRESS') {
       res.redirect(`/order/${orderId}/contact-details/edit`)

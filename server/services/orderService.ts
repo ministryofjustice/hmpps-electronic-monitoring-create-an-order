@@ -1,25 +1,36 @@
 import RestClient from '../data/restClient'
-import { getOrder } from '../data/inMemoryDatabase'
+import { AuthenticatedRequestInput } from '../interfaces/request'
 import OrderModel, { Order } from '../models/Order'
+
+type GetOrderRequestInput = AuthenticatedRequestInput & {
+  orderId: string
+}
 
 export default class OrderService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async createOrder(accessToken: string): Promise<Order> {
+  async createOrder(input: AuthenticatedRequestInput): Promise<Order> {
     const result = await this.apiClient.get({
       path: '/api/CreateForm',
       query: {
         title: 'MyNewForm',
       },
-      token: accessToken,
+      token: input.accessToken,
     })
 
     return OrderModel.parse(result)
   }
 
-  async getOrder(id: string) {
-    const order = getOrder(id)
-    return Promise.resolve(order)
+  async getOrder(input: GetOrderRequestInput): Promise<Order> {
+    const result = await this.apiClient.get({
+      path: '/api/GetForm',
+      query: {
+        id: input.orderId,
+      },
+      token: input.accessToken,
+    })
+
+    return OrderModel.parse(result)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

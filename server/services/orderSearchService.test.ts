@@ -33,7 +33,7 @@ describe('Order Search Service', () => {
       mockRestClient.get.mockResolvedValue([mockNewOrder])
 
       const orderService = new OrderSearchService(mockRestClient)
-      const orders = await orderService.searchOrders('', { searchTerm: '' })
+      const orders = await orderService.searchOrders({ accessToken: '', searchTerm: '' })
 
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/ListForms',
@@ -52,7 +52,7 @@ describe('Order Search Service', () => {
 
       try {
         const orderService = new OrderSearchService(mockRestClient)
-        await orderService.searchOrders('', { searchTerm: '' })
+        await orderService.searchOrders({ accessToken: '', searchTerm: '' })
       } catch (e) {
         expect((e as Error).name).toEqual('ZodError')
       }
@@ -63,7 +63,7 @@ describe('Order Search Service', () => {
 
       try {
         const orderService = new OrderSearchService(mockRestClient)
-        await orderService.searchOrders('', { searchTerm: '' })
+        await orderService.searchOrders({ accessToken: '', searchTerm: '' })
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(500)
         expect((e as SanitisedError).message).toEqual('Internal Server Error')
