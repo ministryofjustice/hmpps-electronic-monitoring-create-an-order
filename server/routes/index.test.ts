@@ -10,6 +10,7 @@ import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order } from '../models/Order'
+import { SanitisedError } from '../sanitisedError'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -30,7 +31,7 @@ const restClient = new RestClient('cemoApi', {
   agent: { timeout: 0 },
 }) as jest.Mocked<RestClient>
 const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditService>
-const orderSearchService = new OrderSearchService() as jest.Mocked<OrderSearchService>
+const orderSearchService = new OrderSearchService(restClient) as jest.Mocked<OrderSearchService>
 const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
 
@@ -42,6 +43,13 @@ const mockSubmittedOrder: Order = {
 const mockDraftOrder: Order = {
   id: uuidv4(),
   status: 'IN_PROGRESS',
+}
+
+const mock500Error: SanitisedError = {
+  message: 'Internal Server Error',
+  name: 'InternalServerError',
+  stack: '',
+  status: 500,
 }
 
 const mockDeviceWearer: DeviceWearer = {
@@ -81,7 +89,24 @@ describe('authorised user', () => {
         .get('/')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Electronic Monitoring Order')
+          expect(res.text).toContain('Electronic Monitoring Application Forms')
+          expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
+            who: user.username,
+            correlationId: expect.any(String),
+          })
+        })
+    })
+
+    it('should render the order search page with no results if there is an error', () => {
+      auditService.logPageView.mockResolvedValue()
+      orderSearchService.searchOrders.mockRejectedValue(mock500Error)
+
+      return request(app)
+        .get('/')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Electronic Monitoring Application Forms')
+          expect(res.text).toContain('No existing forms found.')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
             correlationId: expect.any(String),

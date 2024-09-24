@@ -4,7 +4,9 @@ import AuditService from '../services/auditService'
 import OrderSearchController from './orderSearchController'
 import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
+import RestClient from '../data/restClient'
 import { Order } from '../models/Order'
+import { SanitisedError } from '../sanitisedError'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
@@ -15,7 +17,15 @@ const mockSubmittedOrder: Order = {
   status: 'SUBMITTED',
 }
 
+const mock500Error: SanitisedError = {
+  message: 'Internal Server Error',
+  name: 'InternalServerError',
+  stack: '',
+  status: 500,
+}
+
 describe('OrderSearchController', () => {
+  let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderSearchService>
@@ -31,8 +41,13 @@ describe('OrderSearchController', () => {
       region: '',
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockOrderService = new OrderSearchService() as jest.Mocked<OrderSearchService>
+    mockOrderService = new OrderSearchService(mockRestClient) as jest.Mocked<OrderSearchService>
     orderController = new OrderSearchController(mockAuditService, mockOrderService)
 
     req = {
@@ -81,6 +96,19 @@ describe('OrderSearchController', () => {
         'pages/index',
         expect.objectContaining({
           orderList: [mockSubmittedOrder],
+        }),
+      )
+    })
+
+    it('should render a view containing no results if there is an error', async () => {
+      mockOrderService.searchOrders.mockRejectedValue(mock500Error)
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/index',
+        expect.objectContaining({
+          orderList: [],
         }),
       )
     })

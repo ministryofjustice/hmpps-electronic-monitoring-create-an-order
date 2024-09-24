@@ -14,10 +14,17 @@ export default class OrderSearchController {
       correlationId: req.id,
     })
 
-    const orders = await this.orderSearchService.searchOrders({
-      searchTerm: '',
-    })
+    try {
+      const { user } = res.locals
+      const { token } = user
 
-    res.render('pages/index', { orderList: orders })
+      const orders = await this.orderSearchService.searchOrders(token, {
+        searchTerm: '',
+      })
+
+      res.render('pages/index', { orderList: orders })
+    } catch (e) {
+      res.render('pages/index', { orderList: [] })
+    }
   }
 }
