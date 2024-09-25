@@ -82,23 +82,19 @@
     </li>
   </ul>
 
-  <div class="govuk-button-group">
-    {% if order.status == "IN_PROGRESS" %}
 
+  {% if order.status == "IN_PROGRESS" %}
+    <form action="/order/{{ order.id }}/submit" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+      <div class="govuk-button-group">
         {{ govukButton({
             text: "Submit order"
         }) }}
-  
-        {{ govukButton({
-            text: "Delete order",
-            classes: "govuk-button--warning",
-            href: "/order/" + order.id + "/delete"
-        }) }}
-    {% else %}
-
-        <a class="govuk-link" href="/">Return to order search view</a>
-
-    {% endif %}
-  </div>
-
+      </div>
+    </form>
+  {% else %}
+    <div class="govuk-button-group">
+      <a id="backToSearch" class="govuk-link" href="/">Return to order search view</a>
+    </div>
+  {% endif %}
 {% endblock %}
