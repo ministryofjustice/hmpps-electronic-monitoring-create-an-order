@@ -11,7 +11,7 @@ export default class DeviceWearerController {
   edit: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const [order, deviceWearer] = await Promise.all([
-      this.orderService.getOrder(orderId),
+      this.orderService.getOrder({ accessToken: res.locals.user.token, orderId }),
       this.deviceWearerService.getDeviceWearer(orderId),
     ])
 
@@ -25,7 +25,7 @@ export default class DeviceWearerController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const [order, deviceWearer] = await Promise.all([
-      this.orderService.getOrder(orderId),
+      this.orderService.getOrder({ accessToken: res.locals.user.token, orderId }),
       this.deviceWearerService.getDeviceWearer(orderId),
     ])
 

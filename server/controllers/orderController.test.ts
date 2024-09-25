@@ -6,6 +6,7 @@ import OrderService from '../services/orderService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order } from '../models/Order'
+import { SanitisedError } from '../sanitisedError'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -22,6 +23,13 @@ const mockSubmittedOrder: Order = {
 const mockDraftOrder: Order = {
   id: mockId,
   status: 'IN_PROGRESS',
+}
+
+const mockNotFoundRequest: SanitisedError = {
+  message: 'Not Found',
+  name: 'Not Found',
+  stack: '',
+  status: 404,
 }
 
 describe('OrderController', () => {
@@ -99,6 +107,14 @@ describe('OrderController', () => {
         }),
       )
     })
+
+    it('should render an error page if the order cant be found', async () => {
+      mockOrderService.getOrder.mockRejectedValue(mockNotFoundRequest)
+
+      await orderController.summary(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/error', { message: `Could not find an order with id: ${mockId}` })
+    })
   })
 
   describe('create', () => {
@@ -107,7 +123,7 @@ describe('OrderController', () => {
 
       await orderController.create(req, res, next)
 
-      expect(mockOrderService.createOrder).toHaveBeenCalledWith('fakeUserToken')
+      expect(mockOrderService.createOrder).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockDraftOrder.id}/summary`)
     })
   })

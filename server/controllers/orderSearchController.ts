@@ -15,12 +15,7 @@ export default class OrderSearchController {
     })
 
     try {
-      const { user } = res.locals
-      const { token } = user
-
-      const orders = await this.orderSearchService.searchOrders(token, {
-        searchTerm: '',
-      })
+      const orders = await this.orderSearchService.searchOrders({ accessToken: res.locals.user.token, searchTerm: '' })
 
       res.render('pages/index', { orderList: orders })
     } catch (e) {

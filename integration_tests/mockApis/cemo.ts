@@ -1,4 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
+import { v4 as uuidv4 } from 'uuid'
 import { stubFor } from './wiremock'
 
 const ping = (httpStatus = 200) =>
@@ -27,11 +28,11 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
         httpStatus === 200
           ? [
               {
-                id: '8138066f-717d-40d7-bd46-9ed08c68364c',
+                id: uuidv4(),
                 status: 'SUBMITTED',
               },
               {
-                id: '8138066f-717d-40d7-bd46-9ed08c68364c',
+                id: uuidv4(),
                 status: 'IN_PROGRESS',
               },
             ]
@@ -39,7 +40,39 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
     },
   })
 
+type GetOrderStubOptions = {
+  httpStatus: number
+  id?: string
+  status?: string
+}
+
+const defaultGetOrderOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+}
+
+const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/GetForm\\?id=${options.id}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              id: options.id,
+              status: options.status,
+            }
+          : null,
+    },
+  })
+
 export default {
+  stubCemoGetOrder: getOrder,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
 }

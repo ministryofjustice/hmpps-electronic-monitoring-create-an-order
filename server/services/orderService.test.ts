@@ -33,7 +33,7 @@ describe('Order Service', () => {
       mockRestClient.get.mockResolvedValue(mockNewOrder)
 
       const orderService = new OrderService(mockRestClient)
-      const order = await orderService.createOrder('')
+      const order = await orderService.createOrder({ accessToken: '' })
 
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/CreateForm',
@@ -55,7 +55,7 @@ describe('Order Service', () => {
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createOrder('')
+        await orderService.createOrder({ accessToken: '' })
       } catch (e) {
         expect((e as Error).name).toEqual('ZodError')
       }
@@ -66,7 +66,53 @@ describe('Order Service', () => {
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createOrder('')
+        await orderService.createOrder({ accessToken: '' })
+      } catch (e) {
+        expect((e as SanitisedError).status).toEqual(404)
+        expect((e as SanitisedError).message).toEqual('Not Found')
+      }
+    })
+  })
+
+  describe('getOrder', () => {
+    it('should get the order fromthe api and return a valid order object', async () => {
+      mockRestClient.get.mockResolvedValue(mockNewOrder)
+
+      const orderService = new OrderService(mockRestClient)
+      const order = await orderService.getOrder({ accessToken: 'token', orderId: '123456789' })
+
+      expect(mockRestClient.get).toHaveBeenCalledWith({
+        path: '/api/GetForm',
+        query: {
+          id: '123456789',
+        },
+        token: 'token',
+      })
+      expect(order).toEqual(mockNewOrder)
+    })
+
+    it('should throw an error if the api returns an invalid object', async () => {
+      expect.assertions(1)
+
+      mockRestClient.get.mockResolvedValue({
+        ...mockNewOrder,
+        status: 'INVALID_STATUS',
+      })
+
+      try {
+        const orderService = new OrderService(mockRestClient)
+        await orderService.getOrder({ accessToken: '', orderId: '123456789' })
+      } catch (e) {
+        expect((e as Error).name).toEqual('ZodError')
+      }
+    })
+
+    it('should propagate errors from the api', async () => {
+      mockRestClient.get.mockRejectedValue(mock404Error)
+
+      try {
+        const orderService = new OrderService(mockRestClient)
+        await orderService.getOrder({ accessToken: '', orderId: '123456789' })
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(404)
         expect((e as SanitisedError).message).toEqual('Not Found')

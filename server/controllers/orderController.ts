@@ -8,25 +8,27 @@ export default class OrderController {
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
-    const { user } = res.locals
-    const { token } = user
-    const order = await this.orderService.createOrder(token)
+    const order = await this.orderService.createOrder({ accessToken: res.locals.user.token })
 
     res.redirect(`/order/${order.id}/summary`)
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const id = req.params.orderId
-    const order = await this.orderService.getOrder(id)
+    try {
+      const order = await this.orderService.getOrder({ accessToken: res.locals.user.token, orderId: id })
 
-    res.render('pages/order/summary', {
-      order,
-    })
+      res.render('pages/order/summary', {
+        order,
+      })
+    } catch (e) {
+      res.render('pages/error', { message: `Could not find an order with id: ${id}` })
+    }
   }
 
   confirmDelete: RequestHandler = async (req: Request, res: Response) => {
     const id = req.params.orderId
-    const order = await this.orderService.getOrder(id)
+    const order = await this.orderService.getOrder({ accessToken: res.locals.user.token, orderId: id })
 
     if (order.status === 'SUBMITTED') {
       res.redirect('/order/delete/failed')
@@ -39,7 +41,7 @@ export default class OrderController {
 
   delete: RequestHandler = async (req: Request, res: Response) => {
     const id = req.params.orderId
-    const order = await this.orderService.getOrder(id)
+    const order = await this.orderService.getOrder({ accessToken: res.locals.user.token, orderId: id })
 
     if (order.status === 'SUBMITTED') {
       res.redirect('/order/delete/failed')
