@@ -52,6 +52,7 @@ context('Order Summary', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoListOrders')
       cy.task('stubCemoGetOrder', { httpStatus: 404 })
     })
 
