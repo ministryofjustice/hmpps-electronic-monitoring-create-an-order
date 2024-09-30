@@ -1,35 +1,69 @@
-import type { NextFunction, Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import AuditService from '../services/auditService'
 import OrderController from './orderController'
 import OrderService from '../services/orderService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order } from '../models/Order'
-import { SanitisedError } from '../sanitisedError'
+import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
 
-const mockId = uuidv4()
-
-const mockSubmittedOrder: Order = {
-  id: mockId,
-  status: 'SUBMITTED',
+const createMockRequest = (order?: Order): Request => {
+  return {
+    // @ts-expect-error stubbing session
+    session: {},
+    query: {},
+    params: {},
+    user: {
+      username: '',
+      token: '',
+      authSource: '',
+    },
+    order,
+  }
 }
 
-const mockDraftOrder: Order = {
-  id: mockId,
-  status: 'IN_PROGRESS',
+const createMockResponse = (): Response => {
+  // @ts-expect-error stubbing res.render
+  return {
+    locals: {
+      user: {
+        username: 'fakeUserName',
+        token: 'fakeUserToken',
+        authSource: 'nomis',
+        userId: 'fakeId',
+        name: 'fake user',
+        displayName: 'fuser',
+        userRoles: ['fakeRole'],
+        staffId: 123,
+      },
+    },
+    redirect: jest.fn(),
+    render: jest.fn(),
+    set: jest.fn(),
+    send: jest.fn(),
+  }
 }
 
-const mockNotFoundRequest: SanitisedError = {
-  message: 'Not Found',
-  name: 'Not Found',
-  stack: '',
-  status: 404,
+const createMockOrder = (status: OrderStatus): Order => {
+  return {
+    id: uuidv4(),
+    status,
+    deviceWearer: {
+      firstName: null,
+      lastName: null,
+      preferredName: null,
+      gender: null,
+      dateOfBirth: null,
+    },
+    deviceWearerContactDetails: {
+      contactNumber: null,
+    },
+  }
 }
 
 describe('OrderController', () => {
@@ -38,9 +72,6 @@ describe('OrderController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
-  let req: Request
-  let res: Response
-  let next: NextFunction
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -57,112 +88,106 @@ describe('OrderController', () => {
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     orderController = new OrderController(mockAuditService, mockOrderService)
-
-    req = {
-      // @ts-expect-error stubbing session
-      session: {},
-      query: {},
-      params: {
-        orderId: mockId,
-      },
-      user: {
-        username: 'fakeUserName',
-        token: 'fakeUserToken',
-        authSource: 'auth',
-      },
-    }
-    // @ts-expect-error stubbing res.render
-    res = {
-      locals: {
-        user: {
-          username: 'fakeUserName',
-          token: 'fakeUserToken',
-          authSource: 'nomis',
-          userId: 'fakeId',
-          name: 'fake user',
-          displayName: 'fuser',
-          userRoles: ['fakeRole'],
-          staffId: 123,
-        },
-      },
-      redirect: jest.fn(),
-      render: jest.fn(),
-      set: jest.fn(),
-      send: jest.fn(),
-    }
-
-    jest.fn()
   })
 
   describe('summary', () => {
     it('should render a summary of the order', async () => {
-      mockOrderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
 
+      // When
       await orderController.summary(req, res, next)
 
+      // Then
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/summary',
         expect.objectContaining({
-          order: mockSubmittedOrder,
+          order: mockOrder,
         }),
       )
-    })
-
-    it('should render an error page if the order cant be found', async () => {
-      mockOrderService.getOrder.mockRejectedValue(mockNotFoundRequest)
-
-      await orderController.summary(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith('pages/error', { message: `Could not find an order with id: ${mockId}` })
     })
   })
 
   describe('create', () => {
     it('should create an order and redirect to view the order', async () => {
-      mockOrderService.createOrder.mockResolvedValue(mockDraftOrder)
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const req = createMockRequest()
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.createOrder.mockResolvedValue(mockOrder)
 
+      // When
       await orderController.create(req, res, next)
 
+      // Then
       expect(mockOrderService.createOrder).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockDraftOrder.id}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
     })
   })
 
   describe('confirmDelete', () => {
     it('should render a confirmation page for a draft order', async () => {
-      mockOrderService.getOrder.mockResolvedValue(mockDraftOrder)
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
 
+      // When
       await orderController.confirmDelete(req, res, next)
 
+      // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-confirm', {
-        order: mockDraftOrder,
+        order: mockOrder,
       })
     })
 
     it('should redirect to a failed page for a submitted order', async () => {
-      mockOrderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
 
+      // When
       await orderController.confirmDelete(req, res, next)
 
+      // Then
       expect(res.redirect).toHaveBeenCalledWith(`/order/delete/failed`)
     })
   })
 
   describe('delete', () => {
     it('should delete the order and redirect to a success page for a draft order', async () => {
-      mockOrderService.getOrder.mockResolvedValue(mockDraftOrder)
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
 
+      // When
       await orderController.delete(req, res, next)
 
-      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith(mockDraftOrder.id)
+      // Then
+      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith(mockOrder.id)
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/success')
     })
 
     it('should not delete the order and reditect to a failed page for a submitted order', async () => {
-      mockOrderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
 
+      // When
       await orderController.delete(req, res, next)
 
+      // Then
       expect(mockOrderService.deleteOrder).toHaveBeenCalledTimes(0)
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/failed')
     })
@@ -170,14 +195,30 @@ describe('OrderController', () => {
 
   describe('deleteFailed', () => {
     it('should render the failed view', async () => {
+      // Given
+      const req = createMockRequest()
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
       await orderController.deleteFailed(req, res, next)
+
+      // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-failed')
     })
   })
 
   describe('deleteSuccess', () => {
     it('should render the success view', async () => {
+      // Given
+      const req = createMockRequest()
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
       await orderController.deleteSuccess(req, res, next)
+
+      // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-success')
     })
   })

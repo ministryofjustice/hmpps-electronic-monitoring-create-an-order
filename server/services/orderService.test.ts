@@ -2,12 +2,23 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderService from './orderService'
 import RestClient from '../data/restClient'
 import { SanitisedError } from '../sanitisedError'
+import { Order, OrderStatusEnum } from '../models/Order'
 
 jest.mock('../data/restClient')
 
-const mockNewOrder = {
+const mockNewOrder: Order = {
   id: uuidv4(),
-  status: 'IN_PROGRESS',
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  deviceWearer: {
+    firstName: null,
+    lastName: null,
+    preferredName: null,
+    gender: null,
+    dateOfBirth: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
 }
 
 const mock404Error: SanitisedError = {

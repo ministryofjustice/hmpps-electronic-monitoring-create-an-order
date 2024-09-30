@@ -57,9 +57,9 @@ context('Order Summary', () => {
     })
 
     it('Should indicate to the user that there was an error', () => {
-      cy.signIn().visit('/order/123456789/summary')
+      cy.signIn().visit(`/order/${mockOrderId}/summary`, { failOnStatusCode: false })
 
-      Page.verifyOnPage(ErrorPage, 'Could not find an order with id: 123456789')
+      Page.verifyOnPage(ErrorPage, 'Not Found')
     })
   })
 })

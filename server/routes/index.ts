@@ -6,6 +6,7 @@ import OrderSearchController from '../controllers/orderSearchController'
 import OrderController from '../controllers/orderController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ContactDetailsController from '../controllers/contactDetailsController'
+import populateOrder from '../middleware/populateCurrentOrder'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -22,8 +23,10 @@ export default function routes({
 
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
-  const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, orderService)
-  const contactDetailsController = new ContactDetailsController(auditService, orderService)
+  const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
+  const contactDetailsController = new ContactDetailsController(auditService)
+
+  router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.search)
 
@@ -37,11 +40,9 @@ export default function routes({
 
   // Device Wearer
   get('/order/:orderId/device-wearer', deviceWearerController.view)
-  get('/order/:orderId/device-wearer/edit', deviceWearerController.edit)
 
   // Contact Details
   get('/order/:orderId/contact-details', contactDetailsController.view)
-  get('/order/:orderId/contact-details/edit', contactDetailsController.edit)
 
   return router
 }
