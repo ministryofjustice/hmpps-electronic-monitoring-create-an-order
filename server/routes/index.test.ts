@@ -52,6 +52,13 @@ const mock500Error: SanitisedError = {
   status: 500,
 }
 
+const mock404Error: SanitisedError = {
+  message: 'Not Found',
+  name: 'Not Found',
+  stack: '',
+  status: 404,
+}
+
 const mockDeviceWearer: DeviceWearer = {
   orderId: '123456789',
   firstName: 'John',
@@ -208,21 +215,6 @@ describe('authorised user', () => {
     })
   })
 
-  describe('GET /order/:orderId/device-wearer/edit', () => {
-    it('should render editable device wearer page', () => {
-      auditService.logPageView.mockResolvedValue()
-      orderService.getOrder.mockResolvedValue(mockDraftOrder)
-      deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
-
-      return request(app)
-        .get(`/order/${mockDraftOrder.id}/device-wearer/edit`)
-        .expect('Content-Type', /html/)
-        .expect(res => {
-          expect(res.text).toContain('About the device wearer')
-        })
-    })
-  })
-
   describe('GET /order/:orderId/contact-details', () => {
     it('should render contact details page', () => {
       auditService.logPageView.mockResolvedValue()
@@ -236,17 +228,43 @@ describe('authorised user', () => {
         })
     })
   })
+})
 
-  describe('GET /order/:orderId/contact-details/edit', () => {
-    it('should render editable contact details page', () => {
-      auditService.logPageView.mockResolvedValue()
-      orderService.getOrder.mockResolvedValue(mockDraftOrder)
+describe('Order Not Found', () => {
+  let app: Express
+  const mockId = uuidv4()
 
+  beforeEach(() => {
+    app = appWithAllRoutes({
+      services: {
+        auditService,
+        orderService,
+        deviceWearerService,
+        orderSearchService,
+      },
+      userSupplier: () => user,
+    })
+
+    orderService.getOrder.mockRejectedValue(mock404Error)
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  describe.each<[string, 'get' | 'post', string]>([
+    ['GET /order/:orderId/summary', 'get', `/order/${mockId}/summary`],
+    ['GET /order/:orderId/delete', 'get', `/order/${mockId}/delete`],
+    ['POST /order/:orderId/summary', 'post', `/order/${mockId}/delete`],
+    ['GET /order/:orderId/device-wearer', 'get', `/order/${mockId}/device-wearer`],
+    ['GET /order/:orderId/contact-details', 'get', `/order/${mockId}/contact-details`],
+  ])('%s', (_, method, path) => {
+    it('should render a 404 if the order is not found', () => {
       return request(app)
-        .get(`/order/${mockDraftOrder.id}/contact-details/edit`)
-        .expect('Content-Type', /html/)
+        [method](path)
+        .expect(404)
         .expect(res => {
-          expect(res.text).toContain('Contact details')
+          expect(res.text).toContain('Not Found')
         })
     })
   })
@@ -279,9 +297,7 @@ describe('unauthorised user', () => {
     ['GET /order/:orderId/delete', 'get', '/order/123456789/delete'],
     ['POST /order/:orderId/summary', 'post', '/order/123456789/delete'],
     ['GET /order/:orderId/device-wearer', 'get', '/order/123456789/device-wearer'],
-    ['GET /order/:orderId/device-wearer/edit', 'get', '/order/123456789/device-wearer/edit'],
     ['GET /order/:orderId/contact-details', 'get', '/order/123456789/contact-details'],
-    ['GET /order/:orderId/contact-details/edit', 'get', '/order/123456789/contact-details/edit'],
   ])('%s', (_, method, path) => {
     it('should redirect to authError', () => {
       return request(app)[method](path).expect(302).expect('Location', '/authError')
