@@ -5,12 +5,12 @@ import { appWithAllRoutes, unauthorisedUser, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import OrderService from '../services/orderService'
 import DeviceWearerService from '../services/deviceWearerService'
-import { DeviceWearer } from '../data/inMemoryDatabase'
 import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order } from '../models/Order'
+import { Order, OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
+import { DeviceWearer } from '../models/DeviceWearer'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -37,12 +37,32 @@ const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWeare
 
 const mockSubmittedOrder: Order = {
   id: uuidv4(),
-  status: 'SUBMITTED',
+  status: OrderStatusEnum.Enum.SUBMITTED,
+  deviceWearer: {
+    firstName: null,
+    lastName: null,
+    preferredName: null,
+    gender: null,
+    dateOfBirth: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
 }
 
 const mockDraftOrder: Order = {
   id: uuidv4(),
-  status: 'IN_PROGRESS',
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  deviceWearer: {
+    firstName: null,
+    lastName: null,
+    preferredName: null,
+    gender: null,
+    dateOfBirth: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
 }
 
 const mock500Error: SanitisedError = {
@@ -60,7 +80,6 @@ const mock404Error: SanitisedError = {
 }
 
 const mockDeviceWearer: DeviceWearer = {
-  orderId: '123456789',
   firstName: 'John',
   lastName: 'Smith',
   dateOfBirth: '',

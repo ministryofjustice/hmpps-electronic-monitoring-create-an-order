@@ -30,10 +30,30 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
               {
                 id: uuidv4(),
                 status: 'SUBMITTED',
+                deviceWearer: {
+                  firstName: null,
+                  lastName: null,
+                  preferredName: null,
+                  gender: null,
+                  dateOfBirth: null,
+                },
+                deviceWearerContactDetails: {
+                  contactNumber: null,
+                },
               },
               {
                 id: uuidv4(),
                 status: 'IN_PROGRESS',
+                deviceWearer: {
+                  firstName: null,
+                  lastName: null,
+                  preferredName: null,
+                  gender: null,
+                  dateOfBirth: null,
+                },
+                deviceWearerContactDetails: {
+                  contactNumber: null,
+                },
               },
             ]
           : null,
@@ -66,6 +86,16 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
           ? {
               id: options.id,
               status: options.status,
+              deviceWearer: {
+                firstName: null,
+                lastName: null,
+                preferredName: null,
+                gender: null,
+                dateOfBirth: null,
+              },
+              deviceWearerContactDetails: {
+                contactNumber: null,
+              },
             }
           : null,
     },

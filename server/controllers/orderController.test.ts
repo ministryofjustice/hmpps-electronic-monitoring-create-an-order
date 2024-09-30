@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import AuditService from '../services/auditService'
 import OrderController from './orderController'

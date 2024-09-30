@@ -42,6 +42,7 @@ describe('ContactDetailsController', () => {
         deviceWearer: {
           firstName: null,
           lastName: null,
+          preferredName: null,
           gender: null,
           dateOfBirth: null,
         },

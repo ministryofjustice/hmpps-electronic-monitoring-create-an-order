@@ -5,7 +5,7 @@ import OrderSearchController from './orderSearchController'
 import OrderSearchService from '../services/orderSearchService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order } from '../models/Order'
+import { Order, OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 
 jest.mock('../services/auditService')
@@ -14,7 +14,17 @@ jest.mock('../data/hmppsAuditClient')
 
 const mockSubmittedOrder: Order = {
   id: uuidv4(),
-  status: 'SUBMITTED',
+  status: OrderStatusEnum.Enum.SUBMITTED,
+  deviceWearer: {
+    firstName: null,
+    lastName: null,
+    preferredName: null,
+    gender: null,
+    dateOfBirth: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
 }
 
 const mock500Error: SanitisedError = {
