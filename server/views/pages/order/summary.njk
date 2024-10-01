@@ -30,15 +30,9 @@
   <ul class="govuk-task-list">
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
-        {% if order.status == "SUBMITTED" %}
-            <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/device-wearer" aria-describedby="order-section-device-wearer">
-                About the device wearer
-            </a>
-        {% else %}
-            <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/device-wearer/edit" aria-describedby="order-section-device-wearer">
-                About the device wearer
-            </a>
-        {% endif %}
+        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/about-the-device-wearer" aria-describedby="order-section-device-wearer">
+            About the device wearer
+        </a>
       </div>
       {% if order.deviceWearer.isComplete %}
         <div class="govuk-task-list__status" >
@@ -56,15 +50,9 @@
     </li>
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
-        {% if order.status == "Submitted" %}
-            <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/contact-details" aria-describedby="order-section-contact-details">
-                Contact details
-            </a>
-        {% else %}
-            <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/contact-details/edit" aria-describedby="order-section-contact-details">
-                Contact details
-            </a>
-        {% endif %}
+        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/about-the-device-wearer/contact-details" aria-describedby="order-section-contact-details">
+            Contact details
+        </a>
       </div>
       {% if order.contactDetails.isComplete %}
         <div class="govuk-task-list__status" >

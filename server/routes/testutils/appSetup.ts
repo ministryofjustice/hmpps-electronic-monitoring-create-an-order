@@ -1,7 +1,6 @@
 import express, { Express } from 'express'
 import { NotFound } from 'http-errors'
 import { v4 as uuidv4 } from 'uuid'
-
 import jwt from 'jsonwebtoken'
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'

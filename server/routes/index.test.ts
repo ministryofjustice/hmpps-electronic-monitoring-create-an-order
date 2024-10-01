@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
-import { appWithAllRoutes, unauthorisedUser, user } from './testutils/appSetup'
+import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import OrderService from '../services/orderService'
 import DeviceWearerService from '../services/deviceWearerService'
@@ -10,7 +10,6 @@ import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
-import { DeviceWearer } from '../models/DeviceWearer'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -33,7 +32,7 @@ const restClient = new RestClient('cemoApi', {
 const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditService>
 const orderSearchService = new OrderSearchService(restClient) as jest.Mocked<OrderSearchService>
 const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
-const deviceWearerService = new DeviceWearerService() as jest.Mocked<DeviceWearerService>
+const deviceWearerService = new DeviceWearerService(restClient) as jest.Mocked<DeviceWearerService>
 
 const mockSubmittedOrder: Order = {
   id: uuidv4(),
@@ -77,14 +76,6 @@ const mock404Error: SanitisedError = {
   name: 'Not Found',
   stack: '',
   status: 404,
-}
-
-const mockDeviceWearer: DeviceWearer = {
-  firstName: 'John',
-  lastName: 'Smith',
-  dateOfBirth: '',
-  alias: '',
-  gender: 'male',
 }
 
 describe('authorised user', () => {
@@ -219,14 +210,14 @@ describe('authorised user', () => {
     })
   })
 
-  describe('GET /order/:orderId/device-wearer', () => {
+  describe('GET /order/:orderId/about-the-device-wearer', () => {
     it('should render device wearer page', () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
-      deviceWearerService.getDeviceWearer.mockResolvedValue(mockDeviceWearer)
+      flashProvider.mockReturnValue([])
 
       return request(app)
-        .get(`/order/${mockSubmittedOrder.id}/device-wearer`)
+        .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('About the device wearer')
@@ -234,13 +225,13 @@ describe('authorised user', () => {
     })
   })
 
-  describe('GET /order/:orderId/contact-details', () => {
+  describe('GET /order/:orderId/about-the-device-wearer/contact-details', () => {
     it('should render contact details page', () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
       return request(app)
-        .get(`/order/${mockSubmittedOrder.id}/contact-details`)
+        .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer/contact-details`)
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Contact details')
@@ -275,8 +266,13 @@ describe('Order Not Found', () => {
     ['GET /order/:orderId/summary', 'get', `/order/${mockId}/summary`],
     ['GET /order/:orderId/delete', 'get', `/order/${mockId}/delete`],
     ['POST /order/:orderId/summary', 'post', `/order/${mockId}/delete`],
-    ['GET /order/:orderId/device-wearer', 'get', `/order/${mockId}/device-wearer`],
-    ['GET /order/:orderId/contact-details', 'get', `/order/${mockId}/contact-details`],
+    ['GET /order/:orderId/about-the-device-wearer', 'get', `/order/${mockId}/about-the-device-wearer`],
+    ['POST /order/:orderId/about-the-device-wearer', 'post', `/order/${mockId}/about-the-device-wearer`],
+    [
+      'GET /order/:orderId/about-the-device-wearer/contact-details',
+      'get',
+      `/order/${mockId}/about-the-device-wearer/contact-details`,
+    ],
   ])('%s', (_, method, path) => {
     it('should render a 404 if the order is not found', () => {
       return request(app)
@@ -315,8 +311,13 @@ describe('unauthorised user', () => {
     ['GET /order/:orderId/summary', 'get', '/order/123456789/summary'],
     ['GET /order/:orderId/delete', 'get', '/order/123456789/delete'],
     ['POST /order/:orderId/summary', 'post', '/order/123456789/delete'],
-    ['GET /order/:orderId/device-wearer', 'get', '/order/123456789/device-wearer'],
-    ['GET /order/:orderId/contact-details', 'get', '/order/123456789/contact-details'],
+    ['GET /order/:orderId/about-the-device-wearer', 'get', '/order/123456789/about-the-device-wearer'],
+    ['POST /order/:orderId/about-the-device-wearer', 'post', '/order/123456789/about-the-device-wearer'],
+    [
+      'GET /order/:orderId/about-the-device-wearer/contact-details',
+      'get',
+      '/order/123456789/about-the-device-wearer/contact-details',
+    ],
   ])('%s', (_, method, path) => {
     it('should redirect to authError', () => {
       return request(app)[method](path).expect(302).expect('Location', '/authError')

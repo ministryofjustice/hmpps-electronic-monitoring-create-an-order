@@ -1,3 +1,8 @@
+import { ErrorMessage } from '../interfaces/formData'
+import { ValidationResult } from '../models/Validation'
+
+const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -20,4 +25,37 @@ export const initialiseName = (fullName?: string): string | undefined => {
 
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
+}
+
+export const calculateAge = (birthDate: string) =>
+  Math.floor((new Date().getTime() - new Date(birthDate).getTime()) / YEAR_IN_MS)
+
+export const serialiseDate = (year: string, month: string, day: string) => {
+  if (isBlank(year) || isBlank(month) || isBlank(day)) {
+    return null
+  }
+
+  return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10)).toISOString()
+}
+
+export const deserialiseDate = (dateString: string): [year: string, month: string, day: string] => {
+  if (isBlank(dateString)) {
+    return ['', '', '']
+  }
+
+  const date = new Date(dateString)
+
+  return [date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString()]
+}
+
+export const getError = (validationErrors: ValidationResult, field: string): ErrorMessage | undefined => {
+  const matchedError = validationErrors.find(e => e.field === field)
+
+  if (matchedError) {
+    return {
+      text: matchedError.error,
+    }
+  }
+
+  return undefined
 }
