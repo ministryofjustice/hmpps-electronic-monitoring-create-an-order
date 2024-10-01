@@ -18,7 +18,7 @@ const mockSubmittedOrder: Order = {
   deviceWearer: {
     firstName: null,
     lastName: null,
-    preferredName: null,
+    alias: null,
     gender: null,
     dateOfBirth: null,
   },

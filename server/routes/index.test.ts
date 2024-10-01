@@ -41,7 +41,7 @@ const mockSubmittedOrder: Order = {
   deviceWearer: {
     firstName: null,
     lastName: null,
-    preferredName: null,
+    alias: null,
     gender: null,
     dateOfBirth: null,
   },
@@ -56,7 +56,7 @@ const mockDraftOrder: Order = {
   deviceWearer: {
     firstName: null,
     lastName: null,
-    preferredName: null,
+    alias: null,
     gender: null,
     dateOfBirth: null,
   },
@@ -83,7 +83,7 @@ const mockDeviceWearer: DeviceWearer = {
   firstName: 'John',
   lastName: 'Smith',
   dateOfBirth: '',
-  preferredName: '',
+  alias: '',
   gender: 'male',
 }
 

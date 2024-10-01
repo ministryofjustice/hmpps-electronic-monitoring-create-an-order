@@ -33,7 +33,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                 deviceWearer: {
                   firstName: null,
                   lastName: null,
-                  preferredName: null,
+                  alias: null,
                   gender: null,
                   dateOfBirth: null,
                 },
@@ -47,7 +47,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                 deviceWearer: {
                   firstName: null,
                   lastName: null,
-                  preferredName: null,
+                  alias: null,
                   gender: null,
                   dateOfBirth: null,
                 },
@@ -89,7 +89,7 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
               deviceWearer: {
                 firstName: null,
                 lastName: null,
-                preferredName: null,
+                alias: null,
                 gender: null,
                 dateOfBirth: null,
               },

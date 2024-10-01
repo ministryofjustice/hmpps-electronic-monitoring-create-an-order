@@ -16,8 +16,6 @@ export default class OrderSearchService {
       token: input.accessToken,
     })
 
-    const orders = OrderListModel.parse(result)
-
-    return orders
+    return OrderListModel.parse(result)
   }
 }
