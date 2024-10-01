@@ -7,6 +7,7 @@ import OrderController from '../controllers/orderController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ContactDetailsController from '../controllers/contactDetailsController'
 import populateOrder from '../middleware/populateCurrentOrder'
+import paths from '../constants/paths'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -31,18 +32,19 @@ export default function routes({
   get('/', orderSearchController.search)
 
   // Order
-  post('/order/create', orderController.create)
-  get('/order/delete/success', orderController.deleteSuccess)
-  get('/order/delete/failed', orderController.deleteFailed)
-  get('/order/:orderId/summary', orderController.summary)
-  get('/order/:orderId/delete', orderController.confirmDelete)
-  post('/order/:orderId/delete', orderController.delete)
+  post(paths.ORDER.CREATE, orderController.create)
+  get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
+  get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
+  get(paths.ORDER.SUMMARY, orderController.summary)
+  get(paths.ORDER.DELETE, orderController.confirmDelete)
+  post(paths.ORDER.DELETE, orderController.delete)
 
   // Device Wearer
-  get('/order/:orderId/device-wearer', deviceWearerController.view)
+  get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.update)
 
   // Contact Details
-  get('/order/:orderId/contact-details', contactDetailsController.view)
+  get(paths.ABOUT_THE_DEVICE_WEARER.CONTACT_DETAILS, contactDetailsController.view)
 
   return router
 }

@@ -8,127 +8,189 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 
-{{ govukBackLink({
-  text: "Back",
-  href: "/order/" + deviceWearer.orderId + "/summary"
-}) }}
-
-{% set html %}
-  <p class="govuk-notification-banner__heading">
-    You are viewing a submitted order.
-  </p>
-{% endset %}
-
-{{ govukNotificationBanner({
-  html: html
-}) }}
-
-<div class="homepage-content">
-  {{ mojPageHeaderActions({
-    heading: {
-        text: "About the device wearer"
-    }
-  }) }}
-</div>
-
-{% call govukFieldset({
-  legend: {
-    text: "Name of the device wearer",
-    classes: "govuk-fieldset__legend--l",
-    isPageHeading: false
-  }
-}) %}
-
-  {{ govukInput({
-    label: {
-      text: "First name",
-      classes: "govuk-label--s"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "first-name",
-    name: "firstName",
-    autocomplete: "name given-name",
-    value: deviceWearer.firstName,
-    disabled: true
-
+  {{ govukBackLink({
+    text: "Back",
+    href: orderSummaryUri
   }) }}
 
-  {{ govukInput({
-    label: {
-      text: "Last name",
-      classes: "govuk-label--s"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "last-name",
-    name: "lastName",
-    autocomplete: "name family-name",
-    value: deviceWearer.lastName,
-    disabled: true
-  }) }}
+  {% if not isOrderEditable %}
+      {% set html %}
+        <p class="govuk-notification-banner__heading">
+          You are viewing a submitted order.
+        </p>
+      {% endset %}
 
-  {{ govukInput({
-    label: {
-      text: "Preferred name",
-      classes: "govuk-label--s"
-    },
-    hint: {
-        text: "For example a nickname or alias the device wearer is known as"
-    },
-    classes: "govuk-!-width-two-thirds",
-    id: "preferred-name",
-    name: "preferredName",
-    autocomplete: "name nickname",
-    value: deviceWearer.preferredName,
-    disabled: true
-  }) }}
+      {{ govukNotificationBanner({
+        html: html
+      }) }}
+  {% endif %}
 
-{% endcall %}
-
-{{ govukRadios({
-  name: "gender",
-  fieldset: {
-    legend: {
-      text: "Gender",
-      isPageHeading: false,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  items: [
-    {
-      value: "male",
-      text: "Male",
-      disabled: true
-    },
-    {
-      value: "female",
-      text: "Female",
-      disabled: true
-    },
-    {
-      value: "non-binary",
-      text: "Non-binary",
-      disabled: true
-    },
-    {
-      value: "unknown",
-      text: "Don't Know",
-      disabled: true
-    },
-    {
-      value: "self-identify",
-      text: "Self identify",
-      disabled: true
-    }
-  ],
-  value: deviceWearer.gender
-}) }}
-
-
-  <div class="govuk-button-group">  
-    <a class="govuk-link" href="/order/{{ deviceWearer.orderId }}/summary">Return to order section menu</a>
+  <div class="homepage-content">
+    {{ mojPageHeaderActions({
+      heading: {
+          text: "About the device wearer"
+      }
+    }) }}
   </div>
+
+  <form action="{{ formActionUri }}" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {% call govukFieldset({
+      legend: {
+        text: "Name of the device wearer",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+
+      {{ govukInput({
+        label: {
+          text: "First name",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "first-name",
+        name: "firstName",
+        autocomplete: "name given-name",
+        value: firstName.value,
+        errorMessage: firstName.error,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Last name",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "last-name",
+        name: "lastName",
+        autocomplete: "name family-name",
+        value: lastName.value,
+        errorMessage: lastName.error,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Preferred name",
+          classes: "govuk-label--s"
+        },
+        hint: {
+            text: "For example a nickname or alias the device wearer is also known as"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "alias",
+        name: "alias",
+        autocomplete: "name nickname",
+        value: alias.value,
+        errorMessage: alias.error,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukDateInput({
+        id: "dateOfBirth",
+        namePrefix: "dateOfBirth",
+        fieldset: {
+          legend: {
+            text: "Date of birth",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "For example, 21 05 2011"
+        },
+        items: [
+          {
+            name: "day",
+            classes: "govuk-input--width-2",
+            autocomplete: "bday-day",
+            value: dateOfBirth_day.value
+          },
+          {
+            name: "month",
+            classes: "govuk-input--width-2",
+            autocomplete: "bday-month",
+            value: dateOfBirth_month.value
+          },
+          {
+            name: "year",
+            classes: "govuk-input--width-4",
+            autocomplete: "bday-year",
+            value: dateOfBirth_year.value
+          }
+        ],
+        errorMessage: dateOfBirth.error,
+        disabled: not isOrderEditable
+      }) }}
+
+    {% endcall %}
+
+    {{ govukRadios({
+      name: "gender",
+      fieldset: {
+        legend: {
+          text: "Gender",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: [
+        {
+          value: "male",
+          text: "Male",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "female",
+          text: "Female",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "non-binary",
+          text: "Non-binary",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "unknown",
+          text: "Don't Know",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "self-identify",
+          text: "Self identify",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: gender.value,
+      errorMessage: gender.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    <div class="govuk-button-group">
+      {% if isOrderEditable %}
+        {{ govukButton({
+            text: "Save and continue",
+            name: "action",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return back to to form section menu",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "back"
+        }) }}
+      {% else %}
+        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to to form section menu</a>
+      {% endif %}
+    </div>
+  </form>
 
 {% endblock %}

@@ -1,5 +1,4 @@
 import { HmppsUser } from '../../interfaces/hmppsUser'
-import { FormData } from '../../interfaces/formData'
 import { Order } from '../../models/Order'
 
 export declare module 'express-session' {
@@ -7,7 +6,6 @@ export declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
-    formData: FormData
   }
 }
 
@@ -23,6 +21,7 @@ export declare global {
       verified?: boolean
       id: string
       logout(done: (err: unknown) => void): void
+      flash(type: string, message: unknown): number
       order?: Order
     }
 
