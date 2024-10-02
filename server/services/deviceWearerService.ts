@@ -11,7 +11,7 @@ type UpdateDeviceWearerRequestInput = AuthenticatedRequestInput & {
     firstName: string
     lastName: string
     alias: string
-    gender: string | null
+    gender: string
     'dateOfBirth-day': string
     'dateOfBirth-month': string
     'dateOfBirth-year': string
