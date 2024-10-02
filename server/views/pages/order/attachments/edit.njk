@@ -38,10 +38,11 @@
   <div class="govuk-button-group">
     {{ govukButton({
         text: "Save and continue",
-        type: 'submit'
-    }) }}
-  
+        type: 'submit',
+        value: "continue"
+    }) }}  
     <a class="govuk-link" href="/order/{{ orderId }}/attachments">Return to order section menu</a>
+    
   </div>
 </form>
 {% endblock %}
