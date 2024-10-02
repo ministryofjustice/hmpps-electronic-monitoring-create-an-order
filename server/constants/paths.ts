@@ -13,7 +13,7 @@ const paths = {
     RESPONSIBLE_ADULT: '/order/:orderId/about-the-device-wearer/responsible-adult',
   },
 
-  ATTCHMENT: {
+  ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
     LICENCE: '/order/:orderId/attachments/licence',
     PHOTO_ID: '/order/:orderId/attachments/photoId',
