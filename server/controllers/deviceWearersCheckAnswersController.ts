@@ -1,12 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService } from '../services'
 
-export default class ContactDetailsController {
+export default class DeviceWearerCheckAnswersController {
   constructor(private readonly auditService: AuditService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { deviceWearerContactDetails } = req.order!
-
-    res.render(`pages/order/about-the-device-wearer/contact-details`, { contactDetails: deviceWearerContactDetails })
+    res.render(`pages/order/about-the-device-wearer/check-your-answers`)
   }
 }

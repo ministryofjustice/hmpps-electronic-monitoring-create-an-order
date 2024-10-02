@@ -41,106 +41,99 @@
   <form action="{{ formActionUri }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    {% call govukFieldset({
-      legend: {
-        text: "Name of the device wearer",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
+    {{ govukInput({
+      label: {
+        text: "First name",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "first-name",
+      name: "firstName",
+      autocomplete: "name given-name",
+      value: firstName.value,
+      errorMessage: firstName.error,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: {
-          text: "First name",
-          classes: "govuk-label--s"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "first-name",
-        name: "firstName",
-        autocomplete: "name given-name",
-        value: firstName.value,
-        errorMessage: firstName.error,
-        disabled: not isOrderEditable
-      }) }}
+    {{ govukInput({
+      label: {
+        text: "Last name",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "last-name",
+      name: "lastName",
+      autocomplete: "name family-name",
+      value: lastName.value,
+      errorMessage: lastName.error,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: {
-          text: "Last name",
-          classes: "govuk-label--s"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "last-name",
-        name: "lastName",
-        autocomplete: "name family-name",
-        value: lastName.value,
-        errorMessage: lastName.error,
-        disabled: not isOrderEditable
-      }) }}
+    {{ govukInput({
+      label: {
+        text: "Alias (optional)",
+        classes: "govuk-label--s"
+      },
+      hint: {
+          text: "For example a nickname or alias the device wearer is also known as"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "alias",
+      name: "alias",
+      autocomplete: "name nickname",
+      value: alias.value,
+      errorMessage: alias.error,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: {
-          text: "Preferred name",
-          classes: "govuk-label--s"
+    {{ govukDateInput({
+      id: "dateOfBirth",
+      namePrefix: "dateOfBirth",
+      fieldset: {
+        legend: {
+          text: "Date of birth",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2011"
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          autocomplete: "bday-day",
+          value: dateOfBirth_day.value
         },
-        hint: {
-            text: "For example a nickname or alias the device wearer is also known as"
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          autocomplete: "bday-month",
+          value: dateOfBirth_month.value
         },
-        classes: "govuk-!-width-two-thirds",
-        id: "alias",
-        name: "alias",
-        autocomplete: "name nickname",
-        value: alias.value,
-        errorMessage: alias.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukDateInput({
-        id: "dateOfBirth",
-        namePrefix: "dateOfBirth",
-        fieldset: {
-          legend: {
-            text: "Date of birth",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
-        hint: {
-          text: "For example, 21 05 2011"
-        },
-        items: [
-          {
-            name: "day",
-            classes: "govuk-input--width-2",
-            autocomplete: "bday-day",
-            value: dateOfBirth_day.value
-          },
-          {
-            name: "month",
-            classes: "govuk-input--width-2",
-            autocomplete: "bday-month",
-            value: dateOfBirth_month.value
-          },
-          {
-            name: "year",
-            classes: "govuk-input--width-4",
-            autocomplete: "bday-year",
-            value: dateOfBirth_year.value
-          }
-        ],
-        errorMessage: dateOfBirth.error,
-        disabled: not isOrderEditable
-      }) }}
-
-    {% endcall %}
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          autocomplete: "bday-year",
+          value: dateOfBirth_year.value
+        }
+      ],
+      errorMessage: dateOfBirth.error,
+      disabled: not isOrderEditable
+    }) }}
 
     {{ govukRadios({
       name: "gender",
       fieldset: {
         legend: {
-          text: "Gender",
+          text: "Gender identity",
           isPageHeading: false,
-          classes: "govuk-fieldset__legend--l"
+          classes: "govuk-fieldset__legend--s"
         }
+      },
+      hint: {
+        text: "Select the device wearer's gender"
       },
       items: [
         {
