@@ -50,13 +50,13 @@ export default function routes({
   get(paths.ABOUT_THE_DEVICE_WEARER.CONTACT_DETAILS, contactDetailsController.view)
 
   // Attachments
-  get(paths.ATTCHMENT.ATTACHMENTS, attachmentsController.view)
-  get(paths.ATTCHMENT.LICENCE, attachmentsController.licence)
-  post(paths.ATTCHMENT.LICENCE, attachmentsController.uploadLicence)
-  get(paths.ATTCHMENT.PHOTO_ID, attachmentsController.photo)
-  post(paths.ATTCHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
-  get(paths.ATTCHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
-  get(paths.ATTCHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
+  get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
+  get(paths.ATTACHMENT.LICENCE, attachmentsController.licence)
+  post(paths.ATTACHMENT.LICENCE, attachmentsController.uploadLicence)
+  get(paths.ATTACHMENT.PHOTO_ID, attachmentsController.photo)
+  post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
+  get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
+  get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
 
   return router
 }
