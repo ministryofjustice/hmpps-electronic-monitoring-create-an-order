@@ -19,7 +19,6 @@ const paths = {
     PHOTO_ID: '/order/:orderId/attachments/photoId',
     DOWNLOAD_LICENCE: '/order/:orderId/attachments/licence/:filename',
     DOWNLOAD_PHOTO_ID: '/order/:orderId/attachments/photoId/:filename',
-    DOWNLOD: '/order/:orderId/attachments/:attchmentType/raw',
   },
 }
 
