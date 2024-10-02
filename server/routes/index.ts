@@ -33,14 +33,13 @@ export default function routes({
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
   const contactDetailsController = new ContactDetailsController(auditService)
-  const responsibleAdultController = new ResponsibleAdultController(auditService);
-  const deviceWearerContactDetailsController = new DeviceWearerContactDetailsController(auditService);
-  const responsibleOfficerController = new ResponsibleOfficerController(auditService);
+  const responsibleAdultController = new ResponsibleAdultController(auditService)
+  const deviceWearerContactDetailsController = new DeviceWearerContactDetailsController(auditService)
+  const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
 
   router.param('orderId', populateOrder(orderService))
-  
 
   get('/', orderSearchController.search)
 

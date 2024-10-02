@@ -236,7 +236,7 @@ describe('authorised user', () => {
         .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer/contact-details`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Contact details')
+          expect(res.text).toContain('Telephone number')
         })
     })
   })

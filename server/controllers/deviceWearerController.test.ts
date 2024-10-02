@@ -111,7 +111,7 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
-        'pages/order/device-wearer/view',
+        'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
           firstName: { value: 'tester' },
           lastName: { value: 'testington' },
@@ -150,7 +150,7 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
-        'pages/order/device-wearer/view',
+        'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
           firstName: { value: 'new' },
           lastName: { value: 'name' },
