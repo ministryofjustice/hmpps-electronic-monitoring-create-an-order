@@ -1,0 +1,48 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% block content %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/order/" + orderId + "/attachments"
+}) }}
+
+<div class="homepage-content">
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "Additional documents"
+    }
+  }) }}
+</div>
+ <form method="post" encType="multipart/form-data">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  {{ govukFileUpload({
+    id: "licence",
+    name: "file",
+    label: {
+      text: "Upload the "+fileType
+    },
+    hint: {
+      text: "Upload a copy of the "+ fileType
+    },
+    errorMessage:error
+  }) }}
+
+  <div class="govuk-button-group">
+    {{ govukButton({
+        text: "Save and continue",
+        type: 'submit',
+        value: "continue"
+    }) }}  
+    <a class="govuk-link" href="/order/{{ orderId }}/attachments">Return to attachment summary page</a>
+    
+  </div>
+</form>
+{% endblock %}

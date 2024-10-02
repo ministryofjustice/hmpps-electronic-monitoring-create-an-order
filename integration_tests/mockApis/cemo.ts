@@ -40,6 +40,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                 deviceWearerContactDetails: {
                   contactNumber: null,
                 },
+                additionalDocuments: [],
               },
               {
                 id: uuidv4(),
@@ -54,6 +55,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                 deviceWearerContactDetails: {
                   contactNumber: null,
                 },
+                additionalDocuments: [],
               },
             ]
           : null,
@@ -96,8 +98,77 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
               deviceWearerContactDetails: {
                 contactNumber: null,
               },
+              additionalDocuments: [],
             }
           : null,
+    },
+  })
+
+type GetOrderWithAttachmentStubOptions = {
+  httpStatus: number
+  id?: string
+  status?: string
+  attachments?: Attachment
+}
+type Attachment = {
+  id?: string
+  orderId?: string
+  fileType?: string
+  fileName?: string
+}
+const getOrderWithAttachments = (
+  options: GetOrderWithAttachmentStubOptions = defaultGetOrderOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/GetForm\\?id=${options.id}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              id: options.id,
+              status: options.status,
+              deviceWearer: {
+                firstName: null,
+                lastName: null,
+                alias: null,
+                gender: null,
+                dateOfBirth: null,
+              },
+              deviceWearerContactDetails: {
+                contactNumber: null,
+              },
+              additionalDocuments: options.attachments,
+            }
+          : null,
+    },
+  })
+
+type UploadAttachmentStubOptions = {
+  httpStatus: number
+  id?: string
+  type?: string
+}
+
+const defaultUploadAttachmentOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  type: 'LICENCE',
+}
+const uploadAttachment = (options: UploadAttachmentStubOptions = defaultUploadAttachmentOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: `/cemo/api/order/${options.id}/document-type/${options.type}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? {} : { status: 400, userMessage: 'Mock Error', developerMessage: '' },
     },
   })
 
@@ -105,4 +176,6 @@ export default {
   stubCemoGetOrder: getOrder,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
+  stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubUploadAttachment: uploadAttachment,
 }

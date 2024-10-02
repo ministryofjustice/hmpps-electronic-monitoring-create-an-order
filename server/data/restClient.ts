@@ -29,6 +29,12 @@ interface StreamRequest {
   token: string
 }
 
+interface PostMultiPartRequest extends Request {
+  metadata?: Record<string, unknown>
+  retry?: boolean
+  fileToUpload: Express.Multer.File
+}
+
 export default class RestClient {
   agent: Agent
 
@@ -117,6 +123,48 @@ export default class RestClient {
     }
   }
 
+  async postMultiPart<Response = unknown>({
+    path,
+    query = {},
+    headers = {},
+    responseType = '',
+    metadata = {},
+    raw = false,
+    token,
+    retry = false,
+    fileToUpload,
+  }: PostMultiPartRequest): Promise<Response> {
+    logger.info(`${this.name} POST: ${path}`)
+    try {
+      const result = await superagent
+        .post(`${this.apiUrl()}${path}`)
+        .query(query)
+        .attach('file', fileToUpload.buffer, {
+          filename: fileToUpload.originalname,
+          contentType: fileToUpload.mimetype,
+        })
+        .field('metadata', JSON.stringify(metadata))
+        .agent(this.agent)
+        .retry(2, (err, res) => {
+          if (retry === false) {
+            return false
+          }
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .auth(token, { type: 'bearer' })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+
+      return raw ? result : result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error as UnsanitisedError)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
+      throw sanitisedError
+    }
+  }
+
   async patch<Response = unknown>(request: RequestWithBody): Promise<Response> {
     return this.requestWithBody('patch', request)
   }
@@ -171,6 +219,7 @@ export default class RestClient {
           if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
+        .responseType('stream')
         .timeout(this.timeoutConfig())
         .set(headers)
         .end((error, response) => {

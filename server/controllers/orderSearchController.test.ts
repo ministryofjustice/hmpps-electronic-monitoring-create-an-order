@@ -25,6 +25,7 @@ const mockSubmittedOrder: Order = {
   deviceWearerContactDetails: {
     contactNumber: null,
   },
+  additionalDocuments: [],
 }
 
 const mock500Error: SanitisedError = {

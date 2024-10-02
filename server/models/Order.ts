@@ -1,6 +1,7 @@
 import z from 'zod'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerContactDetailsModel from './DeviceWearerContactDetails'
+import AttachmentModel from './Attachment'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 
@@ -9,6 +10,7 @@ const OrderModel = z.object({
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
+  additionalDocuments: z.array(AttachmentModel),
 })
 
 export type Order = z.infer<typeof OrderModel>

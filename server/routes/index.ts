@@ -7,6 +7,8 @@ import OrderController from '../controllers/orderController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ContactDetailsController from '../controllers/contactDetailsController'
 import populateOrder from '../middleware/populateCurrentOrder'
+import AttachmentsController from '../controllers/attachmentController'
+
 import paths from '../constants/paths'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +17,7 @@ export default function routes({
   orderService,
   orderSearchService,
   deviceWearerService,
+  attachmentService,
 }: Services): Router {
   const router = Router()
 
@@ -26,8 +29,8 @@ export default function routes({
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
   const contactDetailsController = new ContactDetailsController(auditService)
-
   router.param('orderId', populateOrder(orderService))
+  const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
 
   get('/', orderSearchController.search)
 
@@ -45,6 +48,15 @@ export default function routes({
 
   // Contact Details
   get(paths.ABOUT_THE_DEVICE_WEARER.CONTACT_DETAILS, contactDetailsController.view)
+
+  // Attachments
+  get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
+  get(paths.ATTACHMENT.LICENCE, attachmentsController.licence)
+  post(paths.ATTACHMENT.LICENCE, attachmentsController.uploadLicence)
+  get(paths.ATTACHMENT.PHOTO_ID, attachmentsController.photo)
+  post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
+  get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
+  get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
 
   return router
 }

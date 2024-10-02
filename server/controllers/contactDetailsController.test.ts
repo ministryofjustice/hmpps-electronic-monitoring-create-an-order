@@ -49,6 +49,7 @@ describe('ContactDetailsController', () => {
         deviceWearerContactDetails: {
           contactNumber: null,
         },
+        additionalDocuments: [],
       },
       user: {
         username: 'fakeUserName',

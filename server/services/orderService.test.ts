@@ -19,6 +19,7 @@ const mockNewOrder: Order = {
   deviceWearerContactDetails: {
     contactNumber: null,
   },
+  additionalDocuments: [],
 }
 
 const mock404Error: SanitisedError = {
