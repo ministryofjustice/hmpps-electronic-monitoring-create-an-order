@@ -38,4 +38,15 @@ export default class OrderService {
     // Do nothing for now
     return Promise.resolve()
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async submitOrder(id: string) {
+    // Do nothing for now
+    // Will call API endpoint(s):
+    //  - Updating order status to SUBMITTED in CEMO DB
+    //  - Submitting order to Serco
+    //  - Returning reference number from Serco
+    //  - Generating a PDF of form to download (and eventually emailing to user)
+    return Promise.resolve()
+  }
 }

@@ -223,4 +223,66 @@ describe('OrderController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/order/delete-success')
     })
   })
+
+  describe('submit', () => {
+    it('should submit the order and redirect to a success page for a draft order', async () => {
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(res.redirect).toHaveBeenCalledWith('/order/submit/success')
+    })
+
+    it('should not submit the order and redirect to a failed page for a submitted order', async () => {
+      // Given
+      const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+      const req = createMockRequest(mockOrder)
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(mockOrderService.submitOrder).toHaveBeenCalledTimes(0)
+      expect(res.redirect).toHaveBeenCalledWith('/order/submit/failed')
+    })
+  })
+
+  describe('submitFailed', () => {
+    it('should render the failed view', async () => {
+      // Given
+      const req = createMockRequest()
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await orderController.submitFailed(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-failed')
+    })
+  })
+
+  describe('submitSuccess', () => {
+    it('should render the success view', async () => {
+      // Given
+      const req = createMockRequest()
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await orderController.submitSuccess(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success')
+    })
+  })
 })

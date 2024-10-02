@@ -49,4 +49,23 @@ export default class OrderController {
   deleteSuccess: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/order/delete-success')
   }
+
+  submit: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+
+    if (order.status === 'SUBMITTED') {
+      res.redirect('/order/submit/failed')
+    } else {
+      await this.orderService.submitOrder(order.id)
+      res.redirect('/order/submit/success')
+    }
+  }
+
+  submitFailed: RequestHandler = async (req: Request, res: Response) => {
+    res.render('pages/order/submit-failed')
+  }
+
+  submitSuccess: RequestHandler = async (req: Request, res: Response) => {
+    res.render('pages/order/submit-success')
+  }
 }
