@@ -68,6 +68,26 @@
         </div>
       {% endif %}
     </li>
+    <li class="govuk-task-list__item govuk-task-list__item--with-link">
+      <div class="govuk-task-list__name-and-hint">        
+            <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/attachments" aria-describedby="order-section-attachments">
+                Attachments
+            </a>
+      </div>
+      {% if order.attachments.isComplete %}
+        <div class="govuk-task-list__status" >
+          <strong class="govuk-tag govuk-tag--green">
+            Complete
+          </strong>
+        </div>
+      {% else %}               
+        <div class="govuk-task-list__status" >
+           <strong class="govuk-tag govuk-tag--grey">
+            Incomplete
+          </strong>
+        </div>
+      {% endif %}
+    </li>
   </ul>
 
 
