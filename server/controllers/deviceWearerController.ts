@@ -98,7 +98,7 @@ export default class DeviceWearerController {
     const formData = req.flash('formData')
     const viewModel = this.constructViewModel(deviceWearer, errors as never, formData as never, orderId)
 
-    res.render(`pages/order/device-wearer/view`, viewModel)
+    res.render(`pages/order/about-the-device-wearer/device-wearer`, viewModel)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

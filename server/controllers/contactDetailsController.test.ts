@@ -88,7 +88,7 @@ describe('ContactDetailsController', () => {
       await contactDetailsController.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/order/contact-details/view',
+        'pages/order/about-the-device-wearer/contact-details',
         expect.objectContaining({
           contactDetails: {
             contactNumber: null,
