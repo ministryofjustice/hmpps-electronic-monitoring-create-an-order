@@ -40,12 +40,18 @@ context('Index', () => {
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList().should('exist')
       indexPage.ordersListItems().should('exist').should('have.length', 2)
+
+      indexPage.ordersListItems().eq(0).find('.govuk-link').should('contain', 'New form')
+
       indexPage
         .ordersListItems()
         .eq(0)
         .find('.govuk-tag')
         .should('have.class', 'govuk-tag--green')
         .should('contain', 'Submitted')
+
+      indexPage.ordersListItems().eq(1).find('.govuk-link').should('contain', 'test tester')
+
       indexPage
         .ordersListItems()
         .eq(1)

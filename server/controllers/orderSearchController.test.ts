@@ -12,6 +12,29 @@ jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
+const mockDraftOrder: Order = {
+  id: uuidv4(),
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  deviceWearer: {
+    nomisId: null,
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    firstName: null,
+    lastName: null,
+    alias: null,
+    dateOfBirth: null,
+    adultAtTimeOfInstallation: false,
+    sex: null,
+    gender: null,
+    disabilities: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
+  additionalDocuments: [],
+}
+
 const mockSubmittedOrder: Order = {
   id: uuidv4(),
   status: OrderStatusEnum.Enum.SUBMITTED,
@@ -20,8 +43,8 @@ const mockSubmittedOrder: Order = {
     pncId: null,
     deliusId: null,
     prisonNumber: null,
-    firstName: null,
-    lastName: null,
+    firstName: 'first',
+    lastName: 'last',
     alias: null,
     dateOfBirth: null,
     adultAtTimeOfInstallation: false,
@@ -106,14 +129,17 @@ describe('OrderSearchController', () => {
 
   describe('search orders', () => {
     it('should render a view containing order search results', async () => {
-      mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
+      mockOrderService.searchOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
 
       await orderController.search(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
-          orderList: [mockSubmittedOrder],
+          orders: [
+            { displayName: 'New form', status: 'IN_PROGRESS', summaryUri: `/order/${mockDraftOrder.id}/summary` },
+            { displayName: 'first last', status: 'SUBMITTED', summaryUri: `/order/${mockSubmittedOrder.id}/summary` },
+          ],
         }),
       )
     })
@@ -126,7 +152,7 @@ describe('OrderSearchController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
-          orderList: [],
+          orders: [],
         }),
       )
     })
