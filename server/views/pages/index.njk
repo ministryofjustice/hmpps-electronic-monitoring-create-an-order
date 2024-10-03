@@ -91,17 +91,17 @@
 
 <div id="ordersList">
   <ul class="govuk-task-list">
-    {% if orderList.length == 0 %}
+    {% if orders.length == 0 %}
       <li class="govuk-task-list__item govuk-task-list__item--with-link">
         No existing forms found.
       </li>
     {% endif %}
 
-    {% for order in orderList %}
+    {% for order in orders %}
       <li class="govuk-task-list__item govuk-task-list__item--with-link">
         <div class="govuk-task-list__name-and-hint">
-          <a class="govuk-link govuk-task-list__link" href="/order/{{order.id}}/summary" aria-describedby="company-details-1-status">
-            {{ order.id }}
+          <a class="govuk-link govuk-task-list__link" href="{{ order.summaryUri }}" aria-describedby="company-details-1-status">
+            {{ order.displayName }}
           </a>
         </div>
         {% if order.status == 'SUBMITTED' %}
