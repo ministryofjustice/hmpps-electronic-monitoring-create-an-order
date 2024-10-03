@@ -57,11 +57,18 @@ const createMockOrder = (status: OrderStatus): Order => {
     id: uuidv4(),
     status,
     deviceWearer: {
+      nomisId: null,
+      pncId: null,
+      deliusId: null,
+      prisonNumber: null,
       firstName: 'tester',
       lastName: 'testington',
       alias: 'test',
-      gender: 'male',
       dateOfBirth: '1980-01-01T00:00:00.000Z',
+      adultAtTimeOfInstallation: false,
+      sex: 'male',
+      gender: 'male',
+      disabilities: 'Vision,Mobilitiy',
     },
     deviceWearerContactDetails: {
       contactNumber: null,
@@ -113,13 +120,23 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
+          orderSummaryUri: '/order/123456789/summary',
+          formActionUri: '/order/123456789/about-the-device-wearer',
+          nomisId: { value: '' },
+          pncId: { value: '' },
+          deliusId: { value: '' },
+          prisonNumber: { value: '' },
           firstName: { value: 'tester' },
           lastName: { value: 'testington' },
           alias: { value: 'test' },
-          gender: { value: 'male' },
           dateOfBirth_day: { value: '1' },
           dateOfBirth_month: { value: '1' },
           dateOfBirth_year: { value: '1980' },
+          dateOfBirth: { value: '' },
+          adultAtTimeOfInstallation: { value: 'false' },
+          sex: { value: 'male' },
+          gender: { value: 'male' },
+          disabilities: { values: ['Vision', 'Mobilitiy'] },
         }),
       )
     })
@@ -135,13 +152,20 @@ describe('DeviceWearerController', () => {
         .mockReturnValueOnce([{ error: 'Date of birth must be in the past', field: 'dateOfBirth' }])
         .mockReturnValueOnce([
           {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
             firstName: 'new',
             lastName: 'name',
             alias: 'new',
-            gender: 'female',
             'dateOfBirth-day': '02',
             'dateOfBirth-month': '03',
             'dateOfBirth-year': '1990',
+            adultAtTimeOfInstallation: 'true',
+            sex: 'female',
+            gender: 'female',
+            disabilities: ['Vision', 'Hearing'],
           },
         ])
 
@@ -152,14 +176,21 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
+          nomisId: { value: 'nomis' },
+          pncId: { value: 'pnc' },
+          deliusId: { value: 'delius' },
+          prisonNumber: { value: 'prison' },
           firstName: { value: 'new' },
           lastName: { value: 'name' },
           alias: { value: 'new' },
-          gender: { value: 'female' },
           dateOfBirth_day: { value: '02' },
           dateOfBirth_month: { value: '03' },
           dateOfBirth_year: { value: '1990' },
           dateOfBirth: { value: '', error: { text: 'Date of birth must be in the past' } },
+          adultAtTimeOfInstallation: { value: 'true' },
+          sex: { value: 'female' },
+          gender: { value: 'female' },
+          disabilities: { values: ['Vision', 'Hearing'] },
         }),
       )
     })
@@ -174,13 +205,20 @@ describe('DeviceWearerController', () => {
       req.flash = jest.fn()
       req.body = {
         action: 'continue',
-        firstName: 'f',
-        lastName: 'l',
-        alias: 'a',
-        gender: 'male',
-        'dateOfBirth-day': '1',
-        'dateOfBirth-month': '1',
-        'dateOfBirth-year': '1970',
+        nomisId: 'nomis',
+        pncId: 'pnc',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+        firstName: 'new',
+        lastName: 'name',
+        alias: 'new',
+        'dateOfBirth-day': '02',
+        'dateOfBirth-month': '03',
+        'dateOfBirth-year': '1990',
+        adultAtTimeOfInstallation: 'true',
+        sex: 'female',
+        gender: 'female',
+        disabilities: ['Vision', 'Hearing'],
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue([
         { error: 'Date of birth must be in the past', field: 'dateOfBirth' },
@@ -192,13 +230,20 @@ describe('DeviceWearerController', () => {
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
       expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {
-        firstName: 'f',
-        lastName: 'l',
-        alias: 'a',
-        gender: 'male',
-        'dateOfBirth-day': '1',
-        'dateOfBirth-month': '1',
-        'dateOfBirth-year': '1970',
+        nomisId: 'nomis',
+        pncId: 'pnc',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+        firstName: 'new',
+        lastName: 'name',
+        alias: 'new',
+        'dateOfBirth-day': '02',
+        'dateOfBirth-month': '03',
+        'dateOfBirth-year': '1990',
+        adultAtTimeOfInstallation: 'true',
+        sex: 'female',
+        gender: 'female',
+        disabilities: ['Vision', 'Hearing'],
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
@@ -209,7 +254,7 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer')
     })
 
-    it('should save and redirect to the contact details page if the device wearer is over 18', async () => {
+    it('should save and redirect to the contact details page if the device wearer is an adult', async () => {
       // Given
       const req = createMockRequest()
       const res = createMockResponse()
@@ -217,20 +262,34 @@ describe('DeviceWearerController', () => {
       req.flash = jest.fn()
       req.body = {
         action: 'continue',
-        firstName: 'f',
-        lastName: 'l',
-        alias: 'a',
-        gender: 'male',
-        'dateOfBirth-day': '1',
-        'dateOfBirth-month': '1',
-        'dateOfBirth-year': '1970',
+        nomisId: 'nomis',
+        pncId: 'pnc',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+        firstName: 'new',
+        lastName: 'name',
+        alias: 'new',
+        'dateOfBirth-day': '02',
+        'dateOfBirth-month': '03',
+        'dateOfBirth-year': '1990',
+        adultAtTimeOfInstallation: 'true',
+        sex: 'female',
+        gender: 'female',
+        disabilities: ['Vision', 'Hearing'],
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
         firstName: 'tester',
         lastName: 'testington',
         alias: 'test',
-        gender: 'male',
         dateOfBirth: '1980-01-01T00:00:00.000Z',
+        adultAtTimeOfInstallation: true,
+        sex: 'male',
+        gender: 'male',
+        disabilities: 'Vision,Mobilitiy',
       })
 
       // When
@@ -241,7 +300,7 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/contact-details')
     })
 
-    it('should save and redirect to the responsible adult page if the device wearer is under 18', async () => {
+    it('should save and redirect to the responsible adult page if the device wearer is not an adult', async () => {
       // Given
       const req = createMockRequest()
       const res = createMockResponse()
@@ -249,20 +308,34 @@ describe('DeviceWearerController', () => {
       req.flash = jest.fn()
       req.body = {
         action: 'continue',
-        firstName: 'f',
-        lastName: 'l',
-        alias: 'a',
-        gender: 'male',
-        'dateOfBirth-day': '1',
-        'dateOfBirth-month': '1',
-        'dateOfBirth-year': '1970',
+        nomisId: 'nomis',
+        pncId: 'pnc',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+        firstName: 'new',
+        lastName: 'name',
+        alias: 'new',
+        'dateOfBirth-day': '02',
+        'dateOfBirth-month': '03',
+        'dateOfBirth-year': '1990',
+        adultAtTimeOfInstallation: 'true',
+        sex: 'female',
+        gender: 'female',
+        disabilities: ['Vision', 'Hearing'],
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
         firstName: 'tester',
         lastName: 'testington',
         alias: 'test',
+        dateOfBirth: '1980-01-01T00:00:00.000Z',
+        adultAtTimeOfInstallation: false,
+        sex: 'male',
         gender: 'male',
-        dateOfBirth: '2005-01-01T00:00:00.000Z',
+        disabilities: 'Vision,Mobilitiy',
       })
 
       // When
@@ -281,20 +354,34 @@ describe('DeviceWearerController', () => {
       req.flash = jest.fn()
       req.body = {
         action: 'back',
-        firstName: 'f',
-        lastName: 'l',
-        alias: 'a',
-        gender: 'male',
-        'dateOfBirth-day': '1',
-        'dateOfBirth-month': '1',
-        'dateOfBirth-year': '1970',
+        nomisId: 'nomis',
+        pncId: 'pnc',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+        firstName: 'new',
+        lastName: 'name',
+        alias: 'new',
+        'dateOfBirth-day': '02',
+        'dateOfBirth-month': '03',
+        'dateOfBirth-year': '1990',
+        adultAtTimeOfInstallation: 'true',
+        sex: 'female',
+        gender: 'female',
+        disabilities: ['Vision', 'Hearing'],
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
         firstName: 'tester',
         lastName: 'testington',
         alias: 'test',
+        dateOfBirth: '1980-01-01T00:00:00.000Z',
+        adultAtTimeOfInstallation: true,
+        sex: 'male',
         gender: 'male',
-        dateOfBirth: '2001-01-01T00:00:00.000Z',
+        disabilities: 'Vision,Mobilitiy',
       })
 
       // When

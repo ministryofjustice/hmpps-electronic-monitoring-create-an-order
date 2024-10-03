@@ -3,6 +3,7 @@ export type ErrorMessage = {
 }
 
 export type FormField = {
-  value: string
+  value?: string
+  values?: Array<string>
   error?: ErrorMessage
 }
