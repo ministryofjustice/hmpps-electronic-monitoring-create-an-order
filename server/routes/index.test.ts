@@ -240,6 +240,26 @@ describe('authorised user', () => {
         })
     })
   })
+
+  describe('POST /order/:orderId/submit', () => {
+    it('should submit a draft order and redirect to the success page', () => {
+      orderService.getOrder.mockResolvedValue(mockDraftOrder)
+
+      return request(app)
+        .post(`/order/${mockDraftOrder.id}/submit`)
+        .expect(302)
+        .expect('Location', '/order/submit/success')
+    })
+
+    it('should not submit an already submitted order and redirect to the failed page', () => {
+      orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+
+      return request(app)
+        .post(`/order/${mockSubmittedOrder.id}/submit`)
+        .expect(302)
+        .expect('Location', '/order/submit/failed')
+    })
+  })
 })
 
 describe('Order Not Found', () => {

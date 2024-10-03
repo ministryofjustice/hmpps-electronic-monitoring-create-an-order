@@ -1,0 +1,32 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/"
+}) }}
+
+{{ govukPanel({
+  titleText: "Application successfully submitted",
+  html: "Your reference number<br><strong>EXAMPLE</strong>",
+  attributes: {
+    "data-qa": "confirmation-panel"
+  }
+}) }}
+
+
+<div class="govuk-button-group">
+      {{ govukButton({
+          text: "Back to your applications",
+          href: "/"
+      }) }}
+  </div>
+
+{% endblock %}
