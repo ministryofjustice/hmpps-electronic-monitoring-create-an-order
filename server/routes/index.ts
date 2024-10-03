@@ -50,9 +50,9 @@ export default function routes({
   get(paths.ORDER.SUMMARY, orderController.summary)
   get(paths.ORDER.DELETE, orderController.confirmDelete)
   post(paths.ORDER.DELETE, orderController.delete)
-  post('/order/:orderId/submit', orderController.submit)
-  get('/order/submit/success', orderController.submitSuccess)
-  get('/order/submit/failed', orderController.submitFailed)
+  post(paths.ORDER.SUBMIT, orderController.submit)
+  get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
+  get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
 
   // Device Wearer
   get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.view)

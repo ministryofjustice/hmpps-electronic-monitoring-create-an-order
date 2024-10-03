@@ -5,6 +5,9 @@ const paths = {
     DELETE_FAILED: '/order/delete/failed',
     DELETE_SUCCESS: '/order/delete/success',
     SUMMARY: '/order/:orderId/summary',
+    SUBMIT: '/order/:orderId/submit',
+    SUBMIT_FAILED: '/order/submit/failed',
+    SUBMIT_SUCCESS: '/order/submit/success',
   },
 
   ABOUT_THE_DEVICE_WEARER: {
