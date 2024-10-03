@@ -10,6 +10,7 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% block content %}
 
@@ -43,13 +44,64 @@
 
     {{ govukInput({
       label: {
+        text: "NOMIS ID",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "nomis-id",
+      name: "nomisId",
+      value: nomisId.value,
+      errorMessage: nomisId.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "PNC ID",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "pnc-id",
+      name: "pncId",
+      value: pncId.value,
+      errorMessage: pncId.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "DELIUS ID",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "delius-id",
+      name: "deliusId",
+      value: deliusId.value,
+      errorMessage: deliusId.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Prison Number",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "prison-number",
+      name: "prisonNumber",
+      value: prisonNumber.value,
+      errorMessage: prisonNumber.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
         text: "First name",
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-two-thirds",
       id: "first-name",
       name: "firstName",
-      autocomplete: "name given-name",
       value: firstName.value,
       errorMessage: firstName.error,
       disabled: not isOrderEditable
@@ -63,7 +115,6 @@
       classes: "govuk-!-width-two-thirds",
       id: "last-name",
       name: "lastName",
-      autocomplete: "name family-name",
       value: lastName.value,
       errorMessage: lastName.error,
       disabled: not isOrderEditable
@@ -80,7 +131,6 @@
       classes: "govuk-!-width-two-thirds",
       id: "alias",
       name: "alias",
-      autocomplete: "name nickname",
       value: alias.value,
       errorMessage: alias.error,
       disabled: not isOrderEditable
@@ -103,23 +153,89 @@
         {
           name: "day",
           classes: "govuk-input--width-2",
-          autocomplete: "bday-day",
           value: dateOfBirth_day.value
         },
         {
           name: "month",
           classes: "govuk-input--width-2",
-          autocomplete: "bday-month",
           value: dateOfBirth_month.value
         },
         {
           name: "year",
           classes: "govuk-input--width-4",
-          autocomplete: "bday-year",
           value: dateOfBirth_year.value
         }
       ],
       errorMessage: dateOfBirth.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukRadios({
+      name: "adultAtTimeOfInstallation",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: "Will the device wearer be 18 years old when the device is installed?",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "Select one option"
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: adultAtTimeOfInstallation.value,
+      errorMessage: adultAtTimeOfInstallation.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukRadios({
+      name: "sex",
+      fieldset: {
+        legend: {
+          text: "Sex",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "Select the device wearer's sex"
+      },
+      items: [
+        {
+          value: "male",
+          text: "Male",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "female",
+          text: "Female",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "prefer not to say",
+          text: "Prefer not to say",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "unknown",
+          text: "Don't know",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: sex.value,
+      errorMessage: sex.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -153,7 +269,7 @@
         },
         {
           value: "unknown",
-          text: "Don't Know",
+          text: "Don't know",
           disabled: not isOrderEditable
         },
         {
@@ -164,6 +280,74 @@
       ],
       value: gender.value,
       errorMessage: gender.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukCheckboxes({
+      name: "disabilities",
+      classes: "govuk-checkboxes--small",
+      fieldset: {
+        legend: {
+          text: "Disabilities",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      hint: {
+        text: "Does the device wearer have any disabilities"
+      },
+      items: [
+        {
+          value: "Vision",
+          text: "Vision"
+        },
+        {
+          value: "Hearing",
+          text: "Hearing"
+        },
+        {
+          value: "Mobility",
+          text: "Mobility"
+        },
+        {
+          value: "Dexterity",
+          text: "Dexterity"
+        },
+        {
+          value: "Learning, understanding or concentrating",
+          text: "Learning, understanding or concentrating"
+        },
+        {
+          value: "Memory",
+          text: "Memory"
+        },
+        {
+          value: "Mental health",
+          text: "Mental health"
+        },
+        {
+          value: "Stamina or breathing or fatigue",
+          text: "Stamina or breathing or fatigue"
+        },
+        {
+          value: "Socially or behaviorally",
+          text: "Socially or behaviorally"
+        },
+        {
+          value: "Other",
+          text: "Other"
+        },
+        {
+          value: "None of the above",
+          text: "None of the above"
+        },
+        {
+          value: "Prefer Not to Say",
+          text: "Prefer Not to Say"
+        }
+      ],
+      values: disabilities.values,
+      errorMessage: disabilities.error,
       disabled: not isOrderEditable
     }) }}
 

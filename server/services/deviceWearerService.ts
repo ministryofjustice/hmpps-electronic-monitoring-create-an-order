@@ -8,13 +8,20 @@ import { serialiseDate } from '../utils/utils'
 type UpdateDeviceWearerRequestInput = AuthenticatedRequestInput & {
   orderId: string
   data: {
+    nomisId: string
+    pncId: string
+    deliusId: string
+    prisonNumber: string
     firstName: string
     lastName: string
     alias: string
-    gender: string
     'dateOfBirth-day': string
     'dateOfBirth-month': string
     'dateOfBirth-year': string
+    adultAtTimeOfInstallation: string
+    sex: string
+    gender: string
+    disabilities: Array<string>
   }
 }
 
@@ -27,6 +34,7 @@ export default class DeviceWearerService {
         'dateOfBirth-day': dobDay,
         'dateOfBirth-month': dobMonth,
         'dateOfBirth-year': dobYear,
+        disabilities,
         ...data
       } = input.data
 
@@ -35,6 +43,7 @@ export default class DeviceWearerService {
         data: {
           ...data,
           dateOfBirth: serialiseDate(dobYear, dobMonth, dobDay),
+          disabilities: disabilities.join(','),
         },
         token: input.accessToken,
       })

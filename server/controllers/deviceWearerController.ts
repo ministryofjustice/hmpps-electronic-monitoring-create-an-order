@@ -4,19 +4,26 @@ import { AuditService, DeviceWearerService } from '../services'
 import paths from '../constants/paths'
 import { isValidationResult, ValidationResult } from '../models/Validation'
 import { DeviceWearer } from '../models/DeviceWearer'
-import { calculateAge, deserialiseDate, getError } from '../utils/utils'
+import { deserialiseDate, getError } from '../utils/utils'
 import { FormField } from '../interfaces/formData'
 
 // Basic validation of user submitted form data
 const DeviceWearerFormDataModel = z.object({
   action: z.string(),
+  nomisId: z.string(),
+  pncId: z.string(),
+  deliusId: z.string(),
+  prisonNumber: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   alias: z.string(),
-  gender: z.string().default(''),
   'dateOfBirth-day': z.string(),
   'dateOfBirth-month': z.string(),
   'dateOfBirth-year': z.string(),
+  adultAtTimeOfInstallation: z.string().default(''),
+  sex: z.string().default(''),
+  gender: z.string().default(''),
+  disabilities: z.array(z.string()).default([]),
 })
 
 type DeviceWearerFormData = z.infer<typeof DeviceWearerFormDataModel>
@@ -24,14 +31,21 @@ type DeviceWearerFormData = z.infer<typeof DeviceWearerFormDataModel>
 type DeviceWearerViewModel = {
   formActionUri: string
   orderSummaryUri: string
+  nomisId: FormField
+  pncId: FormField
+  deliusId: FormField
+  prisonNumber: FormField
   firstName: FormField
   lastName: FormField
   alias: FormField
-  gender: FormField
   dateOfBirth_day: FormField
   dateOfBirth_month: FormField
   dateOfBirth_year: FormField
   dateOfBirth: FormField
+  adultAtTimeOfInstallation: FormField
+  sex: FormField
+  gender: FormField
+  disabilities: FormField
 }
 
 export default class DeviceWearerController {
@@ -48,14 +62,24 @@ export default class DeviceWearerController {
     return {
       formActionUri: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId),
       orderSummaryUri: paths.ORDER.SUMMARY.replace(':orderId', orderId),
+      nomisId: { value: formData.nomisId, error: getError(validationErrors, 'nomisId') },
+      pncId: { value: formData.pncId, error: getError(validationErrors, 'pncId') },
+      deliusId: { value: formData.deliusId, error: getError(validationErrors, 'deliusId') },
+      prisonNumber: { value: formData.prisonNumber, error: getError(validationErrors, 'prisonNumber') },
       firstName: { value: formData.firstName, error: getError(validationErrors, 'firstName') },
       lastName: { value: formData.lastName, error: getError(validationErrors, 'lastName') },
       alias: { value: formData.alias, error: getError(validationErrors, 'alias') },
-      gender: { value: formData.gender || '', error: getError(validationErrors, 'gender') },
       dateOfBirth_day: { value: formData['dateOfBirth-day'] },
       dateOfBirth_month: { value: formData['dateOfBirth-month'] },
       dateOfBirth_year: { value: formData['dateOfBirth-year'] },
       dateOfBirth: { value: '', error: getError(validationErrors, 'dateOfBirth') },
+      adultAtTimeOfInstallation: {
+        value: formData.adultAtTimeOfInstallation || '',
+        error: getError(validationErrors, 'adultAtTimeOfInstallation'),
+      },
+      sex: { value: formData.sex || '', error: getError(validationErrors, 'sex') },
+      gender: { value: formData.gender || '', error: getError(validationErrors, 'gender') },
+      disabilities: { values: formData.disabilities || '', error: getError(validationErrors, 'disabilities') },
     }
   }
 
@@ -65,16 +89,23 @@ export default class DeviceWearerController {
     return {
       formActionUri: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId),
       orderSummaryUri: paths.ORDER.SUMMARY.replace(':orderId', orderId),
+      nomisId: { value: deviceWearer.nomisId || '' },
+      pncId: { value: deviceWearer.pncId || '' },
+      deliusId: { value: deviceWearer.deliusId || '' },
+      prisonNumber: { value: deviceWearer.prisonNumber || '' },
       firstName: { value: deviceWearer.firstName || '' },
       lastName: { value: deviceWearer.lastName || '' },
       alias: { value: deviceWearer.alias || '' },
-      gender: { value: deviceWearer.gender || '' },
       dateOfBirth_day: { value: day },
       dateOfBirth_month: { value: month },
       dateOfBirth_year: { value: year },
       dateOfBirth: {
         value: '',
       },
+      adultAtTimeOfInstallation: { value: String(deviceWearer.adultAtTimeOfInstallation) },
+      sex: { value: deviceWearer.sex || '' },
+      gender: { value: deviceWearer.gender || '' },
+      disabilities: { values: (deviceWearer.disabilities || '').split(',') },
     }
   }
 
@@ -117,13 +148,10 @@ export default class DeviceWearerController {
 
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      const dob = updateDeviceWearerResult.dateOfBirth
-      const age = calculateAge(dob || '')
-
-      if (!Number.isNaN(dob) && age < 18) {
-        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
-      } else {
+      if (updateDeviceWearerResult.adultAtTimeOfInstallation) {
         res.redirect(paths.ABOUT_THE_DEVICE_WEARER.CONTACT_DETAILS.replace(':orderId', orderId))
+      } else {
+        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
       }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
