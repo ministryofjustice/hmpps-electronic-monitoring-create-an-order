@@ -37,19 +37,89 @@
 
   <h2 class="govuk-heading-l">Check your answers</h2>
 
+  <h3 class="govuk-heading-m">About the device wearer</h3>
+
   {{ govukSummaryList({
     rows: [
+      {
+          key: {
+              text: "NOMIS ID"
+          },
+          value: {
+              text: firstName.value
+          },
+          actions: {
+              items: [
+              {
+                  href: aboutTheDeviceWearerUri,
+                  text: "Change",
+                  visuallyHiddenText: "name"
+              }
+              ]
+          }
+        },
+        {
+            key: {
+                text: "PNC ID"
+            },
+            value: {
+                text: pncId.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "DELIUS ID"
+            },
+            value: {
+                text: deliusId.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Prison number"
+            },
+            value: {
+                text: prisonNumber.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
         {
             key: {
                 text: "First name"
             },
             value: {
-                text: "Placeholder"
+                text: firstName.value
             },
             actions: {
                 items: [
                 {
-                    href: "#",
+                    href: aboutTheDeviceWearerUri,
                     text: "Change",
                     visuallyHiddenText: "name"
                 }
@@ -61,12 +131,114 @@
                 text: "Last name"
             },
             value: {
-                text: "Placeholder"
+                text: lastName.value
             },
             actions: {
                 items: [
                 {
-                    href: "#",
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Alias (optional)"
+            },
+            value: {
+                text: alias.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Date of birth"
+            },
+            value: {
+                html: dateOfBirth_day.value+"/"+dateOfBirth_month.value+"/"+dateOfBirth_year.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Will the device wearer be 18 years old when the device is installed?"
+            },
+            value: {
+                text: adultAtTimeOfInstallation.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Sex"
+            },
+            value: {
+                text: sex.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Gender"
+            },
+            value: {
+                text: gender.value
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                }
+                ]
+            }
+        },
+        {
+            key: {
+                text: "Disabilities"
+            },
+            value: {
+                text: disabilities.values
+            },
+            actions: {
+                items: [
+                {
+                    href: aboutTheDeviceWearerUri,
                     text: "Change",
                     visuallyHiddenText: "name"
                 }
@@ -79,11 +251,11 @@
   <div class="govuk-button-group">
     {% if isOrderEditable %}
       {{ govukButton({
-        text: "Continue",
+        text: "Save and continue",
         href: orderSummaryUri
       }) }}
       {{ govukButton({
-        text: "Return back to to form section menu",
+        text: "Return back to form section menu",
         href: orderSummaryUri
       }) }}
     {% else %}
