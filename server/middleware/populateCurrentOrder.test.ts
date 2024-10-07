@@ -63,9 +63,6 @@ const createMockOrder = (status: OrderStatus): Order => {
       gender: null,
       disabilities: null,
     },
-    deviceWearerContactDetails: {
-      contactNumber: null,
-    },
     additionalDocuments: [],
   }
 }

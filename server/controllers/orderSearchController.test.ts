@@ -29,9 +29,6 @@ const mockSubmittedOrder: Order = {
     gender: null,
     disabilities: null,
   },
-  deviceWearerContactDetails: {
-    contactNumber: null,
-  },
   additionalDocuments: [],
 }
 

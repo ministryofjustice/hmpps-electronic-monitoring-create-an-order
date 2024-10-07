@@ -149,7 +149,7 @@ export default class DeviceWearerController {
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId))
     } else if (action === 'continue') {
       if (updateDeviceWearerResult.adultAtTimeOfInstallation) {
-        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.CONTACT_DETAILS.replace(':orderId', orderId))
+        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_OFFICER.replace(':orderId', orderId))
       } else {
         res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
       }

@@ -5,13 +5,10 @@ import type { Services } from '../services'
 import OrderSearchController from '../controllers/orderSearchController'
 import OrderController from '../controllers/orderController'
 import DeviceWearerController from '../controllers/deviceWearerController'
-import ContactDetailsController from '../controllers/contactDetailsController'
 import populateOrder from '../middleware/populateCurrentOrder'
 import AttachmentsController from '../controllers/attachmentController'
-
 import paths from '../constants/paths'
 import ResponsibleAdultController from '../controllers/responsibleAdultController'
-import DeviceWearerContactDetailsController from '../controllers/deviceWearerContactDetails'
 import ResponsibleOfficerController from '../controllers/responsibleOfficerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 
@@ -32,9 +29,7 @@ export default function routes({
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
-  const contactDetailsController = new ContactDetailsController(auditService)
   const responsibleAdultController = new ResponsibleAdultController(auditService)
-  const deviceWearerContactDetailsController = new DeviceWearerContactDetailsController(auditService)
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
@@ -58,14 +53,8 @@ export default function routes({
   get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.update)
 
-  // Contact Details
-  get(paths.ABOUT_THE_DEVICE_WEARER.CONTACT_DETAILS, contactDetailsController.view)
-
   // Responsible Adult
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.view)
-
-  // Device wearer contact details
-  get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_CONTACT_DETAILS, deviceWearerContactDetailsController.view)
 
   // ResponsibleOfficer
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_OFFICER, responsibleOfficerController.view)
