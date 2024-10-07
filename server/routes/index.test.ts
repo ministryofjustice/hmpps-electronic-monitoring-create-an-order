@@ -51,6 +51,9 @@ const mockSubmittedOrder: Order = {
     gender: null,
     disabilities: null,
   },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
   additionalDocuments: [],
 }
 
@@ -70,6 +73,9 @@ const mockDraftOrder: Order = {
     sex: null,
     gender: null,
     disabilities: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
   },
   additionalDocuments: [],
 }
@@ -235,6 +241,20 @@ describe('authorised user', () => {
     })
   })
 
+  describe('GET /order/:orderId/contact-information/contact-details', () => {
+    it('should render contact details page', () => {
+      auditService.logPageView.mockResolvedValue()
+      orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+
+      return request(app)
+        .get(`/order/${mockSubmittedOrder.id}/contact-information/contact-details`)
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Contact information')
+        })
+    })
+  })
+
   describe('POST /order/:orderId/submit', () => {
     it('should submit a draft order and redirect to the success page', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
@@ -284,6 +304,11 @@ describe('Order Not Found', () => {
     ['POST /order/:orderId/summary', 'post', `/order/${mockId}/delete`],
     ['GET /order/:orderId/about-the-device-wearer', 'get', `/order/${mockId}/about-the-device-wearer`],
     ['POST /order/:orderId/about-the-device-wearer', 'post', `/order/${mockId}/about-the-device-wearer`],
+    [
+      'GET /order/:orderId/contact-information/contact-details',
+      'get',
+      `/order/${mockId}/contact-information/contact-details`,
+    ],
   ])('%s', (_, method, path) => {
     it('should render a 404 if the order is not found', () => {
       return request(app)
@@ -324,6 +349,11 @@ describe('unauthorised user', () => {
     ['POST /order/:orderId/summary', 'post', '/order/123456789/delete'],
     ['GET /order/:orderId/about-the-device-wearer', 'get', '/order/123456789/about-the-device-wearer'],
     ['POST /order/:orderId/about-the-device-wearer', 'post', '/order/123456789/about-the-device-wearer'],
+    [
+      'GET /order/:orderId/contact-information/contact-details',
+      'get',
+      `/order/123456789/contact-information/contact-details`,
+    ],
   ])('%s', (_, method, path) => {
     it('should redirect to authError', () => {
       return request(app)[method](path).expect(302).expect('Location', '/authError')

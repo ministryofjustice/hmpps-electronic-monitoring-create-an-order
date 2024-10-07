@@ -17,6 +17,10 @@ const paths = {
     RESPONSIBLE_OFFICER: '/order/:orderId/about-the-device-wearer/responsible-officer',
   },
 
+  CONTACT_INFORMATION: {
+    CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
+  },
+
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
     LICENCE: '/order/:orderId/attachments/licence',
