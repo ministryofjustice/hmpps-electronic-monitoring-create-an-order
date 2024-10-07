@@ -11,7 +11,6 @@ export const services = () => {
   const auditService = new AuditService(hmppsAuditClient)
   const orderService = new OrderService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
-
   const attachmentService = new AttachmentService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
 

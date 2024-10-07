@@ -241,16 +241,16 @@ describe('authorised user', () => {
     })
   })
 
-  describe('GET /order/:orderId/about-the-device-wearer/contact-details', () => {
+  describe('GET /order/:orderId/contact-information/contact-details', () => {
     it('should render contact details page', () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
       return request(app)
-        .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer/contact-details`)
+        .get(`/order/${mockSubmittedOrder.id}/contact-information/contact-details`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Telephone number')
+          expect(res.text).toContain('Contact information')
         })
     })
   })
@@ -305,9 +305,9 @@ describe('Order Not Found', () => {
     ['GET /order/:orderId/about-the-device-wearer', 'get', `/order/${mockId}/about-the-device-wearer`],
     ['POST /order/:orderId/about-the-device-wearer', 'post', `/order/${mockId}/about-the-device-wearer`],
     [
-      'GET /order/:orderId/about-the-device-wearer/contact-details',
+      'GET /order/:orderId/contact-information/contact-details',
       'get',
-      `/order/${mockId}/about-the-device-wearer/contact-details`,
+      `/order/${mockId}/contact-information/contact-details`,
     ],
   ])('%s', (_, method, path) => {
     it('should render a 404 if the order is not found', () => {
@@ -350,9 +350,9 @@ describe('unauthorised user', () => {
     ['GET /order/:orderId/about-the-device-wearer', 'get', '/order/123456789/about-the-device-wearer'],
     ['POST /order/:orderId/about-the-device-wearer', 'post', '/order/123456789/about-the-device-wearer'],
     [
-      'GET /order/:orderId/about-the-device-wearer/contact-details',
+      'GET /order/:orderId/contact-information/contact-details',
       'get',
-      '/order/123456789/about-the-device-wearer/contact-details',
+      '/order/123456789/contact-information/contact-details',
     ],
   ])('%s', (_, method, path) => {
     it('should redirect to authError', () => {

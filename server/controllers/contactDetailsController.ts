@@ -7,6 +7,6 @@ export default class ContactDetailsController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const { deviceWearerContactDetails } = req.order!
 
-    res.render(`pages/order/about-the-device-wearer/contact-details`, { contactDetails: deviceWearerContactDetails })
+    res.render(`pages/order/contact-information/contact-details`, { contactDetails: deviceWearerContactDetails })
   }
 }
