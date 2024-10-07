@@ -61,7 +61,7 @@ CEMO_API_URL=http://localhost:8080
 
 1. To start the main services, excluding the example typescript template app and hmpps auth: 
 
-    `docker compose up --scale=app=0  –scale=hmpps-auth=0`
+    `docker compose up --scale=app=0 --scale=hmpps-auth=0`
 
 2.  And then, to build the assets and start the app with esbuild:
 
