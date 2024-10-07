@@ -113,13 +113,13 @@ export default class DeviceWearerController {
     deviceWearer: DeviceWearer,
     validationErrors: ValidationResult,
     formData: [DeviceWearerFormData],
-    formAction: string,
+    orderId: string,
   ): DeviceWearerViewModel {
     if (validationErrors.length > 0 && formData.length > 0) {
-      return this.createViewModelFromFormData(formData[0], validationErrors, formAction)
+      return this.createViewModelFromFormData(formData[0], validationErrors, orderId)
     }
 
-    return this.createViewModelFromDeviceWearer(deviceWearer, formAction)
+    return this.createViewModelFromDeviceWearer(deviceWearer, orderId)
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {

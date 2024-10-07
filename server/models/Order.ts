@@ -1,6 +1,6 @@
 import z from 'zod'
 import DeviceWearerModel from './DeviceWearer'
-import DeviceWearerContactDetailsModel from './DeviceWearerContactDetails'
+import DeviceWearerContactDetailsModel from './ContactDetails'
 import AttachmentModel from './Attachment'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
