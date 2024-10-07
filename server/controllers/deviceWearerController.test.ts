@@ -70,6 +70,9 @@ const createMockOrder = (status: OrderStatus): Order => {
       gender: 'male',
       disabilities: 'Vision,Mobilitiy',
     },
+    deviceWearerContactDetails: {
+      contactNumber: null,
+    },
     additionalDocuments: [],
   }
 }
@@ -251,7 +254,7 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer')
     })
 
-    it('should save and redirect to the responsible officer page if the device wearer is an adult', async () => {
+    it('should save and redirect to the contact details page if the device wearer is an adult', async () => {
       // Given
       const req = createMockRequest()
       const res = createMockResponse()
@@ -294,7 +297,7 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/responsible-officer')
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/contact-details')
     })
 
     it('should save and redirect to the responsible adult page if the device wearer is not an adult', async () => {

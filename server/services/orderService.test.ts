@@ -23,6 +23,9 @@ const mockNewOrder: Order = {
     gender: null,
     disabilities: null,
   },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
   additionalDocuments: [],
 }
 
