@@ -5,6 +5,8 @@ export default class ContactDetailsController {
   constructor(private readonly auditService: AuditService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render(`pages/order/contact-information/contact-details`)
+    const { deviceWearerContactDetails } = req.order!
+
+    res.render(`pages/order/contact-information/contact-details`, { contactDetails: deviceWearerContactDetails })
   }
 }
