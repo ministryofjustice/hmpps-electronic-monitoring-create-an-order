@@ -352,7 +352,7 @@ describe('unauthorised user', () => {
     [
       'GET /order/:orderId/contact-information/contact-details',
       'get',
-      `/order/123456789/contact-information/contact-details`,
+      '/order/123456789/contact-information/contact-details',
     ],
   ])('%s', (_, method, path) => {
     it('should redirect to authError', () => {
