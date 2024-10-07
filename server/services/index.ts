@@ -4,6 +4,7 @@ import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import DeviceWearerService from './deviceWearerService'
 import AttachmentService from './attachmentService'
+import ContactDetailsService from './contactDetailsService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -13,10 +14,12 @@ export const services = () => {
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
+  const contactDetailsService = new ContactDetailsService(cemoApiClient)
 
   return {
     applicationInfo,
     auditService,
+    contactDetailsService,
     deviceWearerService,
     orderService,
     orderSearchService,
@@ -26,4 +29,4 @@ export const services = () => {
 
 export type Services = ReturnType<typeof services>
 
-export { AuditService, DeviceWearerService, OrderService, OrderSearchService, AttachmentService }
+export { AuditService, ContactDetailsService, DeviceWearerService, OrderService, OrderSearchService, AttachmentService }

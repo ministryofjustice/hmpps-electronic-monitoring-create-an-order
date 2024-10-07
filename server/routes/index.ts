@@ -14,9 +14,15 @@ import DeviceWearerCheckAnswersController from '../controllers/deviceWearersChec
 import ContactDetailsController from '../controllers/contactDetailsController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function routes(services: Services): Router {
+export default function routes({
+  auditService,
+  contactDetailsService,
+  orderService,
+  orderSearchService,
+  deviceWearerService,
+  attachmentService,
+}: Services): Router {
   const router = Router()
-  const { auditService, orderService, orderSearchService, deviceWearerService, attachmentService } = services
 
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,7 +35,7 @@ export default function routes(services: Services): Router {
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
-  const contactDetailsController = new ContactDetailsController(auditService)
+  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -67,7 +73,8 @@ export default function routes(services: Services): Router {
    * CONATCT INFORMATION
    */
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
-
+  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.update)
+  
   /**
    * ATTACHMENTS
    */

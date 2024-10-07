@@ -98,6 +98,7 @@ export default class RestClient {
     }: RequestWithBody,
   ): Promise<Response> {
     logger.info(`${this.name} ${method.toUpperCase()}: ${path}`)
+    console.log(data)
     try {
       const result = await superagent[method](`${this.apiUrl()}${path}`)
         .query(query)
