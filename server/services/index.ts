@@ -1,9 +1,10 @@
 import { dataAccess } from '../data'
+import AttachmentService from './attachmentService'
 import AuditService from './auditService'
+import DeviceWearerService from './deviceWearerService'
+import InstallationAndRiskService from './installationAndRiskService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
-import DeviceWearerService from './deviceWearerService'
-import AttachmentService from './attachmentService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -13,6 +14,7 @@ export const services = () => {
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
+  const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
 
   return {
     applicationInfo,
@@ -21,9 +23,10 @@ export const services = () => {
     orderService,
     orderSearchService,
     attachmentService,
+    installationAndRiskService,
   }
 }
 
 export type Services = ReturnType<typeof services>
 
-export { AuditService, DeviceWearerService, OrderService, OrderSearchService, AttachmentService }
+export { AttachmentService, AuditService, DeviceWearerService, OrderSearchService, OrderService }

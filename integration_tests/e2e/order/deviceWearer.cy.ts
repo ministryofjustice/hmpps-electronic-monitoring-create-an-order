@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import ErrorPage from '../../pages/error'
-import Page from '../../pages/page'
 import DeviceWearerPage from '../../pages/order/deviceWearer'
+import Page from '../../pages/page'
 
 const mockOrderId = uuidv4()
 
