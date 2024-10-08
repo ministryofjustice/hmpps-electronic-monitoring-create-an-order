@@ -7,6 +7,7 @@ import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
+import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import ResponsibleAdultController from '../controllers/responsibleAdultController'
@@ -25,6 +26,7 @@ export default function routes({
   monitoringConditionsService,
   orderService,
   orderSearchService,
+  trailMonitoringService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -40,6 +42,7 @@ export default function routes({
   const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
   const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
+  const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -92,6 +95,10 @@ export default function routes({
   // Main monitoring conditions page
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
+
+  // Trail monitoring page
+  get(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.view)
+  post(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.update)
 
   /**
    * ATTACHMENTS

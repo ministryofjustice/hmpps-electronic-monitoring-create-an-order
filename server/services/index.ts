@@ -7,6 +7,7 @@ import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
+import TrailMonitoringService from './trailMonitoringService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -19,17 +20,19 @@ export const services = () => {
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
+  const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
 
   return {
     applicationInfo,
+    attachmentService,
     auditService,
     contactDetailsService,
     deviceWearerService,
-    orderService,
-    orderSearchService,
-    attachmentService,
     installationAndRiskService,
     monitoringConditionsService,
+    orderSearchService,
+    orderService,
+    trailMonitoringService,
   }
 }
 
@@ -41,6 +44,7 @@ export {
   DeviceWearerService,
   InstallationAndRiskService,
   MonitoringConditionsService,
-  OrderService,
   OrderSearchService,
+  OrderService,
+  TrailMonitoringService
 }
