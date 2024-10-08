@@ -3,6 +3,7 @@ import AttachmentService from './attachmentService'
 import AuditService from './auditService'
 import DeviceWearerService from './deviceWearerService'
 import InstallationAndRiskService from './installationAndRiskService'
+import MonitoringConditionsService from './monitoringConditionsService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 
@@ -15,6 +16,7 @@ export const services = () => {
   const attachmentService = new AttachmentService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
+  const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
 
   return {
     applicationInfo,
@@ -24,9 +26,17 @@ export const services = () => {
     orderSearchService,
     attachmentService,
     installationAndRiskService,
+    monitoringConditionsService,
   }
 }
 
 export type Services = ReturnType<typeof services>
 
-export { AttachmentService, AuditService, DeviceWearerService, OrderSearchService, OrderService }
+export {
+  AttachmentService,
+  AuditService,
+  DeviceWearerService,
+  MonitoringConditionsService,
+  OrderSearchService,
+  OrderService,
+}

@@ -6,6 +6,7 @@ import ContactDetailsController from '../controllers/contactDetailsController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
+import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import ResponsibleAdultController from '../controllers/responsibleAdultController'
@@ -24,6 +25,7 @@ export default function routes(services: Services): Router {
     deviceWearerService,
     attachmentService,
     installationAndRiskService,
+    monitoringConditionsService,
   } = services
 
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -39,6 +41,7 @@ export default function routes(services: Services): Router {
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
   const contactDetailsController = new ContactDetailsController(auditService)
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
+  const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -82,6 +85,14 @@ export default function routes(services: Services): Router {
    */
   get(paths.INSTALLATION_AND_RISK, installationAndRiskController.view)
   post(paths.INSTALLATION_AND_RISK, installationAndRiskController.update)
+
+  /**
+   * MONITORING CONDITIONS
+   */
+
+  // Main monitoring conditions page
+  get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
+  post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
   /**
    * ATTACHMENTS
