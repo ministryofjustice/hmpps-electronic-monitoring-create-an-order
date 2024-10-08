@@ -7,6 +7,7 @@ import ContactDetailsService from './contactDetailsService'
 import CurfewDatesService from './curfewDatesService'
 import CurfewDayOfReleaseService from './curfewDayOfReleaseService'
 import CurfewTimetableService from './curfewTimetableService'
+import DeviceWearerResponsibleAdultService from './deviceWearerResponsibleAdultService'
 import DeviceWearerService from './deviceWearerService'
 import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
@@ -25,6 +26,7 @@ export const services = () => {
   const curfewDatesService = new CurfewDatesService(cemoApiClient)
   const curfewDayOfReleaseService = new CurfewDayOfReleaseService(cemoApiClient)
   const curfewTimetableService = new CurfewTimetableService(cemoApiClient)
+  const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
@@ -42,6 +44,7 @@ export const services = () => {
     curfewDayOfReleaseService,
     curfewDatesService,
     curfewTimetableService,
+    deviceWearerResponsibleAdultService,
     deviceWearerService,
     installationAndRiskService,
     monitoringConditionsService,
@@ -60,6 +63,7 @@ export {
   CurfewDatesService,
   CurfewDayOfReleaseService,
   CurfewTimetableService,
+  DeviceWearerResponsibleAdultService,
   DeviceWearerService,
   InstallationAndRiskService,
   MonitoringConditionsService,

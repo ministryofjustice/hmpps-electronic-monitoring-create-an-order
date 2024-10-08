@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
 
 const DeviceWearerModel = z.object({
   nomisId: z.string().nullable(),
@@ -16,6 +17,7 @@ const DeviceWearerModel = z.object({
     .string()
     .nullable()
     .transform(val => (val === null ? [] : val.split(','))),
+  deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.optional(),
 })
 
 export type DeviceWearer = z.infer<typeof DeviceWearerModel>

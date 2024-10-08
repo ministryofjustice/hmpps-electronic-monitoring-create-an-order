@@ -15,11 +15,12 @@ import MonitoringConditionsController from '../controllers/monitoringConditions/
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
-import ResponsibleAdultController from '../controllers/responsibleAdultController'
+import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
 import ResponsibleOfficerController from '../controllers/responsibleOfficerController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
+import DeviceWearerResponsibleAdultService from '../services/deviceWearerResponsibleAdultService'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -31,6 +32,7 @@ export default function routes({
   curfewDatesService,
   curfewDayOfReleaseService,
   curfewTimetableService,
+  deviceWearerResponsibleAdultService,
   deviceWearerService,
   installationAndRiskService,
   monitoringConditionsService,
@@ -50,7 +52,7 @@ export default function routes({
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
-  const responsibleAdultController = new ResponsibleAdultController(auditService)
+  const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
