@@ -37,7 +37,6 @@ context('About the device wearer', () => {
         page.contactNumber().type('abc')
         page.saveAndReturnButton().click()
 
-        // Doesn't actually exist yet
         Page.verifyOnPage(OrderSummaryPage)
       })
     })
