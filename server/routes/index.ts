@@ -6,6 +6,7 @@ import ContactDetailsController from '../controllers/contact-information/contact
 import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
+import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
@@ -19,6 +20,7 @@ import type { Services } from '../services'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
+  alcoholMonitoringService,
   attachmentService,
   attendanceMonitoringService,
   auditService,
@@ -34,6 +36,7 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
+  const alcoholMonitoringController = new AlcoholMonitoringController(auditService, alcoholMonitoringService)
   const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
@@ -106,6 +109,10 @@ export default function routes({
   // Attendance monitoring page
   get(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.view)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
+
+  // Alcohol monitoring page
+  get(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController.view)
+  post(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController.update)
 
   /**
    * ATTACHMENTS

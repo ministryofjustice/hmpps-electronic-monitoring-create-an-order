@@ -1,4 +1,5 @@
 import { dataAccess } from '../data'
+import AlcoholMonitoringService from './alcoholMonitoringService'
 import AttachmentService from './attachmentService'
 import AttendanceMonitoringService from './attendanceMonitoringService'
 import AuditService from './auditService'
@@ -13,18 +14,20 @@ import TrailMonitoringService from './trailMonitoringService'
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
 
+  const alcoholMonitoringService = new AlcoholMonitoringService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
   const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
-  const orderService = new OrderService(cemoApiClient)
-  const orderSearchService = new OrderSearchService(cemoApiClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
+  const orderSearchService = new OrderSearchService(cemoApiClient)
+  const orderService = new OrderService(cemoApiClient)
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
 
   return {
+    alcoholMonitoringService,
     applicationInfo,
     attachmentService,
     attendanceMonitoringService,
@@ -41,6 +44,7 @@ export const services = () => {
 
 export type Services = ReturnType<typeof services>
 export {
+  AlcoholMonitoringService,
   AttachmentService,
   AuditService,
   ContactDetailsService,
