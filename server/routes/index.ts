@@ -8,6 +8,7 @@ import DeviceWearerCheckAnswersController from '../controllers/deviceWearersChec
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
+import CurfewDatesController from '../controllers/monitoringConditions/curfewDatesController'
 import CurfewDayOfReleaseController from '../controllers/monitoringConditions/curfewDayOfReleaseController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
@@ -26,6 +27,7 @@ export default function routes({
   attendanceMonitoringService,
   auditService,
   contactDetailsService,
+  curfewDatesService,
   curfewDayOfReleaseService,
   deviceWearerService,
   installationAndRiskService,
@@ -41,6 +43,7 @@ export default function routes({
   const alcoholMonitoringController = new AlcoholMonitoringController(auditService, alcoholMonitoringService)
   const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
   const curfewDayOfReleaseController = new CurfewDayOfReleaseController(auditService, curfewDayOfReleaseService)
+  const curfewDatesController = new CurfewDatesController(auditService, curfewDatesService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
@@ -120,6 +123,10 @@ export default function routes({
   // Curfew day of release page
   get(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController.update)
+
+  // Curfew dates page
+  get(paths.MONITORING_CONDITIONS.CURFEW_DATES, curfewDatesController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_DATES, curfewDatesController.update)
 
   /**
    * ATTACHMENTS
