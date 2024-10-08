@@ -9,6 +9,7 @@
   - [Running the application locally](#running-the-application-locally)
     - [One-time setup:](#one-time-setup)
     - [Every-time setup:](#every-time-setup)
+- [Running both the UI and the API locally](#running-both-the-ui-and-the-api-locally)
 - [Code quality checks](#code-quality-checks)
   - [Run linter](#run-linter)
   - [Run tests](#run-tests)
@@ -70,6 +71,8 @@ CEMO_API_URL=http://localhost:8080
 
 3.  Access the service via [http://localhost:3000](http://localhost:3000), using your dev environment DPS personal credentials to sign in at the sign in page.
 
+## Running both the UI and the API locally
+Instructions for this can be found in the readme of the [Create an EM Order API repo](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api).
 
 ## Code quality checks
 
