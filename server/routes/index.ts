@@ -6,6 +6,7 @@ import ContactDetailsController from '../controllers/contact-information/contact
 import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
+import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import ResponsibleAdultController from '../controllers/responsibleAdultController'
@@ -16,16 +17,16 @@ import type { Services } from '../services'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
+  attachmentService,
   auditService,
   contactDetailsService,
+  deviceWearerService,
   installationAndRiskService,
+  monitoringConditionsService,
   orderService,
   orderSearchService,
-  deviceWearerService,
-  attachmentService,
 }: Services): Router {
   const router = Router()
-
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
@@ -38,6 +39,7 @@ export default function routes({
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
   const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
+  const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -82,6 +84,14 @@ export default function routes({
    */
   get(paths.INSTALLATION_AND_RISK, installationAndRiskController.view)
   post(paths.INSTALLATION_AND_RISK, installationAndRiskController.update)
+
+  /**
+   * MONITORING CONDITIONS
+   */
+
+  // Main monitoring conditions page
+  get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
+  post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
   /**
    * ATTACHMENTS

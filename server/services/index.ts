@@ -4,6 +4,7 @@ import AuditService from './auditService'
 import ContactDetailsService from './contactDetailsService'
 import DeviceWearerService from './deviceWearerService'
 import InstallationAndRiskService from './installationAndRiskService'
+import MonitoringConditionsService from './monitoringConditionsService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 
@@ -17,6 +18,7 @@ export const services = () => {
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
+  const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
 
   return {
     applicationInfo,
@@ -27,6 +29,7 @@ export const services = () => {
     orderSearchService,
     attachmentService,
     installationAndRiskService,
+    monitoringConditionsService,
   }
 }
 
@@ -37,6 +40,7 @@ export {
   ContactDetailsService,
   DeviceWearerService,
   InstallationAndRiskService,
+  MonitoringConditionsService,
   OrderService,
   OrderSearchService,
 }
