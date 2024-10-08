@@ -6,6 +6,7 @@ import ContactDetailsController from '../controllers/contact-information/contact
 import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
+import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import OrderController from '../controllers/orderController'
@@ -19,6 +20,7 @@ import type { Services } from '../services'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
   attachmentService,
+  attendanceMonitoringService,
   auditService,
   contactDetailsService,
   deviceWearerService,
@@ -32,6 +34,7 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
+  const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
@@ -99,6 +102,10 @@ export default function routes({
   // Trail monitoring page
   get(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.view)
   post(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.update)
+
+  // Attendance monitoring page
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.view)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
 
   /**
    * ATTACHMENTS

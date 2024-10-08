@@ -1,5 +1,6 @@
 import { dataAccess } from '../data'
 import AttachmentService from './attachmentService'
+import AttendanceMonitoringService from './attendanceMonitoringService'
 import AuditService from './auditService'
 import ContactDetailsService from './contactDetailsService'
 import DeviceWearerService from './deviceWearerService'
@@ -13,6 +14,7 @@ export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
 
   const attachmentService = new AttachmentService(cemoApiClient)
+  const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const orderService = new OrderService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
@@ -25,6 +27,7 @@ export const services = () => {
   return {
     applicationInfo,
     attachmentService,
+    attendanceMonitoringService,
     auditService,
     contactDetailsService,
     deviceWearerService,
@@ -46,5 +49,5 @@ export {
   MonitoringConditionsService,
   OrderSearchService,
   OrderService,
-  TrailMonitoringService
+  TrailMonitoringService,
 }
