@@ -54,6 +54,7 @@ SYSTEM_CLIENT_SECRET=[REPLACE WITH SYSTEM_CLIENT_SECRET]
 ENVIRONMENT_NAME=DEV
 CEMO_API_URL=http://localhost:8080
 ```
+- Use the command `env` to check that the environment variables are in your current shell session. If any of them aren't listed, then load the environment variables into your current shell session using `export $(cat .env)`
 - Install dependencies using `npm install`, ensuring you are using `node v20`
   - Note: Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json` and the CircleCI build config.
 
