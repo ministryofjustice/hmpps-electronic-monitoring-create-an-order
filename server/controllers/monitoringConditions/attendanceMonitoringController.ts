@@ -19,7 +19,7 @@ type AttendanceMonitoringViewModel = NonNullable<unknown>
 export default class AttendanceMonitoringController {
   constructor(
     private readonly auditService: AuditService,
-    private readonly deviceWearerService: AttendanceMonitoringService,
+    private readonly attendanceMonitoringService: AttendanceMonitoringService,
   ) {}
 
   private constructViewModel(

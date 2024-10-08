@@ -19,7 +19,7 @@ type TrailMonitoringViewModel = NonNullable<unknown>
 export default class TrailMonitoringController {
   constructor(
     private readonly auditService: AuditService,
-    private readonly deviceWearerService: TrailMonitoringService,
+    private readonly trailMonitoringService: TrailMonitoringService,
   ) {}
 
   private constructViewModel(

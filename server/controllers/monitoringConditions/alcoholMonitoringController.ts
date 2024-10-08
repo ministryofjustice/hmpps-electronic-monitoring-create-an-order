@@ -18,7 +18,7 @@ type AlcoholMonitoringViewModel = NonNullable<unknown>
 export default class AlcoholMonitoringController {
   constructor(
     private readonly auditService: AuditService,
-    private readonly deviceWearerService: AlcoholMonitoringService,
+    private readonly alcoholMonitoringService: AlcoholMonitoringService,
   ) {}
 
   private constructViewModel(

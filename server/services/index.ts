@@ -25,9 +25,6 @@ export const services = () => {
   const curfewDatesService = new CurfewDatesService(cemoApiClient)
   const curfewDayOfReleaseService = new CurfewDayOfReleaseService(cemoApiClient)
   const curfewTimetableService = new CurfewTimetableService(cemoApiClient)
-  const orderService = new OrderService(cemoApiClient)
-  const orderSearchService = new OrderSearchService(cemoApiClient)
-  const attachmentService = new AttachmentService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
@@ -68,5 +65,5 @@ export {
   MonitoringConditionsService,
   OrderSearchService,
   OrderService,
-  TrailMonitoringService
+  TrailMonitoringService,
 }

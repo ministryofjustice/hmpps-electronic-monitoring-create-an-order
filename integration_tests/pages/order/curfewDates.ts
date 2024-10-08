@@ -1,6 +1,6 @@
 import Page, { PageElement } from '../page'
 
-export default class CurfewDates extends Page {
+export default class CurfewDatesPage extends Page {
   constructor() {
     super('Monitoring conditions')
   }
