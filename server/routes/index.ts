@@ -14,7 +14,6 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
   auditService,

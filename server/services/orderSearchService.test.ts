@@ -49,7 +49,7 @@ const mockNewOrder: Order = {
     disabilities: [],
   },
   deviceWearerContactDetails: {
-    contactNumber: null,
+    contactNumber: '',
   },
   additionalDocuments: [],
 }

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { Order, OrderStatus, OrderStatusEnum } from '../../models/Order'
+import { Order, OrderStatus } from '../../models/Order'
 
 export const createMockRequest = (order?: Order): Request => {
   return {
@@ -57,7 +57,7 @@ export const createMockOrder = (status: OrderStatus): Order => {
       adultAtTimeOfInstallation: false,
       sex: 'male',
       gender: 'male',
-      disabilities: 'Vision,Mobilitiy',
+      disabilities: ['Vision', 'Mobilitiy'],
     },
     deviceWearerContactDetails: {
       contactNumber: '01234567890',
