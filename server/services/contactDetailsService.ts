@@ -1,6 +1,5 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import DeviceWearerModel, { DeviceWearer } from '../models/DeviceWearer'
 import DeviceWearerContactDetailsModel, { ContactDetails } from '../models/ContactDetails'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'

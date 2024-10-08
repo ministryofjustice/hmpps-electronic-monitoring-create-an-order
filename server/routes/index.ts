@@ -74,7 +74,7 @@ export default function routes({
    */
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
   post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.update)
-  
+
   /**
    * ATTACHMENTS
    */

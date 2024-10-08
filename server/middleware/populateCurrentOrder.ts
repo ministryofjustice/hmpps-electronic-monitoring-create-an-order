@@ -1,5 +1,6 @@
 import { RequestParamHandler, Request, Response, NextFunction } from 'express'
 import logger from '../../logger'
+import paths from '../constants/paths'
 import { OrderService } from '../services'
 import { OrderStatusEnum } from '../models/Order'
 
@@ -13,6 +14,7 @@ const populateOrder =
       req.order = order
       res.locals.orderId = order.id
       res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
+      res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
 
       next()
     } catch (error) {

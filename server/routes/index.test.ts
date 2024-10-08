@@ -49,7 +49,7 @@ const mockSubmittedOrder: Order = {
     adultAtTimeOfInstallation: false,
     sex: null,
     gender: null,
-    disabilities: null,
+    disabilities: [],
   },
   deviceWearerContactDetails: {
     contactNumber: null,
@@ -72,7 +72,7 @@ const mockDraftOrder: Order = {
     adultAtTimeOfInstallation: false,
     sex: null,
     gender: null,
-    disabilities: null,
+    disabilities: [],
   },
   deviceWearerContactDetails: {
     contactNumber: null,
@@ -245,6 +245,7 @@ describe('authorised user', () => {
     it('should render contact details page', () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      flashProvider.mockReturnValue([])
 
       return request(app)
         .get(`/order/${mockSubmittedOrder.id}/contact-information/contact-details`)

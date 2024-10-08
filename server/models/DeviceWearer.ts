@@ -12,7 +12,10 @@ const DeviceWearerModel = z.object({
   adultAtTimeOfInstallation: z.boolean().nullable(),
   sex: z.string().nullable(),
   gender: z.string().nullable(),
-  disabilities: z.string().nullable(),
+  disabilities: z
+    .string()
+    .nullable()
+    .transform(val => (val === null ? [] : val.split(','))),
 })
 
 export type DeviceWearer = z.infer<typeof DeviceWearerModel>
