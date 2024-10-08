@@ -1,4 +1,4 @@
-import { ErrorMessage } from '../interfaces/formData'
+import { ErrorMessage } from '../models/view-models/utils'
 import { ValidationResult } from '../models/Validation'
 
 const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000

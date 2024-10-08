@@ -68,7 +68,7 @@ const createMockOrder = (status: OrderStatus): Order => {
       adultAtTimeOfInstallation: false,
       sex: 'male',
       gender: 'male',
-      disabilities: 'Vision,Mobilitiy',
+      disabilities: ['Vision', 'Mobilitiy'],
     },
     deviceWearerContactDetails: {
       contactNumber: null,
@@ -289,7 +289,7 @@ describe('DeviceWearerController', () => {
         adultAtTimeOfInstallation: true,
         sex: 'male',
         gender: 'male',
-        disabilities: 'Vision,Mobilitiy',
+        disabilities: ['Vision', 'Mobilitiy'],
       })
 
       // When
@@ -335,7 +335,7 @@ describe('DeviceWearerController', () => {
         adultAtTimeOfInstallation: false,
         sex: 'male',
         gender: 'male',
-        disabilities: 'Vision,Mobilitiy',
+        disabilities: ['Vision', 'Mobilitiy'],
       })
 
       // When
@@ -381,7 +381,7 @@ describe('DeviceWearerController', () => {
         adultAtTimeOfInstallation: true,
         sex: 'male',
         gender: 'male',
-        disabilities: 'Vision,Mobilitiy',
+        disabilities: ['Vision', 'Mobilitiy'],
       })
 
       // When

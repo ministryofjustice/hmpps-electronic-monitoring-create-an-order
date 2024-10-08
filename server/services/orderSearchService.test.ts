@@ -6,8 +6,10 @@ import { Order, OrderStatusEnum } from '../models/Order'
 
 jest.mock('../data/restClient')
 
-const mockNewOrder: Order = {
-  id: uuidv4(),
+const mockId = uuidv4()
+
+const mockApiResponse = {
+  id: mockId,
   status: OrderStatusEnum.Enum.IN_PROGRESS,
   deviceWearer: {
     nomisId: null,
@@ -22,6 +24,29 @@ const mockNewOrder: Order = {
     sex: null,
     gender: null,
     disabilities: null,
+  },
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
+  additionalDocuments: [],
+}
+
+const mockNewOrder: Order = {
+  id: mockId,
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  deviceWearer: {
+    nomisId: null,
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    firstName: null,
+    lastName: null,
+    alias: null,
+    dateOfBirth: null,
+    adultAtTimeOfInstallation: false,
+    sex: null,
+    gender: null,
+    disabilities: [],
   },
   deviceWearerContactDetails: {
     contactNumber: null,
@@ -49,7 +74,7 @@ describe('Order Search Service', () => {
 
   describe('searchOrders', () => {
     it('should get orders from the api', async () => {
-      mockRestClient.get.mockResolvedValue([mockNewOrder])
+      mockRestClient.get.mockResolvedValue([mockApiResponse])
 
       const orderService = new OrderSearchService(mockRestClient)
       const orders = await orderService.searchOrders({ accessToken: '', searchTerm: '' })

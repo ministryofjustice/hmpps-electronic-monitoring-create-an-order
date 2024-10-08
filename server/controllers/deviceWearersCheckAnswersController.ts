@@ -3,26 +3,26 @@ import paths from '../constants/paths'
 import { AuditService } from '../services'
 import { DeviceWearer } from '../models/DeviceWearer'
 import { deserialiseDate } from '../utils/utils'
-import { FormField } from '../interfaces/formData'
+import { MultipleChoiceField, TextField } from '../models/view-models/utils'
 
 type DeviceWearerCheckAnswersViewModel = {
   aboutTheDeviceWearerUri: string
   orderSummaryUri: string
-  nomisId: FormField
-  pncId: FormField
-  deliusId: FormField
-  prisonNumber: FormField
-  firstName: FormField
-  lastName: FormField
-  alias: FormField
-  dateOfBirth_day: FormField
-  dateOfBirth_month: FormField
-  dateOfBirth_year: FormField
-  dateOfBirth: FormField
-  adultAtTimeOfInstallation: FormField
-  sex: FormField
-  gender: FormField
-  disabilities: FormField
+  nomisId: TextField
+  pncId: TextField
+  deliusId: TextField
+  prisonNumber: TextField
+  firstName: TextField
+  lastName: TextField
+  alias: TextField
+  dateOfBirth_day: TextField
+  dateOfBirth_month: TextField
+  dateOfBirth_year: TextField
+  dateOfBirth: TextField
+  adultAtTimeOfInstallation: TextField
+  sex: TextField
+  gender: TextField
+  disabilities: MultipleChoiceField
 }
 
 export default class DeviceWearerCheckAnswersController {
@@ -53,7 +53,7 @@ export default class DeviceWearerCheckAnswersController {
       adultAtTimeOfInstallation: { value: String(deviceWearer.adultAtTimeOfInstallation) },
       sex: { value: deviceWearer.sex || '' },
       gender: { value: deviceWearer.gender || '' },
-      disabilities: { values: (deviceWearer.disabilities || '').split(',') },
+      disabilities: { values: deviceWearer.disabilities },
     }
   }
 
