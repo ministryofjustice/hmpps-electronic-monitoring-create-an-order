@@ -50,6 +50,26 @@
     </li>
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
       <div class="govuk-task-list__name-and-hint">
+        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/installation-and-risk" aria-describedby="order-section-device-wearer">
+            Installation and risk
+        </a>
+      </div>
+      {% if order.installationAndRisk.isComplete %}
+        <div class="govuk-task-list__status" >
+          <strong class="govuk-tag govuk-tag--green">
+            Complete
+          </strong>
+        </div>
+      {% else %}
+        <div class="govuk-task-list__status" >
+           <strong class="govuk-tag govuk-tag--grey">
+            Incomplete
+          </strong>
+        </div>
+      {% endif %}
+    </li>
+    <li class="govuk-task-list__item govuk-task-list__item--with-link">
+      <div class="govuk-task-list__name-and-hint">
         <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/contact-information/contact-details" aria-describedby="order-section-contact-details">
             Contact information
         </a>

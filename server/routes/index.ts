@@ -1,22 +1,30 @@
 import { type RequestHandler, Router } from 'express'
 
-import asyncMiddleware from '../middleware/asyncMiddleware'
-import type { Services } from '../services'
 import paths from '../constants/paths'
-import OrderSearchController from '../controllers/orderSearchController'
-import OrderController from '../controllers/orderController'
-import DeviceWearerController from '../controllers/deviceWearerController'
-import populateOrder from '../middleware/populateCurrentOrder'
 import AttachmentsController from '../controllers/attachmentController'
+import ContactDetailsController from '../controllers/contactDetailsController'
+import DeviceWearerController from '../controllers/deviceWearerController'
+import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
+import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
+import OrderController from '../controllers/orderController'
+import OrderSearchController from '../controllers/orderSearchController'
 import ResponsibleAdultController from '../controllers/responsibleAdultController'
 import ResponsibleOfficerController from '../controllers/responsibleOfficerController'
-import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
-import ContactDetailsController from '../controllers/contactDetailsController'
+import asyncMiddleware from '../middleware/asyncMiddleware'
+import populateOrder from '../middleware/populateCurrentOrder'
+import type { Services } from '../services'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes(services: Services): Router {
   const router = Router()
-  const { auditService, orderService, orderSearchService, deviceWearerService, attachmentService } = services
+  const {
+    auditService,
+    orderService,
+    orderSearchService,
+    deviceWearerService,
+    attachmentService,
+    installationAndRiskService,
+  } = services
 
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,6 +38,7 @@ export default function routes(services: Services): Router {
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
   const contactDetailsController = new ContactDetailsController(auditService)
+  const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -67,6 +76,12 @@ export default function routes(services: Services): Router {
    * CONATCT INFORMATION
    */
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
+
+  /**
+   * INSTALLATION AND RISK
+   */
+  get(paths.INSTALLATION_AND_RISK, installationAndRiskController.view)
+  post(paths.INSTALLATION_AND_RISK, installationAndRiskController.update)
 
   /**
    * ATTACHMENTS

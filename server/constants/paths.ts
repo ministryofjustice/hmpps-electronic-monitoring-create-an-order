@@ -21,6 +21,8 @@ const paths = {
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
   },
 
+  INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
+
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
     LICENCE: '/order/:orderId/attachments/licence',
