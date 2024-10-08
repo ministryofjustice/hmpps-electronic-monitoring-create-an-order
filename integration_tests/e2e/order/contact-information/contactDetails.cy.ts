@@ -3,6 +3,7 @@ import ErrorPage from '../../../pages/error'
 import ContactDetailsPage from '../../../pages/order/contact-information/contactDetails'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import AddressInformationPage from '../../../pages/order/contact-information/addressInformation'
+import OrderSummaryPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -37,7 +38,7 @@ context('About the device wearer', () => {
         page.saveAndReturnButton().click()
 
         // Doesn't actually exist yet
-        // Page.verifyOnPage(AddressInformationPage)
+        Page.verifyOnPage(OrderSummaryPage)
       })
     })
 
