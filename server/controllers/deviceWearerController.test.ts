@@ -71,7 +71,7 @@ const createMockOrder = (status: OrderStatus): Order => {
       disabilities: ['Vision', 'Mobilitiy'],
     },
     deviceWearerContactDetails: {
-      contactNumber: null,
+      contactNumber: '',
     },
     additionalDocuments: [],
   }

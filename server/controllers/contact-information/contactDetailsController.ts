@@ -1,10 +1,9 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../constants/paths'
-import { AuditService, ContactDetailsService } from '../services'
-import { isValidationResult } from '../models/Validation'
+import paths from '../../constants/paths'
+import { AuditService, ContactDetailsService } from '../../services'
+import { isValidationResult } from '../../models/Validation'
 import contactDetailsViewModel from '../../models/view-models/contactDetails'
 import ContactDetailsFormDataModel from '../../models/form-data/contactDetails'
-
 
 export default class ContactDetailsController {
   constructor(
@@ -29,7 +28,7 @@ export default class ContactDetailsController {
     const { orderId } = req.params
     const { action, ...formData } = ContactDetailsFormDataModel.parse(req.body)
 
-    const result = await this.contactDetailsService.updateDeviceWearer({
+    const result = await this.contactDetailsService.updateContactDetails({
       accessToken: res.locals.user.token,
       orderId,
       data: formData,

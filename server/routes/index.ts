@@ -2,7 +2,7 @@ import { type RequestHandler, Router } from 'express'
 
 import paths from '../constants/paths'
 import AttachmentsController from '../controllers/attachmentController'
-import ContactDetailsController from '../controllers/contactDetailsController'
+import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
@@ -13,6 +13,7 @@ import ResponsibleOfficerController from '../controllers/responsibleOfficerContr
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({

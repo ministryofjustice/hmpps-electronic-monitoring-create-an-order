@@ -9,7 +9,7 @@ type ContactDetailsViewModel = ViewModel<DeviceWearerContactDetails>
 const constructFromFormData = (formData: ContactDetailsFormData, validationErrors: ValidationResult) => {
   return {
     contactNumber: {
-      value: formData.contactNumber || '',
+      value: formData.contactNumber,
       error: getError(validationErrors, 'contactNumber'),
     },
   }
@@ -18,7 +18,7 @@ const constructFromFormData = (formData: ContactDetailsFormData, validationError
 const constructFromEntity = (contactDetails: DeviceWearerContactDetails) => {
   return {
     contactNumber: {
-      value: contactDetails.contactNumber || '',
+      value: contactDetails.contactNumber,
     },
   }
 }

@@ -14,7 +14,7 @@ type UpdateContactDetailsRequest = AuthenticatedRequestInput & {
 export default class ContactDetailsService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async updateDeviceWearer(input: UpdateContactDetailsRequest): Promise<ContactDetails | ValidationResult> {
+  async updateContactDetails(input: UpdateContactDetailsRequest): Promise<ContactDetails | ValidationResult> {
     try {
       const result = await this.apiClient.post({
         path: `/api/order/${input.orderId}/contact-details`,
