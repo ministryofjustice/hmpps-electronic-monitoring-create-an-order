@@ -23,6 +23,17 @@ const paths = {
 
   INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
 
+  MONITORING_CONDITIONS: {
+    BASE_URL: '/order/:orderId/monitoring-conditions',
+    TRAIL: '/order/:orderId/monitoring-conditions/trail',
+    ZONE: '/order/:orderId/monitoring-conditions/zone',
+    ATTENDANCE: '/order/:orderId/monitoring-conditions/attendance',
+    ALCOHOL: '/order/:orderId/monitoring-conditions/alcohol',
+    CURFEW_DAY_OF_RELEASE: '/order/:orderId/monitoring-conditions/curfew-day-of-release',
+    CURFEW_DATES: '/order/:orderId/monitoring-conditions/curfew-dates',
+    CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew-timetable',
+  },
+
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
     LICENCE: '/order/:orderId/attachments/licence',
