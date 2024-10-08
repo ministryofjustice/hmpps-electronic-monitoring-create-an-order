@@ -46,7 +46,7 @@ describe('ContactDetailsController', () => {
       req.flash = jest.fn().mockReturnValue([])
 
       // When
-      await contactDetailsController.view(req, res, next)
+      await contactDetailsController.get(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
@@ -75,7 +75,7 @@ describe('ContactDetailsController', () => {
         ])
 
       // When
-      await contactDetailsController.view(req, res, next)
+      await contactDetailsController.get(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
@@ -85,7 +85,9 @@ describe('ContactDetailsController', () => {
         }),
       )
     })
+  })
 
+  describe('post', () => {
     it('should persist data and redirect to the form when the user submits invalid values', async () => {
       // Given
       const req = createMockRequest()
@@ -101,7 +103,7 @@ describe('ContactDetailsController', () => {
       ])
 
       // When
-      await contactDetailsController.update(req, res, next)
+      await contactDetailsController.post(req, res, next)
 
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
@@ -129,7 +131,7 @@ describe('ContactDetailsController', () => {
       })
 
       // When
-      await contactDetailsController.update(req, res, next)
+      await contactDetailsController.post(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -151,7 +153,7 @@ describe('ContactDetailsController', () => {
       })
 
       // When
-      await contactDetailsController.update(req, res, next)
+      await contactDetailsController.post(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()

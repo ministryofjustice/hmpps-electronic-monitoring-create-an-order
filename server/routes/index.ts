@@ -74,8 +74,8 @@ export default function routes({
   /**
    * CONATCT INFORMATION
    */
-  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
-  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.update)
+  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
+  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
 
   /**
    * INSTALLATION AND RISK

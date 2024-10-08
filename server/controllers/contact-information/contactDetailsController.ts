@@ -11,7 +11,7 @@ export default class ContactDetailsController {
     private readonly contactDetailsService: ContactDetailsService,
   ) {}
 
-  view: RequestHandler = async (req: Request, res: Response) => {
+  get: RequestHandler = async (req: Request, res: Response) => {
     const { deviceWearerContactDetails } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
@@ -24,7 +24,7 @@ export default class ContactDetailsController {
     res.render(`pages/order/contact-information/contact-details`, viewModel)
   }
 
-  update: RequestHandler = async (req: Request, res: Response) => {
+  post: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const { action, ...formData } = ContactDetailsFormDataModel.parse(req.body)
 
