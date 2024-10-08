@@ -200,10 +200,41 @@ const uploadAttachment = (options: UploadAttachmentStubOptions = defaultUploadAt
     },
   })
 
+type ValidationErrors = Array<{
+  erorr: string
+  field: string
+}>
+
+type UpdateContactDetailsOptions = {
+  httpStatus: number
+  id?: string
+  errors: ValidationErrors
+}
+
+const defaultUpdateContactDetailsOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  errors: [],
+}
+
+const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpdateContactDetailsOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: `/cemo/api/order/${options.id}/contact-details`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? { contactNumber: '01234567890' } : options.errors,
+    },
+  })
+
 export default {
   stubCemoGetOrder: getOrder,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubCemoUpdateContactDetails: updateContactDetails,
   stubUploadAttachment: uploadAttachment,
 }

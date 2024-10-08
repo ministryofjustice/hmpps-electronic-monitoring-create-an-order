@@ -38,7 +38,7 @@
     }) }}
   </div>
 
-  <form action="{{ formActionUri }}" method="post">
+  <form action="" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     {% call govukFieldset({
@@ -52,7 +52,6 @@
       {{ govukInput({
         label: {
           text: "Enter a telephone number we can use to contact the device wearer."
-          
         },
         hint: {
           text: "Provide either a landline or mobile number"

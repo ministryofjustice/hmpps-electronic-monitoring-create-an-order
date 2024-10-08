@@ -2,7 +2,7 @@ import { type RequestHandler, Router } from 'express'
 
 import paths from '../constants/paths'
 import AttachmentsController from '../controllers/attachmentController'
-import ContactDetailsController from '../controllers/contactDetailsController'
+import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
@@ -16,20 +16,18 @@ import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function routes(services: Services): Router {
+export default function routes({
+  attachmentService,
+  auditService,
+  contactDetailsService,
+  deviceWearerService,
+  installationAndRiskService,
+  monitoringConditionsService,
+  orderService,
+  orderSearchService,
+}: Services): Router {
   const router = Router()
-  const {
-    auditService,
-    orderService,
-    orderSearchService,
-    deviceWearerService,
-    attachmentService,
-    installationAndRiskService,
-    monitoringConditionsService,
-  } = services
-
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
@@ -39,7 +37,7 @@ export default function routes(services: Services): Router {
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
-  const contactDetailsController = new ContactDetailsController(auditService)
+  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
   const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
 
@@ -78,7 +76,8 @@ export default function routes(services: Services): Router {
   /**
    * CONATCT INFORMATION
    */
-  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
+  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
+  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
 
   /**
    * INSTALLATION AND RISK
