@@ -11,6 +11,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block content %}
 
@@ -41,6 +42,195 @@
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <h2 class="govuk-heading-l">Monitoring projects</h2>
+
+    {{ govukRadios({
+      name: "partOfAquisitiveCrime",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: "Is the device wearer part of the Acquisitive Crime project? (optional)",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "Not available to device wearers under 18. If selected the device wearer must be trail monitored as part of the project requirements."
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: adultAtTimeOfInstallation.value,
+      errorMessage: adultAtTimeOfInstallation.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukRadios({
+      name: "partOfDapolProject",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: "Is the device wearer part of the Domestic Abuse Perpetrators on Licence (DAPOL) project? (optional)",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "Not available to device wearers under 18."
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: adultAtTimeOfInstallation.value,
+      errorMessage: adultAtTimeOfInstallation.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    <h2 class="govuk-heading-l">Order information</h2>
+
+    {{ govukSelect({
+      id: "sort",
+      name: "sort",
+      label: {
+        text: "Select order type"
+      },
+      items: [
+        {
+          value: "",
+          text: "Select"
+        },
+        {
+          value: "special",
+          text: "Special"
+        },
+        {
+          value: "pretrial",
+          text: "Pre Trial"
+        },
+        {
+          value: "postrelease",
+          text: "Post Release"
+        },
+        {
+          value: "immigration",
+          text: "Immigration"
+        },
+        {
+          value: "community",
+          text: "Community"
+        },
+        {
+          value: "civil",
+          text: "Civil"
+        }
+      ]
+    }) }}
+
+    {{ govukCheckboxes({
+      name: "monitoringRequired",
+      fieldset: {
+        legend: {
+          text: "Monitoring required",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+        text: "What monitoring does the device wearer need? Select all that apply."
+      },
+      items: [
+        {
+          value: "curfew",
+          text: "Curfew with electronic monitoring",
+          hint: {
+            text: "The device wearer must stay inside an address at specific times during the day and night."
+          }
+        },
+        {
+          value: "zone",
+          text: "Exclusion and inclusion zone monitoring",
+          hint: {
+            text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
+          }
+        },
+        {
+          value: "trail",
+          text: "Trail monitoring",
+          hint: {
+            text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
+          }
+        },
+        {
+          value: "attendance",
+          text: "Mandatory attendance monitoring",
+          hint: {
+            text: "Attendance of the device wearer at appointments is monitored."
+          }
+        },
+        {
+          value: "alcohol",
+          text: "Alcohol monitoring",
+          hint: {
+            text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
+          }
+        }
+      ]
+    }) }}
+
+    {{ govukCheckboxes({
+      name: "deviceRequired",
+      fieldset: {
+        legend: {
+          text: "Device required",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+        text: "Select the device to be installed. Select all that apply."
+      },
+      items: [
+        {
+          value: "locationFitted",
+          text: "Location, fitted"
+        },
+        {
+          value: "locationNotFitted",
+          text: "Location, not fitted"
+        },
+        {
+          value: "radioFrequency",
+          text: "Radio frequency "
+        },
+        {
+          value: "alcoholTransdermal",
+          text: "Alcohol, transdermal "
+        },
+        {
+          value: "alcoholRemoteBreath",
+          text: "Alcohol, remote breath"
+        }
+      ]
+    }) }}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
