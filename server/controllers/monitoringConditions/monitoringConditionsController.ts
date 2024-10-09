@@ -5,22 +5,27 @@ import { z } from 'zod'
 import paths from '../../constants/paths'
 import { MonitoringConditions } from '../../models/MonitoringConditions'
 import { isValidationResult, ValidationResult } from '../../models/Validation'
-import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
+import {
+  MultipleChoiceField,
+  MultipleChoiceFieldValues,
+  MultipleChoiceValue,
+  TextField,
+} from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
 import { getError } from '../../utils/utils'
 
-const deviceTypes = [
+const deviceTypes: MultipleChoiceValue[] = [
   { text: 'Location Monitoring (using Non-Fitted Device)', value: '250' },
   { text: 'AAMR', value: 'aamr' },
   { text: 'AML', value: 'aml' },
   { text: 'Attendance Requirement', value: 'attendance_requirement' },
   { text: 'Curfew with EM', value: 'curfew_with_em' },
   { text: 'EM Exclusion / Inclusion Zone', value: 'em_exclusion_inclusion_zone' },
-  { text: 'Location Monitoring (Fitted Device)', value: '	location_monitoring' },
+  { text: 'Location Monitoring (Fitted Device)', value: 'location_monitoring' },
 ]
 
-const orderTypes = [
+const orderTypes: MultipleChoiceValue[] = [
   { text: 'Select', value: '' },
   { text: 'Civil', value: 'civil' },
   { text: 'Community', value: 'community' },
@@ -48,7 +53,7 @@ type MonitoringConditionsViewModel = {
   dapol: TextField
   orderType: TextField
   monitoringRequired: MultipleChoiceField
-  devicesRequired: MultipleChoiceField
+  devicesRequired: MultipleChoiceFieldValues
 }
 
 const monitoringTypes: (keyof MonitoringConditions)[] = [
@@ -69,13 +74,13 @@ const nextPage = (selections: string[]): string => {
   if (selections.includes('trail')) {
     return paths.MONITORING_CONDITIONS.TRAIL
   }
-  if (selections.includes('attendance')) {
+  if (selections.includes('mandatoryAttendance')) {
     return paths.MONITORING_CONDITIONS.ATTENDANCE
   }
   if (selections.includes('alcohol')) {
     return paths.MONITORING_CONDITIONS.ALCOHOL
   }
-  throw new Error('Invalid selection')
+  return paths.MONITORING_CONDITIONS.BASE_URL
 }
 
 export default class MonitoringConditionsController {
@@ -99,6 +104,7 @@ export default class MonitoringConditionsController {
   private createViewModelFromMonitoringConditions(
     monitoringConditions: MonitoringConditions,
   ): MonitoringConditionsViewModel {
+    const devicesRequired = monitoringConditions.devicesRequired?.split(',')
     const monitoringRequiredValues = monitoringTypes.reduce((acc: string[], val) => {
       if (monitoringConditions[val]) {
         acc.push(val)
@@ -116,7 +122,7 @@ export default class MonitoringConditionsController {
         values: monitoringRequiredValues,
       },
       devicesRequired: {
-        values: monitoringConditions.devicesRequired ? monitoringConditions.devicesRequired.split(',') : [],
+        values: deviceTypes.map(d => ({ ...d, checked: devicesRequired?.includes(d.value) })),
       },
     }
   }
@@ -141,7 +147,10 @@ export default class MonitoringConditionsController {
         values: formData.monitoringRequired,
         error: getError(validationErrors, 'monitoringRequired'),
       },
-      devicesRequired: { values: formData.devicesRequired, error: getError(validationErrors, 'devicesRequired') },
+      devicesRequired: {
+        values: deviceTypes.map(d => ({ ...d, checked: formData.devicesRequired?.includes(d.value) })),
+        error: getError(validationErrors, 'devicesRequired'),
+      },
     }
   }
 

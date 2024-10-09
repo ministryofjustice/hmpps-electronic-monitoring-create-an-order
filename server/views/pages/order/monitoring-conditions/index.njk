@@ -46,7 +46,7 @@
     <h2 class="govuk-heading-l">Monitoring projects</h2>
 
     {{ govukRadios({
-      name: "partOfAquisitiveCrime",
+      name: "acquisitiveCrime",
       classes: "govuk-radios--inline",
       fieldset: {
         legend: {
@@ -70,13 +70,13 @@
           disabled: not isOrderEditable
         }
       ],
-      value: adultAtTimeOfInstallation.value,
-      errorMessage: adultAtTimeOfInstallation.error,
+      value: acquisitiveCrime.value,
+      errorMessage: acquisitiveCrime.error,
       disabled: not isOrderEditable
     }) }}
 
     {{ govukRadios({
-      name: "partOfDapolProject",
+      name: "dapol",
       classes: "govuk-radios--inline",
       fieldset: {
         legend: {
@@ -100,8 +100,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: adultAtTimeOfInstallation.value,
-      errorMessage: adultAtTimeOfInstallation.error,
+      value: dapol.value,
+      errorMessage: dapol.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -112,7 +112,10 @@
       label: {
         text: "Select order type"
       },
-      items: orderTypes
+      items: orderTypes,
+      value: orderType.value,
+      errorMessage: orderType.error,
+      disabled: not isOrderEditable
     }) }}
 
     {{ govukCheckboxes({
@@ -133,41 +136,48 @@
           text: "Curfew with electronic monitoring",
           hint: {
             text: "The device wearer must stay inside an address at specific times during the day and night."
-          }
+          },
+          checked: monitoringRequired.values | select("equalto", "curfew") | length
         },
         {
           value: "exclusionZone",
           text: "Exclusion and inclusion zone monitoring",
           hint: {
             text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
-          }
+          },
+          checked: monitoringRequired.values | select("equalto", "exclusionZone") | length
         },
         {
           value: "trail",
           text: "Trail monitoring",
           hint: {
             text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
-          }
+          },
+          checked: monitoringRequired.values | select("equalto", "trail") | length
         },
         {
           value: "mandatoryAttendance",
           text: "Mandatory attendance monitoring",
           hint: {
             text: "Attendance of the device wearer at appointments is monitored."
-          }
+          },
+          checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length
         },
         {
           value: "alcohol",
           text: "Alcohol monitoring",
           hint: {
             text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
-          }
+          },
+          checked: monitoringRequired.values | select("equalto", "alcohol") | length
         }
-      ]
+      ],
+      errorMessage: monitoringRequired.error,
+      disabled: not isOrderEditable
     }) }}
 
     {{ govukCheckboxes({
-      name: "deviceRequired",
+      name: "devicesRequired",
       fieldset: {
         legend: {
           text: "Device required",
@@ -178,7 +188,9 @@
       hint: {
         text: "Select the device to be installed. Select all that apply."
       },
-      items: deviceTypes
+      items: devicesRequired.values,
+      errorMessage: devicesRequired.error,
+      disabled: not isOrderEditable
     }) }}
 
     <div class="govuk-button-group">
