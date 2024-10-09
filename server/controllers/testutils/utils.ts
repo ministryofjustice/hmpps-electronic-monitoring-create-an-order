@@ -59,6 +59,12 @@ export const createMockOrder = (status: OrderStatus): Order => {
       gender: 'male',
       disabilities: ['Vision', 'Mobilitiy'],
     },
+    deviceWearerResponsibleAdult: {
+      relationship: 'parent',
+      otherRelationshipDetails: null,
+      fullName: 'Parent Name',
+      contactNumber: '01234567890',
+    },
     deviceWearerAddresses: [],
     deviceWearerContactDetails: {
       contactNumber: '01234567890',
