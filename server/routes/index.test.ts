@@ -1,15 +1,15 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
-import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
-import AuditService, { Page } from '../services/auditService'
-import OrderService from '../services/orderService'
-import DeviceWearerService from '../services/deviceWearerService'
-import OrderSearchService from '../services/orderSearchService'
+import { getMockOrder, getMockSubmittedOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order, OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
+import AuditService, { Page } from '../services/auditService'
+import DeviceWearerService from '../services/deviceWearerService'
+import OrderSearchService from '../services/orderSearchService'
+import OrderService from '../services/orderService'
+import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -34,53 +34,8 @@ const orderSearchService = new OrderSearchService(restClient) as jest.Mocked<Ord
 const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService(restClient) as jest.Mocked<DeviceWearerService>
 
-const mockSubmittedOrder: Order = {
-  id: uuidv4(),
-  status: OrderStatusEnum.Enum.SUBMITTED,
-  deviceWearer: {
-    nomisId: null,
-    pncId: null,
-    deliusId: null,
-    prisonNumber: null,
-    firstName: null,
-    lastName: null,
-    alias: null,
-    dateOfBirth: null,
-    adultAtTimeOfInstallation: false,
-    sex: null,
-    gender: null,
-    disabilities: [],
-  },
-  deviceWearerAddresses: [],
-  deviceWearerContactDetails: {
-    contactNumber: '',
-  },
-  additionalDocuments: [],
-}
-
-const mockDraftOrder: Order = {
-  id: uuidv4(),
-  status: OrderStatusEnum.Enum.IN_PROGRESS,
-  deviceWearer: {
-    nomisId: null,
-    pncId: null,
-    deliusId: null,
-    prisonNumber: null,
-    firstName: null,
-    lastName: null,
-    alias: null,
-    dateOfBirth: null,
-    adultAtTimeOfInstallation: false,
-    sex: null,
-    gender: null,
-    disabilities: [],
-  },
-  deviceWearerAddresses: [],
-  deviceWearerContactDetails: {
-    contactNumber: '',
-  },
-  additionalDocuments: [],
-}
+const mockSubmittedOrder = getMockSubmittedOrder()
+const mockDraftOrder = getMockOrder()
 
 const mock500Error: SanitisedError = {
   message: 'Internal Server Error',

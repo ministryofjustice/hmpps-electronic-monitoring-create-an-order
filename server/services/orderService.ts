@@ -14,7 +14,6 @@ export default class OrderService {
       path: '/api/orders',
       token: input.accessToken,
     })
-
     return OrderModel.parse(result)
   }
 

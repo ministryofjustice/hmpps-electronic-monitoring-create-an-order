@@ -108,41 +108,11 @@
     <h2 class="govuk-heading-l">Order information</h2>
 
     {{ govukSelect({
-      id: "sort",
-      name: "sort",
+      name: "orderType",
       label: {
         text: "Select order type"
       },
-      items: [
-        {
-          value: "",
-          text: "Select"
-        },
-        {
-          value: "special",
-          text: "Special"
-        },
-        {
-          value: "pretrial",
-          text: "Pre Trial"
-        },
-        {
-          value: "postrelease",
-          text: "Post Release"
-        },
-        {
-          value: "immigration",
-          text: "Immigration"
-        },
-        {
-          value: "community",
-          text: "Community"
-        },
-        {
-          value: "civil",
-          text: "Civil"
-        }
-      ]
+      items: orderTypes
     }) }}
 
     {{ govukCheckboxes({
@@ -166,7 +136,7 @@
           }
         },
         {
-          value: "zone",
+          value: "exclusionZone",
           text: "Exclusion and inclusion zone monitoring",
           hint: {
             text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
@@ -180,7 +150,7 @@
           }
         },
         {
-          value: "attendance",
+          value: "mandatoryAttendance",
           text: "Mandatory attendance monitoring",
           hint: {
             text: "Attendance of the device wearer at appointments is monitored."
@@ -208,28 +178,7 @@
       hint: {
         text: "Select the device to be installed. Select all that apply."
       },
-      items: [
-        {
-          value: "locationFitted",
-          text: "Location, fitted"
-        },
-        {
-          value: "locationNotFitted",
-          text: "Location, not fitted"
-        },
-        {
-          value: "radioFrequency",
-          text: "Radio frequency "
-        },
-        {
-          value: "alcoholTransdermal",
-          text: "Alcohol, transdermal "
-        },
-        {
-          value: "alcoholRemoteBreath",
-          text: "Alcohol, remote breath"
-        }
-      ]
+      items: deviceTypes
     }) }}
 
     <div class="govuk-button-group">

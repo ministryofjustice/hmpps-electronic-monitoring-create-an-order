@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
-import AuditService from '../services/auditService'
-import OrderController from './orderController'
-import OrderService from '../services/orderService'
+import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
+import { Order, OrderStatusEnum } from '../models/Order'
+import AuditService from '../services/auditService'
+import OrderService from '../services/orderService'
+import OrderController from './orderController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -49,32 +49,6 @@ const createMockResponse = (): Response => {
   }
 }
 
-const createMockOrder = (status: OrderStatus): Order => {
-  return {
-    id: uuidv4(),
-    status,
-    deviceWearer: {
-      nomisId: null,
-      pncId: null,
-      deliusId: null,
-      prisonNumber: null,
-      firstName: null,
-      lastName: null,
-      alias: null,
-      dateOfBirth: null,
-      adultAtTimeOfInstallation: null,
-      sex: null,
-      gender: null,
-      disabilities: [],
-    },
-    deviceWearerAddresses: [],
-    deviceWearerContactDetails: {
-      contactNumber: '',
-    },
-    additionalDocuments: [],
-  }
-}
-
 describe('OrderController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
@@ -102,7 +76,7 @@ describe('OrderController', () => {
   describe('summary', () => {
     it('should render a summary of the order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder()
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -123,7 +97,7 @@ describe('OrderController', () => {
   describe('create', () => {
     it('should create an order and redirect to view the order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder()
       const req = createMockRequest()
       const res = createMockResponse()
       const next = jest.fn()
@@ -141,7 +115,7 @@ describe('OrderController', () => {
   describe('confirmDelete', () => {
     it('should render a confirmation page for a draft order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder()
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -157,7 +131,7 @@ describe('OrderController', () => {
 
     it('should redirect to a failed page for a submitted order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -173,7 +147,7 @@ describe('OrderController', () => {
   describe('delete', () => {
     it('should delete the order and redirect to a success page for a draft order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder()
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -188,7 +162,7 @@ describe('OrderController', () => {
 
     it('should not delete the order and reditect to a failed page for a submitted order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -235,7 +209,7 @@ describe('OrderController', () => {
   describe('submit', () => {
     it('should submit the order and redirect to a success page for a draft order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder()
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -250,7 +224,7 @@ describe('OrderController', () => {
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()

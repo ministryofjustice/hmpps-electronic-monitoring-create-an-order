@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
+import { getMockOrder } from '../../../test/mocks/mockOrder'
 import { Order, OrderStatus } from '../../models/Order'
 
 export const createMockRequest = (order?: Order): Request => {
@@ -43,8 +43,7 @@ export const createMockResponse = (): Response => {
 
 export const createMockOrder = (status: OrderStatus): Order => {
   return {
-    id: uuidv4(),
-    status,
+    ...getMockOrder({ status }),
     deviceWearer: {
       nomisId: null,
       pncId: null,
@@ -69,6 +68,5 @@ export const createMockOrder = (status: OrderStatus): Order => {
     deviceWearerContactDetails: {
       contactNumber: '01234567890',
     },
-    additionalDocuments: [],
   }
 }
