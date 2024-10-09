@@ -1,6 +1,7 @@
-import Page, { PageElement } from './page'
+import AppPage from './appPage'
+import { PageElement } from './page'
 
-export default class NewFormPage extends Page {
+export default class NewFormPage extends AppPage {
   constructor() {
     super('New Form')
   }

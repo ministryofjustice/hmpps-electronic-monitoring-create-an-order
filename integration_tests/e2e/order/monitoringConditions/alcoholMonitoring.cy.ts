@@ -18,7 +18,7 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       page.subHeader().should('contain.text', 'Alcohol monitoring')
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
     })
   })
 

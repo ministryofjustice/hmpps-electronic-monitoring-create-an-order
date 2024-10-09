@@ -17,19 +17,25 @@ context('Order Summary', () => {
     it('User name visible in header', () => {
       cy.signIn().visit(`/order/${mockOrderId}/summary`)
       const page = Page.verifyOnPage(OrderSummaryPage)
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Phase banner visible in header', () => {
       cy.signIn().visit(`/order/${mockOrderId}/summary`)
       const page = Page.verifyOnPage(OrderSummaryPage)
-      page.headerPhaseBanner().should('contain.text', 'dev')
+      page.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Submit order form should exist', () => {
       cy.signIn().visit(`/order/${mockOrderId}/summary`)
       const page = Page.verifyOnPage(OrderSummaryPage)
       page.submissionForm().should('exist').should('have.attr', 'action', `/order/${mockOrderId}/submit`)
+    })
+
+    it('Should be accessible', () => {
+      cy.signIn().visit(`/order/${mockOrderId}/summary`)
+      const page = Page.verifyOnPage(OrderSummaryPage)
+      page.checkIsAccessible()
     })
   })
 

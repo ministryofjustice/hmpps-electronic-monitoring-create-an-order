@@ -1,13 +1,10 @@
-import Page, { PageElement } from '../page'
+import AppPage from '../appPage'
+import { PageElement } from '../page'
 
-export default class InstallationAndRiskPage extends Page {
+export default class InstallationAndRiskPage extends AppPage {
   constructor() {
     super('Installation and risk information')
   }
-
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
-
-  headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
 
   form = (): PageElement => cy.get('form')
 

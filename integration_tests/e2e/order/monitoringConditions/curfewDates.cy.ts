@@ -18,7 +18,7 @@ context('Curfew monitoring - dates', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-dates`)
       const page = Page.verifyOnPage(CurfewDatesPage)
       page.subHeader().should('contain.text', 'Curfew with electronic monitoring')
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
     })
   })
 

@@ -17,7 +17,7 @@ context('Monitoring conditions main section', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
     })
   })
 

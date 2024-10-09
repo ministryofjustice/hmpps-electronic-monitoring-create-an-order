@@ -1,17 +1,14 @@
-import Page, { PageElement } from './page'
+import AppPage from './appPage'
+import { PageElement } from './page'
 
-export default class IndexPage extends Page {
+export default class IndexPage extends AppPage {
   constructor() {
     super('Electronic Monitoring Application Forms')
   }
 
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
-
-  headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
-
   newOrderForm = (): PageElement => cy.get('form[action="/order/create"]')
 
-  newOrderFormButton = (): PageElement => cy.get('form[action="/order/create"] button[type=submit]')
+  newOrderFormButton = (): PageElement => this.newOrderForm().get('button[type=submit]')
 
   searchInput = (): PageElement => cy.get('#keyword')
 

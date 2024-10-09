@@ -12,13 +12,13 @@ context('Index', () => {
     it('User name visible in header', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.headerUserName().should('contain.text', 'J. Smith')
+      indexPage.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Phase banner visible in header', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.headerPhaseBanner().should('contain.text', 'dev')
+      indexPage.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Create new form should exist', () => {
@@ -58,6 +58,12 @@ context('Index', () => {
         .find('.govuk-tag')
         .should('have.class', 'govuk-tag--grey')
         .should('contain', 'Draft')
+    })
+
+    it('Should be accessible', () => {
+      cy.signIn().visit(`/`)
+      const page = Page.verifyOnPage(IndexPage)
+      page.checkIsAccessible()
     })
   })
 

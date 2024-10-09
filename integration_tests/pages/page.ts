@@ -5,15 +5,20 @@ export default abstract class Page {
     return new constructor(...args)
   }
 
-  constructor(private readonly title: string) {
+  constructor(
+    private readonly title: string,
+    private readonly subtitle?: string,
+  ) {
     this.checkOnPage()
   }
 
   checkOnPage(): void {
     cy.get('h1').contains(this.title)
+
+    if (this.subtitle) cy.get('legend').contains(this.subtitle)
   }
 
-  signOut = (): PageElement => cy.get('[data-qa=signOut]')
-
-  manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
+  checkIsAccessible(): void {
+    cy.isAccessible()
+  }
 }

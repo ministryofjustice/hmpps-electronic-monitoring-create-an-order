@@ -1,6 +1,7 @@
-import Page, { PageElement } from './page'
+import AppPage from './appPage'
+import { PageElement } from './page'
 
-export default class HDCPage extends Page {
+export default class HDCPage extends AppPage {
   constructor() {
     super('Home Detention Curfew (HDC) form')
   }
