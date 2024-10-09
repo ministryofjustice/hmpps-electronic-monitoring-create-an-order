@@ -1,6 +1,7 @@
 import { type RequestHandler, Router } from 'express'
 
 import paths from '../constants/paths'
+import AddressController from '../controllers/contact-information/addressDetailsController'
 import AttachmentsController from '../controllers/attachmentController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import DeviceWearerController from '../controllers/deviceWearerController'
@@ -23,6 +24,7 @@ import type { Services } from '../services'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
+  addressService,
   alcoholMonitoringService,
   attachmentService,
   attendanceMonitoringService,
@@ -43,6 +45,7 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
+  const addressController = new AddressController(auditService, addressService)
   const alcoholMonitoringController = new AlcoholMonitoringController(auditService, alcoholMonitoringService)
   const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
   const curfewDayOfReleaseController = new CurfewDayOfReleaseController(auditService, curfewDayOfReleaseService)
@@ -96,8 +99,14 @@ export default function routes({
   /**
    * CONTACT INFORMATION
    */
+
+  // Contact details
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
   post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
+
+  // Addresses
+  get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.get)
+  post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.post)
 
   /**
    * INSTALLATION AND RISK

@@ -1,17 +1,17 @@
 import { z } from 'zod'
 
-export const AddressType = z.enum(['PRIMARY', 'SECONDARY', 'TERTIARY'])
+export const AddressTypeEnum = z.enum(['PRIMARY', 'SECONDARY', 'TERTIARY'])
 
 const AddressModel = z.object({
-  addressType: AddressType,
-  addressLine1: z.string(),
-  addressLine2: z.string(),
-  addressLine3: z.string(),
-  addressLine4: z.string(),
-  postCode: z.string(),
+  addressType: AddressTypeEnum,
+  addressLine1: z.string().nullable(),
+  addressLine2: z.string().nullable(),
+  addressLine3: z.string().nullable(),
+  addressLine4: z.string().nullable(),
+  postcode: z.string().nullable(),
 })
 
 export type Address = z.infer<typeof AddressModel>
-export type AddressType = z.infer<typeof AddressType>
+export type AddressType = z.infer<typeof AddressTypeEnum>
 
 export default AddressModel

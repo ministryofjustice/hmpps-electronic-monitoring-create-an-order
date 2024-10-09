@@ -24,6 +24,8 @@ export default class OrderService {
       token: input.accessToken,
     })
 
+    console.log(result)
+
     return OrderModel.parse(result)
   }
 
