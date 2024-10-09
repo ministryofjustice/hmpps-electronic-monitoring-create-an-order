@@ -44,6 +44,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   gender: null,
                   disabilities: null,
                 },
+                deviceWearerAddresses: [],
                 deviceWearerContactDetails: {
                   contactNumber: null,
                 },
@@ -66,6 +67,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   gender: null,
                   disabilities: null,
                 },
+                deviceWearerAddresses: [],
                 deviceWearerContactDetails: {
                   contactNumber: null,
                 },
@@ -116,6 +118,7 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
                 gender: null,
                 disabilities: null,
               },
+              deviceWearerAddresses: [],
               deviceWearerContactDetails: {
                 contactNumber: null,
               },
@@ -167,6 +170,7 @@ const getOrderWithAttachments = (
                 gender: null,
                 disabilities: null,
               },
+              deviceWearerAddresses: [],
               deviceWearerContactDetails: {
                 contactNumber: null,
               },

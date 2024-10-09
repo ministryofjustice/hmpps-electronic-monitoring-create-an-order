@@ -25,6 +25,7 @@ const mockApiResponse = {
     gender: null,
     disabilities: null,
   },
+  deviceWearerAddresses: [],
   deviceWearerContactDetails: {
     contactNumber: null,
   },
@@ -48,6 +49,7 @@ const mockNewOrder: Order = {
     gender: null,
     disabilities: [],
   },
+  deviceWearerAddresses: [],
   deviceWearerContactDetails: {
     contactNumber: '',
   },

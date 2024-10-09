@@ -1,7 +1,8 @@
 import z from 'zod'
+import AddressModel from './Address'
+import AttachmentModel from './Attachment'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerContactDetailsModel from './ContactDetails'
-import AttachmentModel from './Attachment'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 
@@ -9,6 +10,7 @@ const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
+  deviceWearerAddresses: z.array(AddressModel),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   additionalDocuments: z.array(AttachmentModel),
 })

@@ -68,6 +68,7 @@ describe('AttachmentController', () => {
           gender: null,
           disabilities: [],
         },
+        deviceWearerAddresses: [],
         deviceWearerContactDetails: {
           contactNumber: '',
         },
