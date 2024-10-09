@@ -31,9 +31,20 @@ const mockApiResponse = {
     contactNumber: null,
   },
   additionalDocuments: [],
+  monitoringConditions: {
+    orderType: null,
+    acquisitiveCrime: null,
+    dapol: null,
+    curfew: null,
+    exclusionZone: null,
+    trail: null,
+    mandatoryAttendance: null,
+    alcohol: null,
+    devicesRequired: null,
+  },
 }
 
-const mockNewOrder = getMockOrder()
+const mockNewOrder = getMockOrder({ id: mockId })
 
 const mock404Error: SanitisedError = {
   message: 'Not Found',
