@@ -20,7 +20,6 @@ import ResponsibleOfficerController from '../controllers/responsibleOfficerContr
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
-import DeviceWearerResponsibleAdultService from '../services/deviceWearerResponsibleAdultService'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -86,6 +85,7 @@ export default function routes({
 
   // Responsible Adult
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.update)
 
   // ResponsibleOfficer
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_OFFICER, responsibleOfficerController.view)
@@ -94,7 +94,7 @@ export default function routes({
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)
 
   /**
-   * CONATCT INFORMATION
+   * CONTACT INFORMATION
    */
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
   post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)

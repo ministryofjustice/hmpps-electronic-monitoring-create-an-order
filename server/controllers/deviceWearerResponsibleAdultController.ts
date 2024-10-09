@@ -10,9 +10,10 @@ import DeviceWearerResponsibleAdultService from '../services/deviceWearerRespons
 
 const DeviceWearerResponsibleAdultFormDataModel = z.object({
   action: z.string(),
-  relationship: z.string().default(''),
-  fullName: z.string().default(''),
-  contactNumber: z.string().default(''),
+  relationship: z.string(),
+  otherRelationshipDetails: z.string(),
+  fullName: z.string(),
+  contactNumber: z.string(),
 })
 
 type DeviceWearerResponsibleAdultFormData = z.infer<typeof DeviceWearerResponsibleAdultFormDataModel>
@@ -21,6 +22,7 @@ type DeviceWearerResponsibleAdultViewModel = {
   formActionUri: string
   orderSummaryUri: string
   relationship: TextField
+  otherRelationshipDetails: TextField
   fullName: TextField
   contactNumber: TextField
 }
@@ -43,6 +45,10 @@ export default class DeviceWearerResponsibleAdultController {
         value: formData.relationship || '',
         error: getError(validationErrors, 'relationship'),
       },
+      otherRelationshipDetails: {
+        value: formData.otherRelationshipDetails || '',
+        error: getError(validationErrors, 'otherRelationshipDetails'),
+      },
       fullName: { value: formData.fullName || '', error: getError(validationErrors, 'fullName') },
       contactNumber: { value: formData.contactNumber || '', error: getError(validationErrors, 'contactNumber') },
     }
@@ -56,6 +62,7 @@ export default class DeviceWearerResponsibleAdultController {
       formActionUri: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId),
       orderSummaryUri: paths.ORDER.SUMMARY.replace(':orderId', orderId),
       relationship: { value: deviceWearerResponsibleAdult.relationship || '' },
+      otherRelationshipDetails: { value: deviceWearerResponsibleAdult.otherRelationshipDetails || '' },
       fullName: { value: deviceWearerResponsibleAdult.fullName || '' },
       contactNumber: { value: deviceWearerResponsibleAdult!.contactNumber || '' },
     }
@@ -75,11 +82,16 @@ export default class DeviceWearerResponsibleAdultController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { deviceWearerResponsibleAdult } = req.order!.deviceWearer
+    const { deviceWearerResponsibleAdult } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = this.constructViewModel(
-      deviceWearerResponsibleAdult ?? { relationship: null, fullName: null, contactNumber: null },
+      deviceWearerResponsibleAdult ?? {
+        relationship: null,
+        otherRelationshipDetails: null,
+        fullName: null,
+        contactNumber: null,
+      },
       errors as never,
       formData as never,
       orderId,
@@ -102,9 +114,9 @@ export default class DeviceWearerResponsibleAdultController {
       req.flash('formData', formData)
       req.flash('validationErrors', updateDeviceWearerResult)
 
-      res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
-    } else if (action === 'continue') {
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
+    } else if (action === 'continue') {
+      res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

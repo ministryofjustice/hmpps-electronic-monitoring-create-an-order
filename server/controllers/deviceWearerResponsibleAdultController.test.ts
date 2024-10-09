@@ -69,16 +69,18 @@ const createMockOrder = (status: OrderStatus, responsibleAdultFullName: string):
       sex: 'male',
       gender: 'male',
       disabilities: ['Vision', 'Mobilitiy'],
-      deviceWearerResponsibleAdult: {
-        relationship: 'parent',
-        fullName: responsibleAdultFullName,
-        contactNumber: 'parent contact',
-      },
     },
     deviceWearerContactDetails: {
       contactNumber: '',
     },
+    deviceWearerAddresses: [],
     additionalDocuments: [],
+    deviceWearerResponsibleAdult: {
+      relationship: 'parent',
+      otherRelationshipDetails: null,
+      fullName: responsibleAdultFullName,
+      contactNumber: 'parent contact',
+    },
   }
 }
 
@@ -178,6 +180,7 @@ describe('DeviceWearerController', () => {
       req.body = {
         action: 'continue',
         relationship: 'parent',
+        otherRelationshipDetails: '',
         fullName: '',
         contactNumber: 'parent contact',
       }
@@ -193,6 +196,7 @@ describe('DeviceWearerController', () => {
       expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {
         relationship: 'parent',
         fullName: '',
+        otherRelationshipDetails: '',
         contactNumber: 'parent contact',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
@@ -201,7 +205,7 @@ describe('DeviceWearerController', () => {
           field: 'fullName',
         },
       ])
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/contact-details')
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/responsible-adult')
     })
 
     it('should save and redirect to the contact details page', async () => {
@@ -213,11 +217,13 @@ describe('DeviceWearerController', () => {
       req.body = {
         action: 'continue',
         relationship: 'parent',
+        otherRelationshipDetails: '',
         fullName: 'Parent Name',
         contactNumber: 'parent contact',
       }
       mockDeviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult.mockResolvedValue({
         relationship: 'parent',
+        otherRelationshipDetails: '',
         fullName: 'Parent Name',
         contactNumber: 'parent contact',
       })
@@ -227,7 +233,7 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/responsible-adult')
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/contact-details')
     })
   })
 
@@ -241,11 +247,13 @@ describe('DeviceWearerController', () => {
     req.body = {
       action: 'back',
       relationship: 'parent',
+      otherRelationshipDetails: '',
       fullName: 'Parent Name',
       contactNumber: 'parent contact',
     }
     mockDeviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult.mockResolvedValue({
       relationship: 'parent',
+      otherRelationshipDetails: '',
       fullName: 'Parent Name',
       contactNumber: 'parent contact',
     })
