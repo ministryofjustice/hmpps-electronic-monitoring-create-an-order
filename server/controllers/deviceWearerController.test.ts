@@ -219,7 +219,7 @@ describe('DeviceWearerController', () => {
         adultAtTimeOfInstallation: 'true',
         sex: 'female',
         gender: 'female',
-        disabilities: ['Vision', 'Hearing'],
+        disabilities: 'Vision',
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue([
         { error: 'Date of birth must be in the past', field: 'dateOfBirth' },
@@ -244,7 +244,7 @@ describe('DeviceWearerController', () => {
         adultAtTimeOfInstallation: 'true',
         sex: 'female',
         gender: 'female',
-        disabilities: ['Vision', 'Hearing'],
+        disabilities: ['Vision'],
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
