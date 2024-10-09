@@ -29,6 +29,7 @@ const mockDraftOrder: Order = {
     gender: null,
     disabilities: [],
   },
+  deviceWearerAddresses: [],
   deviceWearerContactDetails: {
     contactNumber: '',
   },
@@ -52,6 +53,7 @@ const mockSubmittedOrder: Order = {
     gender: null,
     disabilities: [],
   },
+  deviceWearerAddresses: [],
   deviceWearerContactDetails: {
     contactNumber: '',
   },
