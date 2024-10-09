@@ -173,11 +173,7 @@ export default class MonitoringConditionsController {
     const { monitoringConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = this.constructViewModel(
-      monitoringConditions as MonitoringConditions, // TODO: Remove this cast once the API is implemented
-      errors as never,
-      formData as never,
-    )
+    const viewModel = this.constructViewModel(monitoringConditions, errors as never, formData as never)
 
     res.render(`pages/order/monitoring-conditions/index`, viewModel)
   }
