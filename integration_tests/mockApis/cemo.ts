@@ -35,6 +35,7 @@ const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     gender: null,
     disabilities: null,
   },
+  enforcementZoneConditions: [],
   deviceWearerAddresses: [],
   deviceWearerContactDetails: {
     contactNumber: null,
