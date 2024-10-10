@@ -46,7 +46,11 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   gender: null,
                   disabilities: null,
                 },
-                deviceWearerAddresses: [],
+                deviceWearerAddressInformation: {
+                  primaryAddress: null,
+                  secondaryAddress: null,
+                  tertiaryAddress: null
+                },
                 deviceWearerContactDetails: {
                   contactNumber: null,
                 },
@@ -69,7 +73,11 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   gender: null,
                   disabilities: null,
                 },
-                deviceWearerAddresses: [],
+                deviceWearerAddressInformation: {
+                  primaryAddress: null,
+                  secondaryAddress: null,
+                  tertiaryAddress: null
+                },
                 deviceWearerContactDetails: {
                   contactNumber: null,
                 },
@@ -120,7 +128,11 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
                 gender: null,
                 disabilities: null,
               },
-              deviceWearerAddresses: [],
+              deviceWearerAddressInformation: {
+                primaryAddress: null,
+                secondaryAddress: null,
+                tertiaryAddress: null
+              },
               deviceWearerContactDetails: {
                 contactNumber: null,
               },
@@ -170,7 +182,11 @@ const createOrder = (options: CreateOrderStubOptions = defaultCreateOrderOptions
                 gender: null,
                 disabilities: null,
               },
-              deviceWearerAddresses: [],
+              deviceWearerAddressInformation: {
+                primaryAddress: null,
+                secondaryAddress: null,
+                tertiaryAddress: null
+              },
               deviceWearerContactDetails: {
                 contactNumber: null,
               },
@@ -222,7 +238,11 @@ const getOrderWithAttachments = (
                 gender: null,
                 disabilities: null,
               },
-              deviceWearerAddresses: [],
+              deviceWearerAddressInformation: {
+                primaryAddress: null,
+                secondaryAddress: null,
+                tertiaryAddress: null
+              },
               deviceWearerContactDetails: {
                 contactNumber: null,
               },

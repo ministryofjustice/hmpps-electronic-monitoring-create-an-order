@@ -68,7 +68,11 @@ describe('AttachmentController', () => {
           gender: null,
           disabilities: [],
         },
-        deviceWearerAddresses: [],
+        deviceWearerAddressInformation: {
+          primaryAddress: null,
+          secondaryAddress: null,
+          tertiaryAddress: null
+        },
         deviceWearerContactDetails: {
           contactNumber: '',
         },

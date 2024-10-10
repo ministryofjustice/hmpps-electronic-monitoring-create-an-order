@@ -1,6 +1,6 @@
 import z from 'zod'
 import AttachmentModel from './Attachment'
-import DeviceWearerAddressModel from './DeviceWearerAddress'
+import DeviceWearerAddressInformationModel from './DeviceWearerAddressInformation'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerContactDetailsModel from './ContactDetails'
 import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
@@ -11,7 +11,7 @@ const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
-  deviceWearerAddresses: z.array(DeviceWearerAddressModel),
+  deviceWearerAddressInformation: DeviceWearerAddressInformationModel,
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.optional().nullable(),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   additionalDocuments: z.array(AttachmentModel),

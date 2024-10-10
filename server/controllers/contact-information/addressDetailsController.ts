@@ -4,7 +4,8 @@ import { AuditService, AddressService } from '../../services'
 import { isValidationResult } from '../../models/Validation'
 import addressDetailsViewModel from '../../models/view-models/addressDetails'
 import AddressDetailsFormDataModel from '../../models/form-data/addressDetails'
-import { DeviceWearerAddress, DeviceWearerAddressType, DeviceWearerAddressTypeEnum } from '../../models/DeviceWearerAddress'
+import { DeviceWearerAddressInformation, DeviceWearerAddressType, DeviceWearerAddressTypeEnum } from '../../models/DeviceWearerAddressInformation'
+import { Address } from '../../models/Address'
 
 const nextAddressMap = {
   [DeviceWearerAddressTypeEnum.Enum.PRIMARY]: DeviceWearerAddressTypeEnum.enum.SECONDARY,
@@ -31,33 +32,39 @@ export default class AddressController {
     return paths.CONTACT_INFORMATION.RESPONSIBLE_OFFICER.replace(':orderId', orderId)
   }
 
-  private getActiveAddress(addresses: Array<DeviceWearerAddress>, addressType: DeviceWearerAddressType): DeviceWearerAddress {
-    const matchedAddress = addresses.find(address => address.addressType.toLowerCase() === addressType.toLowerCase())
+  private getActiveAddress(addressInformation: DeviceWearerAddressInformation, addressType: DeviceWearerAddressType): Address {
+    const placeholderAddress = {
+      addressLine1: '',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+  };
 
-    if(matchedAddress) {
-      return matchedAddress
+    if (addressType === DeviceWearerAddressTypeEnum.Enum.PRIMARY) {
+      return addressInformation.primaryAddress || placeholderAddress
     }
 
-    return {
-      addressType: 'PRIMARY',
-      address: {
-        addressLine1: '',
-        addressLine2: '',
-        addressLine3: '',
-        addressLine4: '',
-        postcode: '',
-      }
+    if (addressType === DeviceWearerAddressTypeEnum.Enum.SECONDARY) {
+      return addressInformation.secondaryAddress || placeholderAddress
     }
+
+    if (addressType === DeviceWearerAddressTypeEnum.Enum.TERTIARY) {
+      return addressInformation.tertiaryAddress || placeholderAddress
+    }
+
+    return placeholderAddress
   }
 
   get: RequestHandler = async (req: Request, res: Response) => {
+    console.log('hit here')
     const { addressType } = req.params
-    const { deviceWearerAddresses: addresses } = req.order!
+    const { deviceWearerAddressInformation: addressInformation } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     
-    const activeAddress = this.getActiveAddress(addresses, DeviceWearerAddressTypeEnum.parse(addressType))
-    const hasAnotherAddress = addresses.some(address => address.addressType === nextAddressMap[activeAddress.addressType])
+    const activeAddress = this.getActiveAddress(addressInformation, DeviceWearerAddressTypeEnum.parse(addressType))
+    const hasAnotherAddress = false
 
     const viewModel = addressDetailsViewModel.construct(
       activeAddress,
@@ -70,13 +77,16 @@ export default class AddressController {
   }
 
   post: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const { orderId, addressType } = req.params
     const { action, hasAnotherAddress, ...formData } = AddressDetailsFormDataModel.parse(req.body)
+    const submissionData = {
+      [addressType === 'PRIMARY' ? 'primaryAddress' : addressType === 'SECONDARY' ? 'secondaryAddress' : 'tertiaryAddress']: formData
+    }
 
     const result = await this.addressService.updateAddress({
       accessToken: res.locals.user.token,
       orderId,
-      data: formData,
+      data: submissionData,
     })
 
     if (isValidationResult(result)) {
@@ -84,10 +94,10 @@ export default class AddressController {
       req.flash('validationErrors', result)
 
       res.redirect(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', formData.addressType),
+        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', addressType),
       )
     } else if (action === 'continue') {
-      res.redirect(this.getNextPage(orderId, result.addressType, hasAnotherAddress))
+      res.redirect(this.getNextPage(orderId, DeviceWearerAddressTypeEnum.parse(addressType), hasAnotherAddress))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

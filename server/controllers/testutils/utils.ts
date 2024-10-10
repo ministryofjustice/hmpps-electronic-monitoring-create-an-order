@@ -65,7 +65,11 @@ export const createMockOrder = (status: OrderStatus): Order => {
       fullName: 'Parent Name',
       contactNumber: '01234567890',
     },
-    deviceWearerAddresses: [],
+    deviceWearerAddressInformation: {
+      primaryAddress: null,
+      secondaryAddress: null,
+      tertiaryAddress: null
+    },
     deviceWearerContactDetails: {
       contactNumber: '01234567890',
     },

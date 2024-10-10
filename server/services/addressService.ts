@@ -1,28 +1,21 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import DeviceWearerAddressModel, { DeviceWearerAddress } from '../models/DeviceWearerAddress'
+import DeviceWearerAddressModel, { DeviceWearerAddressInformation } from '../models/DeviceWearerAddressInformation'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
 type UpdateAddressRequest = AuthenticatedRequestInput & {
   orderId: string
-  data: {
-    addressType: string
-    addressLine1: string
-    addressLine2: string
-    addressLine3: string
-    addressLine4: string
-    postcode: string
-  }
+  data: Partial<DeviceWearerAddressInformation>
 }
 
 export default class AddressService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async updateAddress(input: UpdateAddressRequest): Promise<DeviceWearerAddress | ValidationResult> {
+  async updateAddress(input: UpdateAddressRequest): Promise<DeviceWearerAddressInformation | ValidationResult> {
     try {
-      const result = await this.apiClient.post({
-        path: `/api/order/${input.orderId}/address`,
+      const result = await this.apiClient.patch({
+        path: `/api/orders/${input.orderId}/address`,
         data: input.data,
         token: input.accessToken,
       })
