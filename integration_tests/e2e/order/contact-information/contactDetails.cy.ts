@@ -16,7 +16,7 @@ context('About the device wearer', () => {
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         cy.task('stubCemoListOrders')
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-        cy.task('stubCemoUpdateContactDetails', { httpStatus: 200, id: mockOrderId, erorrs: [] })
+        cy.task('stubCemoPutContactDetails', { httpStatus: 200, id: mockOrderId, erorrs: [] })
       })
 
       it('Should allow the user to submit data and move to the next page', () => {
@@ -47,7 +47,7 @@ context('About the device wearer', () => {
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         cy.task('stubCemoListOrders')
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-        cy.task('stubCemoUpdateContactDetails', {
+        cy.task('stubCemoPutContactDetails', {
           httpStatus: 400,
           id: mockOrderId,
           errors: [{ error: 'Phone number is in an incorrect format', field: 'contactNumber' }],

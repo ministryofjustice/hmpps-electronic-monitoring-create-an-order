@@ -52,10 +52,10 @@ context('About the device wearer', () => {
 
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-      cy.task('stubCemoPostDeviceWearer', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoPutDeviceWearer', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
     })
 
-    context('given I am on the devise wearers details page', () => {
+    context('given I am on the device wearers details page', () => {
       let aboutDeviceWearerPage: AboutDeviceWearerPage
 
       beforeEach(() => {

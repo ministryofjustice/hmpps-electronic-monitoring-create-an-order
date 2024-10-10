@@ -22,8 +22,8 @@ export default class DeviceWearerResponsibleAdultService {
     try {
       const { data } = input
 
-      const result = await this.apiClient.post({
-        path: `/api/order/${input.orderId}/device-wearer-responsible-adult`,
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/device-wearer-responsible-adult`,
         data,
         token: input.accessToken,
       })

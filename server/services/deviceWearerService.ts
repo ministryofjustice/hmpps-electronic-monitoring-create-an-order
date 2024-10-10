@@ -38,8 +38,8 @@ export default class DeviceWearerService {
         ...data
       } = input.data
 
-      const result = await this.apiClient.post({
-        path: `/api/order/${input.orderId}/device-wearer`,
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/device-wearer`,
         data: {
           ...data,
           dateOfBirth: serialiseDate(dobYear, dobMonth, dobDay),

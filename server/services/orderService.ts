@@ -10,11 +10,8 @@ export default class OrderService {
   constructor(private readonly apiClient: RestClient) {}
 
   async createOrder(input: AuthenticatedRequestInput): Promise<Order> {
-    const result = await this.apiClient.get({
-      path: '/api/CreateForm',
-      query: {
-        title: 'MyNewForm',
-      },
+    const result = await this.apiClient.post({
+      path: '/api/orders',
       token: input.accessToken,
     })
 
@@ -23,10 +20,7 @@ export default class OrderService {
 
   async getOrder(input: GetOrderRequestInput): Promise<Order> {
     const result = await this.apiClient.get({
-      path: '/api/GetForm',
-      query: {
-        id: input.orderId,
-      },
+      path: `/api/orders/${input.orderId}`,
       token: input.accessToken,
     })
 

@@ -82,7 +82,7 @@ describe('Order Search Service', () => {
       const orders = await orderService.searchOrders({ accessToken: '', searchTerm: '' })
 
       expect(mockRestClient.get).toHaveBeenCalledWith({
-        path: '/api/ListForms',
+        path: '/api/orders',
         token: '',
       })
       expect(orders).toEqual([mockNewOrder])
