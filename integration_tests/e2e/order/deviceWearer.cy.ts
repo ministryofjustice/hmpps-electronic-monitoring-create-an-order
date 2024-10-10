@@ -52,10 +52,10 @@ context('About the device wearer', () => {
 
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-      cy.task('stubCemoPostDeviceWearer', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoPutDeviceWearer', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
     })
 
-    context('given I am on the devise wearers details page', () => {
+    context('given I am on the device wearers details page', () => {
       let aboutDeviceWearerPage: AboutDeviceWearerPage
 
       beforeEach(() => {
@@ -70,7 +70,7 @@ context('About the device wearer', () => {
         aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       })
 
-      context('when a valid set of data is entered into the devise wearer details form', () => {
+      context('when a valid set of data is entered into the device wearer details form', () => {
         beforeEach(() => {
           aboutDeviceWearerPage.form.fillInWith({
             nomisId: '1234567',

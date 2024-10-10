@@ -17,7 +17,7 @@ export default class AttachmentService {
   async uploadAttachment(input: UploadAttachmentRequestInput): Promise<ErrorResponse> {
     try {
       await this.apiClient.postMultiPart({
-        path: `/api/order/${input.orderId}/document-type/${input.fileType}`,
+        path: `/api/orders/${input.orderId}/document-type/${input.fileType}`,
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -38,7 +38,7 @@ export default class AttachmentService {
 
   async downloadAttachment(input: DownloadAttachmentRequestInpput): Promise<Readable> {
     return this.apiClient.stream({
-      path: `/api/order/${input.orderId}/document-type/${input.fileType}/raw`,
+      path: `/api/orders/${input.orderId}/document-type/${input.fileType}/raw`,
       token: input.accessToken,
     })
   }

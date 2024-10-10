@@ -12,7 +12,7 @@ export default class OrderSearchService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async searchOrders(input: OrderSearchInput): Promise<OrderList> {
     const result = await this.apiClient.get({
-      path: '/api/ListForms',
+      path: '/api/orders',
       token: input.accessToken,
     })
 

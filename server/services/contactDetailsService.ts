@@ -16,8 +16,8 @@ export default class ContactDetailsService {
 
   async updateContactDetails(input: UpdateContactDetailsRequest): Promise<ContactDetails | ValidationResult> {
     try {
-      const result = await this.apiClient.post({
-        path: `/api/order/${input.orderId}/contact-details`,
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/contact-details`,
         data: input.data,
         token: input.accessToken,
       })

@@ -76,16 +76,13 @@ describe('Order Service', () => {
 
   describe('createOrder', () => {
     it('should post to the api and return a valid order object', async () => {
-      mockRestClient.get.mockResolvedValue(mockApiResponse)
+      mockRestClient.post.mockResolvedValue(mockApiResponse)
 
       const orderService = new OrderService(mockRestClient)
       const order = await orderService.createOrder({ accessToken: '' })
 
-      expect(mockRestClient.get).toHaveBeenCalledWith({
-        path: '/api/CreateForm',
-        query: {
-          title: 'MyNewForm',
-        },
+      expect(mockRestClient.post).toHaveBeenCalledWith({
+        path: '/api/orders',
         token: '',
       })
       expect(order).toEqual(mockNewOrder)
@@ -108,7 +105,7 @@ describe('Order Service', () => {
     })
 
     it('should propagate errors from the api', async () => {
-      mockRestClient.get.mockRejectedValue(mock404Error)
+      mockRestClient.post.mockRejectedValue(mock404Error)
 
       try {
         const orderService = new OrderService(mockRestClient)
@@ -128,10 +125,7 @@ describe('Order Service', () => {
       const order = await orderService.getOrder({ accessToken: 'token', orderId: '123456789' })
 
       expect(mockRestClient.get).toHaveBeenCalledWith({
-        path: '/api/GetForm',
-        query: {
-          id: '123456789',
-        },
+        path: '/api/orders/123456789',
         token: 'token',
       })
       expect(order).toEqual(mockNewOrder)

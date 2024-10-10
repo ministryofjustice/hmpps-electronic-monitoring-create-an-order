@@ -21,7 +21,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/cemo/api/ListForms',
+      urlPattern: '/cemo/api/orders',
     },
     response: {
       status: httpStatus,
@@ -96,7 +96,7 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/cemo/api/GetForm\\?id=${options.id}`,
+      urlPattern: `/cemo/api/orders/${options.id}`,
     },
     response: {
       status: options.httpStatus,
@@ -145,8 +145,8 @@ const defaultCreateOrderOptions = {
 const createOrder = (options: CreateOrderStubOptions = defaultCreateOrderOptions): SuperAgentRequest =>
   stubFor({
     request: {
-      method: 'GET',
-      urlPattern: `/cemo/api/CreateForm\\?title=(.*)`,
+      method: 'POST',
+      urlPattern: `/cemo/api/orders`,
     },
     response: {
       status: options.httpStatus,
@@ -198,7 +198,7 @@ const getOrderWithAttachments = (
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/cemo/api/GetForm\\?id=${options.id}`,
+      urlPattern: `/cemo/api/orders/${options.id}`,
     },
     response: {
       status: options.httpStatus,
@@ -247,7 +247,7 @@ const uploadAttachment = (options: UploadAttachmentStubOptions = defaultUploadAt
   stubFor({
     request: {
       method: 'POST',
-      urlPattern: `/cemo/api/order/${options.id}/document-type/${options.type}`,
+      urlPattern: `/cemo/api/orders/${options.id}/document-type/${options.type}`,
     },
     response: {
       status: options.httpStatus,
@@ -276,8 +276,8 @@ const defaultUpdateContactDetailsOptions = {
 const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpdateContactDetailsOptions) =>
   stubFor({
     request: {
-      method: 'POST',
-      urlPattern: `/cemo/api/order/${options.id}/contact-details`,
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}/contact-details`,
     },
     response: {
       status: options.httpStatus,
@@ -313,13 +313,13 @@ const defaultPostDeviceWearerDetailsOptions = {
   },
 }
 
-const postDeviceWearerDetails = (
+const putDeviceWearerDetails = (
   options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions,
 ): SuperAgentRequest =>
   stubFor({
     request: {
-      method: 'POST',
-      urlPattern: `/cemo/api/order/${options.id}/device-wearer`,
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}/device-wearer`,
     },
     response: {
       status: options.httpStatus,
@@ -337,10 +337,10 @@ const postDeviceWearerDetails = (
 export default {
   stubCemoGetOrder: getOrder,
   stubCemoCreateOrder: createOrder,
-  stubCemoPostDeviceWearer: postDeviceWearerDetails,
+  stubCemoPutDeviceWearer: putDeviceWearerDetails,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
-  stubCemoUpdateContactDetails: updateContactDetails,
+  stubCemoPutContactDetails: updateContactDetails,
   stubUploadAttachment: uploadAttachment,
 }
