@@ -15,7 +15,7 @@ import MonitoringConditionsController from '../controllers/monitoringConditions/
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
-import ResponsibleAdultController from '../controllers/responsibleAdultController'
+import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
 import ResponsibleOfficerController from '../controllers/responsibleOfficerController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
@@ -31,6 +31,7 @@ export default function routes({
   curfewDatesService,
   curfewDayOfReleaseService,
   curfewTimetableService,
+  deviceWearerResponsibleAdultService,
   deviceWearerService,
   installationAndRiskService,
   monitoringConditionsService,
@@ -50,7 +51,7 @@ export default function routes({
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
-  const responsibleAdultController = new ResponsibleAdultController(auditService)
+  const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
@@ -84,6 +85,7 @@ export default function routes({
 
   // Responsible Adult
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.update)
 
   // ResponsibleOfficer
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_OFFICER, responsibleOfficerController.view)
@@ -92,7 +94,7 @@ export default function routes({
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)
 
   /**
-   * CONATCT INFORMATION
+   * CONTACT INFORMATION
    */
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
   post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
