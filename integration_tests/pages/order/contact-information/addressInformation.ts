@@ -1,6 +1,6 @@
-import Page from '../../page'
+import AppPage from '../../appPage'
 
-export default class AddressInformationPage extends Page {
+export default class AddressInformationPage extends AppPage {
   constructor() {
     super('Address information')
   }

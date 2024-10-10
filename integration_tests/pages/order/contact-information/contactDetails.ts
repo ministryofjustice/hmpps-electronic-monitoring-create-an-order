@@ -1,6 +1,7 @@
-import Page, { PageElement } from '../../page'
+import AppPage from '../../appPage'
+import { PageElement } from '../../page'
 
-export default class ContactDetailsPage extends Page {
+export default class ContactDetailsPage extends AppPage {
   constructor() {
     super('Contact information')
   }

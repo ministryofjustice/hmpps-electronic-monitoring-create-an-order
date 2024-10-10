@@ -1,11 +1,7 @@
-import Page, { PageElement } from '../page'
+import AppPage from '../appPage'
 
-export default class AttachmentPage extends Page {
+export default class AttachmentPage extends AppPage {
   constructor() {
     super('Attach a document')
   }
-
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
-
-  headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
 }

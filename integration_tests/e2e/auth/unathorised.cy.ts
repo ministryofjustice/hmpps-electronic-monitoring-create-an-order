@@ -1,5 +1,5 @@
-import AuthErrorPage from '../pages/authError'
-import Page from '../pages/page'
+import AuthErrorPage from '../../pages/auth/error'
+import Page from '../../pages/page'
 
 context('Unauthorised sign In', () => {
   beforeEach(() => {

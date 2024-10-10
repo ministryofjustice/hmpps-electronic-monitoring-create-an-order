@@ -27,13 +27,13 @@ context('Attachment', () => {
     it('Should display the user name visible in header', () => {
       cy.signIn().visit(`/order/${mockOrderId}/attachments`)
       const page = Page.verifyOnPage(AttachmentPage)
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Should display the phase banner in header', () => {
       cy.signIn().visit(`/order/${mockOrderId}/attachments`)
       const page = Page.verifyOnPage(AttachmentPage)
-      page.headerPhaseBanner().should('contain.text', 'dev')
+      page.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Should render summary pages', () => {
@@ -60,6 +60,12 @@ context('Attachment', () => {
         .should('exist')
         .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/photo.jpeg`)
       cy.get('a:contains("Change")').should('have.length', 2)
+    })
+
+    it('Should be accessible', () => {
+      cy.signIn().visit(`/order/${mockOrderId}/attachments`)
+      const page = Page.verifyOnPage(AttachmentPage)
+      page.checkIsAccessible()
     })
   })
 

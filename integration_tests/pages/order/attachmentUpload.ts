@@ -1,13 +1,10 @@
-import Page, { PageElement } from '../page'
+import AppPage from '../appPage'
+import { PageElement } from '../page'
 
-export default class AttachmentUploadPage extends Page {
+export default class AttachmentUploadPage extends AppPage {
   constructor() {
     super('Additional documents')
   }
-
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
-
-  headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
 
   saveAndContinueButton = (): PageElement =>
     cy.get('form[enctype="multipart/form-data"] button[type=submit][value="continue"]')

@@ -21,6 +21,24 @@ export default defineConfig({
         ...auth,
         ...tokenVerification,
         ...cemo,
+        /*
+         * used to output summary accessibility testing issues found to console during integration testing
+         */
+        log(message) {
+          // eslint-disable-next-line no-console
+          console.log(message)
+
+          return null
+        },
+        /*
+         * used to output table accessibility testing details found to console during integration testing
+         */
+        table(message) {
+          // eslint-disable-next-line no-console
+          console.table(message)
+
+          return null
+        },
       })
     },
     baseUrl: 'http://localhost:3007',

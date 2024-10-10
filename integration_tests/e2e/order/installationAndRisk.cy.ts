@@ -17,7 +17,13 @@ context('Installation and risk section', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/installation-and-risk`)
       const page = Page.verifyOnPage(InstallationAndRiskPage)
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
+    })
+
+    it('Should be accessible', () => {
+      cy.signIn().visit(`/order/${mockOrderId}/installation-and-risk`)
+      const page = Page.verifyOnPage(InstallationAndRiskPage)
+      page.checkIsAccessible()
     })
   })
 

@@ -2,6 +2,8 @@ import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import { stubFor } from './wiremock'
 
+import { DeviceWearer } from '../../server/models/DeviceWearer'
+
 const ping = (httpStatus = 200) =>
   stubFor({
     request: {
@@ -95,6 +97,56 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
     request: {
       method: 'GET',
       urlPattern: `/cemo/api/GetForm\\?id=${options.id}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              id: options.id,
+              status: options.status,
+              deviceWearer: {
+                nomisId: null,
+                pncId: null,
+                deliusId: null,
+                prisonNumber: null,
+                firstName: null,
+                lastName: null,
+                alias: null,
+                dateOfBirth: null,
+                adultAtTimeOfInstallation: null,
+                sex: null,
+                gender: null,
+                disabilities: null,
+              },
+              deviceWearerAddresses: [],
+              deviceWearerContactDetails: {
+                contactNumber: null,
+              },
+              additionalDocuments: [],
+            }
+          : null,
+    },
+  })
+
+type CreateOrderStubOptions = {
+  httpStatus: number
+  id?: string
+  status?: string
+}
+
+const defaultCreateOrderOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+}
+
+const createOrder = (options: CreateOrderStubOptions = defaultCreateOrderOptions): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/CreateForm\\?title=(.*)`,
     },
     response: {
       status: options.httpStatus,
@@ -234,8 +286,58 @@ const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpda
     },
   })
 
+type PostDeviceWearerDetailsStubOptions = {
+  httpStatus: number
+  id: string
+  status: string
+  deviceWearer?: DeviceWearer
+}
+
+const defaultPostDeviceWearerDetailsOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+  deviceWearer: {
+    nomisId: null,
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    firstName: null,
+    lastName: null,
+    alias: null,
+    dateOfBirth: null,
+    adultAtTimeOfInstallation: null,
+    sex: null,
+    gender: null,
+    disabilities: null,
+  },
+}
+
+const postDeviceWearerDetails = (
+  options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: `/cemo/api/order/${options.id}/device-wearer`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...defaultPostDeviceWearerDetailsOptions.deviceWearer,
+              ...options.deviceWearer,
+            }
+          : null,
+    },
+  })
+
 export default {
   stubCemoGetOrder: getOrder,
+  stubCemoCreateOrder: createOrder,
+  stubCemoPostDeviceWearer: postDeviceWearerDetails,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,

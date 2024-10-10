@@ -1,7 +1,7 @@
-import IndexPage from '../pages/index'
-import AuthSignInPage from '../pages/authSignIn'
-import Page from '../pages/page'
-import AuthManageDetailsPage from '../pages/authManageDetails'
+import IndexPage from '../../pages/index'
+import AuthSignInPage from '../../pages/auth/signIn'
+import Page from '../../pages/page'
+import AuthManageDetailsPage from '../../pages/auth/manageDetails'
 
 context('Sign In', () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ context('Sign In', () => {
   it('User can sign out', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.signOut().click()
+    indexPage.header.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
   })
 
@@ -31,8 +31,8 @@ context('Sign In', () => {
     cy.task('stubAuthManageDetails')
     const indexPage = Page.verifyOnPage(IndexPage)
 
-    indexPage.manageDetails().get('a').invoke('removeAttr', 'target')
-    indexPage.manageDetails().click()
+    indexPage.header.manageDetails().get('a').invoke('removeAttr', 'target')
+    indexPage.header.manageDetails().click()
     Page.verifyOnPage(AuthManageDetailsPage)
   })
 
@@ -58,6 +58,6 @@ context('Sign In', () => {
 
     cy.signIn()
 
-    indexPage.headerUserName().contains('B. Brown')
+    indexPage.header.userName().contains('B. Brown')
   })
 })

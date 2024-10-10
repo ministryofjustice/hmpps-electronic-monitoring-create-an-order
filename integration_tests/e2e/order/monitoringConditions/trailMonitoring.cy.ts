@@ -18,7 +18,7 @@ context('Trail monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
       page.subHeader().should('contain.text', 'Trail monitoring')
-      page.headerUserName().should('contain.text', 'J. Smith')
+      page.header.userName().should('contain.text', 'J. Smith')
     })
   })
 

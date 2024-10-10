@@ -1,6 +1,6 @@
-import Page from './page'
+import AppPage from './appPage'
 
-export default class ErrorPage extends Page {
+export default class ErrorPage extends AppPage {
   constructor(errorMessage: string) {
     super(errorMessage)
   }

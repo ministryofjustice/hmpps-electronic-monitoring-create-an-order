@@ -1,13 +1,10 @@
-import Page, { PageElement } from '../page'
+import AppPage from '../appPage'
+import { PageElement } from '../page'
 
-export default class AttendanceMonitoringPage extends Page {
+export default class AttendanceMonitoringPage extends AppPage {
   constructor() {
     super('Monitoring conditions')
   }
-
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
-
-  headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
 
   form = (): PageElement => cy.get('form')
 
