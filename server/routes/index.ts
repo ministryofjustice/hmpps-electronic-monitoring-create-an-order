@@ -13,6 +13,7 @@ import CurfewDayOfReleaseController from '../controllers/monitoringConditions/cu
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
+import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
@@ -38,6 +39,7 @@ export default function routes({
   orderService,
   orderSearchService,
   trailMonitoringService,
+  zoneService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -58,6 +60,7 @@ export default function routes({
   const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
   const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
+  const zoneController = new EnforcementZoneController(auditService, zoneService)
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService)
 
   router.param('orderId', populateOrder(orderService))
@@ -137,6 +140,9 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.update)
 
+  // Exclusion Inclusion Zone
+  get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
+  post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
   /**
    * ATTACHMENTS
    */

@@ -13,6 +13,7 @@ import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
+import EnforcementZoneService from './enforcementZoneServices'
 import TrailMonitoringService from './trailMonitoringService'
 
 export const services = () => {
@@ -30,6 +31,7 @@ export const services = () => {
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
+  const zoneService = new EnforcementZoneService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
@@ -51,6 +53,7 @@ export const services = () => {
     orderSearchService,
     orderService,
     trailMonitoringService,
+    zoneService,
   }
 }
 
@@ -70,4 +73,5 @@ export {
   OrderSearchService,
   OrderService,
   TrailMonitoringService,
+  EnforcementZoneService,
 }

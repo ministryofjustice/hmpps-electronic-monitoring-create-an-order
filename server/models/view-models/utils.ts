@@ -23,3 +23,7 @@ export type MultipleChoiceField = FormField & {
 export type ViewModel<T> = {
   [K in keyof T]: T[K] extends Date ? DateField : T[K] extends string[] ? MultipleChoiceField : TextField
 }
+
+export type ErrorsViewModel = {
+  [field: string]: ErrorMessage
+}

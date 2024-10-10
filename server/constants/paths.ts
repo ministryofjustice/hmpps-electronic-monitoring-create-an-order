@@ -27,7 +27,7 @@ const paths = {
   MONITORING_CONDITIONS: {
     BASE_URL: '/order/:orderId/monitoring-conditions',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
-    ZONE: '/order/:orderId/monitoring-conditions/zone',
+    ZONE: '/order/:orderId/monitoring-conditions/zone/:zoneId',
     ATTENDANCE: '/order/:orderId/monitoring-conditions/attendance',
     ALCOHOL: '/order/:orderId/monitoring-conditions/alcohol',
     CURFEW_DAY_OF_RELEASE: '/order/:orderId/monitoring-conditions/curfew-day-of-release',

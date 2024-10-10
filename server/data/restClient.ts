@@ -127,6 +127,7 @@ export default class RestClient {
     path,
     query = {},
     headers = {},
+
     responseType = '',
     metadata = {},
     raw = false,
@@ -136,14 +137,14 @@ export default class RestClient {
   }: PostMultiPartRequest): Promise<Response> {
     logger.info(`${this.name} POST: ${path}`)
     try {
-      const result = await superagent
+      const request = superagent
         .post(`${this.apiUrl()}${path}`)
         .query(query)
         .attach('file', fileToUpload.buffer, {
           filename: fileToUpload.originalname,
           contentType: fileToUpload.mimetype,
         })
-        .field('metadata', JSON.stringify(metadata))
+        .field('metadata', JSON.stringify(metadata), { contentType: 'application/json' })
         .agent(this.agent)
         .retry(2, (err, res) => {
           if (retry === false) {
@@ -157,6 +158,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
+      const result = await request
       return raw ? result : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error as UnsanitisedError)

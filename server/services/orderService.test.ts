@@ -30,6 +30,7 @@ const mockApiResponse = {
   deviceWearerContactDetails: {
     contactNumber: null,
   },
+  enforcementZoneConditions: [],
   additionalDocuments: [],
   monitoringConditions: {
     orderType: null,
