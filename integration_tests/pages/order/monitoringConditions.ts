@@ -13,6 +13,4 @@ export default class MonitoringConditionsPage extends AppPage {
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
 
   backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
-  submittedBanner = (): PageElement => cy.get('.govuk-notification-banner')
 }

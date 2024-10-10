@@ -153,21 +153,23 @@
         {
           name: "day",
           classes: "govuk-input--width-2",
-          value: dateOfBirth_day.value
+          value: dateOfBirth_day.value,
+          attributes: {disabled: not isOrderEditable }
         },
         {
           name: "month",
           classes: "govuk-input--width-2",
-          value: dateOfBirth_month.value
+          value: dateOfBirth_month.value,
+          attributes: {disabled: not isOrderEditable }
         },
         {
           name: "year",
           classes: "govuk-input--width-4",
-          value: dateOfBirth_year.value
+          value: dateOfBirth_year.value,
+          attributes: {disabled: not isOrderEditable }
         }
       ],
-      errorMessage: dateOfBirth.error,
-      disabled: not isOrderEditable
+      errorMessage: dateOfBirth.error
     }) }}
 
     {{ govukRadios({

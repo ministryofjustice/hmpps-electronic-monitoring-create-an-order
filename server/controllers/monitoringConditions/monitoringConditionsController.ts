@@ -9,6 +9,7 @@ import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
 import { getError } from '../../utils/utils'
+import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const monitoringConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -33,33 +34,6 @@ type MonitoringConditionsViewModel = {
   devicesRequired: MultipleChoiceField
 }
 
-const monitoringTypes: (keyof MonitoringConditions)[] = [
-  'curfew',
-  'exclusionZone',
-  'trail',
-  'mandatoryAttendance',
-  'alcohol',
-]
-
-const nextPage = (selections: string[]): string => {
-  if (selections.includes('curfew')) {
-    return paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE
-  }
-  if (selections.includes('zone')) {
-    return paths.MONITORING_CONDITIONS.ZONE
-  }
-  if (selections.includes('trail')) {
-    return paths.MONITORING_CONDITIONS.TRAIL
-  }
-  if (selections.includes('mandatoryAttendance')) {
-    return paths.MONITORING_CONDITIONS.ATTENDANCE
-  }
-  if (selections.includes('alcohol')) {
-    return paths.MONITORING_CONDITIONS.ALCOHOL
-  }
-  return paths.MONITORING_CONDITIONS.BASE_URL
-}
-
 export default class MonitoringConditionsController {
   constructor(
     private readonly auditService: AuditService,
@@ -81,12 +55,7 @@ export default class MonitoringConditionsController {
   private createViewModelFromMonitoringConditions(
     monitoringConditions: MonitoringConditions,
   ): MonitoringConditionsViewModel {
-    const monitoringRequiredValues = monitoringTypes.reduce((acc: string[], val) => {
-      if (monitoringConditions[val]) {
-        acc.push(val)
-      }
-      return acc
-    }, [])
+    const monitoringRequiredValues = getSelectedMonitoringTypes(monitoringConditions)
 
     return {
       acquisitiveCrime: { value: String(monitoringConditions.acquisitiveCrime) },

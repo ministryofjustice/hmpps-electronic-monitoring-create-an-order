@@ -18,7 +18,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   deviceWearer: {
@@ -50,6 +50,10 @@ const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     mandatoryAttendance: null,
     alcohol: null,
     devicesRequired: null,
+  },
+  trailMonitoring: {
+    startDate: null,
+    endDate: null,
   },
 })
 
