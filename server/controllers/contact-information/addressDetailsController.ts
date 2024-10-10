@@ -4,12 +4,12 @@ import { AuditService, AddressService } from '../../services'
 import { isValidationResult } from '../../models/Validation'
 import addressDetailsViewModel from '../../models/view-models/addressDetails'
 import AddressDetailsFormDataModel from '../../models/form-data/addressDetails'
-import { Address, AddressType, AddressTypeEnum } from '../../models/Address'
+import { DeviceWearerAddress, DeviceWearerAddressType, DeviceWearerAddressTypeEnum } from '../../models/DeviceWearerAddress'
 
 const nextAddressMap = {
-  [AddressTypeEnum.Enum.PRIMARY]: AddressTypeEnum.enum.SECONDARY,
-  [AddressTypeEnum.Enum.SECONDARY]: AddressTypeEnum.enum.TERTIARY,
-  [AddressTypeEnum.enum.TERTIARY]: 'blackhole'
+  [DeviceWearerAddressTypeEnum.Enum.PRIMARY]: DeviceWearerAddressTypeEnum.enum.SECONDARY,
+  [DeviceWearerAddressTypeEnum.Enum.SECONDARY]: DeviceWearerAddressTypeEnum.enum.TERTIARY,
+  [DeviceWearerAddressTypeEnum.enum.TERTIARY]: 'blackhole'
 }
 
 export default class AddressController {
@@ -18,9 +18,9 @@ export default class AddressController {
     private readonly addressService: AddressService,
   ) {}
 
-  private getNextPage(orderId: string, currentAddressType: AddressType, hasAnotherAddress: boolean) {
+  private getNextPage(orderId: string, currentAddressType: DeviceWearerAddressType, hasAnotherAddress: boolean) {
     if (
-      (currentAddressType === AddressTypeEnum.Enum.PRIMARY || currentAddressType === AddressTypeEnum.Enum.SECONDARY) &&
+      (currentAddressType === DeviceWearerAddressTypeEnum.Enum.PRIMARY || currentAddressType === DeviceWearerAddressTypeEnum.Enum.SECONDARY) &&
       hasAnotherAddress
     ) {
       return paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
@@ -31,7 +31,7 @@ export default class AddressController {
     return paths.CONTACT_INFORMATION.RESPONSIBLE_OFFICER.replace(':orderId', orderId)
   }
 
-  private getActiveAddress(addresses: Array<Address>, addressType: AddressType): Address {
+  private getActiveAddress(addresses: Array<DeviceWearerAddress>, addressType: DeviceWearerAddressType): DeviceWearerAddress {
     const matchedAddress = addresses.find(address => address.addressType.toLowerCase() === addressType.toLowerCase())
 
     if(matchedAddress) {
@@ -40,11 +40,13 @@ export default class AddressController {
 
     return {
       addressType: 'PRIMARY',
-      addressLine1: '',
-      addressLine2: '',
-      addressLine3: '',
-      addressLine4: '',
-      postcode: '',
+      address: {
+        addressLine1: '',
+        addressLine2: '',
+        addressLine3: '',
+        addressLine4: '',
+        postcode: '',
+      }
     }
   }
 
@@ -54,7 +56,7 @@ export default class AddressController {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     
-    const activeAddress = this.getActiveAddress(addresses, AddressTypeEnum.parse(addressType))
+    const activeAddress = this.getActiveAddress(addresses, DeviceWearerAddressTypeEnum.parse(addressType))
     const hasAnotherAddress = addresses.some(address => address.addressType === nextAddressMap[activeAddress.addressType])
 
     const viewModel = addressDetailsViewModel.construct(
