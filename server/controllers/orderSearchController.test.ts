@@ -30,6 +30,8 @@ const mockSubmittedOrder: Order = {
     gender: null,
     disabilities: [],
   },
+  enforcementZoneConditions: [],
+  additionalDocuments: [],
 }
 
 const mock500Error: SanitisedError = {

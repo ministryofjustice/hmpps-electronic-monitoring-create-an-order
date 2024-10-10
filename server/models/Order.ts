@@ -5,6 +5,7 @@ import DeviceWearerContactDetailsModel from './ContactDetails'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
 import MonitoringConditionsModel from './MonitoringConditions'
+import EnforcementZoneModel from './EnforcementZone'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 
@@ -15,6 +16,7 @@ const OrderModel = z.object({
   deviceWearerAddresses: z.array(AddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.optional().nullable(),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
+  enforcementZoneConditions: z.array(EnforcementZoneModel),
   additionalDocuments: z.array(AttachmentModel),
   monitoringConditions: MonitoringConditionsModel,
 })
