@@ -44,6 +44,80 @@
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
+    {% set disabled = {} if isOrderEditable else { disabled:true } %}
+
+    {{ govukDateInput({
+      id: "startDate",
+      namePrefix: "startDate",
+      fieldset: {
+        legend: {
+          text: "Enter the date when the monitoring starts",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2011"
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          value: startDateDay.value,
+          attributes: disabled
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          value: startDateMonth.value,
+          attributes: disabled
+        },
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          value: startDateYear.value,
+          attributes: disabled
+        }
+      ],
+      errorMessage: startDate.error
+    }) }}
+
+    {{ govukDateInput({
+      id: "endDate",
+      namePrefix: "endDate",
+      fieldset: {
+        legend: {
+          text: "Enter the date when the monitoring ends (optional)",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2011"
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          value: endDateDay.value,
+          attributes: disabled
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          value: endDateMonth.value,
+          attributes: disabled
+        },
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          value: endDateYear.value,
+          attributes: disabled
+        }
+      ],
+      errorMessage: endDate.error
+    }) }}
+
     <div class="govuk-button-group">
       {% if isOrderEditable %}
         {{ govukButton({

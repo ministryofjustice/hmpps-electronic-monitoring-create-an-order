@@ -1,5 +1,5 @@
-import { ErrorMessage } from '../models/view-models/utils'
 import { ValidationResult } from '../models/Validation'
+import { ErrorMessage } from '../models/view-models/utils'
 
 const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
 
@@ -35,11 +35,11 @@ export const serialiseDate = (year: string, month: string, day: string) => {
     return null
   }
 
-  return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10)).toISOString()
+  return new Date(Date.UTC(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))).toISOString()
 }
 
-export const deserialiseDate = (dateString: string): [year: string, month: string, day: string] => {
-  if (isBlank(dateString)) {
+export const deserialiseDate = (dateString?: string | null): [year: string, month: string, day: string] => {
+  if (!dateString || isBlank(dateString)) {
     return ['', '', '']
   }
 

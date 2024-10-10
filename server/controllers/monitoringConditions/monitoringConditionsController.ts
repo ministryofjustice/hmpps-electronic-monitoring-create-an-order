@@ -41,11 +41,19 @@ const monitoringTypes: (keyof MonitoringConditions)[] = [
   'alcohol',
 ]
 
-const nextPage = (selections: string[]): string => {
+const pathLookup = {
+  curfew: paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE,
+  exclusionZone: paths.MONITORING_CONDITIONS.ZONE,
+  trail: paths.MONITORING_CONDITIONS.TRAIL,
+  mandatoryAttendance: paths.MONITORING_CONDITIONS.ATTENDANCE,
+  alcohol: paths.MONITORING_CONDITIONS.ALCOHOL,
+}
+
+const nextPage = (selections: string[], currentPage?: string): string => {
   if (selections.includes('curfew')) {
     return paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE
   }
-  if (selections.includes('zone')) {
+  if (selections.includes('exclusionZone')) {
     return paths.MONITORING_CONDITIONS.ZONE
   }
   if (selections.includes('trail')) {
