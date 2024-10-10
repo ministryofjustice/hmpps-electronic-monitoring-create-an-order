@@ -149,6 +149,38 @@ context('Monitoring conditions main section', () => {
         })
       })
     })
+
+    it('should correctly submit the data to the CEMO API and move to the next selected page with a single checkbox selected', () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions',
+        response: mockEmptyMonitoringConditions.monitoringConditions,
+      })
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
+      const page = Page.verifyOnPage(MonitoringConditionsPage)
+      cy.get('input[type="radio"][value="true"]').check()
+      cy.get('input[type="checkbox"][value="alcohol"]').check()
+      cy.get('input[type="checkbox"][value="aml"]').check()
+      cy.get('select[name="orderType"]').select('immigration')
+      page.saveAndContinueButton().click()
+      cy.task('getStubbedRequest', `/order/${mockOrderId}/monitoring-conditions`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+        expect(requests[0]).to.deep.equal({
+          acquisitiveCrime: true,
+          dapol: true,
+          orderType: 'immigration',
+          curfew: false,
+          exclusionZone: false,
+          trail: false,
+          mandatoryAttendance: false,
+          alcohol: true,
+          devicesRequired: 'aml',
+        })
+      })
+      const nextPage = Page.verifyOnPage(CurfewDayOfReleasePage)
+      nextPage.subHeader().should('contain.text', 'Alcohol monitoring')
+    })
   })
 
   context('Unhealthy backend', () => {

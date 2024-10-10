@@ -15,8 +15,12 @@ const monitoringConditionsFormDataModel = z.object({
   acquisitiveCrime: z.coerce.boolean(),
   dapol: z.coerce.boolean(),
   orderType: z.coerce.string(),
-  monitoringRequired: z.string().array().default([]),
-  devicesRequired: z.string().array().default([]),
+  monitoringRequired: z
+    .union([z.string(), z.array(z.string()).default([])])
+    .transform(val => (Array.isArray(val) ? val : [val])),
+  devicesRequired: z
+    .union([z.string(), z.array(z.string()).default([])])
+    .transform(val => (Array.isArray(val) ? val : [val])),
 })
 
 type MonitoringConditionsFormData = z.infer<typeof monitoringConditionsFormDataModel>
