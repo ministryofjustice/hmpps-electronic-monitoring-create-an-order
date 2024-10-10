@@ -1,5 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
+import { Order } from '../../server/models/Order'
 import { stubFor } from './wiremock'
 
 import { DeviceWearer } from '../../server/models/DeviceWearer'
@@ -106,6 +107,7 @@ type GetOrderStubOptions = {
   httpStatus: number
   id?: string
   status?: string
+  order?: Partial<Order>
 }
 
 const defaultGetOrderOptions = {
@@ -158,6 +160,7 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
                 alcohol: null,
                 devicesRequired: null,
               },
+              ...(options.order ? options.order : {}),
             }
           : null,
     },
@@ -276,6 +279,26 @@ const getOrderWithAttachments = (
     },
   })
 
+type SubmitOrderStubOptions = {
+  httpStatus: number
+  id: string
+  subPath?: string
+  response: Record<string, unknown>
+}
+
+const submitOrder = (options: SubmitOrderStubOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: `/cemo/api/order/${options.id}${options.subPath ?? '/'}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.response,
+    },
+  })
+
 type UploadAttachmentStubOptions = {
   httpStatus: number
   id?: string
@@ -379,12 +402,14 @@ const putDeviceWearerDetails = (
   })
 
 export default {
-  stubCemoGetOrder: getOrder,
   stubCemoCreateOrder: createOrder,
-  stubCemoPutDeviceWearer: putDeviceWearerDetails,
-  stubCemoPing: ping,
-  stubCemoListOrders: listOrders,
+  stubCemoGetOrder: getOrder,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubCemoListOrders: listOrders,
+  stubCemoPing: ping,
   stubCemoPutContactDetails: updateContactDetails,
+  stubCemoPutDeviceWearer: putDeviceWearerDetails,
+  stubCemoSubmitOrder: submitOrder,
+  stubCemoUpdateContactDetails: updateContactDetails,
   stubUploadAttachment: uploadAttachment,
 }

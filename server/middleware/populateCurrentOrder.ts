@@ -1,8 +1,8 @@
-import { RequestParamHandler, Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, RequestParamHandler, Response } from 'express'
 import logger from '../../logger'
 import paths from '../constants/paths'
-import { OrderService } from '../services'
 import { OrderStatusEnum } from '../models/Order'
+import { OrderService } from '../services'
 
 const populateOrder =
   (orderService: OrderService): RequestParamHandler =>

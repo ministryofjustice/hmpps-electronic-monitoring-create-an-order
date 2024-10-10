@@ -5,35 +5,10 @@ import { z } from 'zod'
 import paths from '../../constants/paths'
 import { MonitoringConditions } from '../../models/MonitoringConditions'
 import { isValidationResult, ValidationResult } from '../../models/Validation'
-import {
-  MultipleChoiceField,
-  MultipleChoiceFieldValues,
-  MultipleChoiceValue,
-  TextField,
-} from '../../models/view-models/utils'
+import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
 import { getError } from '../../utils/utils'
-
-const deviceTypes: MultipleChoiceValue[] = [
-  { text: 'Location Monitoring (using Non-Fitted Device)', value: '250' },
-  { text: 'AAMR', value: 'aamr' },
-  { text: 'AML', value: 'aml' },
-  { text: 'Attendance Requirement', value: 'attendance_requirement' },
-  { text: 'Curfew with EM', value: 'curfew_with_em' },
-  { text: 'EM Exclusion / Inclusion Zone', value: 'em_exclusion_inclusion_zone' },
-  { text: 'Location Monitoring (Fitted Device)', value: 'location_monitoring' },
-]
-
-const orderTypes: MultipleChoiceValue[] = [
-  { text: 'Select', value: '' },
-  { text: 'Civil', value: 'civil' },
-  { text: 'Community', value: 'community' },
-  { text: 'Immigration', value: 'immigration' },
-  { text: 'Post Release', value: 'post_release' },
-  { text: 'Pre-Trial', value: 'pre_trial' },
-  { text: 'Special', value: 'special' },
-]
 
 const monitoringConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -47,13 +22,11 @@ const monitoringConditionsFormDataModel = z.object({
 type MonitoringConditionsFormData = z.infer<typeof monitoringConditionsFormDataModel>
 
 type MonitoringConditionsViewModel = {
-  deviceTypes: typeof deviceTypes
-  orderTypes: typeof orderTypes
   acquisitiveCrime: TextField
   dapol: TextField
   orderType: TextField
   monitoringRequired: MultipleChoiceField
-  devicesRequired: MultipleChoiceFieldValues
+  devicesRequired: MultipleChoiceField
 }
 
 const monitoringTypes: (keyof MonitoringConditions)[] = [
@@ -104,7 +77,6 @@ export default class MonitoringConditionsController {
   private createViewModelFromMonitoringConditions(
     monitoringConditions: MonitoringConditions,
   ): MonitoringConditionsViewModel {
-    const devicesRequired = monitoringConditions.devicesRequired?.split(',')
     const monitoringRequiredValues = monitoringTypes.reduce((acc: string[], val) => {
       if (monitoringConditions[val]) {
         acc.push(val)
@@ -113,8 +85,6 @@ export default class MonitoringConditionsController {
     }, [])
 
     return {
-      deviceTypes,
-      orderTypes,
       acquisitiveCrime: { value: String(monitoringConditions.acquisitiveCrime) },
       dapol: { value: String(monitoringConditions.dapol) },
       orderType: { value: monitoringConditions.orderType ?? '' },
@@ -122,7 +92,7 @@ export default class MonitoringConditionsController {
         values: monitoringRequiredValues,
       },
       devicesRequired: {
-        values: deviceTypes.map(d => ({ ...d, checked: devicesRequired?.includes(d.value) })),
+        values: monitoringConditions.devicesRequired?.split(',') ?? [],
       },
     }
   }
@@ -132,8 +102,6 @@ export default class MonitoringConditionsController {
     validationErrors: ValidationResult,
   ): MonitoringConditionsViewModel {
     return {
-      deviceTypes,
-      orderTypes,
       acquisitiveCrime: {
         value: String(formData.acquisitiveCrime),
         error: getError(validationErrors, 'acquisitiveCrime'),
@@ -148,7 +116,7 @@ export default class MonitoringConditionsController {
         error: getError(validationErrors, 'monitoringRequired'),
       },
       devicesRequired: {
-        values: deviceTypes.map(d => ({ ...d, checked: formData.devicesRequired?.includes(d.value) })),
+        values: formData.devicesRequired,
         error: getError(validationErrors, 'devicesRequired'),
       },
     }

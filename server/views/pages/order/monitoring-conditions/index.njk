@@ -112,7 +112,15 @@
       label: {
         text: "Select order type"
       },
-      items: orderTypes,
+      items: [
+        { text: 'Select', value: '' },
+        { text: 'Civil', value: 'civil' },
+        { text: 'Community', value: 'community' },
+        { text: 'Immigration', value: 'immigration' },
+        { text: 'Post Release', value: 'post_release' },
+        { text: 'Pre-Trial', value: 'pre_trial' },
+        { text: 'Special', value: 'special' }
+      ],
       value: orderType.value,
       errorMessage: orderType.error,
       disabled: not isOrderEditable
@@ -137,7 +145,8 @@
           hint: {
             text: "The device wearer must stay inside an address at specific times during the day and night."
           },
-          checked: monitoringRequired.values | select("equalto", "curfew") | length
+          checked: monitoringRequired.values | select("equalto", "curfew") | length,
+          disabled: not isOrderEditable
         },
         {
           value: "exclusionZone",
@@ -145,7 +154,8 @@
           hint: {
             text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
           },
-          checked: monitoringRequired.values | select("equalto", "exclusionZone") | length
+          checked: monitoringRequired.values | select("equalto", "exclusionZone") | length,
+          disabled: not isOrderEditable
         },
         {
           value: "trail",
@@ -153,7 +163,8 @@
           hint: {
             text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
           },
-          checked: monitoringRequired.values | select("equalto", "trail") | length
+          checked: monitoringRequired.values | select("equalto", "trail") | length,
+          disabled: not isOrderEditable
         },
         {
           value: "mandatoryAttendance",
@@ -161,7 +172,8 @@
           hint: {
             text: "Attendance of the device wearer at appointments is monitored."
           },
-          checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length
+          checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length,
+          disabled: not isOrderEditable
         },
         {
           value: "alcohol",
@@ -169,7 +181,8 @@
           hint: {
             text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
           },
-          checked: monitoringRequired.values | select("equalto", "alcohol") | length
+          checked: monitoringRequired.values | select("equalto", "alcohol") | length,
+          disabled: not isOrderEditable
         }
       ],
       errorMessage: monitoringRequired.error,
@@ -180,7 +193,7 @@
       name: "devicesRequired",
       fieldset: {
         legend: {
-          text: "Device required",
+          text: "Devices required",
           isPageHeading: true,
           classes: "govuk-fieldset__legend--l"
         }
@@ -188,9 +201,44 @@
       hint: {
         text: "Select the device to be installed. Select all that apply."
       },
-      items: devicesRequired.values,
-      errorMessage: devicesRequired.error,
-      disabled: not isOrderEditable
+      items: [
+        {
+          text: 'Location Monitoring (using Non-Fitted Device)',
+          value: '250',
+          checked: monitoringRequired.values | select("equalto", "250") | length
+        },
+        {
+          text: 'AAMR',
+          value: 'aamr',
+          checked: monitoringRequired.values | select("equalto", "aamr") | length
+        },
+        {
+          text: 'AML',
+          value: 'aml',
+          checked: monitoringRequired.values | select("equalto", "aml") | length
+        },
+        {
+          text: 'Attendance Requirement',
+          value: 'attendance_requirement',
+          checked: monitoringRequired.values | select("equalto", "attendance_requirement") | length
+        },
+        {
+          text: 'Curfew with EM',
+          value: 'curfew_with_em',
+          checked: monitoringRequired.values | select("equalto", "curfew_with_em") | length
+        },
+        {
+          text: 'EM Exclusion / Inclusion Zone',
+          value: 'em_exclusion_inclusion_zone',
+          checked: monitoringRequired.values | select("equalto", "em_exclusion_inclusion_zone") | length
+        },
+        {
+          text: 'Location Monitoring (Fitted Device)',
+          value: 'location_monitoring',
+          checked: monitoringRequired.values | select("equalto", "location_monitoring") | length
+         }
+      ],
+      errorMessage: devicesRequired.error
     }) }}
 
     <div class="govuk-button-group">
