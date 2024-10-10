@@ -18,6 +18,41 @@ const ping = (httpStatus = 200) =>
     },
   })
 
+const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+  id: uuidv4(),
+  status,
+  deviceWearer: {
+    nomisId: null,
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    firstName: null,
+    lastName: null,
+    alias: null,
+    dateOfBirth: null,
+    adultAtTimeOfInstallation: null,
+    sex: null,
+    gender: null,
+    disabilities: null,
+  },
+  deviceWearerAddresses: [],
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
+  additionalDocuments: [],
+  monitoringConditions: {
+    orderType: null,
+    acquisitiveCrime: null,
+    dapol: null,
+    curfew: null,
+    exclusionZone: null,
+    trail: null,
+    mandatoryAttendance: null,
+    alcohol: null,
+    devicesRequired: null,
+  },
+})
+
 const listOrders = (httpStatus = 200): SuperAgentRequest =>
   stubFor({
     request: {
@@ -30,43 +65,9 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
       jsonBody:
         httpStatus === 200
           ? [
+              mockApiOrder('SUBMITTED'),
               {
-                id: uuidv4(),
-                status: 'SUBMITTED',
-                deviceWearer: {
-                  nomisId: null,
-                  pncId: null,
-                  deliusId: null,
-                  prisonNumber: null,
-                  firstName: null,
-                  lastName: null,
-                  alias: null,
-                  dateOfBirth: null,
-                  adultAtTimeOfInstallation: null,
-                  sex: null,
-                  gender: null,
-                  disabilities: null,
-                },
-                deviceWearerAddresses: [],
-                deviceWearerContactDetails: {
-                  contactNumber: null,
-                },
-                additionalDocuments: [],
-                monitoringConditions: {
-                  orderType: null,
-                  acquisitiveCrime: null,
-                  dapol: null,
-                  curfew: null,
-                  exclusionZone: null,
-                  trail: null,
-                  mandatoryAttendance: null,
-                  alcohol: null,
-                  devicesRequired: null,
-                },
-              },
-              {
-                id: uuidv4(),
-                status: 'IN_PROGRESS',
+                ...mockApiOrder(),
                 deviceWearer: {
                   nomisId: null,
                   pncId: null,
@@ -80,22 +81,6 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   sex: null,
                   gender: null,
                   disabilities: null,
-                },
-                deviceWearerAddresses: [],
-                deviceWearerContactDetails: {
-                  contactNumber: null,
-                },
-                additionalDocuments: [],
-                monitoringConditions: {
-                  orderType: null,
-                  acquisitiveCrime: null,
-                  dapol: null,
-                  curfew: null,
-                  exclusionZone: null,
-                  trail: null,
-                  mandatoryAttendance: null,
-                  alcohol: null,
-                  devicesRequired: null,
                 },
               },
             ]
@@ -128,38 +113,9 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
       jsonBody:
         options.httpStatus === 200
           ? {
+              ...mockApiOrder(),
               id: options.id,
               status: options.status,
-              deviceWearer: {
-                nomisId: null,
-                pncId: null,
-                deliusId: null,
-                prisonNumber: null,
-                firstName: null,
-                lastName: null,
-                alias: null,
-                dateOfBirth: null,
-                adultAtTimeOfInstallation: null,
-                sex: null,
-                gender: null,
-                disabilities: null,
-              },
-              deviceWearerAddresses: [],
-              deviceWearerContactDetails: {
-                contactNumber: null,
-              },
-              additionalDocuments: [],
-              monitoringConditions: {
-                orderType: null,
-                acquisitiveCrime: null,
-                dapol: null,
-                curfew: null,
-                exclusionZone: null,
-                trail: null,
-                mandatoryAttendance: null,
-                alcohol: null,
-                devicesRequired: null,
-              },
               ...(options.order ? options.order : {}),
             }
           : null,
@@ -190,27 +146,9 @@ const createOrder = (options: CreateOrderStubOptions = defaultCreateOrderOptions
       jsonBody:
         options.httpStatus === 200
           ? {
+              ...mockApiOrder(),
               id: options.id,
               status: options.status,
-              deviceWearer: {
-                nomisId: null,
-                pncId: null,
-                deliusId: null,
-                prisonNumber: null,
-                firstName: null,
-                lastName: null,
-                alias: null,
-                dateOfBirth: null,
-                adultAtTimeOfInstallation: null,
-                sex: null,
-                gender: null,
-                disabilities: null,
-              },
-              deviceWearerAddresses: [],
-              deviceWearerContactDetails: {
-                contactNumber: null,
-              },
-              additionalDocuments: [],
             }
           : null,
     },
@@ -242,38 +180,10 @@ const getOrderWithAttachments = (
       jsonBody:
         options.httpStatus === 200
           ? {
+              ...mockApiOrder(),
               id: options.id,
               status: options.status,
-              deviceWearer: {
-                nomisId: null,
-                pncId: null,
-                deliusId: null,
-                prisonNumber: null,
-                firstName: null,
-                lastName: null,
-                alias: null,
-                dateOfBirth: null,
-                adultAtTimeOfInstallation: null,
-                sex: null,
-                gender: null,
-                disabilities: null,
-              },
-              deviceWearerAddresses: [],
-              deviceWearerContactDetails: {
-                contactNumber: null,
-              },
               additionalDocuments: options.attachments,
-              monitoringConditions: {
-                orderType: null,
-                acquisitiveCrime: null,
-                dapol: null,
-                curfew: null,
-                exclusionZone: null,
-                trail: null,
-                mandatoryAttendance: null,
-                alcohol: null,
-                devicesRequired: null,
-              },
             }
           : null,
     },
@@ -286,7 +196,7 @@ type SubmitOrderStubOptions = {
   response: Record<string, unknown>
 }
 
-const submitOrder = (options: SubmitOrderStubOptions): Promise<string> =>
+const submitOrder = (options: SubmitOrderStubOptions) =>
   stubFor({
     request: {
       method: 'POST',
@@ -380,9 +290,7 @@ const defaultPostDeviceWearerDetailsOptions = {
   },
 }
 
-const putDeviceWearerDetails = (
-  options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions,
-): Promise<string> =>
+const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions) =>
   stubFor({
     request: {
       method: 'PUT',
