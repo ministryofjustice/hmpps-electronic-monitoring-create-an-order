@@ -70,7 +70,7 @@ context('About the device wearer', () => {
         aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       })
 
-      context('when a valid set of data is entered into the devise wearer details form', () => {
+      context('when a valid set of data is entered into the device wearer details form', () => {
         beforeEach(() => {
           aboutDeviceWearerPage.form.fillInWith({
             nomisId: '1234567',
