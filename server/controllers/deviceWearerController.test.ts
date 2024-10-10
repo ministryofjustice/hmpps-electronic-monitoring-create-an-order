@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
-import AuditService from '../services/auditService'
-import DeviceWearerController from './deviceWearerController'
-import DeviceWearerService from '../services/deviceWearerService'
+import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
-import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
 import RestClient from '../data/restClient'
+import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
+import AuditService from '../services/auditService'
+import DeviceWearerService from '../services/deviceWearerService'
+import DeviceWearerController from './deviceWearerController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -54,8 +54,7 @@ const createMockResponse = (): Response => {
 
 const createMockOrder = (status: OrderStatus): Order => {
   return {
-    id: uuidv4(),
-    status,
+    ...getMockOrder({ status }),
     deviceWearer: {
       nomisId: null,
       pncId: null,
@@ -70,11 +69,6 @@ const createMockOrder = (status: OrderStatus): Order => {
       gender: 'male',
       disabilities: ['Vision', 'Mobilitiy'],
     },
-    deviceWearerAddresses: [],
-    deviceWearerContactDetails: {
-      contactNumber: '',
-    },
-    additionalDocuments: [],
   }
 }
 

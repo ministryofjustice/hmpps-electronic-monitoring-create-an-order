@@ -1,44 +1,21 @@
 import type { NextFunction, Request, Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
-import AuditService from '../services/auditService'
-import OrderSearchController from './orderSearchController'
-import OrderSearchService from '../services/orderSearchService'
+import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
+import AuditService from '../services/auditService'
+import OrderSearchService from '../services/orderSearchService'
+import OrderSearchController from './orderSearchController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
-const mockDraftOrder: Order = {
-  id: uuidv4(),
-  status: OrderStatusEnum.Enum.IN_PROGRESS,
-  deviceWearer: {
-    nomisId: null,
-    pncId: null,
-    deliusId: null,
-    prisonNumber: null,
-    firstName: null,
-    lastName: null,
-    alias: null,
-    dateOfBirth: null,
-    adultAtTimeOfInstallation: false,
-    sex: null,
-    gender: null,
-    disabilities: [],
-  },
-  deviceWearerAddresses: [],
-  deviceWearerContactDetails: {
-    contactNumber: '',
-  },
-  additionalDocuments: [],
-}
+const mockDraftOrder = getMockOrder()
 
 const mockSubmittedOrder: Order = {
-  id: uuidv4(),
-  status: OrderStatusEnum.Enum.SUBMITTED,
+  ...getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED }),
   deviceWearer: {
     nomisId: null,
     pncId: null,
@@ -53,11 +30,6 @@ const mockSubmittedOrder: Order = {
     gender: null,
     disabilities: [],
   },
-  deviceWearerAddresses: [],
-  deviceWearerContactDetails: {
-    contactNumber: '',
-  },
-  additionalDocuments: [],
 }
 
 const mock500Error: SanitisedError = {

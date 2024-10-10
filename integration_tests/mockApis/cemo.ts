@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
-import { stubFor } from './wiremock'
+import { Order } from '../../server/models/Order'
+import { getMatchingRequests, stubFor } from './wiremock'
 
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 
@@ -17,6 +18,41 @@ const ping = (httpStatus = 200) =>
     },
   })
 
+const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+  id: uuidv4(),
+  status,
+  deviceWearer: {
+    nomisId: null,
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    firstName: null,
+    lastName: null,
+    alias: null,
+    dateOfBirth: null,
+    adultAtTimeOfInstallation: null,
+    sex: null,
+    gender: null,
+    disabilities: null,
+  },
+  deviceWearerAddresses: [],
+  deviceWearerContactDetails: {
+    contactNumber: null,
+  },
+  additionalDocuments: [],
+  monitoringConditions: {
+    orderType: null,
+    acquisitiveCrime: null,
+    dapol: null,
+    curfew: null,
+    exclusionZone: null,
+    trail: null,
+    mandatoryAttendance: null,
+    alcohol: null,
+    devicesRequired: null,
+  },
+})
+
 const listOrders = (httpStatus = 200): SuperAgentRequest =>
   stubFor({
     request: {
@@ -29,32 +65,9 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
       jsonBody:
         httpStatus === 200
           ? [
+              mockApiOrder('SUBMITTED'),
               {
-                id: uuidv4(),
-                status: 'SUBMITTED',
-                deviceWearer: {
-                  nomisId: null,
-                  pncId: null,
-                  deliusId: null,
-                  prisonNumber: null,
-                  firstName: null,
-                  lastName: null,
-                  alias: null,
-                  dateOfBirth: null,
-                  adultAtTimeOfInstallation: null,
-                  sex: null,
-                  gender: null,
-                  disabilities: null,
-                },
-                deviceWearerAddresses: [],
-                deviceWearerContactDetails: {
-                  contactNumber: null,
-                },
-                additionalDocuments: [],
-              },
-              {
-                id: uuidv4(),
-                status: 'IN_PROGRESS',
+                ...mockApiOrder(),
                 deviceWearer: {
                   nomisId: null,
                   pncId: null,
@@ -69,11 +82,6 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   gender: null,
                   disabilities: null,
                 },
-                deviceWearerAddresses: [],
-                deviceWearerContactDetails: {
-                  contactNumber: null,
-                },
-                additionalDocuments: [],
               },
             ]
           : null,
@@ -84,6 +92,7 @@ type GetOrderStubOptions = {
   httpStatus: number
   id?: string
   status?: string
+  order?: Partial<Order>
 }
 
 const defaultGetOrderOptions = {
@@ -104,27 +113,10 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
       jsonBody:
         options.httpStatus === 200
           ? {
+              ...mockApiOrder(),
               id: options.id,
               status: options.status,
-              deviceWearer: {
-                nomisId: null,
-                pncId: null,
-                deliusId: null,
-                prisonNumber: null,
-                firstName: null,
-                lastName: null,
-                alias: null,
-                dateOfBirth: null,
-                adultAtTimeOfInstallation: null,
-                sex: null,
-                gender: null,
-                disabilities: null,
-              },
-              deviceWearerAddresses: [],
-              deviceWearerContactDetails: {
-                contactNumber: null,
-              },
-              additionalDocuments: [],
+              ...(options.order ? options.order : {}),
             }
           : null,
     },
@@ -154,27 +146,9 @@ const createOrder = (options: CreateOrderStubOptions = defaultCreateOrderOptions
       jsonBody:
         options.httpStatus === 200
           ? {
+              ...mockApiOrder(),
               id: options.id,
               status: options.status,
-              deviceWearer: {
-                nomisId: null,
-                pncId: null,
-                deliusId: null,
-                prisonNumber: null,
-                firstName: null,
-                lastName: null,
-                alias: null,
-                dateOfBirth: null,
-                adultAtTimeOfInstallation: null,
-                sex: null,
-                gender: null,
-                disabilities: null,
-              },
-              deviceWearerAddresses: [],
-              deviceWearerContactDetails: {
-                contactNumber: null,
-              },
-              additionalDocuments: [],
             }
           : null,
     },
@@ -206,29 +180,32 @@ const getOrderWithAttachments = (
       jsonBody:
         options.httpStatus === 200
           ? {
+              ...mockApiOrder(),
               id: options.id,
               status: options.status,
-              deviceWearer: {
-                nomisId: null,
-                pncId: null,
-                deliusId: null,
-                prisonNumber: null,
-                firstName: null,
-                lastName: null,
-                alias: null,
-                dateOfBirth: null,
-                adultAtTimeOfInstallation: null,
-                sex: null,
-                gender: null,
-                disabilities: null,
-              },
-              deviceWearerAddresses: [],
-              deviceWearerContactDetails: {
-                contactNumber: null,
-              },
               additionalDocuments: options.attachments,
             }
           : null,
+    },
+  })
+
+type SubmitOrderStubOptions = {
+  httpStatus: number
+  id: string
+  subPath?: string
+  response: Record<string, unknown>
+}
+
+const submitOrder = (options: SubmitOrderStubOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: `/cemo/api/order/${options.id}${options.subPath ?? '/'}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.response,
     },
   })
 
@@ -313,9 +290,7 @@ const defaultPostDeviceWearerDetailsOptions = {
   },
 }
 
-const putDeviceWearerDetails = (
-  options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions,
-): SuperAgentRequest =>
+const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions) =>
   stubFor({
     request: {
       method: 'PUT',
@@ -334,13 +309,30 @@ const putDeviceWearerDetails = (
     },
   })
 
+const getStubbedRequest = (url: string) =>
+  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(res => {
+    if (res?.body.requests && Array.isArray(res?.body.requests)) {
+      return res.body.requests.map(req => {
+        try {
+          return JSON.parse(req.body)
+        } catch {
+          return {}
+        }
+      })
+    }
+    return []
+  })
+
 export default {
-  stubCemoGetOrder: getOrder,
   stubCemoCreateOrder: createOrder,
-  stubCemoPutDeviceWearer: putDeviceWearerDetails,
-  stubCemoPing: ping,
-  stubCemoListOrders: listOrders,
+  stubCemoGetOrder: getOrder,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubCemoListOrders: listOrders,
+  stubCemoPing: ping,
   stubCemoPutContactDetails: updateContactDetails,
+  stubCemoPutDeviceWearer: putDeviceWearerDetails,
+  stubCemoSubmitOrder: submitOrder,
+  stubCemoUpdateContactDetails: updateContactDetails,
   stubUploadAttachment: uploadAttachment,
+  getStubbedRequest,
 }

@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import OrderService from '../services/orderService'
+import { getMockOrder } from '../../test/mocks/mockOrder'
 import RestClient from '../data/restClient'
-import populateCurrentOrder from './populateCurrentOrder'
+import { OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
-import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
+import OrderService from '../services/orderService'
+import populateCurrentOrder from './populateCurrentOrder'
 
 jest.mock('../data/restClient')
 jest.mock('../services/orderService')
@@ -42,32 +43,6 @@ const createMockResponse = (): Response => {
     render: jest.fn(),
     set: jest.fn(),
     send: jest.fn(),
-  }
-}
-
-const createMockOrder = (status: OrderStatus): Order => {
-  return {
-    id: uuidv4(),
-    status,
-    deviceWearer: {
-      nomisId: null,
-      pncId: null,
-      deliusId: null,
-      prisonNumber: null,
-      firstName: null,
-      lastName: null,
-      alias: null,
-      dateOfBirth: null,
-      adultAtTimeOfInstallation: false,
-      sex: null,
-      gender: null,
-      disabilities: [],
-    },
-    deviceWearerAddresses: [],
-    deviceWearerContactDetails: {
-      contactNumber: '',
-    },
-    additionalDocuments: [],
   }
 }
 
@@ -115,7 +90,7 @@ describe('populateCurrentOrder', () => {
     const req = createMockRequest()
     const res = createMockResponse()
     const next = jest.fn()
-    const mockOrder = createMockOrder(OrderStatusEnum.Enum.SUBMITTED)
+    const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
 
     // When
@@ -133,7 +108,7 @@ describe('populateCurrentOrder', () => {
     const req = createMockRequest()
     const res = createMockResponse()
     const next = jest.fn()
-    const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+    const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.IN_PROGRESS })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
 
     // When

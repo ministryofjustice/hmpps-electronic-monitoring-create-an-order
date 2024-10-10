@@ -1,14 +1,15 @@
 import type { NextFunction, Request, Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
 import { Readable } from 'stream'
+import { v4 as uuidv4 } from 'uuid'
+import { getMockOrder } from '../../test/mocks/mockOrder'
+import HmppsAuditClient from '../data/hmppsAuditClient'
+import RestClient from '../data/restClient'
+import AttachmentType from '../models/AttachmentType'
+import { OrderStatusEnum } from '../models/Order'
+import AttachmentService from '../services/attachmentService'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
-import AttachmentService from '../services/attachmentService'
-import HmppsAuditClient from '../data/hmppsAuditClient'
-import AttachmentType from '../models/AttachmentType'
 import AttachmentController from './attachmentController'
-import { OrderStatusEnum } from '../models/Order'
-import RestClient from '../data/restClient'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -51,29 +52,7 @@ describe('AttachmentController', () => {
       params: {
         orderId: mockId,
       },
-      order: {
-        id: mockId,
-        status: OrderStatusEnum.Enum.IN_PROGRESS,
-        deviceWearer: {
-          nomisId: null,
-          pncId: null,
-          deliusId: null,
-          prisonNumber: null,
-          firstName: null,
-          lastName: null,
-          alias: null,
-          dateOfBirth: null,
-          adultAtTimeOfInstallation: false,
-          sex: null,
-          gender: null,
-          disabilities: [],
-        },
-        deviceWearerAddresses: [],
-        deviceWearerContactDetails: {
-          contactNumber: '',
-        },
-        additionalDocuments: [],
-      },
+      order: getMockOrder({ id: mockId }),
       user: {
         username: 'fakeUserName',
         token: 'fakeUserToken',

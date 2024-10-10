@@ -1,10 +1,10 @@
-import AuditService from '../../services/auditService'
-import ContactDetailsController from './contactDetailsController'
-import ContactDetailsService from '../../services/contactDetailsService'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
-import { OrderStatusEnum } from '../../models/Order'
 import RestClient from '../../data/restClient'
+import { OrderStatusEnum } from '../../models/Order'
+import AuditService from '../../services/auditService'
+import ContactDetailsService from '../../services/contactDetailsService'
 import { createMockOrder, createMockRequest, createMockResponse } from '../testutils/utils'
+import ContactDetailsController from './contactDetailsController'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
