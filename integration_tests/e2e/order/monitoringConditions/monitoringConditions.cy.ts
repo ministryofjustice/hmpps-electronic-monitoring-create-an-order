@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import ErrorPage from '../../../pages/error'
+import CurfewDayOfReleasePage from '../../../pages/order/curfewDayOfRelease'
 import MonitoringConditionsPage from '../../../pages/order/monitoringConditions'
 import Page from '../../../pages/page'
 
@@ -17,7 +18,7 @@ const mockSubmittedMonitoringRequirements = {
       '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
   },
 }
-const mockEmptyMonitoringRequirements = {
+const mockEmptyMonitoringConditions = {
   monitoringConditions: {
     orderType: null,
     acquisitiveCrime: null,
@@ -87,7 +88,7 @@ context('Monitoring conditions main section', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: mockEmptyMonitoringRequirements,
+        order: mockEmptyMonitoringConditions,
       })
     })
 
@@ -122,7 +123,7 @@ context('Monitoring conditions main section', () => {
         httpStatus: 200,
         id: mockOrderId,
         subPath: '/monitoring-conditions',
-        response: mockEmptyMonitoringRequirements,
+        response: mockEmptyMonitoringConditions.monitoringConditions,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
@@ -130,6 +131,23 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="checkbox"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       page.saveAndContinueButton().click()
+      const nextPage = Page.verifyOnPage(CurfewDayOfReleasePage)
+      nextPage.subHeader().should('contain.text', 'Curfew for day of release')
+      cy.task('getStubbedRequest', `/order/${mockOrderId}/monitoring-conditions`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+        expect(requests[0]).to.deep.equal({
+          acquisitiveCrime: true,
+          dapol: true,
+          orderType: 'immigration',
+          curfew: true,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: true,
+          alcohol: true,
+          devicesRequired:
+            '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+        })
+      })
     })
   })
 

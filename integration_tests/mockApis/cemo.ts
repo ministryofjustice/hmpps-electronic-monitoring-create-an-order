@@ -1,7 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import { Order } from '../../server/models/Order'
-import { stubFor } from './wiremock'
+import { getMatchingRequests, stubFor } from './wiremock'
 
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 
@@ -286,7 +286,7 @@ type SubmitOrderStubOptions = {
   response: Record<string, unknown>
 }
 
-const submitOrder = (options: SubmitOrderStubOptions) =>
+const submitOrder = (options: SubmitOrderStubOptions): Promise<string> =>
   stubFor({
     request: {
       method: 'POST',
@@ -382,7 +382,7 @@ const defaultPostDeviceWearerDetailsOptions = {
 
 const putDeviceWearerDetails = (
   options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions,
-): SuperAgentRequest =>
+): Promise<string> =>
   stubFor({
     request: {
       method: 'PUT',
@@ -401,6 +401,20 @@ const putDeviceWearerDetails = (
     },
   })
 
+const getStubbedRequest = (url: string) =>
+  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(res => {
+    if (res?.body.requests && Array.isArray(res?.body.requests)) {
+      return res.body.requests.map(req => {
+        try {
+          return JSON.parse(req.body)
+        } catch {
+          return {}
+        }
+      })
+    }
+    return []
+  })
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoGetOrder: getOrder,
@@ -412,4 +426,5 @@ export default {
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
   stubUploadAttachment: uploadAttachment,
+  getStubbedRequest,
 }
