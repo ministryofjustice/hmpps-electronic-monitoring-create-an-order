@@ -18,7 +18,7 @@ const OrderModel = z.object({
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   additionalDocuments: z.array(AttachmentModel),
   monitoringConditions: MonitoringConditionsModel,
-  trailMonitoring: TrailMonitoringModel,
+  monitoringConditionsTrail: TrailMonitoringModel.optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>
