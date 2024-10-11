@@ -15,8 +15,8 @@ export default class MonitoringConditionsService {
     input: UpdateMonitoringConditionsInput,
   ): Promise<MonitoringConditions | ValidationResult> {
     try {
-      const result = await this.apiClient.post({
-        path: `/api/order/${input.orderId}/monitoring-conditions`,
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/monitoring-conditions`,
         data: input.data,
         token: input.accessToken,
       })
