@@ -26,6 +26,7 @@ export const getMockOrder = (options?: MockOrderOptions): Order => ({
   deviceWearerContactDetails: {
     contactNumber: '',
   },
+  enforcementZoneConditions: [],
   deviceWearerAddresses: [],
   additionalDocuments: [],
   monitoringConditions: {
