@@ -290,7 +290,7 @@ const defaultPostDeviceWearerDetailsOptions = {
     adultAtTimeOfInstallation: null,
     sex: null,
     gender: null,
-    disabilities: null,
+    disabilities: [],
   },
 }
 
@@ -316,9 +316,9 @@ const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = de
 const getStubbedRequest = (url: string) =>
   getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(res => {
     if (res?.body.requests && Array.isArray(res?.body.requests)) {
-      return res.body.requests.map(req => {
+      return res.body.requests.map((req: Record<string, unknown>) => {
         try {
-          return JSON.parse(req.body)
+          return JSON.parse(req.body as string)
         } catch {
           return {}
         }
