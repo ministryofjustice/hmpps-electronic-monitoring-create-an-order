@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
+import { mockApiOrder } from '../../integration_tests/mockApis/cemo'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import RestClient from '../data/restClient'
-import { OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import OrderService from './orderService'
 
@@ -9,40 +9,7 @@ jest.mock('../data/restClient')
 
 const mockId = uuidv4()
 
-const mockApiResponse = {
-  id: mockId,
-  status: OrderStatusEnum.Enum.IN_PROGRESS,
-  deviceWearer: {
-    nomisId: null,
-    pncId: null,
-    deliusId: null,
-    prisonNumber: null,
-    firstName: null,
-    lastName: null,
-    alias: null,
-    dateOfBirth: null,
-    adultAtTimeOfInstallation: false,
-    sex: null,
-    gender: null,
-    disabilities: null,
-  },
-  deviceWearerAddresses: [],
-  deviceWearerContactDetails: {
-    contactNumber: null,
-  },
-  additionalDocuments: [],
-  monitoringConditions: {
-    orderType: null,
-    acquisitiveCrime: null,
-    dapol: null,
-    curfew: null,
-    exclusionZone: null,
-    trail: null,
-    mandatoryAttendance: null,
-    alcohol: null,
-    devicesRequired: null,
-  },
-}
+const mockApiResponse = { ...mockApiOrder(), id: mockId }
 
 const mockNewOrder = getMockOrder({ id: mockId })
 

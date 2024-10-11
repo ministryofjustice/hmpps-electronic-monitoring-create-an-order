@@ -18,7 +18,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   deviceWearer: {
@@ -50,6 +50,10 @@ const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     mandatoryAttendance: null,
     alcohol: null,
     devicesRequired: null,
+  },
+  trailMonitoring: {
+    startDate: null,
+    endDate: null,
   },
 })
 
@@ -263,11 +267,15 @@ const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpda
     },
   })
 
+type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
+  disabilities?: string | null
+}
+
 type PostDeviceWearerDetailsStubOptions = {
   httpStatus: number
   id: string
   status: string
-  deviceWearer?: DeviceWearer
+  deviceWearer?: ApiDeviceWearer
 }
 
 const defaultPostDeviceWearerDetailsOptions = {
@@ -312,9 +320,9 @@ const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = de
 const getStubbedRequest = (url: string) =>
   getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(res => {
     if (res?.body.requests && Array.isArray(res?.body.requests)) {
-      return res.body.requests.map(req => {
+      return res.body.requests.map((req: Record<string, unknown>) => {
         try {
-          return JSON.parse(req.body)
+          return JSON.parse(req.body as string)
         } catch {
           return {}
         }

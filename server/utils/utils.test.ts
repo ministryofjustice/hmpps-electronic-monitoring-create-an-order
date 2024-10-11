@@ -37,6 +37,7 @@ describe('serialiseDate', () => {
     ['Valid past date', ['2000', '02', '01'], '2000-02-01T00:00:00.000Z'],
     ['Valid future date', ['2050', '02', '01'], '2050-02-01T00:00:00.000Z'],
     ['Valid short year format', ['22', '02', '01'], '1922-02-01T00:00:00.000Z'],
+    ['Valid BST date', ['2024', '06', '01'], '2024-06-01T00:00:00.000Z'],
   ])('%s serialiseDate(%s, %s)', (_: string, [year, month, day]: Array<string>, expected: string | null) => {
     expect(serialiseDate(year, month, day)).toEqual(expected)
   })
@@ -45,8 +46,9 @@ describe('serialiseDate', () => {
 describe('deserialiseDate', () => {
   it.each([
     ['Empty date', '', ['', '', '']],
+    ['Undefined', undefined, ['', '', '']],
     ['Valid date', '2000-02-01T00:00:00.000Z', ['2000', '2', '1']],
-  ])('%s deserialiseDate(%s, %s)', (_: string, input: string, expected: Array<string>) => {
+  ])('%s deserialiseDate(%s, %s)', (_: string, input: string | undefined, expected: Array<string>) => {
     expect(deserialiseDate(input)).toEqual(expected)
   })
 })

@@ -18,7 +18,7 @@ export const getMockOrder = (options?: MockOrderOptions): Order => ({
     lastName: null,
     alias: null,
     dateOfBirth: null,
-    adultAtTimeOfInstallation: false,
+    adultAtTimeOfInstallation: null,
     sex: null,
     gender: null,
     disabilities: [],
@@ -38,6 +38,10 @@ export const getMockOrder = (options?: MockOrderOptions): Order => ({
     mandatoryAttendance: null,
     alcohol: null,
     devicesRequired: null,
+  },
+  trailMonitoring: {
+    startDate: null,
+    endDate: null,
   },
 })
 

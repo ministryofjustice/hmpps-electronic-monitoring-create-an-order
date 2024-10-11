@@ -136,6 +136,8 @@
       disabled: not isOrderEditable
     }) }}
 
+    {% set disabled = {} if isOrderEditable else { disabled:true } %}
+
     {{ govukDateInput({
       id: "dateOfBirth",
       namePrefix: "dateOfBirth",
@@ -153,21 +155,23 @@
         {
           name: "day",
           classes: "govuk-input--width-2",
-          value: dateOfBirth_day.value
+          value: dateOfBirth_day.value,
+          attributes: disabled
         },
         {
           name: "month",
           classes: "govuk-input--width-2",
-          value: dateOfBirth_month.value
+          value: dateOfBirth_month.value,
+          attributes: disabled
         },
         {
           name: "year",
           classes: "govuk-input--width-4",
-          value: dateOfBirth_year.value
+          value: dateOfBirth_year.value,
+          attributes: disabled
         }
       ],
-      errorMessage: dateOfBirth.error,
-      disabled: not isOrderEditable
+      errorMessage: dateOfBirth.error
     }) }}
 
     {{ govukRadios({
