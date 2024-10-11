@@ -38,7 +38,7 @@
     }) }}
   </div>
 
-  <form method="post">
+  <form action="{{ formActionUri }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     {% call govukFieldset({
@@ -50,7 +50,7 @@
     }) %}
 
     {% set otherRelationshipDetailsHtml %}
-      {{ 
+      {{
         govukInput({
         label: {
           text: "Enter details of relationship to device wearer"
@@ -61,7 +61,7 @@
         errorMessage: otherRelationshipDetails.error,
         disabled: not isOrderEditable,
         value: otherRelationshipDetails.value
-        }) 
+        })
       }}
     {% endset %}
 
@@ -98,7 +98,7 @@
             value: "guardian",
             text: "Guardian",
             disabled: not isOrderEditable
-          }, 
+          },
           {
             value: "other",
             text: "Other",

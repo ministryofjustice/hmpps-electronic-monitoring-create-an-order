@@ -2,8 +2,8 @@ import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
-
 import { DeviceWearer } from '../../server/models/DeviceWearer'
+import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
 
 const ping = (httpStatus = 200) =>
   stubFor({
@@ -272,14 +272,14 @@ type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
   disabilities?: string | null
 }
 
-type PostDeviceWearerDetailsStubOptions = {
+type PutDeviceWearerStubOptions = {
   httpStatus: number
   id: string
   status: string
   deviceWearer?: ApiDeviceWearer
 }
 
-const defaultPostDeviceWearerDetailsOptions = {
+const defaultPutDeviceWearerOptions = {
   httpStatus: 200,
   id: uuidv4(),
   status: 'IN_PROGRESS',
@@ -299,7 +299,7 @@ const defaultPostDeviceWearerDetailsOptions = {
   },
 }
 
-const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions) =>
+const putDeviceWearer = (options: PutDeviceWearerStubOptions = defaultPutDeviceWearerOptions): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
@@ -311,7 +311,7 @@ const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = de
       jsonBody:
         options.httpStatus === 200
           ? {
-              ...defaultPostDeviceWearerDetailsOptions.deviceWearer,
+              ...defaultPutDeviceWearerOptions.deviceWearer,
               ...options.deviceWearer,
             }
           : null,
@@ -332,16 +332,61 @@ const getStubbedRequest = (url: string) =>
     return []
   })
 
+type PutResponsibleAdultStubOptions = {
+  httpStatus: number
+  id: string
+  status: string
+  responsibleAdult?: ResponsibleAdult
+}
+
+const defaultPutResponsibleAdultOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+  responsibleAdult: {
+    relationship: null,
+    otherRelationshipDetails: null,
+    fullName: null,
+    contactNumber: null,
+  },
+}
+
+const putResponsibleAdult = (
+  options: PutResponsibleAdultStubOptions = defaultPutResponsibleAdultOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}/device-wearer-responsible-adult`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...defaultPutResponsibleAdultOptions.responsibleAdult,
+              ...options.responsibleAdult,
+            }
+          : null,
+    },
+  })
+
+const verifyPutResponsibleAdultRequest = (responsibleAdult: ResponsibleAdult): SuperAgentRequest =>
+  getMatchingRequests(responsibleAdult)
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoGetOrder: getOrder,
-  stubCemoGetOrderWithAttachments: getOrderWithAttachments,
-  stubCemoListOrders: listOrders,
   stubCemoPing: ping,
+  stubCemoListOrders: listOrders,
+  stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
-  stubCemoPutDeviceWearer: putDeviceWearerDetails,
+  stubCemoPutDeviceWearer: putDeviceWearer,
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
+  stubCemoPutResponsibleAdult: putResponsibleAdult,
+  verifyCemoPutResponsibleAdultRequest: verifyPutResponsibleAdultRequest,
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
 }
