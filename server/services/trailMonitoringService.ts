@@ -14,8 +14,8 @@ export default class TrailMonitoringService {
 
   async update(input: TrailMonitoringInput): Promise<TrailMonitoring | ValidationResult> {
     try {
-      const result = await this.apiClient.post({
-        path: `/api/order/${input.orderId}/trail-monitoring`,
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/monitoring-conditions-trail`,
         data: input.data,
         token: input.accessToken,
       })
