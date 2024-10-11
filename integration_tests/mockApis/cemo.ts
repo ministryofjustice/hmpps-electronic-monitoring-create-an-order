@@ -52,10 +52,6 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     alcohol: null,
     devicesRequired: null,
   },
-  trailMonitoring: {
-    startDate: null,
-    endDate: null,
-  },
 })
 
 const listOrders = (httpStatus = 200): SuperAgentRequest =>
@@ -204,8 +200,8 @@ type SubmitOrderStubOptions = {
 const submitOrder = (options: SubmitOrderStubOptions) =>
   stubFor({
     request: {
-      method: 'POST',
-      urlPattern: `/cemo/api/order/${options.id}${options.subPath ?? '/'}`,
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}${options.subPath ?? '/'}`,
     },
     response: {
       status: options.httpStatus,

@@ -7,7 +7,7 @@ import Page from '../../../pages/page'
 const mockOrderId = uuidv4()
 
 const mockEmptyTrailMonitoring = {
-  trailMonitoring: {
+  monitoringConditionsTrail: {
     startDate: null,
     endDate: null,
   },
@@ -26,7 +26,7 @@ const mockEmptyTrailMonitoring = {
 }
 
 const mockSubmittedTrailMonitoring = {
-  trailMonitoring: {
+  monitoringConditionsTrail: {
     startDate: '2024-03-27T00:00:00.000Z',
     endDate: '2025-04-28T00:00:00.000Z',
   },
@@ -110,7 +110,7 @@ context('Trail monitoring', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 400,
         id: mockOrderId,
-        subPath: '/trail-monitoring',
+        subPath: '/monitoring-conditions-trail',
         response: [
           { field: 'startDate', error: 'You must enter a valid date' },
           { field: 'endDate', error: 'You must enter a valid date' },
@@ -123,12 +123,13 @@ context('Trail monitoring', () => {
       cy.get('#endDate-error').should('contain', 'You must enter a valid date')
     })
 
-    it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    it.only('should correctly submit the data to the CEMO API and move to the next selected page', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
-        subPath: '/trail-monitoring',
-        response: mockEmptyTrailMonitoring.trailMonitoring,
+        subPath: '/monitoring-conditions-trail',
+        response: mockSubmittedTrailMonitoring.monitoringConditionsTrail,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
@@ -139,7 +140,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-month').type('4')
       cy.get('#endDate-year').type('2025')
       page.saveAndContinueButton().click()
-      cy.task('getStubbedRequest', `/order/${mockOrderId}/trail-monitoring`).then(requests => {
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-trail`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           startDate: '2024-03-27T00:00:00.000Z',

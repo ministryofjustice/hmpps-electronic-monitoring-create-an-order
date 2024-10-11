@@ -133,7 +133,7 @@ context('Monitoring conditions main section', () => {
       page.saveAndContinueButton().click()
       const nextPage = Page.verifyOnPage(CurfewDayOfReleasePage)
       nextPage.subHeader().should('contain.text', 'Curfew for day of release')
-      cy.task('getStubbedRequest', `/order/${mockOrderId}/monitoring-conditions`).then(requests => {
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           acquisitiveCrime: true,
@@ -164,7 +164,7 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="checkbox"][value="aml"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       page.saveAndContinueButton().click()
-      cy.task('getStubbedRequest', `/order/${mockOrderId}/monitoring-conditions`).then(requests => {
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           acquisitiveCrime: true,
