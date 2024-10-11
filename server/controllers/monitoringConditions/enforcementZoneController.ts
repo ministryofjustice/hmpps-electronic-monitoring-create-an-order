@@ -52,13 +52,19 @@ export default class EnforcementZoneController {
       if (uploadResult.userMessage != null) errorViewModel.file = { text: uploadResult.userMessage }
     }
     if (Object.keys(errorViewModel).length !== 0)
-      res.render(`pages/order/monitoring-condition/zone/edit`, { zone: formData, error: errorViewModel })
+      res.render(`pages/order/monitoring-conditions/enforcement-zone`, { zone: formData, error: errorViewModel })
     else if (formData.anotherZone === 'true')
       res.redirect(
         paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', (zoneIdInt + 1).toString()),
       )
-    else if (action === 'continue') res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
-    else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    else if (action === 'continue') {
+      const order = req.order!
+      if (order.enforcementZoneConditions.length - 1 > zoneIdInt)
+        res.redirect(
+          paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', (zoneIdInt + 1).toString()),
+        )
+      else res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
+    } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -69,7 +75,7 @@ export default class EnforcementZoneController {
     const [startYear, startMonth, startDay] = deserialiseDate(enforcementZone?.startDate || '')
     const [endYear, endMonth, endDay] = deserialiseDate(enforcementZone?.endDate || '')
 
-    res.render(`pages/order/monitoring-condition/zone/edit`, {
+    res.render(`pages/order/monitoring-conditions/enforcement-zone`, {
       zone: {
         startYear,
         startMonth,
