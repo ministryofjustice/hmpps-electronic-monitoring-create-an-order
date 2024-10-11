@@ -191,6 +191,20 @@ describe('EnforcementZoneController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/attendance`)
     })
 
+    it('Should logs audit', async () => {
+      req.params.zoneId = '0'
+      req.body = createMockBody('false', 'continue')
+      req.order?.enforcementZoneConditions.push(createMockEnforcementZone())
+      mockEnforcementZoneService.updateZone = jest.fn().mockReturnValueOnce(null)
+      await controller.update(req, res, next)
+
+      expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
+        who: 'fakeUserName',
+        correlationId: req.order?.id,
+        what: 'Updated enforcement zone with zone id : 0',
+      })
+    })
+
     it('Should redirect to order summary page', async () => {
       req.params.zoneId = '0'
       req.body = createMockBody('false', 'back')

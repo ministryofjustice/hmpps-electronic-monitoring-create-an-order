@@ -42,7 +42,7 @@ export default class EnforcementZoneController {
     if (result !== null) errorViewModel = getErrorsViewModel(result)
 
     // Upload file if exist
-    if (file !== null) {
+    if (file !== null && file !== undefined) {
       const uploadResult = await this.zoneService.uploadZoneAttachment({
         accessToken: res.locals.user.token,
         orderId,
@@ -53,18 +53,28 @@ export default class EnforcementZoneController {
     }
     if (Object.keys(errorViewModel).length !== 0)
       res.render(`pages/order/monitoring-conditions/enforcement-zone`, { zone: formData, error: errorViewModel })
-    else if (formData.anotherZone === 'true')
-      res.redirect(
-        paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', (zoneIdInt + 1).toString()),
-      )
-    else if (action === 'continue') {
-      const order = req.order!
-      if (order.enforcementZoneConditions.length - 1 > zoneIdInt)
+    else {
+      this.auditService.logAuditEvent({
+        who: res.locals.user.username,
+        correlationId: orderId,
+        what: `Updated enforcement zone with zone id : ${zoneId}`,
+      })
+      if (formData.anotherZone === 'true')
         res.redirect(
           paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', (zoneIdInt + 1).toString()),
         )
-      else res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
-    } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      else if (action === 'continue') {
+        const order = req.order!
+        if (order.enforcementZoneConditions.length - 1 > zoneIdInt)
+          res.redirect(
+            paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(
+              ':zoneId',
+              (zoneIdInt + 1).toString(),
+            ),
+          )
+        else res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
+      } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    }
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
