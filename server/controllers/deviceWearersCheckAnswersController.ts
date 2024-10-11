@@ -1,9 +1,9 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../constants/paths'
-import { AuditService } from '../services'
 import { DeviceWearer } from '../models/DeviceWearer'
-import { deserialiseDate } from '../utils/utils'
 import { MultipleChoiceField, TextField } from '../models/view-models/utils'
+import { AuditService } from '../services'
+import { deserialiseDate } from '../utils/utils'
 
 type DeviceWearerCheckAnswersViewModel = {
   aboutTheDeviceWearerUri: string
@@ -53,7 +53,7 @@ export default class DeviceWearerCheckAnswersController {
       adultAtTimeOfInstallation: { value: String(deviceWearer.adultAtTimeOfInstallation) },
       sex: { value: deviceWearer.sex || '' },
       gender: { value: deviceWearer.gender || '' },
-      disabilities: { values: deviceWearer.disabilities },
+      disabilities: { values: deviceWearer.disabilities ?? [] },
     }
   }
 

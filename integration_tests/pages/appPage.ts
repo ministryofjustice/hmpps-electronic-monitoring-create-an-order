@@ -1,5 +1,5 @@
-import Page from './page'
 import PageHeaderComponent from './components/PageHeaderComponent'
+import Page, { PageElement } from './page'
 
 export default class AppPage extends Page {
   header: PageHeaderComponent
@@ -8,4 +8,6 @@ export default class AppPage extends Page {
     super(title, subtitle)
     this.header = new PageHeaderComponent()
   }
+
+  submittedBanner = (): PageElement => cy.get('.govuk-notification-banner')
 }
