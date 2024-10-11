@@ -18,7 +18,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   deviceWearer: {
@@ -267,11 +267,15 @@ const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpda
     },
   })
 
+type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
+  disabilities?: string | null
+}
+
 type PostDeviceWearerDetailsStubOptions = {
   httpStatus: number
   id: string
   status: string
-  deviceWearer?: DeviceWearer
+  deviceWearer?: ApiDeviceWearer
 }
 
 const defaultPostDeviceWearerDetailsOptions = {
@@ -290,7 +294,7 @@ const defaultPostDeviceWearerDetailsOptions = {
     adultAtTimeOfInstallation: null,
     sex: null,
     gender: null,
-    disabilities: [],
+    disabilities: null,
   },
 }
 

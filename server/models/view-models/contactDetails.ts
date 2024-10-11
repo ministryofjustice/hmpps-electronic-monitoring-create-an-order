@@ -1,8 +1,8 @@
+import { getError } from '../../utils/utils'
 import { ContactDetails } from '../ContactDetails'
-import { ViewModel } from './utils'
 import { ContactDetailsFormData } from '../form-data/contactDetails'
 import { ValidationResult } from '../Validation'
-import { getError } from '../../utils/utils'
+import { ViewModel } from './utils'
 
 type ContactDetailsViewModel = ViewModel<ContactDetails>
 
@@ -18,7 +18,7 @@ const constructFromFormData = (formData: ContactDetailsFormData, validationError
 const constructFromEntity = (contactDetails: ContactDetails) => {
   return {
     contactNumber: {
-      value: contactDetails.contactNumber,
+      value: contactDetails.contactNumber ?? '',
     },
   }
 }

@@ -1,11 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
 import z from 'zod'
-import { AuditService, DeviceWearerService } from '../services'
 import paths from '../constants/paths'
-import { isValidationResult, ValidationResult } from '../models/Validation'
 import { DeviceWearer } from '../models/DeviceWearer'
-import { deserialiseDate, getError } from '../utils/utils'
+import { isValidationResult, ValidationResult } from '../models/Validation'
 import { MultipleChoiceField, TextField } from '../models/view-models/utils'
+import { AuditService, DeviceWearerService } from '../services'
+import { deserialiseDate, getError } from '../utils/utils'
 
 // Basic validation of user submitted form data
 const DeviceWearerFormDataModel = z.object({
@@ -107,7 +107,7 @@ export default class DeviceWearerController {
       adultAtTimeOfInstallation: { value: String(deviceWearer.adultAtTimeOfInstallation) },
       sex: { value: deviceWearer.sex || '' },
       gender: { value: deviceWearer.gender || '' },
-      disabilities: { values: deviceWearer.disabilities },
+      disabilities: { values: deviceWearer.disabilities ?? [] },
     }
   }
 

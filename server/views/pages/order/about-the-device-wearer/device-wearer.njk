@@ -136,6 +136,8 @@
       disabled: not isOrderEditable
     }) }}
 
+    {% set disabled = {} if isOrderEditable else { disabled:true } %}
+
     {{ govukDateInput({
       id: "dateOfBirth",
       namePrefix: "dateOfBirth",
@@ -154,19 +156,19 @@
           name: "day",
           classes: "govuk-input--width-2",
           value: dateOfBirth_day.value,
-          attributes: {disabled: not isOrderEditable }
+          attributes: disabled
         },
         {
           name: "month",
           classes: "govuk-input--width-2",
           value: dateOfBirth_month.value,
-          attributes: {disabled: not isOrderEditable }
+          attributes: disabled
         },
         {
           name: "year",
           classes: "govuk-input--width-4",
           value: dateOfBirth_year.value,
-          attributes: {disabled: not isOrderEditable }
+          attributes: disabled
         }
       ],
       errorMessage: dateOfBirth.error
