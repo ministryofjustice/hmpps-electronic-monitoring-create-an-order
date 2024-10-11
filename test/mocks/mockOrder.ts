@@ -40,10 +40,6 @@ export const getMockOrder = (options?: MockOrderOptions): Order => ({
     alcohol: null,
     devicesRequired: null,
   },
-  trailMonitoring: {
-    startDate: null,
-    endDate: null,
-  },
 })
 
 export const getMockSubmittedOrder = (options?: MockOrderOptions) => ({

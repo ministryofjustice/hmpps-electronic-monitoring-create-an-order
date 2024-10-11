@@ -41,7 +41,7 @@ export default class TrailMonitoringController {
   ) {}
 
   private constructViewModel(
-    trailMonitoring: TrailMonitoring,
+    trailMonitoring: TrailMonitoring | undefined,
     validationErrors: ValidationResult,
     formData: [TrailMonitoringFormData],
     formAction: string,
@@ -54,11 +54,11 @@ export default class TrailMonitoringController {
   }
 
   private createViewModelFromTrailMonitoring(
-    trailMonitoring: TrailMonitoring,
+    trailMonitoring: TrailMonitoring | undefined,
     orderId: string,
   ): TrailMonitoringViewModel {
-    const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(trailMonitoring.startDate)
-    const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(trailMonitoring.endDate)
+    const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(trailMonitoring?.startDate)
+    const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(trailMonitoring?.endDate)
 
     return {
       startDateDay: { value: startDateDay },
@@ -96,10 +96,10 @@ export default class TrailMonitoringController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { trailMonitoring, monitoringConditions } = req.order!
+    const { monitoringConditionsTrail, monitoringConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = this.constructViewModel(trailMonitoring, errors as never, formData as never, orderId)
+    const viewModel = this.constructViewModel(monitoringConditionsTrail, errors as never, formData as never, orderId)
 
     if (!monitoringConditions.trail) {
       res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
@@ -125,7 +125,7 @@ export default class TrailMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'trail').replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
