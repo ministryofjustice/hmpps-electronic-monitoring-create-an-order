@@ -1,10 +1,6 @@
 import { PageElement } from '../../page'
 
 export default class ResponsibleOfficerFormComponent {
-  constructor() {
-    this.checkHasForm()
-  }
-
   private get form(): PageElement {
     return cy.get('form') // [action*="about-the-device-wearer/responsible-officer"]
   }
