@@ -4,8 +4,9 @@ import Page, { PageElement } from './page'
 export default class AppPage extends Page {
   header: PageHeaderComponent
 
-  constructor(title: string, subtitle?: string) {
-    super(title, subtitle)
+  constructor(title: string, uri?: string, subtitle?: string) {
+    super(title, uri, subtitle)
+
     this.header = new PageHeaderComponent()
   }
 

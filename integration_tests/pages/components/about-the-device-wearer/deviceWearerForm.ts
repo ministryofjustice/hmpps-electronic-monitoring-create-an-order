@@ -21,10 +21,6 @@ export type AboutDeviceWearerFormData = {
 }
 
 export default class AboutDeviceWearerFormComponent {
-  constructor() {
-    this.checkHasForm()
-  }
-
   private get form(): PageElement {
     return cy.get('form[action*="about-the-device-wearer"]')
   }
