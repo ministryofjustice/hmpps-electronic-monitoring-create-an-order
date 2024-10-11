@@ -3,8 +3,8 @@ import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
 import IndexPage from '../../pages/index'
 import OrderTasksPage from '../../pages/order/summary'
-import AboutDeviceWearerPage from '../../pages/order/deviceWearer/about'
-import ResponsibleAdultPage from '../../pages/order/deviceWearer/responsibleAdult'
+import AboutDeviceWearerPage from '../../pages/order/about-the-device-wearer/device-wearer'
+import ResponsibleAdultPage from '../../pages/order/about-the-device-wearer/responsible-adult-details'
 
 const mockOrderId = uuidv4()
 
