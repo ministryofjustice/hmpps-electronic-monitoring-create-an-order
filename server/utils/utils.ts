@@ -1,5 +1,5 @@
+import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 import { ValidationResult } from '../models/Validation'
-import { ErrorMessage } from '../models/view-models/utils'
 
 const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
 
@@ -58,4 +58,12 @@ export const getError = (validationErrors: ValidationResult, field: string): Err
   }
 
   return undefined
+}
+
+export const getErrorsViewModel = (validationErrors: ValidationResult): ErrorsViewModel => {
+  const viewModel: ErrorsViewModel = {}
+  validationErrors.forEach(error => {
+    viewModel[error.field] = { text: error.error }
+  })
+  return viewModel
 }
