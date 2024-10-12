@@ -1,4 +1,4 @@
-import assert from 'node:assert'
+import assert from 'assert'
 
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
@@ -36,6 +36,9 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     sex: null,
     gender: null,
     disabilities: null,
+  },
+  contactDetails: {
+    contactNumber: null,
   },
   enforcementZoneConditions: [],
   deviceWearerAddresses: [],
@@ -403,6 +406,7 @@ export default {
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
   stubCemoPutResponsibleAdult: putResponsibleAdult,
+
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
