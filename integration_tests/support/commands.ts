@@ -5,6 +5,11 @@ Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
   return cy.task('getSignInUrl').then((url: string) => cy.visit(url, options))
 })
 
+// Use a faster typing speed to avoid slowing down the tests
+Cypress.Keyboard.defaults({
+  keystrokeDelay: 1,
+})
+
 // ACCESSIBILITY TESTING
 
 function terminalLog(violations: axe.Result[]) {

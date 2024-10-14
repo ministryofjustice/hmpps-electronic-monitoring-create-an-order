@@ -1,5 +1,5 @@
-import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 import { ValidationResult } from '../models/Validation'
+import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 
 const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
 
@@ -46,6 +46,27 @@ export const deserialiseDate = (dateString?: string | null): [year: string, mont
   const date = new Date(dateString)
 
   return [date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString()]
+}
+
+export const serialiseTime = (hour: string, minute: string): string | null => {
+  const hourValid = /\d{1,2}/.test(hour)
+  const minuteValid = /\d{1,2}/.test(minute)
+
+  if (!hourValid || !minuteValid) {
+    return null
+  }
+  return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:00`
+}
+
+export const deserialiseTime = (timeString?: string | null): [hours: string, minutes: string] => {
+  if (!timeString || isBlank(timeString)) {
+    return ['', '']
+  }
+  const timeMatch = timeString.match(/(\d{2}):(\d{2}):\d{2}/)
+  if (!timeMatch) {
+    return ['', '']
+  }
+  return [timeMatch[1], timeMatch[2]]
 }
 
 export const getError = (validationErrors: ValidationResult, field: string): ErrorMessage | undefined => {
