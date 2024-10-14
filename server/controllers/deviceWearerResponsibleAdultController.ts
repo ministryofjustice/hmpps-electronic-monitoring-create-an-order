@@ -10,7 +10,7 @@ import DeviceWearerResponsibleAdultService from '../services/deviceWearerRespons
 
 const DeviceWearerResponsibleAdultFormDataModel = z.object({
   action: z.string(),
-  relationship: z.string(),
+  relationship: z.string().default(''),
   otherRelationshipDetails: z.string(),
   fullName: z.string(),
   contactNumber: z.string(),

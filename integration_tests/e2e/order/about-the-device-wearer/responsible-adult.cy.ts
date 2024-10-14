@@ -93,102 +93,132 @@ context('About the device wearer - Responsible Adult', () => {
     })
 
     context('Not entering any information', () => {
-      // TODO: FAIL because no validation message is displayed
-      it.skip('should not continue to collect the responsible officer details', () => {
-        cy.task('stubCemoPutResponsibleAdult', {
-          httpStatus: 200,
+      it('should not continue to collect the responsible officer details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
           id: mockOrderId,
-          status: 'IN_PROGRESS',
+          subPath: '/device-wearer-responsible-adult',
+          response: [
+            { field: 'relationship', error: 'Relationship is required' },
+            { field: 'fullName', error: 'Full name is required' },
+            { field: 'contactNumber', error: 'Phone number is in an incorrect format' },
+          ],
         })
 
-        const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
+        cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
+        const page = Page.verifyOnPage(ResponsibleAdultPage)
+        // const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
 
         page.form.saveAndContinueButton().click()
 
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
-          body: '{}',
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
+          expect(requests).to.have.lengthOf(1)
+          expect(requests[0]).to.deep.equal({
+            fullName: '',
+            contactNumber: '',
+            relationship: '',
+            otherRelationshipDetails: '',
+          })
         })
-
-        Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#relationship-error').should('contain', 'Relationship is required')
+        cy.get('#contact-number-error').should('contain', 'Phone number is in an incorrect format')
+        cy.get('#full-name-error').should('contain', 'Full name is required')
       })
     })
 
     context('Only entering relationship', () => {
-      // TODO: FAIL because no validation message is displayed
-      it.skip('should not continue to collect the responsible officer details', () => {
-        cy.task('stubCemoPutResponsibleAdult', {
-          httpStatus: 200,
+      it('should not continue to collect the responsible officer details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
           id: mockOrderId,
-          status: 'IN_PROGRESS',
-          relationship: 'Other',
+          subPath: '/device-wearer-responsible-adult',
+          response: [
+            { field: 'fullName', error: 'Full name is required' },
+            { field: 'contactNumber', error: 'Phone number is in an incorrect format' },
+          ],
         })
 
-        const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
+        cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
+        const page = Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#relationship-2').click()
 
-        page.form.setRelationship('Other')
         page.form.saveAndContinueButton().click()
 
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
-          body: {
-            relationship: 'other',
-          },
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
+          expect(requests).to.have.lengthOf(1)
+          expect(requests[0]).to.deep.equal({
+            fullName: '',
+            contactNumber: '',
+            relationship: 'guardian',
+            otherRelationshipDetails: '',
+          })
         })
-
-        Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#contact-number-error').should('contain', 'Phone number is in an incorrect format')
+        cy.get('#full-name-error').should('contain', 'Full name is required')
       })
     })
 
     context('Only entering full name', () => {
-      // TODO: FAIL because no validation message is displayed
-      it.skip('should not continue to collect the responsible officer details', () => {
-        cy.task('stubCemoPutResponsibleAdult', {
-          httpStatus: 200,
+      it('should not continue to collect the responsible officer details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
           id: mockOrderId,
-          status: 'IN_PROGRESS',
-          fullName: 'Martha Steward',
+          subPath: '/device-wearer-responsible-adult',
+          response: [
+            { field: 'relationship', error: 'Relationship is required' },
+            { field: 'contactNumber', error: 'Phone number is in an incorrect format' },
+          ],
         })
 
-        const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
+        cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
+        const page = Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#full-name').type('John Smith')
 
-        page.form.setFullName('Martha Steward')
         page.form.saveAndContinueButton().click()
 
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
-          body: {
-            fullName: 'Martha Steward',
-          },
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
+          expect(requests).to.have.lengthOf(1)
+          expect(requests[0]).to.deep.equal({
+            fullName: 'John Smith',
+            contactNumber: '',
+            relationship: '',
+            otherRelationshipDetails: '',
+          })
         })
-
-        Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#relationship-error').should('contain', 'Relationship is required')
+        cy.get('#contact-number-error').should('contain', 'Phone number is in an incorrect format')
       })
     })
 
     context('Only entering contact number', () => {
-      // TODO: FAIL because no validation message is displayed
-      it.skip('should not continue to collect the responsible officer details', () => {
-        cy.task('stubCemoPutResponsibleAdult', {
-          httpStatus: 200,
+      it('should not continue to collect the responsible officer details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
           id: mockOrderId,
-          status: 'IN_PROGRESS',
-          contactNumber: '999999',
+          subPath: '/device-wearer-responsible-adult',
+          response: [
+            { field: 'relationship', error: 'Relationship is required' },
+            { field: 'fullName', error: 'Full name is required' },
+          ],
         })
 
-        const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
+        cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
+        const page = Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#contact-number').type('07900000000')
 
-        page.form.setContactNumber('999999')
         page.form.saveAndContinueButton().click()
 
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
-          body: {
-            contactNumber: '999999',
-          },
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
+          expect(requests).to.have.lengthOf(1)
+          expect(requests[0]).to.deep.equal({
+            fullName: '',
+            contactNumber: '07900000000',
+            relationship: '',
+            otherRelationshipDetails: '',
+          })
         })
-
-        Page.verifyOnPage(ResponsibleAdultPage)
+        cy.get('#relationship-error').should('contain', 'Relationship is required')
+        cy.get('#full-name-error').should('contain', 'Full name is required')
       })
     })
   })
