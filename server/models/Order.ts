@@ -1,9 +1,11 @@
 import z from 'zod'
 import AddressModel from './Address'
 import AttachmentModel from './Attachment'
+import AttendanceMonitoringModel from './AttendanceMonitoring'
 import DeviceWearerContactDetailsModel from './ContactDetails'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
+import EnforcementZoneModel from './EnforcementZone'
 import MonitoringConditionsModel from './MonitoringConditions'
 import TrailMonitoringModel from './TrailMonitoring'
 
@@ -14,11 +16,13 @@ const OrderModel = z.object({
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
   deviceWearerAddresses: z.array(AddressModel),
-  deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.optional().nullable(),
+  deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
+  enforcementZoneConditions: z.array(EnforcementZoneModel),
   additionalDocuments: z.array(AttachmentModel),
   monitoringConditions: MonitoringConditionsModel,
-  trailMonitoring: TrailMonitoringModel,
+  monitoringConditionsTrail: TrailMonitoringModel.nullable(),
+  monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

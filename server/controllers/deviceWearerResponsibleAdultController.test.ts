@@ -1,10 +1,10 @@
 import AuditService from '../services/auditService'
 import DeviceWearerResponsibleAdultService from '../services/deviceWearerResponsibleAdultService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
-import { OrderStatusEnum } from '../models/Order'
 import DeviceWearerResponsibleAdultController from './deviceWearerResponsibleAdultController'
 import RestClient from '../data/restClient'
-import { createMockOrder, createMockRequest, createMockResponse } from './testutils/utils'
+import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
+import { getMockOrder } from '../../test/mocks/mockOrder'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -12,7 +12,17 @@ jest.mock('../services/deviceWearerResponsibleAdultService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
 
-describe('DeviceWearerController', () => {
+const createMockOrder = (name: string) =>
+  getMockOrder({
+    deviceWearerResponsibleAdult: {
+      relationship: 'parent',
+      otherRelationshipDetails: null,
+      fullName: name,
+      contactNumber: '01234567890',
+    },
+  })
+
+describe('DeviceWearerResponsibleAdultController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
@@ -44,7 +54,7 @@ describe('DeviceWearerController', () => {
   describe('view', () => {
     it('should render the form using the saved responsible adult data', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = createMockOrder('Parent Name')
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -66,8 +76,7 @@ describe('DeviceWearerController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
-      mockOrder.deviceWearerResponsibleAdult!.fullName = ''
+      const mockOrder = createMockOrder('')
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()

@@ -1,0 +1,51 @@
+{% macro addressInput(input) %}
+  <div id="{{input.id}}-form" class="govuk-form-group{% if input.errorMessage %} govuk-form-group--error{% endif %}">
+      <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.label }}</legend>
+          {% if input.hint %}<div class="govuk-hint">{{ input.hint }}</div>{% endif %}
+          {% if input.errorMessage %}<div class="govuk-error-message" id="{{input.id}}-error">{{ input.errorMessage.text }}</div>{% endif %}
+          
+          <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{input.id}}-line1">Address line 1</label>
+              <input class="govuk-input govuk-date-input__input govuk-!-width-one-half"
+                      id="{{input.id}}-line1"
+                      name="{{input.name}}Line1"
+                      value="{{input.value.line1}}"
+                      type="text" {% if input.disabled %}disabled {% endif %}/>
+          </div>
+          <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{input.id}}-line1">Address line 2</label>
+              <input class="govuk-input govuk-date-input__input govuk-!-width-one-half"
+                      id="{{input.id}}-line2"
+                      name="{{input.name}}Line2"
+                      value="{{input.value.line2}}"
+                      type="text" {% if input.disabled %}disabled {% endif %}/>
+          </div>
+          <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{input.id}}-line1">Address line 3</label>
+              <input class="govuk-input govuk-date-input__input govuk-!-width-one-half"
+                      id="{{input.id}}-line3"
+                      name="{{input.name}}Line3"
+                      value="{{input.value.line3}}"
+                      type="text" {% if input.disabled %}disabled {% endif %}/>
+          </div>
+          <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{input.id}}-line1">Address line 3</label>
+              <input class="govuk-input govuk-date-input__input govuk-!-width-one-half"
+                      id="{{input.id}}-line4"
+                      name="{{input.name}}Line4"
+                      value="{{input.value.line4}}"
+                      type="text" {% if input.disabled %}disabled {% endif %}/>
+          </div>
+          <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="{{input.id}}-postcode">Postcode</label>
+              <input class="govuk-input govuk-date-input__input govuk-!-width-one-quarter"
+                      id="{{input.id}}-postcode"
+                      name="{{input.name}}Postcode"
+                      value="{{input.value.postcode}}"
+                      type="text" {% if input.disabled %}disabled {% endif %}/>
+          </div>
+          
+      </fieldset>
+  </div>
+{% endmacro %}

@@ -1,0 +1,39 @@
+{% macro timeInput(input) %}
+  <div id="{{input.id}}-form" class="govuk-form-group{% if input.errorMessage %} govuk-form-group--error{% endif %}">
+      <fieldset class="govuk-fieldset">
+          <div class="form-time">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.label }}</legend>
+              {% if input.hint %}<div class="govuk-hint">{{ input.hint }}</div>{% endif %}
+              {% if input.errorMessage %}<div class="govuk-error-message" id="{{input.id}}-error">{{ input.errorMessage.text }}</div>{% endif %}
+              
+              <div style="display: inline-block">
+                <div class="govuk-form-group form-group-hours">
+                    <label class="govuk-label govuk-date-input__label" for="{{input.id}}-hours">Hour</label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                            id="{{input.id}}-hours"
+                            name="{{input.name}}Hours"
+                            value="{{input.value.hours}}"
+                            type="number"
+                            pattern="[0-9]{2}"
+                            min="0"
+                            max="23" {% if input.disabled %}disabled {% endif %} />
+                </div>
+              </div>
+              <div style="display: inline-block">:</div>
+              <div style="display: inline-block">
+                <div class="govuk-form-group form-group-minutes">
+                    <label class="govuk-label govuk-date-input__label" for="{{input.id}}-minutes">Minute</label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                            id="{{input.id}}-minutes"
+                            name="{{input.name}}Minutes"
+                            value="{{input.value.minutes}}"
+                            type="number"
+                            pattern="[0-9]{2}"
+                            min="0"
+                            max="59" {% if input.disabled %}disabled {% endif %} />
+                </div>
+              </div>
+          </div>
+      </fieldset>
+  </div>
+{% endmacro %}

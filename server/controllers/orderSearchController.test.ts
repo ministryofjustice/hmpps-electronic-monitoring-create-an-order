@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order, OrderStatusEnum } from '../models/Order'
+import { OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
@@ -14,8 +14,8 @@ jest.mock('../data/hmppsAuditClient')
 
 const mockDraftOrder = getMockOrder()
 
-const mockSubmittedOrder: Order = {
-  ...getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED }),
+const mockSubmittedOrder = getMockOrder({
+  status: OrderStatusEnum.Enum.SUBMITTED,
   deviceWearer: {
     nomisId: null,
     pncId: null,
@@ -30,7 +30,9 @@ const mockSubmittedOrder: Order = {
     gender: null,
     disabilities: [],
   },
-}
+  enforcementZoneConditions: [],
+  additionalDocuments: [],
+})
 
 const mock500Error: SanitisedError = {
   message: 'Internal Server Error',

@@ -1,9 +1,11 @@
+import assert from 'assert'
+
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
-
 import { DeviceWearer } from '../../server/models/DeviceWearer'
+import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
 
 const ping = (httpStatus = 200) =>
   stubFor({
@@ -35,6 +37,11 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     gender: null,
     disabilities: null,
   },
+  deviceWearerResponsibleAdult: null,
+  contactDetails: {
+    contactNumber: null,
+  },
+  enforcementZoneConditions: [],
   deviceWearerAddresses: [],
   deviceWearerContactDetails: {
     contactNumber: null,
@@ -51,10 +58,7 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     alcohol: null,
     devicesRequired: null,
   },
-  trailMonitoring: {
-    startDate: null,
-    endDate: null,
-  },
+  monitoringConditionsTrail: null,
 })
 
 const listOrders = (httpStatus = 200): SuperAgentRequest =>
@@ -203,8 +207,8 @@ type SubmitOrderStubOptions = {
 const submitOrder = (options: SubmitOrderStubOptions) =>
   stubFor({
     request: {
-      method: 'POST',
-      urlPattern: `/cemo/api/order/${options.id}${options.subPath ?? '/'}`,
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}${options.subPath ?? '/'}`,
     },
     response: {
       status: options.httpStatus,
@@ -271,14 +275,14 @@ type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
   disabilities?: string | null
 }
 
-type PostDeviceWearerDetailsStubOptions = {
+type PutDeviceWearerStubOptions = {
   httpStatus: number
   id: string
   status: string
   deviceWearer?: ApiDeviceWearer
 }
 
-const defaultPostDeviceWearerDetailsOptions = {
+const defaultPutDeviceWearerOptions = {
   httpStatus: 200,
   id: uuidv4(),
   status: 'IN_PROGRESS',
@@ -298,7 +302,7 @@ const defaultPostDeviceWearerDetailsOptions = {
   },
 }
 
-const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = defaultPostDeviceWearerDetailsOptions) =>
+const putDeviceWearer = (options: PutDeviceWearerStubOptions = defaultPutDeviceWearerOptions): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
@@ -310,7 +314,7 @@ const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = de
       jsonBody:
         options.httpStatus === 200
           ? {
-              ...defaultPostDeviceWearerDetailsOptions.deviceWearer,
+              ...defaultPutDeviceWearerOptions.deviceWearer,
               ...options.deviceWearer,
             }
           : null,
@@ -318,11 +322,11 @@ const putDeviceWearerDetails = (options: PostDeviceWearerDetailsStubOptions = de
   })
 
 const getStubbedRequest = (url: string) =>
-  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(res => {
-    if (res?.body.requests && Array.isArray(res?.body.requests)) {
-      return res.body.requests.map((req: Record<string, unknown>) => {
+  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(response => {
+    if (response?.body.requests && Array.isArray(response?.body.requests)) {
+      return response.body.requests.map((request: Record<string, unknown>) => {
         try {
-          return JSON.parse(req.body as string)
+          return JSON.parse(request.body as string)
         } catch {
           return {}
         }
@@ -331,16 +335,81 @@ const getStubbedRequest = (url: string) =>
     return []
   })
 
+type PutResponsibleAdultStubOptions = {
+  httpStatus: number
+  id: string
+  status: string
+  responsibleAdult?: ResponsibleAdult
+}
+
+const defaultPutResponsibleAdultOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+  responsibleAdult: {
+    relationship: null,
+    otherRelationshipDetails: null,
+    fullName: null,
+    contactNumber: null,
+  },
+}
+
+const putResponsibleAdult = (
+  options: PutResponsibleAdultStubOptions = defaultPutResponsibleAdultOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}/device-wearer-responsible-adult`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...defaultPutResponsibleAdultOptions.responsibleAdult,
+              ...options.responsibleAdult,
+            }
+          : null,
+    },
+  })
+
+type VerifyStubbedRequestParams = {
+  uri: string
+  body: unknown
+}
+
+const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
+  getStubbedRequest(options.uri).then(requests => {
+    if (requests.length === 0) {
+      throw new Error(`No stub requests were found for the url <${options.uri}>`)
+    }
+
+    if (requests.length > 1) {
+      throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
+    }
+
+    const expected = JSON.stringify(options.body, null, 2)
+    const actual = JSON.stringify(requests[0], null, 2)
+    assert.deepEqual(requests[0], options.body, `expected:\n${expected}\n\nactual:\n${actual}`)
+
+    return requests
+  })
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoGetOrder: getOrder,
-  stubCemoGetOrderWithAttachments: getOrderWithAttachments,
-  stubCemoListOrders: listOrders,
   stubCemoPing: ping,
+  stubCemoListOrders: listOrders,
+  stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
-  stubCemoPutDeviceWearer: putDeviceWearerDetails,
+  stubCemoPutDeviceWearer: putDeviceWearer,
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
+  stubCemoPutResponsibleAdult: putResponsibleAdult,
+
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
+  stubCemoVerifyRequestReceived,
 }
