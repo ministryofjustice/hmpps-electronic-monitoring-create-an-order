@@ -1,11 +1,12 @@
 import z from 'zod'
 import AddressModel from './Address'
 import AttachmentModel from './Attachment'
+import AttendanceMonitoringModel from './AttendanceMonitoring'
 import DeviceWearerContactDetailsModel from './ContactDetails'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
-import MonitoringConditionsModel from './MonitoringConditions'
 import EnforcementZoneModel from './EnforcementZone'
+import MonitoringConditionsModel from './MonitoringConditions'
 import TrailMonitoringModel from './TrailMonitoring'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
@@ -21,6 +22,7 @@ const OrderModel = z.object({
   additionalDocuments: z.array(AttachmentModel),
   monitoringConditions: MonitoringConditionsModel,
   monitoringConditionsTrail: TrailMonitoringModel.optional(),
+  monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>
