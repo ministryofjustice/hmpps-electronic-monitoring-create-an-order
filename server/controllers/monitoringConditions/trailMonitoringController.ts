@@ -41,7 +41,7 @@ export default class TrailMonitoringController {
   ) {}
 
   private constructViewModel(
-    trailMonitoring: TrailMonitoring | undefined,
+    trailMonitoring: TrailMonitoring,
     validationErrors: ValidationResult,
     formData: [TrailMonitoringFormData],
     formAction: string,
@@ -54,7 +54,7 @@ export default class TrailMonitoringController {
   }
 
   private createViewModelFromTrailMonitoring(
-    trailMonitoring: TrailMonitoring | undefined,
+    trailMonitoring: TrailMonitoring,
     orderId: string,
   ): TrailMonitoringViewModel {
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(trailMonitoring?.startDate)
@@ -99,7 +99,15 @@ export default class TrailMonitoringController {
     const { monitoringConditionsTrail, monitoringConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = this.constructViewModel(monitoringConditionsTrail, errors as never, formData as never, orderId)
+    const viewModel = this.constructViewModel(
+      monitoringConditionsTrail ?? {
+        startDate: null,
+        endDate: null,
+      },
+      errors as never,
+      formData as never,
+      orderId,
+    )
 
     if (!monitoringConditions.trail) {
       res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
