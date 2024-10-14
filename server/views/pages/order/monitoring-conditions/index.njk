@@ -205,36 +205,48 @@
       items: [
         {
           text: 'Location Monitoring (using Non-Fitted Device)',
-          value: '250'
+          value: '250',
+          checked: devicesRequired.values | select("equalto", "250") | length,
+          disabled: not isOrderEditable
         },
         {
           text: 'AAMR',
-          value: 'aamr'
+          value: 'aamr',
+          checked: devicesRequired.values | select("equalto", "aamr") | length,
+          disabled: not isOrderEditable
         },
         {
           text: 'AML',
-          value: 'aml'
+          value: 'aml',
+          checked: devicesRequired.values | select("equalto", "aml") | length,
+          disabled: not isOrderEditable
         },
         {
           text: 'Attendance Requirement',
-          value: 'attendance_requirement'
+          value: 'attendance_requirement',
+          checked: devicesRequired.values | select("equalto", "attendance_requirement") | length,
+          disabled: not isOrderEditable
         },
         {
           text: 'Curfew with EM',
-          value: 'curfew_with_em'
+          value: 'curfew_with_em',
+          checked: devicesRequired.values | select("equalto", "curfew_with_em") | length,
+          disabled: not isOrderEditable
         },
         {
           text: 'EM Exclusion / Inclusion Zone',
-          value: 'em_exclusion_inclusion_zone'
+          value: 'em_exclusion_inclusion_zone',
+          checked: devicesRequired.values | select("equalto", "em_exclusion_inclusion_zone") | length,
+          disabled: not isOrderEditable
         },
         {
           text: 'Location Monitoring (Fitted Device)',
-          value: 'location_monitoring'
+          value: 'location_monitoring',
+          checked: devicesRequired.values | select("equalto", "location_monitoring") | length,
+          disabled: not isOrderEditable
         }
       ],
-      values: devicesRequired.values,
-      errorMessage: devicesRequired.error,
-      disabled: not isOrderEditable
+      errorMessage: devicesRequired.error
     }) }}
 
     <div class="govuk-button-group">
