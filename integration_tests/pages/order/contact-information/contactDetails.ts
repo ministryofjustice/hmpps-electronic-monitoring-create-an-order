@@ -1,22 +1,24 @@
 import AppPage from '../../appPage'
 import { PageElement } from '../../page'
 
+import paths from '../../../../server/constants/paths'
+
+import ContactDetailsFormComponent from '../../components/contact-information/contactDetailsForm'
+
 export default class ContactDetailsPage extends AppPage {
+  public form = new ContactDetailsFormComponent()
+
   constructor() {
-    super('Contact information')
+    super('Contact information', paths.CONTACT_INFORMATION.CONTACT_DETAILS)
   }
 
-  subHeading = (): PageElement => cy.get('legend')
+  checkOnPage(): void {
+    super.checkOnPage()
 
-  form = (): PageElement => cy.get('form')
+    this.form.checkHasForm()
+  }
 
-  inputs = (): PageElement => cy.get('form input')
-
-  contactNumber = (): PageElement => cy.get('form input[name=contactNumber]')
-
-  saveAndContinueButton = (): PageElement => cy.get('form button[type=submit][value="continue"]')
-
-  saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
-
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
+  get backToSummaryButton(): PageElement {
+    return cy.get('a#backToSummary')
+  }
 }

@@ -9,7 +9,7 @@ export default class ErrorPage extends AppPage {
 }
 
 export class NotFoundErrorPage extends AppPage {
-  constructor() {
-    super('Not Found', '/*')
+  constructor(errorMessage: string = 'Not Found') {
+    super(errorMessage, '/*')
   }
 }
