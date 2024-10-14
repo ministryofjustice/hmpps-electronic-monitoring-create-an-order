@@ -3,7 +3,7 @@ import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import ContactDetailsPage from '../../../pages/order/contact-information/contactDetails'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 
 const mockOrderId = uuidv4()
 
@@ -30,8 +30,10 @@ context('About the device wearer', () => {
 
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
-      page.form.saveAndContinueButton().should('exist')
-      page.form.saveAndReturnButton().should('exist')
+
+      // page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer`)
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton().should('not.exist')
     })
 
@@ -83,7 +85,7 @@ context('About the device wearer', () => {
 
         page.form.fillInWith(validFormData)
 
-        page.form.saveAndContinueButton().click()
+        page.form.saveAndContinueButton.click()
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/device-wearer`,
@@ -101,7 +103,7 @@ context('About the device wearer', () => {
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
           },
-        })
+        }).should('be.true')
 
         Page.verifyOnPage(ContactDetailsPage)
       })
@@ -136,7 +138,7 @@ context('About the device wearer', () => {
 
         page.form.fillInWith(validFormData)
 
-        page.form.saveAndContinueButton().click()
+        page.form.saveAndContinueButton.click()
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/device-wearer`,
@@ -154,7 +156,7 @@ context('About the device wearer', () => {
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
           },
-        })
+        }).should('be.true')
 
         Page.verifyOnPage(ResponsibleAdultPage)
       })
@@ -174,8 +176,8 @@ context('About the device wearer', () => {
     it('Should display the back to summary button', () => {
       const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
-      page.form.saveAndContinueButton().should('not.exist')
-      page.form.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })

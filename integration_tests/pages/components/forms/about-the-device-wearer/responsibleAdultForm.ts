@@ -1,4 +1,5 @@
-import { PageElement } from '../../page'
+import { PageElement } from '../../../page'
+import FormComponent from '../../formComponent'
 
 export type ResponsibleAdultFormData = {
   relationship?: string
@@ -7,18 +8,8 @@ export type ResponsibleAdultFormData = {
   contactNumber?: string
 }
 
-export default class ResponsibleAdultFormComponent {
-  private get form(): PageElement {
-    return cy.get('form') // [action*="about-the-device-wearer/responsible-adult"]
-  }
-
-  checkHasForm(): void {
-    this.form.should('exist')
-  }
-
-  hasAction = (action: string | RegExp): PageElement => this.form.should('have.attr', 'action', action)
-
-  // RELATIONSHIP
+export default class ResponsibleAdultFormComponent extends FormComponent {
+  // FIELDS
 
   setRelationship(relationship: string) {
     this.relationshipField(relationship).click()
@@ -54,12 +45,6 @@ export default class ResponsibleAdultFormComponent {
   }
 
   contactNumberField = (): PageElement => this.form.getByLabel('Parent / guardian contact number')
-
-  // ACTIONS
-
-  saveAndContinueButton = (): PageElement => this.form.get('button[type=submit][value="continue"]')
-
-  saveAndReturnButton = (): PageElement => this.form.get('button[type=submit][value="back"]')
 
   // FORM HELPERS
 

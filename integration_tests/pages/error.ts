@@ -4,12 +4,12 @@ import AppPage from './appPage'
 
 export default class ErrorPage extends AppPage {
   constructor(errorMessage: string) {
-    super(errorMessage, '/*')
+    super(errorMessage, /\/*/)
   }
 }
 
 export class NotFoundErrorPage extends AppPage {
   constructor(errorMessage: string = 'Not Found') {
-    super(errorMessage, '/*')
+    super(errorMessage, /\/*'/)
   }
 }
