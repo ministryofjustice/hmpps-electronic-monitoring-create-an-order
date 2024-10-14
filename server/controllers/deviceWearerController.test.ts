@@ -1,8 +1,7 @@
-import type { Request, Response } from 'express'
 import { getMockOrder } from '../../test/mocks/mockOrder'
+import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
 import AuditService from '../services/auditService'
 import DeviceWearerService from '../services/deviceWearerService'
 import DeviceWearerController from './deviceWearerController'
@@ -13,64 +12,22 @@ jest.mock('../services/deviceWearerService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
 
-const createMockRequest = (order?: Order): Request => {
-  return {
-    // @ts-expect-error stubbing session
-    session: {},
-    query: {},
-    params: {
-      orderId: '123456789',
-    },
-    user: {
-      username: '',
-      token: '',
-      authSource: '',
-    },
-    order,
-  }
-}
-
-const createMockResponse = (): Response => {
-  // @ts-expect-error stubbing res.render
-  return {
-    locals: {
-      user: {
-        username: 'fakeUserName',
-        token: 'fakeUserToken',
-        authSource: 'nomis',
-        userId: 'fakeId',
-        name: 'fake user',
-        displayName: 'fuser',
-        userRoles: ['fakeRole'],
-        staffId: 123,
-      },
-    },
-    redirect: jest.fn(),
-    render: jest.fn(),
-    set: jest.fn(),
-    send: jest.fn(),
-  }
-}
-
-const createMockOrder = (status: OrderStatus): Order => {
-  return {
-    ...getMockOrder({ status }),
-    deviceWearer: {
-      nomisId: null,
-      pncId: null,
-      deliusId: null,
-      prisonNumber: null,
-      firstName: 'tester',
-      lastName: 'testington',
-      alias: 'test',
-      dateOfBirth: '1980-01-01T00:00:00.000Z',
-      adultAtTimeOfInstallation: false,
-      sex: 'male',
-      gender: 'male',
-      disabilities: ['Vision', 'Mobilitiy'],
-    },
-  }
-}
+const mockOrder = getMockOrder({
+  deviceWearer: {
+    nomisId: null,
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    firstName: 'tester',
+    lastName: 'testington',
+    alias: 'test',
+    dateOfBirth: '1980-01-01T00:00:00.000Z',
+    adultAtTimeOfInstallation: false,
+    sex: 'male',
+    gender: 'male',
+    disabilities: ['Vision', 'Mobilitiy'],
+  },
+})
 
 describe('DeviceWearerController', () => {
   let mockRestClient: jest.Mocked<RestClient>
@@ -102,7 +59,6 @@ describe('DeviceWearerController', () => {
   describe('view', () => {
     it('should render the form using the saved device wearer data', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -138,7 +94,6 @@ describe('DeviceWearerController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
