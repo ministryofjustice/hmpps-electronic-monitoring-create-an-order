@@ -37,6 +37,7 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     gender: null,
     disabilities: null,
   },
+  deviceWearerResponsibleAdult: null,
   contactDetails: {
     contactNumber: null,
   },
@@ -57,6 +58,7 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     alcohol: null,
     devicesRequired: null,
   },
+  monitoringConditionsTrail: null,
 })
 
 const listOrders = (httpStatus = 200): SuperAgentRequest =>
