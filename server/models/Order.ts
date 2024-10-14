@@ -21,7 +21,7 @@ const OrderModel = z.object({
   enforcementZoneConditions: z.array(EnforcementZoneModel),
   additionalDocuments: z.array(AttachmentModel),
   monitoringConditions: MonitoringConditionsModel,
-  monitoringConditionsTrail: TrailMonitoringModel.optional(),
+  monitoringConditionsTrail: TrailMonitoringModel.nullable(),
   monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),
 })
 

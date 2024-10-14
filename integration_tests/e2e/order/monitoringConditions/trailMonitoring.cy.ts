@@ -123,8 +123,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-error').should('contain', 'You must enter a valid date')
     })
 
-    // eslint-disable-next-line no-only-tests/no-only-tests
-    it.only('should correctly submit the data to the CEMO API and move to the next selected page', () => {
+    it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
