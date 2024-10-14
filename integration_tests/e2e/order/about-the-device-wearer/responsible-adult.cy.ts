@@ -35,6 +35,7 @@ context('About the device wearer - Responsible Adult', () => {
       page.backToSummaryButton().should('not.exist')
     })
 
+    // TODO: FAIL there are two form input related issues
     it.skip('Should be accessible', () => {
       const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
       page.checkIsAccessible()
@@ -66,6 +67,16 @@ context('About the device wearer - Responsible Adult', () => {
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton().click()
 
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
+        body: {
+          relationship: 'other',
+          otherRelationshipDetails: 'Partner',
+          fullName: 'Audrey Taylor',
+          contactNumber: '07101 123 456',
+        },
+      })
+
       Page.verifyOnPage(ContactDetailsPage)
     })
   })
@@ -82,6 +93,7 @@ context('About the device wearer - Responsible Adult', () => {
     })
 
     context('Not entering any information', () => {
+      // TODO: FAIL because no validation message is displayed
       it.skip('should not continue to collect the responsible officer details', () => {
         cy.task('stubCemoPutResponsibleAdult', {
           httpStatus: 200,
@@ -93,12 +105,17 @@ context('About the device wearer - Responsible Adult', () => {
 
         page.form.saveAndContinueButton().click()
 
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
+          body: '{}',
+        })
+
         Page.verifyOnPage(ResponsibleAdultPage)
-        // TODO: and there should be some validation message showing
       })
     })
 
     context('Only entering relationship', () => {
+      // TODO: FAIL because no validation message is displayed
       it.skip('should not continue to collect the responsible officer details', () => {
         cy.task('stubCemoPutResponsibleAdult', {
           httpStatus: 200,
@@ -112,12 +129,19 @@ context('About the device wearer - Responsible Adult', () => {
         page.form.setRelationship('Other')
         page.form.saveAndContinueButton().click()
 
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
+          body: {
+            relationship: 'other',
+          },
+        })
+
         Page.verifyOnPage(ResponsibleAdultPage)
-        // TODO: and there should be some validation message showing
       })
     })
 
     context('Only entering full name', () => {
+      // TODO: FAIL because no validation message is displayed
       it.skip('should not continue to collect the responsible officer details', () => {
         cy.task('stubCemoPutResponsibleAdult', {
           httpStatus: 200,
@@ -131,12 +155,19 @@ context('About the device wearer - Responsible Adult', () => {
         page.form.setFullName('Martha Steward')
         page.form.saveAndContinueButton().click()
 
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
+          body: {
+            fullName: 'Martha Steward',
+          },
+        })
+
         Page.verifyOnPage(ResponsibleAdultPage)
-        // TODO: and there should be some validation message showing
       })
     })
 
     context('Only entering contact number', () => {
+      // TODO: FAIL because no validation message is displayed
       it.skip('should not continue to collect the responsible officer details', () => {
         cy.task('stubCemoPutResponsibleAdult', {
           httpStatus: 200,
@@ -150,8 +181,14 @@ context('About the device wearer - Responsible Adult', () => {
         page.form.setContactNumber('999999')
         page.form.saveAndContinueButton().click()
 
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
+          body: {
+            contactNumber: '999999',
+          },
+        })
+
         Page.verifyOnPage(ResponsibleAdultPage)
-        // TODO: and there should be some validation message showing
       })
     })
   })
