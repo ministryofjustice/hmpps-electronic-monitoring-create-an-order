@@ -10,6 +10,27 @@ export type TextField = FormField & {
   value: string
 }
 
+export type Address = {
+  line1: string
+  line2: string
+  line3: string
+  line4: string
+  postcode: string
+}
+
+export type AddressField = FormField & {
+  value: Address
+}
+
+export type Time = {
+  hours: string
+  minutes: string
+}
+
+export type TimeField = FormField & {
+  value: Time
+}
+
 export type DateField = FormField & {
   day: string
   month: string
