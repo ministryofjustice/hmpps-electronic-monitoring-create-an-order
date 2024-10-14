@@ -47,7 +47,7 @@ context('About the device wearer', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoListOrders', 200)
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.task('stubCemoPutDeviceWearer', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
 
@@ -55,10 +55,13 @@ context('About the device wearer', () => {
     })
 
     context('for someone over 18 years old', () => {
+      const birthYear = 1970
+
+      // TODO: FAILS because filling in an over 18 device wearer should skip the responsible adult step
       it.skip('should continue to collect the responsible officer details', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
-        page.form.fillInWith({
+        const validFormData = {
           nomisId: '1234567',
           pncId: '1234567',
           deliusId: '1234567',
@@ -71,25 +74,47 @@ context('About the device wearer', () => {
           dob: {
             date: '01',
             month: '01',
-            year: '1972',
+            year: `${birthYear}`,
           },
 
           is18: true,
           sex: 'Male',
           genderIdentity: 'Male',
-        })
+        }
+
+        page.form.fillInWith(validFormData)
 
         page.form.saveAndContinueButton().click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/device-wearer`,
+          body: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            firstName: 'Barton',
+            lastName: 'Fink',
+            alias: 'Barty',
+            adultAtTimeOfInstallation: 'true',
+            sex: 'male',
+            gender: 'male',
+            dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
+            disabilities: '',
+          },
+        })
 
         Page.verifyOnPage(ContactDetailsPage)
       })
     })
 
     context('for someone under 18 years old', () => {
+      const birthYear = new Date().getFullYear() - 16
+
       it('should continue to collect the responsible adult details', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
-        page.form.fillInWith({
+        const validFormData = {
           nomisId: '1234567',
           pncId: '1234567',
           deliusId: '1234567',
@@ -102,15 +127,35 @@ context('About the device wearer', () => {
           dob: {
             date: '01',
             month: '01',
-            year: `${new Date().getFullYear() - 16}`,
+            year: `${birthYear}`,
           },
 
           is18: true,
           sex: 'Male',
           genderIdentity: 'Male',
-        })
+        }
+
+        page.form.fillInWith(validFormData)
 
         page.form.saveAndContinueButton().click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/device-wearer`,
+          body: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            firstName: 'Barton',
+            lastName: 'Fink',
+            alias: 'Barty',
+            adultAtTimeOfInstallation: 'true',
+            sex: 'male',
+            gender: 'male',
+            dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
+            disabilities: '',
+          },
+        })
 
         Page.verifyOnPage(ResponsibleAdultPage)
       })

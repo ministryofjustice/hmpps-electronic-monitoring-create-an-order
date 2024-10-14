@@ -1,3 +1,5 @@
+import assert from 'node:assert'
+
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import { Order } from '../../server/models/Order'
@@ -315,11 +317,11 @@ const putDeviceWearer = (options: PutDeviceWearerStubOptions = defaultPutDeviceW
   })
 
 const getStubbedRequest = (url: string) =>
-  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(res => {
-    if (res?.body.requests && Array.isArray(res?.body.requests)) {
-      return res.body.requests.map((req: Record<string, unknown>) => {
+  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(response => {
+    if (response?.body.requests && Array.isArray(response?.body.requests)) {
+      return response.body.requests.map((request: Record<string, unknown>) => {
         try {
-          return JSON.parse(req.body as string)
+          return JSON.parse(request.body as string)
         } catch {
           return {}
         }
@@ -368,8 +370,27 @@ const putResponsibleAdult = (
     },
   })
 
-const verifyPutResponsibleAdultRequest = (responsibleAdult: ResponsibleAdult): SuperAgentRequest =>
-  getMatchingRequests(responsibleAdult)
+type VerifyStubbedRequestParams = {
+  uri: string
+  body: unknown
+}
+
+const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
+  getStubbedRequest(options.uri).then(requests => {
+    if (requests.length === 0) {
+      throw new Error(`No stub requests were found for the url <${options.uri}>`)
+    }
+
+    if (requests.length > 1) {
+      throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
+    }
+
+    const expected = JSON.stringify(options.body, null, 2)
+    const actual = JSON.stringify(requests[0], null, 2)
+    assert.deepEqual(requests[0], options.body, `expected:\n${expected}\n\nactual:\n${actual}`)
+
+    return requests
+  })
 
 export default {
   stubCemoCreateOrder: createOrder,
@@ -382,7 +403,7 @@ export default {
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
   stubCemoPutResponsibleAdult: putResponsibleAdult,
-  verifyCemoPutResponsibleAdultRequest: verifyPutResponsibleAdultRequest,
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
+  stubCemoVerifyRequestReceived,
 }
