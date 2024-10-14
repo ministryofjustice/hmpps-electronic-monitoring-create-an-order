@@ -17,25 +17,13 @@ const monitoringConditionsFormDataModel = z.object({
     if (value === undefined) {
       return null
     }
-    if (value === 'true') {
-      return true
-    }
-    if (value === 'false') {
-      return false
-    }
-    return value
+    return value === 'true'
   }),
   dapol: z.union([z.string(), z.undefined()]).transform(value => {
     if (value === undefined) {
       return null
     }
-    if (value === 'true') {
-      return true
-    }
-    if (value === 'false') {
-      return false
-    }
-    return value
+    return value === 'true'
   }),
   orderType: z.coerce.string(),
   monitoringRequired: z
