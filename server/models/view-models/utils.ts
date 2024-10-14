@@ -31,10 +31,14 @@ export type TimeField = FormField & {
   value: Time
 }
 
-export type DateField = FormField & {
+export type Date = {
   day: string
   month: string
   year: string
+}
+
+export type DateField = FormField & {
+  value: Date
 }
 
 export type MultipleChoiceField = FormField & {
