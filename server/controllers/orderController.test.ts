@@ -1,8 +1,8 @@
-import type { Request, Response } from 'express'
 import { getMockOrder } from '../../test/mocks/mockOrder'
+import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { Order, OrderStatusEnum } from '../models/Order'
+import { OrderStatusEnum } from '../models/Order'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
@@ -11,43 +11,6 @@ jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
-
-const createMockRequest = (order?: Order): Request => {
-  return {
-    // @ts-expect-error stubbing session
-    session: {},
-    query: {},
-    params: {},
-    user: {
-      username: '',
-      token: '',
-      authSource: '',
-    },
-    order,
-  }
-}
-
-const createMockResponse = (): Response => {
-  // @ts-expect-error stubbing res.render
-  return {
-    locals: {
-      user: {
-        username: 'fakeUserName',
-        token: 'fakeUserToken',
-        authSource: 'nomis',
-        userId: 'fakeId',
-        name: 'fake user',
-        displayName: 'fuser',
-        userRoles: ['fakeRole'],
-        staffId: 123,
-      },
-    },
-    redirect: jest.fn(),
-    render: jest.fn(),
-    set: jest.fn(),
-    send: jest.fn(),
-  }
-}
 
 describe('OrderController', () => {
   let mockRestClient: jest.Mocked<RestClient>
