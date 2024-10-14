@@ -1,9 +1,9 @@
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import { OrderStatusEnum } from '../../models/Order'
 import AuditService from '../../services/auditService'
 import ContactDetailsService from '../../services/contactDetailsService'
-import { createMockOrder, createMockRequest, createMockResponse } from '../testutils/utils'
+import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
+import { getMockOrder } from '../../../test/mocks/mockOrder'
 import ContactDetailsController from './contactDetailsController'
 
 jest.mock('../../services/auditService')
@@ -39,7 +39,7 @@ describe('ContactDetailsController', () => {
   describe('get', () => {
     it('should render the form using the saved contact details data', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder({ deviceWearerContactDetails: { contactNumber: '01234567890' } })
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()
@@ -61,7 +61,7 @@ describe('ContactDetailsController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
+      const mockOrder = getMockOrder({ deviceWearerContactDetails: { contactNumber: '01234567890' } })
       const req = createMockRequest(mockOrder)
       const res = createMockResponse()
       const next = jest.fn()

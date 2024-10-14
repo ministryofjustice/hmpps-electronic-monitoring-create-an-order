@@ -1,14 +1,9 @@
 import { randomUUID } from 'crypto'
-import { Order, OrderStatus, OrderStatusEnum } from '../../server/models/Order'
+import { Order, OrderStatusEnum } from '../../server/models/Order'
 
-type MockOrderOptions = {
-  id?: string
-  status?: OrderStatus
-}
-
-export const getMockOrder = (options?: MockOrderOptions): Order => ({
-  id: options?.id ?? randomUUID(),
-  status: options?.status ?? OrderStatusEnum.Enum.IN_PROGRESS,
+export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
+  id: randomUUID(),
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
   deviceWearer: {
     nomisId: null,
     pncId: null,
@@ -42,9 +37,9 @@ export const getMockOrder = (options?: MockOrderOptions): Order => ({
     devicesRequired: null,
   },
   monitoringConditionsTrail: null,
+  ...overrideProperties,
 })
 
-export const getMockSubmittedOrder = (options?: MockOrderOptions) => ({
-  ...getMockOrder(options),
-  status: OrderStatusEnum.Enum.SUBMITTED,
-})
+export const getMockSubmittedOrder = (overrideProperties?: Partial<Order>) => {
+  return getMockOrder({ ...overrideProperties, status: OrderStatusEnum.Enum.SUBMITTED })
+}
