@@ -13,8 +13,18 @@ import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const monitoringConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
-  acquisitiveCrime: z.coerce.boolean(),
-  dapol: z.coerce.boolean(),
+  acquisitiveCrime: z.union([z.string(), z.undefined()]).transform(value => {
+    if (value === undefined) {
+      return null
+    }
+    return value === 'true'
+  }),
+  dapol: z.union([z.string(), z.undefined()]).transform(value => {
+    if (value === undefined) {
+      return null
+    }
+    return value === 'true'
+  }),
   orderType: z.coerce.string(),
   monitoringRequired: z
     .union([z.string(), z.array(z.string()).default([])])
@@ -97,8 +107,8 @@ export default class MonitoringConditionsController {
 
   createApiModelFromFormData(formData: MonitoringConditionsFormData): MonitoringConditions {
     return {
-      acquisitiveCrime: formData.acquisitiveCrime,
-      dapol: formData.dapol,
+      acquisitiveCrime: formData.acquisitiveCrime === null ? null : Boolean(formData.acquisitiveCrime),
+      dapol: formData.dapol === null ? null : Boolean(formData.dapol),
       orderType: formData.orderType === '' ? null : formData.orderType,
       curfew: formData.monitoringRequired.includes('curfew'),
       exclusionZone: formData.monitoringRequired.includes('exclusionZone'),

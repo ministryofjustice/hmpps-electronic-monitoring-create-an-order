@@ -244,7 +244,7 @@
           value: 'location_monitoring',
           checked: devicesRequired.values | select("equalto", "location_monitoring") | length,
           disabled: not isOrderEditable
-         }
+        }
       ],
       errorMessage: devicesRequired.error
     }) }}
