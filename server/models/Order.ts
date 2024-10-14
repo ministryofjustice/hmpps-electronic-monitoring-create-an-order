@@ -16,7 +16,7 @@ const OrderModel = z.object({
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
   deviceWearerAddresses: z.array(AddressModel),
-  deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.optional().nullable(),
+  deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   enforcementZoneConditions: z.array(EnforcementZoneModel),
   additionalDocuments: z.array(AttachmentModel),

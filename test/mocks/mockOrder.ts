@@ -23,6 +23,7 @@ export const getMockOrder = (options?: MockOrderOptions): Order => ({
     gender: null,
     disabilities: [],
   },
+  deviceWearerResponsibleAdult: null,
   deviceWearerContactDetails: {
     contactNumber: '',
   },
