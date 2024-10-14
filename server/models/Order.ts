@@ -1,5 +1,6 @@
 import z from 'zod'
 import AddressModel from './Address'
+import AlcoholMonitoringModel from './AlcoholMonitoring'
 import AttachmentModel from './Attachment'
 import AttendanceMonitoringModel from './AttendanceMonitoring'
 import DeviceWearerContactDetailsModel from './ContactDetails'
@@ -23,6 +24,7 @@ const OrderModel = z.object({
   monitoringConditions: MonitoringConditionsModel,
   monitoringConditionsTrail: TrailMonitoringModel.nullable(),
   monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),
+  monitoringConditionsAlcohol: AlcoholMonitoringModel.optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

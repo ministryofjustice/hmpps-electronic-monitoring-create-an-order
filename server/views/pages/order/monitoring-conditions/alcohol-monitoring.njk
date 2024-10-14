@@ -11,6 +11,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "../../../partials/addressInput.njk" import addressInput %}
 
 {% block content %}
 
@@ -43,6 +44,210 @@
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {{ govukRadios({
+        name: "monitoringType",
+        fieldset: {
+            legend: {
+            text: "What type of alcohol monitoring is needed?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--s"
+            }
+        },
+        hint: {
+            text: "Select one option"
+        },
+        items: [
+            {
+            value: "ALCOHOL_LEVEL",
+            text: "Alcohol level",
+            disabled: not isOrderEditable
+            },
+            {
+            value: "ALCOHOL_ABSTINENCE",
+            text: "Alcohol abstinence",
+            disabled: not isOrderEditable
+            }
+        ],
+        value: monitoringType.value,
+        errorMessage: monitoringType.error
+        }) }}
+    
+    {% set disabled = {} if isOrderEditable else { disabled:true } %}
+    
+    {{ govukDateInput({
+      id: "startDate",
+      namePrefix: "startDate",
+      fieldset: {
+        legend: {
+          text: "Start date of alcohol monitoring",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2011"
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          value: startDate.value.day,
+          attributes: disabled
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          value: startDate.value.month,
+          attributes: disabled
+        },
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          value: startDate.value.year,
+          attributes: disabled
+        }
+      ],
+      errorMessage: startDate.error
+    }) }}
+
+    {{ govukDateInput({
+      id: "endDate",
+      namePrefix: "endDate",
+      fieldset: {
+        legend: {
+          text: "End date of alcohol monitoring",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2011"
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          value: endDate.value.day,
+          attributes: disabled
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          value: endDate.value.month,
+          attributes: disabled
+        },
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          value: endDate.value.year,
+          attributes: disabled
+        }
+      ],
+      errorMessage: endDate.error
+    }) }}
+
+    {% set probationHtml %}
+      {{ govukInput({
+        id: "probationName",
+        name: "probationName",
+        type: "text",
+        classes: "govuk-!-width-one-third",
+        label: {
+          text: "Enter name"
+        },
+        disabled: not isOrderEditable,
+        value: probationName.value,
+        errorMessage: probationName.error
+      }) }}
+    {% endset -%}
+
+    {% set prisonHtml %}
+      {{ govukInput({
+        id: "prisonName",
+        name: "prisonName",
+        type: "text",
+        classes: "govuk-!-width-one-third",
+        label: {
+          text: "Enter name"
+        },
+        disabled: not isOrderEditable,
+        value: prisonName.value,
+        errorMessage: prisonName.error
+      }) }}
+    {% endset -%}
+
+    {% set agreedHtml %}
+      {{ addressInput({
+        id: "agreedAddress",
+        name: "agreedAddress",
+        value: agreedAddress.value,
+        errorMessage: agreedAddress.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endset -%}
+
+    {{ govukRadios({
+        name: "installationLocation",
+        fieldset: {
+            legend: {
+            text: "Where will alcohol monitoring equipment installation take place?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--s"
+            }
+        },
+        hint: {
+            text: "Select one option"
+        },
+        items: [
+          {
+            value: "INSTALLATION_ADDRESS",
+            text: "at [installation address]",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "PRIMARY_ADDRESS",
+            text: "at [primary address]",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "SECONDARY_ADDRESS",
+            text: "at [secondary address]",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "TERTARY_ADDRESS",
+            text: "at [third address]",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "AGREED_LOCATION",
+            text: "at an agreed location",
+            disabled: not isOrderEditable,
+            conditional: {
+              html: agreedHtml
+            }
+          },
+          {
+            value: "PROBATION_OFFICE",
+            text: "at the probation office",
+            disabled: not isOrderEditable,
+            conditional: {
+              html: probationHtml
+            }
+          },
+          {
+            value: "PRISON",
+            text: "at prison",
+            disabled: not isOrderEditable,
+            conditional: {
+              html: prisonHtml
+            }
+          }
+        ],
+        value: installationLocation.value,
+        errorMessage: installationLocation.error
+        }) }}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
