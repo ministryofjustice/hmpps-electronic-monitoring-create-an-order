@@ -304,31 +304,34 @@ describe('DeviceWearerAddressController', () => {
       ['Secondary', 'secondary', secondaryAddress, true],
       ['Tertiary', 'tertiary', tertiaryAddress, false],
       ['Installation', 'installation', installationAddress, false],
-    ])('it should render the %s address form with the correct address', async (_: string, param: string, expected, hasAnotherAddress: boolean) => {
-      // Given
-      const req = createMockRequest({
-        order: orderWithAddresses,
-        flash: jest.fn().mockReturnValue([]),
-        params: {
-          orderId: '123456789',
+    ])(
+      'it should render the %s address form with the correct address',
+      async (_: string, param: string, expected, hasAnotherAddress: boolean) => {
+        // Given
+        const req = createMockRequest({
+          order: orderWithAddresses,
+          flash: jest.fn().mockReturnValue([]),
+          params: {
+            orderId: '123456789',
+            addressType: param,
+          },
+        })
+        const res = createMockResponse()
+        const next = jest.fn()
+
+        // When
+        await deviceWearerAddressController.getAddress(req, res, next)
+
+        // Then
+        expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
+          ...expected.address,
           addressType: param,
-        },
-      })
-      const res = createMockResponse()
-      const next = jest.fn()
-
-      // When
-      await deviceWearerAddressController.getAddress(req, res, next)
-
-      // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
-        ...expected.address,
-        addressType: param,
-        hasAnotherAddress,
-    installationAddress: false,
-        errors: {},
-      })
-    })
+          hasAnotherAddress,
+          installationAddress: false,
+          errors: {},
+        })
+      },
+    )
 
     it('should render the form using submitted data when there are validaiton errors', async () => {
       // Given
@@ -363,14 +366,14 @@ describe('DeviceWearerAddressController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
-        addressType: "primary",
+        addressType: 'primary',
         addressLine1: '',
         addressLine2: '',
         addressLine3: '',
         addressLine4: '',
         postcode: '',
         hasAnotherAddress: true,
-     installationAddress: false,
+        installationAddress: false,
         errors: {
           addressLine1: {
             text: 'Address line 1 is required',
