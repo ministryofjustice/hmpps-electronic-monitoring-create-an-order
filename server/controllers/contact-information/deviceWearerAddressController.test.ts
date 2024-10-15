@@ -443,6 +443,7 @@ describe('DeviceWearerAddressController', () => {
         flash: jest.fn(),
         params: {
           orderId: '123456789',
+          addressType: 'primary'
         },
       })
       const res = createMockResponse()
@@ -484,7 +485,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine3: 'c',
             addressLine4: 'd',
             postCode: 'e',
-            hasAnotherAddress: true,
+            hasAnotherAddress: 'true',
           },
           flash: jest.fn(),
           params: {
@@ -534,7 +535,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine3: 'c',
             addressLine4: 'd',
             postCode: 'e',
-            hasAnotherAddress: false,
+            hasAnotherAddress: 'false',
           },
           flash: jest.fn(),
           params: {
@@ -547,7 +548,7 @@ describe('DeviceWearerAddressController', () => {
 
         mockDeviceWearerAddressService.updateAddress.mockResolvedValue({
           addressType: 'PRIMARY',
-          installationAddress: false,
+          installationAddress: true,
           address: {
             addressLine1: 'a',
             addressLine2: 'b',
@@ -583,7 +584,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine3: 'c',
             addressLine4: 'd',
             postCode: 'e',
-            hasAnotherAddress: false,
+            hasAnotherAddress: 'false',
           },
           flash: jest.fn(),
           params: {

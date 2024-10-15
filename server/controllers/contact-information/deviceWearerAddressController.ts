@@ -4,6 +4,12 @@ import { AuditService } from '../../services'
 import DeviceWearerAddressService from '../../services/deviceWearerAddressService'
 import { DeviceWearerAddress, DeviceWearerAddressTypeEnum } from '../../models/DeviceWearerAddress'
 import { getErrorsViewModel } from '../../utils/utils'
+import { isValidationResult } from '../../models/Validation'
+
+const locationMap = {
+  [DeviceWearerAddressTypeEnum.Enum.PRIMARY]: [DeviceWearerAddressTypeEnum.Enum.SECONDARY],
+  [DeviceWearerAddressTypeEnum.Enum.SECONDARY]: [DeviceWearerAddressTypeEnum.Enum.TERTIARY],
+}
 
 export default class DeviceWearerAddressController {
   constructor(
@@ -81,5 +87,63 @@ export default class DeviceWearerAddressController {
     })
   }
 
-  postAddress: RequestHandler = async (req: Request, res: Response) => {}
+  postAddress: RequestHandler = async (req: Request, res: Response) => {
+    const { orderId, addressType } = req.params
+    const { action, ...formData } = req.body
+    const { deviceWearerAddresses: addresses } = req.order!
+
+    const result = await this.deviceWearerAddressService.updateAddress({
+      accessToken: res.locals.user.token,
+      orderId,
+      data: {
+        addressType: addressType.toUpperCase(),
+        ...formData,
+      },
+    })
+
+    if (isValidationResult(result)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', result)
+
+      res.redirect(
+        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', addressType),
+      )
+    } else if (action === 'back') {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    } else {
+      console.log(formData)
+      if (formData.hasAnotherAddress === 'true') {
+        if (addressType.toUpperCase() === 'PRIMARY') {
+          res.redirect(
+            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'secondary'),
+          )
+        }
+
+        if (addressType.toUpperCase() === 'SECONDARY') {
+          res.redirect(
+            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'tertiary'),
+          )
+        }
+      }
+
+      else if (addressType.toUpperCase() === 'PRIMARY') {
+        if (!result.installationAddress) {
+          res.redirect(
+            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'installation'),
+          )
+        } else {
+          res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
+        }
+      } else {
+        const primaryAddress = addresses.find(address => address.addressType === 'PRIMARY')
+        if (primaryAddress && primaryAddress.installationAddress) {
+          res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
+        } else {
+          res.redirect(
+            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'installation'),
+          )
+        }
+      }
+    }
+  }
 }
