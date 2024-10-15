@@ -14,8 +14,15 @@ const mockSubmittedMonitoringRequirements = {
     trail: true,
     mandatoryAttendance: true,
     alcohol: true,
-    devicesRequired:
-      '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+    devicesRequired: [
+      '250',
+      'aamr',
+      'aml',
+      'attendance_requirement',
+      'curfew_with_em',
+      'em_exclusion_inclusion_zone',
+      'location_monitoring',
+    ],
   },
 }
 const mockEmptyMonitoringConditions = {
@@ -144,8 +151,15 @@ context('Monitoring conditions main section', () => {
           trail: true,
           mandatoryAttendance: true,
           alcohol: true,
-          devicesRequired:
-            '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+          devicesRequired: [
+            '250',
+            'aamr',
+            'aml',
+            'attendance_requirement',
+            'curfew_with_em',
+            'em_exclusion_inclusion_zone',
+            'location_monitoring',
+          ],
         })
       })
     })
@@ -175,7 +189,7 @@ context('Monitoring conditions main section', () => {
           trail: false,
           mandatoryAttendance: false,
           alcohol: true,
-          devicesRequired: 'aml',
+          devicesRequired: ['aml'],
         })
       })
       const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)
