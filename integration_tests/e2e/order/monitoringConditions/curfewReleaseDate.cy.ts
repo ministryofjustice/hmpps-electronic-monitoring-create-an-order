@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
-import CurfewDatesPage from '../../../pages/order/curfewDates'
+import CurfewConditionsPage from '../../../pages/order/curfewConditions'
 import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import Page from '../../../pages/page'
 
@@ -169,7 +169,7 @@ context('Curfew monitoring - release date', () => {
           })
         },
       )
-      const nextPage = Page.verifyOnPage(CurfewDatesPage)
+      const nextPage = Page.verifyOnPage(CurfewConditionsPage)
       nextPage.subHeader().should('contain.text', 'Curfew with electronic monitoring')
     })
   })

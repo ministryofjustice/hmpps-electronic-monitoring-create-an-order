@@ -9,7 +9,7 @@ import DeviceWearerCheckAnswersController from '../controllers/deviceWearersChec
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
-import CurfewDatesController from '../controllers/monitoringConditions/curfewDatesController'
+import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
@@ -29,7 +29,7 @@ export default function routes({
   attendanceMonitoringService,
   auditService,
   contactDetailsService,
-  curfewDatesService,
+  curfewConditionsService,
   curfewReleaseDateService,
   curfewTimetableService,
   deviceWearerResponsibleAdultService,
@@ -49,7 +49,7 @@ export default function routes({
   const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
   const curfewReleaseDateController = new CurfewReleaseDateController(auditService, curfewReleaseDateService)
   const curfewTimetableController = new CurfewTimetableController(auditService, curfewTimetableService)
-  const curfewDatesController = new CurfewDatesController(auditService, curfewDatesService)
+  const curfewConditionsController = new CurfewConditionsController(auditService, curfewConditionsService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
@@ -134,9 +134,9 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController.update)
 
-  // Curfew dates page
-  get(paths.MONITORING_CONDITIONS.CURFEW_DATES, curfewDatesController.view)
-  post(paths.MONITORING_CONDITIONS.CURFEW_DATES, curfewDatesController.update)
+  // Curfew conditions page
+  get(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController.update)
 
   // Curfew dates page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)
