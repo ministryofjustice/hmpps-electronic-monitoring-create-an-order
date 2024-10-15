@@ -53,7 +53,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.signIn()
     })
 
-    it('Should not allow the user to update the contact details', () => {
+    it('Should not allow the user to update the enforcement zone details', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
 
       // Verify the correct buttons are displayed
