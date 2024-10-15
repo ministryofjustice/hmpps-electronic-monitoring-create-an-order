@@ -15,7 +15,7 @@ context('Curfew monitoring - dates', () => {
     })
 
     it('Should display the form', () => {
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-dates`)
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/dates`)
       const page = Page.verifyOnPage(CurfewDatesPage)
       page.subHeader().should('contain.text', 'Curfew with electronic monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
@@ -32,7 +32,7 @@ context('Curfew monitoring - dates', () => {
 
     it('Should display the form', () => {
       // Implement once persistence is in place
-      // cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-dates`)
+      // cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/dates`)
       // const page = Page.verifyOnPage(CurfewDatesPage)
       // page.saveAndContinueButton().should('not.exist')
       // page.saveAndReturnButton().should('not.exist')
@@ -49,7 +49,7 @@ context('Curfew monitoring - dates', () => {
     })
 
     it('Should indicate to the user that there was an error', () => {
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-dates`, {
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/dates`, {
         failOnStatusCode: false,
       })
 

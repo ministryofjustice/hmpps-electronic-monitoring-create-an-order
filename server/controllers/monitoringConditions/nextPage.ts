@@ -10,7 +10,7 @@ const monitoringTypes: (keyof MonitoringConditions)[] = [
 ]
 
 const pathLookup: Record<string, string> = {
-  curfew: paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE,
+  curfew: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
   exclusionZone: paths.MONITORING_CONDITIONS.ZONE,
   trail: paths.MONITORING_CONDITIONS.TRAIL,
   mandatoryAttendance: paths.MONITORING_CONDITIONS.ATTENDANCE,
