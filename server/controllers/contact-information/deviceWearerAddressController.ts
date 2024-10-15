@@ -66,4 +66,8 @@ export default class DeviceWearerAddressController {
       }
     }
   }
+
+  getAddress: RequestHandler = async (req: Request, res: Response) => {}
+
+  postAddress: RequestHandler = async (req: Request, res: Response) => {}
 }
