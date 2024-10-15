@@ -183,7 +183,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should continue to collect the next enforcement zones data', () => {
-      let page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
+      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData: EnforcementZoneFormData = {
         zoneType,
@@ -199,9 +199,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
-      page = Page.verifyOnPage(EnforcementZonePage, { orderId: mockOrderId, zoneId: 2 })
-
-      
+      Page.verifyOnPage(EnforcementZonePage, { orderId: mockOrderId, zoneId: 2 })
     })
 
     it('should return to the summary page', () => {

@@ -30,7 +30,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
 
-  
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton.should('not.exist')
