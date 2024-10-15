@@ -15,7 +15,7 @@ context('Curfew monitoring - timetable', () => {
     })
 
     it('Should display the form', () => {
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-timetable`)
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
       const page = Page.verifyOnPage(CurfewTimetablePage)
       page.subHeader().should('contain.text', 'Timetable for curfew with electronic monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
@@ -32,7 +32,7 @@ context('Curfew monitoring - timetable', () => {
 
     it('Should display the form', () => {
       // Implement once persistence is in place
-      // cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-timetable`)
+      // cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
       // const page = Page.verifyOnPage(CurfewTimetablePage)
       // page.saveAndContinueButton().should('not.exist')
       // page.saveAndReturnButton().should('not.exist')
@@ -49,7 +49,7 @@ context('Curfew monitoring - timetable', () => {
     })
 
     it('Should indicate to the user that there was an error', () => {
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew-timetable`, {
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`, {
         failOnStatusCode: false,
       })
 

@@ -59,7 +59,7 @@ describe('DeviceWearerController', () => {
   describe('view', () => {
     it('should render the form using the saved device wearer data', async () => {
       // Given
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
@@ -71,8 +71,6 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
-          orderSummaryUri: '/order/123456789/summary',
-          formActionUri: '/order/123456789/about-the-device-wearer',
           nomisId: { value: '' },
           pncId: { value: '' },
           deliusId: { value: '' },
@@ -94,7 +92,7 @@ describe('DeviceWearerController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest

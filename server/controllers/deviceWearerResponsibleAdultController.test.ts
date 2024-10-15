@@ -55,7 +55,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
     it('should render the form using the saved responsible adult data', async () => {
       // Given
       const mockOrder = createMockOrder('Parent Name')
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
@@ -77,7 +77,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
       const mockOrder = createMockOrder('')
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest

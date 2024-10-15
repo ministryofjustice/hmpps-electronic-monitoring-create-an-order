@@ -4,16 +4,16 @@ import AttachmentService from './attachmentService'
 import AttendanceMonitoringService from './attendanceMonitoringService'
 import AuditService from './auditService'
 import ContactDetailsService from './contactDetailsService'
-import CurfewDatesService from './curfewDatesService'
-import CurfewDayOfReleaseService from './curfewDayOfReleaseService'
+import CurfewConditionsService from './curfewConditionsService'
+import CurfewReleaseDateService from './curfewReleaseDateService'
 import CurfewTimetableService from './curfewTimetableService'
 import DeviceWearerResponsibleAdultService from './deviceWearerResponsibleAdultService'
 import DeviceWearerService from './deviceWearerService'
+import EnforcementZoneService from './enforcementZoneServices'
 import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
-import EnforcementZoneService from './enforcementZoneServices'
 import TrailMonitoringService from './trailMonitoringService'
 
 export const services = () => {
@@ -24,8 +24,8 @@ export const services = () => {
   const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
-  const curfewDatesService = new CurfewDatesService(cemoApiClient)
-  const curfewDayOfReleaseService = new CurfewDayOfReleaseService(cemoApiClient)
+  const curfewConditionsService = new CurfewConditionsService(cemoApiClient)
+  const curfewReleaseDateService = new CurfewReleaseDateService(cemoApiClient)
   const curfewTimetableService = new CurfewTimetableService(cemoApiClient)
   const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
@@ -43,8 +43,8 @@ export const services = () => {
     attendanceMonitoringService,
     auditService,
     contactDetailsService,
-    curfewDayOfReleaseService,
-    curfewDatesService,
+    curfewReleaseDateService,
+    curfewConditionsService,
     curfewTimetableService,
     deviceWearerResponsibleAdultService,
     deviceWearerService,
@@ -63,15 +63,15 @@ export {
   AttachmentService,
   AuditService,
   ContactDetailsService,
-  CurfewDatesService,
-  CurfewDayOfReleaseService,
+  CurfewConditionsService,
+  CurfewReleaseDateService,
   CurfewTimetableService,
   DeviceWearerResponsibleAdultService,
   DeviceWearerService,
+  EnforcementZoneService,
   InstallationAndRiskService,
   MonitoringConditionsService,
   OrderSearchService,
   OrderService,
   TrailMonitoringService,
-  EnforcementZoneService,
 }

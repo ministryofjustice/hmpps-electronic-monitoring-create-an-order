@@ -5,7 +5,7 @@ describe('nextPage', () => {
   it('should return the first selected page if the current page is undefined', () => {
     const allPages = ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol']
     const allPagesResult = nextPage(allPages)
-    expect(allPagesResult).toEqual(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
+    expect(allPagesResult).toEqual(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE)
 
     const somePages = ['trail', 'mandatoryAttendance', 'alcohol']
     const somePagesResult = nextPage(somePages)
@@ -29,7 +29,7 @@ describe('nextPage', () => {
     expect(result).toEqual(paths.MONITORING_CONDITIONS.ATTENDANCE)
 
     const result2 = nextPage(allPages)
-    expect(result2).toEqual(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
+    expect(result2).toEqual(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE)
   })
 
   it('should return the summary page if the currently selected page is the last page', () => {

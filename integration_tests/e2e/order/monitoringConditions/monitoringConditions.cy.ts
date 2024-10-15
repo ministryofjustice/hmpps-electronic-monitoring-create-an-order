@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import ErrorPage from '../../../pages/error'
-import CurfewDayOfReleasePage from '../../../pages/order/curfewDayOfRelease'
+import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import MonitoringConditionsPage from '../../../pages/order/monitoringConditions'
 import Page from '../../../pages/page'
 
@@ -131,7 +131,7 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="checkbox"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       page.saveAndContinueButton().click()
-      const nextPage = Page.verifyOnPage(CurfewDayOfReleasePage)
+      const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)
       nextPage.subHeader().should('contain.text', 'Curfew for day of release')
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
@@ -178,7 +178,7 @@ context('Monitoring conditions main section', () => {
           devicesRequired: 'aml',
         })
       })
-      const nextPage = Page.verifyOnPage(CurfewDayOfReleasePage)
+      const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)
       nextPage.subHeader().should('contain.text', 'Alcohol monitoring')
     })
   })

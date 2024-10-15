@@ -40,7 +40,7 @@ describe('ContactDetailsController', () => {
     it('should render the form using the saved contact details data', async () => {
       // Given
       const mockOrder = getMockOrder({ deviceWearerContactDetails: { contactNumber: '01234567890' } })
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
@@ -62,7 +62,7 @@ describe('ContactDetailsController', () => {
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
       const mockOrder = getMockOrder({ deviceWearerContactDetails: { contactNumber: '01234567890' } })
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest

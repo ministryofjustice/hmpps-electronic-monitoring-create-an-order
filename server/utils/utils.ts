@@ -81,6 +81,18 @@ export const getError = (validationErrors: ValidationResult, field: string): Err
   return undefined
 }
 
+export const getErrors = (validationErrors: ValidationResult, fields: string[]): ErrorMessage | undefined => {
+  const matchedErrors = validationErrors.filter(e => fields.includes(e.field))
+
+  if (matchedErrors.length > 0) {
+    return {
+      text: matchedErrors.map(e => e.error).join(', '),
+    }
+  }
+
+  return undefined
+}
+
 export const getErrorsViewModel = (validationErrors: ValidationResult): ErrorsViewModel => {
   const viewModel: ErrorsViewModel = {}
   validationErrors.forEach(error => {
