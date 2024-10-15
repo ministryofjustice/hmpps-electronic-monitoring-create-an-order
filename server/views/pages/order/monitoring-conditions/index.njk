@@ -204,45 +204,33 @@
       },
       items: [
         {
-          text: 'Location Monitoring (using Non-Fitted Device)',
-          value: '250',
-          checked: devicesRequired.values | select("equalto", "250") | length,
+          text: 'Location, fitted',
+          value: 'Location - fitted',
+          checked: devicesRequired.values | select("equalto", "Location - fitted") | length,
           disabled: not isOrderEditable
         },
         {
-          text: 'AAMR',
-          value: 'aamr',
-          checked: devicesRequired.values | select("equalto", "aamr") | length,
+          text: 'Location, not fitted',
+          value: 'Location - non-fitted',
+          checked: devicesRequired.values | select("equalto", "Location - non-fitted") | length,
           disabled: not isOrderEditable
         },
         {
-          text: 'AML',
-          value: 'aml',
-          checked: devicesRequired.values | select("equalto", "aml") | length,
+          text: 'Radio frequency',
+          value: 'RF',
+          checked: devicesRequired.values | select("equalto", "RF") | length,
           disabled: not isOrderEditable
         },
         {
-          text: 'Attendance Requirement',
-          value: 'attendance_requirement',
-          checked: devicesRequired.values | select("equalto", "attendance_requirement") | length,
+          text: 'Alcohol, transdermal',
+          value: 'Alcohol (Transdermal)',
+          checked: devicesRequired.values | select("equalto", "Alcohol (Transdermal)") | length,
           disabled: not isOrderEditable
         },
         {
-          text: 'Curfew with EM',
-          value: 'curfew_with_em',
-          checked: devicesRequired.values | select("equalto", "curfew_with_em") | length,
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'EM Exclusion / Inclusion Zone',
-          value: 'em_exclusion_inclusion_zone',
-          checked: devicesRequired.values | select("equalto", "em_exclusion_inclusion_zone") | length,
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Location Monitoring (Fitted Device)',
-          value: 'location_monitoring',
-          checked: devicesRequired.values | select("equalto", "location_monitoring") | length,
+          text: 'Alcohol, remote breath',
+          value: 'Alcohol (Remote Breath)',
+          checked: devicesRequired.values | select("equalto", "Alcohol (Remote Breath)") | length,
           disabled: not isOrderEditable
         }
       ],

@@ -14,8 +14,7 @@ const mockSubmittedMonitoringRequirements = {
     trail: true,
     mandatoryAttendance: true,
     alcohol: true,
-    devicesRequired:
-      '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+    devicesRequired: 'Location - fitted,Location - non-fitted,RF,Alcohol (Transdermal),Alcohol (Remote Breath)',
   },
 }
 const mockEmptyMonitoringConditions = {
@@ -144,8 +143,7 @@ context('Monitoring conditions main section', () => {
           trail: true,
           mandatoryAttendance: true,
           alcohol: true,
-          devicesRequired:
-            '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+          devicesRequired: 'Location - fitted,Location - non-fitted,RF,Alcohol (Transdermal),Alcohol (Remote Breath)',
         })
       })
     })
@@ -161,7 +159,7 @@ context('Monitoring conditions main section', () => {
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       cy.get('input[type="radio"][value="true"]').check()
       cy.get('input[type="checkbox"][value="alcohol"]').check()
-      cy.get('input[type="checkbox"][value="aml"]').check()
+      cy.get('input[type="checkbox"][value="Alcohol (Transdermal)"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       page.saveAndContinueButton().click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
@@ -175,7 +173,7 @@ context('Monitoring conditions main section', () => {
           trail: false,
           mandatoryAttendance: false,
           alcohol: true,
-          devicesRequired: 'aml',
+          devicesRequired: 'Alcohol (Transdermal)',
         })
       })
       const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)
