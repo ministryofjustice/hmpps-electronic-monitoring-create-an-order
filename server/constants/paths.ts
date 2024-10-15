@@ -32,7 +32,7 @@ const paths = {
     ATTENDANCE_ITEM: '/order/:orderId/monitoring-conditions/attendance/:conditionId',
     ALCOHOL: '/order/:orderId/monitoring-conditions/alcohol',
     CURFEW_RELEASE_DATE: '/order/:orderId/monitoring-conditions/curfew/release-date',
-    CURFEW_DATES: '/order/:orderId/monitoring-conditions/curfew/dates',
+    CURFEW_CONDITIONS: '/order/:orderId/monitoring-conditions/curfew/conditions',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
   },
 

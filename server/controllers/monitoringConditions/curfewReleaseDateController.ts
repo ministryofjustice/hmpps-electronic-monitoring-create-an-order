@@ -125,7 +125,7 @@ export default class CurfewReleaseDateController {
 
       res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
     } else {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_DATES.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
     }
   }
 }
