@@ -31,6 +31,17 @@ export type TimeField = FormField & {
   value: Time
 }
 
+export type TimeSpan = {
+  startHours: string
+  startMinutes: string
+  endHours: string
+  endMinutes: string
+}
+
+export type TimeSpanField = FormField & {
+  value: TimeSpan
+}
+
 export type Date = {
   day: string
   month: string
