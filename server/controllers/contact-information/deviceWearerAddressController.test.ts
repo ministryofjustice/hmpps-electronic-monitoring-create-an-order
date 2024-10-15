@@ -300,11 +300,11 @@ describe('DeviceWearerAddressController', () => {
 
   describe('getAddress', () => {
     it.each([
-      ['Primary', 'primary', primaryAddress],
-      ['Secondary', 'secondary', secondaryAddress],
-      ['Tertiary', 'secondary', secondaryAddress],
-      ['Installation', 'secondary', secondaryAddress],
-    ])('it should render the %s address form with the correct address', async (_: string, param: string, expected) => {
+      ['Primary', 'primary', primaryAddress, true],
+      ['Secondary', 'secondary', secondaryAddress, true],
+      ['Tertiary', 'tertiary', tertiaryAddress, false],
+      ['Installation', 'installation', installationAddress, false],
+    ])('it should render the %s address form with the correct address', async (_: string, param: string, expected, hasAnotherAddress: boolean) => {
       // Given
       const req = createMockRequest({
         order: orderWithAddresses,
@@ -323,6 +323,9 @@ describe('DeviceWearerAddressController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
         ...expected.address,
+        addressType: param,
+        hasAnotherAddress,
+    installationAddress: false,
         errors: {},
       })
     })
@@ -360,11 +363,14 @@ describe('DeviceWearerAddressController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
+        addressType: "primary",
         addressLine1: '',
         addressLine2: '',
         addressLine3: '',
         addressLine4: '',
         postcode: '',
+        hasAnotherAddress: true,
+     installationAddress: false,
         errors: {
           addressLine1: {
             text: 'Address line 1 is required',
@@ -443,7 +449,7 @@ describe('DeviceWearerAddressController', () => {
         flash: jest.fn(),
         params: {
           orderId: '123456789',
-          addressType: 'primary'
+          addressType: 'primary',
         },
       })
       const res = createMockResponse()
