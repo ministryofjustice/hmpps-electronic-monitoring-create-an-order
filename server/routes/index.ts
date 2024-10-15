@@ -109,7 +109,9 @@ export default function routes({
 
   // Device wearer addresses
   get(paths.CONTACT_INFORMATION.ADDRESSES_NO_FIXED_ABODE, deviceWearerAddressController.getFixedAbode)
-  post(paths.CONTACT_INFORMATION.ADDRESSES, deviceWearerAddressController.postFixedAbode)
+  post(paths.CONTACT_INFORMATION.ADDRESSES_NO_FIXED_ABODE, deviceWearerAddressController.postFixedAbode)
+  get(paths.CONTACT_INFORMATION.ADDRESSES, deviceWearerAddressController.getAddress)
+  post(paths.CONTACT_INFORMATION.ADDRESSES, deviceWearerAddressController.postAddress)
 
   /**
    * INSTALLATION AND RISK

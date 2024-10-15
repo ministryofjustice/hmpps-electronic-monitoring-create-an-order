@@ -21,7 +21,7 @@ const primaryAddress = {
     addressLine2: '',
     addressLine3: '',
     addressLine4: '',
-    postCode: '',
+    postcode: '',
   },
 }
 
@@ -33,7 +33,7 @@ const primaryInstallationAddress = {
     addressLine2: '',
     addressLine3: '',
     addressLine4: '',
-    postCode: '',
+    postcode: '',
   },
 }
 
@@ -45,7 +45,7 @@ const secondaryAddress = {
     addressLine2: '',
     addressLine3: '',
     addressLine4: '',
-    postCode: '',
+    postcode: '',
   },
 }
 
@@ -57,7 +57,7 @@ const tertiaryAddress = {
     addressLine2: '',
     addressLine3: '',
     addressLine4: '',
-    postCode: '',
+    postcode: '',
   },
 }
 
@@ -69,7 +69,7 @@ const installationAddress = {
     addressLine2: '',
     addressLine3: '',
     addressLine4: '',
-    postCode: '',
+    postcode: '',
   },
 }
 
@@ -348,7 +348,7 @@ describe('DeviceWearerAddressController', () => {
               addressLine2: '',
               addressLine3: '',
               addressLine4: '',
-              postCode: '',
+              postcode: '',
             },
           ]),
       })
@@ -364,7 +364,7 @@ describe('DeviceWearerAddressController', () => {
         addressLine2: '',
         addressLine3: '',
         addressLine4: '',
-        postCode: '',
+        postcode: '',
         errors: {
           addressLine1: {
             text: 'Address line 1 is required',
@@ -391,7 +391,7 @@ describe('DeviceWearerAddressController', () => {
           addressLine2: '',
           addressLine3: 'c',
           addressLine4: 'd',
-          postCode: '',
+          postcode: '',
         },
         flash: jest.fn(),
         params: {
@@ -418,7 +418,7 @@ describe('DeviceWearerAddressController', () => {
         addressLine2: '',
         addressLine3: 'c',
         addressLine4: 'd',
-        postCode: '',
+        postcode: '',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         { error: 'Address line 1 is required', field: 'addressLine1' },
@@ -457,7 +457,7 @@ describe('DeviceWearerAddressController', () => {
           addressLine2: 'b',
           addressLine3: 'c',
           addressLine4: 'd',
-          postCode: 'e',
+          postcode: 'e',
         },
       })
 
@@ -484,7 +484,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
-            postCode: 'e',
+            postcode: 'e',
             hasAnotherAddress: 'true',
           },
           flash: jest.fn(),
@@ -504,7 +504,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
-            postCode: 'e',
+            postcode: 'e',
           },
         })
 
@@ -534,7 +534,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
-            postCode: 'e',
+            postcode: 'e',
             hasAnotherAddress: 'false',
           },
           flash: jest.fn(),
@@ -554,7 +554,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
-            postCode: 'e',
+            postcode: 'e',
           },
         })
 
@@ -583,7 +583,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
-            postCode: 'e',
+            postcode: 'e',
             hasAnotherAddress: 'false',
           },
           flash: jest.fn(),
@@ -603,7 +603,7 @@ describe('DeviceWearerAddressController', () => {
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
-            postCode: 'e',
+            postcode: 'e',
           },
         })
 

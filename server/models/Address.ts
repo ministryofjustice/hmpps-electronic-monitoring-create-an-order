@@ -5,7 +5,7 @@ const AddressModel = z.object({
   addressLine2: z.string(),
   addressLine3: z.string(),
   addressLine4: z.string(),
-  postCode: z.string(),
+  postcode: z.string(),
 })
 
 export type Address = z.infer<typeof AddressModel>

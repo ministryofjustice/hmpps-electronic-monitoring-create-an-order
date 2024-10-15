@@ -6,11 +6,6 @@ import { DeviceWearerAddress, DeviceWearerAddressTypeEnum } from '../../models/D
 import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
 
-const locationMap = {
-  [DeviceWearerAddressTypeEnum.Enum.PRIMARY]: [DeviceWearerAddressTypeEnum.Enum.SECONDARY],
-  [DeviceWearerAddressTypeEnum.Enum.SECONDARY]: [DeviceWearerAddressTypeEnum.Enum.TERTIARY],
-}
-
 export default class DeviceWearerAddressController {
   constructor(
     private readonly auditService: AuditService,
@@ -60,11 +55,11 @@ export default class DeviceWearerAddressController {
       if (action === 'continue') {
         if (fixedAbode === 'true') {
           res.redirect(
-            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType?', 'primary'),
+            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'primary'),
           )
         } else {
           res.redirect(
-            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType?', 'installation'),
+            paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'installation'),
           )
         }
       } else {
@@ -77,11 +72,16 @@ export default class DeviceWearerAddressController {
     const { addressType } = req.params
     const { deviceWearerAddresses: addresses } = req.order!
     const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
+    const nextAddressType = addressType.toUpperCase() === 'PRIMARY' ? 'SECONDARY' : addressType === 'SECONDARY' ? 'TERTIARY' : ''
+    const hasAnotherAddress = addresses.some(address => address.addressType === nextAddressType)
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
     res.render('pages/order/contact-information/address', {
+      addressType,
       ...currentAddress?.address,
+      installationAddress: currentAddress?.installationAddress,
+      hasAnotherAddress: hasAnotherAddress,
       ...(formData.length > 0 ? (formData[0] as never) : {}),
       errors: getErrorsViewModel(errors as never),
     })
@@ -111,7 +111,6 @@ export default class DeviceWearerAddressController {
     } else if (action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     } else {
-      console.log(formData)
       if (formData.hasAnotherAddress === 'true') {
         if (addressType.toUpperCase() === 'PRIMARY') {
           res.redirect(
