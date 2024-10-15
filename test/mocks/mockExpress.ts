@@ -1,20 +1,19 @@
 import type { Request, Response } from 'express'
-import { Order } from '../../server/models/Order'
 
-export const createMockRequest = (order?: Order): Request => {
+export const createMockRequest = (
+  overrideProperties: Partial<Request> = { params: { orderId: '123456789' } },
+): Request => {
   return {
     // @ts-expect-error stubbing session
     session: {},
     query: {},
-    params: {
-      orderId: '123456789',
-    },
+    params: {},
     user: {
       username: '',
       token: '',
       authSource: '',
     },
-    order,
+    ...overrideProperties,
   }
 }
 
