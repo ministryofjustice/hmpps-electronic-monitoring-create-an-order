@@ -6,6 +6,7 @@ import AttendanceMonitoringModel from './AttendanceMonitoring'
 import DeviceWearerContactDetailsModel from './ContactDetails'
 import CurfewConditionsModel from './CurfewConditions'
 import CurfewReleaseDateModel from './CurfewReleaseDate'
+import CurfewTimetableModel from './CurfewTimetable'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
 import EnforcementZoneModel from './EnforcementZone'
@@ -29,6 +30,7 @@ const OrderModel = z.object({
   monitoringConditionsAlcohol: AlcoholMonitoringModel.optional(),
   monitoringConditionsCurfewReleaseDate: CurfewReleaseDateModel.optional(),
   monitoringConditionsCurfewConditions: CurfewConditionsModel.optional(),
+  monitoringConditionsCurfewTimetable: CurfewTimetableModel.optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>
