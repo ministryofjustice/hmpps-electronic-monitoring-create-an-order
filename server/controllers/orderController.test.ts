@@ -40,7 +40,7 @@ describe('OrderController', () => {
     it('should render a summary of the order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -79,7 +79,7 @@ describe('OrderController', () => {
     it('should render a confirmation page for a draft order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -95,7 +95,7 @@ describe('OrderController', () => {
     it('should redirect to a failed page for a submitted order', async () => {
       // Given
       const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -111,7 +111,7 @@ describe('OrderController', () => {
     it('should delete the order and redirect to a success page for a draft order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -126,7 +126,7 @@ describe('OrderController', () => {
     it('should not delete the order and reditect to a failed page for a submitted order', async () => {
       // Given
       const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -173,7 +173,7 @@ describe('OrderController', () => {
     it('should submit the order and redirect to a success page for a draft order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -188,7 +188,7 @@ describe('OrderController', () => {
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {
       // Given
       const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
-      const req = createMockRequest(mockOrder)
+      const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
 
