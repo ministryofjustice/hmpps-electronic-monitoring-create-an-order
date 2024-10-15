@@ -201,7 +201,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
       page = Page.verifyOnPage(EnforcementZonePage, { orderId: mockOrderId, zoneId: 2 })
 
-      // page.form.isEmpty()
+      
     })
 
     it('should return to the summary page', () => {
