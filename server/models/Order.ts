@@ -1,5 +1,5 @@
 import z from 'zod'
-import AddressModel from './Address'
+import DeviceWearerAddressModel from './DeviceWearerAddress'
 import AlcoholMonitoringModel from './AlcoholMonitoring'
 import AttachmentModel from './Attachment'
 import AttendanceMonitoringModel from './AttendanceMonitoring'
@@ -18,7 +18,7 @@ const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
-  deviceWearerAddresses: z.array(AddressModel),
+  deviceWearerAddresses: z.array(DeviceWearerAddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   enforcementZoneConditions: z.array(EnforcementZoneModel),
