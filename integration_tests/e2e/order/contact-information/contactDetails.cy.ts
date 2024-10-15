@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import ContactDetailsPage from '../../../pages/order/contact-information/contactDetails'
-// import AddressInformationPage from '../../../pages/order/contact-information/addressInformation'
+import AddressInformationPage from '../../../pages/order/contact-information/addressInformation'
 import OrderSummaryPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
@@ -80,8 +80,7 @@ context('About the device wearer', () => {
         },
       })
 
-      // Page.verifyOnPage(AddressInformationPage)
-      Page.verifyOnPage(NotFoundErrorPage, 'Not found')
+      Page.verifyOnPage(AddressInformationPage)
     })
 
     it('should return to the summary page', () => {
