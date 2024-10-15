@@ -1,0 +1,209 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../../../partials/addressInput.njk" import addressInput %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: orderSummaryUri
+  }) }}
+
+  {% if not isOrderEditable %}
+      {% set html %}
+        <p class="govuk-notification-banner__heading">
+          You are viewing a submitted order.
+        </p>
+      {% endset %}
+
+      {{ govukNotificationBanner({
+        html: html
+      }) }}
+  {% endif %}
+
+  <div class="homepage-content">
+    {{ mojPageHeaderActions({
+      heading: {
+          text: "Contact information"
+      }
+    }) }}
+  </div>
+
+  <form action="" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {% call govukFieldset({
+      legend: {
+        text: addressType | capitalize + " address",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+
+      <div class="govuk-!-width-two-thirds">
+        <h4 class="govuk-heading-s">What is the device wearer's {{ addressType | lower }} address?</h4>
+        {% if addressType == "primary" %}
+          <p>
+            If the device wearer has multiple addresses, enter the address where they spend most of their time or have registered as their home residence
+          </p>
+        {% endif %}
+      </div>
+
+      {{ govukInput({
+        label: {
+          text: "Addresss line 1"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-1",
+        name: "addressLine1",
+        value: addressLine1,
+        errorMessage: errors.addressLine1,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Addresss line 2"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-2",
+        name: "addressLine2",
+        value: addressLine2,
+        errorMessage: errors.addressLine2,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Addresss line 3"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-3",
+        name: "addressLine3",
+        value: addressLine3,
+        errorMessage: errors.addressLine3,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Addresss line 4"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-4",
+        name: "addressLine4",
+        value: addressLine4,
+        errorMessage: errors.addressLine4,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Postcode"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "postcode",
+        name: "postcode",
+        value: postcode,
+        errorMessage: errors.postcode,
+        disabled: not isOrderEditable
+      }) }}
+
+      {% if addressType == "primary" %}
+
+        {{ govukRadios({
+            name: "installationAddress",
+            classes: "govuk-radios--inline",
+            fieldset: {
+            legend: {
+                text: "Is the primary address where the device will be installed?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+            }
+            },
+            items: [
+            {
+                value: "true",
+                text: "Yes",
+                disabled: not isOrderEditable
+            },
+            {
+                value: "false",
+                text: "No",
+                disabled: not isOrderEditable
+            }
+            ],
+            value: installationAddress,
+            errorMessage: errors.installationAddress,
+            disabled: not isOrderEditable
+        }) }}
+
+      {% endif %}
+
+      {% if (addressType == "primary") or (addressType == 'secondary') %}
+
+        {{ govukRadios({
+            name: "hasAnotherAddress",
+            classes: "govuk-radios--inline",
+            fieldset: {
+            legend: {
+                text: "Does the device wearer have another address they will be monitored at?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+            }
+            },
+            hint: {
+            text: "For example, the device wearer will spend curfew hours at another address. Examples of additional addresses include living part time in another address due to separated parents or living on-site at a school or university during term time.",
+            classes: "govuk-!-width-two-thirds"
+            },
+            items: [
+            {
+                value: "true",
+                text: "Yes",
+                disabled: not isOrderEditable
+            },
+            {
+                value: "false",
+                text: "No",
+                disabled: not isOrderEditable
+            }
+            ],
+            value: hasAnotherAddress,
+            errorMessage: errors.hasAnotherAddress,
+            disabled: not isOrderEditable
+        }) }}
+
+    {% endif %}
+
+    {% endcall %}
+
+    <div class="govuk-button-group">
+      {% if isOrderEditable %}
+        {{ govukButton({
+            text: "Save and continue",
+            name: "action",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return back to to form section menu",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "back"
+        }) }}
+      {% else %}
+        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to to form section menu</a>
+      {% endif %}
+    </div>
+  </form>
+
+{% endblock %}

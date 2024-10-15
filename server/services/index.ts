@@ -15,6 +15,7 @@ import MonitoringConditionsService from './monitoringConditionsService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import TrailMonitoringService from './trailMonitoringService'
+import DeviceWearerAddressService from './deviceWearerAddressService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -27,6 +28,7 @@ export const services = () => {
   const curfewConditionsService = new CurfewConditionsService(cemoApiClient)
   const curfewReleaseDateService = new CurfewReleaseDateService(cemoApiClient)
   const curfewTimetableService = new CurfewTimetableService(cemoApiClient)
+  const deviceWearerAddressService = new DeviceWearerAddressService(cemoApiClient)
   const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
@@ -46,6 +48,7 @@ export const services = () => {
     curfewReleaseDateService,
     curfewConditionsService,
     curfewTimetableService,
+    deviceWearerAddressService,
     deviceWearerResponsibleAdultService,
     deviceWearerService,
     installationAndRiskService,

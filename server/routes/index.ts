@@ -5,6 +5,7 @@ import AttachmentsController from '../controllers/attachmentController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
+import DeviceWearerAddressController from '../controllers/contact-information/deviceWearerAddressController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
@@ -32,6 +33,7 @@ export default function routes({
   curfewConditionsService,
   curfewReleaseDateService,
   curfewTimetableService,
+  deviceWearerAddressService,
   deviceWearerResponsibleAdultService,
   deviceWearerService,
   installationAndRiskService,
@@ -53,6 +55,7 @@ export default function routes({
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
+  const deviceWearerAddressController = new DeviceWearerAddressController(auditService, deviceWearerAddressService)
   const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
@@ -99,8 +102,16 @@ export default function routes({
   /**
    * CONTACT INFORMATION
    */
+
+  // Contact details
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
   post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
+
+  // Device wearer addresses
+  get(paths.CONTACT_INFORMATION.ADDRESSES_NO_FIXED_ABODE, deviceWearerAddressController.getFixedAbode)
+  post(paths.CONTACT_INFORMATION.ADDRESSES_NO_FIXED_ABODE, deviceWearerAddressController.postFixedAbode)
+  get(paths.CONTACT_INFORMATION.ADDRESSES, deviceWearerAddressController.getAddress)
+  post(paths.CONTACT_INFORMATION.ADDRESSES, deviceWearerAddressController.postAddress)
 
   /**
    * INSTALLATION AND RISK

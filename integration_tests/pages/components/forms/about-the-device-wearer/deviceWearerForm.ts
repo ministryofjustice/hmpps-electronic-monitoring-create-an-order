@@ -1,4 +1,5 @@
-import { PageElement } from '../../page'
+import { PageElement } from '../../../page'
+import FormComponent from '../../formComponent'
 
 export type AboutDeviceWearerDateOfBirthFormData = {
   date: string
@@ -20,18 +21,8 @@ export type AboutDeviceWearerFormData = {
   genderIdentity: string
 }
 
-export default class AboutDeviceWearerFormComponent {
-  private get form(): PageElement {
-    return cy.get('form')
-  }
-
-  checkHasForm(): void {
-    this.form.should('exist')
-  }
-
-  hasAction = (action: string | RegExp): PageElement => this.form.should('have.attr', 'action', action)
-
-  // IDENTIFIERS
+export default class AboutDeviceWearerFormComponent extends FormComponent {
+  // FIELDS
 
   nomisIdField = (): PageElement => this.form.getByLabel('NOMIS ID')
 
@@ -98,12 +89,6 @@ export default class AboutDeviceWearerFormComponent {
   genderIdentityDoNotKnowField = (): PageElement => this.genderIdentityFieldset().getByLabel("Don't know")
 
   genderIdentitySelfIdentifyField = (): PageElement => this.genderIdentityFieldset().getByLabel('Self identify')
-
-  // ACTIONS
-
-  saveAndContinueButton = (): PageElement => this.form.get('button[type=submit][value="continue"]')
-
-  saveAndReturnButton = (): PageElement => this.form.get('button[type=submit][value="back"]')
 
   // FORM HELPERS
 

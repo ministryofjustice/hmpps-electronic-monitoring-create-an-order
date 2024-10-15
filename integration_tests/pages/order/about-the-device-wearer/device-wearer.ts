@@ -3,7 +3,7 @@ import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
 
-import AboutDeviceWearerFormComponent from '../../components/about-the-device-wearer/deviceWearerForm'
+import AboutDeviceWearerFormComponent from '../../components/forms/about-the-device-wearer/deviceWearerForm'
 
 export default class AboutDeviceWearerPage extends AppPage {
   form = new AboutDeviceWearerFormComponent()
