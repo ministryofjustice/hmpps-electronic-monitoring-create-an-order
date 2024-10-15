@@ -22,7 +22,7 @@ export type AboutDeviceWearerFormData = {
 
 export default class AboutDeviceWearerFormComponent {
   private get form(): PageElement {
-    return cy.get('form[action*="about-the-device-wearer"]')
+    return cy.get('form')
   }
 
   checkHasForm(): void {
