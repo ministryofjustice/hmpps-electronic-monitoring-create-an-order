@@ -1,0 +1,104 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: orderSummaryUri
+  }) }}
+
+  {% if not isOrderEditable %}
+      {% set html %}
+        <p class="govuk-notification-banner__heading">
+          You are viewing a submitted order.
+        </p>
+      {% endset %}
+
+      {{ govukNotificationBanner({
+        html: html
+      }) }}
+  {% endif %}
+
+  <div class="homepage-content">
+    {{ mojPageHeaderActions({
+      heading: {
+          text: "Contact information"
+      }
+    }) }}
+  </div>
+
+  <form action="" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {% call govukFieldset({
+      legend: {
+        text: "Primary address",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+
+      {{ govukRadios({
+        name: "fixedAbode",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Does the device wearer have a fixed address?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        hint: {
+            text: "For example, the device wearer has a tenancy or permanent address they are registered at.",
+            classes: "govuk-!-width-two-thirds"
+        },
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "false",
+            text: "No",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: fixedAbode,
+        errorMessage: errors.fixedAbode,
+        disabled: not isOrderEditable
+      }) }}
+
+    {% endcall %}
+
+    <div class="govuk-button-group">
+      {% if isOrderEditable %}
+        {{ govukButton({
+            text: "Save and continue",
+            name: "action",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return back to to form section menu",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "back"
+        }) }}
+      {% else %}
+        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to to form section menu</a>
+      {% endif %}
+    </div>
+  </form>
+
+{% endblock %}
