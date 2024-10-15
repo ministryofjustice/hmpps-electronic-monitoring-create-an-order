@@ -67,7 +67,19 @@ export default class DeviceWearerAddressController {
     }
   }
 
-  getAddress: RequestHandler = async (req: Request, res: Response) => {}
+  getAddress: RequestHandler = async (req: Request, res: Response) => {
+    const { addressType } = req.params
+    const { deviceWearerAddresses: addresses } = req.order!
+    const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+
+    res.render('pages/order/contact-information/address', {
+      ...currentAddress?.address,
+      ...(formData.length > 0 ? (formData[0] as never) : {}),
+      errors: getErrorsViewModel(errors as never),
+    })
+  }
 
   postAddress: RequestHandler = async (req: Request, res: Response) => {}
 }

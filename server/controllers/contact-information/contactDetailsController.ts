@@ -21,7 +21,7 @@ export default class ContactDetailsController {
       errors as never,
     )
 
-    res.render(`pages/order/contact-information/contact-details`, viewModel)
+    res.render('pages/order/contact-information/contact-details', viewModel)
   }
 
   post: RequestHandler = async (req: Request, res: Response) => {

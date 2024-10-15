@@ -15,7 +15,7 @@ jest.mock('../../data/restClient')
 
 const primaryAddress = {
   addressType: DeviceWearerAddressTypeEnum.Enum.PRIMARY,
-  isInstallationAddress: false,
+  installationAddress: false,
   address: {
     addressLine1: '',
     addressLine2: '',
@@ -27,7 +27,7 @@ const primaryAddress = {
 
 const primaryInstallationAddress = {
   addressType: DeviceWearerAddressTypeEnum.Enum.PRIMARY,
-  isInstallationAddress: true,
+  installationAddress: true,
   address: {
     addressLine1: '',
     addressLine2: '',
@@ -39,7 +39,7 @@ const primaryInstallationAddress = {
 
 const secondaryAddress = {
   addressType: DeviceWearerAddressTypeEnum.Enum.SECONDARY,
-  isInstallationAddress: false,
+  installationAddress: false,
   address: {
     addressLine1: '',
     addressLine2: '',
@@ -51,7 +51,7 @@ const secondaryAddress = {
 
 const tertiaryAddress = {
   addressType: DeviceWearerAddressTypeEnum.Enum.TERTIARY,
-  isInstallationAddress: false,
+  installationAddress: false,
   address: {
     addressLine1: '',
     addressLine2: '',
@@ -63,7 +63,7 @@ const tertiaryAddress = {
 
 const installationAddress = {
   addressType: DeviceWearerAddressTypeEnum.Enum.INSTALLATION,
-  isInstallationAddress: false,
+  installationAddress: false,
   address: {
     addressLine1: '',
     addressLine2: '',
@@ -75,7 +75,7 @@ const installationAddress = {
 
 const noFixedAbodeAddress = {
   addressType: DeviceWearerAddressTypeEnum.Enum.NO_FIXED_ABODE,
-  isInstallationAddress: false,
+  installationAddress: false,
   address: null,
 }
 
@@ -342,7 +342,7 @@ describe('DeviceWearerAddressController', () => {
             { error: 'Address line 2 is required', field: 'addressLine2' },
             { error: 'Postcode is required', field: 'postcode' },
           ])
-          .mockRejectedValueOnce([
+          .mockReturnValueOnce([
             {
               addressLine1: '',
               addressLine2: '',
@@ -450,6 +450,7 @@ describe('DeviceWearerAddressController', () => {
 
       mockDeviceWearerAddressService.updateAddress.mockResolvedValue({
         addressType: 'PRIMARY',
+        installationAddress: false,
         address: {
           addressLine1: 'a',
           addressLine2: 'b',
@@ -496,6 +497,7 @@ describe('DeviceWearerAddressController', () => {
 
         mockDeviceWearerAddressService.updateAddress.mockResolvedValue({
           addressType: 'PRIMARY',
+          installationAddress: false,
           address: {
             addressLine1: 'a',
             addressLine2: 'b',
@@ -545,6 +547,7 @@ describe('DeviceWearerAddressController', () => {
 
         mockDeviceWearerAddressService.updateAddress.mockResolvedValue({
           addressType: 'PRIMARY',
+          installationAddress: false,
           address: {
             addressLine1: 'a',
             addressLine2: 'b',
@@ -593,6 +596,7 @@ describe('DeviceWearerAddressController', () => {
 
         mockDeviceWearerAddressService.updateAddress.mockResolvedValue({
           addressType: 'PRIMARY',
+          installationAddress: false,
           address: {
             addressLine1: 'a',
             addressLine2: 'b',

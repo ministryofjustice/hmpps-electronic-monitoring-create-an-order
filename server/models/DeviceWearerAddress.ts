@@ -11,6 +11,7 @@ export const DeviceWearerAddressTypeEnum = z.enum([
 
 const DeviceWearerAddressModel = z.object({
   addressType: DeviceWearerAddressTypeEnum,
+  installationAddress: z.boolean(),
   address: AddressModel.nullable(),
 })
 
