@@ -27,109 +27,32 @@
     Complete all sections before submitting the form.
   </p>
 
-  <ul class="govuk-task-list">
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-      <div class="govuk-task-list__name-and-hint">
-        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/about-the-device-wearer" aria-describedby="order-section-device-wearer">
-            About the device wearer
-        </a>
+{% macro _lineItem(name, order, url, complete, describedBy) %}
+  <li class="govuk-task-list__item govuk-task-list__item--with-link">
+    <div class="govuk-task-list__name-and-hint">
+      <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}{{ url }}" aria-describedby="{{ describedBy }}">
+          {{ name }}
+      </a>
+    </div>
+    {% if complete === true %}
+      <div class="govuk-task-list__status" >
+        <strong class="govuk-tag govuk-tag--green">Complete</strong>
       </div>
-      {% if order.deviceWearer.isComplete %}
-        <div class="govuk-task-list__status" >
-          <strong class="govuk-tag govuk-tag--green">
-            Complete
-          </strong>
-        </div>
-      {% else %}               
-        <div class="govuk-task-list__status" >
-           <strong class="govuk-tag govuk-tag--grey">
-            Incomplete
-          </strong>
-        </div>
-      {% endif %}
-    </li>
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-      <div class="govuk-task-list__name-and-hint">
-        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/installation-and-risk" aria-describedby="order-section-device-wearer">
-            Installation and risk
-        </a>
+    {% else %}               
+      <div class="govuk-task-list__status" >
+        <strong class="govuk-tag govuk-tag--grey">Incomplete</strong>
       </div>
-      {% if order.installationAndRisk.isComplete %}
-        <div class="govuk-task-list__status" >
-          <strong class="govuk-tag govuk-tag--green">
-            Complete
-          </strong>
-        </div>
-      {% else %}
-        <div class="govuk-task-list__status" >
-           <strong class="govuk-tag govuk-tag--grey">
-            Incomplete
-          </strong>
-        </div>
-      {% endif %}
-    </li>
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-      <div class="govuk-task-list__name-and-hint">
-        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/contact-information/contact-details" aria-describedby="order-section-contact-details">
-            Contact information
-        </a>
-      </div>
-      {% if order.contactDetails.isComplete %}
-        <div class="govuk-task-list__status" >
-          <strong class="govuk-tag govuk-tag--green">
-            Complete
-          </strong>
-        </div>
-      {% else %}               
-        <div class="govuk-task-list__status" >
-           <strong class="govuk-tag govuk-tag--grey">
-            Incomplete
-          </strong>
-        </div>
-      {% endif %}
-    </li>
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-      <div class="govuk-task-list__name-and-hint">
-        <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/monitoring-conditions" aria-describedby="order-section-device-wearer">
-            Monitoring conditions
-        </a>
-      </div>
-      {% if order.deviceWearer.isComplete %}
-        <div class="govuk-task-list__status" >
-          <strong class="govuk-tag govuk-tag--green">
-            Complete
-          </strong>
-        </div>
-      {% else %}
-        <div class="govuk-task-list__status" >
-           <strong class="govuk-tag govuk-tag--grey">
-            Incomplete
-          </strong>
-        </div>
-      {% endif %}
-    </li>
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-      <div class="govuk-task-list__name-and-hint">        
-            <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}/attachments" aria-describedby="order-section-attachments">
-                Attachments
-            </a>
-      </div>
-      {% if order.attachments.isComplete %}
-        <div class="govuk-task-list__status" >
-          <strong class="govuk-tag govuk-tag--green">
-            Complete
-          </strong>
-        </div>
-      {% else %}               
-        <div class="govuk-task-list__status" >
-           <strong class="govuk-tag govuk-tag--grey">
-            Incomplete
-          </strong>
-        </div>
-      {% endif %}
-    </li>
-  </ul>
+    {% endif %}
+  </li>
+{% endmacro %}
 
+  <ul class="govuk-task-list">
+    {{ _lineItem("About the device wearer", "/about-the-device-wearer", order.deviceWearer.isComplete, "order-section-device-wearer") }}
+    {{ _lineItem("Contact information", "/contact-information/contact-details", order.contactDetails.isComplete, "order-section-contact-details") }}
+    {{ _lineItem("Installation and risk", "/installation-and-risk", order.installationAndRisk.isComplete, "order-section-installation-and-risk") }}
+    {{ _lineItem("Monitoring conditions", "/monitoring-conditions", order.monitoringConditions.isComplete, "order-section-monitoring-conditions") }}
+    {{ _lineItem("Attachments", "/attachments", order.attachments.isComplete, "order-section-attachments") }}
+  </ul>
 
   {% if order.status == "IN_PROGRESS" %}
     <form action="/order/{{ order.id }}/submit" method="post">
