@@ -1,5 +1,3 @@
-// Remove this eslint config once this controller is implemented
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import paths from '../../constants/paths'
@@ -155,7 +153,7 @@ export default class AttendanceMonitoringController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, conditionId } = req.params
+    const { conditionId } = req.params
     const { monitoringConditionsAttendance } = req.order!
     const condition = monitoringConditionsAttendance?.find(c => c.id === conditionId)
     if (!condition) {
@@ -163,8 +161,6 @@ export default class AttendanceMonitoringController {
       return
     }
 
-    const errors = req.flash('validationErrors')
-    const formData = req.flash('formData')
     const viewModel = this.createViewModelFromAttendanceMonitoring(condition)
     res.render('pages/order/monitoring-conditions/attendance-monitoring', viewModel)
   }
@@ -203,7 +199,6 @@ export default class AttendanceMonitoringController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { action, ...formData } = attendanceMonitoringFormDataModel.parse(req.body)
 
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }

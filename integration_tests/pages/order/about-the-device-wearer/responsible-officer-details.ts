@@ -3,7 +3,7 @@ import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
 
-import ResponsibleOfficerFormComponent from '../../components/about-the-device-wearer/responsibleOfficerForm'
+import ResponsibleOfficerFormComponent from '../../components/forms/about-the-device-wearer/responsibleOfficerForm'
 
 export default class ResponsibleOfficerPage extends AppPage {
   form = new ResponsibleOfficerFormComponent()

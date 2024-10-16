@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
-import ErrorPage from '../../../pages/error'
+import { NotFoundErrorPage } from '../../../pages/error'
 import CurfewConditionsPage from '../../../pages/order/curfewConditions'
 import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import Page from '../../../pages/page'
@@ -184,7 +184,7 @@ context('Curfew monitoring - release date', () => {
         failOnStatusCode: false,
       })
 
-      Page.verifyOnPage(ErrorPage, 'Not found')
+      Page.verifyOnPage(NotFoundErrorPage)
     })
   })
 })

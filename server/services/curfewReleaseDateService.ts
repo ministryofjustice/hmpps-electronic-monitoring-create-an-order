@@ -4,7 +4,7 @@ import CurfewReleaseDateModel, { CurfewReleaseDate } from '../models/CurfewRelea
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
-type AlcoholMonitoringInput = AuthenticatedRequestInput & {
+type CurfewReleaseDateInput = AuthenticatedRequestInput & {
   orderId: string
   data: CurfewReleaseDate
 }
@@ -12,7 +12,7 @@ type AlcoholMonitoringInput = AuthenticatedRequestInput & {
 export default class CurfewReleaseDateService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async update(input: AlcoholMonitoringInput): Promise<CurfewReleaseDate | ValidationResult> {
+  async update(input: CurfewReleaseDateInput): Promise<CurfewReleaseDate | ValidationResult> {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-release-date`,

@@ -1,9 +1,11 @@
-import AppPage from '../appPage'
-import { PageElement } from '../page'
+import AppPage from '../../appPage'
+import { PageElement } from '../../page'
+
+import paths from '../../../../server/constants/paths'
 
 export default class AttendanceMonitoringPage extends AppPage {
   constructor() {
-    super('Monitoring conditions')
+    super('Monitoring conditions', paths.MONITORING_CONDITIONS.ATTENDANCE, 'Attendance monitoring')
   }
 
   form = (): PageElement => cy.get('form')

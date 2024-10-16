@@ -1,7 +1,8 @@
 import assert from 'assert'
-
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
+import jsonDiff from 'json-diff'
+
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
@@ -199,6 +200,7 @@ const getOrderWithAttachments = (
 
 type SubmitOrderStubOptions = {
   httpStatus: number
+  method?: string
   id: string
   subPath?: string
   response: Record<string, unknown>
@@ -207,7 +209,7 @@ type SubmitOrderStubOptions = {
 const submitOrder = (options: SubmitOrderStubOptions) =>
   stubFor({
     request: {
-      method: 'PUT',
+      method: options.method || 'PUT',
       urlPattern: `/cemo/api/orders/${options.id}${options.subPath ?? '/'}`,
     },
     response: {
@@ -321,14 +323,60 @@ const putDeviceWearer = (options: PutDeviceWearerStubOptions = defaultPutDeviceW
     },
   })
 
-const getStubbedRequest = (url: string) =>
+type MultipartFileData = {
+  name?: string
+  filename?: string
+  contentType?: string
+  contents?: string
+}
+
+const toFileData = (raw: string) => {
+  const parts = raw.split('\r\n').slice(1, -1)
+
+  const data: MultipartFileData = {}
+  const attrs = parts[0].split(';')
+  attrs.shift()
+  attrs.forEach((item: string) => {
+    const kv = item.trim().split('=')
+    const key = kv[0].trim()
+    const value = (kv[1] || '').replace(/"/g, '')
+    if (value !== '') {
+      data[key as keyof MultipartFileData] = value
+    }
+  })
+  data.contentType = (parts[1].split('Content-Type:')[1] || '').trim()
+  data.contents = parts[parts.length - 1]
+
+  return data
+}
+
+const toMultipartData = (contents: string, boundary: string) => {
+  const parts = contents.split(boundary).slice(1, -1)
+  const files = parts.map((part: string) => toFileData(part)).filter((file: MultipartFileData) => file.name === 'file')
+
+  return files
+}
+
+type RequestHeaders = {
+  ['Content-Type']: string
+}
+
+const getStubbedRequest = (url: string, asBase64?: boolean) =>
   getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(response => {
     if (response?.body.requests && Array.isArray(response?.body.requests)) {
       return response.body.requests.map((request: Record<string, unknown>) => {
+        if (asBase64) {
+          const boundary = (request.headers as RequestHeaders)['Content-Type' as keyof RequestHeaders].split(
+            'boundary=',
+          )[1]
+          const content = toMultipartData(request.body as string, boundary)
+          return content
+        }
+
         try {
           return JSON.parse(request.body as string)
         } catch {
-          return {}
+          return request.body
         }
       })
     }
@@ -377,11 +425,12 @@ const putResponsibleAdult = (
 
 type VerifyStubbedRequestParams = {
   uri: string
-  body: unknown
+  body?: unknown
+  fileContents?: string
 }
 
 const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
-  getStubbedRequest(options.uri).then(requests => {
+  getStubbedRequest(options.uri, !!options.fileContents).then(requests => {
     if (requests.length === 0) {
       throw new Error(`No stub requests were found for the url <${options.uri}>`)
     }
@@ -390,11 +439,19 @@ const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
       throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
     }
 
-    const expected = JSON.stringify(options.body, null, 2)
-    const actual = JSON.stringify(requests[0], null, 2)
-    assert.deepEqual(requests[0], options.body, `expected:\n${expected}\n\nactual:\n${actual}`)
+    if (options.body) {
+      assert.deepEqual(requests[0], options.body, jsonDiff.diffString(options.body, requests[0], { color: false }))
+    }
 
-    return requests
+    if (options.fileContents) {
+      assert.deepEqual(
+        requests[0],
+        options.fileContents,
+        jsonDiff.diffString(options.fileContents, requests[0], { color: false }),
+      )
+    }
+
+    return true
   })
 
 export default {

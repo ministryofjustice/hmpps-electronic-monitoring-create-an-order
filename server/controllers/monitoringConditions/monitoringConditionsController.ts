@@ -1,5 +1,3 @@
-// Remove this eslint config once this controller is implemented
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import paths from '../../constants/paths'
@@ -53,7 +51,7 @@ export default class MonitoringConditionsController {
   private constructViewModel(
     monitoringConditions: MonitoringConditions,
     validationErrors: ValidationResult,
-    formData: [MonitoringConditionsFormData],
+    formData: MonitoringConditionsFormData[],
   ): MonitoringConditionsViewModel {
     if (validationErrors.length > 0 && formData.length > 0) {
       return this.createViewModelFromFormData(formData[0], validationErrors)
@@ -120,7 +118,6 @@ export default class MonitoringConditionsController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
     const { monitoringConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
