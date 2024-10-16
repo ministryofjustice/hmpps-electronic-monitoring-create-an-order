@@ -8,11 +8,14 @@ Cypress.Commands.add(
     label: string,
     options: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow> = {},
   ): Cypress.Chainable<JQuery> => {
+    const log = false
+
     return cy
-      .wrap(subject, { log: false })
-      .contains('label', label)
-      .invoke({ log: false }, 'attr', 'for')
-      .then(id => cy.get(`#${id}`, { log: false, ...options }))
+      .wrap(subject, { log })
+      .contains('label', label, { log })
+      .invoke({ log }, 'attr', 'for')
+      .then(id => cy.get(`#${id}`, { log, ...options }))
+      .first({ log })
   },
 )
 
@@ -26,9 +29,11 @@ Cypress.Commands.add(
     legend: string,
     options: Partial<Cypress.Loggable & Cypress.Timeoutable> = {},
   ): Cypress.Chainable<JQuery> => {
+    const log = false
+
     return cy
-      .wrap(subject, { log: false })
-      .contains('legend', legend)
-      .parent('fieldset', { log: false, ...options })
+      .wrap(subject, { log })
+      .contains('legend', legend, { log })
+      .parent('fieldset', { log, ...options })
   },
 )

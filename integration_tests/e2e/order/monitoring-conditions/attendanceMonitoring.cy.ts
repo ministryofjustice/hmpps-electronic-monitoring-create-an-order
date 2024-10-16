@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/alcoholMonitoring'
-import AttendanceMonitoringPage from '../../../pages/order/attendanceMonitoring'
+import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
 import Page from '../../../pages/page'
 

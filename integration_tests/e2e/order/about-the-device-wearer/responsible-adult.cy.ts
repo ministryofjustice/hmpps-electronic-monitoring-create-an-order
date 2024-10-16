@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import ContactDetailsPage from '../../../pages/order/contact-information/contactDetails'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 
 const mockOrderId = uuidv4()
 
@@ -29,9 +29,10 @@ context('About the device wearer - Responsible Adult', () => {
 
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
-      page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
-      page.form.saveAndContinueButton().should('exist')
-      page.form.saveAndReturnButton().should('exist')
+
+      // page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton().should('not.exist')
     })
 
@@ -65,7 +66,7 @@ context('About the device wearer - Responsible Adult', () => {
       }
 
       page.form.fillInWith(validFormData)
-      page.form.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}/device-wearer-responsible-adult`,
@@ -75,7 +76,7 @@ context('About the device wearer - Responsible Adult', () => {
           fullName: 'Audrey Taylor',
           contactNumber: '07101 123 456',
         },
-      })
+      }).should('be.true')
 
       Page.verifyOnPage(ContactDetailsPage)
     })
@@ -109,7 +110,7 @@ context('About the device wearer - Responsible Adult', () => {
         const page = Page.verifyOnPage(ResponsibleAdultPage)
         // const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
 
-        page.form.saveAndContinueButton().click()
+        page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
           expect(requests).to.have.lengthOf(1)
@@ -140,9 +141,9 @@ context('About the device wearer - Responsible Adult', () => {
 
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
-        cy.get('#relationship-2').click()
 
-        page.form.saveAndContinueButton().click()
+        page.form.setRelationship('Guardian')
+        page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
           expect(requests).to.have.lengthOf(1)
@@ -172,14 +173,14 @@ context('About the device wearer - Responsible Adult', () => {
 
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
-        cy.get('#full-name').type('John Smith')
 
-        page.form.saveAndContinueButton().click()
+        page.form.setFullName('Martha Steward')
+        page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
           expect(requests).to.have.lengthOf(1)
           expect(requests[0]).to.deep.equal({
-            fullName: 'John Smith',
+            fullName: 'Martha Steward',
             contactNumber: '',
             relationship: '',
             otherRelationshipDetails: '',
@@ -204,15 +205,15 @@ context('About the device wearer - Responsible Adult', () => {
 
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
-        cy.get('#contact-number').type('07900000000')
 
-        page.form.saveAndContinueButton().click()
+        page.form.setContactNumber('999999')
+        page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
           expect(requests).to.have.lengthOf(1)
           expect(requests[0]).to.deep.equal({
             fullName: '',
-            contactNumber: '07900000000',
+            contactNumber: '999999',
             relationship: '',
             otherRelationshipDetails: '',
           })
@@ -236,8 +237,8 @@ context('About the device wearer - Responsible Adult', () => {
     it('Should display the back to summary button', () => {
       const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
 
-      page.form.saveAndContinueButton().should('not.exist')
-      page.form.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })

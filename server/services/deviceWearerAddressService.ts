@@ -1,25 +1,33 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import CurfewReleaseDateModel, { CurfewReleaseDate } from '../models/CurfewReleaseDate'
+import DeviceWearerAddressModel, { DeviceWearerAddress } from '../models/DeviceWearerAddress'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
-type CurfewReleaseDateInput = AuthenticatedRequestInput & {
+type UpdateDeviceWearerAddresssRequest = AuthenticatedRequestInput & {
   orderId: string
-  data: CurfewReleaseDate
+  data: {
+    addressType: string
+    addressLine1?: string
+    addressLine2?: string
+    addressLine3?: string
+    addressLine4?: string
+    postcode?: string
+  }
 }
 
-export default class CurfewReleaseDateService {
+export default class DeviceWearerAddressService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async update(input: CurfewReleaseDateInput): Promise<CurfewReleaseDate | ValidationResult> {
+  async updateAddress(input: UpdateDeviceWearerAddresssRequest): Promise<DeviceWearerAddress | ValidationResult> {
     try {
       const result = await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-release-date`,
+        path: `/api/orders/${input.orderId}/address`,
         data: input.data,
         token: input.accessToken,
       })
-      return CurfewReleaseDateModel.parse(result)
+
+      return DeviceWearerAddressModel.parse(result)
     } catch (e) {
       const sanitisedError = e as SanitisedError
 

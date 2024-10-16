@@ -11,8 +11,79 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "../../../partials/timeSpanInput.njk" import timeSpanInput %}
 
 {% block content %}
+
+{% macro _timetable(day, index, data, disabled) %}
+  <div class="timetable timetable-{{index}}">
+    {{ timeSpanInput({
+        id: "curfewTimetable-" + day + "-" + index + "-time",
+        namePrefix: "curfewTimetable[" + day + "][" + index + "][time",
+        nameSuffix: "]",
+        value: data.timeSpan.value,
+        errorMessage: data.timeSpan.error,
+        disabled: disabled
+      }) }}
+    
+    {{ govukCheckboxes({
+      idPrefix: "curfewTimetable-" + day + "-" + index + "-addresses",
+      name: "curfewTimetable[" + day + "][" + index + "][addresses][]",
+      values: data.addresses.values,
+      items: [
+        {
+          text: 'Primary address',
+          value: 'PRIMARY_ADDRESS',
+          disabled: disabled
+        },
+        {
+          text: 'Secondary address',
+          value: 'SECONDARY_ADDRESS',
+          disabled: disabled
+        },
+        {
+          text: 'Third address',
+          value: 'TERTIARY_ADDRESS',
+          disabled: disabled
+        }
+      ],
+      errorMessage: data.addresses.error
+    }) }}
+  </div>
+{% endmacro %}
+
+<script type="text/javascript">
+
+function duplicateTimetableBlock(day) {
+  const currentTimetables = document.querySelectorAll(`#${day}-timetables .timetable`)
+  const newId = currentTimetables.length
+  const newNode = currentTimetables[0].cloneNode(true)
+  if(newNode.className){
+      newNode.className = newNode.className.replace('timetable-0', `timetable-${newId}`)
+  }
+  newNode.querySelectorAll('*').forEach(el => {
+    if(el.type === "checkbox"){
+      el.checked = false
+    }else if(el.value){
+      el.value = ""
+    }
+    if(el.name){
+      el.name = el.name.replace(`[${day}][0]`, `[${day}][${newId}]`)
+    }
+    if(el.id){
+      el.id = el.id.replace(`${day}-0`, `${day}-${newId}`)
+    }
+    
+    if(el.htmlFor){
+      el.htmlFor = el.htmlFor.replace(`${day}-0`, `${day}-${newId}`)
+    }
+  })
+  
+  currentTimetables[0].parentNode.appendChild(newNode)
+  return false
+}
+
+</script>
 
   {{ govukBackLink({
     text: "Back",
@@ -39,10 +110,29 @@
     }) }}
   </div>
 
-  <h2 class="govuk-heading-l">Timetable for curfew with electronic monitoring</h2>
+  <h2 class="govuk-heading-m">Timetable for curfew with electronic monitoring</h2>
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+
+    {% set days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] %}
+
+    {% for day in days %}
+      <h3 class="govuk-heading-m">{{ day | title}}</h3>
+      <div id="{{ day }}-timetables">
+        {% if curfewTimetable[day] | length === 0 %}
+            {{ _timetable(day, 0, {}, not isOrderEditable)}}
+        {% else %}
+          {% for timetable in curfewTimetable[day] %}
+            {{ _timetable(day, loop.index0, timetable, not isOrderEditable)}}
+          {% endfor %}
+        {% endif %}
+      </div>
+      <p class="govuk-body">
+        <a id="add-time-{{ day }}" href="#" class="govuk-link" onclick="duplicateTimetableBlock('{{ day }}'); return false">Add another time</a>
+      </p>
+    {% endfor %}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}

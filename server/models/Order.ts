@@ -1,11 +1,12 @@
 import z from 'zod'
-import AddressModel from './Address'
+import DeviceWearerAddressModel from './DeviceWearerAddress'
 import AlcoholMonitoringModel from './AlcoholMonitoring'
 import AttachmentModel from './Attachment'
 import AttendanceMonitoringModel from './AttendanceMonitoring'
 import DeviceWearerContactDetailsModel from './ContactDetails'
 import CurfewConditionsModel from './CurfewConditions'
 import CurfewReleaseDateModel from './CurfewReleaseDate'
+import CurfewTimetableModel from './CurfewTimetable'
 import DeviceWearerModel from './DeviceWearer'
 import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
 import EnforcementZoneModel from './EnforcementZone'
@@ -18,7 +19,7 @@ const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
   deviceWearer: DeviceWearerModel,
-  deviceWearerAddresses: z.array(AddressModel),
+  deviceWearerAddresses: z.array(DeviceWearerAddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   enforcementZoneConditions: z.array(EnforcementZoneModel),
@@ -29,6 +30,7 @@ const OrderModel = z.object({
   monitoringConditionsAlcohol: AlcoholMonitoringModel.optional(),
   monitoringConditionsCurfewReleaseDate: CurfewReleaseDateModel.optional(),
   monitoringConditionsCurfewConditions: CurfewConditionsModel.optional(),
+  monitoringConditionsCurfewTimetable: CurfewTimetableModel.optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

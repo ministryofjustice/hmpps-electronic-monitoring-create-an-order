@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { PageElement } from '../page'
 
-export default class FormInputComponent {
+export default class FormTextareaComponent {
   private elementCacheId: string = uuidv4()
 
   constructor(

@@ -2,7 +2,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { PageElement } from '../page'
 
-export default class FormInputComponent {
+export type UploadFileOptions = {
+  fileName: string
+  contents: string
+}
+
+export default class FormFileUploadComponent {
   private elementCacheId: string = uuidv4()
 
   constructor(
@@ -10,6 +15,7 @@ export default class FormInputComponent {
     private readonly label: string,
   ) {
     this.parent.getByLabel(this.label, { log: false }).as(`${this.elementCacheId}-element`)
+
     this.element.should('exist')
   }
 
@@ -17,23 +23,27 @@ export default class FormInputComponent {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
-  set(value?: string | number | boolean) {
-    this.element.type(value as string)
+  uploadFile(options: UploadFileOptions): void {
+    this.element.selectFile({
+      contents: Cypress.Buffer.from(options.contents),
+      fileName: options.fileName,
+      lastModified: Date.now(),
+    })
   }
 
-  shouldHaveValue(value?: string | number | boolean) {
+  shouldHaveValue(value?: string | number | boolean): void {
     this.element.should('have.value', value as string)
   }
 
-  shouldBeDisabled() {
+  shouldBeDisabled(): void {
     this.element.should('be.disabled')
   }
 
-  get validationMessage() {
+  get validationMessage(): PageElement {
     return this.element.siblings('.govuk-error-message', { log: false })
   }
 
-  shouldHaveValidationMessage(message: string) {
+  shouldHaveValidationMessage(message: string): void {
     this.validationMessage.should('contain', message)
   }
 

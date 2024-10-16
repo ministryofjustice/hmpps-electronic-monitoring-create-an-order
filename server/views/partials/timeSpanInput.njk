@@ -11,7 +11,7 @@
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-start-hours">Hour</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
                             {% if input.id %}id="{{input.id}}-start-hours"{% endif %}
-                            name="{{input.name}}StartHours"
+                            name="{{input.namePrefix}}StartHours{{input.nameSuffix}}"
                             value="{{input.value.startHours}}"
                             type="number"
                             pattern="[0-9]{2}"
@@ -25,7 +25,7 @@
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-start-minutes">Minute</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
                             {% if input.id %}id="{{input.id}}-start-minutes"{% endif %}
-                            name="{{input.name}}StartMinutes"
+                            name="{{input.namePrefix}}StartMinutes{{input.nameSuffix}}"
                             value="{{input.value.startMinutes}}"
                             type="number"
                             pattern="[0-9]{2}"
@@ -41,7 +41,7 @@
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-end-hours">Hour</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
                             id="{{input.id}}-end-hours"
-                            name="{{input.name}}EndHours"
+                            name="{{input.namePrefix}}EndHours{{input.nameSuffix}}"
                             value="{{input.value.endHours}}"
                             type="number"
                             pattern="[0-9]{2}"
@@ -55,7 +55,7 @@
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-end-minutes">Minute</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
                             id="{{input.id}}-end-minutes"
-                            name="{{input.name}}EndMinutes"
+                            name="{{input.namePrefix}}EndMinutes{{input.nameSuffix}}"
                             value="{{input.value.endMinutes}}"
                             type="number"
                             pattern="[0-9]{2}"

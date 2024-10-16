@@ -21,7 +21,7 @@ export default class ContactDetailsController {
       errors as never,
     )
 
-    res.render(`pages/order/contact-information/contact-details`, viewModel)
+    res.render('pages/order/contact-information/contact-details', viewModel)
   }
 
   post: RequestHandler = async (req: Request, res: Response) => {
@@ -40,7 +40,7 @@ export default class ContactDetailsController {
 
       res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      res.redirect(paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId))
+      res.redirect(paths.CONTACT_INFORMATION.ADDRESSES_NO_FIXED_ABODE.replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

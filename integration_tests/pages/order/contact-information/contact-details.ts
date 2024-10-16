@@ -3,7 +3,7 @@ import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
 
-import ContactDetailsFormComponent from '../../components/contact-information/contactDetailsForm'
+import ContactDetailsFormComponent from '../../components/forms/contact-information/contactDetailsForm'
 
 export default class ContactDetailsPage extends AppPage {
   public form = new ContactDetailsFormComponent()
