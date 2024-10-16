@@ -47,11 +47,11 @@
 {% endmacro %}
 
   <ul class="govuk-task-list">
-    {{ _lineItem("About the device wearer", "/about-the-device-wearer", order.deviceWearer.isComplete, "order-section-device-wearer") }}
-    {{ _lineItem("Contact information", "/contact-information/contact-details", order.contactDetails.isComplete, "order-section-contact-details") }}
-    {{ _lineItem("Installation and risk", "/installation-and-risk", order.installationAndRisk.isComplete, "order-section-installation-and-risk") }}
-    {{ _lineItem("Monitoring conditions", "/monitoring-conditions", order.monitoringConditions.isComplete, "order-section-monitoring-conditions") }}
-    {{ _lineItem("Attachments", "/attachments", order.attachments.isComplete, "order-section-attachments") }}
+    {{ _lineItem("About the device wearer", order, "/about-the-device-wearer", order.deviceWearer.isComplete, "order-section-device-wearer") }}
+    {{ _lineItem("Contact information", order, "/contact-information/contact-details", order.contactDetails.isComplete, "order-section-contact-details") }}
+    {{ _lineItem("Installation and risk", order, "/installation-and-risk", order.installationAndRisk.isComplete, "order-section-installation-and-risk") }}
+    {{ _lineItem("Monitoring conditions", order, "/monitoring-conditions", order.monitoringConditions.isComplete, "order-section-monitoring-conditions") }}
+    {{ _lineItem("Attachments", order, "/attachments", order.attachments.isComplete, "order-section-attachments") }}
   </ul>
 
   {% if order.status == "IN_PROGRESS" %}
