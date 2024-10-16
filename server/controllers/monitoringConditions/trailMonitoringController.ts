@@ -1,5 +1,3 @@
-// Remove this eslint config once this controller is implemented
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import paths from '../../constants/paths'
@@ -9,7 +7,6 @@ import { FormField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import TrailMonitoringService from '../../services/trailMonitoringService'
 import { deserialiseDate, getError, serialiseDate } from '../../utils/utils'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const trailMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -44,19 +41,15 @@ export default class TrailMonitoringController {
     trailMonitoring: TrailMonitoring,
     validationErrors: ValidationResult,
     formData: [TrailMonitoringFormData],
-    formAction: string,
   ): TrailMonitoringViewModel {
     if (validationErrors.length > 0 && formData.length > 0) {
-      return this.createViewModelFromFormData(formData[0], validationErrors, formAction)
+      return this.createViewModelFromFormData(formData[0], validationErrors)
     }
 
-    return this.createViewModelFromTrailMonitoring(trailMonitoring, formAction)
+    return this.createViewModelFromTrailMonitoring(trailMonitoring)
   }
 
-  private createViewModelFromTrailMonitoring(
-    trailMonitoring: TrailMonitoring,
-    orderId: string,
-  ): TrailMonitoringViewModel {
+  private createViewModelFromTrailMonitoring(trailMonitoring: TrailMonitoring): TrailMonitoringViewModel {
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(trailMonitoring?.startDate)
     const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(trailMonitoring?.endDate)
 
@@ -73,7 +66,6 @@ export default class TrailMonitoringController {
   private createViewModelFromFormData(
     formData: TrailMonitoringFormData,
     validationErrors: ValidationResult,
-    orderId: string,
   ): TrailMonitoringViewModel {
     return {
       startDate: { error: getError(validationErrors, 'startDate') },
@@ -106,7 +98,6 @@ export default class TrailMonitoringController {
       },
       errors as never,
       formData as never,
-      orderId,
     )
 
     if (!monitoringConditions.trail) {
@@ -118,7 +109,6 @@ export default class TrailMonitoringController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { monitoringConditions } = req.order!
     const formData = trailMonitoringFormDataModel.parse(req.body)
 
     const updateMonitoringConditionsResult = await this.trailMonitoringService.update({

@@ -1,5 +1,3 @@
-// Remove this eslint config once this controller is implemented
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import paths from '../../constants/paths'

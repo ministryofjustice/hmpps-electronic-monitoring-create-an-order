@@ -1,5 +1,3 @@
-// Remove this eslint config once this controller is implemented
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import paths from '../../constants/paths'
@@ -139,7 +137,6 @@ export default class AlcoholMonitoringController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
     const { monitoringConditionsAlcohol } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
