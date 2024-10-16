@@ -1,0 +1,75 @@
+services:
+
+  cemo-api:
+    container_name: cemo-api
+    image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest
+    networks:
+      - hmpps_integration
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    depends_on:
+      cemo-db:
+        condition: service_healthy
+        restart: true
+      cemo-redis:
+        condition: service_started
+    environment:
+      - SERVER_PORT=8080
+
+      - DB_SERVER=cemo-db
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+
+      - HMPPS_AUTH_URL=http://cemo-wiremock:8080/auth
+      - CLIENT_ID=clientid
+      - CLIENT_SECRET=clientsecret
+
+      - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/docs
+
+      - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth
+      - SERCO_CLIENT_ID=clientid
+      - SERCO_CLIENT_SECRET=clientsecret
+      - SERCO_USERNAME=serco
+      - SERCO_PASSWORD=serco
+      - SERCO_URL=http://cemo-wiremock:8080/serco
+
+  cemo-db:
+    container_name: cemo-db
+    image: postgres:14
+    restart: always
+    networks:
+      - hmpps_integration
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+
+  cemo-redis:
+    container_name: cemo-redis
+    image: redis:7.2
+    networks:
+      - hmpps_integration
+    ports:
+      - '6379:6379'
+
+  cemo-wiremock:
+    container_name: cemo-wiremock
+    image: wiremock/wiremock:latest
+    restart: always
+    networks:
+      - hmpps_integration
+    ports:
+      - "9091:8080"
+
+networks:
+  hmpps_integration:
