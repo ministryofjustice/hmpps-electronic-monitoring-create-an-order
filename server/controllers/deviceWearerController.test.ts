@@ -26,6 +26,7 @@ const mockOrder = getMockOrder({
     sex: 'male',
     gender: 'male',
     disabilities: ['Vision', 'Mobilitiy'],
+    noFixedAbode: null,
   },
 })
 
@@ -238,6 +239,7 @@ describe('DeviceWearerController', () => {
         sex: 'male',
         gender: 'male',
         disabilities: ['Vision', 'Mobilitiy'],
+        noFixedAbode: null,
       })
 
       // When
@@ -284,6 +286,7 @@ describe('DeviceWearerController', () => {
         sex: 'male',
         gender: 'male',
         disabilities: ['Vision', 'Mobilitiy'],
+        noFixedAbode: null,
       })
 
       // When
@@ -330,6 +333,7 @@ describe('DeviceWearerController', () => {
         sex: 'male',
         gender: 'male',
         disabilities: ['Vision', 'Mobilitiy'],
+        noFixedAbode: null,
       })
 
       // When

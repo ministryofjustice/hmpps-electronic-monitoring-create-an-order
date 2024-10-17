@@ -17,6 +17,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
     sex: null,
     gender: null,
     disabilities: [],
+    noFixedAbode: null,
   },
   deviceWearerResponsibleAdult: null,
   deviceWearerContactDetails: {

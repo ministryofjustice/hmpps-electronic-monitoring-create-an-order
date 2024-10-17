@@ -29,6 +29,7 @@ const mockSubmittedOrder = getMockOrder({
     sex: null,
     gender: null,
     disabilities: [],
+    noFixedAbode: null,
   },
   enforcementZoneConditions: [],
   additionalDocuments: [],

@@ -99,7 +99,7 @@ describe('AddressController', () => {
         const next = jest.fn()
 
         // When
-        await addressController.getAddress(req, res, next)
+        await addressController.get(req, res, next)
 
         // Then
         expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
@@ -139,7 +139,7 @@ describe('AddressController', () => {
       const next = jest.fn()
 
       // When
-      await addressController.getAddress(req, res, next)
+      await addressController.get(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
@@ -194,7 +194,7 @@ describe('AddressController', () => {
       ])
 
       // When
-      await addressController.postAddress(req, res, next)
+      await addressController.post(req, res, next)
 
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
@@ -244,7 +244,7 @@ describe('AddressController', () => {
       })
 
       // When
-      await addressController.postAddress(req, res, next)
+      await addressController.post(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -255,7 +255,7 @@ describe('AddressController', () => {
       ['Primary', 'primary', '/order/123456789/contact-information/addresses/secondary'],
       ['Secondary', 'secondary', '/order/123456789/contact-information/addresses/tertiary'],
     ])(
-      'should go to the correct location if the user indicates they have another address',
+      'should go to the next address form if the user indicates they have another address',
       async (_: string, param: string, expectedLocation: string) => {
         // Given
         const req = createMockRequest({
@@ -289,7 +289,7 @@ describe('AddressController', () => {
         })
 
         // When
-        await addressController.postAddress(req, res, next)
+        await addressController.post(req, res, next)
 
         // Then
         expect(req.flash).not.toHaveBeenCalled()
@@ -300,10 +300,8 @@ describe('AddressController', () => {
     it.each([
       ['Primary', 'primary', '/order/123456789/contact-information/notifying-organisation'],
       ['Secondary', 'secondary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Tertiary', 'tertiary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Installation', 'installation', '/order/123456789/contact-information/notifying-organisation'],
     ])(
-      'should go to the notifying organisation page if the user indicates they do not have another address or no more addresses can be added',
+      'should go to the notifying organisation page if the user indicates they do not have another address',
       async (_: string, param: string, expectedLocation: string) => {
         // Given
         const req = createMockRequest({
@@ -337,12 +335,51 @@ describe('AddressController', () => {
         })
 
         // When
-        await addressController.postAddress(req, res, next)
+        await addressController.post(req, res, next)
 
         // Then
         expect(req.flash).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith(expectedLocation)
       },
     )
+
+    it('should go always go the notifying organisation page if the tertiary address is being filled in', async () => {
+      // Given
+      const req = createMockRequest({
+        order: mockOrder,
+        body: {
+          action: 'continue',
+          addressLine1: 'a',
+          addressLine2: 'b',
+          addressLine3: 'c',
+          addressLine4: 'd',
+          postcode: 'e',
+          hasAnotherAddress: 'false',
+        },
+        flash: jest.fn(),
+        params: {
+          orderId: '123456789',
+          addressType: 'tertiary',
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockAddressService.updateAddress.mockResolvedValue({
+        addressType: 'TERTIARY',
+        addressLine1: 'a',
+        addressLine2: 'b',
+        addressLine3: 'c',
+        addressLine4: 'd',
+        postcode: 'e',
+      })
+
+      // When
+      await addressController.post(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
+    })
   })
 })

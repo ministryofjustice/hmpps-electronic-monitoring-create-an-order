@@ -24,7 +24,7 @@ export default class AddressController {
     private readonly addressService: AddressService,
   ) {}
 
-  getAddress: RequestHandler = async (req: Request, res: Response) => {
+  get: RequestHandler = async (req: Request, res: Response) => {
     const { addressType } = req.params
     const { addresses } = req.order!
     const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
@@ -41,7 +41,7 @@ export default class AddressController {
     })
   }
 
-  postAddress: RequestHandler = async (req: Request, res: Response) => {
+  post: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, addressType } = req.params
     const { action, ...formData } = req.body
 

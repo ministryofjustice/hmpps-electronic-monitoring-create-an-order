@@ -22,6 +22,7 @@ import ResponsibleOfficerController from '../controllers/responsibleOfficerContr
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
+import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -47,24 +48,25 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
+  const addressController = new AddressController(auditService, addressService)
   const alcoholMonitoringController = new AlcoholMonitoringController(auditService, alcoholMonitoringService)
+  const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
   const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
+  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
   const curfewReleaseDateController = new CurfewReleaseDateController(auditService, curfewReleaseDateService)
   const curfewTimetableController = new CurfewTimetableController(auditService, curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(auditService, curfewConditionsService)
-  const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
-  const addressController = new AddressController(auditService, addressService)
-  const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
-  const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
-  const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
-  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
   const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
-  const zoneController = new EnforcementZoneController(auditService, zoneService)
+  const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService)
+  const orderSearchController = new OrderSearchController(auditService, orderSearchService)
+  const orderController = new OrderController(auditService, orderService)
+  const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
+  const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService)
+  const zoneController = new EnforcementZoneController(auditService, zoneService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -107,9 +109,13 @@ export default function routes({
   get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
   post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
 
+  // No fixed abode
+  get(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.get)
+  post(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.post)
+
   // Device wearer addresses
-  get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.getAddress)
-  post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.postAddress)
+  get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.get)
+  post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.post)
 
   /**
    * INSTALLATION AND RISK

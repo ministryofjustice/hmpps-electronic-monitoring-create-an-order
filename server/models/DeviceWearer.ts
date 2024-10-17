@@ -16,6 +16,7 @@ const DeviceWearerModel = z.object({
     .string()
     .nullable()
     .transform(val => (val === null ? [] : val.split(','))),
+  noFixedAbode: z.boolean().nullable(),
 })
 
 export type DeviceWearer = z.infer<typeof DeviceWearerModel>

@@ -66,6 +66,7 @@ const createMockOrder = (status: OrderStatus): Order => {
       sex: 'male',
       gender: 'male',
       disabilities: ['Vision', 'Mobilitiy'],
+      noFixedAbode: null,
     },
   }
 }

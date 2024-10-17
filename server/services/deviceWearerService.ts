@@ -25,6 +25,13 @@ type UpdateDeviceWearerRequestInput = AuthenticatedRequestInput & {
   }
 }
 
+type UpdateNoFixedAbodeRequest = AuthenticatedRequestInput & {
+  orderId: string
+  data: {
+    noFixedAbode: string
+  }
+}
+
 export default class DeviceWearerService {
   constructor(private readonly apiClient: RestClient) {}
 
@@ -45,6 +52,26 @@ export default class DeviceWearerService {
           dateOfBirth: serialiseDate(dobYear, dobMonth, dobDay),
           disabilities: disabilities.join(','),
         },
+        token: input.accessToken,
+      })
+
+      return DeviceWearerModel.parse(result)
+    } catch (e) {
+      const sanitisedError = e as SanitisedError
+
+      if (sanitisedError.status === 400) {
+        return ValidationResultModel.parse((e as SanitisedError).data)
+      }
+
+      throw e
+    }
+  }
+
+  async updateNoFixedAbode(input: UpdateNoFixedAbodeRequest): Promise<DeviceWearer | ValidationResult> {
+    try {
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/device-wearer/no-fixed-abode`,
+        data: input.data,
         token: input.accessToken,
       })
 
