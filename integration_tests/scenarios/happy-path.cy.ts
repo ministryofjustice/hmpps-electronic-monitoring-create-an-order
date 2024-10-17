@@ -1,6 +1,6 @@
-import Page from '../../pages/page'
-import IndexPage from '../../pages/index'
-import OrderSummaryPage from '../../pages/order/summary'
+import Page from '../pages/page'
+import IndexPage from '../pages/index'
+import OrderSummaryPage from '../pages/order/summary'
 
 context('Scenarios', () => {
   context('Happy path', () => {

@@ -3,7 +3,7 @@ import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
 
-import { Order } from '../../server/models/Order'
+import { Order, OrderStatus } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
@@ -21,7 +21,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-export const mockApiOrder = (status = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status: OrderStatus = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   deviceWearer: {
@@ -40,9 +40,6 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     noFixedAbode: null,
   },
   deviceWearerResponsibleAdult: null,
-  contactDetails: {
-    contactNumber: null,
-  },
   enforcementZoneConditions: [],
   addresses: [],
   deviceWearerContactDetails: {
@@ -64,39 +61,46 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
   monitoringConditionsTrail: null,
 })
 
-const listOrders = (httpStatus = 200): SuperAgentRequest =>
+type ListOrdersStubOptions = {
+  httpStatus: number
+  orders?: object[]
+}
+
+const defaultListOrdersOptions: ListOrdersStubOptions = {
+  httpStatus: 200,
+  orders: [
+    mockApiOrder('SUBMITTED'),
+    {
+      ...mockApiOrder(),
+      deviceWearer: {
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        firstName: 'test',
+        lastName: 'tester',
+        alias: null,
+        dateOfBirth: null,
+        adultAtTimeOfInstallation: null,
+        sex: null,
+        gender: null,
+        disabilities: null,
+        noFixedAbode: null,
+      },
+    },
+  ],
+}
+
+const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
       urlPattern: '/cemo/api/orders',
     },
     response: {
-      status: httpStatus,
+      status: options.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody:
-        httpStatus === 200
-          ? [
-              mockApiOrder('SUBMITTED'),
-              {
-                ...mockApiOrder(),
-                deviceWearer: {
-                  nomisId: null,
-                  pncId: null,
-                  deliusId: null,
-                  prisonNumber: null,
-                  firstName: 'test',
-                  lastName: 'tester',
-                  alias: null,
-                  dateOfBirth: null,
-                  adultAtTimeOfInstallation: null,
-                  sex: null,
-                  gender: null,
-                  disabilities: null,
-                  noFixedAbode: null,
-                },
-              },
-            ]
-          : null,
+      jsonBody: options.httpStatus === 200 ? options.orders : null,
     },
   })
 
