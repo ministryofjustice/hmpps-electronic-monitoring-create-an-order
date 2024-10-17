@@ -13,4 +13,15 @@ export default class InstallationAndRiskPage extends AppPage {
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
 
   backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
+
+  fillInForm = () => {
+    cy.get('input[name="riskOfSeriousHarm"][value="MEDIUM"]').click()
+    cy.get('input[name="riskOfSelfHarm"][value="LOW"]').click()
+    cy.get('input[name="riskCategory[]"][value="VIOLENCE"]').click()
+    cy.get('input[name="riskCategory[]"][value="GENDER"]').click()
+    cy.get('input[name="riskCategory[]"][value="SUBSTANCE_ABUSE"]').click()
+    cy.get('textarea[name="riskDetails"]').type('Details about the risk')
+    cy.get('input[name="mappaLevel"][value="MAPPA2"]').click()
+    cy.get('input[name="mappaCaseType"][value="SPECIAL_IMMIGRATION_APPEALS"]').click()
+  }
 }
