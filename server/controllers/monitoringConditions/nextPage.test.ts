@@ -50,7 +50,7 @@ describe('getSelectedMonitoringTypes', () => {
       trail: true,
       mandatoryAttendance: false,
       alcohol: true,
-      devicesRequired: ['250'],
+      devicesRequired: ['Location - fitted'],
     }
     const result = getSelectedMonitoringTypes(conditions)
     expect(result).toStrictEqual(['curfew', 'trail', 'alcohol'])
