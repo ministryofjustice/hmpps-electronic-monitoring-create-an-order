@@ -275,7 +275,7 @@ const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpda
     },
   })
 
-type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities' | 'noFixedAbode'> & {
+type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
   disabilities?: string | null
 }
 
@@ -303,6 +303,7 @@ const defaultPutDeviceWearerOptions = {
     sex: null,
     gender: null,
     disabilities: null,
+    noFixedAbode: null,
   },
 }
 
