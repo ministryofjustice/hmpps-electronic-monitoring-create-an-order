@@ -42,7 +42,6 @@ const createToken = async (userToken: UserToken, privateKey: jose.KeyLike): Prom
     .setExpirationTime('2h')
     .sign(privateKey)
 
-  console.log(jsonwebtoken)
   return jsonwebtoken
 }
 
@@ -174,7 +173,22 @@ const stubSignIn = async (userToken: UserToken) => {
     redirect(),
     signOut(),
     token(accessToken),
-    tokenVerification.stubVerifyToken(),
+    tokenVerification.stubVerifyToken(true),
+    jwks(keyPair.publicKey),
+  ])
+}
+
+const stubUnverifiableSignIn = async (userToken: UserToken) => {
+  const keyPair = await generateKeyPair()
+  const unverifiableKeyPair = await generateKeyPair()
+  const accessToken = await createToken(userToken, unverifiableKeyPair.privateKey)
+
+  return Promise.all([
+    favicon(),
+    redirect(),
+    signOut(),
+    token(accessToken),
+    tokenVerification.stubVerifyToken(false),
     jwks(keyPair.publicKey),
   ])
 }
@@ -184,4 +198,6 @@ export default {
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
   stubSignIn,
+  stubUnverifiableSignIn,
+  ...tokenVerification,
 }

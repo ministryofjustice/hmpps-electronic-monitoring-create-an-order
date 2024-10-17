@@ -3,7 +3,7 @@ import { PageElement } from './page'
 
 export default class IndexPage extends AppPage {
   constructor() {
-    super('Electronic Monitoring Application Forms')
+    super('Electronic Monitoring Application Forms', '/')
   }
 
   newOrderForm = (): PageElement => cy.get('form[action="/order/create"]')
