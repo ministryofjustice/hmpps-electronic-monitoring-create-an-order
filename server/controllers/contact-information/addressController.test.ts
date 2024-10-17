@@ -49,8 +49,23 @@ const installationAddress = {
   postcode: '',
 }
 
-const mockOrder = getMockOrder({
+const createMockOrder = (noFixedAbode: boolean | null) => getMockOrder({
   addresses: [primaryAddress, secondaryAddress, tertiaryAddress, installationAddress],
+  deviceWearer: {
+      nomisId: null,
+      pncId: null,
+      deliusId: null,
+      prisonNumber: null,
+      firstName: null,
+      lastName: null,
+      alias: null,
+      dateOfBirth: null,
+      adultAtTimeOfInstallation: null,
+      sex: null,
+      gender: null,
+      disabilities: [],
+      noFixedAbode
+  }
 })
 
 describe('AddressController', () => {
@@ -77,6 +92,191 @@ describe('AddressController', () => {
     addressController = new AddressController(mockAuditService, mockAddressService)
   })
 
+  describe('getNoFixedAbode', () => {
+
+    it('should render the no-fixed-abode view with neither option selected', async () => {
+      // Given
+      const req = createMockRequest({
+        order: createMockOrder(null),
+        flash: jest.fn().mockReturnValue([]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.getNoFixedAbode(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
+        noFixedAbode: 'null',
+        errors: {},
+      })
+    })
+
+    it('should render the fixed-abode view with the "yes" option selected', async () => {
+      // Given
+      const req = createMockRequest({
+        order: createMockOrder(true),
+        flash: jest.fn().mockReturnValue([]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.getNoFixedAbode(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
+        noFixedAbode: 'true',
+        errors: {},
+      })
+    })
+
+    it('should render the fixed-abode view with the "no" option selected', async () => {
+      // Given
+      const req = createMockRequest({
+        order: createMockOrder(false),
+        flash: jest.fn().mockReturnValue([]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.getNoFixedAbode(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
+        fixedAbode: 'false',
+        errors: {},
+      })
+    })
+
+    it('should render the fixed-abode view with errors if neither option was selected on form submission', async () => {
+      // Given
+      const req = createMockRequest({
+        order: createMockOrder(null),
+        flash: jest
+          .fn()
+          .mockReturnValueOnce([
+            { error: 'You must indicate whether the device wearer has a fixed abode', field: 'fixedAbode' },
+          ])
+          .mockReturnValue([
+            {
+              noFixedAbode: 'null'
+            }
+          ]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.getNoFixedAbode(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
+        fixedAbode: 'null',
+        errors: {
+          fixedAbode: {
+            text: 'You must indicate whether the device wearer has a fixed abode',
+          },
+        },
+      })
+    })
+  })
+
+  describe('postNoFixedAbode', () => {
+    it('should redirect to the primary address page if the user selects "yes"', async () => {
+      // Given
+      const req = createMockRequest({
+        body: {
+          action: 'continue',
+          noFixedAbode: 'false',
+        },
+        flash: jest.fn(),
+        params: {
+          orderId: '123456789',
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.postNoFixedAbode(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/addresses/primary')
+    })
+
+    it('should redirect to the notifying organisation form if the user selects "no"', async () => {
+      // Given
+      const req = createMockRequest({
+        body: {
+          action: 'continue',
+          noFixedAbode: 'true',
+        },
+        flash: jest.fn(),
+        params: {
+          orderId: '123456789',
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.postNoFixedAbode(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
+    })
+
+    it('should redirect to the summary page if the user selects back', async () => {
+      const req = createMockRequest({
+        body: {
+          action: 'back',
+          noFixedAbode: 'false',
+        },
+        flash: jest.fn(),
+        params: {
+          orderId: '123456789',
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.postNoFixedAbode(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
+    })
+
+    it('should redirect to the form if the user doesnt select an option', async () => {
+      const req = createMockRequest({
+        body: {
+          action: 'continue',
+        },
+        flash: jest.fn(),
+        params: {
+          orderId: '123456789',
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await addressController.postNoFixedAbode(req, res, next)
+
+      // Then
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        { error: 'You must indicate whether the device wearer has a fixed abode', field: 'noFixedAbode' },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/no-fixed-abode')
+    })
+  })
+
   describe('getAddress', () => {
     it.each([
       ['Primary', 'primary', primaryAddress, true],
@@ -88,7 +288,7 @@ describe('AddressController', () => {
       async (_: string, param: string, expected, hasAnotherAddress: boolean) => {
         // Given
         const req = createMockRequest({
-          order: mockOrder,
+          order: createMockOrder(null),
           flash: jest.fn().mockReturnValue([]),
           params: {
             orderId: '123456789',
@@ -113,7 +313,7 @@ describe('AddressController', () => {
     it('should render the form using submitted data when there are validaiton errors', async () => {
       // Given
       const req = createMockRequest({
-        order: mockOrder,
+        order: createMockOrder(null),
         params: {
           orderId: '123456789',
           addressType: 'primary',
@@ -169,7 +369,7 @@ describe('AddressController', () => {
     it('should persist data and redirect to the form when the user submits invalid data', async () => {
       // Given
       const req = createMockRequest({
-        order: mockOrder,
+        order: createMockOrder(null),
         body: {
           action: 'continue',
           addressLine1: '',
@@ -216,7 +416,7 @@ describe('AddressController', () => {
     it('should save and redirect to the order summary page if the user selects back', async () => {
       // Given
       const req = createMockRequest({
-        order: mockOrder,
+        order: createMockOrder(null),
         body: {
           action: 'back',
           addressLine1: 'a',
@@ -255,11 +455,11 @@ describe('AddressController', () => {
       ['Primary', 'primary', '/order/123456789/contact-information/addresses/secondary'],
       ['Secondary', 'secondary', '/order/123456789/contact-information/addresses/tertiary'],
     ])(
-      'should go to the correct location if the user indicates they have another address',
+      'should go to the next address form if the user indicates they have another address',
       async (_: string, param: string, expectedLocation: string) => {
         // Given
         const req = createMockRequest({
-          order: mockOrder,
+          order: createMockOrder(null),
           body: {
             action: 'continue',
             addressLine1: 'a',
@@ -299,15 +499,13 @@ describe('AddressController', () => {
 
     it.each([
       ['Primary', 'primary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Secondary', 'secondary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Tertiary', 'tertiary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Installation', 'installation', '/order/123456789/contact-information/notifying-organisation'],
+      ['Secondary', 'secondary', '/order/123456789/contact-information/notifying-organisation']
     ])(
-      'should go to the notifying organisation page if the user indicates they do not have another address or no more addresses can be added',
+      'should go to the notifying organisation page if the user indicates they do not have another address',
       async (_: string, param: string, expectedLocation: string) => {
         // Given
         const req = createMockRequest({
-          order: mockOrder,
+          order: createMockOrder(null),
           body: {
             action: 'continue',
             addressLine1: 'a',
@@ -342,6 +540,48 @@ describe('AddressController', () => {
         // Then
         expect(req.flash).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith(expectedLocation)
+      },
+    )
+
+    it(
+      'should go always go the notifying organisation page if the tertiary address is being filled in',
+      async () => {
+        // Given
+        const req = createMockRequest({
+          order: createMockOrder(null),
+          body: {
+            action: 'continue',
+            addressLine1: 'a',
+            addressLine2: 'b',
+            addressLine3: 'c',
+            addressLine4: 'd',
+            postcode: 'e',
+            hasAnotherAddress: 'false',
+          },
+          flash: jest.fn(),
+          params: {
+            orderId: '123456789',
+            addressType: 'tertiary',
+          },
+        })
+        const res = createMockResponse()
+        const next = jest.fn()
+
+        mockAddressService.updateAddress.mockResolvedValue({
+          addressType: 'TERTIARY',
+          addressLine1: 'a',
+          addressLine2: 'b',
+          addressLine3: 'c',
+          addressLine4: 'd',
+          postcode: 'e',
+        })
+
+        // When
+        await addressController.postAddress(req, res, next)
+
+        // Then
+        expect(req.flash).not.toHaveBeenCalled()
+        expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
       },
     )
   })
