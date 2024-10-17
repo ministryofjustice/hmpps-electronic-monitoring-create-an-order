@@ -1,10 +1,10 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import DeviceWearerAddressModel, { DeviceWearerAddress } from '../models/DeviceWearerAddress'
+import AddressModel, { Address } from '../models/Address'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
-type UpdateDeviceWearerAddresssRequest = AuthenticatedRequestInput & {
+type UpdateAddresssRequest = AuthenticatedRequestInput & {
   orderId: string
   data: {
     addressType: string
@@ -16,10 +16,10 @@ type UpdateDeviceWearerAddresssRequest = AuthenticatedRequestInput & {
   }
 }
 
-export default class DeviceWearerAddressService {
+export default class AddressService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async updateAddress(input: UpdateDeviceWearerAddresssRequest): Promise<DeviceWearerAddress | ValidationResult> {
+  async updateAddress(input: UpdateAddresssRequest): Promise<Address | ValidationResult> {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/address`,
@@ -27,7 +27,7 @@ export default class DeviceWearerAddressService {
         token: input.accessToken,
       })
 
-      return DeviceWearerAddressModel.parse(result)
+      return AddressModel.parse(result)
     } catch (e) {
       const sanitisedError = e as SanitisedError
 
