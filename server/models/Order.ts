@@ -25,7 +25,7 @@ const OrderModel = z.object({
   deviceWearerContactDetails: DeviceWearerContactDetailsModel,
   enforcementZoneConditions: z.array(EnforcementZoneModel),
   additionalDocuments: z.array(AttachmentModel),
-  installationAndRisk: InstallationAndRiskModel.optional(),
+  installationAndRisk: InstallationAndRiskModel.nullable(),
   monitoringConditions: MonitoringConditionsModel,
   monitoringConditionsTrail: TrailMonitoringModel.nullable(),
   monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),

@@ -36,7 +36,7 @@ export default class InstallationAndRiskController {
   ) {}
 
   private constructViewModel(
-    installationAndRisk: InstallationAndRisk | undefined,
+    installationAndRisk: InstallationAndRisk | null,
     validationErrors: ValidationResult,
     formData: [InstallationAndRiskFormData],
   ): InstallationAndRiskViewModel {
@@ -48,7 +48,7 @@ export default class InstallationAndRiskController {
   }
 
   private createViewModelFromInstallationAndRisk(
-    installationAndRisk?: InstallationAndRisk,
+    installationAndRisk: InstallationAndRisk | null,
   ): InstallationAndRiskViewModel {
     return {
       riskOfSeriousHarm: { value: installationAndRisk?.riskOfSeriousHarm ?? '' },

@@ -48,6 +48,7 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
   deviceWearerContactDetails: {
     contactNumber: null,
   },
+  installationAndRisk: null,
   additionalDocuments: [],
   monitoringConditions: {
     orderType: null,
