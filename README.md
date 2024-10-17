@@ -15,26 +15,26 @@
   - [Run tests](#run-tests)
     - [Running integration tests](#running-integration-tests)
 - [Change log](#change-log)
-      
+
 
 ## About this project
 A service to allow users to Create Electronic Monitoring Orders. This Typescript front-end application is the user interface for the [HMPPS Create an Electronic Monitoring Order API](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api).
 
 ## Running the app
-The easiest way to run the app is to use docker compose to create the service and all dependencies. 
+The easiest way to run the app is to use docker compose to create the service and all dependencies.
 
 `docker compose pull`
 
 `docker compose up`
 
 ### Dependencies
-The app requires: 
+The app requires:
 * hmpps-auth - for authentication
 * redis - session store and token caching
 
 ### Running the application locally
 
-#### One-time setup: 
+#### One-time setup:
 - Create a personal client in the development environment of DPS with the roles `ROLE_EM_CEMO__CREATE_ORDER` and `ROLE_EM_CEMO__CREATE_DEVICE_WEARER`.
     - This service uses [HMPPS Auth](https://github.com/ministryofjustice/hmpps-auth) in development when run locally. Accordingly, to access the service locally you must first have a personal client created in the dev environment of DPS with the relevant roles. You’ll use this to log into the service, including locally.
     - To do this, you must submit a personal client request by cloning the [request template](https://dsdmoj.atlassian.net/browse/HAAR-664) and asking for a review on the [HMPPS Auth and Audit slack channel](https://moj.enterprise.slack.com/archives/C02S71KUBED).
@@ -61,7 +61,7 @@ CEMO_API_URL=http://localhost:8080
 
 #### Every-time setup:
 
-1. To start the main services, excluding the example typescript template app and hmpps auth: 
+1. To start the main services, excluding the example typescript template app and hmpps auth:
 
     `docker compose up --scale=app=0 --scale=hmpps-auth=0`
 
@@ -96,6 +96,20 @@ Instructions for this can be found in the readme of the [Create an EM Order API 
 
 3. And then either:
    - run tests in headless mode with `npm run int-test`
+   - Or run tests with the cypress UI `npm run int-test-ui`
+
+#### Running end-to-end scenarios against the CEMO API
+
+1. For local running, start an API, test db and wiremock instance by:
+
+    `docker compose -f docker-compose-scenarios.yml up`
+
+2. Then run the server so that it can connect to the services in the docker network:
+
+    `npm run start-scenarios` (or `npm run start-scenarios:dev` to run with auto-restart on changes)
+
+3. And then either:
+   - run scenario tests in headless mode with `npm run int-scenarios`
    - Or run tests with the cypress UI `npm run int-test-ui`
 
 ## Change log
