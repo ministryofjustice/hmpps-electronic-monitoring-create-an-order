@@ -19,7 +19,7 @@ const paths = {
 
   CONTACT_INFORMATION: {
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
-    ADDRESSES_NO_FIXED_ABODE: '/order/:orderId/contact-information/addresses',
+    NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
     ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType',
     NOTIFYING_ORGANISATION: '/order/:orderId/contact-information/notifying-organisation',
   },

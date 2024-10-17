@@ -37,6 +37,7 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     sex: null,
     gender: null,
     disabilities: null,
+    noFixedAbode: null,
   },
   deviceWearerResponsibleAdult: null,
   contactDetails: {
@@ -90,6 +91,7 @@ const listOrders = (httpStatus = 200): SuperAgentRequest =>
                   sex: null,
                   gender: null,
                   disabilities: null,
+                  noFixedAbode: null,
                 },
               },
             ]
@@ -273,7 +275,7 @@ const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpda
     },
   })
 
-type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
+type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities' | 'noFixedAbode'> & {
   disabilities?: string | null
 }
 
@@ -465,7 +467,6 @@ export default {
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
   stubCemoPutResponsibleAdult: putResponsibleAdult,
-
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,

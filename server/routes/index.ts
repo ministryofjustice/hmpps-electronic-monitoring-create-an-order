@@ -55,7 +55,7 @@ export default function routes({
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
-  const addressController = new AddressController(auditService, addressService)
+  const addressController = new AddressController(auditService, addressService, deviceWearerService)
   const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
   const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)

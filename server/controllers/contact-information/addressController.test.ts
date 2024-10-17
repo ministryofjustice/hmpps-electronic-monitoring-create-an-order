@@ -2,6 +2,7 @@ import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
 import AddressService from '../../services/addressService'
+import DeviceWearerService from '../../services/deviceWearerService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import AddressController from './addressController'
@@ -10,6 +11,7 @@ import { AddressTypeEnum } from '../../models/Address'
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
 jest.mock('../../services/addressService')
+jest.mock('../../services/deviceWearerService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 
@@ -49,9 +51,10 @@ const installationAddress = {
   postcode: '',
 }
 
-const createMockOrder = (noFixedAbode: boolean | null) => getMockOrder({
-  addresses: [primaryAddress, secondaryAddress, tertiaryAddress, installationAddress],
-  deviceWearer: {
+const createMockOrder = (noFixedAbode: boolean | null) =>
+  getMockOrder({
+    addresses: [primaryAddress, secondaryAddress, tertiaryAddress, installationAddress],
+    deviceWearer: {
       nomisId: null,
       pncId: null,
       deliusId: null,
@@ -64,15 +67,16 @@ const createMockOrder = (noFixedAbode: boolean | null) => getMockOrder({
       sex: null,
       gender: null,
       disabilities: [],
-      noFixedAbode
-  }
-})
+      noFixedAbode,
+    },
+  })
 
 describe('AddressController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockAddressService: jest.Mocked<AddressService>
+  let mockDeviceWearerService: jest.Mocked<DeviceWearerService>
   let addressController: AddressController
 
   beforeEach(() => {
@@ -89,11 +93,11 @@ describe('AddressController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAddressService = new AddressService(mockRestClient) as jest.Mocked<AddressService>
-    addressController = new AddressController(mockAuditService, mockAddressService)
+    mockDeviceWearerService = new DeviceWearerService(mockRestClient) as jest.Mocked<DeviceWearerService>
+    addressController = new AddressController(mockAuditService, mockAddressService, mockDeviceWearerService)
   })
 
   describe('getNoFixedAbode', () => {
-
     it('should render the no-fixed-abode view with neither option selected', async () => {
       // Given
       const req = createMockRequest({
@@ -146,7 +150,7 @@ describe('AddressController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
-        fixedAbode: 'false',
+        noFixedAbode: 'false',
         errors: {},
       })
     })
@@ -162,8 +166,8 @@ describe('AddressController', () => {
           ])
           .mockReturnValue([
             {
-              noFixedAbode: 'null'
-            }
+              noFixedAbode: 'null',
+            },
           ]),
       })
       const res = createMockResponse()
@@ -174,7 +178,7 @@ describe('AddressController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
-        fixedAbode: 'null',
+        noFixedAbode: 'null',
         errors: {
           fixedAbode: {
             text: 'You must indicate whether the device wearer has a fixed abode',
@@ -200,6 +204,22 @@ describe('AddressController', () => {
       const res = createMockResponse()
       const next = jest.fn()
 
+      mockDeviceWearerService.updateNoFixedAbode.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        firstName: null,
+        lastName: null,
+        alias: null,
+        dateOfBirth: null,
+        adultAtTimeOfInstallation: null,
+        sex: null,
+        gender: null,
+        disabilities: [],
+        noFixedAbode: false
+      })
+
       // When
       await addressController.postNoFixedAbode(req, res, next)
 
@@ -223,6 +243,22 @@ describe('AddressController', () => {
       const res = createMockResponse()
       const next = jest.fn()
 
+      mockDeviceWearerService.updateNoFixedAbode.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        firstName: null,
+        lastName: null,
+        alias: null,
+        dateOfBirth: null,
+        adultAtTimeOfInstallation: null,
+        sex: null,
+        gender: null,
+        disabilities: [],
+        noFixedAbode: true
+      })
+
       // When
       await addressController.postNoFixedAbode(req, res, next)
 
@@ -245,6 +281,22 @@ describe('AddressController', () => {
       const res = createMockResponse()
       const next = jest.fn()
 
+      mockDeviceWearerService.updateNoFixedAbode.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        firstName: null,
+        lastName: null,
+        alias: null,
+        dateOfBirth: null,
+        adultAtTimeOfInstallation: null,
+        sex: null,
+        gender: null,
+        disabilities: [],
+        noFixedAbode: false
+      })
+
       // When
       await addressController.postNoFixedAbode(req, res, next)
 
@@ -265,6 +317,9 @@ describe('AddressController', () => {
       })
       const res = createMockResponse()
       const next = jest.fn()
+      mockDeviceWearerService.updateNoFixedAbode.mockResolvedValue([
+        { error: 'You must indicate whether the device wearer has a fixed abode', field: 'noFixedAbode' },
+      ])
 
       // When
       await addressController.postNoFixedAbode(req, res, next)
@@ -499,7 +554,7 @@ describe('AddressController', () => {
 
     it.each([
       ['Primary', 'primary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Secondary', 'secondary', '/order/123456789/contact-information/notifying-organisation']
+      ['Secondary', 'secondary', '/order/123456789/contact-information/notifying-organisation'],
     ])(
       'should go to the notifying organisation page if the user indicates they do not have another address',
       async (_: string, param: string, expectedLocation: string) => {
@@ -543,46 +598,43 @@ describe('AddressController', () => {
       },
     )
 
-    it(
-      'should go always go the notifying organisation page if the tertiary address is being filled in',
-      async () => {
-        // Given
-        const req = createMockRequest({
-          order: createMockOrder(null),
-          body: {
-            action: 'continue',
-            addressLine1: 'a',
-            addressLine2: 'b',
-            addressLine3: 'c',
-            addressLine4: 'd',
-            postcode: 'e',
-            hasAnotherAddress: 'false',
-          },
-          flash: jest.fn(),
-          params: {
-            orderId: '123456789',
-            addressType: 'tertiary',
-          },
-        })
-        const res = createMockResponse()
-        const next = jest.fn()
-
-        mockAddressService.updateAddress.mockResolvedValue({
-          addressType: 'TERTIARY',
+    it('should go always go the notifying organisation page if the tertiary address is being filled in', async () => {
+      // Given
+      const req = createMockRequest({
+        order: createMockOrder(null),
+        body: {
+          action: 'continue',
           addressLine1: 'a',
           addressLine2: 'b',
           addressLine3: 'c',
           addressLine4: 'd',
           postcode: 'e',
-        })
+          hasAnotherAddress: 'false',
+        },
+        flash: jest.fn(),
+        params: {
+          orderId: '123456789',
+          addressType: 'tertiary',
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
 
-        // When
-        await addressController.postAddress(req, res, next)
+      mockAddressService.updateAddress.mockResolvedValue({
+        addressType: 'TERTIARY',
+        addressLine1: 'a',
+        addressLine2: 'b',
+        addressLine3: 'c',
+        addressLine4: 'd',
+        postcode: 'e',
+      })
 
-        // Then
-        expect(req.flash).not.toHaveBeenCalled()
-        expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
-      },
-    )
+      // When
+      await addressController.postAddress(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
+    })
   })
 })

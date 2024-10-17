@@ -135,7 +135,7 @@ describe('ContactDetailsController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/addresses')
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/no-fixed-abode')
     })
 
     it('should save and redirect to the order summary page if the user selects back', async () => {
