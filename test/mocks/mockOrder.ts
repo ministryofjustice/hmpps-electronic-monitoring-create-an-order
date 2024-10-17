@@ -23,7 +23,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
     contactNumber: '',
   },
   enforcementZoneConditions: [],
-  deviceWearerAddresses: [],
+  addresses: [],
   additionalDocuments: [],
   monitoringConditions: {
     orderType: null,
