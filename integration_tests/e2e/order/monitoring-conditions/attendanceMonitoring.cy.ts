@@ -19,13 +19,11 @@ const monitoringConditions = {
   mandatoryAttendance: true,
   alcohol: true,
   devicesRequired: [
-    '250',
-    'aamr',
-    'aml',
-    'attendance_requirement',
-    'curfew_with_em',
-    'em_exclusion_inclusion_zone',
-    'location_monitoring',
+    'Location - fitted',
+    'Location - non-fitted',
+    'RF',
+    'Alcohol (Transdermal)',
+    'Alcohol (Remote Breath)',
   ],
 }
 
