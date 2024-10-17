@@ -73,7 +73,7 @@ export default class MonitoringConditionsController {
         values: monitoringRequiredValues,
       },
       devicesRequired: {
-        values: monitoringConditions.devicesRequired?.split(',') ?? [],
+        values: monitoringConditions.devicesRequired ?? [],
       },
     }
   }
@@ -113,7 +113,7 @@ export default class MonitoringConditionsController {
       trail: formData.monitoringRequired.includes('trail'),
       mandatoryAttendance: formData.monitoringRequired.includes('mandatoryAttendance'),
       alcohol: formData.monitoringRequired.includes('alcohol'),
-      devicesRequired: formData.devicesRequired.length > 0 ? formData.devicesRequired.join(',') : null,
+      devicesRequired: formData.devicesRequired.length > 0 ? formData.devicesRequired : null,
     }
   }
 
@@ -139,7 +139,6 @@ export default class MonitoringConditionsController {
     if (isValidationResult(updateMonitoringConditionsResult)) {
       req.flash('formData', formData)
       req.flash('validationErrors', updateMonitoringConditionsResult)
-
       res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
       res.redirect(nextPage(formData.monitoringRequired).replace(':orderId', orderId))

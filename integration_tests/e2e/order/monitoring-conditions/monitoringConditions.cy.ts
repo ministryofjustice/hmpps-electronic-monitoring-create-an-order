@@ -14,7 +14,13 @@ const mockSubmittedMonitoringRequirements = {
     trail: true,
     mandatoryAttendance: true,
     alcohol: true,
-    devicesRequired: 'Location - fitted,Location - non-fitted,RF,Alcohol (Transdermal),Alcohol (Remote Breath)',
+    devicesRequired: [
+      'Location - fitted',
+      'Location - non-fitted',
+      'RF',
+      'Alcohol (Transdermal)',
+      'Alcohol (Remote Breath)',
+    ],
   },
 }
 const mockEmptyMonitoringConditions = {
@@ -143,7 +149,13 @@ context('Monitoring conditions main section', () => {
           trail: true,
           mandatoryAttendance: true,
           alcohol: true,
-          devicesRequired: 'Location - fitted,Location - non-fitted,RF,Alcohol (Transdermal),Alcohol (Remote Breath)',
+          devicesRequired: [
+            'Location - fitted',
+            'Location - non-fitted',
+            'RF',
+            'Alcohol (Transdermal)',
+            'Alcohol (Remote Breath)',
+          ],
         })
       })
     })
@@ -173,7 +185,7 @@ context('Monitoring conditions main section', () => {
           trail: false,
           mandatoryAttendance: false,
           alcohol: true,
-          devicesRequired: 'Alcohol (Transdermal)',
+          devicesRequired: ['Alcohol (Transdermal)'],
         })
       })
       const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)

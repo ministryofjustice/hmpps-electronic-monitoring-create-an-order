@@ -92,7 +92,7 @@ const mockEmptyTimetable = {
 
 const checkFormFields = () => {
   const groupedTimetables = mockSubmittedTimetable.monitoringConditionsCurfewTimetable.reduce(
-    (acc: Record<string, CurfewTimetable[]>, t) => {
+    (acc: Record<string, CurfewTimetable>, t) => {
       if (!acc[t.day]) {
         acc[t.day] = []
       }

@@ -21,7 +21,7 @@ export default class CurfewTimetablePage extends AppPage {
 
   fillInForm = (order: Order): void => {
     const groupedTimetables = order.monitoringConditionsCurfewTimetable.reduce(
-      (acc: Record<string, CurfewTimetable[]>, t) => {
+      (acc: Record<string, CurfewTimetable>, t) => {
         if (!acc[t.day]) {
           acc[t.day] = []
         }

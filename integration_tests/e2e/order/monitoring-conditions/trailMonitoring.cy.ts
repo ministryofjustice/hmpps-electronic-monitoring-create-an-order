@@ -20,8 +20,15 @@ const mockEmptyTrailMonitoring = {
     trail: true,
     mandatoryAttendance: false,
     alcohol: true,
-    devicesRequired:
-      '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+    devicesRequired: [
+      '250',
+      'aamr',
+      'aml',
+      'attendance_requirement',
+      'curfew_with_em',
+      'em_exclusion_inclusion_zone',
+      'location_monitoring',
+    ],
   },
 }
 
@@ -39,8 +46,15 @@ const mockSubmittedTrailMonitoring = {
     trail: true,
     mandatoryAttendance: true,
     alcohol: true,
-    devicesRequired:
-      '250,aamr,aml,attendance_requirement,curfew_with_em,em_exclusion_inclusion_zone,location_monitoring',
+    devicesRequired: [
+      '250',
+      'aamr',
+      'aml',
+      'attendance_requirement',
+      'curfew_with_em',
+      'em_exclusion_inclusion_zone',
+      'location_monitoring',
+    ],
   },
 }
 
