@@ -2,8 +2,9 @@ import assert from 'assert'
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
+import { Client as PostgresqlClient } from 'pg'
 
-import { Order, OrderStatus } from '../../server/models/Order'
+import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
@@ -21,7 +22,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-export const mockApiOrder = (status: OrderStatus = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   deviceWearer: {
@@ -462,6 +463,63 @@ const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
     return true
   })
 
+const tables = [
+  'address',
+  'alternative_contact_details',
+  'device_wearer_contact_details',
+  'device_wearer',
+
+  'curfew_timetable',
+
+  'mandatory_attendance',
+  'alcohol_monitoring',
+  'curfew',
+  'curfew_release_date',
+  'additional_documentions',
+  'monitoring_conditions',
+
+  'installation_and_risk',
+  'enforcement_zone',
+  'trail_monitoring',
+  'responsible_adult',
+  'responsible_officer',
+
+  'orders',
+]
+
+const emptyNextTable = async (client: PostgresqlClient) => {
+  const table = tables.shift()
+
+  if (!table) {
+    return
+  }
+
+  await client.query(`DELETE FROM ${table}`)
+  await emptyNextTable(client)
+}
+
+const resetDB = async () => {
+  const client = new PostgresqlClient({
+    user: 'postgres',
+    password: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    database: 'postgres',
+  })
+
+  await client.connect()
+
+  // INFO: incase we ever need to list the tables
+  // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
+  // console.log(rows)
+
+  await emptyNextTable(client)
+
+  await client.end()
+
+  return true
+}
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoGetOrder: getOrder,
@@ -476,4 +534,6 @@ export default {
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
+
+  resetDB,
 }
