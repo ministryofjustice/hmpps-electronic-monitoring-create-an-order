@@ -12,6 +12,7 @@ import DeviceWearerResponsibleAdultModel from './DeviceWearerResponsibleAdult'
 import EnforcementZoneModel from './EnforcementZone'
 import InstallationAndRiskModel from './InstallationAndRisk'
 import MonitoringConditionsModel from './MonitoringConditions'
+import NotifyingOrganisationModel from './NotifyingOrganisation'
 import TrailMonitoringModel from './TrailMonitoring'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
@@ -33,6 +34,7 @@ const OrderModel = z.object({
   monitoringConditionsCurfewReleaseDate: CurfewReleaseDateModel.optional(),
   monitoringConditionsCurfewConditions: CurfewConditionsModel.optional(),
   monitoringConditionsCurfewTimetable: CurfewTimetableModel.optional(),
+  notifyingOrganisation: NotifyingOrganisationModel.optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>
