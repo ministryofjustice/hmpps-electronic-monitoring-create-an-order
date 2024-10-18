@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import AddressInformationPage from '../../../pages/order/contact-information/addressInformation'
 import OrderSummaryPage from '../../../pages/order/summary'
+import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 
 const mockOrderId = uuidv4()
-const pagePath = '/contact-information/contact-details'
 const apiPath = '/contact-details'
 
 context('Contact details - Contact information', () => {
@@ -18,9 +17,9 @@ context('Contact details - Contact information', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
-        subPath: pagePath,
+        subPath: apiPath,
         response: {
-          contactNumber: 'abc',
+          contactNumber: '01234567890',
         },
       })
 
@@ -32,7 +31,7 @@ context('Contact details - Contact information', () => {
       const page = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
 
       const validFormData = {
-        contactNumber: 'abc',
+        contactNumber: '01234567890',
       }
 
       page.form.fillInWith(validFormData)
@@ -41,31 +40,29 @@ context('Contact details - Contact information', () => {
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
-          contactNumber: 'abc',
+          contactNumber: '01234567890',
         },
       }).should('be.true')
     })
 
-    // TODO: FAIL page has not been created yet
-    it.skip('should continue to the address details', () => {
+    it('should continue to collect no fixed abode details', () => {
       const page = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
 
       const validFormData = {
-        contactNumber: 'abc',
+        contactNumber: '01234567890',
       }
 
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(AddressInformationPage)
+      Page.verifyOnPage(NoFixedAbodePage)
     })
 
-    // TODO: FAIL page has not been created yet
-    it.skip('should return to the summary page', () => {
+    it('should return to the summary page', () => {
       const page = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
 
       const validFormData = {
-        contactNumber: 'abc',
+        contactNumber: '01234567890',
       }
 
       page.form.fillInWith(validFormData)

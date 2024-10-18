@@ -1,9 +1,15 @@
 import { Request, RequestHandler, Response } from 'express'
+import z from 'zod'
 import paths from '../../constants/paths'
 import { AuditService } from '../../services'
 import DeviceWearerService from '../../services/deviceWearerService'
 import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
+
+const FormDataModel = z.object({
+  action: z.string().default('continue'),
+  noFixedAbode: z.string().default(''),
+})
 
 export default class NoFixedAbodeController {
   constructor(
@@ -27,7 +33,7 @@ export default class NoFixedAbodeController {
 
   post: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { action, ...formData } = req.body
+    const { action, ...formData } = FormDataModel.parse(req.body)
 
     const result = await this.deviceWearerService.updateNoFixedAbode({
       accessToken: res.locals.user.token,
