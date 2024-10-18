@@ -2,6 +2,7 @@ import assert from 'assert'
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
+import { Client as PostgresqlClient } from 'pg'
 
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
@@ -21,7 +22,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-export const mockApiOrder = (status = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   deviceWearer: {
@@ -40,9 +41,6 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
     noFixedAbode: null,
   },
   deviceWearerResponsibleAdult: null,
-  contactDetails: {
-    contactNumber: null,
-  },
   enforcementZoneConditions: [],
   addresses: [],
   deviceWearerContactDetails: {
@@ -64,39 +62,46 @@ export const mockApiOrder = (status = 'IN_PROGRESS') => ({
   monitoringConditionsTrail: null,
 })
 
-const listOrders = (httpStatus = 200): SuperAgentRequest =>
+type ListOrdersStubOptions = {
+  httpStatus: number
+  orders?: object[]
+}
+
+const defaultListOrdersOptions: ListOrdersStubOptions = {
+  httpStatus: 200,
+  orders: [
+    mockApiOrder('SUBMITTED'),
+    {
+      ...mockApiOrder(),
+      deviceWearer: {
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        firstName: 'test',
+        lastName: 'tester',
+        alias: null,
+        dateOfBirth: null,
+        adultAtTimeOfInstallation: null,
+        sex: null,
+        gender: null,
+        disabilities: null,
+        noFixedAbode: null,
+      },
+    },
+  ],
+}
+
+const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
       urlPattern: '/cemo/api/orders',
     },
     response: {
-      status: httpStatus,
+      status: options.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody:
-        httpStatus === 200
-          ? [
-              mockApiOrder('SUBMITTED'),
-              {
-                ...mockApiOrder(),
-                deviceWearer: {
-                  nomisId: null,
-                  pncId: null,
-                  deliusId: null,
-                  prisonNumber: null,
-                  firstName: 'test',
-                  lastName: 'tester',
-                  alias: null,
-                  dateOfBirth: null,
-                  adultAtTimeOfInstallation: null,
-                  sex: null,
-                  gender: null,
-                  disabilities: null,
-                  noFixedAbode: null,
-                },
-              },
-            ]
-          : null,
+      jsonBody: options.httpStatus === 200 ? options.orders : null,
     },
   })
 
@@ -458,6 +463,63 @@ const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
     return true
   })
 
+const tables = [
+  'address',
+  'alternative_contact_details',
+  'device_wearer_contact_details',
+  'device_wearer',
+
+  'curfew_timetable',
+
+  'mandatory_attendance',
+  'alcohol_monitoring',
+  'curfew',
+  'curfew_release_date',
+  'additional_documentions',
+  'monitoring_conditions',
+
+  'installation_and_risk',
+  'enforcement_zone',
+  'trail_monitoring',
+  'responsible_adult',
+  'responsible_officer',
+
+  'orders',
+]
+
+const emptyNextTable = async (client: PostgresqlClient) => {
+  const table = tables.shift()
+
+  if (!table) {
+    return
+  }
+
+  await client.query(`DELETE FROM ${table}`)
+  await emptyNextTable(client)
+}
+
+const resetDB = async () => {
+  const client = new PostgresqlClient({
+    user: 'postgres',
+    password: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    database: 'postgres',
+  })
+
+  await client.connect()
+
+  // INFO: incase we ever need to list the tables
+  // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
+  // console.log(rows)
+
+  await emptyNextTable(client)
+
+  await client.end()
+
+  return true
+}
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoGetOrder: getOrder,
@@ -472,4 +534,6 @@ export default {
   stubUploadAttachment: uploadAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
+
+  resetDB,
 }
