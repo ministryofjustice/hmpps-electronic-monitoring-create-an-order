@@ -1,0 +1,209 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../../../partials/addressInput.njk" import addressInput %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: orderSummaryUri
+  }) }}
+
+  {% if not isOrderEditable %}
+      {% set html %}
+        <p class="govuk-notification-banner__heading">
+          You are viewing a submitted order.
+        </p>
+      {% endset %}
+
+      {{ govukNotificationBanner({
+        html: html
+      }) }}
+  {% endif %}
+
+  <div class="homepage-content">
+    {{ mojPageHeaderActions({
+      heading: {
+          text: "Contact information"
+      }
+    }) }}
+  </div>
+
+  <form action="" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <h2 class="govuk-heading-l">Notifying organisation</h2>
+
+    {{ govukInput({
+        label: {
+          text: "Email address for the notifying organisation ",
+          classes: "govuk-label--s"
+        },
+        hint: {
+          text: "For example functional mailbox"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "notifyingOrganisationEmail",
+        name: "notifyingOrganisationEmail",
+        value: notifyingOrganisationEmail.value,
+        errorMessage: notifyingOrganisationEmail.error,
+        disabled: not isOrderEditable
+      }) }}
+
+    <h2 class="govuk-heading-l">Responsible Officer</h2>
+
+    {{ govukInput({
+        label: {
+          text: "Full name of responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "officerName",
+        name: "officerName",
+        value: officerName.value,
+        errorMessage: officerName.error,
+        disabled: not isOrderEditable
+      }) }}
+
+    {{ govukInput({
+        label: {
+          text: "Telephone number for responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "officerPhoneNumber",
+        name: "officerPhoneNumber",
+        value: officerPhoneNumber.value,
+        errorMessage: officerPhoneNumber.error,
+        disabled: not isOrderEditable
+      }) }}
+
+    <h2 class="govuk-heading-l">Responsible Organisation</h2>
+    
+    {{ govukRadios({
+      name: "organisationType",
+      fieldset: {
+        legend: {
+          text: "What type of organisation is the responsible officer part of?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      hint: {
+        text: "Select one option"
+      },
+      value: organisationType.value,
+      errorMessage: organisationType.error,
+      items: [
+        {
+          value: "YJS",
+          text: "Youth Justice Service (YJS)",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "YCS",
+          text: "Youth Custody Service (YCS)",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "PROBATION",
+          text: "Probation",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "FMS",
+          text: "Field monitoring service",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "HOME_OFFICE",
+          text: "Home Office",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "POLICE",
+          text: "Police",
+          disabled: not isOrderEditable
+        }
+      ]
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "What region is the responsible organisation in?",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "organisationRegion",
+      name: "organisationRegion",
+      value: organisationRegion.value,
+      errorMessage: organisationRegion.error,
+      disabled: not isOrderEditable
+    }) }}
+
+
+    {{ addressInput({
+      label: "What is the address of the responsible organisation?",
+      id: "organisationAddress",
+      name: "organisationAddress",
+      value: organisationAddress.value,
+      errorMessage: organisationAddress.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: "Telephone number for responsible organisation",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "organisationPhoneNumber",
+      name: "organisationPhoneNumber",
+      value: organisationPhoneNumber.value,
+      errorMessage: organisationPhoneNumber.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: " Email address for responsible organisation",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "organisationEmail",
+      name: "organisationEmail",
+      value: organisationEmail.value,
+      errorMessage: organisationEmail.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    <div class="govuk-button-group">
+      {% if isOrderEditable %}
+        {{ govukButton({
+            text: "Save and continue",
+            name: "action",
+            value: "continue"
+        }) }}
+        {{ govukButton({
+            text: "Save and return back to to form section menu",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "back"
+        }) }}
+      {% else %}
+        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to to form section menu</a>
+      {% endif %}
+    </div>
+  </form>
+
+{% endblock %}

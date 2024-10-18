@@ -2,10 +2,12 @@ import { type RequestHandler, Router } from 'express'
 
 import paths from '../constants/paths'
 import AttachmentsController from '../controllers/attachmentController'
+import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
+import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
+import NotifyingOrganisationController from '../controllers/contact-information/notifyingOrganisationController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
-import AddressController from '../controllers/contact-information/addressController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
@@ -22,7 +24,6 @@ import ResponsibleOfficerController from '../controllers/responsibleOfficerContr
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
-import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -39,6 +40,7 @@ export default function routes({
   deviceWearerService,
   installationAndRiskService,
   monitoringConditionsService,
+  notifyingOrganisationService,
   orderService,
   orderSearchService,
   trailMonitoringService,
@@ -61,6 +63,10 @@ export default function routes({
   const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
   const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService)
+  const notifyingOrganisationController = new NotifyingOrganisationController(
+    auditService,
+    notifyingOrganisationService,
+  )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
@@ -116,6 +122,10 @@ export default function routes({
   // Device wearer addresses
   get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.get)
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.post)
+
+  // Device wearer addresses
+  get(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.view)
+  post(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.update)
 
   /**
    * INSTALLATION AND RISK

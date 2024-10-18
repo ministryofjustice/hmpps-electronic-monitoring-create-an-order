@@ -1,4 +1,5 @@
 import { dataAccess } from '../data'
+import AddressService from './addressService'
 import AlcoholMonitoringService from './alcoholMonitoringService'
 import AttachmentService from './attachmentService'
 import AttendanceMonitoringService from './attendanceMonitoringService'
@@ -12,10 +13,10 @@ import DeviceWearerService from './deviceWearerService'
 import EnforcementZoneService from './enforcementZoneServices'
 import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
+import NotifyingOrganisationService from './notifyingOrganisationService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import TrailMonitoringService from './trailMonitoringService'
-import AddressService from './addressService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -33,6 +34,7 @@ export const services = () => {
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
+  const notifyingOrganisationService = new NotifyingOrganisationService(cemoApiClient)
   const zoneService = new EnforcementZoneService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
@@ -53,6 +55,7 @@ export const services = () => {
     deviceWearerService,
     installationAndRiskService,
     monitoringConditionsService,
+    notifyingOrganisationService,
     orderSearchService,
     orderService,
     trailMonitoringService,
