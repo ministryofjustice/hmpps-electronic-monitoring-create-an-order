@@ -34,6 +34,7 @@ export default class AddressController {
     const formData = req.flash('formData')
 
     res.render('pages/order/contact-information/address', {
+      addressType,
       ...currentAddress,
       hasAnotherAddress,
       ...(formData.length > 0 ? (formData[0] as never) : {}),
