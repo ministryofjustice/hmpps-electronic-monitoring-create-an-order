@@ -41,7 +41,6 @@ context('Contact information', () => {
           addressLine3: 'line 3',
           addressLine4: 'line 3',
           postcode: 'postcode',
-          hasAnotherAddress: 'No',
         }
 
         page.form.fillInWith(validFormData)

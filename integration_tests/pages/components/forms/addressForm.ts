@@ -71,7 +71,7 @@ export default class AddressFormComponent extends FormComponent {
       this.postcodeField.set(profile.postcode)
     }
 
-    if (profile.hasAnotherAddress && this.canCreateAnotherAddress) {
+    if (profile.hasAnotherAddress) {
       this.hasAnotherAddressField.set(profile.hasAnotherAddress)
     }
   }
