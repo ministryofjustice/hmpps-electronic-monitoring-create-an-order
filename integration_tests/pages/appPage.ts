@@ -10,5 +10,9 @@ export default class AppPage extends Page {
     this.header = new PageHeaderComponent()
   }
 
+  get backToSummaryButton(): PageElement {
+    return cy.contains('Back')
+  }
+
   submittedBanner = (): PageElement => cy.get('.govuk-notification-banner')
 }

@@ -8,8 +8,6 @@ import ResponsibleAdultFormComponent from '../../components/forms/about-the-devi
 export default class ResponsibleAdultPage extends AppPage {
   form = new ResponsibleAdultFormComponent()
 
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
   constructor() {
     super('About the device wearer', paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, 'Responsible Adult')
   }

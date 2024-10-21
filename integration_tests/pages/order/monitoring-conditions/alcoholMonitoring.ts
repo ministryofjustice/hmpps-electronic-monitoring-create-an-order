@@ -14,8 +14,6 @@ export default class AlcoholMonitoringPage extends AppPage {
 
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
 
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
   fillInForm = (type: string): void => {
     cy.get('input[type="radio"][value="ALCOHOL_ABSTINENCE"]').check()
     cy.get('#startDate-day').type('27')

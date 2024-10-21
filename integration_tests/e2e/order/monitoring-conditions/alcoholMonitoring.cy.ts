@@ -89,7 +89,7 @@ context('Alcohol monitoring', () => {
       cy.get('input[name="probationOfficeName"]').should('have.value', 'Probation Office')
       page.saveAndContinueButton().should('not.exist')
       page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
 
     it('Should correctly display the submitted data in disabled fields (prison)', () => {
@@ -118,7 +118,7 @@ context('Alcohol monitoring', () => {
       cy.get('input[name="prisonName"]').should('have.value', 'Prison Name')
       page.saveAndContinueButton().should('not.exist')
       page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 

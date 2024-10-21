@@ -11,6 +11,4 @@ export default class MonitoringConditionsPage extends AppPage {
   saveAndContinueButton = (): PageElement => cy.get('form button[type=submit][value="continue"]')
 
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
-
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
 }

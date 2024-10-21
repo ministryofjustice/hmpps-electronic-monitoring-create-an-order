@@ -9,17 +9,13 @@ export default class NotifyingOrganisationPage extends AppPage {
   public form = new NotifyingOrganisationFormComponent()
 
   constructor() {
-    super('Contact information', paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION)
+    super('Contact information', paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, 'Notifying organisation')
   }
 
   checkOnPage(): void {
     super.checkOnPage()
 
     this.form.checkHasForm()
-  }
-
-  get backToSummaryButton(): PageElement {
-    return cy.get('a#backToSummary')
   }
 
   fillInForm = (): void => {

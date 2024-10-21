@@ -3,12 +3,10 @@ import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
 
-import ResponsibleOfficerFormComponent from '../../components/forms/about-the-device-wearer/responsibleOfficerForm'
+import ResponsibleOfficerDetailsFormComponent from '../../components/forms/about-the-device-wearer/responsibleOfficerDetailsForm'
 
-export default class ResponsibleOfficerPage extends AppPage {
-  form = new ResponsibleOfficerFormComponent()
-
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
+export default class ResponsibleOfficerDetilsPage extends AppPage {
+  form = new ResponsibleOfficerDetailsFormComponent()
 
   constructor() {
     super(

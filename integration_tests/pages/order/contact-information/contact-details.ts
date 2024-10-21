@@ -17,8 +17,4 @@ export default class ContactDetailsPage extends AppPage {
 
     this.form.checkHasForm()
   }
-
-  get backToSummaryButton(): PageElement {
-    return cy.get('a#backToSummary')
-  }
 }

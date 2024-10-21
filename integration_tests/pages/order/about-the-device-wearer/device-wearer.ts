@@ -8,8 +8,6 @@ import AboutDeviceWearerFormComponent from '../../components/forms/about-the-dev
 export default class AboutDeviceWearerPage extends AppPage {
   form = new AboutDeviceWearerFormComponent()
 
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
   constructor() {
     super('About the device wearer', paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, '')
   }

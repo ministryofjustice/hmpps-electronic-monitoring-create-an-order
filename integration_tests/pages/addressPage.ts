@@ -18,8 +18,6 @@ export default class AddressPage extends AppPage {
     super.checkOnPage()
 
     this.form.checkHasForm()
-
-    cy.get('.govuk-fieldset__legend--l', { log: false }).contains(this.subheading)
   }
 
   get backToSummaryButton(): PageElement {

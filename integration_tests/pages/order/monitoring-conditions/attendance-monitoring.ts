@@ -16,8 +16,6 @@ export default class AttendanceMonitoringPage extends AppPage {
 
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
 
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
   fillInForm = (): void => {
     cy.get('#startDate-day').type('27')
     cy.get('#startDate-month').type('3')
