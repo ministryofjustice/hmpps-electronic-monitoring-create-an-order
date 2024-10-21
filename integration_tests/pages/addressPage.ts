@@ -1,5 +1,6 @@
 import AppPage from './appPage'
 import AddressFormComponent from './components/forms/addressForm'
+import { PageElement } from './page'
 
 export default class AddressPage extends AppPage {
   form = new AddressFormComponent()
@@ -18,5 +19,9 @@ export default class AddressPage extends AppPage {
     this.form.checkHasForm()
 
     cy.get('.govuk-fieldset__legend--l', { log: false }).contains(this.subheading)
+  }
+
+  get backToSummaryButton(): PageElement {
+    return cy.get('a#backToSummary')
   }
 }

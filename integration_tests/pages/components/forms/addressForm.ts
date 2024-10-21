@@ -1,5 +1,6 @@
 import FormComponent from '../formComponent'
 import FormInputComponent from '../formInputComponent'
+import FormRadiosComponent from '../formRadiosComponent'
 
 export type AddressFormData = {
   addressLine1?: string
@@ -7,6 +8,7 @@ export type AddressFormData = {
   addressLine3?: string
   addressLine4?: string
   postcode?: string
+  hasAnotherAddress: string
 }
 
 export default class AddressFormComponent extends FormComponent {
@@ -37,6 +39,11 @@ export default class AddressFormComponent extends FormComponent {
     return new FormInputComponent(this.form, label)
   }
 
+  get hasAnotherAddressField(): FormRadiosComponent {
+    const label = 'Does the device wearer have another address they will be monitored at?'
+    return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
+  }
+
   // FORM HELPERS
 
   fillInWith(profile: AddressFormData): void {
@@ -59,6 +66,10 @@ export default class AddressFormComponent extends FormComponent {
     if (profile.postcode) {
       this.postcodeField.set(profile.postcode)
     }
+
+    if (profile.hasAnotherAddress) {
+      this.hasAnotherAddressField.set(profile.hasAnotherAddress)
+    }
   }
 
   shouldBeValid(): void {
@@ -73,5 +84,15 @@ export default class AddressFormComponent extends FormComponent {
     this.addressLine2Field.shouldBeDisabled()
     this.addressLine2Field.shouldBeDisabled()
     this.postcodeField.shouldBeDisabled()
+    this.hasAnotherAddressField.shouldBeDisabled()
+  }
+
+  shouldNotBeDisabled(): void {
+    this.addressLine1Field.shouldNotBeDisabled()
+    this.addressLine2Field.shouldNotBeDisabled()
+    this.addressLine2Field.shouldNotBeDisabled()
+    this.addressLine2Field.shouldNotBeDisabled()
+    this.postcodeField.shouldNotBeDisabled()
+    this.hasAnotherAddressField.shouldNotBeDisabled()
   }
 }
