@@ -5,7 +5,6 @@ import AlcoholMonitoringController from './alcoholMonitoringController'
 import RestClient from '../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import { AlcoholMonitoringTypeEnum, InstallationAddressTypeEnum } from '../../models/AlcoholMonitoring'
 import { AddressTypeEnum } from '../../models/Address'
 
 jest.mock('../../services/auditService')
@@ -17,12 +16,12 @@ jest.mock('../../data/restClient')
 const createMockOrder = (startDate: string | null = null, prisonName = null, probationOfficeName = null) =>
   getMockOrder({
     monitoringConditionsAlcohol: {
-      monitoringType: AlcoholMonitoringTypeEnum.Enum.ABSTINENCE,
+      monitoringType: 'ALCOHOL_ABSTINENCE',
       startDate,
       endDate: '2027-02-15',
       prisonName,
       probationOfficeName,
-      installationAddressType: InstallationAddressTypeEnum.Enum.PRIMARY,
+      installationLocation: 'PRIMARY',
     },
     addresses: [
       {
@@ -76,12 +75,12 @@ describe('AlcoholMonitoringController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/monitoring-conditions/alcohol-monitoring',
         expect.objectContaining({
-          monitoringType: { value: 'ABSTINENCE' },
+          monitoringType: { value: 'ALCOHOL_ABSTINENCE' },
           startDate: { value: { day: '15', month: '2', year: '2026' } },
           endDate: { value: { day: '15', month: '2', year: '2027' } },
           prisonName: { value: '' },
           probationOfficeName: { value: '' },
-          installationAddressType: { value: 'PRIMARY' },
+          installationLocation: { value: 'PRIMARY' },
           primaryAddressView: { value: '1 Mock Street, Mock City, Mock Postcode' },
           secondaryAddressView: { value: '' },
           tertiaryAddressView: { value: '' },
@@ -101,7 +100,7 @@ describe('AlcoholMonitoringController', () => {
         .mockReturnValueOnce([{ error: 'Start date is required', field: 'startDate' }])
         .mockReturnValueOnce([
           {
-            monitoringType: 'ABSTINENCE',
+            monitoringType: 'ALCOHOL_ABSTINENCE',
             'startDate-day': '',
             'startDate-month': '',
             'startDate-year': '',
@@ -110,7 +109,7 @@ describe('AlcoholMonitoringController', () => {
             'endDate-year': '2027',
             prisonName: '',
             probationOfficeName: '',
-            installationAddressType: 'PRIMARY',
+            installationLocation: 'PRIMARY',
             primaryAddressView: '1 Mock Street, Mock City, Mock Postcode',
             secondaryAddressView: '',
             tertiaryAddressView: '',
@@ -125,7 +124,7 @@ describe('AlcoholMonitoringController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/monitoring-conditions/alcohol-monitoring',
         expect.objectContaining({
-          monitoringType: { value: 'ABSTINENCE' },
+          monitoringType: { value: 'ALCOHOL_ABSTINENCE' },
           startDate: { value: { day: '', month: '', year: '' }, error: { text: 'Start date is required' } },
           endDate: { value: { day: '15', month: '02', year: '2027' } },
           prisonName: { value: '' },
@@ -134,7 +133,7 @@ describe('AlcoholMonitoringController', () => {
           secondaryAddressView: { value: '' },
           tertiaryAddressView: { value: '' },
           installationAddressView: { value: '' },
-          installationAddressType: { value: 'PRIMARY' },
+          installationLocation: { value: 'PRIMARY' },
         }),
       )
     })
@@ -156,7 +155,7 @@ describe('AlcoholMonitoringController', () => {
         'endDate-day': '30',
         'endDate-month': '12',
         'endDate-year': '2027',
-        installationAddressType: 'PRIMARY',
+        installationLocation: 'PRIMARY',
         prisonName: '',
         probationOfficeName: '',
       }
@@ -178,7 +177,7 @@ describe('AlcoholMonitoringController', () => {
         'endDate-day': '30',
         'endDate-month': '12',
         'endDate-year': '2027',
-        installationAddressType: 'PRIMARY',
+        installationLocation: 'PRIMARY',
         prisonName: '',
         probationOfficeName: '',
       })
@@ -199,22 +198,22 @@ describe('AlcoholMonitoringController', () => {
       req.flash = jest.fn()
       req.body = {
         action: 'continue',
-        monitoringType: 'ABSTINENCE',
+        monitoringType: 'ALCOHOL_ABSTINENCE',
         'startDate-day': '30',
         'startDate-month': '12',
         'startDate-year': '2026',
         'endDate-day': '30',
         'endDate-month': '12',
         'endDate-year': '2027',
-        installationAddressType: 'PRIMARY',
+        installationLocation: 'PRIMARY',
         prisonName: '',
         probationOfficeName: '',
       }
       mockAlcoholMonitoringService.update.mockResolvedValue({
-        monitoringType: 'ABSTINENCE',
+        monitoringType: 'ALCOHOL_ABSTINENCE',
         startDate: '2026-12-30',
         endDate: '2027-12-30',
-        installationAddressType: 'PRIMARY',
+        installationLocation: 'PRIMARY',
         prisonName: '',
         probationOfficeName: '',
       })
@@ -236,22 +235,22 @@ describe('AlcoholMonitoringController', () => {
     req.flash = jest.fn()
     req.body = {
       action: 'back',
-      monitoringType: 'ABSTINENCE',
+      monitoringType: 'ALCOHOL_ABSTINENCE',
       'startDate-day': '30',
       'startDate-month': '12',
       'startDate-year': '2026',
       'endDate-day': '30',
       'endDate-month': '12',
       'endDate-year': '2027',
-      installationAddressType: 'PRIMARY',
+      installationLocation: 'PRIMARY',
       prisonName: '',
       probationOfficeName: '',
     }
     mockAlcoholMonitoringService.update.mockResolvedValue({
-      monitoringType: 'ABSTINENCE',
+      monitoringType: 'ALCOHOL_ABSTINENCE',
       startDate: '2026-12-30',
       endDate: '2027-12-30',
-      installationAddressType: 'PRIMARY',
+      installationLocation: 'PRIMARY',
       prisonName: '',
       probationOfficeName: '',
     })
