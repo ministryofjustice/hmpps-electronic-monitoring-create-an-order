@@ -8,10 +8,16 @@ export type AddressFormData = {
   addressLine3?: string
   addressLine4?: string
   postcode?: string
-  hasAnotherAddress: string
+  hasAnotherAddress?: string
 }
 
 export default class AddressFormComponent extends FormComponent {
+  constructor(
+    private readonly canCreateAnotherAddress: boolean = true
+  ) {
+    super()
+  }
+
   // FIELDS
 
   get addressLine1Field(): FormInputComponent {
@@ -67,7 +73,7 @@ export default class AddressFormComponent extends FormComponent {
       this.postcodeField.set(profile.postcode)
     }
 
-    if (profile.hasAnotherAddress) {
+    if (profile.hasAnotherAddress && this.canCreateAnotherAddress) {
       this.hasAnotherAddressField.set(profile.hasAnotherAddress)
     }
   }
@@ -84,7 +90,10 @@ export default class AddressFormComponent extends FormComponent {
     this.addressLine2Field.shouldBeDisabled()
     this.addressLine2Field.shouldBeDisabled()
     this.postcodeField.shouldBeDisabled()
-    this.hasAnotherAddressField.shouldBeDisabled()
+
+    if (this.canCreateAnotherAddress) {
+      this.hasAnotherAddressField.shouldBeDisabled()
+    }
   }
 
   shouldNotBeDisabled(): void {
@@ -93,6 +102,9 @@ export default class AddressFormComponent extends FormComponent {
     this.addressLine2Field.shouldNotBeDisabled()
     this.addressLine2Field.shouldNotBeDisabled()
     this.postcodeField.shouldNotBeDisabled()
-    this.hasAnotherAddressField.shouldNotBeDisabled()
+
+    if (this.canCreateAnotherAddress) {
+      this.hasAnotherAddressField.shouldNotBeDisabled()
+    }
   }
 }
