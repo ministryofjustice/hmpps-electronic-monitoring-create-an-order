@@ -14,66 +14,66 @@ const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 const mockSubmittedTimetable = {
   ...mockApiOrder('SUBMITTED'),
-  monitoringConditionsCurfewTimetable: [
+  curfewTimeTable: [
     {
-      day: 'monday',
+      dayOfWeek: 'monday',
       startTime: '09:15:00',
       endTime: '17:30:00',
-      addresses: ['SECONDARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS',
     },
     {
-      day: 'monday',
+      dayOfWeek: 'monday',
       startTime: '08:25:00',
       endTime: '17:35:00',
-      addresses: ['TERTIARY_ADDRESS'],
+      curfewAddress: 'TERTIARY_ADDRESS',
     },
     {
-      day: 'tuesday',
+      dayOfWeek: 'tuesday',
       startTime: '10:20:00',
       endTime: '17:30:00',
-      addresses: ['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS,TERTIARY_ADDRESS',
     },
     {
-      day: 'wednesday',
+      dayOfWeek: 'wednesday',
       startTime: '08:15:00',
       endTime: '12:30:00',
-      addresses: ['SECONDARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS',
     },
     {
-      day: 'wednesday',
+      dayOfWeek: 'wednesday',
       startTime: '12:30:00',
       endTime: '17:30:00',
-      addresses: ['TERTIARY_ADDRESS'],
+      curfewAddress: 'TERTIARY_ADDRESS',
     },
     {
-      day: 'thursday',
+      dayOfWeek: 'thursday',
       startTime: '07:00:00',
       endTime: '18:30:00',
-      addresses: ['SECONDARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS',
     },
     {
-      day: 'friday',
+      dayOfWeek: 'friday',
       startTime: '08:25:00',
       endTime: '14:35:00',
-      addresses: ['SECONDARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS',
     },
     {
-      day: 'friday',
+      dayOfWeek: 'friday',
       startTime: '14:35:00',
       endTime: '17:40:00',
-      addresses: ['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS,TERTIARY_ADDRESS',
     },
     {
-      day: 'saturday',
+      dayOfWeek: 'saturday',
       startTime: '07:15:00',
       endTime: '19:30:00',
-      addresses: ['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS,TERTIARY_ADDRESS',
     },
     {
-      day: 'sunday',
+      dayOfWeek: 'sunday',
       startTime: '06:15:00',
       endTime: '20:30:00',
-      addresses: ['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'],
+      curfewAddress: 'SECONDARY_ADDRESS,TERTIARY_ADDRESS',
     },
   ],
   id: mockOrderId,
@@ -91,16 +91,13 @@ const mockEmptyTimetable = {
 }
 
 const checkFormFields = () => {
-  const groupedTimetables = mockSubmittedTimetable.monitoringConditionsCurfewTimetable.reduce(
-    (acc: Record<string, CurfewTimetable>, t) => {
-      if (!acc[t.day]) {
-        acc[t.day] = []
-      }
-      acc[t.day].push(t)
-      return acc
-    },
-    {},
-  )
+  const groupedTimetables = mockSubmittedTimetable.curfewTimeTable.reduce((acc: Record<string, CurfewTimetable>, t) => {
+    if (!acc[t.dayOfWeek]) {
+      acc[t.dayOfWeek] = []
+    }
+    acc[t.dayOfWeek].push(t)
+    return acc
+  }, {})
   Object.entries(groupedTimetables).forEach(([day, timetables]) => {
     timetables.forEach((t, index) => {
       const [startHours, startMinutes] = deserialiseTime(t.startTime)
@@ -110,13 +107,13 @@ const checkFormFields = () => {
       cy.get(`input#curfewTimetable-${day}-${index}-time-end-hours`).should('have.value', endHours)
       cy.get(`input#curfewTimetable-${day}-${index}-time-end-minutes`).should('have.value', endMinutes)
       cy.get(`input#curfewTimetable-${day}-${index}-addresses`).should(
-        t.addresses?.includes('PRIMARY_ADDRESS') ? 'be.checked' : 'not.be.checked',
+        t.curfewAddress?.includes('PRIMARY_ADDRESS') ? 'be.checked' : 'not.be.checked',
       )
       cy.get(`input#curfewTimetable-${day}-${index}-addresses-2`).should(
-        t.addresses?.includes('SECONDARY_ADDRESS') ? 'be.checked' : 'not.be.checked',
+        t.curfewAddress?.includes('SECONDARY_ADDRESS') ? 'be.checked' : 'not.be.checked',
       )
       cy.get(`input#curfewTimetable-${day}-${index}-addresses-3`).should(
-        t.addresses?.includes('TERTIARY_ADDRESS') ? 'be.checked' : 'not.be.checked',
+        t.curfewAddress?.includes('TERTIARY_ADDRESS') ? 'be.checked' : 'not.be.checked',
       )
     })
   })
@@ -246,7 +243,7 @@ context('Curfew monitoring - Timetable', () => {
         httpStatus: 200,
         id: mockOrderId,
         subPath: '/monitoring-conditions-curfew-timetable',
-        response: mockSubmittedTimetable.monitoringConditionsCurfewTimetable,
+        response: mockSubmittedTimetable.curfewTimeTable,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
       const page = Page.verifyOnPage(CurfewTimetablePage)
@@ -254,7 +251,7 @@ context('Curfew monitoring - Timetable', () => {
       page.saveAndContinueButton().click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-timetable`).then(requests => {
         expect(requests).to.have.lengthOf(1)
-        expect(requests[0]).to.deep.equal(mockSubmittedTimetable.monitoringConditionsCurfewTimetable)
+        expect(requests[0]).to.deep.equal(mockSubmittedTimetable.curfewTimeTable)
       })
       Page.verifyOnPage(OrderTasksPage)
     })

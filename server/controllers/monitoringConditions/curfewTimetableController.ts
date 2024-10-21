@@ -2,30 +2,31 @@ import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import paths from '../../constants/paths'
 import { CurfewTimetable } from '../../models/CurfewTimetable'
-import { isValidationResult, ValidationResult } from '../../models/Validation'
+import { isValidationListResult, ValidationErrorModel } from '../../models/Validation'
 import { MultipleChoiceField, TimeSpanField } from '../../models/view-models/utils'
 import { AuditService, CurfewTimetableService } from '../../services'
 import { deserialiseTime, getError, getErrors, serialiseTime } from '../../utils/utils'
+import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const timetableForm = z.object({
   timeStartHours: z.string(),
   timeStartMinutes: z.string(),
   timeEndHours: z.string(),
   timeEndMinutes: z.string(),
-  addresses: z.array(z.string()),
+  addresses: z.array(z.string()).default([]),
 })
-
+const timetable = z.object({
+  monday: z.array(timetableForm),
+  tuesday: z.array(timetableForm),
+  wednesday: z.array(timetableForm),
+  thursday: z.array(timetableForm),
+  friday: z.array(timetableForm),
+  saturday: z.array(timetableForm),
+  sunday: z.array(timetableForm),
+})
 const curfewTimetableFormDataModel = z.object({
   action: z.string().default('continue'),
-  curfewTimetable: z.object({
-    monday: z.array(timetableForm),
-    tuesday: z.array(timetableForm),
-    wednesday: z.array(timetableForm),
-    thursday: z.array(timetableForm),
-    friday: z.array(timetableForm),
-    saturday: z.array(timetableForm),
-    sunday: z.array(timetableForm),
-  }),
+  curfewTimetable: timetable,
 })
 
 type CurfewTimetableFormDataItem = z.infer<typeof timetableForm>
@@ -36,7 +37,14 @@ type Timetable = {
   timeSpan: TimeSpanField
   addresses: MultipleChoiceField
 }
-
+const curfewTimetableApiDto = z.object({
+  dayOfWeek: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
+  curfewAddress: z.string(),
+  errors: z.array(ValidationErrorModel),
+})
+type CurfewTimetableApiDto = z.infer<typeof curfewTimetableApiDto>
 type CurfewTimetableViewModel = {
   curfewTimetable: {
     monday: Timetable[]
@@ -57,48 +65,58 @@ export default class CurfewTimetableController {
 
   private constructViewModel(
     curfewTimetable: CurfewTimetable | undefined,
-    validationErrors: ValidationResult,
+    curefewTimetableApiDto: CurfewTimetableApiDto[],
     formData: [CurfewTimetableFormData],
   ): CurfewTimetableViewModel {
-    if (validationErrors.length > 0 && formData.length > 0) {
-      return this.createViewModelFromFormData(formData[0], validationErrors)
+    if (formData?.length > 0) {
+      return this.createViewModelFromFormData(formData[0])
     }
 
-    return this.createViewModelFromCurfewTimetable(curfewTimetable)
+    if (!curefewTimetableApiDto || curefewTimetableApiDto.length === 0) {
+      const curfewTimetableAsApiDto =
+        curfewTimetable?.map(item => {
+          return {
+            ...item,
+            errors: [],
+          }
+        }) ?? []
+      return this.createViewModelFromApiDto(curfewTimetableAsApiDto)
+    }
+    return this.createViewModelFromApiDto(curefewTimetableApiDto)
   }
 
-  private createViewModelFromCurfewTimetable(curfewTimetable?: CurfewTimetable): CurfewTimetableViewModel {
-    const getTimetablesForDay = (day: string, timetables?: CurfewTimetable): Timetable[] =>
+  private createViewModelFromApiDto(validationErrors: CurfewTimetableApiDto[]): CurfewTimetableViewModel {
+    const getTimetablesForDay = (day: string, timetables?: CurfewTimetableApiDto[]): Timetable[] =>
       timetables
-        ?.filter(t => t.day === day)
+        ?.filter(t => t.dayOfWeek === day)
         .map(t => {
           const [startHours, startMinutes] = deserialiseTime(t.startTime)
           const [endHours, endMinutes] = deserialiseTime(t.endTime)
           return {
-            timeSpan: { value: { startHours, startMinutes, endHours, endMinutes } },
-            addresses: { values: t.addresses },
+            timeSpan: {
+              value: { startHours, startMinutes, endHours, endMinutes },
+              error: getErrors(t.errors, [`startTime`, `endTime`]),
+            },
+            addresses: { values: t.curfewAddress.split(','), error: getError(t.errors, `curfewAddress`) },
           }
         }) ?? []
 
     return {
       curfewTimetable: {
-        monday: getTimetablesForDay('monday', curfewTimetable),
-        tuesday: getTimetablesForDay('tuesday', curfewTimetable),
-        wednesday: getTimetablesForDay('wednesday', curfewTimetable),
-        thursday: getTimetablesForDay('thursday', curfewTimetable),
-        friday: getTimetablesForDay('friday', curfewTimetable),
-        saturday: getTimetablesForDay('saturday', curfewTimetable),
-        sunday: getTimetablesForDay('sunday', curfewTimetable),
+        monday: getTimetablesForDay('MONDAY', validationErrors),
+        tuesday: getTimetablesForDay('TUESDAY', validationErrors),
+        wednesday: getTimetablesForDay('WEDNESDAY', validationErrors),
+        thursday: getTimetablesForDay('THURSDAY', validationErrors),
+        friday: getTimetablesForDay('FRIDAY', validationErrors),
+        saturday: getTimetablesForDay('SATURDAY', validationErrors),
+        sunday: getTimetablesForDay('SUNDAY', validationErrors),
       },
     }
   }
 
-  private createViewModelFromFormData(
-    formData: CurfewTimetableFormData,
-    validationErrors: ValidationResult,
-  ): CurfewTimetableViewModel {
+  private createViewModelFromFormData(formData: CurfewTimetableFormData): CurfewTimetableViewModel {
     const getTimetablesForDay = (day: string, timetables: CurfewTimetableFormDataItem[]): Timetable[] =>
-      timetables.map((t, index) => {
+      timetables.map(t => {
         return {
           timeSpan: {
             value: {
@@ -107,9 +125,8 @@ export default class CurfewTimetableController {
               endHours: t.timeEndHours,
               endMinutes: t.timeEndMinutes,
             },
-            error: getErrors(validationErrors, [`${day}[${index}].startTime`, `${day}[${index}].endTime`]),
           },
-          addresses: { values: t.addresses, error: getError(validationErrors, `${day}[${index}].addresses`) },
+          addresses: { values: t.addresses },
         }
       }) ?? []
 
@@ -126,44 +143,82 @@ export default class CurfewTimetableController {
     }
   }
 
-  private createApiModelFromFormData(formData: CurfewTimetableFormData): CurfewTimetable {
+  private createApiModelFromFormData(formData: CurfewTimetableFormData, orderId: string): CurfewTimetable {
     return Object.entries(formData.curfewTimetable).flatMap(([day, timetables]) =>
-      timetables.map(timetable => ({
-        day,
-        addresses: timetable.addresses,
-        startTime: serialiseTime(timetable.timeStartHours, timetable.timeStartMinutes) || '',
-        endTime: serialiseTime(timetable.timeEndHours, timetable.timeEndMinutes) || '',
+      timetables.map(t => ({
+        dayOfWeek: day.toUpperCase(),
+        orderId,
+        curfewAddress: t.addresses.join(','),
+        startTime: serialiseTime(t.timeStartHours, t.timeStartMinutes) || '',
+        endTime: serialiseTime(t.timeEndHours, t.timeEndMinutes) || '',
       })),
     )
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsCurfewTimetable: timetable } = req.order!
+    const { curfewTimeTable: curfewTimetable } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-
-    const viewModel = this.constructViewModel(timetable, errors as never, formData as never)
+    const viewModel = this.constructViewModel(curfewTimetable, errors as never, formData as never)
     res.render(`pages/order/monitoring-conditions/curfew-timetable`, viewModel)
+  }
+
+  private addTimeToCurfewDay(req: Request, res: Response, formData: CurfewTimetableFormData, orderId: string) {
+    const day = formData.action.split('-').pop()!
+    const curfewDay = formData.curfewTimetable[day as keyof typeof formData.curfewTimetable]
+
+    curfewDay.push({
+      timeStartHours: '',
+      timeStartMinutes: '',
+      timeEndHours: '',
+      timeEndMinutes: '',
+      addresses: [],
+    })
+    req.flash('formData', formData)
+    res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+  }
+
+  private removeTimeToCurfewDay(req: Request, res: Response, formData: CurfewTimetableFormData, orderId: string) {
+    const action = formData.action.split('-')
+    const day = action[2]
+    const index = Number.parseInt(action[3], 10)
+    const curfewDay = formData.curfewTimetable[day as keyof typeof formData.curfewTimetable]
+
+    curfewDay.splice(index, 1)
+    req.flash('formData', formData)
+    res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
 
     const formData = curfewTimetableFormDataModel.parse(req.body)
-
-    const updateResult = await this.curfewTimetableService.update({
-      accessToken: res.locals.user.token,
-      orderId,
-      data: this.createApiModelFromFormData(formData),
-    })
-
-    if (isValidationResult(updateResult)) {
-      req.flash('formData', formData)
-      req.flash('validationErrors', updateResult)
-
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+    if (formData.action.startsWith('add-time-')) {
+      this.addTimeToCurfewDay(req, res, formData, orderId)
+    } else if (formData.action.startsWith('remove-time-')) {
+      this.removeTimeToCurfewDay(req, res, formData, orderId)
     } else {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      const apiModel = this.createApiModelFromFormData(formData, orderId)
+      const updateResult = await this.curfewTimetableService.update({
+        accessToken: res.locals.user.token,
+        orderId,
+        data: apiModel,
+      })
+
+      if (isValidationListResult(updateResult)) {
+        const validationResult = apiModel.map((item, index) => {
+          return {
+            ...item,
+            errors: updateResult.filter(it => it.index === index).at(0)?.errors ?? [],
+          }
+        })
+        req.flash('validationErrors', validationResult)
+
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+      } else {
+        const { monitoringConditions } = req.order!
+        res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'curfew').replace(':orderId', orderId))
+      }
     }
   }
 }

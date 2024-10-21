@@ -20,16 +20,13 @@ export default class CurfewTimetablePage extends AppPage {
   backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
 
   fillInForm = (order: Order): void => {
-    const groupedTimetables = order.monitoringConditionsCurfewTimetable.reduce(
-      (acc: Record<string, CurfewTimetable>, t) => {
-        if (!acc[t.day]) {
-          acc[t.day] = []
-        }
-        acc[t.day].push(t)
-        return acc
-      },
-      {},
-    )
+    const groupedTimetables = order.curfewTimeTable.reduce((acc: Record<string, CurfewTimetable>, t) => {
+      if (!acc[t.dayOfWeek]) {
+        acc[t.dayOfWeek] = []
+      }
+      acc[t.dayOfWeek].push(t)
+      return acc
+    }, {})
     Object.entries(groupedTimetables).forEach(([day, timetables]) => {
       timetables.forEach((t, index) => {
         const [startHours, startMinutes] = deserialiseTime(t.startTime)
@@ -42,7 +39,7 @@ export default class CurfewTimetablePage extends AppPage {
         cy.get(`input#curfewTimetable-${day}-${index}-time-start-minutes`).type(startMinutes)
         cy.get(`input#curfewTimetable-${day}-${index}-time-end-hours`).type(endHours)
         cy.get(`input#curfewTimetable-${day}-${index}-time-end-minutes`).type(endMinutes)
-        t.addresses.forEach(address => {
+        t.curfewAddress.split(',').forEach(address => {
           cy.get(`#${day}-timetables .timetable-${index} input[value="${address}"]`).check()
         })
       })
