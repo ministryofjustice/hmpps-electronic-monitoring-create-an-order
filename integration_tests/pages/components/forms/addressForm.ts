@@ -12,9 +12,7 @@ export type AddressFormData = {
 }
 
 export default class AddressFormComponent extends FormComponent {
-  constructor(
-    private readonly canCreateAnotherAddress: boolean = true
-  ) {
+  constructor(private readonly canCreateAnotherAddress: boolean = true) {
     super()
   }
 

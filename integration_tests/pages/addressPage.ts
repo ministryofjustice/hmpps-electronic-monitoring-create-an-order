@@ -9,7 +9,7 @@ export default class AddressPage extends AppPage {
     title: string,
     uri: string,
     private readonly subheading: string,
-    private readonly canCreateAnotherAddress: boolean = true
+    private readonly canCreateAnotherAddress: boolean = true,
   ) {
     super(title, uri)
   }

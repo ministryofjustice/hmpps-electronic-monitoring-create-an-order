@@ -35,8 +35,10 @@ context('Contact information', () => {
 
         // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way
         // page.form.hasAnotherAddressField.shouldNotExist()
-        cy.contains('legend', 'Does the device wearer have another address they will be monitored at?', { log: false }).should('not.exist')
-        
+        cy.contains('legend', 'Does the device wearer have another address they will be monitored at?', {
+          log: false,
+        }).should('not.exist')
+
         page.form.addressLine1Field.shouldHaveValue('')
         page.form.addressLine2Field.shouldHaveValue('')
         page.form.addressLine3Field.shouldHaveValue('')
@@ -110,11 +112,13 @@ context('Contact information', () => {
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
-        
+
         // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way
         // page.form.hasAnotherAddressField.shouldNotExist()
-        cy.contains('legend', 'Does the device wearer have another address they will be monitored at?', { log: false }).should('not.exist')
-        
+        cy.contains('legend', 'Does the device wearer have another address they will be monitored at?', {
+          log: false,
+        }).should('not.exist')
+
         page.form.addressLine1Field.shouldHaveValue('tertiary line 1')
         page.form.addressLine2Field.shouldHaveValue('tertiary line 2')
         page.form.addressLine3Field.shouldHaveValue('tertiary line 3')
