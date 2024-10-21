@@ -50,7 +50,7 @@
     }) %}
 
       {{ govukRadios({
-        name: "fixedAbode",
+        name: "noFixedAbode",
         classes: "govuk-radios--inline",
         fieldset: {
           legend: {
@@ -65,18 +65,18 @@
         },
         items: [
           {
-            value: "true",
+            value: "false",
             text: "Yes",
             disabled: not isOrderEditable
           },
           {
-            value: "false",
+            value: "true",
             text: "No",
             disabled: not isOrderEditable
           }
         ],
-        value: fixedAbode,
-        errorMessage: errors.fixedAbode,
+        value: noFixedAbode,
+        errorMessage: errors.noFixedAbode,
         disabled: not isOrderEditable
       }) }}
 
