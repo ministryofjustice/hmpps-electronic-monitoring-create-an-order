@@ -29,6 +29,10 @@ export default class FormInputComponent {
     this.element.should('be.disabled')
   }
 
+  shouldNotBeDisabled(): void {
+    this.element.should('not.be.disabled')
+  }
+
   get validationMessage() {
     return this.element.siblings('.govuk-error-message', { log: false })
   }
