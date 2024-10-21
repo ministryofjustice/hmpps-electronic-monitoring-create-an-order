@@ -5,6 +5,7 @@ const CurfewTimetableModel = z.array(
     dayOfWeek: z.string(),
     startTime: z.string(),
     endTime: z.string(),
+    orderId: z.string(),
     curfewAddress: z.string(),
   }),
 )

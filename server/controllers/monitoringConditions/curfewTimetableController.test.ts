@@ -348,6 +348,7 @@ describe('CurfewTimetableController', () => {
           dayOfWeek: day.toUpperCase(),
           startTime: '00:00:00',
           endTime: '07:00:00',
+          orderId: mockId,
           curfewAddress: 'SECONDARY_ADDRESS',
         }
       })

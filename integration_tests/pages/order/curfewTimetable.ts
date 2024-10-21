@@ -31,16 +31,16 @@ export default class CurfewTimetablePage extends AppPage {
       timetables.forEach((t, index) => {
         const [startHours, startMinutes] = deserialiseTime(t.startTime)
         const [endHours, endMinutes] = deserialiseTime(t.endTime)
-
+        const displayDay = day.toLocaleLowerCase()
         if (index > 0) {
-          cy.get(`a#add-time-${day}`).click()
+          cy.get(`button#add-time-${displayDay}`).click()
         }
-        cy.get(`input#curfewTimetable-${day}-${index}-time-start-hours`).type(startHours)
-        cy.get(`input#curfewTimetable-${day}-${index}-time-start-minutes`).type(startMinutes)
-        cy.get(`input#curfewTimetable-${day}-${index}-time-end-hours`).type(endHours)
-        cy.get(`input#curfewTimetable-${day}-${index}-time-end-minutes`).type(endMinutes)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-start-hours`).type(startHours)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-start-minutes`).type(startMinutes)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-end-hours`).type(endHours)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-end-minutes`).type(endMinutes)
         t.curfewAddress.split(',').forEach(address => {
-          cy.get(`#${day}-timetables .timetable-${index} input[value="${address}"]`).check()
+          cy.get(`input#curfewTimetable-${displayDay}-${index}-addresses-${address}`).check()
         })
       })
     })

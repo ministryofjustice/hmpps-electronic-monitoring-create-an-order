@@ -37,17 +37,20 @@
         {
           text: 'Primary address',
           value: 'PRIMARY_ADDRESS',
-          disabled: disabled
+          disabled: disabled,
+          id: "curfewTimetable-" + day + "-" + index + "-addresses-PRIMARY_ADDRESS"
         },
         {
           text: 'Secondary address',
           value: 'SECONDARY_ADDRESS',
-          disabled: disabled
+          disabled: disabled,
+          id: "curfewTimetable-" + day + "-" + index + "-addresses-SECONDARY_ADDRESS"
         },
         {
           text: 'Third address',
           value: 'TERTIARY_ADDRESS',
-          disabled: disabled
+          disabled: disabled,
+          id: "curfewTimetable-" + day + "-" + index + "-addresses-TERTIARY_ADDRESS"
         }
       ],
       errorMessage: data.addresses.error
@@ -104,6 +107,7 @@
       <p class="govuk-body">
         {% if isOrderEditable %}
         {{ govukButton({
+            id: "add-time-"+day,
             text: "Add another time",
             classes: "govuk-button--secondary",
             name: "action",
