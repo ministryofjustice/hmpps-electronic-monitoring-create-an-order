@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import SecondaryAddressPage from '../../../pages/order/contact-information/secondary-address'
 
 const mockOrderId = uuidv4()
 const apiPath = '/address'
@@ -9,7 +9,7 @@ const addressLine2Error = 'Address line 2 is required'
 const postcodeError = 'Postcode is required'
 
 context('Contact information', () => {
-  context('Primary address', () => {
+  context('Secondary address', () => {
     context('Submitting invalid data', () => {
       beforeEach(() => {
         cy.task('reset')
@@ -31,11 +31,11 @@ context('Contact information', () => {
       })
 
       it('Should display validation error messages', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(SecondaryAddressPage, { orderId: mockOrderId, addressType: 'secondary' })
 
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(PrimaryAddressPage)
+        Page.verifyOnPage(SecondaryAddressPage)
 
         page.form.addressLine1Field.shouldHaveValidationMessage(addressLine1Error)
         page.form.addressLine2Field.shouldHaveValidationMessage(addressLine2Error)

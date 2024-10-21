@@ -14,7 +14,7 @@ const FormDataModel = z.object({
   addressLine3: z.string(),
   addressLine4: z.string(),
   postcode: z.string(),
-  hasAnotherAddress: z.string(),
+  hasAnotherAddress: z.string().default('false'),
 })
 
 const getNextAddressType = (addressType: AddressType) => {
