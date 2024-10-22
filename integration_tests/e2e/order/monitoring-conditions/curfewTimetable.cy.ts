@@ -9,7 +9,7 @@ import OrderTasksPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
-
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 const mockSubmittedTimetable = {
   ...mockApiOrder('SUBMITTED'),
   curfewTimeTable: [
@@ -135,29 +135,29 @@ context('Curfew monitoring - Timetable', () => {
     cy.task('stubCemoListOrders')
   })
 
-  // context('Draft order', () => {
-  //   beforeEach(() => {
-  //     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-  //   })
+  context('Draft order', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+    })
 
-  //   it('Should display the timetable form', () => {
-  //     cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
-  //     const page = Page.verifyOnPage(CurfewTimetablePage)
-  //     days.forEach(day => {
-  //       const lowerDay = day.toLowerCase()
-  //       cy.get('h3').contains(day)
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-time-start-hours`).should('exist')
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-time-start-minutes`).should('exist')
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-time-end-hours`).should('exist')
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-time-end-minutes`).should('exist')
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-addresses`).should('exist')
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-addresses-2`).should('exist')
-  //       cy.get(`input#curfewTimetable-${lowerDay}-0-addresses-3`).should('exist')
-  //     })
-  //     page.subHeader().should('contain.text', 'Timetable for curfew with electronic monitoring')
-  //     page.header.userName().should('contain.text', 'J. Smith')
-  //   })
-  // })
+    it('Should display the timetable form', () => {
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
+      const page = Page.verifyOnPage(CurfewTimetablePage)
+      days.forEach(day => {
+        const lowerDay = day.toLowerCase()
+        cy.get('h3').contains(day)
+        cy.get(`input#curfewTimetable-${lowerDay}-0-time-start-hours`).should('exist')
+        cy.get(`input#curfewTimetable-${lowerDay}-0-time-start-minutes`).should('exist')
+        cy.get(`input#curfewTimetable-${lowerDay}-0-time-end-hours`).should('exist')
+        cy.get(`input#curfewTimetable-${lowerDay}-0-time-end-minutes`).should('exist')
+        cy.get(`input#curfewTimetable-${lowerDay}-0-addresses`).should('exist')
+        cy.get(`input#curfewTimetable-${lowerDay}-0-addresses-2`).should('exist')
+        cy.get(`input#curfewTimetable-${lowerDay}-0-addresses-3`).should('exist')
+      })
+      page.subHeader().should('contain.text', 'Timetable for curfew with electronic monitoring')
+      page.header.userName().should('contain.text', 'J. Smith')
+    })
+  })
 
   context('Submitted Order', () => {
     beforeEach(() => {
