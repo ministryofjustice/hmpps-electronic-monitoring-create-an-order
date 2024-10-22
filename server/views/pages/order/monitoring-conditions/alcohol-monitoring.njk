@@ -149,16 +149,16 @@
 
     {% set probationHtml %}
       {{ govukInput({
-        id: "probationName",
-        name: "probationName",
+        id: "probationOfficeName",
+        name: "probationOfficeName",
         type: "text",
         classes: "govuk-!-width-one-third",
         label: {
           text: "Enter name"
         },
         disabled: not isOrderEditable,
-        value: probationName.value,
-        errorMessage: probationName.error
+        value: probationOfficeName.value,
+        errorMessage: probationOfficeName.error
       }) }}
     {% endset -%}
 
@@ -177,16 +177,6 @@
       }) }}
     {% endset -%}
 
-    {% set agreedHtml %}
-      {{ addressInput({
-        id: "agreedAddress",
-        name: "agreedAddress",
-        value: agreedAddress.value,
-        errorMessage: agreedAddress.error,
-        disabled: not isOrderEditable
-      }) }}
-    {% endset -%}
-
     {{ govukRadios({
         name: "installationLocation",
         fieldset: {
@@ -199,34 +189,26 @@
         hint: {
             text: "Select one option"
         },
-        items: [
+        items: [        
           {
-            value: "INSTALLATION_ADDRESS",
-            text: "at [installation address]",
-            disabled: not isOrderEditable
+            value: "INSTALLATION",
+            text: "at Installation Address (not provided)" if not installationAddressView.value else "at Installation Address: "+installationAddressView.value,
+            disabled: not isOrderEditable or not installationAddressView.value
           },
           {
-            value: "PRIMARY_ADDRESS",
-            text: "at [primary address]",
-            disabled: not isOrderEditable
+            value: "PRIMARY",
+            text: "at Primary Address (not provided)" if not primaryAddressView.value else "at Primary Address: "+primaryAddressView.value,
+            disabled: not isOrderEditable or not primaryAddressView.value
           },
           {
-            value: "SECONDARY_ADDRESS",
-            text: "at [secondary address]",
-            disabled: not isOrderEditable
+            value: "SECONDARY",
+            text: "at Secondary Address (not provided)" if not secondaryAddressView.value else "at Secondary Address: "+secondaryAddressView.value,
+            disabled: not isOrderEditable or not secondaryAddressView.value
           },
           {
-            value: "TERTARY_ADDRESS",
-            text: "at [third address]",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "AGREED_LOCATION",
-            text: "at an agreed location",
-            disabled: not isOrderEditable,
-            conditional: {
-              html: agreedHtml
-            }
+            value: "TERTIARY",
+            text: "at Tertiary Address (not provided)" if not tertiaryAddressView.value else "at Tertiary Address: "+tertiaryAddressView.value,
+            disabled: not isOrderEditable or not tertiaryAddressView.value
           },
           {
             value: "PROBATION_OFFICE",
