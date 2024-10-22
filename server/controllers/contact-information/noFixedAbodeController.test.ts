@@ -66,7 +66,7 @@ describe('NoFixedAbodeController', () => {
       const next = jest.fn()
 
       // When
-      await controller.get(req, res, next)
+      await controller.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
@@ -85,7 +85,7 @@ describe('NoFixedAbodeController', () => {
       const next = jest.fn()
 
       // When
-      await controller.get(req, res, next)
+      await controller.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
@@ -104,7 +104,7 @@ describe('NoFixedAbodeController', () => {
       const next = jest.fn()
 
       // When
-      await controller.get(req, res, next)
+      await controller.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
@@ -132,7 +132,7 @@ describe('NoFixedAbodeController', () => {
       const next = jest.fn()
 
       // When
-      await controller.get(req, res, next)
+      await controller.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
@@ -179,7 +179,7 @@ describe('NoFixedAbodeController', () => {
       })
 
       // When
-      await controller.post(req, res, next)
+      await controller.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -218,7 +218,7 @@ describe('NoFixedAbodeController', () => {
       })
 
       // When
-      await controller.post(req, res, next)
+      await controller.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -256,7 +256,7 @@ describe('NoFixedAbodeController', () => {
       })
 
       // When
-      await controller.post(req, res, next)
+      await controller.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -280,7 +280,7 @@ describe('NoFixedAbodeController', () => {
       ])
 
       // When
-      await controller.post(req, res, next)
+      await controller.update(req, res, next)
 
       // Then
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
