@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
 import ErrorPage from '../../../pages/error'
-import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import MonitoringConditionsPage from '../../../pages/order/monitoringConditions'
 import Page from '../../../pages/page'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
