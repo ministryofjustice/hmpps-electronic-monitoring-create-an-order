@@ -11,9 +11,9 @@ import { deserialiseDate, deserialiseTime, getError, getErrors, serialiseDate, s
 const CurfewReleaseDateFormDataModel = z.object({
   action: z.string().default('continue'),
   address: z.string().optional(),
-  'releaseDate-day': z.string(),
-  'releaseDate-month': z.string(),
-  'releaseDate-year': z.string(),
+  releaseDateDay: z.string(),
+  releaseDateMonth: z.string(),
+  releaseDateYear: z.string(),
   curfewTimesStartHours: z.string(),
   curfewTimesStartMinutes: z.string(),
   curfewTimesEndHours: z.string(),
@@ -35,7 +35,7 @@ export default class CurfewReleaseDateController {
   ) {}
 
   private constructViewModel(
-    curfewReleaseDate: CurfewReleaseDate | undefined,
+    curfewReleaseDate: CurfewReleaseDate | undefined | null,
     validationErrors: ValidationResult,
     formData: [CurfewReleaseDateFormData],
   ): CurfewReleaseDateViewModel {
@@ -46,14 +46,16 @@ export default class CurfewReleaseDateController {
     return this.createViewModelFromCurfewReleaseDate(curfewReleaseDate)
   }
 
-  private createViewModelFromCurfewReleaseDate(curfewReleaseDate?: CurfewReleaseDate): CurfewReleaseDateViewModel {
+  private createViewModelFromCurfewReleaseDate(
+    curfewReleaseDate?: CurfewReleaseDate | null,
+  ): CurfewReleaseDateViewModel {
     const [releaseDateYear, releaseDateMonth, releaseDateDay] = deserialiseDate(curfewReleaseDate?.releaseDate)
 
     const [startHours, startMinutes] = deserialiseTime(curfewReleaseDate?.startTime)
     const [endHours, endMinutes] = deserialiseTime(curfewReleaseDate?.endTime)
 
     return {
-      address: { value: curfewReleaseDate?.address ?? '' },
+      address: { value: curfewReleaseDate?.curfewAddress ?? '' },
       releaseDate: { value: { year: releaseDateYear, month: releaseDateMonth, day: releaseDateDay } },
       curfewTimes: { value: { startHours, startMinutes, endHours, endMinutes } },
     }
@@ -64,12 +66,12 @@ export default class CurfewReleaseDateController {
     validationErrors: ValidationResult,
   ): CurfewReleaseDateViewModel {
     return {
-      address: { value: formData?.address ?? '', error: getError(validationErrors, 'address') },
+      address: { value: formData?.address ?? '', error: getError(validationErrors, 'curfewAddress') },
       releaseDate: {
         value: {
-          year: formData['releaseDate-year'],
-          month: formData['releaseDate-month'],
-          day: formData['releaseDate-day'],
+          year: formData.releaseDateYear,
+          month: formData.releaseDateMonth,
+          day: formData.releaseDateDay,
         },
         error: getError(validationErrors, 'releaseDate'),
       },
@@ -85,21 +87,18 @@ export default class CurfewReleaseDateController {
     }
   }
 
-  createApiModelFromFormData(formData: CurfewReleaseDateFormData): CurfewReleaseDate {
+  createApiModelFromFormData(formData: CurfewReleaseDateFormData, orderId: string): CurfewReleaseDate {
     return {
-      releaseDate: serialiseDate(
-        formData['releaseDate-year'],
-        formData['releaseDate-month'],
-        formData['releaseDate-day'],
-      ),
+      releaseDate: serialiseDate(formData.releaseDateYear, formData.releaseDateMonth, formData.releaseDateDay),
+      orderId,
       startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
       endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
-      address: formData.address ?? null,
+      curfewAddress: formData.address ?? null,
     }
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsCurfewReleaseDate: model } = req.order!
+    const { curfewReleaseDateConditions: model } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = this.constructViewModel(model, errors as never, formData as never)
@@ -114,11 +113,11 @@ export default class CurfewReleaseDateController {
     const updateResult = await this.curfewReleaseDateService.update({
       accessToken: res.locals.user.token,
       orderId,
-      data: this.createApiModelFromFormData(formData),
+      data: this.createApiModelFromFormData(formData, orderId),
     })
 
     if (isValidationResult(updateResult)) {
-      req.flash('formData', formData)
+      req.flash('formData', [formData])
       req.flash('validationErrors', updateResult)
 
       res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
