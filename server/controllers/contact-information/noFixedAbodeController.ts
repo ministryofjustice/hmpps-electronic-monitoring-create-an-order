@@ -17,7 +17,7 @@ export default class NoFixedAbodeController {
     private readonly deviceWearerService: DeviceWearerService,
   ) {}
 
-  get: RequestHandler = async (req: Request, res: Response) => {
+  view: RequestHandler = async (req: Request, res: Response) => {
     const {
       deviceWearer: { noFixedAbode },
     } = req.order!
@@ -31,7 +31,7 @@ export default class NoFixedAbodeController {
     })
   }
 
-  post: RequestHandler = async (req: Request, res: Response) => {
+  update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const { action, ...formData } = FormDataModel.parse(req.body)
 

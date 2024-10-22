@@ -112,16 +112,16 @@ export default function routes({
    */
 
   // Contact details
-  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.get)
-  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.post)
+  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
+  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.update)
 
   // No fixed abode
-  get(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.get)
-  post(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.post)
+  get(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.view)
+  post(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.update)
 
   // Device wearer addresses
-  get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.get)
-  post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.post)
+  get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.view)
+  post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
   // Device wearer addresses
   get(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.view)
@@ -141,8 +141,8 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
-  get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.get)
-  post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.post)
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)
 
   // Trail monitoring page
   get(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.view)

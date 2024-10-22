@@ -99,7 +99,7 @@ describe('AddressController', () => {
         const next = jest.fn()
 
         // When
-        await addressController.get(req, res, next)
+        await addressController.view(req, res, next)
 
         // Then
         expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
@@ -139,7 +139,7 @@ describe('AddressController', () => {
       const next = jest.fn()
 
       // When
-      await addressController.get(req, res, next)
+      await addressController.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
@@ -194,7 +194,7 @@ describe('AddressController', () => {
       ])
 
       // When
-      await addressController.post(req, res, next)
+      await addressController.update(req, res, next)
 
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
@@ -244,7 +244,7 @@ describe('AddressController', () => {
       })
 
       // When
-      await addressController.post(req, res, next)
+      await addressController.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -289,7 +289,7 @@ describe('AddressController', () => {
         })
 
         // When
-        await addressController.post(req, res, next)
+        await addressController.update(req, res, next)
 
         // Then
         expect(req.flash).not.toHaveBeenCalled()
@@ -335,7 +335,7 @@ describe('AddressController', () => {
         })
 
         // When
-        await addressController.post(req, res, next)
+        await addressController.update(req, res, next)
 
         // Then
         expect(req.flash).not.toHaveBeenCalled()
@@ -375,7 +375,7 @@ describe('AddressController', () => {
       })
 
       // When
-      await addressController.post(req, res, next)
+      await addressController.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()

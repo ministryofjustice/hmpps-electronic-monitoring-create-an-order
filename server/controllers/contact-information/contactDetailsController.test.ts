@@ -46,7 +46,7 @@ describe('ContactDetailsController', () => {
       req.flash = jest.fn().mockReturnValue([])
 
       // When
-      await contactDetailsController.get(req, res, next)
+      await contactDetailsController.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
@@ -75,7 +75,7 @@ describe('ContactDetailsController', () => {
         ])
 
       // When
-      await contactDetailsController.get(req, res, next)
+      await contactDetailsController.view(req, res, next)
 
       // Then
       expect(res.render).toHaveBeenCalledWith(
@@ -103,7 +103,7 @@ describe('ContactDetailsController', () => {
       ])
 
       // When
-      await contactDetailsController.post(req, res, next)
+      await contactDetailsController.update(req, res, next)
 
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
@@ -131,7 +131,7 @@ describe('ContactDetailsController', () => {
       })
 
       // When
-      await contactDetailsController.post(req, res, next)
+      await contactDetailsController.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
@@ -153,7 +153,7 @@ describe('ContactDetailsController', () => {
       })
 
       // When
-      await contactDetailsController.post(req, res, next)
+      await contactDetailsController.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()

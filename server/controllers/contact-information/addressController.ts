@@ -63,7 +63,7 @@ export default class AddressController {
     return paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION
   }
 
-  get: RequestHandler = async (req: Request, res: Response) => {
+  view: RequestHandler = async (req: Request, res: Response) => {
     const { addressType } = req.params
     const { addresses } = req.order!
     const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
@@ -81,7 +81,7 @@ export default class AddressController {
     })
   }
 
-  post: RequestHandler = async (req: Request, res: Response) => {
+  update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const { orderId, addressType } = req.params
     const { action, hasAnotherAddress, ...formData } = FormDataModel.parse(req.body)
