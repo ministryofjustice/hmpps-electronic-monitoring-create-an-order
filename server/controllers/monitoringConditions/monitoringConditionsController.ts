@@ -7,7 +7,7 @@ import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
 import { getError } from '../../utils/utils'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
+import { getSelectedMonitoringTypes } from './nextPage'
 
 const monitoringConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -141,7 +141,12 @@ export default class MonitoringConditionsController {
       req.flash('validationErrors', updateMonitoringConditionsResult)
       res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(nextPage(formData.monitoringRequired).replace(':orderId', orderId))
+      res.redirect(
+        paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', orderId).replace(
+          ':addressType(installation)',
+          'installation',
+        ),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

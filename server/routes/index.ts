@@ -141,6 +141,9 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.get)
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.post)
+
   // Trail monitoring page
   get(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.view)
   post(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.update)

@@ -43,7 +43,7 @@ context('Contact information', () => {
           addressLine1: 'line 1',
           addressLine2: 'line 2',
           addressLine3: 'line 3',
-          addressLine4: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'No',
         }
@@ -58,7 +58,7 @@ context('Contact information', () => {
             addressLine1: 'line 1',
             addressLine2: 'line 2',
             addressLine3: 'line 3',
-            addressLine4: 'line 3',
+            addressLine4: 'line 4',
             postcode: 'postcode',
           },
         }).should('be.true')
@@ -74,7 +74,7 @@ context('Contact information', () => {
           addressLine1: 'line 1',
           addressLine2: 'line 2',
           addressLine3: 'line 3',
-          addressLine4: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'Yes',
         }
@@ -95,7 +95,7 @@ context('Contact information', () => {
           addressLine1: 'line 1',
           addressLine2: 'line 2',
           addressLine3: 'line 3',
-          addressLine4: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'No',
         }
@@ -116,7 +116,7 @@ context('Contact information', () => {
           addressLine1: 'line 1',
           addressLine2: 'line 2',
           addressLine3: 'line 3',
-          addressLine4: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'No',
         }
