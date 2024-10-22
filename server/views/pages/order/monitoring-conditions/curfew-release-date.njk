@@ -49,7 +49,6 @@
     
     {{ govukDateInput({
       id: "releaseDate",
-      namePrefix: "releaseDate",
       fieldset: {
         legend: {
           text: "Release date",
@@ -62,20 +61,26 @@
       },
       items: [
         {
-          name: "day",
+          name: "releaseDateDay",
           classes: "govuk-input--width-2",
+          label: "Day",
+          id:"releaseDateDay",
           value: releaseDate.value.day,
           attributes: disabled
         },
         {
-          name: "month",
+          name: "releaseDateMonth",
           classes: "govuk-input--width-2",
+           label: "Month",
+            id:"releaseDateMonth",
           value: releaseDate.value.month,
           attributes: disabled
         },
         {
-          name: "year",
+          name: "releaseDateYear",
           classes: "govuk-input--width-4",
+           label: "Year",
+            id:"releaseDateYear",
           value: releaseDate.value.year,
           attributes: disabled
         }
@@ -109,17 +114,17 @@
         },
         items: [
             {
-            value: "PRIMARY_ADDRESS",
+            value: "PRIMARY",
             text: "Primary address",
             disabled: not isOrderEditable
             },
             {
-            value: "SECONDARY_ADDRESS",
+            value: "SECONDARY",
             text: "Secondary address",
             disabled: not isOrderEditable
             },
             {
-            value: "TERTIARY_ADDRESS",
+            value: "TERTIARY",
             text: "Third address",
             disabled: not isOrderEditable
             }
