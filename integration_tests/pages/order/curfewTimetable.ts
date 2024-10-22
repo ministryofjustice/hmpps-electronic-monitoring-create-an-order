@@ -20,30 +20,27 @@ export default class CurfewTimetablePage extends AppPage {
   backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
 
   fillInForm = (order: Order): void => {
-    const groupedTimetables = order.monitoringConditionsCurfewTimetable.reduce(
-      (acc: Record<string, CurfewTimetable>, t) => {
-        if (!acc[t.day]) {
-          acc[t.day] = []
-        }
-        acc[t.day].push(t)
-        return acc
-      },
-      {},
-    )
+    const groupedTimetables = order.curfewTimeTable.reduce((acc: Record<string, CurfewTimetable>, t) => {
+      if (!acc[t.dayOfWeek]) {
+        acc[t.dayOfWeek] = []
+      }
+      acc[t.dayOfWeek].push(t)
+      return acc
+    }, {})
     Object.entries(groupedTimetables).forEach(([day, timetables]) => {
       timetables.forEach((t, index) => {
         const [startHours, startMinutes] = deserialiseTime(t.startTime)
         const [endHours, endMinutes] = deserialiseTime(t.endTime)
-
+        const displayDay = day.toLocaleLowerCase()
         if (index > 0) {
-          cy.get(`a#add-time-${day}`).click()
+          cy.get(`button#add-time-${displayDay}`).click()
         }
-        cy.get(`input#curfewTimetable-${day}-${index}-time-start-hours`).type(startHours)
-        cy.get(`input#curfewTimetable-${day}-${index}-time-start-minutes`).type(startMinutes)
-        cy.get(`input#curfewTimetable-${day}-${index}-time-end-hours`).type(endHours)
-        cy.get(`input#curfewTimetable-${day}-${index}-time-end-minutes`).type(endMinutes)
-        t.addresses.forEach(address => {
-          cy.get(`#${day}-timetables .timetable-${index} input[value="${address}"]`).check()
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-start-hours`).type(startHours)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-start-minutes`).type(startMinutes)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-end-hours`).type(endHours)
+        cy.get(`input#curfewTimetable-${displayDay}-${index}-time-end-minutes`).type(endMinutes)
+        t.curfewAddress.split(',').forEach(address => {
+          cy.get(`input#curfewTimetable-${displayDay}-${index}-addresses-${address}`).check()
         })
       })
     })

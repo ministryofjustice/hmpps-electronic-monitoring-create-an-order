@@ -1,7 +1,7 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import CurfewTimetableModel, { CurfewTimetable } from '../models/CurfewTimetable'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ListValidationResult, ListValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
 type CurfewTimetableInput = AuthenticatedRequestInput & {
@@ -12,7 +12,7 @@ type CurfewTimetableInput = AuthenticatedRequestInput & {
 export default class CurfewTimetableService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async update(input: CurfewTimetableInput): Promise<CurfewTimetable | ValidationResult> {
+  async update(input: CurfewTimetableInput): Promise<CurfewTimetable | ListValidationResult> {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-timetable`,
@@ -24,7 +24,7 @@ export default class CurfewTimetableService {
       const sanitisedError = e as SanitisedError
 
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return ListValidationResultModel.parse((e as SanitisedError).data)
       }
 
       throw e

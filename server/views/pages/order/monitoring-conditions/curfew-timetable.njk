@@ -15,7 +15,7 @@
 
 {% block content %}
 
-{% macro _timetable(day, index, data, disabled) %}
+{% macro _timetable(day, index, data, disabled, removable) %}
   <div class="timetable timetable-{{index}}">
     {{ timeSpanInput({
         id: "curfewTimetable-" + day + "-" + index + "-time",
@@ -23,7 +23,10 @@
         nameSuffix: "]",
         value: data.timeSpan.value,
         errorMessage: data.timeSpan.error,
-        disabled: disabled
+        disabled: disabled,        
+        removable: removable,
+        day: day,
+        index:index
       }) }}
     
     {{ govukCheckboxes({
@@ -34,57 +37,26 @@
         {
           text: 'Primary address',
           value: 'PRIMARY_ADDRESS',
-          disabled: disabled
+          disabled: disabled,
+          id: "curfewTimetable-" + day + "-" + index + "-addresses-PRIMARY_ADDRESS"
         },
         {
           text: 'Secondary address',
           value: 'SECONDARY_ADDRESS',
-          disabled: disabled
+          disabled: disabled,
+          id: "curfewTimetable-" + day + "-" + index + "-addresses-SECONDARY_ADDRESS"
         },
         {
           text: 'Third address',
           value: 'TERTIARY_ADDRESS',
-          disabled: disabled
+          disabled: disabled,
+          id: "curfewTimetable-" + day + "-" + index + "-addresses-TERTIARY_ADDRESS"
         }
       ],
       errorMessage: data.addresses.error
     }) }}
   </div>
 {% endmacro %}
-
-<script type="text/javascript">
-
-function duplicateTimetableBlock(day) {
-  const currentTimetables = document.querySelectorAll(`#${day}-timetables .timetable`)
-  const newId = currentTimetables.length
-  const newNode = currentTimetables[0].cloneNode(true)
-  if(newNode.className){
-      newNode.className = newNode.className.replace('timetable-0', `timetable-${newId}`)
-  }
-  newNode.querySelectorAll('*').forEach(el => {
-    if(el.type === "checkbox"){
-      el.checked = false
-    }else if(el.value){
-      el.value = ""
-    }
-    if(el.name){
-      el.name = el.name.replace(`[${day}][0]`, `[${day}][${newId}]`)
-    }
-    if(el.id){
-      el.id = el.id.replace(`${day}-0`, `${day}-${newId}`)
-    }
-    
-    if(el.htmlFor){
-      el.htmlFor = el.htmlFor.replace(`${day}-0`, `${day}-${newId}`)
-    }
-  })
-  
-  currentTimetables[0].parentNode.appendChild(newNode)
-  return false
-}
-
-</script>
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
@@ -112,6 +84,9 @@ function duplicateTimetableBlock(day) {
 
   <h2 class="govuk-heading-m">Timetable for curfew with electronic monitoring</h2>
 
+<span class="govuk-heading-s">Enter curfew hours and address for each day.</span>
+<span class="govuk-caption-m">For example from 09:30 to 18:00</span>
+<br />
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
@@ -125,13 +100,23 @@ function duplicateTimetableBlock(day) {
             {{ _timetable(day, 0, {}, not isOrderEditable)}}
         {% else %}
           {% for timetable in curfewTimetable[day] %}
-            {{ _timetable(day, loop.index0, timetable, not isOrderEditable)}}
+            {{ _timetable(day, loop.index0, timetable, not isOrderEditable,curfewTimetable[day].length!==1 )}}
           {% endfor %}
         {% endif %}
       </div>
       <p class="govuk-body">
-        <a id="add-time-{{ day }}" href="#" class="govuk-link" onclick="duplicateTimetableBlock('{{ day }}'); return false">Add another time</a>
+        {% if isOrderEditable %}
+        {{ govukButton({
+            id: "add-time-"+day,
+            text: "Add another time",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "add-time-"+day
+        }) }}       
+      {% endif %}        
       </p>
+      <div class="moj-button-action">     
+    </div>
     {% endfor %}
 
     <div class="govuk-button-group">
@@ -152,5 +137,4 @@ function duplicateTimetableBlock(day) {
       {% endif %}
     </div>
   </form>
-
 {% endblock %}

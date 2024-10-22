@@ -1,12 +1,13 @@
 {% macro timeSpanInput(input) %}
+<div>
   <div {% if input.id %}id="{{input.id}}-form" {% endif %}class="govuk-form-group{% if input.errorMessage %} govuk-form-group--error{% endif %}">
       <fieldset class="govuk-fieldset">
-          <div class="form-time">
+          <div class="govuk-date-input ">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.label }}</legend>
               {% if input.hint %}<div class="govuk-hint">{{ input.hint }}</div>{% endif %}
               {% if input.errorMessage %}<div class="govuk-error-message" id="{{input.id}}-error">{{ input.errorMessage.text }}</div>{% endif %}
               
-              <div style="display: inline-block">
+              <div  class="govuk-date-input__item">
                 <div class="govuk-form-group form-group-start-hours">
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-start-hours">Hour</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
@@ -19,8 +20,10 @@
                             max="23" {% if input.disabled %}disabled {% endif %} />
                 </div>
               </div>
-              <div style="display: inline-block">:</div>
-              <div style="display: inline-block">
+              <div class="govuk-date-input__item">
+                <label class="govuk-label govuk-date-input__label" >:</label>
+              </div>
+              <div class="govuk-date-input__item">
                 <div class="govuk-form-group form-group-start-minutes">
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-start-minutes">Minute</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
@@ -34,9 +37,11 @@
                 </div>
               </div>
 
-              <div style="display: inline-block; text-align: center; width:40px">to</div>
+              <div class="govuk-date-input__item" style="text-align: center; width:40px">
+               <label class="govuk-label govuk-date-input__label" >to</label>
+                </div>
 
-              <div style="display: inline-block">
+              <div class="govuk-date-input__item">
                 <div class="govuk-form-group form-group-end-hours">
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-end-hours">Hour</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
@@ -49,8 +54,10 @@
                             max="23" {% if input.disabled %}disabled {% endif %} />
                 </div>
               </div>
-              <div style="display: inline-block">:</div>
-              <div style="display: inline-block">
+              <div class="govuk-date-input__item">
+                <label class="govuk-label govuk-date-input__label" >:</label>
+              </div>
+              <div class="govuk-date-input__item">
                 <div class="govuk-form-group form-group-end-minutes">
                     <label class="govuk-label govuk-date-input__label" for="{{input.id}}-end-minutes">Minute</label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2"
@@ -63,7 +70,16 @@
                             max="59" {% if input.disabled %}disabled {% endif %} />
                 </div>
               </div>
+             {% if input.removable %}  
+            
+              <button value="remove-time-{{input.day}}-{{input.index}}" type="submit" name="action" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                Remove
+              </button>
+            
+            {% endif %}
           </div>
+        
       </fieldset>
   </div>
+
 {% endmacro %}

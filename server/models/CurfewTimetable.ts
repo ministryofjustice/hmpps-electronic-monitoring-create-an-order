@@ -2,10 +2,11 @@ import { z } from 'zod'
 
 const CurfewTimetableModel = z.array(
   z.object({
-    day: z.string(),
+    dayOfWeek: z.string(),
     startTime: z.string(),
     endTime: z.string(),
-    addresses: z.array(z.string()),
+    orderId: z.string(),
+    curfewAddress: z.string(),
   }),
 )
 
