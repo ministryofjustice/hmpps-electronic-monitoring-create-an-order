@@ -1,7 +1,7 @@
+import FormAddressComponent from '../../formAddressComponent'
 import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
-import AddressFormComponent from '../addressForm'
 
 export type ResponsibleOfficerDetailsFormData = {
   fullName?: string
@@ -26,7 +26,7 @@ export type NotifyingOrganisationFormData = {
   responsibleOfficer?: ResponsibleOfficerDetailsFormData
 }
 
-export default class NotifyingOrganisationFormComponent extends AddressFormComponent {
+export default class NotifyingOrganisationFormComponent extends FormComponent {
   // FIELDS
 
   get emailAddressField(): FormInputComponent {
@@ -60,6 +60,11 @@ export default class NotifyingOrganisationFormComponent extends AddressFormCompo
     return new FormInputComponent(this.form, label)
   }
 
+  get responsibleOrganisationAddressField(): FormAddressComponent {
+    const label = 'What is the address of the responsible organisation?'
+    return new FormAddressComponent(this.form, label)
+  }
+
   get responsibleOrganisationContactNumberField(): FormInputComponent {
     const label = 'Telephone number for responsible organisation'
     return new FormInputComponent(this.form, label)
@@ -80,16 +85,14 @@ export default class NotifyingOrganisationFormComponent extends AddressFormCompo
     this.fillInResponsibleOrganisationDetailsWith(data)
 
     const { responsibleOfficer } = data
-    if (!responsibleOfficer) {
-      return
+    if (responsibleOfficer) {
+      this.fillInResponsibleOfficerDetailsWith(responsibleOfficer)
     }
-    this.fillInResponsibleOfficerDetailsWith(responsibleOfficer)
 
     const { address } = data
-    if (!address) {
-      return
+    if (address) {
+      this.responsibleOrganisationAddressField.set(address)
     }
-    this.fillAddressInWith(address)
   }
 
   fillInResponsibleOrganisationDetailsWith(data: NotifyingOrganisationFormData): void {

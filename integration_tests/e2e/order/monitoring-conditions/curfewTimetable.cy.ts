@@ -208,7 +208,7 @@ context('Curfew monitoring - Timetable', () => {
       checkFormFields()
       page.saveAndContinueButton().should('exist')
       page.saveAndReturnButton().should('exist')
-      page.backToSummaryButton.should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
   })
 

@@ -17,7 +17,7 @@ declare namespace Cypress {
      * @example cy.getByLabel('My text field')
      */
     getByLabel: (
-      label: string,
+      label: string | RegExp,
       options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>,
     ) => Chainable<JQuery>
 
@@ -25,6 +25,9 @@ declare namespace Cypress {
      * Custom command to get a form fieldset by legend text. Options are passed to the command to get the actual fieldset element
      * @example cy.getByLegend('Important fields')
      */
-    getByLegend: (legend: string, options?: Partial<Cypress.Loggable & Cypress.Timeoutable>) => Chainable<JQuery>
+    getByLegend: (
+      legend: string | RegExp,
+      options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>,
+    ) => Chainable<JQuery>
   }
 }

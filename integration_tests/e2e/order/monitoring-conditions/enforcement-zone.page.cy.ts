@@ -32,7 +32,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
 
     // TODO: FAIL there is one form input related issues

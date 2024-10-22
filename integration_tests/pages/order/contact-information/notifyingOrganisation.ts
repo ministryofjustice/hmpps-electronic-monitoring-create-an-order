@@ -1,11 +1,10 @@
-import AppPage from '../../appPage'
-import { PageElement } from '../../page'
+import AppFormPage from '../../appFormPage'
 
 import paths from '../../../../server/constants/paths'
 
 import NotifyingOrganisationFormComponent from '../../components/forms/contact-information/notifyingOrganisationForm'
 
-export default class NotifyingOrganisationPage extends AppPage {
+export default class NotifyingOrganisationPage extends AppFormPage {
   public form = new NotifyingOrganisationFormComponent()
 
   constructor() {

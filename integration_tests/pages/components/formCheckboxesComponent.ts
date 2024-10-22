@@ -2,13 +2,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { PageElement } from '../page'
 
-export default class FormRadiosComponent {
+export default class FormCheckboxesComponent {
   private elementCacheId: string = uuidv4()
 
   constructor(
     private readonly parent: PageElement,
     private readonly label: string,
-    private readonly options: (string | RegExp)[],
+    private readonly options: string[],
   ) {
     this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
 
@@ -19,19 +19,23 @@ export default class FormRadiosComponent {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
-  set(value: string) {
-    this.element.getByLabel(value).check()
+  set(values: string | string[]): void {
+    const valuesArr = Array.isArray(values) ? values : [values]
+
+    this.options.forEach(value => {
+      if (valuesArr.indexOf(value) > -1) {
+        this.element.getByLabel(value).check()
+      } else {
+        this.element.getByLabel(value).uncheck()
+      }
+    })
   }
 
   shouldHaveValue(value: string): void {
     this.element.getByLabel(value).should('be.checked')
   }
 
-  shouldNotHaveValue(): void {
-    this.options.forEach(option => this.element.getByLabel(option).should('not.be.checked'))
-  }
-
-  shouldHaveOption(value: string | RegExp): void {
+  shouldHaveOption(value: string): void {
     this.element.getByLabel(value).should('exist')
   }
 
@@ -44,11 +48,11 @@ export default class FormRadiosComponent {
   }
 
   shouldBeDisabled(): void {
-    this.element.find('input[type=radio]').each(input => cy.wrap(input).should('be.disabled'))
+    this.element.find('input[type=checkbox]').each(input => cy.wrap(input).should('be.disabled'))
   }
 
   shouldNotBeDisabled(): void {
-    this.element.find('input[type=radio]').each(input => cy.wrap(input).should('not.be.disabled'))
+    this.element.find('input[type=checkbox]').each(input => cy.wrap(input).should('not.be.disabled'))
   }
 
   get validationMessage() {

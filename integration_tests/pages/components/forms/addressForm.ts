@@ -34,7 +34,7 @@ export default class AddressFormComponent extends FormComponent {
   }
 
   get addressLine4Field(): FormInputComponent {
-    const label = 'Addresss line 4'
+    const label = 'Address line 4'
     return new FormInputComponent(this.form, label)
   }
 
@@ -50,7 +50,7 @@ export default class AddressFormComponent extends FormComponent {
 
   // FORM HELPERS
 
-  fillAddressInWith(address: AddressFormData): void {
+  fillInWith(address: AddressFormData): void {
     if (address.line1) {
       this.addressLine1Field.set(address.line1)
     }
@@ -71,8 +71,8 @@ export default class AddressFormComponent extends FormComponent {
       this.postcodeField.set(address.postcode)
     }
 
-    if (profile.hasAnotherAddress) {
-      this.hasAnotherAddressField.set(profile.hasAnotherAddress)
+    if (address.hasAnotherAddress) {
+      this.hasAnotherAddressField.set(address.hasAnotherAddress)
     }
   }
 

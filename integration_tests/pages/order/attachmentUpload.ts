@@ -1,7 +1,7 @@
-import AppPage from '../appPage'
+import AppFormPage from '../appFormPage'
 import { PageElement } from '../page'
 
-export default class AttachmentUploadPage extends AppPage {
+export default class AttachmentUploadPage extends AppFormPage {
   constructor() {
     super('Additional documents')
   }

@@ -4,7 +4,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcoholMonitoring'
+import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 
@@ -60,10 +60,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 
@@ -90,10 +90,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 
@@ -110,10 +110,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 
@@ -172,10 +172,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 
@@ -234,10 +234,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 
@@ -296,10 +296,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 
@@ -358,10 +358,10 @@ context('Monitoring conditions', () => {
         })
 
         const validFormData = {
-          addressLine1: 'line 1',
-          addressLine2: 'line 2',
-          addressLine3: 'line 3',
-          addressLine4: 'line 4',
+          line1: 'line 1',
+          line2: 'line 2',
+          line3: 'line 3',
+          line4: 'line 4',
           postcode: 'postcode',
         }
 

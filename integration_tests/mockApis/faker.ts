@@ -2,6 +2,10 @@ import { fakerEN_GB as faker } from '@faker-js/faker'
 
 faker.seed(9999)
 
+export const setFakerSeed = (seed: number) => {
+  faker.seed(seed)
+}
+
 const sexOptions = ['Male', 'Female', 'Prefer not to say', "Don't know"]
 
 const genderOptions = ['Male', 'Female', 'Non-binary', "Don't know", 'Self identify']
@@ -35,12 +39,18 @@ const validUkPhoneNumbers = [
   // ['No area',	'01632 960', 0, 999], // libphonenumber fails these numbers
 ]
 
-export type Address = {
-  line1?: string
-  line2?: string
-  line3?: string
-  line4?: string
-  postcode?: string
+export class Address {
+  constructor(
+    public line1?: string,
+    public line2?: string,
+    public line3?: string,
+    public line4?: string,
+    public postcode?: string,
+  ) {}
+
+  toString() {
+    return `${this.line1}, ${this.line2}, ${this.postcode}`
+  }
 }
 
 export type ResponsibleOrganisation = {
@@ -48,7 +58,7 @@ export type ResponsibleOrganisation = {
   contactNumber?: string
   emailAddress?: string
   region?: string
-  address?: Address
+  address?: Partial<Address>
 }
 
 export type PersonOfInterest = {
@@ -109,13 +119,14 @@ export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
   }
 }
 
-export const createFakeAddress = (): Partial<Address> => {
-  return {
-    line1: faker.location.streetAddress(),
-    line2: faker.location.city(),
-    line3: faker.location.state(),
-    postcode: faker.location.zipCode(),
-  }
+export const createFakeAddress = (): Address => {
+  return new Address(
+    faker.location.streetAddress(),
+    faker.location.city(),
+    faker.location.state(),
+    undefined,
+    faker.location.zipCode(),
+  )
 }
 
 export const createFakeOrganisation = (): Partial<ResponsibleOrganisation> => {

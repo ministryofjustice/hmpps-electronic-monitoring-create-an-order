@@ -32,10 +32,9 @@ context('About the device wearer', () => {
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
-      // page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer`)
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
 
     it('Should be accessible', () => {

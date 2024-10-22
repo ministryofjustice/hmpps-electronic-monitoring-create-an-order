@@ -5,7 +5,7 @@ Cypress.Commands.add(
   },
   (
     subject,
-    label: string,
+    label: string | RegExp,
     options: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow> = {},
   ): Cypress.Chainable<JQuery> => {
     const log = false
@@ -26,8 +26,8 @@ Cypress.Commands.add(
   },
   (
     subject,
-    legend: string,
-    options: Partial<Cypress.Loggable & Cypress.Timeoutable> = {},
+    legend: string | RegExp,
+    options: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow> = {},
   ): Cypress.Chainable<JQuery> => {
     const log = false
 

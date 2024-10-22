@@ -52,8 +52,6 @@ export default class FormDateComponent {
   }
 
   shouldHaveValue(value: Date): void {
-    const parts = `${value}--`.split('-')
-
     this.day.should('have.value', `0${value.getDate()}`.slice(-2))
     this.month.should('have.value', `0${value.getMonth() + 1}`.slice(-2))
     this.year.should('have.value', `${value.getFullYear()}`)
