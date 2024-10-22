@@ -52,7 +52,7 @@
 
       <div class="govuk-!-width-two-thirds">
         <h4 class="govuk-heading-s">What is the device wearer's {{ addressType | lower }} address?</h4>
-        {% if addressType == "primary" %}
+        {% if addressType | lower == "primary" %}
           <p>
             If the device wearer has multiple addresses, enter the address where they spend most of their time or have registered as their home residence
           </p>
@@ -119,38 +119,7 @@
         disabled: not isOrderEditable
       }) }}
 
-      {% if addressType == "primary" %}
-
-        {{ govukRadios({
-            name: "installationAddress",
-            classes: "govuk-radios--inline",
-            fieldset: {
-            legend: {
-                text: "Is the primary address where the device will be installed?",
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--s"
-            }
-            },
-            items: [
-            {
-                value: "true",
-                text: "Yes",
-                disabled: not isOrderEditable
-            },
-            {
-                value: "false",
-                text: "No",
-                disabled: not isOrderEditable
-            }
-            ],
-            value: installationAddress,
-            errorMessage: errors.installationAddress,
-            disabled: not isOrderEditable
-        }) }}
-
-      {% endif %}
-
-      {% if (addressType == "primary") or (addressType == 'secondary') %}
+      {% if (addressType | lower == "primary") or (addressType | lower == 'secondary') %}
 
         {{ govukRadios({
             name: "hasAnotherAddress",

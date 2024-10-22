@@ -1,10 +1,21 @@
 import { Request, RequestHandler, Response } from 'express'
+import { z } from 'zod'
 import paths from '../../constants/paths'
 import { AuditService } from '../../services'
 import AddressService from '../../services/addressService'
 import { AddressType, AddressTypeEnum } from '../../models/Address'
 import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
+
+const FormDataModel = z.object({
+  action: z.string().default('continue'),
+  addressLine1: z.string(),
+  addressLine2: z.string(),
+  addressLine3: z.string(),
+  addressLine4: z.string(),
+  postcode: z.string(),
+  hasAnotherAddress: z.string().default('false'),
+})
 
 const getNextAddressType = (addressType: AddressType) => {
   if (addressType === 'PRIMARY') {
@@ -36,7 +47,7 @@ export default class AddressController {
     res.render('pages/order/contact-information/address', {
       addressType,
       ...currentAddress,
-      hasAnotherAddress,
+      hasAnotherAddress: addresses.length === 0 ? '' : String(hasAnotherAddress),
       ...(formData.length > 0 ? (formData[0] as never) : {}),
       errors: getErrorsViewModel(errors as never),
     })
@@ -44,7 +55,7 @@ export default class AddressController {
 
   post: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, addressType } = req.params
-    const { action, ...formData } = req.body
+    const { action, hasAnotherAddress, ...formData } = FormDataModel.parse(req.body)
 
     const result = await this.addressService.updateAddress({
       accessToken: res.locals.user.token,
@@ -60,20 +71,29 @@ export default class AddressController {
       req.flash('validationErrors', result)
 
       res.redirect(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', addressType),
+        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+          ':addressType(primary|secondary|tertiary)',
+          addressType,
+        ),
       )
     } else if (action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
-    } else if (formData.hasAnotherAddress === 'true') {
+    } else if (hasAnotherAddress === 'true') {
       if (addressType.toUpperCase() === 'PRIMARY') {
         res.redirect(
-          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'secondary'),
+          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+            ':addressType(primary|secondary|tertiary)',
+            'secondary',
+          ),
         )
       }
 
       if (addressType.toUpperCase() === 'SECONDARY') {
         res.redirect(
-          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'tertiary'),
+          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+            ':addressType(primary|secondary|tertiary)',
+            'tertiary',
+          ),
         )
       }
     } else {

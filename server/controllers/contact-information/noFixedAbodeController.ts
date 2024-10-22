@@ -50,7 +50,12 @@ export default class NoFixedAbodeController {
     } else if (result.noFixedAbode) {
       res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
     } else {
-      res.redirect(paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'primary'))
+      res.redirect(
+        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+          ':addressType(primary|secondary|tertiary)',
+          'primary',
+        ),
+      )
     }
   }
 }

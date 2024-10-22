@@ -104,7 +104,7 @@ describe('AddressController', () => {
         // Then
         expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
           ...expected,
-          hasAnotherAddress,
+          hasAnotherAddress: String(hasAnotherAddress),
           errors: {},
         })
       },
@@ -149,7 +149,7 @@ describe('AddressController', () => {
         addressLine3: '',
         addressLine4: '',
         postcode: '',
-        hasAnotherAddress: true,
+        hasAnotherAddress: 'true',
         errors: {
           addressLine1: {
             text: 'Address line 1 is required',
@@ -223,7 +223,7 @@ describe('AddressController', () => {
           addressLine2: 'b',
           addressLine3: 'c',
           addressLine4: 'd',
-          postCode: 'e',
+          postcode: 'e',
         },
         flash: jest.fn(),
         params: {
