@@ -3,6 +3,7 @@ import ErrorPage from '../../../pages/error'
 import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import MonitoringConditionsPage from '../../../pages/order/monitoringConditions'
 import Page from '../../../pages/page'
+import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 
 const mockSubmittedMonitoringRequirements = {
   monitoringConditions: {
@@ -136,8 +137,7 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="checkbox"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       page.saveAndContinueButton().click()
-      const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)
-      nextPage.subHeader().should('contain.text', 'Curfew for day of release')
+      Page.verifyOnPage(InstallationAddressPage)
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
@@ -188,8 +188,7 @@ context('Monitoring conditions main section', () => {
           devicesRequired: ['Alcohol (Transdermal)'],
         })
       })
-      const nextPage = Page.verifyOnPage(CurfewReleaseDatePage)
-      nextPage.subHeader().should('contain.text', 'Alcohol monitoring')
+      Page.verifyOnPage(InstallationAddressPage)
     })
   })
 
