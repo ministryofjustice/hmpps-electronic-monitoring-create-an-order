@@ -17,17 +17,26 @@ context('Contact information', () => {
       })
 
       it('Should display the user name visible in header', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.header.userName().should('contain.text', 'J. Smith')
       })
 
       it('Should display the phase banner in header', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
       it('Should allow the user to update the primary address details', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
@@ -44,7 +53,10 @@ context('Contact information', () => {
 
       // TODO: FAIL issue determining if autocomplete is valid
       it.skip('Should be accessible', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.checkIsAccessible()
       })
     })
@@ -76,17 +88,26 @@ context('Contact information', () => {
       })
 
       it('Should display the user name visible in header', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.header.userName().should('contain.text', 'J. Smith')
       })
 
       it('Should display the phase banner in header', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
       it('Should allow the user to update the primary address details', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
@@ -103,7 +124,10 @@ context('Contact information', () => {
 
       // TODO: FAIL issue determining if autocomplete is valid
       it.skip('Should be accessible', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.checkIsAccessible()
       })
     })
@@ -143,17 +167,26 @@ context('Contact information', () => {
       })
 
       it('Should display the user name visible in header', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.header.userName().should('contain.text', 'J. Smith')
       })
 
       it('Should display the phase banner in header', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
       it('Should allow the user to update the primary address details', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
@@ -170,7 +203,10 @@ context('Contact information', () => {
 
       // TODO: FAIL issue determining if autocomplete is valid
       it.skip('Should be accessible', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
         page.checkIsAccessible()
       })
     })

@@ -31,7 +31,10 @@ context('Contact information', () => {
       })
 
       it('Should display validation error messages', () => {
-        const page = Page.visit(PrimaryAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+        const page = Page.visit(PrimaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'primary',
+        })
 
         page.form.saveAndContinueButton.click()
 

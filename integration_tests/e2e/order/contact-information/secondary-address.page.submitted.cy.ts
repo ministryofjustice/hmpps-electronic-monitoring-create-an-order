@@ -17,22 +17,34 @@ context('Contact information', () => {
       })
 
       it('Should display the user name visible in header', () => {
-        const page = Page.visit(SecondaryAddressPage, { orderId: mockOrderId, addressType: 'secondary' })
+        const page = Page.visit(SecondaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'secondary',
+        })
         page.header.userName().should('contain.text', 'J. Smith')
       })
 
       it('Should display the phase banner in header', () => {
-        const page = Page.visit(SecondaryAddressPage, { orderId: mockOrderId, addressType: 'secondary' })
+        const page = Page.visit(SecondaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'secondary',
+        })
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
       it('Should display the submitted order notification', () => {
-        const page = Page.visit(SecondaryAddressPage, { orderId: mockOrderId, addressType: 'secondary' })
+        const page = Page.visit(SecondaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'secondary',
+        })
         page.submittedBanner().should('contain', 'You are viewing a submitted order.')
       })
 
       it('Should not allow the user to update the secondary address details', () => {
-        const page = Page.visit(SecondaryAddressPage, { orderId: mockOrderId, addressType: 'secondary' })
+        const page = Page.visit(SecondaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'secondary',
+        })
 
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')

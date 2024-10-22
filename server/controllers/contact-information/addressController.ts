@@ -71,20 +71,29 @@ export default class AddressController {
       req.flash('validationErrors', result)
 
       res.redirect(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', addressType),
+        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+          ':addressType(primary|secondary|tertiary)',
+          addressType,
+        ),
       )
     } else if (action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     } else if (hasAnotherAddress === 'true') {
       if (addressType.toUpperCase() === 'PRIMARY') {
         res.redirect(
-          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'secondary'),
+          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+            ':addressType(primary|secondary|tertiary)',
+            'secondary',
+          ),
         )
       }
 
       if (addressType.toUpperCase() === 'SECONDARY') {
         res.redirect(
-          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(':addressType', 'tertiary'),
+          paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
+            ':addressType(primary|secondary|tertiary)',
+            'tertiary',
+          ),
         )
       }
     } else {

@@ -33,7 +33,10 @@ context('Contact information', () => {
       })
 
       it('should submit a correctly formatted address submission', () => {
-        const page = Page.visit(TertiaryAddressPage, { orderId: mockOrderId, addressType: 'tertiary' })
+        const page = Page.visit(TertiaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'tertiary',
+        })
 
         const validFormData = {
           addressLine1: 'line 1',
@@ -60,7 +63,10 @@ context('Contact information', () => {
       })
 
       it('should continue to collect responsible officer', () => {
-        const page = Page.visit(TertiaryAddressPage, { orderId: mockOrderId, addressType: 'tertiary' })
+        const page = Page.visit(TertiaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'tertiary',
+        })
 
         const validFormData = {
           addressLine1: 'line 1',
@@ -77,7 +83,10 @@ context('Contact information', () => {
       })
 
       it('should return to the summary page', () => {
-        const page = Page.visit(TertiaryAddressPage, { orderId: mockOrderId, addressType: 'tertiary' })
+        const page = Page.visit(TertiaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'tertiary',
+        })
 
         const validFormData = {
           addressLine1: 'line 1',
