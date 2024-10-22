@@ -66,7 +66,7 @@ context('Monitoring conditions', () => {
       })
     })
 
-    context('Viewing a draft order with primary, secondary and tertiary addresses', () => {
+    context('Viewing a draft order with an existing installation addresses', () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
