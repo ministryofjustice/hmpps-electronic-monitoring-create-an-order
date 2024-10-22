@@ -4,7 +4,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
 import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
-import AlcoholMonitoringPage from '../../../pages/order/alcoholMonitoring'
+import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcoholMonitoring'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 
