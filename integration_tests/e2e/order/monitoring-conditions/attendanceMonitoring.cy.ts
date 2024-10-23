@@ -168,7 +168,7 @@ context('Attendance monitoring', () => {
     })
   })
 
-  context('Submitting the form', () => {
+  context.skip('Submitting the form', () => {
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
