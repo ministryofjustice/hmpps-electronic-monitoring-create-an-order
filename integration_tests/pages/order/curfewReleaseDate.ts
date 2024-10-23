@@ -17,13 +17,13 @@ export default class CurfewReleaseDatePage extends AppPage {
   backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
 
   fillInForm = (): void => {
-    cy.get('#releaseDate-day').type('27')
-    cy.get('#releaseDate-month').type('3')
-    cy.get('#releaseDate-year').type('2024')
+    cy.get('#releaseDateDay').type('27')
+    cy.get('#releaseDateMonth').type('3')
+    cy.get('#releaseDateYear').type('2024')
     cy.get('#curfewTimes-start-hours').type('18')
     cy.get('#curfewTimes-start-minutes').type('15')
     cy.get('#curfewTimes-end-hours').type('19')
     cy.get('#curfewTimes-end-minutes').type('30')
-    cy.get('input[type="radio"][value="SECONDARY_ADDRESS"]').check()
+    cy.get('input[type="radio"][value="SECONDARY"]').check()
   }
 }

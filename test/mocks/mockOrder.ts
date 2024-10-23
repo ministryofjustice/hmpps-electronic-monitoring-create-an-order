@@ -39,6 +39,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
     devicesRequired: null,
   },
   monitoringConditionsTrail: null,
+  monitoringConditionsAlcohol: null,
   ...overrideProperties,
 })
 

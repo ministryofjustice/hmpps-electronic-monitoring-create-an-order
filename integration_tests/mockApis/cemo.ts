@@ -60,6 +60,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     devicesRequired: null,
   },
   monitoringConditionsTrail: null,
+  monitoringConditionsAlcohol: null,
 })
 
 type ListOrdersStubOptions = {

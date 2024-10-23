@@ -9,9 +9,10 @@ const mockOrderId = uuidv4()
 
 const mockSubmittedCurfewReleaseDate = {
   ...mockApiOrder('SUBMITTED'),
-  monitoringConditionsCurfewReleaseDate: {
-    address: 'SECONDARY_ADDRESS',
+  curfewReleaseDateConditions: {
+    curfewAddress: 'SECONDARY',
     releaseDate: '2026-03-27T00:00:00.000Z',
+    orderId: mockOrderId,
     startTime: '09:15:00',
     endTime: '17:30:00',
   },
@@ -25,9 +26,10 @@ const mockInProgressCurfewReleaseDate = {
 
 const mockEmptyCurfewReleaseDate = {
   ...mockApiOrder('SUBMITTED'),
-  monitoringConditionsCurfewReleaseDate: {
-    address: null,
+  curfewReleaseDateConditions: {
+    curfewAddress: null,
     releaseDate: null,
+    orderId: mockOrderId,
     startTime: null,
     endTime: null,
   },
@@ -35,14 +37,14 @@ const mockEmptyCurfewReleaseDate = {
 }
 
 const checkFormFields = () => {
-  cy.get('#releaseDate-day').should('have.value', '27')
-  cy.get('#releaseDate-month').should('have.value', '3')
-  cy.get('#releaseDate-year').should('have.value', '2026')
+  cy.get('#releaseDateDay').should('have.value', '27')
+  cy.get('#releaseDateMonth').should('have.value', '3')
+  cy.get('#releaseDateYear').should('have.value', '2026')
   cy.get('#curfewTimes-start-hours').should('have.value', '09')
   cy.get('#curfewTimes-start-minutes').should('have.value', '15')
   cy.get('#curfewTimes-end-hours').should('have.value', '17')
   cy.get('#curfewTimes-end-minutes').should('have.value', '30')
-  cy.get('input[type="radio"][value="SECONDARY_ADDRESS"]').should('be.checked')
+  cy.get('input[type="radio"][value="SECONDARY"]').should('be.checked')
 }
 
 context('Curfew monitoring - release date', () => {
@@ -133,7 +135,7 @@ context('Curfew monitoring - release date', () => {
           { field: 'releaseDate', error: 'You must enter a valid date' },
           { field: 'startTime', error: 'You must enter a valid start time' },
           { field: 'endTime', error: 'You must enter a valid end time' },
-          { field: 'address', error: 'You must enter a valid address' },
+          { field: 'curfewAddress', error: 'You must enter a valid address' },
         ],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
@@ -152,7 +154,7 @@ context('Curfew monitoring - release date', () => {
         httpStatus: 200,
         id: mockOrderId,
         subPath: '/monitoring-conditions-curfew-release-date',
-        response: mockEmptyCurfewReleaseDate.monitoringConditionsCurfewReleaseDate,
+        response: mockEmptyCurfewReleaseDate.curfewReleaseDateConditions,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
@@ -164,8 +166,9 @@ context('Curfew monitoring - release date', () => {
           expect(requests[0]).to.deep.equal({
             releaseDate: '2024-03-27T00:00:00.000Z',
             startTime: '18:15:00',
+            orderId: mockOrderId,
             endTime: '19:30:00',
-            address: 'SECONDARY_ADDRESS',
+            curfewAddress: 'SECONDARY',
           })
         },
       )
