@@ -7,6 +7,7 @@ import { FormField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import TrailMonitoringService from '../../services/trailMonitoringService'
 import { deserialiseDate, getError, serialiseDate } from '../../utils/utils'
+import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const trailMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -123,7 +124,8 @@ export default class TrailMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId))
+      const { monitoringConditions } = req.order!
+      res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'trail').replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
