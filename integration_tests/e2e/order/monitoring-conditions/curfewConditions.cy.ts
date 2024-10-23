@@ -9,9 +9,10 @@ const mockOrderId = uuidv4()
 
 const mockSubmittedCurfewConditions = {
   ...mockApiOrder('SUBMITTED'),
-  monitoringConditionsCurfewConditions: {
-    addresses: ['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'],
+  curfewConditions: {
+    curfewAddress: 'SECONDARY,TERTIARY',
     startDate: '2025-03-27T00:00:00.000Z',
+    orderId: mockOrderId,
     endDate: '2026-04-28T00:00:00.000Z',
   },
   id: mockOrderId,
@@ -24,8 +25,9 @@ const mockInProgressCurfewConditions = {
 
 const mockEmptyCurfewConditions = {
   ...mockApiOrder('SUBMITTED'),
-  monitoringConditionsCurfewConditions: {
-    addresses: null,
+  curfewConditions: {
+    curfewAddress: null,
+    orderId: mockOrderId,
     startDate: null,
     endDate: null,
   },
@@ -39,8 +41,8 @@ const checkFormFields = () => {
   cy.get('#endDate-day').should('have.value', '28')
   cy.get('#endDate-month').should('have.value', '4')
   cy.get('#endDate-year').should('have.value', '2026')
-  cy.get('input[type="checkbox"][value="SECONDARY_ADDRESS"]').should('be.checked')
-  cy.get('input[type="checkbox"][value="TERTIARY_ADDRESS"]').should('be.checked')
+  cy.get('input[type="checkbox"][value="SECONDARY"]').should('be.checked')
+  cy.get('input[type="checkbox"][value="TERTIARY"]').should('be.checked')
 }
 
 context('Curfew conditions', () => {
@@ -129,7 +131,7 @@ context('Curfew conditions', () => {
         response: [
           { field: 'startDate', error: 'You must enter a valid date' },
           { field: 'endDate', error: 'You must enter a valid date' },
-          { field: 'addresses', error: 'You must select a valid address' },
+          { field: 'curfewAddress', error: 'You must select a valid address' },
         ],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
@@ -145,7 +147,7 @@ context('Curfew conditions', () => {
         httpStatus: 200,
         id: mockOrderId,
         subPath: '/monitoring-conditions-curfew-conditions',
-        response: mockEmptyCurfewConditions.monitoringConditionsCurfewConditions,
+        response: mockEmptyCurfewConditions.curfewConditions,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
@@ -154,7 +156,8 @@ context('Curfew conditions', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          addresses: ['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'],
+          curfewAddress: 'SECONDARY,TERTIARY',
+          orderId: mockOrderId,
           startDate: '2025-03-27T00:00:00.000Z',
           endDate: '2026-04-28T00:00:00.000Z',
         })
