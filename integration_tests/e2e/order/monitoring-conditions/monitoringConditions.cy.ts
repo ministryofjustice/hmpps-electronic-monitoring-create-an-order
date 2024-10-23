@@ -106,7 +106,7 @@ context('Monitoring conditions main section', () => {
           { field: 'acquisitiveCrime', error: 'You must select an option' },
           { field: 'dapol', error: 'You must select an option' },
           { field: 'orderType', error: 'You must select an option' },
-          { field: 'monitoringRequired', error: 'You must select an option' },
+          { field: 'updateMonitoringConditionsDto', error: 'You must select an option' },
           { field: 'devicesRequired', error: 'You must select an option' },
         ],
       })
