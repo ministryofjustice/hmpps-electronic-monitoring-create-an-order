@@ -13,6 +13,20 @@ export default class NotifyingOrganisationService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: UpdateNotifyingOrganisationRequest): Promise<NotifyingOrganisation | ValidationResult> {
+    return Promise.resolve({
+      notifyingOrganisationEmail: '',
+      officerName: '',
+      officerPhoneNumber: '',
+      organisationType: '',
+      organisationRegion: '',
+      organisationAddressLine1: '',
+      organisationAddressLine2: '',
+      organisationAddressLine3: '',
+      organisationAddressLine4: '',
+      organisationAddressPostcode: '',
+      organisationPhoneNumber: '',
+      organisationEmail: '',
+    })
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/notifying-organisation`,

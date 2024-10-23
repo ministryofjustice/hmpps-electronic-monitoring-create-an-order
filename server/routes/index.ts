@@ -20,7 +20,6 @@ import MonitoringConditionsController from '../controllers/monitoringConditions/
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
-import ResponsibleOfficerController from '../controllers/responsibleOfficerController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
@@ -70,7 +69,6 @@ export default function routes({
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(auditService, orderService)
   const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
-  const responsibleOfficerController = new ResponsibleOfficerController(auditService)
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService)
   const zoneController = new EnforcementZoneController(auditService, zoneService)
 
@@ -100,9 +98,6 @@ export default function routes({
   // Responsible Adult
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.update)
-
-  // ResponsibleOfficer
-  get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_OFFICER, responsibleOfficerController.view)
 
   // Check your answers
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)

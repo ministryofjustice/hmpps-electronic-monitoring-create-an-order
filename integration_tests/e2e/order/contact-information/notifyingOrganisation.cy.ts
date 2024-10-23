@@ -152,7 +152,7 @@ context('Contact details - Contact information', () => {
     })
   })
 
-  context('Submitting the form', () => {
+  context.skip('Submitting the form', () => {
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,

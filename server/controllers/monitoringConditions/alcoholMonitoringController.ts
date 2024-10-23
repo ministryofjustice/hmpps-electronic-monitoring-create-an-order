@@ -7,6 +7,7 @@ import { AlcoholMonitoringService, AuditService } from '../../services'
 import { deserialiseDate, getError, serialiseDate } from '../../utils/utils'
 import { Address, AddressTypeEnum } from '../../models/Address'
 import { AlcoholMonitoring, AlcoholMonitoringType, InstallationLocationType } from '../../models/AlcoholMonitoring'
+import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const alcoholMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -189,7 +190,8 @@ export default class AlcoholMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
+      const { monitoringConditions } = req.order!
+      res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'alcohol').replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

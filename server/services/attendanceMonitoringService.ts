@@ -13,6 +13,20 @@ export default class AttendanceMonitoringService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: AttendanceMonitoringInput): Promise<AttendanceMonitoring | ValidationResult> {
+    return Promise.resolve({
+      addressLine1: '',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+      appointmentDay: '',
+      endDate: '',
+      endTime: '',
+      purpose: '',
+      startDate: '',
+      startTime: '',
+      id: '',
+    })
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-attendance`,

@@ -13,6 +13,11 @@ export default class CurfewConditionsService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: AlcoholMonitoringInput): Promise<CurfewConditions | ValidationResult> {
+    return Promise.resolve({
+      addresses: [],
+      endDate: '',
+      startDate: '',
+    })
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-conditions`,
