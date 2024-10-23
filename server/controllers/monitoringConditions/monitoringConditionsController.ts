@@ -94,7 +94,7 @@ export default class MonitoringConditionsController {
       orderType: { value: formData.orderType, error: getError(validationErrors, 'orderType') },
       monitoringRequired: {
         values: formData.monitoringRequired,
-        error: getError(validationErrors, 'monitoringRequired'),
+        error: getError(validationErrors, 'updateMonitoringConditionsDto'),
       },
       devicesRequired: {
         values: formData.devicesRequired,

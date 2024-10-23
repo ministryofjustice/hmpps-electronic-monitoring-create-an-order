@@ -190,9 +190,10 @@ describe('AlcoholMonitoringController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/order/123456789/monitoring-conditions/alcohol')
     })
 
-    it('should save and redirect to the contact details page', async () => {
+    it('should save and redirect to the next page if user chooses page', async () => {
       // Given
-      const req = createMockRequest()
+      const mockOrder = createMockOrder()
+      const req = createMockRequest({ order: mockOrder, params: { orderId: '123456789' } })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn()
@@ -223,7 +224,7 @@ describe('AlcoholMonitoringController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/monitoring-conditions/curfew/conditions')
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
     })
   })
 

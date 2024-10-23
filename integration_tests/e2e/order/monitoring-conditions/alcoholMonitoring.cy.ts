@@ -3,7 +3,7 @@ import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcoholMonitoring'
 import Page from '../../../pages/page'
-import CurfewConditionsPage from '../../../pages/order/curfewConditions'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -269,7 +269,7 @@ context('Alcohol monitoring', () => {
           probationOfficeName: 'Probation Office',
         })
       })
-      Page.verifyOnPage(CurfewConditionsPage)
+      Page.verifyOnPage(OrderTasksPage)
     })
 
     it('should correctly submit the data to the CEMO API and move to the next page (prison)', () => {
@@ -291,7 +291,7 @@ context('Alcohol monitoring', () => {
           prisonName: 'Prison Name',
         })
       })
-      Page.verifyOnPage(CurfewConditionsPage)
+      Page.verifyOnPage(OrderTasksPage)
     })
   })
 

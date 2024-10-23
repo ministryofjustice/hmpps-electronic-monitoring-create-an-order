@@ -11,11 +11,7 @@ export default class ResponsibleOfficerPage extends AppPage {
   backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
 
   constructor() {
-    super(
-      'About the device wearer',
-      paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_OFFICER,
-      'Responsible officer / responsible organisation details',
-    )
+    super('About the device wearer', '', 'Responsible officer / responsible organisation details')
   }
 
   checkOnPage(): void {
