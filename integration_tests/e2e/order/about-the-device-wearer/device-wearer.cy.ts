@@ -6,6 +6,7 @@ import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/r
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 
 const mockOrderId = uuidv4()
+const apiPath = '/device-wearer'
 
 context('About the device wearer', () => {
   context('Draft order', () => {
@@ -31,10 +32,9 @@ context('About the device wearer', () => {
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
-      // page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer`)
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton().should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
 
     it('Should be accessible', () => {
@@ -50,7 +50,6 @@ context('About the device wearer', () => {
 
       cy.task('stubCemoListOrders', 200)
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-      cy.task('stubCemoPutDeviceWearer', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
 
       cy.signIn()
     })
@@ -58,8 +57,28 @@ context('About the device wearer', () => {
     context('for someone over 18 years old', () => {
       const birthYear = 1970
 
-      // TODO: FAILS because filling in an over 18 device wearer should skip the responsible adult step
-      it.skip('should continue to collect the responsible officer details', () => {
+      it('should continue to collect the contact details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            firstName: 'Barton',
+            lastName: 'Fink',
+            alias: 'Barty',
+            adultAtTimeOfInstallation: true,
+            sex: 'male',
+            gender: 'male',
+            dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
+            disabilities: '',
+            noFixedAbode: null,
+          },
+        })
+
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
@@ -72,11 +91,7 @@ context('About the device wearer', () => {
           lastName: 'Fink',
           alias: 'Barty',
 
-          dob: {
-            date: '01',
-            month: '01',
-            year: `${birthYear}`,
-          },
+          dob: new Date(`${birthYear}-01-01T00:00:00.000Z`),
 
           is18: true,
           sex: 'Male',
@@ -113,6 +128,27 @@ context('About the device wearer', () => {
       const birthYear = new Date().getFullYear() - 16
 
       it('should continue to collect the responsible adult details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            firstName: 'Barton',
+            lastName: 'Fink',
+            alias: 'Barty',
+            adultAtTimeOfInstallation: false,
+            sex: 'male',
+            gender: 'male',
+            dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
+            disabilities: '',
+            noFixedAbode: null,
+          },
+        })
+
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
@@ -125,13 +161,9 @@ context('About the device wearer', () => {
           lastName: 'Fink',
           alias: 'Barty',
 
-          dob: {
-            date: '01',
-            month: '01',
-            year: `${birthYear}`,
-          },
+          dob: new Date(`${birthYear}-01-01T00:00:00.000Z`),
 
-          is18: true,
+          is18: false,
           sex: 'Male',
           genderIdentity: 'Male',
         }
@@ -150,7 +182,7 @@ context('About the device wearer', () => {
             firstName: 'Barton',
             lastName: 'Fink',
             alias: 'Barty',
-            adultAtTimeOfInstallation: 'true',
+            adultAtTimeOfInstallation: 'false',
             sex: 'male',
             gender: 'male',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
@@ -178,7 +210,7 @@ context('About the device wearer', () => {
 
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 

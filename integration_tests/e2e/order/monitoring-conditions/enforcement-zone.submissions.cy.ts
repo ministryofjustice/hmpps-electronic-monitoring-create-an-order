@@ -62,8 +62,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -92,8 +92,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -110,8 +110,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -174,8 +174,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -204,8 +204,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -222,8 +222,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData: EnforcementZoneFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -242,8 +242,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -315,8 +315,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -348,8 +348,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData: EnforcementZoneFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -371,8 +371,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 

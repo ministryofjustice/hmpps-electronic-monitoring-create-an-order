@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import ErrorPage from '../../../pages/error'
-import MonitoringConditionsPage from '../../../pages/order/monitoringConditions'
+import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import Page from '../../../pages/page'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 
@@ -81,9 +81,9 @@ context('Monitoring conditions main section', () => {
       })
       cy.get('select[name="orderType"]').invoke('val').should('deep.equal', 'immigration')
       cy.get('select[name="orderType"]').should('be.disabled')
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 
@@ -115,7 +115,7 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="radio"]').should('not.be.checked')
       cy.get('input[type="checkbox"]').should('not.be.checked')
       cy.get('select[name="orderType"]').invoke('val').should('deep.equal', '')
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.get('#acquisitiveCrime-error').should('contain', 'You must select an option')
       cy.get('#dapol-error').should('contain', 'You must select an option')
       cy.get('#orderType-error').should('contain', 'You must select an option')
@@ -135,7 +135,7 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="radio"][value="true"]').check()
       cy.get('input[type="checkbox"]').check()
       cy.get('select[name="orderType"]').select('immigration')
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       Page.verifyOnPage(InstallationAddressPage)
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
@@ -172,7 +172,7 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="checkbox"][value="alcohol"]').check()
       cy.get('input[type="checkbox"][value="Alcohol (Transdermal)"]').check()
       cy.get('select[name="orderType"]').select('immigration')
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({

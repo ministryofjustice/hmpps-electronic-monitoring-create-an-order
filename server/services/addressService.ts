@@ -4,7 +4,7 @@ import AddressModel, { Address } from '../models/Address'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
-type UpdateAddresssRequest = AuthenticatedRequestInput & {
+type UpdateAddressRequest = AuthenticatedRequestInput & {
   orderId: string
   data: {
     addressType: string
@@ -19,7 +19,7 @@ type UpdateAddresssRequest = AuthenticatedRequestInput & {
 export default class AddressService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async updateAddress(input: UpdateAddresssRequest): Promise<Address | ValidationResult> {
+  async updateAddress(input: UpdateAddressRequest): Promise<Address | ValidationResult> {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/address`,

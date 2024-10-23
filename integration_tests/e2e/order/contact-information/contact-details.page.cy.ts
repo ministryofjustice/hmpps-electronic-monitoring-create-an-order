@@ -30,10 +30,9 @@ context('Contact details - Contact information', () => {
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
 
-      // page.form.hasAction(`/order/${mockOrderId}/contact-details`)
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
 
     // TODO: FAIL issue determining if autocomplete is valid

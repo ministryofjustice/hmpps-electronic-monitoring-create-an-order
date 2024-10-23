@@ -21,15 +21,15 @@
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
   <div class="homepage-content">
@@ -43,89 +43,101 @@
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    <h2 class="govuk-heading-l">Monitoring projects</h2>
-
-    {{ govukRadios({
-      name: "acquisitiveCrime",
-      classes: "govuk-radios--inline",
-      fieldset: {
-        legend: {
-          text: "Is the device wearer part of the Acquisitive Crime project? (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "Not available to device wearers under 18. If selected the device wearer must be trail monitored as part of the project requirements."
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
+    {% call govukFieldset({
+      legend: {
+        text: "Monitoring projects",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukRadios({
+        name: "acquisitiveCrime",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Is the device wearer part of the Acquisitive Crime project? (optional)",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
         },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: acquisitiveCrime.value,
-      errorMessage: acquisitiveCrime.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukRadios({
-      name: "dapol",
-      classes: "govuk-radios--inline",
-      fieldset: {
-        legend: {
-          text: "Is the device wearer part of the Domestic Abuse Perpetrators on Licence (DAPOL) project? (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "Not available to device wearers under 18."
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
+        hint: {
+          text: "Not available to device wearers under 18. If selected the device wearer must be trail monitored as part of the project requirements."
         },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: dapol.value,
-      errorMessage: dapol.error,
-      disabled: not isOrderEditable
-    }) }}
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "false",
+            text: "No",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: acquisitiveCrime.value,
+        errorMessage: acquisitiveCrime.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    <h2 class="govuk-heading-l">Order information</h2>
+      {{ govukRadios({
+        name: "dapol",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Is the device wearer part of the Domestic Abuse Perpetrators on Licence (DAPOL) project? (optional)",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        hint: {
+          text: "Not available to device wearers under 18."
+        },
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "false",
+            text: "No",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: dapol.value,
+        errorMessage: dapol.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
 
-    {{ govukSelect({
-      id: "orderType",
-      name: "orderType",
-      label: {
-        text: "Select order type"
-      },
-      items: [
-        { text: 'Select', value: '' },
-        { text: 'Civil', value: 'civil' },
-        { text: 'Community', value: 'community' },
-        { text: 'Immigration', value: 'immigration' },
-        { text: 'Post Release', value: 'post_release' },
-        { text: 'Pre-Trial', value: 'pre_trial' },
-        { text: 'Special', value: 'special' }
-      ],
-      value: orderType.value,
-      errorMessage: orderType.error,
-      disabled: not isOrderEditable
-    }) }}
+    {% call govukFieldset({
+      legend: {
+        text: "Order information",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukSelect({
+        id: "orderType",
+        name: "orderType",
+        label: {
+          text: "Select order type"
+        },
+        items: [
+          { text: 'Select', value: '' },
+          { text: 'Civil', value: 'civil' },
+          { text: 'Community', value: 'community' },
+          { text: 'Immigration', value: 'immigration' },
+          { text: 'Post Release', value: 'post_release' },
+          { text: 'Pre-Trial', value: 'pre_trial' },
+          { text: 'Special', value: 'special' }
+        ],
+        value: orderType.value,
+        errorMessage: orderType.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
 
     {{ govukCheckboxes({
       name: "monitoringRequired",

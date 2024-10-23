@@ -72,7 +72,7 @@
   "lint-staged": {
     "*.{ts,js,css}": [
       "prettier --write",
-      "eslint --fix"
+      "npm run lint-fix"
     ],
     "*.json": [
       "prettier --write"
@@ -109,6 +109,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.0.3",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.1",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",

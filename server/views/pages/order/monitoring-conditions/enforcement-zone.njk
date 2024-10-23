@@ -19,7 +19,7 @@
 
   {{ govukBackLink({
     text: "Back",
-    href: "/order/" + order.id + "/summary"
+    href: orderSummaryUri
   }) }}
 
   {% if not isOrderEditable %}

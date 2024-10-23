@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import ErrorPage from '../../../pages/error'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcoholMonitoring'
+import { NotFoundErrorPage } from '../../../pages/error'
+import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
 import Page from '../../../pages/page'
 
@@ -102,7 +102,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-year').invoke('val').should('equal', '2025')
       page.saveAndContinueButton().should('not.exist')
       page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 
@@ -156,8 +156,8 @@ context('Trail monitoring', () => {
           endDate: '2025-04-28T00:00:00.000Z',
         })
       })
-      const nextPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      nextPage.subHeader().should('contain.text', 'Alcohol monitoring')
+
+      Page.verifyOnPage(AlcoholMonitoringPage)
     })
   })
 
@@ -172,7 +172,7 @@ context('Trail monitoring', () => {
     it('Should indicate to the user that there was an error', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`, { failOnStatusCode: false })
 
-      Page.verifyOnPage(ErrorPage, 'Not Found')
+      Page.verifyOnPage(NotFoundErrorPage)
     })
   })
 })

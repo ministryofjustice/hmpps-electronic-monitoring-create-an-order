@@ -2,13 +2,13 @@ import FormComponent from '../../formComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
 
 export type NoFixedAbodeFormData = {
-  noFixedAbode?: string
+  hasFixedAddress?: string
 }
 
 export default class NoFixedAbodeFormComponent extends FormComponent {
   // FIELDS
 
-  get noFixedAbodeField(): FormRadiosComponent {
+  get hasFixedAddressField(): FormRadiosComponent {
     const label = 'Does the device wearer have a fixed address?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
@@ -16,20 +16,20 @@ export default class NoFixedAbodeFormComponent extends FormComponent {
   // FORM HELPERS
 
   fillInWith(profile: NoFixedAbodeFormData): void {
-    if (profile.noFixedAbode) {
-      this.noFixedAbodeField.set(profile.noFixedAbode)
+    if (profile.hasFixedAddress) {
+      this.hasFixedAddressField.set(profile.hasFixedAddress)
     }
   }
 
   shouldBeValid(): void {
-    this.noFixedAbodeField.shouldNotHaveValidationMessage()
+    this.hasFixedAddressField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
-    this.noFixedAbodeField.shouldBeDisabled()
+    this.hasFixedAddressField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
-    this.noFixedAbodeField.shouldNotBeDisabled()
+    this.hasFixedAddressField.shouldNotBeDisabled()
   }
 }

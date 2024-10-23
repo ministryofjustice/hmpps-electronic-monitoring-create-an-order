@@ -1,11 +1,10 @@
-import AppPage from '../../appPage'
-import { PageElement } from '../../page'
+import AppFormPage from '../../appFormPage'
 
 import paths from '../../../../server/constants/paths'
 
 import ContactDetailsFormComponent from '../../components/forms/contact-information/contactDetailsForm'
 
-export default class ContactDetailsPage extends AppPage {
+export default class ContactDetailsPage extends AppFormPage {
   public form = new ContactDetailsFormComponent()
 
   constructor() {
@@ -16,9 +15,5 @@ export default class ContactDetailsPage extends AppPage {
     super.checkOnPage()
 
     this.form.checkHasForm()
-  }
-
-  get backToSummaryButton(): PageElement {
-    return cy.get('a#backToSummary')
   }
 }
