@@ -50,7 +50,20 @@ describe('EnforcementZoneController', () => {
       params: {
         orderId: mockId,
       },
-      order: getMockOrder({ id: mockId }),
+      order: getMockOrder({
+        id: mockId,
+        monitoringConditions: {
+          orderType: '',
+          acquisitiveCrime: true,
+          alcohol: false,
+          curfew: false,
+          dapol: false,
+          mandatoryAttendance: true,
+          devicesRequired: [],
+          exclusionZone: false,
+          trail: false,
+        },
+      }),
       user: {
         username: 'fakeUserName',
         token: 'fakeUserToken',
