@@ -247,7 +247,7 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/responsible-officer')
+      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/contact-details')
     })
 
     it('should save and redirect to the responsible adult page if the device wearer is not an adult', async () => {
