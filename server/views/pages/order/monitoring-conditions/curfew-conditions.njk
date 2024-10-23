@@ -119,7 +119,7 @@
     }) }}
 
     {{ govukCheckboxes({
-      name: "addresses",
+      name: "addresses[]",
       fieldset: {
         legend: {
           text: "Curfew addresses ",
@@ -132,17 +132,17 @@
       items: [
         {
           text: 'Primary address',
-          value: 'PRIMARY_ADDRESS',
+          value: 'PRIMARY',
           disabled: not isOrderEditable
         },
         {
           text: 'Secondary address',
-          value: 'SECONDARY_ADDRESS',
+          value: 'SECONDARY',
           disabled: not isOrderEditable
         },
         {
           text: 'Third address',
-          value: 'TERTIARY_ADDRESS',
+          value: 'TERTIARY',
           disabled: not isOrderEditable
         }
       ],

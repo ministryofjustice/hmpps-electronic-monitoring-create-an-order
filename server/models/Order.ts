@@ -32,7 +32,7 @@ const OrderModel = z.object({
   monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),
   monitoringConditionsAlcohol: AlcoholMonitoringModel.nullable().optional(),
   curfewReleaseDateConditions: CurfewReleaseDateModel.nullable().optional(),
-  monitoringConditionsCurfewConditions: CurfewConditionsModel.optional(),
+  curfewConditions: CurfewConditionsModel.nullable().optional(),
   curfewTimeTable: CurfewTimetableModel.optional(),
   notifyingOrganisation: NotifyingOrganisationModel.optional(),
 })

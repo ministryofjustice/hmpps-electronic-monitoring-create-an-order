@@ -34,7 +34,7 @@ export default class CurfewConditionsController {
   ) {}
 
   private constructViewModel(
-    curfewConditions: CurfewConditions | undefined,
+    curfewConditions: CurfewConditions | undefined | null,
     validationErrors: ValidationResult,
     formData: [CurfewConditionsFormData],
   ): CurfewConditionsViewModel {
@@ -46,13 +46,13 @@ export default class CurfewConditionsController {
   }
 
   private createViewModelFromCurfewConditions(
-    curfewConditions: CurfewConditions | undefined,
+    curfewConditions: CurfewConditions | undefined | null,
   ): CurfewConditionsViewModel {
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(curfewConditions?.startDate)
     const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(curfewConditions?.endDate)
 
     return {
-      addresses: { values: curfewConditions?.addresses ?? [] },
+      addresses: { values: curfewConditions?.curfewAddress?.split(',') ?? [] },
       startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
       endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
     }
@@ -63,7 +63,7 @@ export default class CurfewConditionsController {
     validationErrors: ValidationResult,
   ): CurfewConditionsViewModel {
     return {
-      addresses: { values: formData.addresses ?? [], error: getError(validationErrors, 'addresses') },
+      addresses: { values: formData.addresses ?? [], error: getError(validationErrors, 'curfewAddress') },
       startDate: {
         value: { day: formData['startDate-day'], month: formData['startDate-month'], year: formData['startDate-year'] },
         error: getError(validationErrors, 'startDate'),
@@ -75,16 +75,17 @@ export default class CurfewConditionsController {
     }
   }
 
-  private createApiModelFromFormData(formData: CurfewConditionsFormData): CurfewConditions {
+  private createApiModelFromFormData(formData: CurfewConditionsFormData, orderId: string): CurfewConditions {
     return {
+      orderId,
       startDate: serialiseDate(formData['startDate-year'], formData['startDate-month'], formData['startDate-day']),
       endDate: serialiseDate(formData['endDate-year'], formData['endDate-month'], formData['endDate-day']),
-      addresses: formData.addresses ?? [],
+      curfewAddress: formData.addresses?.join(',') ?? '',
     }
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsCurfewConditions: model } = req.order!
+    const { curfewConditions: model } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = this.constructViewModel(model, errors as never, formData as never)
@@ -99,7 +100,7 @@ export default class CurfewConditionsController {
     const updateResult = await this.curfewConditionsService.update({
       accessToken: res.locals.user.token,
       orderId,
-      data: this.createApiModelFromFormData(formData),
+      data: this.createApiModelFromFormData(formData, orderId),
     })
 
     if (isValidationResult(updateResult)) {
