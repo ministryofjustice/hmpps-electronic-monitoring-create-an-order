@@ -1,25 +1,20 @@
-import AppPage from '../../appPage'
-import { PageElement } from '../../page'
+import AppFormPage from '../../appFormPage'
 
 import paths from '../../../../server/constants/paths'
 
 import NotifyingOrganisationFormComponent from '../../components/forms/contact-information/notifyingOrganisationForm'
 
-export default class NotifyingOrganisationPage extends AppPage {
+export default class NotifyingOrganisationPage extends AppFormPage {
   public form = new NotifyingOrganisationFormComponent()
 
   constructor() {
-    super('Contact information', paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION)
+    super('Contact information', paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, 'Notifying organisation')
   }
 
   checkOnPage(): void {
     super.checkOnPage()
 
     this.form.checkHasForm()
-  }
-
-  get backToSummaryButton(): PageElement {
-    return cy.get('a#backToSummary')
   }
 
   fillInForm = (): void => {

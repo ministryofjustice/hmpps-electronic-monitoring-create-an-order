@@ -19,7 +19,24 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          monitoringConditions: {
+            orderType: 'immigration',
+            acquisitiveCrime: false,
+            dapol: false,
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: true,
+            alcohol: false,
+            devicesRequired: [],
+          },
+        },
+      })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -45,8 +62,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -75,8 +92,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -93,8 +110,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -114,7 +131,24 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          monitoringConditions: {
+            orderType: 'immigration',
+            acquisitiveCrime: false,
+            dapol: false,
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: true,
+            alcohol: false,
+            devicesRequired: [],
+          },
+        },
+      })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -140,8 +174,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -170,8 +204,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -188,8 +222,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData: EnforcementZoneFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -208,8 +242,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -231,7 +265,24 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          monitoringConditions: {
+            orderType: 'immigration',
+            acquisitiveCrime: false,
+            dapol: false,
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: true,
+            alcohol: false,
+            devicesRequired: [],
+          },
+        },
+      })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -264,8 +315,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -297,8 +348,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData: EnforcementZoneFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -320,8 +371,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: '2024-10-10',
-        endDate: '2024-10-11',
+        startDate: new Date('2024-10-10T00:00:00.000Z'),
+        endDate: new Date('2024-10-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 

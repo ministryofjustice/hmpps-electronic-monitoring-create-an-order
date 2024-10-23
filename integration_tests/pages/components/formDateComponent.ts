@@ -45,20 +45,16 @@ export default class FormDateComponent {
     this.year.type(value)
   }
 
-  set(value: string) {
-    const parts = `${value}--`.split('-')
-
-    this.setDay(parts[2])
-    this.setMonth(parts[1])
-    this.setYear(parts[0])
+  set(value: Date) {
+    this.setDay(`0${value.getDate()}`.slice(-2))
+    this.setMonth(`0${value.getMonth() + 1}`.slice(-2))
+    this.setYear(`${value.getFullYear()}`)
   }
 
-  shouldHaveValue(value: string): void {
-    const parts = `${value}--`.split('-')
-
-    this.day.should('have.value', parts[2])
-    this.month.should('have.value', parts[1])
-    this.year.should('have.value', parts[0])
+  shouldHaveValue(value: Date): void {
+    this.day.should('have.value', `0${value.getDate()}`.slice(-2))
+    this.month.should('have.value', `0${value.getMonth() + 1}`.slice(-2))
+    this.year.should('have.value', `${value.getFullYear()}`)
   }
 
   shouldBeDisabled(): void {

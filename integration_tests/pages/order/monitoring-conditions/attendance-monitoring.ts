@@ -1,4 +1,5 @@
 import AppPage from '../../appPage'
+
 import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
@@ -15,8 +16,6 @@ export default class AttendanceMonitoringPage extends AppPage {
   saveAndContinueButton = (): PageElement => cy.get('form button[type=submit][value="continue"]')
 
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
-
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
 
   fillInForm = (): void => {
     cy.get('#startDate-day').type('27')

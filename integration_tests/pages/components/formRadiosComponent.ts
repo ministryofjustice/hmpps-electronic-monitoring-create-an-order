@@ -8,7 +8,7 @@ export default class FormRadiosComponent {
   constructor(
     private readonly parent: PageElement,
     private readonly label: string,
-    private readonly options: string[],
+    private readonly options: (string | RegExp)[],
   ) {
     this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
 
@@ -31,7 +31,7 @@ export default class FormRadiosComponent {
     this.options.forEach(option => this.element.getByLabel(option).should('not.be.checked'))
   }
 
-  shouldHaveOption(value: string): void {
+  shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
   }
 

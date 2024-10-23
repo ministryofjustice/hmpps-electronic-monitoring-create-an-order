@@ -4,6 +4,7 @@ import { AuditService, EnforcementZoneService } from '../../services'
 import { deserialiseDate, getErrorsViewModel } from '../../utils/utils'
 import paths from '../../constants/paths'
 import { ErrorsViewModel } from '../../models/view-models/utils'
+import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 
 const ZoneFormDataModel = z.object({
   action: z.string(),
@@ -72,7 +73,12 @@ export default class EnforcementZoneController {
               (zoneIdInt + 1).toString(),
             ),
           )
-        else res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
+        else {
+          const { monitoringConditions } = req.order!
+          res.redirect(
+            nextPage(getSelectedMonitoringTypes(monitoringConditions), 'exclusionZone').replace(':orderId', orderId),
+          )
+        }
       } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }

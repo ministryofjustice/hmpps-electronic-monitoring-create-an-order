@@ -33,7 +33,7 @@ context('About the device wearer - Responsible Adult', () => {
       // page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton().should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
 
     // TODO: FAIL there are two form input related issues
@@ -239,7 +239,7 @@ context('About the device wearer - Responsible Adult', () => {
 
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 

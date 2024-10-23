@@ -9,6 +9,7 @@ import NotifyingOrganisationService from '../../services/notifyingOrganisationSe
 import { getError } from '../../utils/utils'
 
 const NotifyingOrganisationFormDataModel = z.object({
+  action: z.string(),
   notifyingOrganisationEmail: z.string(),
   officerName: z.string(),
   officerPhoneNumber: z.string(),
@@ -160,6 +161,8 @@ export default class NotifyingOrganisationController {
       req.flash('validationErrors', result)
 
       res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
+    } else if (formData.action === 'continue') {
+      res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

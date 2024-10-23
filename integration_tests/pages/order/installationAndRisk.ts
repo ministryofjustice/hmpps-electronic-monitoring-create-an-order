@@ -12,8 +12,6 @@ export default class InstallationAndRiskPage extends AppPage {
 
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
 
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
   fillInForm = () => {
     cy.get('input[name="riskOfSeriousHarm"][value="MEDIUM"]').click()
     cy.get('input[name="riskOfSelfHarm"][value="LOW"]').click()

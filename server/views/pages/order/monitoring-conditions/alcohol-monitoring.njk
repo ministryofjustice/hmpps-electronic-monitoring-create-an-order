@@ -72,9 +72,9 @@
         value: monitoringType.value,
         errorMessage: monitoringType.error
         }) }}
-    
+
     {% set disabled = {} if isOrderEditable else { disabled:true } %}
-    
+
     {{ govukDateInput({
       id: "startDate",
       namePrefix: "startDate",
@@ -154,7 +154,7 @@
         type: "text",
         classes: "govuk-!-width-one-third",
         label: {
-          text: "Enter name"
+          text: "Enter probation office name"
         },
         disabled: not isOrderEditable,
         value: probationOfficeName.value,
@@ -169,7 +169,7 @@
         type: "text",
         classes: "govuk-!-width-one-third",
         label: {
-          text: "Enter name"
+          text: "Enter prison name"
         },
         disabled: not isOrderEditable,
         value: prisonName.value,
@@ -189,7 +189,7 @@
         hint: {
             text: "Select one option"
         },
-        items: [        
+        items: [
           {
             value: "INSTALLATION",
             text: "at Installation Address (not provided)" if not installationAddressView.value else "at Installation Address: "+installationAddressView.value,

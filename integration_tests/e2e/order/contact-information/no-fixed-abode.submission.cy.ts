@@ -44,7 +44,7 @@ context('Contact information', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
         const validFormData = {
-          noFixedAbode: 'No',
+          hasFixedAddress: 'No',
         }
 
         page.form.fillInWith(validFormData)
@@ -62,7 +62,7 @@ context('Contact information', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
         const validFormData = {
-          noFixedAbode: 'Yes',
+          hasFixedAddress: 'Yes',
         }
 
         page.form.fillInWith(validFormData)
@@ -75,7 +75,7 @@ context('Contact information', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
         const validFormData = {
-          noFixedAbode: 'Yes',
+          hasFixedAddress: 'Yes',
         }
 
         page.form.fillInWith(validFormData)
@@ -119,7 +119,7 @@ context('Contact information', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
         const validFormData = {
-          noFixedAbode: 'No',
+          hasFixedAddress: 'No',
         }
 
         page.form.fillInWith(validFormData)
@@ -132,7 +132,7 @@ context('Contact information', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
         const validFormData = {
-          noFixedAbode: 'No',
+          hasFixedAddress: 'No',
         }
 
         page.form.fillInWith(validFormData)

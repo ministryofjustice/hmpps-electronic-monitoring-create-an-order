@@ -1,9 +1,11 @@
 import AppPage from '../appPage'
 import { PageElement } from '../page'
 
+import paths from '../../../server/constants/paths'
+
 export default class OrderTasksPage extends AppPage {
   constructor() {
-    super('Apply for electronic monitoring')
+    super('Apply for electronic monitoring', paths.ORDER.SUMMARY)
   }
 
   orderSections = (): PageElement => cy.get('.govuk-task-list')
@@ -12,11 +14,13 @@ export default class OrderTasksPage extends AppPage {
 
   AboutTheDeviceWearerSectionItem = (): PageElement => this.orderSections().contains('About the device wearer')
 
+  ContactInformationSectionItem = (): PageElement => this.orderSections().contains('Contact information')
+
   InformationAndRiskSectionItem = (): PageElement => this.orderSections().contains('Information and risk')
 
-  ContactInformationSectionItem = (): PageElement => this.orderSections().contains('About the device wearer')
+  MonitoringConditionsSectionItem = (): PageElement => this.orderSections().contains('Monitoring conditions')
 
-  AttachementsSectionItem = (): PageElement => this.orderSections().contains('About the device wearer')
+  AttachmentsSectionItem = (): PageElement => this.orderSections().contains('Attachments')
 
   submissionForm = (): PageElement => cy.get('form[action*="submit"]')
 

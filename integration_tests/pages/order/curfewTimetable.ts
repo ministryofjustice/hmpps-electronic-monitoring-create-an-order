@@ -17,8 +17,6 @@ export default class CurfewTimetablePage extends AppPage {
 
   saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
 
-  backToSummaryButton = (): PageElement => cy.get('a#backToSummary')
-
   fillInForm = (order: Order): void => {
     const groupedTimetables = order.curfewTimeTable.reduce((acc: Record<string, CurfewTimetable>, t) => {
       if (!acc[t.dayOfWeek]) {

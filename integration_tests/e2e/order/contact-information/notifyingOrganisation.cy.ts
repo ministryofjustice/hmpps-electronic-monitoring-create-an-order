@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import { NotFoundErrorPage } from '../../../pages/error'
 import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
-import OrderTasksPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
+import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 
 const mockOrderId = uuidv4()
 const pagePath = '/contact-information/notifying-organisation'
@@ -95,7 +95,7 @@ context('Contact details - Contact information', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
 
     it('Should be accessible', () => {
@@ -148,7 +148,7 @@ context('Contact details - Contact information', () => {
       checkFormFields()
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('not.exist')
+      page.backToSummaryButton.should('exist')
     })
   })
 
@@ -219,7 +219,7 @@ context('Contact details - Contact information', () => {
           organisationEmail: 'test@prison.gov.uk',
         })
       })
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(MonitoringConditionsPage)
     })
   })
 

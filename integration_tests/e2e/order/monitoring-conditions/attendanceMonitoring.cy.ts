@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcoholMonitoring'
+import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
 import Page from '../../../pages/page'
@@ -138,7 +138,7 @@ context('Attendance monitoring', () => {
       checkFormFields()
       page.saveAndContinueButton().should('not.exist')
       page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 
@@ -233,8 +233,7 @@ context('Attendance monitoring', () => {
           postcode: 'Postcode',
         })
       })
-      const nextPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      nextPage.subHeader().should('contain.text', 'Alcohol monitoring')
+      Page.verifyOnPage(AlcoholMonitoringPage)
     })
 
     it('should allow a second entry to be created', () => {
@@ -253,8 +252,7 @@ context('Attendance monitoring', () => {
       secondPage.fillInForm()
       cy.get('input[type="radio"][value="false"]').check()
       secondPage.saveAndContinueButton().click()
-      const nextPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      nextPage.subHeader().should('contain.text', 'Alcohol monitoring')
+      Page.verifyOnPage(AlcoholMonitoringPage)
     })
   })
 

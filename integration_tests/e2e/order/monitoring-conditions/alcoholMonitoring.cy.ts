@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcoholMonitoring'
+import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import Page from '../../../pages/page'
 import OrderTasksPage from '../../../pages/order/summary'
 
@@ -48,7 +48,6 @@ context('Alcohol monitoring', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.subHeader().should('contain.text', 'Alcohol monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -87,9 +86,9 @@ context('Alcohol monitoring', () => {
       })
       cy.get('input[type="radio"][value="PROBATION_OFFICE"]').should('be.checked')
       cy.get('input[name="probationOfficeName"]').should('have.value', 'Probation Office')
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
 
     it('Should correctly display the submitted data in disabled fields (prison)', () => {
@@ -116,9 +115,9 @@ context('Alcohol monitoring', () => {
       })
       cy.get('input[type="radio"][value="PRISON"]').should('be.checked')
       cy.get('input[name="prisonName"]').should('have.value', 'Prison Name')
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
-      page.backToSummaryButton().should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
 
@@ -144,8 +143,8 @@ context('Alcohol monitoring', () => {
       })
       cy.get('input[type="radio"][value="PROBATION_OFFICE"]').should('be.checked')
       cy.get('input[name="probationOfficeName"]').should('have.value', 'Probation Office')
-      page.saveAndContinueButton().should('exist')
-      page.saveAndReturnButton().should('exist')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndContinueButton.should('exist')
     })
 
     it('Should correctly display the submitted data in fields (prison)', () => {
@@ -169,8 +168,8 @@ context('Alcohol monitoring', () => {
       })
       cy.get('input[type="radio"][value="PRISON"]').should('be.checked')
       cy.get('input[name="prisonName"]').should('have.value', 'Prison Name')
-      page.saveAndContinueButton().should('exist')
-      page.saveAndReturnButton().should('exist')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndContinueButton.should('exist')
     })
   })
 
@@ -203,7 +202,7 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       cy.get('input[type="radio"][value="PROBATION_OFFICE"]').check()
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
       cy.get('#startDate-error').should('contain', 'Start date is required')
       cy.get('#endDate-error').should('contain', 'End date is required')
@@ -230,7 +229,7 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       cy.get('input[type="radio"][value="PRISON"]').check()
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
       cy.get('#startDate-error').should('contain', 'Start date is required')
       cy.get('#endDate-error').should('contain', 'End date is required')
@@ -259,8 +258,8 @@ context('Alcohol monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.fillInForm('probationOffice')
-      page.saveAndContinueButton().click()
+      page.fillInForm('at the probation office')
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-alcohol`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
@@ -281,8 +280,8 @@ context('Alcohol monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.fillInForm('prison')
-      page.saveAndContinueButton().click()
+      page.fillInForm('at prison')
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-alcohol`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({

@@ -6,8 +6,8 @@ import FormFileUploadComponent from '../../formFileUploadComponent'
 
 export type EnforcementZoneFormData = {
   zoneType?: string
-  startDate?: string
-  endDate?: string
+  startDate?: Date
+  endDate?: Date
   uploadFile?: {
     fileName: string
     contents: string
