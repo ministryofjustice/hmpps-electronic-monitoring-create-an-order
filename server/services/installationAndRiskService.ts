@@ -13,6 +13,15 @@ export default class InstallationAndRiskService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: UpdateMonitoringConditionsInput): Promise<InstallationAndRisk | ValidationResult> {
+    return Promise.resolve({
+      mappaCaseType: '',
+      mappaLevel: '',
+      riskCategory: [],
+      riskDetails: '',
+      riskOfSelfHarm: '',
+      riskOfSeriousHarm: '',
+    })
+
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/installation-and-risk`,
