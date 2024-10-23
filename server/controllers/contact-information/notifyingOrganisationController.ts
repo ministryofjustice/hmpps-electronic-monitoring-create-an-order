@@ -162,7 +162,7 @@ export default class NotifyingOrganisationController {
 
       res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
+      res.redirect(paths.INSTALLATION_AND_RISK.replace(':orderId', orderId))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
