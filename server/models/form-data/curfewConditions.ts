@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const CurfewConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
-  addresses: z.array(z.string()).optional(),
+  addresses: z.string().or(z.array(z.string())).optional(),
   'startDate-day': z.string(),
   'startDate-month': z.string(),
   'startDate-year': z.string(),

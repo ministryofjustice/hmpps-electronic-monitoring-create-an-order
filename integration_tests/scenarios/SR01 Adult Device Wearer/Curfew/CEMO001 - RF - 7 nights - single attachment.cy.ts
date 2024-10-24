@@ -15,6 +15,10 @@ import NotifyingOrganisationPage from '../../../pages/order/contact-information/
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
+import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
+import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
+import SubmitSuccessPage from '../../../pages/order/submit-success'
 
 context('Scenarios', () => {
   beforeEach(() => {
@@ -38,7 +42,7 @@ context('Scenarios', () => {
 
     cy.signIn()
 
-    const indexPage = Page.verifyOnPage(IndexPage)
+    let indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton().click()
 
     let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -93,5 +97,122 @@ context('Scenarios', () => {
     const installationAddress = Page.verifyOnPage(InstallationAddressPage)
     installationAddress.form.fillInWith(installationAddressDetails)
     installationAddress.form.saveAndContinueButton.click()
+
+    const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+    curfewReleaseDatePage.form.fillInWith({
+      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      startTime: '19:00:00',
+      endTime: '07:00:00',
+      address: 'Primary address',
+    })
+    curfewReleaseDatePage.form.saveAndContinueButton.click()
+
+    const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
+    curfewConditionsPage.form.fillInWith({
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 90), // 30 days
+      addresses: ['Primary address'],
+    })
+    curfewConditionsPage.form.saveAndContinueButton.click()
+
+    const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
+    curfewTimetablePage.fillInForm({
+      curfewTimeTable: [
+        {
+          dayOfWeek: 'MONDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'MONDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'TUESDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'TUESDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'SECONDARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'WEDNESDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'SECONDARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'WEDNESDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'TERTIARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'THURSDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'TERTIARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'THURSDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'FRIDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'FRIDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'SECONDARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'SATURDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'SECONDARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'SATURDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'TERTIARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'SUNDAY',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          curfewAddress: 'TERTIARY_ADDRESS',
+        },
+        {
+          dayOfWeek: 'SUNDAY',
+          startTime: '19:00:00',
+          endTime: '11:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+        },
+      ],
+    })
+    curfewTimetablePage.form.saveAndContinueButton.click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage.submissionFormButton().click()
+
+    const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+    submitSuccessPage.backToYourApplications.click()
+
+    indexPage = Page.verifyOnPage(IndexPage)
+    // indexPage.ordersListItems().contains('Submitted')
   })
 })

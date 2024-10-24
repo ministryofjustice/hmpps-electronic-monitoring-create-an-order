@@ -14,8 +14,15 @@ const createViewModelFromFormData = (
   formData: CurfewConditionsFormData,
   validationErrors: ValidationResult,
 ): CurfewConditionsViewModel => {
+  let addresses: string[] = []
+  if (Array.isArray(formData.addresses)) {
+    addresses = formData.addresses
+  } else if (formData.addresses) {
+    addresses = [formData.addresses]
+  }
+
   return {
-    addresses: { values: formData.addresses ?? [], error: getError(validationErrors, 'curfewAddress') },
+    addresses: { values: addresses, error: getError(validationErrors, 'curfewAddress') },
     startDate: {
       value: { day: formData['startDate-day'], month: formData['startDate-month'], year: formData['startDate-year'] },
       error: getError(validationErrors, 'startDate'),
