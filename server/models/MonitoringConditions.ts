@@ -10,6 +10,8 @@ const MonitoringConditionsModel = z.object({
   mandatoryAttendance: z.boolean().nullable(),
   alcohol: z.boolean().nullable(),
   devicesRequired: z.array(z.string()).nullable(),
+  conditionType: z.string().nullable(),
+  orderTypeDescription: z.string().nullable(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>

@@ -30,6 +30,8 @@ const monitoringConditionsFormDataModel = z.object({
   devicesRequired: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
+  orderTypeDescription: z.coerce.string(),
+  conditionType: z.coerce.string(),
 })
 
 type MonitoringConditionsFormData = z.infer<typeof monitoringConditionsFormDataModel>
@@ -40,6 +42,8 @@ type MonitoringConditionsViewModel = {
   orderType: TextField
   monitoringRequired: MultipleChoiceField
   devicesRequired: MultipleChoiceField
+  orderTypeDescription: TextField
+  conditionType: TextField
 }
 
 export default class MonitoringConditionsController {
@@ -75,6 +79,8 @@ export default class MonitoringConditionsController {
       devicesRequired: {
         values: monitoringConditions.devicesRequired ?? [],
       },
+      orderTypeDescription: { value: monitoringConditions.orderTypeDescription ?? '' },
+      conditionType: { value: monitoringConditions.conditionType ?? '' },
     }
   }
 
@@ -100,6 +106,11 @@ export default class MonitoringConditionsController {
         values: formData.devicesRequired,
         error: getError(validationErrors, 'devicesRequired'),
       },
+      orderTypeDescription: {
+        value: formData.orderTypeDescription,
+        error: getError(validationErrors, 'orderTypeDescription'),
+      },
+      conditionType: { value: formData.conditionType, error: getError(validationErrors, 'conditionType') },
     }
   }
 
@@ -114,6 +125,8 @@ export default class MonitoringConditionsController {
       mandatoryAttendance: formData.monitoringRequired.includes('mandatoryAttendance'),
       alcohol: formData.monitoringRequired.includes('alcohol'),
       devicesRequired: formData.devicesRequired.length > 0 ? formData.devicesRequired : null,
+      orderTypeDescription: formData.orderTypeDescription === '' ? null : formData.orderTypeDescription,
+      conditionType: formData.conditionType === '' ? null : formData.conditionType,
     }
   }
 
