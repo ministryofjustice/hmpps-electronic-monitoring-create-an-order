@@ -20,6 +20,8 @@ const DeviceWearerFormDataModel = z.object({
   'dateOfBirth-day': z.string(),
   'dateOfBirth-month': z.string(),
   'dateOfBirth-year': z.string(),
+  language: z.string(),
+  interpreterRequired: z.string().default(''),
   adultAtTimeOfInstallation: z.string().default(''),
   sex: z.string().default(''),
   gender: z.string().default(''),
@@ -48,6 +50,8 @@ type DeviceWearerViewModel = {
   sex: TextField
   gender: TextField
   disabilities: MultipleChoiceField
+  language: TextField
+  interpreterRequired: TextField
 }
 
 export default class DeviceWearerController {
@@ -82,6 +86,11 @@ export default class DeviceWearerController {
       sex: { value: formData.sex || '', error: getError(validationErrors, 'sex') },
       gender: { value: formData.gender || '', error: getError(validationErrors, 'gender') },
       disabilities: { values: formData.disabilities || '', error: getError(validationErrors, 'disabilities') },
+      language: { value: formData.language || '', error: getError(validationErrors, 'language') },
+      interpreterRequired: {
+        value: formData.interpreterRequired || '',
+        error: getError(validationErrors, 'interpreterRequired'),
+      },
     }
   }
 
@@ -108,6 +117,8 @@ export default class DeviceWearerController {
       sex: { value: deviceWearer.sex || '' },
       gender: { value: deviceWearer.gender || '' },
       disabilities: { values: deviceWearer.disabilities ?? [] },
+      language: { value: deviceWearer.language || '' },
+      interpreterRequired: { value: String(deviceWearer.interpreterRequired) || '' },
     }
   }
 

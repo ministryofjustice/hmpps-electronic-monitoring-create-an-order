@@ -27,6 +27,8 @@ const mockOrder = getMockOrder({
     gender: 'male',
     disabilities: ['Vision', 'Mobilitiy'],
     noFixedAbode: null,
+    interpreterRequired: true,
+    language: 'British Sign',
   },
 })
 
@@ -87,6 +89,8 @@ describe('DeviceWearerController', () => {
           sex: { value: 'male' },
           gender: { value: 'male' },
           disabilities: { values: ['Vision', 'Mobilitiy'] },
+          interpreterRequired: { value: 'true' },
+          language: { value: 'British Sign' },
         }),
       )
     })
@@ -115,6 +119,8 @@ describe('DeviceWearerController', () => {
             sex: 'female',
             gender: 'female',
             disabilities: ['Vision', 'Hearing'],
+            interpreterRequired: 'true',
+            language: 'British Sign',
           },
         ])
 
@@ -140,6 +146,8 @@ describe('DeviceWearerController', () => {
           sex: { value: 'female' },
           gender: { value: 'female' },
           disabilities: { values: ['Vision', 'Hearing'] },
+          interpreterRequired: { value: 'true' },
+          language: { value: 'British Sign' },
         }),
       )
     })
@@ -168,6 +176,8 @@ describe('DeviceWearerController', () => {
         sex: 'female',
         gender: 'female',
         disabilities: 'Vision',
+        interpreterRequired: 'true',
+        language: 'British Sign',
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue([
         { error: 'Date of birth must be in the past', field: 'dateOfBirth' },
@@ -193,6 +203,8 @@ describe('DeviceWearerController', () => {
         sex: 'female',
         gender: 'female',
         disabilities: ['Vision'],
+        interpreterRequired: 'true',
+        language: 'British Sign',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
@@ -225,6 +237,8 @@ describe('DeviceWearerController', () => {
         sex: 'female',
         gender: 'female',
         disabilities: ['Vision', 'Hearing'],
+        interpreterRequired: 'true',
+        language: 'British Sign',
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
         nomisId: null,
@@ -240,6 +254,8 @@ describe('DeviceWearerController', () => {
         gender: 'male',
         disabilities: ['Vision', 'Mobilitiy'],
         noFixedAbode: null,
+        interpreterRequired: true,
+        language: 'British Sign',
       })
 
       // When
@@ -272,6 +288,8 @@ describe('DeviceWearerController', () => {
         sex: 'female',
         gender: 'female',
         disabilities: ['Vision', 'Hearing'],
+        interpreterRequired: 'true',
+        language: 'British Sign',
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
         nomisId: null,
@@ -287,6 +305,8 @@ describe('DeviceWearerController', () => {
         gender: 'male',
         disabilities: ['Vision', 'Mobilitiy'],
         noFixedAbode: null,
+        interpreterRequired: true,
+        language: 'British Sign',
       })
 
       // When
@@ -319,6 +339,8 @@ describe('DeviceWearerController', () => {
         sex: 'female',
         gender: 'female',
         disabilities: ['Vision', 'Hearing'],
+        interpreterRequired: 'true',
+        language: 'British Sign',
       }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
         nomisId: null,
@@ -334,6 +356,8 @@ describe('DeviceWearerController', () => {
         gender: 'male',
         disabilities: ['Vision', 'Mobilitiy'],
         noFixedAbode: null,
+        interpreterRequired: true,
+        language: 'British Sign',
       })
 
       // When

@@ -76,6 +76,8 @@ context('About the device wearer', () => {
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
             noFixedAbode: null,
+            interpreterRequired: true,
+            language: 'British Sign',
           },
         })
 
@@ -96,6 +98,8 @@ context('About the device wearer', () => {
           is18: true,
           sex: 'Male',
           genderIdentity: 'Male',
+          interpreterRequired: true,
+          language: 'British Sign',
         }
 
         page.form.fillInWith(validFormData)
@@ -117,6 +121,8 @@ context('About the device wearer', () => {
             gender: 'male',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
+            interpreterRequired: 'true',
+            language: 'British Sign',
           },
         }).should('be.true')
 
@@ -146,6 +152,8 @@ context('About the device wearer', () => {
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
             noFixedAbode: null,
+            interpreterRequired: true,
+            language: 'British Sign',
           },
         })
 
@@ -166,6 +174,8 @@ context('About the device wearer', () => {
           is18: false,
           sex: 'Male',
           genderIdentity: 'Male',
+          interpreterRequired: true,
+          language: 'British Sign',
         }
 
         page.form.fillInWith(validFormData)
@@ -187,6 +197,8 @@ context('About the device wearer', () => {
             gender: 'male',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
+            interpreterRequired: 'true',
+            language: 'British Sign',
           },
         }).should('be.true')
 

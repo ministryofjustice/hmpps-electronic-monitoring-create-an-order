@@ -11,6 +11,8 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
 
 {% block content %}
 
@@ -354,6 +356,166 @@
       errorMessage: disabilities.error,
       disabled: not isOrderEditable
     }) }}
+
+   
+
+    {{ govukRadios({
+      name: "interpreterRequired", 
+      classes: "govuk-radios--inline",    
+      fieldset:{
+        legend: {
+          text: "Language",
+          classes: "govuk-fieldset__legend--m",
+          isPageHeading: false
+        }
+      },      
+      hint: {
+        text: "Is an interpreter needed"
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: interpreterRequired.value,
+      errorMessage: interpreterRequired.error,
+      disabled: not isOrderEditable
+    }) }}
+    {{ govukSelect({
+        id: "language",
+        name: "language",
+        label: {
+          text: "What is the device wearer's main language"
+        },
+        hint:{
+          text:"Select One"
+        },
+        items: [
+          { text: 'Select', value: '' },
+          { text: "British Sign", value: "British Sign" },
+          { text: "Lipspeak (English)", value: "Lipspeak (English)" },
+          { text: "Palantypists", value: "Palantypists" },
+          { text: "Sign Supported English", value: "Sign Supported English" },
+          { text: "Albanian", value: "Albanian" },
+          { text: "Algerian", value: "Algerian" },
+          { text: "Amharic", value: "Amharic" },
+          { text: "Arabic", value: "Arabic" },
+          { text: "Armenian (Eastern)", value: "Armenian (Eastern)" },
+          { text: "Azerbaijani", value: "Azerbaijani" },
+          { text: "Azeri", value: "Azeri" },
+          { text: "Bambara", value: "Bambara" },
+          { text: "Belarusian", value: "Belarusian" },
+          { text: "Bengali", value: "Bengali" },
+          { text: "Bilen", value: "Bilen" },
+          { text: "Bosnian", value: "Bosnian" },
+          { text: "Bravanese", value: "Bravanese" },
+          { text: "Bulgarian", value: "Bulgarian" },
+          { text: "Cantonese", value: "Cantonese" },
+          { text: "Croatian", value: "Croatian" },
+          { text: "Czech", value: "Czech" },
+          { text: "Dari", value: "Dari" },
+          { text: "Dioula", value: "Dioula" },
+          { text: "Dutch", value: "Dutch" },
+          { text: "Farsi", value: "Farsi" },
+          { text: "Flemish (Dutch)", value: "Flemish (Dutch)" },
+          { text: "French", value: "French" },
+          { text: "Fula", value: "Fula" },
+          { text: "Georgian", value: "Georgian" },
+          { text: "German", value: "German" },
+          { text: "Greek", value: "Greek" },
+          { text: "Gujarati", value: "Gujarati" },
+          { text: "Hebrew", value: "Hebrew" },
+          { text: "Hindi", value: "Hindi" },
+          { text: "Hindko", value: "Hindko" },
+          { text: "Hungarian", value: "Hungarian" },
+          { text: "Igbo", value: "Igbo" },
+          { text: "Ilocano", value: "Ilocano" },
+          { text: "Indonesian", value: "Indonesian" },
+          { text: "Italian", value: "Italian" },
+          { text: "Jamaican Patois", value: "Jamaican Patois" },
+          { text: "Japanese", value: "Japanese" },
+          { text: "Kibajuni", value: "Kibajuni" },
+          { text: "Kikuyu", value: "Kikuyu" },
+          { text: "Kinyarwanda", value: "Kinyarwanda" },
+          { text: "Kirundi", value: "Kirundi" },
+          { text: "Korean", value: "Korean" },
+          { text: "Krio", value: "Krio" },
+          { text: "Kurdish:Bahdini", value: "Kurdish:Bahdini" },
+          { text: "Kurdish:Feyli", value: "Kurdish:Feyli" },
+          { text: "Kurdish:Kurmanji", value: "Kurdish:Kurmanji" },
+          { text: "Kurdish:Sorani", value: "Kurdish:Sorani" },
+          { text: "Lao", value: "Lao" },
+          { text: "Latvian", value: "Latvian" },
+          { text: "Lingala", value: "Lingala" },
+          { text: "Lithuanian", value: "Lithuanian" },
+          { text: "Luganda", value: "Luganda" },
+          { text: "Macedonian (Gorani)", value: "Macedonian (Gorani)" },
+          { text: "Malayalam", value: "Malayalam" },
+          { text: "Mandarin", value: "Mandarin" },
+          { text: "Mandinka", value: "Mandinka" },
+          { text: "Maninka", value: "Maninka" },
+          { text: "Mauritian Creole", value: "Mauritian Creole" },
+          { text: "Mende", value: "Mende" },
+          { text: "Mirpuri", value: "Mirpuri" },
+          { text: "Moldovan", value: "Moldovan" },
+          { text: "Mongolian", value: "Mongolian" },
+          { text: "Moroccan", value: "Moroccan" },
+          { text: "Nepalese", value: "Nepalese" },
+          { text: "Norwegian", value: "Norwegian" },
+          { text: "Oromo", value: "Oromo" },
+          { text: "Pahari", value: "Pahari" },
+          { text: "Pangasinan", value: "Pangasinan" },
+          { text: "Panjabi (Indian)", value: "Panjabi (Indian)" },
+          { text: "Panjabi (Pakistani)", value: "Panjabi (Pakistani)" },
+          { text: "Pashto", value: "Pashto" },
+          { text: "Pidgin English (Nigerian)", value: "Pidgin English (Nigerian)" },
+          { text: "Pidgin English (West African)", value: "Pidgin English (West African)" },
+          { text: "Polish", value: "Polish" },
+          { text: "Portuguese", value: "Portuguese" },
+          { text: "Pothwari", value: "Pothwari" },
+          { text: "Romani", value: "Romani" },
+          { text: "Romanian", value: "Romanian" },
+          { text: "Russian", value: "Russian" },
+          { text: "Serbian", value: "Serbian" },
+          { text: "Shona", value: "Shona" },
+          { text: "Sinhalese", value: "Sinhalese" },
+          { text: "Slovak", value: "Slovak" },
+          { text: "Somali", value: "Somali" },
+          { text: "Spanish", value: "Spanish" },
+          { text: "Sudanese Arabic", value: "Sudanese Arabic" },
+          { text: "Susu", value: "Susu" },
+          { text: "Swahili", value: "Swahili" },
+          { text: "Swedish", value: "Swedish" },
+          { text: "Sylheti", value: "Sylheti" },
+          { text: "Tagalog", value: "Tagalog" },
+          { text: "Tamil", value: "Tamil" },
+          { text: "Telugu", value: "Telugu" },
+          { text: "Temne", value: "Temne" },
+          { text: "Thai", value: "Thai" },
+          { text: "Tigrinya", value: "Tigrinya" },
+          { text: "Turkish", value: "Turkish" },
+          { text: "Twi", value: "Twi" },
+          { text: "Ukrainian", value: "Ukrainian" },
+          { text: "Urdu", value: "Urdu" },
+          { text: "Vietnamese", value: "Vietnamese" },
+          { text: "Wolof", value: "Wolof" },
+          { text: "Yoruba", value: "Yoruba" },
+          { text: "Zaghawa", value: "Zaghawa" }
+        ],
+        value: language.value,
+        errorMessage: language.error,        
+        disabled: not isOrderEditable
+     }) }}
+
+    
+
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
