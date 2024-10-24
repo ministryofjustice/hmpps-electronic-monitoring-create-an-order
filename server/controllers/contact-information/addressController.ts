@@ -8,6 +8,7 @@ import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
 import { Order } from '../../models/Order'
 import nextPage, { getSelectedMonitoringTypes } from '../monitoringConditions/nextPage'
+import TaskListService from '../../services/taskListService'
 
 const FormDataModel = z.object({
   action: z.string().default('continue'),
@@ -35,6 +36,7 @@ export default class AddressController {
   constructor(
     private readonly auditService: AuditService,
     private readonly addressService: AddressService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   getCurrentPage(addressType: string) {
@@ -100,10 +102,14 @@ export default class AddressController {
       req.flash('validationErrors', result)
 
       res.redirect(this.getCurrentPage(addressType).replace(':orderId', orderId))
-    } else if (action === 'back') {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    } else if (action === 'continue') {
+      res.redirect(
+        this.taskListService.getNextPage('PRIMARY_ADDRESS', req.order!, {
+          hasAnotherAddress: hasAnotherAddress === 'true',
+        }),
+      )
     } else {
-      res.redirect(this.getNextPage(addressType, order, hasAnotherAddress).replace(':orderId', orderId))
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }
 }

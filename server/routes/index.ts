@@ -42,6 +42,7 @@ export default function routes({
   notifyingOrganisationService,
   orderService,
   orderSearchService,
+  taskListService,
   trailMonitoringService,
   zoneService,
 }: Services): Router {
@@ -49,19 +50,23 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  const addressController = new AddressController(auditService, addressService)
+  const addressController = new AddressController(auditService, addressService, taskListService)
   const alcoholMonitoringController = new AlcoholMonitoringController(auditService, alcoholMonitoringService)
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
   const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
-  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
+  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(auditService, curfewReleaseDateService)
   const curfewTimetableController = new CurfewTimetableController(auditService, curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(auditService, curfewConditionsService)
-  const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
+  const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, taskListService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
-  const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
+  const installationAndRiskController = new InstallationAndRiskController(
+    auditService,
+    installationAndRiskService,
+    taskListService,
+  )
   const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
-  const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService)
+  const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
   const notifyingOrganisationController = new NotifyingOrganisationController(
     auditService,
     notifyingOrganisationService,
