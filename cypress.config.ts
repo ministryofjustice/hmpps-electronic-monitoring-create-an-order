@@ -1,4 +1,6 @@
 import { defineConfig } from 'cypress'
+import { fakerEN_GB as faker } from '@faker-js/faker'
+
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
@@ -16,6 +18,8 @@ export default defineConfig({
   taskTimeout: 60000,
   e2e: {
     setupNodeEvents(on) {
+      faker.seed(Math.random() * Number.MAX_SAFE_INTEGER)
+
       on('task', {
         reset: resetStubs,
         ...auth,

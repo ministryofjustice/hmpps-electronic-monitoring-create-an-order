@@ -2,10 +2,6 @@ import { fakerEN_GB as faker } from '@faker-js/faker'
 
 faker.seed(9999)
 
-export const setFakerSeed = (seed: number) => {
-  faker.seed(seed)
-}
-
 const sexOptions = ['Male', 'Female', 'Prefer not to say', "Don't know"]
 
 const genderOptions = ['Male', 'Female', 'Non-binary', "Don't know", 'Self identify']
@@ -163,32 +159,38 @@ export const createFakeAdult = (): PersonOfInterest => {
 }
 
 export const createFakeAdultDeviceWearer = (): PersonOfInterest => {
+  const fakeAdult = createFakeAdult()
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
+  const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
     nomisId,
     pncId,
     deliusId,
     prisonNumber,
-    ...createFakeAdult(),
+    homeOfficeReferenceNumber,
+    ...fakeAdult,
   } as PersonOfInterest
 }
 
 export const createFakeYouthDeviceWearer = (): PersonOfInterest => {
+  const fakeYouth = createFakeYouth()
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
+  const homeOfficeReferenceNumber = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
     nomisId,
     pncId,
     deliusId,
     prisonNumber,
-    ...createFakeYouth(),
+    homeOfficeReferenceNumber,
+    ...fakeYouth,
   } as PersonOfInterest
 }
 

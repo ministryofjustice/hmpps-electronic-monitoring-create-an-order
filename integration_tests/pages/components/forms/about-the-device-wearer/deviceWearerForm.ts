@@ -217,8 +217,14 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // FORM HELPERS
 
   fillInWith = (profile: AboutDeviceWearerFormData): undefined => {
-    this.nomisIdField.set(profile.nomisId)
-    this.pncIdField.set(profile.pncId)
+    if (profile.nomisId) {
+      this.nomisIdField.set(profile.nomisId)
+    }
+
+    if (profile.pncId) {
+      this.pncIdField.set(profile.pncId)
+    }
+
     this.deliusIdField.set(profile.deliusId)
     this.prisonNumberField.set(profile.prisonNumber)
     this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
@@ -230,11 +236,21 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
     this.dateOfBirthField.set(profile.dob)
 
-    this.is18Field.set(profile.is18 ? 'Yes' : 'No')
-    this.sexField.set(profile.sex)
-    this.genderIdentityField.set(profile.genderIdentity)
+    if (profile.is18 !== undefined) {
+      this.is18Field.set(profile.is18 ? 'Yes' : 'No')
+    }
 
-    this.interpreterRequiredField.set(profile.interpreterRequired ? 'Yes' : 'No')
+    if (profile.sex) {
+      this.sexField.set(profile.sex)
+    }
+
+    if (profile.genderIdentity) {
+      this.genderIdentityField.set(profile.genderIdentity)
+    }
+
+    if (profile.interpreterRequired !== undefined) {
+      this.interpreterRequiredField.set(profile.interpreterRequired ? 'Yes' : 'No')
+    }
 
     if (profile.language) {
       this.languageField.set(profile.language)

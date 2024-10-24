@@ -18,6 +18,7 @@ import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
+import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 
 context('Scenarios', () => {
   beforeEach(() => {
@@ -49,7 +50,10 @@ context('Scenarios', () => {
     orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
 
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-    aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
+    aboutDeviceWearerPage.form.fillInWith({
+      ...deviceWearerDetails,
+      interpreterRequired: false,
+    })
     aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
     const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
@@ -77,9 +81,19 @@ context('Scenarios', () => {
     notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
     notifyingOrganisationPage.form.saveAndContinueButton.click()
 
+    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+    installationAndRiskPage.saveAndContinueButton().click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage.MonitoringConditionsSectionItem().click()
+
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.fillInWith({
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30), // 30 days
       orderType: 'Post Release',
+      orderTypeDescription: 'DAPOL HDC',
+      conditionType: 'Bail Order',
       monitoringRequired: 'Exclusion and inclusion zone monitoring',
       devicesRequired: 'Location, fitted',
     })
@@ -104,8 +118,7 @@ context('Scenarios', () => {
       duration: '90 days',
       anotherZone: 'No',
     })
-    // enforcementZonePage.form.saveAndContinueButton.click()
-    enforcementZonePage.backToSummaryButton.click()
+    enforcementZonePage.form.saveAndContinueButton.click()
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.submissionFormButton().click()
