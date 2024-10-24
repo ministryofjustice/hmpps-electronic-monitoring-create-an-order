@@ -9,6 +9,8 @@ export type MonitoringConditionsFormData = {
   orderType?: string
   monitoringRequired?: string | string[]
   devicesRequired?: string | string[]
+  orderTypeDescription?: string
+  conditionType?: string
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -38,6 +40,24 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Post Release',
       'Pre-Trial',
       'Special',
+    ])
+  }
+
+  get orderTypeDescriptionField(): FormSelectComponent {
+    return new FormSelectComponent(this.form, 'Select order type', [
+      'DAPOL',
+      'DAPOL HDC',
+      'GPS Acquisitive Crime HDC',
+      'GPS Acquisitive Crime Parole',
+    ])
+  }
+
+  get conditionTypeField(): FormSelectComponent {
+    return new FormSelectComponent(this.form, 'Select order type', [
+      'Requirement of a Community Order',
+      'License Condition of a Custodial Order',
+      'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+      'Bail Order',
     ])
   }
 
@@ -83,6 +103,14 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     if (data.devicesRequired) {
       this.devicesRequiredField.set(data.devicesRequired)
     }
+
+    if (data.orderTypeDescription) {
+      this.orderTypeDescriptionField.set(data.orderTypeDescription)
+    }
+
+    if (data.conditionType) {
+      this.conditionTypeField.set(data.conditionType)
+    }
   }
 
   shouldBeValid(): void {
@@ -91,6 +119,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldNotHaveValidationMessage()
     this.monitoringRequiredField.shouldNotHaveValidationMessage()
     this.devicesRequiredField.shouldNotHaveValidationMessage()
+    this.orderTypeDescriptionField.shouldNotHaveValidationMessage()
+    this.conditionTypeField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
@@ -99,5 +129,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldBeDisabled()
     this.monitoringRequiredField.shouldBeDisabled()
     this.devicesRequiredField.shouldBeDisabled()
+    this.orderTypeDescriptionField.shouldBeDisabled()
+    this.conditionTypeField.shouldBeDisabled()
   }
 }

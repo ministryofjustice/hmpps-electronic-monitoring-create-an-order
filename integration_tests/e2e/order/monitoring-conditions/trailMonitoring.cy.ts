@@ -13,6 +13,8 @@ const mockEmptyTrailMonitoring = {
   },
   monitoringConditions: {
     orderType: 'immigration',
+    orderTypeDescription: null,
+    conditionType: null,
     acquisitiveCrime: true,
     dapol: true,
     curfew: false,
@@ -37,6 +39,8 @@ const mockSubmittedTrailMonitoring = {
   },
   monitoringConditions: {
     orderType: 'immigration',
+    orderTypeDescription: null,
+    conditionType: null,
     acquisitiveCrime: true,
     dapol: true,
     curfew: true,
