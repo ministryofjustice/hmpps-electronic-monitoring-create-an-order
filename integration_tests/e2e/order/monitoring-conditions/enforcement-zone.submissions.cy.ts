@@ -26,6 +26,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         order: {
           monitoringConditions: {
             orderType: 'immigration',
+            orderTypeDescription: null,
+            conditionType: null,
             acquisitiveCrime: false,
             dapol: false,
             curfew: false,
@@ -138,6 +140,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         order: {
           monitoringConditions: {
             orderType: 'immigration',
+            orderTypeDescription: null,
+            conditionType: null,
             acquisitiveCrime: false,
             dapol: false,
             curfew: false,
@@ -272,6 +276,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         order: {
           monitoringConditions: {
             orderType: 'immigration',
+            orderTypeDescription: null,
+            conditionType: null,
             acquisitiveCrime: false,
             dapol: false,
             curfew: false,
