@@ -19,7 +19,7 @@ export default class FormRadiosComponent {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
-  set(value: string) {
+  set(value: string | RegExp) {
     this.element.getByLabel(value).check()
   }
 

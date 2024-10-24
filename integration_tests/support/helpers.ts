@@ -8,7 +8,7 @@ Cypress.Commands.add(
     label: string | RegExp,
     options: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow> = {},
   ): Cypress.Chainable<JQuery> => {
-    const log = false
+    const log = true
 
     return cy
       .wrap(subject, { log })

@@ -11,7 +11,7 @@ export type AlcoholMonitoringFormData = {
   monitoringType?: string
   startDate?: Date
   endDate?: Date
-  installLocation?: string
+  installLocation?: string | RegExp
 }
 
 export default class AlcoholMonitoringFormComponent extends FormComponent {

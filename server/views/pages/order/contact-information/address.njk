@@ -14,7 +14,7 @@
 
 {% block content %}
 
-  {% set section = "Monitoring Conditions" if addressType | lower == "installation" else "Contact information" %}
+  {% set section = "Monitoring conditions" if addressType | lower == "installation" else "Contact information" %}
 
   {{ govukBackLink({
     text: "Back",
@@ -36,7 +36,7 @@
   <div class="homepage-content">
     {{ mojPageHeaderActions({
       heading: {
-          text: section 
+          text: section
       }
     }) }}
   </div>

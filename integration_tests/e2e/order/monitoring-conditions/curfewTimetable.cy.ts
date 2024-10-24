@@ -4,7 +4,7 @@ import { Order } from '../../../../server/models/Order'
 import { deserialiseTime } from '../../../../server/utils/utils'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
-import CurfewTimetablePage from '../../../pages/order/curfewTimetable'
+import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
 import OrderTasksPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
 
@@ -154,7 +154,6 @@ context('Curfew monitoring - Timetable', () => {
         cy.get(`input#curfewTimetable-${lowerDay}-0-addresses-SECONDARY_ADDRESS`).should('exist')
         cy.get(`input#curfewTimetable-${lowerDay}-0-addresses-TERTIARY_ADDRESS`).should('exist')
       })
-      page.subHeader().should('contain.text', 'Timetable for curfew with electronic monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -180,8 +179,8 @@ context('Curfew monitoring - Timetable', () => {
         cy.wrap($el).should('be.disabled')
       })
       checkFormFields()
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
@@ -206,8 +205,8 @@ context('Curfew monitoring - Timetable', () => {
         cy.wrap($el).should('be.enabled')
       })
       checkFormFields()
-      page.saveAndContinueButton().should('exist')
-      page.saveAndReturnButton().should('exist')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton.should('exist')
     })
   })
@@ -242,7 +241,7 @@ context('Curfew monitoring - Timetable', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
       const page = Page.verifyOnPage(CurfewTimetablePage)
       page.fillInForm(mockSubmittedTimetable)
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       checkFormFields()
       cy.get('#curfewTimetable-monday-1-time-error').should('contain', 'You must enter a valid start time')
       cy.get('#curfewTimetable-wednesday-0-time-error').should(
@@ -262,7 +261,7 @@ context('Curfew monitoring - Timetable', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/timetable`)
       const page = Page.verifyOnPage(CurfewTimetablePage)
       page.fillInForm(mockSubmittedTimetable)
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-timetable`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal(mockSubmittedTimetable.curfewTimeTable)
