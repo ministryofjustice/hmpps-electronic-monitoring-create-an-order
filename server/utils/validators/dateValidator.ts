@@ -15,10 +15,15 @@ const DateValidationResonseModel = z.object({
 type DateValidationResponse = z.infer<typeof DateValidationResonseModel>
 
 export default class DateValidator {
-  static isValidDate(dayStr: string, monthStr: string, yearStr: string, field: string): DateValidationResponse {
-    const day = dayStr ? parseInt(dayStr, 10) : NaN
-    const month = monthStr ? parseInt(monthStr, 10) : NaN
-    const year = yearStr ? parseInt(yearStr, 10) : NaN
+  static isValidDateFormat(dayStr: string, monthStr: string, yearStr: string, field: string): DateValidationResponse {
+    if (this.isEmpty(dayStr) && this.isEmpty(monthStr) && this.isEmpty(yearStr)) {
+      return { result: true }
+    }
+
+    const day = this.parseNumber(dayStr)
+    const month = this.parseNumber(monthStr)
+    const year = this.parseNumber(yearStr)
+
     const validationError: ValidationError = {
       field,
       error:
@@ -31,5 +36,13 @@ export default class DateValidator {
     } catch (error) {
       return { result: false, error: validationError }
     }
+  }
+
+  private static isEmpty(value: string): boolean {
+    return value.trim().length === 0
+  }
+
+  private static parseNumber(value: string): number {
+    return value ? parseInt(value, 10) : NaN
   }
 }

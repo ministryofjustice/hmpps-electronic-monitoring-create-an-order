@@ -37,7 +37,7 @@ export default class DeviceWearerService {
   constructor(private readonly apiClient: RestClient) {}
 
   async updateDeviceWearer(input: UpdateDeviceWearerRequestInput): Promise<DeviceWearer | ValidationResult> {
-    const isDateOfBirthValid = DateValidator.isValidDate(
+    const isDateOfBirthValid = DateValidator.isValidDateFormat(
       input.data['dateOfBirth-day'],
       input.data['dateOfBirth-month'],
       input.data['dateOfBirth-year'],
