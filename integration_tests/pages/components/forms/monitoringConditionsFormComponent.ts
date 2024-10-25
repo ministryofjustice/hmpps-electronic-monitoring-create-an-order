@@ -2,6 +2,7 @@ import FormCheckboxesComponent from '../formCheckboxesComponent'
 import FormComponent from '../formComponent'
 import FormRadiosComponent from '../formRadiosComponent'
 import FormSelectComponent from '../formSelectComponent'
+import FormDateComponent from '../formDateComponent'
 
 export type MonitoringConditionsFormData = {
   isPartOfACP?: string
@@ -9,6 +10,10 @@ export type MonitoringConditionsFormData = {
   orderType?: string
   monitoringRequired?: string | string[]
   devicesRequired?: string | string[]
+  orderTypeDescription?: string
+  conditionType?: string
+  startDate?: Date
+  endDate?: Date
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -41,6 +46,24 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
+  get orderTypeDescriptionField(): FormSelectComponent {
+    return new FormSelectComponent(this.form, 'Select order type', [
+      'DAPOL',
+      'DAPOL HDC',
+      'GPS Acquisitive Crime HDC',
+      'GPS Acquisitive Crime Parole',
+    ])
+  }
+
+  get conditionTypeField(): FormSelectComponent {
+    return new FormSelectComponent(this.form, 'Select order type', [
+      'Requirement of a Community Order',
+      'License Condition of a Custodial Order',
+      'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+      'Bail Order',
+    ])
+  }
+
   get monitoringRequiredField(): FormCheckboxesComponent {
     return new FormCheckboxesComponent(this.form, 'Monitoring required', [
       'Curfew with electronic monitoring',
@@ -59,6 +82,14 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Alcohol, transdermal',
       'Alcohol, remote breath',
     ])
+  }
+
+  get startDateField(): FormDateComponent {
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
+  }
+
+  get endDateField(): FormDateComponent {
+    return new FormDateComponent(this.form, 'End date of monitoring(optional)')
   }
 
   // FORM HELPERS
@@ -83,6 +114,22 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     if (data.devicesRequired) {
       this.devicesRequiredField.set(data.devicesRequired)
     }
+
+    if (data.orderTypeDescription) {
+      this.orderTypeDescriptionField.set(data.orderTypeDescription)
+    }
+
+    if (data.conditionType) {
+      this.conditionTypeField.set(data.conditionType)
+    }
+
+    if (data.startDate) {
+      this.startDateField.set(data.startDate)
+    }
+
+    if (data.endDate) {
+      this.endDateField.set(data.endDate)
+    }
   }
 
   shouldBeValid(): void {
@@ -91,6 +138,10 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldNotHaveValidationMessage()
     this.monitoringRequiredField.shouldNotHaveValidationMessage()
     this.devicesRequiredField.shouldNotHaveValidationMessage()
+    this.orderTypeDescriptionField.shouldNotHaveValidationMessage()
+    this.conditionTypeField.shouldNotHaveValidationMessage()
+    this.startDateField.shouldNotHaveValidationMessage()
+    this.endDateField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
@@ -99,5 +150,9 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldBeDisabled()
     this.monitoringRequiredField.shouldBeDisabled()
     this.devicesRequiredField.shouldBeDisabled()
+    this.orderTypeDescriptionField.shouldBeDisabled()
+    this.conditionTypeField.shouldBeDisabled()
+    this.startDateField.shouldBeDisabled()
+    this.endDateField.shouldBeDisabled()
   }
 }

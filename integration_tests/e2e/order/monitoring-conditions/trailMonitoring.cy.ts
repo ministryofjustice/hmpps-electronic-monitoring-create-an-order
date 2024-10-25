@@ -13,6 +13,8 @@ const mockEmptyTrailMonitoring = {
   },
   monitoringConditions: {
     orderType: 'immigration',
+    orderTypeDescription: null,
+    conditionType: null,
     acquisitiveCrime: true,
     dapol: true,
     curfew: false,
@@ -27,6 +29,8 @@ const mockEmptyTrailMonitoring = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: null,
+    endDate: null,
   },
 }
 
@@ -37,6 +41,8 @@ const mockSubmittedTrailMonitoring = {
   },
   monitoringConditions: {
     orderType: 'immigration',
+    orderTypeDescription: null,
+    conditionType: null,
     acquisitiveCrime: true,
     dapol: true,
     curfew: true,
@@ -51,6 +57,8 @@ const mockSubmittedTrailMonitoring = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: null,
+    endDate: null,
   },
 }
 

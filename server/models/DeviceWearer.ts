@@ -5,6 +5,7 @@ const DeviceWearerModel = z.object({
   pncId: z.string().nullable(),
   deliusId: z.string().nullable(),
   prisonNumber: z.string().nullable(),
+  homeOfficeReferenceNumber: z.string().nullable(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
   alias: z.string().nullable(),

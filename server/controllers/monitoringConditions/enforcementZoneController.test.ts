@@ -62,6 +62,10 @@ describe('EnforcementZoneController', () => {
           devicesRequired: [],
           exclusionZone: false,
           trail: false,
+          orderTypeDescription: '',
+          conditionType: '',
+          startDate: '',
+          endDate: '',
         },
       }),
       user: {

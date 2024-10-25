@@ -43,6 +43,83 @@
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
+    {{ govukDateInput({
+      id: "startDate",
+
+      fieldset: {
+        legend: {
+          text: "Enter the date for when monitoring starts",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2032"
+      },
+      items: [
+        {
+          name: "startDay",
+          classes: "govuk-input--width-2",
+          label: "Day",
+          value: startDate.value.day,
+          disabled: not isOrderEditable
+        },
+        {
+          name: "startMonth",
+          classes: "govuk-input--width-2",
+          label: "Month",
+          value: startDate.value.month,
+           disabled: not isOrderEditable
+        },
+        {
+          name: "startYear",
+          classes: "govuk-input--width-4",
+          label: "Year",
+          value: startDate.value.year,
+          disabled: not isOrderEditable
+        }
+      ],
+      errorMessage: startDate.error
+    }) }}
+
+    {{ govukDateInput({
+      id: "endDate",
+      fieldset: {
+        legend: {
+          text: "End date of monitoring(optional)",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2032"
+      },
+      items: [
+        {
+          name: "endDay",
+          label: "Day",
+          classes: "govuk-input--width-2",
+          value: endDate.value.day,
+           disabled: not isOrderEditable
+        },
+        {
+          name: "endMonth",
+          label: "Month",
+          classes: "govuk-input--width-2",
+          value: endDate.value.month,
+           disabled: not isOrderEditable
+        },
+        {
+          name: "endYear",
+          label: "Year",
+          classes: "govuk-input--width-4",
+          value:endDate.value.year,
+           disabled: not isOrderEditable
+        }
+      ],
+      errorMessage: endDate.error
+    }) }}
+
     {% call govukFieldset({
       legend: {
         text: "Monitoring projects",
@@ -135,6 +212,42 @@
         ],
         value: orderType.value,
         errorMessage: orderType.error,
+        disabled: not isOrderEditable
+      }) }}
+
+       {{ govukSelect({
+        id: "orderTypeDescription",
+        name: "orderTypeDescription",
+        label: {
+          text: "Select order type description"
+        },
+        items: [
+          { text: 'Select', value: '' },
+          { text: 'DAPOL', value: 'DAPOL' },
+          { text: 'DAPOL HDC', value: 'DAPOL_HDC' },
+          { text: 'GPS Acquisitive Crime HDC', value: 'GPS_ACQUISITIVE_CRIME_HDC' },
+          { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' }
+        ],
+        value: orderTypeDescription.value,
+        errorMessage: orderTypeDescription.error,
+        disabled: not isOrderEditable
+      }) }}
+
+       {{ govukSelect({
+        id: "conditionType",
+        name: "conditionType",
+        label: {
+          text: "Select condition type"
+        },
+        items: [
+          { text: 'Select', value: '' },
+          { text: 'Requirement of a Community Order', value: 'REQUIREMENT_OF_A_COMMUNITY_ORDER' },
+          { text: 'License Condition of a Custodial Order', value: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER' },
+          { text: 'Post-Sentence Supervision Requirement following on from an Adult Custody order', value: 'POST_SENTENCE_SUPERVISION_REQUIREMENT' },
+          { text: 'Bail Order', value: 'BAIL_ORDER' }
+        ],
+        value: conditionType.value,
+        errorMessage: conditionType.error,
         disabled: not isOrderEditable
       }) }}
     {% endcall %}

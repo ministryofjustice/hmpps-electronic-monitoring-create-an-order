@@ -26,6 +26,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         order: {
           monitoringConditions: {
             orderType: 'immigration',
+            orderTypeDescription: null,
+            conditionType: null,
             acquisitiveCrime: false,
             dapol: false,
             curfew: false,
@@ -34,6 +36,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
             mandatoryAttendance: true,
             alcohol: false,
             devicesRequired: [],
+            startDate: null,
+            endDate: null,
           },
         },
       })
@@ -138,6 +142,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         order: {
           monitoringConditions: {
             orderType: 'immigration',
+            orderTypeDescription: null,
+            conditionType: null,
             acquisitiveCrime: false,
             dapol: false,
             curfew: false,
@@ -146,6 +152,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
             mandatoryAttendance: true,
             alcohol: false,
             devicesRequired: [],
+            startDate: null,
+            endDate: null,
           },
         },
       })
@@ -272,6 +280,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         order: {
           monitoringConditions: {
             orderType: 'immigration',
+            orderTypeDescription: null,
+            conditionType: null,
             acquisitiveCrime: false,
             dapol: false,
             curfew: false,
@@ -280,6 +290,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
             mandatoryAttendance: true,
             alcohol: false,
             devicesRequired: [],
+            startDate: null,
+            endDate: null,
           },
         },
       })

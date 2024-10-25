@@ -14,6 +14,7 @@ const DeviceWearerFormDataModel = z.object({
   pncId: z.string(),
   deliusId: z.string(),
   prisonNumber: z.string(),
+  homeOfficeReferenceNumber: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   alias: z.string(),
@@ -39,6 +40,7 @@ type DeviceWearerViewModel = {
   pncId: TextField
   deliusId: TextField
   prisonNumber: TextField
+  homeOfficeReferenceNumber: TextField
   firstName: TextField
   lastName: TextField
   alias: TextField
@@ -72,6 +74,10 @@ export default class DeviceWearerController {
       pncId: { value: formData.pncId, error: getError(validationErrors, 'pncId') },
       deliusId: { value: formData.deliusId, error: getError(validationErrors, 'deliusId') },
       prisonNumber: { value: formData.prisonNumber, error: getError(validationErrors, 'prisonNumber') },
+      homeOfficeReferenceNumber: {
+        value: formData.homeOfficeReferenceNumber,
+        error: getError(validationErrors, 'homeOfficeReferenceNumber'),
+      },
       firstName: { value: formData.firstName, error: getError(validationErrors, 'firstName') },
       lastName: { value: formData.lastName, error: getError(validationErrors, 'lastName') },
       alias: { value: formData.alias, error: getError(validationErrors, 'alias') },
@@ -104,6 +110,7 @@ export default class DeviceWearerController {
       pncId: { value: deviceWearer.pncId || '' },
       deliusId: { value: deviceWearer.deliusId || '' },
       prisonNumber: { value: deviceWearer.prisonNumber || '' },
+      homeOfficeReferenceNumber: { value: deviceWearer.homeOfficeReferenceNumber || '' },
       firstName: { value: deviceWearer.firstName || '' },
       lastName: { value: deviceWearer.lastName || '' },
       alias: { value: deviceWearer.alias || '' },

@@ -25,6 +25,8 @@ context('Monitoring conditions', () => {
           order: {
             monitoringConditions: {
               orderType: 'immigration',
+              orderTypeDescription: null,
+              conditionType: null,
               acquisitiveCrime: false,
               dapol: false,
               curfew: true,
@@ -33,6 +35,8 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: true,
               alcohol: true,
               devicesRequired: [],
+              startDate: null,
+              endDate: null,
             },
           },
         })
@@ -136,6 +140,8 @@ context('Monitoring conditions', () => {
           order: {
             monitoringConditions: {
               orderType: 'immigration',
+              orderTypeDescription: null,
+              conditionType: null,
               acquisitiveCrime: false,
               dapol: false,
               curfew: false,
@@ -144,6 +150,8 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: false,
               alcohol: false,
               devicesRequired: [],
+              startDate: null,
+              endDate: null,
             },
           },
         })
@@ -198,6 +206,8 @@ context('Monitoring conditions', () => {
           order: {
             monitoringConditions: {
               orderType: 'immigration',
+              orderTypeDescription: null,
+              conditionType: null,
               acquisitiveCrime: false,
               dapol: false,
               curfew: false,
@@ -206,6 +216,8 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: false,
               alcohol: true,
               devicesRequired: [],
+              startDate: null,
+              endDate: null,
             },
           },
         })
@@ -260,6 +272,8 @@ context('Monitoring conditions', () => {
           order: {
             monitoringConditions: {
               orderType: 'immigration',
+              orderTypeDescription: null,
+              conditionType: null,
               acquisitiveCrime: false,
               dapol: false,
               curfew: false,
@@ -268,6 +282,8 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: false,
               alcohol: false,
               devicesRequired: [],
+              startDate: null,
+              endDate: null,
             },
           },
         })
@@ -322,6 +338,8 @@ context('Monitoring conditions', () => {
           order: {
             monitoringConditions: {
               orderType: 'immigration',
+              orderTypeDescription: null,
+              conditionType: null,
               acquisitiveCrime: false,
               dapol: false,
               curfew: false,
@@ -330,6 +348,8 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: true,
               alcohol: false,
               devicesRequired: [],
+              startDate: null,
+              endDate: null,
             },
           },
         })

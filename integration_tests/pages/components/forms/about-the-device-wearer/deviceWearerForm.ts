@@ -9,6 +9,7 @@ export type AboutDeviceWearerFormData = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
+  homeOfficeReferenceNumber?: string
   firstNames?: string
   lastName?: string
   alias?: string
@@ -43,6 +44,10 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     return new FormInputComponent(this.form, label)
   }
 
+  get homeOfficeReferenceNumberField(): FormInputComponent {
+    const lable = 'Home Office Reference Number'
+    return new FormInputComponent(this.form, lable)
+  }
   // NAMES
 
   get firstNamesField(): FormInputComponent {
@@ -216,6 +221,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     this.pncIdField.set(profile.pncId)
     this.deliusIdField.set(profile.deliusId)
     this.prisonNumberField.set(profile.prisonNumber)
+    this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
 
     this.firstNamesField.set(profile.firstNames)
     this.lastNameField.set(profile.lastName)
