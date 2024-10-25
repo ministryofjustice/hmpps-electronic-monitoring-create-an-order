@@ -56,7 +56,10 @@ export default class OrderController {
     if (order.status === 'SUBMITTED') {
       res.redirect('/order/submit/failed')
     } else {
-      await this.orderService.submitOrder(order.id)
+      await this.orderService.submitOrder({
+        accessToken: res.locals.user.token,
+        orderId: order.id,
+      })
       res.redirect('/order/submit/success')
     }
   }

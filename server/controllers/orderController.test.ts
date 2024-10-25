@@ -181,7 +181,10 @@ describe('OrderController', () => {
       await orderController.submit(req, res, next)
 
       // Then
-      expect(mockOrderService.submitOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
       expect(res.redirect).toHaveBeenCalledWith('/order/submit/success')
     })
 
