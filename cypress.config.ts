@@ -18,7 +18,11 @@ export default defineConfig({
   taskTimeout: 60000,
   e2e: {
     setupNodeEvents(on) {
-      faker.seed(Math.random() * Number.MAX_SAFE_INTEGER)
+      const seed = Math.random() * Number.MAX_SAFE_INTEGER
+      faker.seed(seed)
+
+      // eslint-disable-next-line no-console
+      console.log(`Random seed: ${seed}`)
 
       on('task', {
         reset: resetStubs,

@@ -31,7 +31,7 @@ context('Scenarios', () => {
     })
   })
 
-  it('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
+  it('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus document attachment', () => {
     const deviceWearerDetails = createFakeAdultDeviceWearer()
     const primaryAddressDetails = createFakeAddress()
     const installationAddressDetails = createFakeAddress()
@@ -87,7 +87,7 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5), // 5 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 45), // 45 days
       orderType: 'Pre-Trial',
-      orderTypeDescription: 'DAPOL HDC',
+      orderTypeDescription: 'DAPOL',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew with electronic monitoring',
       devicesRequired: 'Location, not fitted',
@@ -102,7 +102,7 @@ context('Scenarios', () => {
     curfewReleaseDatePage.form.fillInWith({
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: '19:00:00',
-      endTime: '07:00:00',
+      endTime: '03:00:00',
       address: 'Primary address',
     })
     curfewReleaseDatePage.form.saveAndContinueButton.click()
@@ -120,7 +120,7 @@ context('Scenarios', () => {
       {
         day: 'MONDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -132,7 +132,7 @@ context('Scenarios', () => {
       {
         day: 'TUESDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -144,7 +144,7 @@ context('Scenarios', () => {
       {
         day: 'WEDNESDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -156,7 +156,7 @@ context('Scenarios', () => {
       {
         day: 'THURSDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -168,7 +168,7 @@ context('Scenarios', () => {
       {
         day: 'FRIDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -180,7 +180,7 @@ context('Scenarios', () => {
       {
         day: 'SATURDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -192,7 +192,7 @@ context('Scenarios', () => {
       {
         day: 'SUNDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: ['Primary address'],
       },
       {
