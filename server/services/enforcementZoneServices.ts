@@ -1,6 +1,6 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import { ValidationError, ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import { serialiseDate } from '../utils/utils'
