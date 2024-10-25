@@ -3,10 +3,10 @@ import { z } from 'zod'
 import paths from '../../constants/paths'
 import { MonitoringConditions } from '../../models/MonitoringConditions'
 import { isValidationResult, ValidationResult } from '../../models/Validation'
-import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
+import { DateField, MultipleChoiceField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
-import { getError } from '../../utils/utils'
+import { deserialiseDate, getError, serialiseDate } from '../../utils/utils'
 import { getSelectedMonitoringTypes } from './nextPage'
 
 const monitoringConditionsFormDataModel = z.object({
@@ -32,6 +32,12 @@ const monitoringConditionsFormDataModel = z.object({
     .transform(val => (Array.isArray(val) ? val : [val])),
   orderTypeDescription: z.coerce.string(),
   conditionType: z.coerce.string(),
+  endDay: z.string().default(''),
+  endMonth: z.string().default(''),
+  endYear: z.string().default(''),
+  startDay: z.string().default(''),
+  startMonth: z.string().default(''),
+  startYear: z.string().default(''),
 })
 
 type MonitoringConditionsFormData = z.infer<typeof monitoringConditionsFormDataModel>
@@ -44,6 +50,8 @@ type MonitoringConditionsViewModel = {
   devicesRequired: MultipleChoiceField
   orderTypeDescription: TextField
   conditionType: TextField
+  startDate: DateField
+  endDate: DateField
 }
 
 export default class MonitoringConditionsController {
@@ -69,6 +77,8 @@ export default class MonitoringConditionsController {
   ): MonitoringConditionsViewModel {
     const monitoringRequiredValues = getSelectedMonitoringTypes(monitoringConditions)
 
+    const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditions?.startDate)
+    const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditions?.endDate)
     return {
       acquisitiveCrime: { value: String(monitoringConditions.acquisitiveCrime) },
       dapol: { value: String(monitoringConditions.dapol) },
@@ -81,6 +91,8 @@ export default class MonitoringConditionsController {
       },
       orderTypeDescription: { value: monitoringConditions.orderTypeDescription ?? '' },
       conditionType: { value: monitoringConditions.conditionType ?? '' },
+      startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
+      endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
     }
   }
 
@@ -111,6 +123,15 @@ export default class MonitoringConditionsController {
         error: getError(validationErrors, 'orderTypeDescription'),
       },
       conditionType: { value: formData.conditionType, error: getError(validationErrors, 'conditionType') },
+
+      startDate: {
+        value: { day: formData.startDay, month: formData.startMonth, year: formData.startYear },
+        error: getError(validationErrors, 'startDate'),
+      },
+      endDate: {
+        value: { day: formData.endDay, month: formData.endMonth, year: formData.endYear },
+        error: getError(validationErrors, 'endDate'),
+      },
     }
   }
 
@@ -127,6 +148,8 @@ export default class MonitoringConditionsController {
       devicesRequired: formData.devicesRequired.length > 0 ? formData.devicesRequired : null,
       orderTypeDescription: formData.orderTypeDescription === '' ? null : formData.orderTypeDescription,
       conditionType: formData.conditionType === '' ? null : formData.conditionType,
+      startDate: serialiseDate(formData.startYear, formData.startMonth, formData.startDay),
+      endDate: serialiseDate(formData.endYear, formData.endMonth, formData.endDay),
     }
   }
 

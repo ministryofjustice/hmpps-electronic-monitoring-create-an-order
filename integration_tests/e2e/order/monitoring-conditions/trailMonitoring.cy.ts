@@ -29,6 +29,8 @@ const mockEmptyTrailMonitoring = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: null,
+    endDate: null,
   },
 }
 
@@ -55,6 +57,8 @@ const mockSubmittedTrailMonitoring = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: null,
+    endDate: null,
   },
 }
 

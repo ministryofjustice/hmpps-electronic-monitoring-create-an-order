@@ -36,6 +36,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
             mandatoryAttendance: true,
             alcohol: false,
             devicesRequired: [],
+            startDate: null,
+            endDate: null,
           },
         },
       })
@@ -150,6 +152,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
             mandatoryAttendance: true,
             alcohol: false,
             devicesRequired: [],
+            startDate: null,
+            endDate: null,
           },
         },
       })
@@ -286,6 +290,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
             mandatoryAttendance: true,
             alcohol: false,
             devicesRequired: [],
+            startDate: null,
+            endDate: null,
           },
         },
       })

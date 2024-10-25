@@ -64,6 +64,8 @@ describe('EnforcementZoneController', () => {
           trail: false,
           orderTypeDescription: '',
           conditionType: '',
+          startDate: '',
+          endDate: '',
         },
       }),
       user: {

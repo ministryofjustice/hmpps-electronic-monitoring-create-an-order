@@ -53,6 +53,8 @@ describe('getSelectedMonitoringTypes', () => {
       devicesRequired: ['Location - fitted'],
       orderTypeDescription: 'DAPOL',
       conditionType: 'BAIL_ORDER',
+      startDate: '2025-01-01',
+      endDate: null,
     }
     const result = getSelectedMonitoringTypes(conditions)
     expect(result).toStrictEqual(['curfew', 'trail', 'alcohol'])

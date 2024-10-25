@@ -2,6 +2,7 @@ import FormCheckboxesComponent from '../formCheckboxesComponent'
 import FormComponent from '../formComponent'
 import FormRadiosComponent from '../formRadiosComponent'
 import FormSelectComponent from '../formSelectComponent'
+import FormDateComponent from '../formDateComponent'
 
 export type MonitoringConditionsFormData = {
   isPartOfACP?: string
@@ -11,6 +12,8 @@ export type MonitoringConditionsFormData = {
   devicesRequired?: string | string[]
   orderTypeDescription?: string
   conditionType?: string
+  startDate?: Date
+  endDate?: Date
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -81,6 +84,14 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
+  get startDateField(): FormDateComponent {
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
+  }
+
+  get endDateField(): FormDateComponent {
+    return new FormDateComponent(this.form, 'End date of monitoring(optional)')
+  }
+
   // FORM HELPERS
 
   fillInWith(data: MonitoringConditionsFormData): void {
@@ -111,6 +122,14 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     if (data.conditionType) {
       this.conditionTypeField.set(data.conditionType)
     }
+
+    if (data.startDate) {
+      this.startDateField.set(data.startDate)
+    }
+
+    if (data.endDate) {
+      this.endDateField.set(data.endDate)
+    }
   }
 
   shouldBeValid(): void {
@@ -121,6 +140,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.devicesRequiredField.shouldNotHaveValidationMessage()
     this.orderTypeDescriptionField.shouldNotHaveValidationMessage()
     this.conditionTypeField.shouldNotHaveValidationMessage()
+    this.startDateField.shouldNotHaveValidationMessage()
+    this.endDateField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
@@ -131,5 +152,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.devicesRequiredField.shouldBeDisabled()
     this.orderTypeDescriptionField.shouldBeDisabled()
     this.conditionTypeField.shouldBeDisabled()
+    this.startDateField.shouldBeDisabled()
+    this.endDateField.shouldBeDisabled()
   }
 }

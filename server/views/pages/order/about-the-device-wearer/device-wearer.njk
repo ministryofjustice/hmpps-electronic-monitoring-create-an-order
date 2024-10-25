@@ -98,6 +98,19 @@
 
     {{ govukInput({
       label: {
+        text: "Home Office Reference Number",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "home-office-reference-number",
+      name: "homeOfficeReferenceNumber",
+      value: homeOfficeReferenceNumber.value,
+      errorMessage: homeOfficeReferenceNumber.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
         text: "First name",
         classes: "govuk-label--s"
       },

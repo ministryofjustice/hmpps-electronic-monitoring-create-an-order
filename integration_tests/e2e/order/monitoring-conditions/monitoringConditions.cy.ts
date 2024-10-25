@@ -23,6 +23,8 @@ const mockSubmittedMonitoringRequirements = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: '2024-10-10T00:00:00.000Z',
+    endDate: '2024-10-11T00:00:00.000Z',
   },
 }
 const mockEmptyMonitoringConditions = {
@@ -38,6 +40,8 @@ const mockEmptyMonitoringConditions = {
     mandatoryAttendance: null,
     alcohol: null,
     devicesRequired: null,
+    startDate: null,
+    endDate: null,
   },
 }
 
@@ -114,6 +118,8 @@ context('Monitoring conditions main section', () => {
           { field: 'conditionType', error: 'You must select an option' },
           { field: 'updateMonitoringConditionsDto', error: 'You must select an option' },
           { field: 'devicesRequired', error: 'You must select an option' },
+          { field: 'startDate', error: 'You must select an option' },
+          { field: 'endDate', error: 'You must select an option' },
         ],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
@@ -129,6 +135,8 @@ context('Monitoring conditions main section', () => {
       cy.get('#conditionType-error').should('contain', 'You must select an option')
       cy.get('#monitoringRequired-error').should('contain', 'You must select an option')
       cy.get('#devicesRequired-error').should('contain', 'You must select an option')
+      cy.get('#startDate-error').should('contain', 'You must select an option')
+      cy.get('#endDate-error').should('contain', 'You must select an option')
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
@@ -145,6 +153,12 @@ context('Monitoring conditions main section', () => {
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('GPS Acquisitive Crime HDC')
       cy.get('select[name="conditionType"]').select('License Condition of a Custodial Order')
+      cy.get('#startDate-startDay').type('27')
+      cy.get('#startDate-startMonth').type('3')
+      cy.get('#startDate-startYear').type('2024')
+      cy.get('#endDate-endDay').type('28')
+      cy.get('#endDate-endMonth').type('4')
+      cy.get('#endDate-endYear').type('2025')
       page.form.saveAndContinueButton.click()
       Page.verifyOnPage(InstallationAddressPage)
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
@@ -167,6 +181,8 @@ context('Monitoring conditions main section', () => {
             'Alcohol (Transdermal)',
             'Alcohol (Remote Breath)',
           ],
+          startDate: '2024-03-27T00:00:00.000Z',
+          endDate: '2025-04-28T00:00:00.000Z',
         })
       })
     })
@@ -186,6 +202,9 @@ context('Monitoring conditions main section', () => {
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('DAPOL')
       cy.get('select[name="conditionType"]').select('Requirement of a Community Order')
+      cy.get('#startDate-startDay').type('27')
+      cy.get('#startDate-startMonth').type('3')
+      cy.get('#startDate-startYear').type('2024')
       page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
@@ -201,6 +220,8 @@ context('Monitoring conditions main section', () => {
           mandatoryAttendance: false,
           alcohol: true,
           devicesRequired: ['Alcohol (Transdermal)'],
+          startDate: '2024-03-27T00:00:00.000Z',
+          endDate: null,
         })
       })
       Page.verifyOnPage(InstallationAddressPage)

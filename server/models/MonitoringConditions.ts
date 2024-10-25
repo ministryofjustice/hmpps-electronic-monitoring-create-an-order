@@ -1,6 +1,8 @@
 import { z } from 'zod'
 
 const MonitoringConditionsModel = z.object({
+  startDate: z.string().datetime().nullable(),
+  endDate: z.string().datetime().nullable(),
   orderType: z.string().nullable(),
   acquisitiveCrime: z.boolean().nullable(),
   dapol: z.boolean().nullable(),

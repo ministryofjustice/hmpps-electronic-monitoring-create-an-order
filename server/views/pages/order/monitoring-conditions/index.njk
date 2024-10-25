@@ -43,6 +43,83 @@
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
+    {{ govukDateInput({
+      id: "startDate",
+
+      fieldset: {
+        legend: {
+          text: "Enter the date for when monitoring starts",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2032"
+      },
+      items: [
+        {
+          name: "startDay",
+          classes: "govuk-input--width-2",
+          label: "Day",
+          value: startDate.value.day,
+          disabled: not isOrderEditable
+        },
+        {
+          name: "startMonth",
+          classes: "govuk-input--width-2",
+          label: "Month",
+          value: startDate.value.month,
+           disabled: not isOrderEditable
+        },
+        {
+          name: "startYear",
+          classes: "govuk-input--width-4",
+          label: "Year",
+          value: startDate.value.year,
+          disabled: not isOrderEditable
+        }
+      ],
+      errorMessage: startDate.error
+    }) }}
+
+    {{ govukDateInput({
+      id: "endDate",
+      fieldset: {
+        legend: {
+          text: "End date of monitoring(optional)",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example, 21 05 2032"
+      },
+      items: [
+        {
+          name: "endDay",
+          label: "Day",
+          classes: "govuk-input--width-2",
+          value: endDate.value.day,
+           disabled: not isOrderEditable
+        },
+        {
+          name: "endMonth",
+          label: "Month",
+          classes: "govuk-input--width-2",
+          value: endDate.value.month,
+           disabled: not isOrderEditable
+        },
+        {
+          name: "endYear",
+          label: "Year",
+          classes: "govuk-input--width-4",
+          value:endDate.value.year,
+           disabled: not isOrderEditable
+        }
+      ],
+      errorMessage: endDate.error
+    }) }}
+
     {% call govukFieldset({
       legend: {
         text: "Monitoring projects",
