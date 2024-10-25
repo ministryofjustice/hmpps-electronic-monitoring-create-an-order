@@ -23,12 +23,12 @@
         nameSuffix: "]",
         value: data.timeSpan.value,
         errorMessage: data.timeSpan.error,
-        disabled: disabled,        
+        disabled: disabled,
         removable: removable,
         day: day,
         index:index
       }) }}
-    
+
     {{ govukCheckboxes({
       idPrefix: "curfewTimetable-" + day + "-" + index + "-addresses",
       name: "curfewTimetable[" + day + "][" + index + "][addresses][]",
@@ -47,7 +47,7 @@
           id: "curfewTimetable-" + day + "-" + index + "-addresses-SECONDARY_ADDRESS"
         },
         {
-          text: 'Third address',
+          text: 'Tertiary address',
           value: 'TERTIARY_ADDRESS',
           disabled: disabled,
           id: "curfewTimetable-" + day + "-" + index + "-addresses-TERTIARY_ADDRESS"
@@ -112,10 +112,10 @@
             classes: "govuk-button--secondary",
             name: "action",
             value: "add-time-"+day
-        }) }}       
-      {% endif %}        
+        }) }}
+      {% endif %}
       </p>
-      <div class="moj-button-action">     
+      <div class="moj-button-action">
     </div>
     {% endfor %}
 

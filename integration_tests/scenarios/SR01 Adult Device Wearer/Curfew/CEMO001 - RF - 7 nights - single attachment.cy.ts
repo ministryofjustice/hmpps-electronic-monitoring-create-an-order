@@ -14,6 +14,7 @@ import PrimaryAddressPage from '../../../pages/order/contact-information/primary
 import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
+import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 
 context('Scenarios', () => {
   beforeEach(() => {
@@ -40,11 +41,14 @@ context('Scenarios', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton().click()
 
-    const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
 
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-    aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
+    aboutDeviceWearerPage.form.fillInWith({
+      ...deviceWearerDetails,
+      interpreterRequired: false,
+    })
     aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
     const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
@@ -68,9 +72,19 @@ context('Scenarios', () => {
     notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
     notifyingOrganisationPage.form.saveAndContinueButton.click()
 
+    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+    installationAndRiskPage.saveAndContinueButton().click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage.MonitoringConditionsSectionItem().click()
+
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.fillInWith({
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5), // 5 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 45), // 45 days
       orderType: 'Pre-Trial',
+      orderTypeDescription: 'DAPOL HDC',
+      conditionType: 'Bail Order',
       monitoringRequired: 'Curfew with electronic monitoring',
       devicesRequired: 'Location, not fitted',
     })

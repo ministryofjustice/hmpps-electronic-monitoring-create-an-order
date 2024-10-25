@@ -119,10 +119,10 @@
     }) }}
 
     {{ govukCheckboxes({
-      name: "addresses[]",
+      name: "addresses",
       fieldset: {
         legend: {
-          text: "Curfew addresses ",
+          text: "Curfew addresses",
           classes: "govuk-fieldset__legend--s"
         }
       },
@@ -141,7 +141,7 @@
           disabled: not isOrderEditable
         },
         {
-          text: 'Third address',
+          text: 'Tertiary address',
           value: 'TERTIARY',
           disabled: not isOrderEditable
         }

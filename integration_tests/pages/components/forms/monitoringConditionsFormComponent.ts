@@ -22,7 +22,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   get isPartOfACPField(): FormRadiosComponent {
     return new FormRadiosComponent(
       this.form,
-      'Is the device wearer part of the Acquisitive Crime project ? (optional)',
+      'Is the device wearer part of the Acquisitive Crime project? (optional)',
       ['Yes', 'No'],
     )
   }
@@ -30,7 +30,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   get isPartOfDAPOLField(): FormRadiosComponent {
     return new FormRadiosComponent(
       this.form,
-      'Is the device wearer part of the Domestic Abuse Perpetrators on Licence(DAPOL) project ? (optional)',
+      'Is the device wearer part of the Domestic Abuse Perpetrators on Licence (DAPOL) project? (optional)',
       ['Yes', 'No'],
     )
   }
@@ -47,7 +47,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get orderTypeDescriptionField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select order type', [
+    return new FormSelectComponent(this.form, 'Select order type description', [
       'DAPOL',
       'DAPOL HDC',
       'GPS Acquisitive Crime HDC',
@@ -56,7 +56,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get conditionTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select order type', [
+    return new FormSelectComponent(this.form, 'Select condition type', [
       'Requirement of a Community Order',
       'License Condition of a Custodial Order',
       'Post-Sentence Supervision Requirement following on from an Adult Custody order',

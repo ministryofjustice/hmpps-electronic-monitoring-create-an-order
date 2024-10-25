@@ -1,23 +1,27 @@
-import { CurfewTimetable } from '../../../server/models/CurfewTimetable'
-import { Order } from '../../../server/models/Order'
-import { deserialiseTime } from '../../../server/utils/utils'
-import AppPage from '../appPage'
-import { PageElement } from '../page'
+import { CurfewTimetable } from '../../../../server/models/CurfewTimetable'
+import { Order } from '../../../../server/models/Order'
+import { deserialiseTime } from '../../../../server/utils/utils'
 
-export default class CurfewTimetablePage extends AppPage {
+import AppFormPage from '../../appFormPage'
+
+import paths from '../../../../server/constants/paths'
+
+import CurfewTimetableFormComponent from '../../components/forms/monitoring-conditions/curfewTimetableFormComponent'
+
+export default class CurfewTimetablePage extends AppFormPage {
+  public form = new CurfewTimetableFormComponent()
+
   constructor() {
-    super('Monitoring conditions')
+    super(
+      'Monitoring conditions',
+      paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
+      'Timetable for curfew with electronic monitoring',
+    )
   }
 
-  form = (): PageElement => cy.get('form')
-
-  subHeader = (): PageElement => cy.get('h2')
-
-  saveAndContinueButton = (): PageElement => cy.get('form button[type=submit][value="continue"]')
-
-  saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
-
   fillInForm = (order: Order): void => {
+    // this.form.fillInWith(order.curfewTimeTable)
+
     const groupedTimetables = order.curfewTimeTable.reduce((acc: Record<string, CurfewTimetable>, t) => {
       if (!acc[t.dayOfWeek]) {
         acc[t.dayOfWeek] = []
@@ -25,6 +29,7 @@ export default class CurfewTimetablePage extends AppPage {
       acc[t.dayOfWeek].push(t)
       return acc
     }, {})
+
     Object.entries(groupedTimetables).forEach(([day, timetables]) => {
       timetables.forEach((t, index) => {
         const [startHours, startMinutes] = deserialiseTime(t.startTime)

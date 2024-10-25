@@ -16,6 +16,7 @@ import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
+import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 
 context('Scenarios', () => {
   beforeEach(() => {
@@ -46,7 +47,10 @@ context('Scenarios', () => {
     orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
 
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-    aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
+    aboutDeviceWearerPage.form.fillInWith({
+      ...deviceWearerDetails,
+      interpreterRequired: false,
+    })
     aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
     const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
@@ -70,9 +74,19 @@ context('Scenarios', () => {
     notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
     notifyingOrganisationPage.form.saveAndContinueButton.click()
 
+    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+    installationAndRiskPage.saveAndContinueButton().click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage.MonitoringConditionsSectionItem().click()
+
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.fillInWith({
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30), // 30 days
       orderType: 'Post Release',
+      orderTypeDescription: 'DAPOL HDC',
+      conditionType: 'Bail Order',
       monitoringRequired: 'Alcohol monitoring',
       devicesRequired: 'Alcohol, transdermal',
     })
@@ -86,11 +100,10 @@ context('Scenarios', () => {
     alcoholMonitoringPage.form.fillInWith({
       monitoringType: 'Alcohol abstinence',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 90), // 30 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30), // 30 days
       installLocation: `at Installation Address: ${installationAddressDetails}`,
     })
-    // alcoholMonitoringPage.form.saveAndContinueButton.click()
-    alcoholMonitoringPage.backToSummaryButton.click()
+    alcoholMonitoringPage.form.saveAndContinueButton.click()
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.submissionFormButton().click()
