@@ -125,27 +125,40 @@ context('Curfew monitoring - release date', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-curfew-release-date',
-        response: [
-          { field: 'releaseDate', error: 'You must enter a valid date' },
-          { field: 'startTime', error: 'You must enter a valid start time' },
-          { field: 'endTime', error: 'You must enter a valid end time' },
-          { field: 'curfewAddress', error: 'You must enter a valid address' },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with an empty form submission', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-curfew-release-date',
+          response: [
+            { field: 'releaseDate', error: 'You must enter a valid date' },
+            { field: 'startTime', error: 'You must enter a valid start time' },
+            { field: 'endTime', error: 'You must enter a valid end time' },
+            { field: 'curfewAddress', error: 'You must enter a valid address' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
+        const page = Page.verifyOnPage(CurfewReleaseDatePage)
+        page.form.saveAndContinueButton.click()
+        cy.get('#releaseDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#curfewTimes-error').should(
+          'contain',
+          'You must enter a valid start time, You must enter a valid end time',
+        )
+        cy.get('#address-error').should('contain', 'You must enter a valid address')
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
-      const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      page.form.saveAndContinueButton.click()
-      cy.get('#releaseDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#curfewTimes-error').should(
-        'contain',
-        'You must enter a valid start time, You must enter a valid end time',
-      )
-      cy.get('#address-error').should('contain', 'You must enter a valid address')
+
+      it('should show an error when releaseDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
+        const page = Page.verifyOnPage(CurfewReleaseDatePage)
+        cy.get('#releaseDateDay').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#releaseDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {

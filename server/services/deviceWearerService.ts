@@ -4,6 +4,7 @@ import DeviceWearerModel, { DeviceWearer } from '../models/DeviceWearer'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { serialiseDate } from '../utils/utils'
+import DateValidator from '../utils/validators/dateValidator'
 
 type UpdateDeviceWearerRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -36,6 +37,16 @@ export default class DeviceWearerService {
   constructor(private readonly apiClient: RestClient) {}
 
   async updateDeviceWearer(input: UpdateDeviceWearerRequestInput): Promise<DeviceWearer | ValidationResult> {
+    const isDateOfBirthValid = DateValidator.isValidDateFormat(
+      input.data['dateOfBirth-day'],
+      input.data['dateOfBirth-month'],
+      input.data['dateOfBirth-year'],
+      'dateOfBirth',
+    )
+    if (isDateOfBirthValid.result === false) {
+      return ValidationResultModel.parse([isDateOfBirthValid.error])
+    }
+
     try {
       const {
         'dateOfBirth-day': dobDay,

@@ -122,23 +122,47 @@ context('Curfew conditions', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-curfew-conditions',
-        response: [
-          { field: 'startDate', error: 'You must enter a valid date' },
-          { field: 'endDate', error: 'You must enter a valid date' },
-          { field: 'curfewAddress', error: 'You must select a valid address' },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with an empty form submission', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-curfew-conditions',
+          response: [
+            { field: 'startDate', error: 'You must enter a valid date' },
+            { field: 'endDate', error: 'You must enter a valid date' },
+            { field: 'curfewAddress', error: 'You must select a valid address' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+        const page = Page.verifyOnPage(CurfewConditionsPage)
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#addresses-error').should('contain', 'You must select a valid address')
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
-      const page = Page.verifyOnPage(CurfewConditionsPage)
-      page.form.saveAndContinueButton.click()
-      cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#endDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#addresses-error').should('contain', 'You must select a valid address')
+
+      it('should show an error when startDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+        const page = Page.verifyOnPage(CurfewConditionsPage)
+        cy.get('#startDate-day').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
+
+      it('should show an error when endDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+        const page = Page.verifyOnPage(CurfewConditionsPage)
+        cy.get('#endDate-year').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#endDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {

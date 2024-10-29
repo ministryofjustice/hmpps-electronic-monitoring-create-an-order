@@ -209,6 +209,19 @@ context('About the device wearer', () => {
     })
   })
 
+  context('Submitting an invalid order', () => {
+    it('should show error when date of birth is provided in the wrong format', () => {
+      cy.signIn().visit(`/order/${mockOrderId}/about-the-device-wearer`)
+      const page = Page.verifyOnPage(AboutDeviceWearerPage)
+      cy.get('#dateOfBirth-day').type('text')
+      page.form.saveAndContinueButton.click()
+      cy.get('#dateOfBirth-error').should(
+        'contain',
+        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+      )
+    })
+  })
+
   context('Submitted order', () => {
     beforeEach(() => {
       cy.task('reset')
