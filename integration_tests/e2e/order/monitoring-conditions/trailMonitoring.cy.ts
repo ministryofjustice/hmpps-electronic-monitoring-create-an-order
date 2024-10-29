@@ -124,21 +124,45 @@ context('Trail monitoring', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-trail',
-        response: [
-          { field: 'startDate', error: 'You must enter a valid date' },
-          { field: 'endDate', error: 'You must enter a valid date' },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with an empty form submission', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-trail',
+          response: [
+            { field: 'startDate', error: 'You must enter a valid date' },
+            { field: 'endDate', error: 'You must enter a valid date' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
+        const page = Page.verifyOnPage(TrailMonitoringPage)
+        page.saveAndContinueButton().click()
+        cy.get('#startDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#endDate-error').should('contain', 'You must enter a valid date')
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
-      const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.saveAndContinueButton().click()
-      cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+
+      it('should show an error when startDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
+        const page = Page.verifyOnPage(TrailMonitoringPage)
+        cy.get('#startDate-day').type('text')
+        page.saveAndContinueButton().click()
+        cy.get('#startDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
+
+      it('should show an error when endDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
+        const page = Page.verifyOnPage(TrailMonitoringPage)
+        cy.get('#endDate-month').type('text')
+        page.saveAndContinueButton().click()
+        cy.get('#endDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
