@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { PageElement } from '../page'
 
 export default abstract class FormComponent {
-  private elementCacheId: string = uuidv4()
+  protected elementCacheId: string = uuidv4()
 
   constructor() {
     cy.get('form').as(this.elementCacheId)

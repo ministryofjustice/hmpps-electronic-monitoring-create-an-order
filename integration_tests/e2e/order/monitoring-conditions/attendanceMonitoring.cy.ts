@@ -128,7 +128,7 @@ context('Attendance monitoring', () => {
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="text"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })

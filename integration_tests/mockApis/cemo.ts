@@ -456,17 +456,22 @@ const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
       throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
     }
 
-    if (options.body) {
-      assert.deepEqual(requests[0], options.body, jsonDiff.diffString(options.body, requests[0], { color: false }))
-    }
+    const expected = options.body || options.fileContents
+    const diffResult = jsonDiff.diff(expected, requests[0], { sort: true })
 
-    if (options.fileContents) {
-      assert.deepEqual(
-        requests[0],
-        options.fileContents,
-        jsonDiff.diffString(options.fileContents, requests[0], { color: false }),
-      )
-    }
+    const message = `
+Expected:
+${JSON.stringify(expected, null, 2)}
+
+But received:
+${JSON.stringify(requests[0], null, 2)}
+
+Difference:
+${jsonDiff.diffString(expected, requests[0], { color: false })}
+
+`
+
+    assert.strictEqual(undefined, diffResult, message)
 
     return true
   })

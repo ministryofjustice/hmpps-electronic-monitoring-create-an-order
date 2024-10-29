@@ -1,0 +1,77 @@
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% from "./timeSpanInput.njk" import timeSpanInput %}
+
+{% set days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] %}
+
+{% macro timeTableDay(day, index, data, disabled, removable) %}
+  <div class="schedule">
+    {{ timeSpanInput({
+      id: "curfewTimetable-" + day + "-" + index + "-time",
+      namePrefix: "curfewTimetable[" + day + "][" + index + "][time",
+      nameSuffix: "]",
+      value: data.timeSpan.value,
+      errorMessage: data.timeSpan.error,
+      disabled: disabled,
+      removable: removable,
+      day: day,
+      index: index
+    }) }}
+
+    {{ govukCheckboxes({
+      idPrefix: "curfewTimetable-" + day + "-" + index + "-addresses",
+      name: "curfewTimetable[" + day + "][" + index + "][addresses][]",
+      values: data.addresses.values,
+      items: [
+        {
+          text: 'Primary address',
+          value: 'PRIMARY_ADDRESS',
+          disabled: disabled
+        },
+        {
+          text: 'Secondary address',
+          value: 'SECONDARY_ADDRESS',
+          disabled: disabled
+        },
+        {
+          text: 'Tertiary address',
+          value: 'TERTIARY_ADDRESS',
+          disabled: disabled
+        }
+      ],
+      errorMessage: data.addresses.error
+    }) }}
+  </div>
+{% endmacro %}
+
+{% macro timeTable(data, disabled) %}
+  {% for day in days %}
+    {% set dayData = data[day] %}
+    {% call govukFieldset({
+      legend: {
+        text: day | title,
+        classes: "govuk-fieldset__legend--m timetable timetable-{{index}}",
+        isPageHeading: true
+      }
+    }) %}
+      {% if dayData | length === 0 %}
+        {{ timeTableDay(day, 0, {}, disabled)}}
+      {% else %}
+        {% for timetable in dayData %}
+          {{ timeTableDay(day, loop.index0, timetable, disabled, dayData.length !== 1 ) }}
+        {% endfor %}
+      {% endif %}
+
+      {% if not disabled %}
+        {{ govukButton({
+            text: "Add another time",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "add-time-" + day
+        }) }}
+      {% endif %}
+    {% endcall %}
+  {% endfor %}
+{% endmacro %}

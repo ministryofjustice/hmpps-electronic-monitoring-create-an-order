@@ -37,7 +37,7 @@ context('Contact information', () => {
           orderId: mockOrderId,
           'addressType(primary|secondary|tertiary)': 'tertiary',
         })
-        page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       })
 
       it('Should not allow the user to update the primary address details', () => {

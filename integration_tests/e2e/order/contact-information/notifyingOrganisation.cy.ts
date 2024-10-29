@@ -114,7 +114,7 @@ context('Contact details - Contact information', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/contact-information/notifying-organisation`)
       const page = Page.verifyOnPage(NotifyingOrganisationPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -138,7 +138,7 @@ context('Contact details - Contact information', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/contact-information/notifying-organisation`)
       const page = Page.verifyOnPage(NotifyingOrganisationPage)
-      page.submittedBanner().should('not.exist')
+      page.submittedBanner.should('not.exist')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.enabled')
       })

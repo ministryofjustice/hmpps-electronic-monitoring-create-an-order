@@ -8,14 +8,13 @@ Cypress.Commands.add(
     label: string | RegExp,
     options: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow> = {},
   ): Cypress.Chainable<JQuery> => {
-    const log = true
+    const log = false
 
     return cy
       .wrap(subject, { log })
       .contains('label', label, { log })
       .invoke({ log }, 'attr', 'for')
       .then(id => cy.get(`#${id}`, { log, ...options }))
-      .first({ log })
   },
 )
 
@@ -34,6 +33,6 @@ Cypress.Commands.add(
     return cy
       .wrap(subject, { log })
       .contains('legend', legend, { log })
-      .parent('fieldset', { log, ...options })
+      .then($legend => cy.wrap($legend, { log }).parent('fieldset', { log, ...options }))
   },
 )

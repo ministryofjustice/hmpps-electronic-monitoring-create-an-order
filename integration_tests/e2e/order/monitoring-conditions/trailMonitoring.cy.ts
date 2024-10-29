@@ -99,7 +99,7 @@ context('Trail monitoring', () => {
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="text"]').should('be.disabled')
       cy.get('input[type="text"]').should('be.disabled')
       cy.get('#startDate-day').invoke('val').should('equal', '27')
