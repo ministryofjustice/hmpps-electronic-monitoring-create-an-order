@@ -1,6 +1,4 @@
-import path from 'path'
-import fs from 'fs'
-import pdf from 'html-pdf'
+import puppeteer from 'puppeteer'
 import { readFile } from 'node:fs/promises'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
@@ -31,32 +29,27 @@ export default class OrderService {
   }
 
   async getReceipt(input: OrderRequestInput): Promise<Buffer> {
-    // Path to the HTML template
-    const htmlPath = path.join(
-      __dirname,
-      '../../../../hmpps-electronic-monitoring-create-an-order/server/views/pages/receipt.html',
-    )
+    const url = 'https://example.com/'
 
     try {
-      const html = await readFile(htmlPath, { encoding: 'utf8' })
+      const browser = await puppeteer.launch()
+      const page = await browser.newPage()
 
-      return await new Promise<Buffer>((resolve, reject) => {
-        pdf
-          .create(html, {
-            format: 'A4',
-            orientation: 'portrait',
-            border: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
-          })
-          .toBuffer((error, buffer) => {
-            if (error) {
-              console.error('Error generating PDF:', error)
-              return reject(error) // Reject the promise on error
-            }
-            resolve(buffer) // Resolve the promise with the buffer
-          })
+      // Navigate to the webpage
+      await page.goto(url, { waitUntil: 'networkidle0' })
+
+      // Create the PDF
+      const bufferArray = await page.pdf({
+        format: 'A4',
+        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
       })
+
+      const buffer = Buffer.from(bufferArray)
+
+      await browser.close()
+      return buffer // Return the generated PDF buffer
     } catch (err) {
-      console.error('Error reading HTML file:', err)
+      console.error('Error generating PDF from webpage:', err)
       throw err // Propagate the error up the call stack
     }
   }
