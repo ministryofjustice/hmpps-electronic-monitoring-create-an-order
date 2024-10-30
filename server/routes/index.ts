@@ -1,9 +1,5 @@
 import { type RequestHandler, Router } from 'express'
 
-import PDFDocument from 'pdfkit'
-import fs from 'fs'
-import pdf from 'html-pdf'
-import path from 'path'
 import AttachmentsController from '../controllers/attachmentController'
 import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
@@ -120,6 +116,7 @@ export default function routes({
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
+  get(paths.ORDER.RECEIPT, orderController.receipt)
 
   /**
    * ABOUT THE DEVICE WEARER
@@ -212,45 +209,6 @@ export default function routes({
   post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
   get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
   get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
-
-  // RECEIPT
-
-  get('/order/:orderId/receipt', async (req, res, next) => {
-    // Path to the HTML template
-    const htmlPath = path.join(
-      __dirname,
-      '../../../../hmpps-electronic-monitoring-create-an-order/server/views/pages/receipt.html',
-    )
-
-    // Read the HTML file
-    fs.readFile(htmlPath, 'utf8', (err, html) => {
-      if (err) {
-        console.error('Error reading HTML file:', err)
-        return res.status(500).send('Failed to generate PDF')
-      }
-
-      // Generate PDF from HTML
-      pdf
-        .create(html, {
-          format: 'A4',
-          orientation: 'portrait',
-          border: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
-        })
-        .toBuffer((error, buffer) => {
-          if (error) {
-            console.error('Error generating PDF:', err)
-            return res.status(500).send('Failed to generate PDF')
-          }
-
-          // Set response headers to indicate a PDF file
-          res.setHeader('Content-Type', 'application/pdf')
-          res.setHeader('Content-Disposition', `attachment; filename="user_answers.pdf"`)
-
-          // Send the PDF buffer as the response
-          res.send(buffer)
-        })
-    })
-  })
 
   return router
 }

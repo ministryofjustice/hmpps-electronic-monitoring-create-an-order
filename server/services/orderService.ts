@@ -1,3 +1,7 @@
+import path from 'path'
+import fs from 'fs'
+import pdf from 'html-pdf'
+import { readFile } from 'node:fs/promises'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import OrderModel, { Order } from '../models/Order'
@@ -24,6 +28,37 @@ export default class OrderService {
       token: input.accessToken,
     })
     return OrderModel.parse(result)
+  }
+
+  async getReceipt(input: OrderRequestInput): Promise<Buffer> {
+    // Path to the HTML template
+    const htmlPath = path.join(
+      __dirname,
+      '../../../../hmpps-electronic-monitoring-create-an-order/server/views/pages/receipt.html',
+    )
+
+    try {
+      const html = await readFile(htmlPath, { encoding: 'utf8' })
+
+      return await new Promise<Buffer>((resolve, reject) => {
+        pdf
+          .create(html, {
+            format: 'A4',
+            orientation: 'portrait',
+            border: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+          })
+          .toBuffer((error, buffer) => {
+            if (error) {
+              console.error('Error generating PDF:', error)
+              return reject(error) // Reject the promise on error
+            }
+            resolve(buffer) // Resolve the promise with the buffer
+          })
+      })
+    } catch (err) {
+      console.error('Error reading HTML file:', err)
+      throw err // Propagate the error up the call stack
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

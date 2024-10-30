@@ -93,4 +93,17 @@ export default class OrderController {
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/order/submit-success')
   }
+
+  receipt: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+
+    const receipt = await this.orderService.getReceipt({
+      accessToken: res.locals.user.token,
+      orderId: order.id,
+    })
+
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', `attachment; filename="user_answers.pdf"`)
+    res.send(receipt)
+  }
 }
