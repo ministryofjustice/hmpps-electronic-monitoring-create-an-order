@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
+import paths from '../constants/paths'
 
 export default class OrderController {
   constructor(
@@ -23,7 +24,7 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect('/order/delete/failed')
+      res.redirect(paths.ORDER.DELETE_FAILED)
     } else {
       res.render('pages/order/delete-confirm', {
         order,
@@ -35,15 +36,25 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect('/order/delete/failed')
+      res.redirect(paths.ORDER.DELETE_FAILED)
     } else {
-      await this.orderService.deleteOrder(order.id)
-      res.redirect('/order/delete/success')
+      try {
+        const { token } = res.locals.user
+        await this.orderService.deleteOrder({ accessToken: token, orderId: order.id })
+
+        res.redirect(paths.ORDER.DELETE_SUCCESS)
+      } catch (error) {
+        req.flash('validationErrors', error)
+
+        res.redirect(paths.ORDER.DELETE_FAILED)
+      }
     }
   }
 
   deleteFailed: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/delete-failed')
+    const errors = req.flash('validationErrors')
+
+    res.render('pages/order/delete-failed', { errors })
   }
 
   deleteSuccess: RequestHandler = async (req: Request, res: Response) => {
@@ -54,15 +65,25 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect('/order/submit/failed')
+      res.redirect(paths.ORDER.SUBMIT_FAILED)
     } else {
-      await this.orderService.submitOrder(order.id)
-      res.redirect('/order/submit/success')
+      try {
+        const { token } = res.locals.user
+        await this.orderService.submitOrder({ accessToken: token, orderId: order.id })
+
+        res.redirect(paths.ORDER.SUBMIT_SUCCESS)
+      } catch (error) {
+        req.flash('validationErrors', error)
+
+        res.redirect(paths.ORDER.SUBMIT_FAILED)
+      }
     }
   }
 
   submitFailed: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/submit-failed')
+    const errors = req.flash('validationErrors')
+
+    res.render('pages/order/submit-failed', { errors })
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {

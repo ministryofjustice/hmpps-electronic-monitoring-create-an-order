@@ -15,12 +15,10 @@ import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
+import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
-import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
-import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
-import SubmitSuccessPage from '../../../pages/order/submit-success'
+import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -53,7 +51,7 @@ context('Scenarios', () => {
     })
   })
 
-  context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus document attachment', () => {
+  context('Immigration with Location - NFD (Non Fitted Device) Pebble (NFD).', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
@@ -72,38 +70,16 @@ context('Scenarios', () => {
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Pre-Trial',
+      orderType: 'Immigration',
       orderTypeDescription: 'DAPOL',
-      conditionType: 'Bail Order',
-      monitoringRequired: 'Curfew with electronic monitoring',
+      conditionType: 'License Condition of a Custodial Order',
+      monitoringRequired: 'Trail monitoring',
       devicesRequired: 'Location, not fitted',
     }
-    const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-      startTime: '19:00:00',
-      endTime: '10:00:00',
-      address: 'Primary address',
-    }
-    const curfewConditionDetails = {
+    const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 35), // 35 days
-      addresses: ['Primary address'],
     }
-    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
-    const curfewTimetable = curfewNights.flatMap((day: string) => [
-      {
-        day,
-        startTime: '00:00:00',
-        endTime: curfewReleaseDetails.endTime,
-        addresses: curfewConditionDetails.addresses,
-      },
-      {
-        day,
-        startTime: curfewReleaseDetails.startTime,
-        endTime: '11:59:00',
-        addresses: curfewConditionDetails.addresses,
-      },
-    ])
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -149,17 +125,9 @@ context('Scenarios', () => {
       installationAddress.form.fillInWith(installationAddressDetails)
       installationAddress.form.saveAndContinueButton.click()
 
-      const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-
-      const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      curfewConditionsPage.form.saveAndContinueButton.click()
-
-      const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-      curfewTimetablePage.form.fillInWith(curfewTimetable)
-      curfewTimetablePage.form.saveAndContinueButton.click()
+      const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
+      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+      trailMonitoringPage.form.saveAndContinueButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submissionFormButton().click()
@@ -225,13 +193,13 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'Bail Order',
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
               describe_exclusion: '',
               device_type: ',',
               device_wearer: deviceWearerDetails.fullName,
-              enforceable_condition: [{ condition: 'Curfew with EM' }],
+              enforceable_condition: [{ condition: 'Location Monitoring (using Non-Fitted Device)' }],
               exclusion_allday: '',
               interim_court_date: '',
               issuing_organisation: '',
@@ -254,7 +222,7 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: '',
               order_start: monitoringConditions.startDate.toISOString().split('T')[0],
-              order_type: 'pre_trial',
+              order_type: 'immigration',
               order_type_description: 'DAPOL',
               order_type_detail: '',
               order_variation_date: '',
@@ -284,91 +252,14 @@ context('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
+              conditional_release_date: '',
               reason_for_order_ending_early: '',
               business_unit: '',
               service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
-              curfew_start: curfewConditionDetails.startDate.toISOString().split('T')[0],
-              curfew_end: curfewConditionDetails.endDate.toISOString().split('T')[0],
-              curfew_duration: [
-                {
-                  location: 'primary',
-                  allday: '',
-                  schedule: [
-                    {
-                      day: 'Mo',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Mo',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Tu',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Tu',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Wed',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Wed',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Th',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Th',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Fr',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Fr',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Sa',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Sa',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Su',
-                      start: '00:00:00',
-                      end: '10:00:00',
-                    },
-                    {
-                      day: 'Su',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                  ],
-                },
-              ],
-              trail_monitoring: '',
+              curfew_start: '',
+              curfew_end: '',
+              curfew_duration: [],
+              trail_monitoring: 'true',
               exclusion_zones: '',
               exclusion_zones_duration: '',
               inclusion_zones: '',

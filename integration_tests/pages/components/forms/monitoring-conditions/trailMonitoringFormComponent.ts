@@ -2,13 +2,8 @@ import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
 
 export type TrailMonitoringFormData = {
-  isPartOfACP?: string
-  isPartOfDAPOL?: string
-  orderType?: string
-  monitoringType?: string
   startDate?: Date
   endDate?: Date
-  installLocation?: string | RegExp
 }
 
 export default class TrailMonitoringFormComponent extends FormComponent {
