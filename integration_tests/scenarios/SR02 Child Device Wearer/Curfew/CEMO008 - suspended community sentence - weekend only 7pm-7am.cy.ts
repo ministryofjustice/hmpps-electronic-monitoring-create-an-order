@@ -2,9 +2,11 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
+import ResponsibleAdultDetailsPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import {
-  createFakeAdultDeviceWearer,
+  createFakeYouthDeviceWearer,
   createFakeResponsibleOfficer,
+  createFakeResponsibleAdult,
   createFakeAddress,
   createFakeOrganisation,
 } from '../../../mockApis/faker'
@@ -14,11 +16,11 @@ import PrimaryAddressPage from '../../../pages/order/contact-information/primary
 import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
-import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
-import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
+import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
+import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
+import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
 
 context('Scenarios', () => {
   beforeEach(() => {
@@ -31,8 +33,9 @@ context('Scenarios', () => {
     })
   })
 
-  it('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
-    const deviceWearerDetails = createFakeAdultDeviceWearer()
+  it('Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Grounds, document attachment', () => {
+    const deviceWearerDetails = createFakeYouthDeviceWearer()
+    const responsibleAdultDetails = createFakeResponsibleAdult()
     const primaryAddressDetails = createFakeAddress()
     const installationAddressDetails = createFakeAddress()
     const notifyingOrganisation = {
@@ -54,6 +57,10 @@ context('Scenarios', () => {
       interpreterRequired: false,
     })
     aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+    const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
+    responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
+    responsibleAdultDetailsPage.form.saveAndContinueButton.click()
 
     const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
     contactDetailsPage.form.fillInWith(deviceWearerDetails)
@@ -84,13 +91,13 @@ context('Scenarios', () => {
 
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.fillInWith({
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5), // 5 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 45), // 45 days
-      orderType: 'Pre-Trial',
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30), // 30 days
+      orderType: 'Post Release',
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew with electronic monitoring',
-      devicesRequired: 'Location, not fitted',
+      devicesRequired: 'Location, fitted',
     })
     monitoringConditionsPage.form.saveAndContinueButton.click()
 
@@ -120,55 +127,7 @@ context('Scenarios', () => {
       {
         day: 'MONDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'MONDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'TUESDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'TUESDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'WEDNESDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'WEDNESDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'THURSDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'THURSDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'FRIDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -180,7 +139,7 @@ context('Scenarios', () => {
       {
         day: 'SATURDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -192,7 +151,7 @@ context('Scenarios', () => {
       {
         day: 'SUNDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: ['Primary address'],
       },
       {

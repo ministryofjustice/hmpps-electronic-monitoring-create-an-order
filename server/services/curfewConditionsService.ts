@@ -60,11 +60,18 @@ export default class CurfewConditionsService {
   }
 
   private createApiModelFromFormData(formData: CurfewConditionsFormData, orderId: string): CurfewConditions {
+    let addresses: string[] = []
+    if (Array.isArray(formData.addresses)) {
+      addresses = formData.addresses
+    } else if (formData.addresses) {
+      addresses = [formData.addresses]
+    }
+
     return {
       orderId,
       startDate: serialiseDate(formData['startDate-year'], formData['startDate-month'], formData['startDate-day']),
       endDate: serialiseDate(formData['endDate-year'], formData['endDate-month'], formData['endDate-day']),
-      curfewAddress: formData.addresses?.join(',') ?? '',
+      curfewAddress: addresses?.join(',') ?? '',
     }
   }
 }

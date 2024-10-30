@@ -70,9 +70,9 @@ context('The kitchen sink', () => {
     aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
     let contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-    contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
     cy.screenshot('05. contactDetailsPage - validation', { overwrite: true })
     contactDetailsPage.form.fillInWith(deviceWearerDetails)
+    contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
     cy.screenshot('06. contactDetailsPage', { overwrite: true })
     contactDetailsPage.form.saveAndContinueButton.click()
 
@@ -120,11 +120,8 @@ context('The kitchen sink', () => {
 
     // no validation
     let notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
-      notifyingOrganisationPage.form.saveAndContinueButton.click()
-      notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-    }
+    // notifyingOrganisationPage.form.saveAndContinueButton.click()
+    notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
     cy.screenshot('15. notifyingOrganisationPage - validation', { overwrite: true })
     notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
     cy.screenshot('16. notifyingOrganisationPage - validation', { overwrite: true })
@@ -132,11 +129,8 @@ context('The kitchen sink', () => {
 
     // no validation
     let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
-      installationAndRiskPage.saveAndContinueButton().click()
-      installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    }
+    // installationAndRiskPage.saveAndContinueButton().click()
+    installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
     cy.screenshot('17. installationAndRiskPage - validation', { overwrite: true })
     // installationAndRiskPage.fillInWith()
     cy.screenshot('18. installationAndRiskPage', { overwrite: true })
@@ -145,8 +139,9 @@ context('The kitchen sink', () => {
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.MonitoringConditionsSectionItem().click()
 
-    const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
+    let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.saveAndContinueButton.click()
+    monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     cy.screenshot('19. monitoringConditionsPage - validation', { overwrite: true })
     monitoringConditionsPage.form.fillInWith({
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -174,15 +169,17 @@ context('The kitchen sink', () => {
     cy.screenshot('20. monitoringConditionsPage', { overwrite: true })
     monitoringConditionsPage.form.saveAndContinueButton.click()
 
-    const installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
+    let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
     installationAddressPage.form.saveAndContinueButton.click()
+    installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
     cy.screenshot('21. installationAddressPage - validation', { overwrite: true })
     installationAddressPage.form.fillInWith(installationAddressDetails)
     cy.screenshot('22. installationAddressPage', { overwrite: true })
     installationAddressPage.form.saveAndContinueButton.click()
 
-    const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+    let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
     curfewReleaseDatePage.form.saveAndContinueButton.click()
+    curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
     cy.screenshot('23. curfewReleaseDatePage - validation', { overwrite: true })
     curfewReleaseDatePage.form.fillInWith({
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -193,8 +190,9 @@ context('The kitchen sink', () => {
     cy.screenshot('24. curfewReleaseDatePage', { overwrite: true })
     curfewReleaseDatePage.form.saveAndContinueButton.click()
 
-    const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
+    let curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
     curfewConditionsPage.form.saveAndContinueButton.click()
+    curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
     cy.screenshot('25. curfewConditionsPage - validation', { overwrite: true })
     curfewConditionsPage.form.fillInWith({
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -204,102 +202,102 @@ context('The kitchen sink', () => {
     cy.screenshot('26. curfewConditionsPage', { overwrite: true })
     curfewConditionsPage.form.saveAndContinueButton.click()
 
-    const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
+    let curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
     curfewTimetablePage.form.saveAndContinueButton.click()
+    curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
     cy.screenshot('27. curfewTimetablePage - validation', { overwrite: true })
-    curfewTimetablePage.fillInForm({
-      curfewTimeTable: [
-        {
-          dayOfWeek: 'MONDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'PRIMARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'MONDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'PRIMARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'TUESDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'PRIMARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'TUESDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'SECONDARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'WEDNESDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'SECONDARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'WEDNESDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'TERTIARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'THURSDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'TERTIARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'THURSDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'PRIMARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'FRIDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'PRIMARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'FRIDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'SECONDARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'SATURDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'SECONDARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'SATURDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'TERTIARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'SUNDAY',
-          startTime: '00:00:00',
-          endTime: '07:00:00',
-          curfewAddress: 'TERTIARY_ADDRESS',
-        },
-        {
-          dayOfWeek: 'SUNDAY',
-          startTime: '19:00:00',
-          endTime: '11:59:00',
-          curfewAddress: 'PRIMARY_ADDRESS',
-        },
-      ],
-    })
+    curfewTimetablePage.form.fillInWith([
+      {
+        day: 'MONDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Primary address'],
+      },
+      {
+        day: 'MONDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Primary address'],
+      },
+      {
+        day: 'TUESDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Primary address'],
+      },
+      {
+        day: 'TUESDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Secondary address'],
+      },
+      {
+        day: 'WEDNESDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Secondary address'],
+      },
+      {
+        day: 'WEDNESDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Tertiary address'],
+      },
+      {
+        day: 'THURSDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Tertiary address'],
+      },
+      {
+        day: 'THURSDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Primary address'],
+      },
+      {
+        day: 'FRIDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Primary address'],
+      },
+      {
+        day: 'FRIDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Secondary address'],
+      },
+      {
+        day: 'SATURDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Secondary address'],
+      },
+      {
+        day: 'SATURDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Tertiary address'],
+      },
+      {
+        day: 'SUNDAY',
+        startTime: '00:00:00',
+        endTime: '07:00:00',
+        addresses: ['Tertiary address'],
+      },
+      {
+        day: 'SUNDAY',
+        startTime: '19:00:00',
+        endTime: '11:59:00',
+        addresses: ['Primary address'],
+      },
+    ])
     cy.screenshot('28. curfewTimetablePage', { overwrite: true })
     curfewTimetablePage.form.saveAndContinueButton.click()
 
-    const enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
+    let enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
     enforcementZonePage.form.saveAndContinueButton.click()
+    enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
     cy.screenshot('29. enforcementZonePage - validation', { overwrite: true })
     enforcementZonePage.form.fillInWith({
       zoneType: 'Exclusion zone',
@@ -311,8 +309,9 @@ context('The kitchen sink', () => {
     cy.screenshot('30. enforcementZonePage', { overwrite: true })
     enforcementZonePage.form.saveAndContinueButton.click()
 
-    const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
+    let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
     alcoholMonitoringPage.form.saveAndContinueButton.click()
+    alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
     cy.screenshot('31. alcoholMonitoringPage - validation', { overwrite: true })
     alcoholMonitoringPage.form.fillInWith({
       // orderType: 'Post Release',

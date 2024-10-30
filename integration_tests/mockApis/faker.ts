@@ -1,7 +1,5 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
 
-faker.seed(9999)
-
 const sexOptions = ['Male', 'Female', 'Prefer not to say', "Don't know"]
 
 const genderOptions = ['Male', 'Female', 'Non-binary', "Don't know", 'Self identify']

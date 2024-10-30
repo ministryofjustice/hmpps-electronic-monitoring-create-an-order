@@ -31,7 +31,7 @@ context('Scenarios', () => {
     })
   })
 
-  it('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
+  it('Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am', () => {
     const deviceWearerDetails = createFakeAdultDeviceWearer()
     const primaryAddressDetails = createFakeAddress()
     const installationAddressDetails = createFakeAddress()
@@ -86,9 +86,9 @@ context('Scenarios', () => {
     monitoringConditionsPage.form.fillInWith({
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 5), // 5 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 45), // 45 days
-      orderType: 'Pre-Trial',
+      orderType: 'Post Release',
       orderTypeDescription: 'DAPOL HDC',
-      conditionType: 'Bail Order',
+      conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
       monitoringRequired: 'Curfew with electronic monitoring',
       devicesRequired: 'Location, not fitted',
     })
@@ -120,55 +120,7 @@ context('Scenarios', () => {
       {
         day: 'MONDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'MONDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'TUESDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'TUESDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'WEDNESDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'WEDNESDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'THURSDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'THURSDAY',
-        startTime: '19:00:00',
-        endTime: '11:59:00',
-        addresses: ['Primary address'],
-      },
-      {
-        day: 'FRIDAY',
-        startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -180,7 +132,7 @@ context('Scenarios', () => {
       {
         day: 'SATURDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: ['Primary address'],
       },
       {
@@ -192,7 +144,7 @@ context('Scenarios', () => {
       {
         day: 'SUNDAY',
         startTime: '00:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: ['Primary address'],
       },
       {
