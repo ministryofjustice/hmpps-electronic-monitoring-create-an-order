@@ -1,7 +1,9 @@
 import { type RequestHandler, Router } from 'express'
 
-import puppeteer from 'puppeteer'
-import paths from '../constants/paths'
+import PDFDocument from 'pdfkit'
+import fs from 'fs'
+import pdf from 'html-pdf'
+import path from 'path'
 import AttachmentsController from '../controllers/attachmentController'
 import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
@@ -24,6 +26,7 @@ import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
+import paths from '../constants/paths'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -213,57 +216,40 @@ export default function routes({
   // RECEIPT
 
   get('/order/:orderId/receipt', async (req, res, next) => {
-    // const order = req.order!
+    // Path to the HTML template
+    const htmlPath = path.join(
+      __dirname,
+      '../../../../hmpps-electronic-monitoring-create-an-order/server/views/pages/receipt.html',
+    )
 
-    const htmlContent = `
-<html>
-<head>
-    <title>User Answers</title>
-</head>
-<body>
-    <h1>User Answers</h1>
-    <p>Content goes here.</p>
-</body>
-</html>
-`
+    // Read the HTML file
+    fs.readFile(htmlPath, 'utf8', (err, html) => {
+      if (err) {
+        console.error('Error reading HTML file:', err)
+        return res.status(500).send('Failed to generate PDF')
+      }
 
-    try {
-      // Generate PDF
-      const browser = await puppeteer.launch()
-      const page = await browser.newPage()
+      // Generate PDF from HTML
+      pdf
+        .create(html, {
+          format: 'A4',
+          orientation: 'portrait',
+          border: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+        })
+        .toBuffer((error, buffer) => {
+          if (error) {
+            console.error('Error generating PDF:', err)
+            return res.status(500).send('Failed to generate PDF')
+          }
 
-      // const websiteUrl = 'https://www.google.com/'
-      // await page.goto(websiteUrl, { waitUntil: 'networkidle0' })
-      // await page.emulateMediaType('screen')
-      // const pdfBuffer = await page.pdf({
-      //   format: 'A4',
-      //   margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
-      //   printBackground: true,
-      // })
+          // Set response headers to indicate a PDF file
+          res.setHeader('Content-Type', 'application/pdf')
+          res.setHeader('Content-Disposition', `attachment; filename="user_answers.pdf"`)
 
-      await page.setContent(htmlContent)
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
-        margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
-        printBackground: true,
-      })
-
-      await browser.close()
-
-      console.log('PDF Buffer Length:', pdfBuffer.length)
-
-      // Send the PDF to the client
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="user_answers.pdf"',
-        'Content-Length': pdfBuffer.length,
-      })
-
-      res.send(pdfBuffer)
-    } catch (error) {
-      console.error('Error generating PDF:', error)
-      res.status(500).send('Failed to generate PDF')
-    }
+          // Send the PDF buffer as the response
+          res.send(buffer)
+        })
+    })
   })
 
   return router
