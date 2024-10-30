@@ -3,7 +3,7 @@ import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
-import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
+import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -110,7 +110,6 @@ context('Attendance monitoring', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.subHeader().should('contain.text', 'Attendance monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })

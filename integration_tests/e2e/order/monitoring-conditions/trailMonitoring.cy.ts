@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
-import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
+import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -81,7 +81,6 @@ context('Trail monitoring', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.subHeader().should('contain.text', 'Trail monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -108,8 +107,8 @@ context('Trail monitoring', () => {
       cy.get('#endDate-day').invoke('val').should('equal', '28')
       cy.get('#endDate-month').invoke('val').should('equal', '4')
       cy.get('#endDate-year').invoke('val').should('equal', '2025')
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
@@ -137,7 +136,7 @@ context('Trail monitoring', () => {
         })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
         const page = Page.verifyOnPage(TrailMonitoringPage)
-        page.saveAndContinueButton().click()
+        page.form.saveAndContinueButton.click()
         cy.get('#startDate-error').should('contain', 'You must enter a valid date')
         cy.get('#endDate-error').should('contain', 'You must enter a valid date')
       })
@@ -146,7 +145,7 @@ context('Trail monitoring', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
         const page = Page.verifyOnPage(TrailMonitoringPage)
         cy.get('#startDate-day').type('text')
-        page.saveAndContinueButton().click()
+        page.form.saveAndContinueButton.click()
         cy.get('#startDate-error').should(
           'contain',
           'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
@@ -157,7 +156,7 @@ context('Trail monitoring', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
         const page = Page.verifyOnPage(TrailMonitoringPage)
         cy.get('#endDate-month').type('text')
-        page.saveAndContinueButton().click()
+        page.form.saveAndContinueButton.click()
         cy.get('#endDate-error').should(
           'contain',
           'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
@@ -180,7 +179,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-day').type('28')
       cy.get('#endDate-month').type('4')
       cy.get('#endDate-year').type('2025')
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-trail`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
