@@ -1,5 +1,6 @@
 import { type RequestHandler, Router } from 'express'
 
+import puppeteer from 'puppeteer'
 import paths from '../constants/paths'
 import AttachmentsController from '../controllers/attachmentController'
 import AddressController from '../controllers/contact-information/addressController'
@@ -208,6 +209,62 @@ export default function routes({
   post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
   get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
   get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
+
+  // RECEIPT
+
+  get('/order/:orderId/receipt', async (req, res, next) => {
+    // const order = req.order!
+
+    const htmlContent = `
+<html>
+<head>
+    <title>User Answers</title>
+</head>
+<body>
+    <h1>User Answers</h1>
+    <p>Content goes here.</p>
+</body>
+</html>
+`
+
+    try {
+      // Generate PDF
+      const browser = await puppeteer.launch()
+      const page = await browser.newPage()
+
+      // const websiteUrl = 'https://www.google.com/'
+      // await page.goto(websiteUrl, { waitUntil: 'networkidle0' })
+      // await page.emulateMediaType('screen')
+      // const pdfBuffer = await page.pdf({
+      //   format: 'A4',
+      //   margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
+      //   printBackground: true,
+      // })
+
+      await page.setContent(htmlContent)
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        margin: { top: '100px', right: '50px', bottom: '100px', left: '50px' },
+        printBackground: true,
+      })
+
+      await browser.close()
+
+      console.log('PDF Buffer Length:', pdfBuffer.length)
+
+      // Send the PDF to the client
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename="user_answers.pdf"',
+        'Content-Length': pdfBuffer.length,
+      })
+
+      res.send(pdfBuffer)
+    } catch (error) {
+      console.error('Error generating PDF:', error)
+      res.status(500).send('Failed to generate PDF')
+    }
+  })
 
   return router
 }

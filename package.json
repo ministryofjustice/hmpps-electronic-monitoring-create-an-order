@@ -107,6 +107,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
+    "puppeteer": "^23.6.1",
     "redis": "^4.6.15",
     "superagent": "^9.0.2",
     "url-value-parser": "^2.2.0",
