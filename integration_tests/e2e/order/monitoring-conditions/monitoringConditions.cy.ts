@@ -80,7 +80,7 @@ context('Monitoring conditions main section', () => {
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"][value="true"]').each($el => {
         cy.wrap($el).should('be.checked').and('be.disabled')
       })

@@ -13,11 +13,13 @@ export default class AppPage extends Page {
     return cy.contains('Back')
   }
 
+  get submittedBanner(): PageElement {
+    return cy.get('.govuk-notification-banner')
+  }
+
   checkOnPage(): void {
     super.checkOnPage()
 
     this.header.checkHasHeader()
   }
-
-  submittedBanner = (): PageElement => cy.get('.govuk-notification-banner')
 }

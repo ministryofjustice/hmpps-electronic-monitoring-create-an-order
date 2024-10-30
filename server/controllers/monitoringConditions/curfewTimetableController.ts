@@ -65,14 +65,14 @@ export default class CurfewTimetableController {
 
   private constructViewModel(
     curfewTimetable: CurfewTimetable | undefined,
-    curefewTimetableApiDto: CurfewTimetableApiDto[],
+    apiDto: CurfewTimetableApiDto[],
     formData: [CurfewTimetableFormData],
   ): CurfewTimetableViewModel {
     if (formData?.length > 0) {
       return this.createViewModelFromFormData(formData[0])
     }
 
-    if (!curefewTimetableApiDto || curefewTimetableApiDto.length === 0) {
+    if (!apiDto || apiDto.length === 0) {
       const curfewTimetableAsApiDto =
         curfewTimetable?.map(item => {
           return {
@@ -82,7 +82,7 @@ export default class CurfewTimetableController {
         }) ?? []
       return this.createViewModelFromApiDto(curfewTimetableAsApiDto)
     }
-    return this.createViewModelFromApiDto(curefewTimetableApiDto)
+    return this.createViewModelFromApiDto(apiDto)
   }
 
   private createViewModelFromApiDto(validationErrors: CurfewTimetableApiDto[]): CurfewTimetableViewModel {
@@ -202,7 +202,7 @@ export default class CurfewTimetableController {
       const updateResult = await this.curfewTimetableService.update({
         accessToken: res.locals.user.token,
         orderId,
-        data: apiModel,
+        data: apiModel.filter(t => t.curfewAddress + t.startTime + t.endTime !== ''),
       })
 
       if (isValidationListResult(updateResult)) {

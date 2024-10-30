@@ -77,7 +77,7 @@ context('Alcohol monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -106,7 +106,7 @@ context('Alcohol monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })

@@ -18,7 +18,7 @@ describe('CurfewTimetableController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
 
-  let mockCurfewTimetablService: jest.Mocked<CurfewTimetableService>
+  let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
   let req: Request
   let res: Response
@@ -38,8 +38,8 @@ describe('CurfewTimetableController', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockCurfewTimetablService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
-    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetablService)
+    mockCurfewTimetableService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
+    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetableService)
 
     req = {
       // @ts-expect-error stubbing session
@@ -80,8 +80,8 @@ describe('CurfewTimetableController', () => {
     next = jest.fn()
   })
 
-  describe('View curefew timetable', () => {
-    it('Shoud render with validationErrors, if flash exist', async () => {
+  describe('View curfew timetable', () => {
+    it('Should render with validationErrors, if flash exist', async () => {
       const validationErrors = days.map(day => {
         return {
           dayOfWeek: day.toUpperCase(),
@@ -227,7 +227,7 @@ describe('CurfewTimetableController', () => {
       })
     })
 
-    it('Shoud render with formData, if flash exist', async () => {
+    it('Should render with formData, if flash exist', async () => {
       const formData: { curfewTimetable: { [k: string]: [object] } } = { curfewTimetable: {} }
       days.forEach(day => {
         formData.curfewTimetable[day] = [
@@ -705,7 +705,7 @@ describe('CurfewTimetableController', () => {
       })
       req.body = formData
 
-      mockCurfewTimetablService.update = jest.fn().mockReturnValueOnce([
+      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([
         { index: 0, errors: [{ field: 'startTime', error: 'Mock Start Time Error' }] },
         { index: 3, errors: [{ field: 'curfewAddress', error: 'Mock Address Error' }] },
       ])
@@ -784,7 +784,7 @@ describe('CurfewTimetableController', () => {
       )
     })
 
-    it('Shoud redirect to next page', async () => {
+    it('Should redirect to next page', async () => {
       const formData: { curfewTimetable: { [k: string]: [object] }; action: string } = {
         action: '',
         curfewTimetable: {},
@@ -802,7 +802,7 @@ describe('CurfewTimetableController', () => {
       })
       req.body = formData
 
-      mockCurfewTimetablService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
+      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
 
       await controller.update(req, res, next)
 

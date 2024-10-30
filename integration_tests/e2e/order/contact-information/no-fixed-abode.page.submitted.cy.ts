@@ -28,7 +28,7 @@ context('Contact information', () => {
 
       it('Should display the submitted order notification', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
-        page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       })
 
       it('Should not allow the user to update the no fixed abode details', () => {

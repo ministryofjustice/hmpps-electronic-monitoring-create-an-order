@@ -84,7 +84,7 @@ context('Installation and risk section', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/installation-and-risk`)
       const page = Page.verifyOnPage(InstallationAndRiskPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="checkbox"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -110,7 +110,7 @@ context('Installation and risk section', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/installation-and-risk`)
       const page = Page.verifyOnPage(InstallationAndRiskPage)
-      page.submittedBanner().should('not.exist')
+      page.submittedBanner.should('not.exist')
       cy.get('input[type="checkbox"]').each($el => {
         cy.wrap($el).should('be.enabled')
       })
