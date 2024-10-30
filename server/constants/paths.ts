@@ -8,7 +8,8 @@ const paths = {
     SUBMIT: '/order/:orderId/submit',
     SUBMIT_FAILED: '/order/submit/failed',
     SUBMIT_SUCCESS: '/order/submit/success',
-    RECEIPT: '/order/:orderId/receipt',
+    VIEW_RECEIPT: '/order/:orderId/receipt/view',
+    DOWNLOAD_RECEIPT: '/order/:orderId/receipt/download',
   },
 
   ABOUT_THE_DEVICE_WEARER: {

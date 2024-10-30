@@ -1,0 +1,36 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block content %}
+
+{{ govukBackLink({
+  text: "Back",
+  href: "/"
+}) }}
+
+{{ govukPanel({
+  titleText: "RECEIPT",
+  html: "",
+  attributes: {
+    "data-qa": "confirmation-panel"
+  }
+}) }}
+
+<body>
+    <h1>Your Receipt</h1>
+    <p>This is a non-visible page that will be converted to PDF.</p>
+</body>
+
+<div class="govuk-button-group">
+      {{ govukButton({
+          text: "Back to your applications",
+          href: "/"
+      }) }}
+  </div>
+
+{% endblock %}

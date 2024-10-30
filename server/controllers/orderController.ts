@@ -94,10 +94,15 @@ export default class OrderController {
     res.render('pages/order/submit-success')
   }
 
-  receipt: RequestHandler = async (req: Request, res: Response) => {
+  getReceipt: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+    res.render(`pages/order/receipt`, order)
+  }
+
+  downloadReciept: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const receipt = await this.orderService.getReceipt({
+    const receipt = await this.orderService.downloadReceipt({
       accessToken: res.locals.user.token,
       orderId: order.id,
     })

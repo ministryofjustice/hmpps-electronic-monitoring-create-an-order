@@ -28,8 +28,8 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async getReceipt(input: OrderRequestInput): Promise<Buffer> {
-    const url = 'https://example.com/'
+  async downloadReceipt(input: OrderRequestInput): Promise<Buffer> {
+    const url = `http://localhost:3000/order/${input.orderId}/receipt/view`
 
     try {
       const browser = await puppeteer.launch()
