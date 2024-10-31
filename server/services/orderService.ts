@@ -4,6 +4,7 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import OrderModel, { Order } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
+import PdfService from './pdfService/pdfService'
 
 type OrderRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -28,30 +29,12 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
+
   async downloadReceipt(input: OrderRequestInput): Promise<Buffer> {
-    const url = `http://localhost:3000/order/${input.orderId}/receipt/view`
+    console.log('in Order.service downloadReceipt')
+    const orderReceiptUri = `/order/${input.orderId}/receipt/view`
 
-    try {
-      const browser = await puppeteer.launch()
-      const page = await browser.newPage()
-
-      // Navigate to the webpage
-      await page.goto(url, { waitUntil: 'networkidle0' })
-
-      // Create the PDF
-      const bufferArray = await page.pdf({
-        format: 'A4',
-        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
-      })
-
-      const buffer = Buffer.from(bufferArray)
-
-      await browser.close()
-      return buffer // Return the generated PDF buffer
-    } catch (err) {
-      console.error('Error generating PDF from webpage:', err)
-      throw err // Propagate the error up the call stack
-    }
+    return PdfService.generatePdf(orderReceiptUri)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
