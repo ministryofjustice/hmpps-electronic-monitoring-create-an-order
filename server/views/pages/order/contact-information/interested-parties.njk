@@ -75,30 +75,30 @@
       }
     }) %}
       {{ govukInput({
-          label: {
-            text: "Full name of responsible officer",
-            classes: "govuk-label--s"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "responsibleOfficerName",
-          name: "responsibleOfficerName",
-          value: responsibleOfficerName,
-          errorMessage: errors.responsibleOfficerName,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Full name of responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "responsibleOfficerName",
+        name: "responsibleOfficerName",
+        value: responsibleOfficerName,
+        errorMessage: errors.responsibleOfficerName,
+        disabled: not isOrderEditable
+      }) }}
 
       {{ govukInput({
-          label: {
-            text: "Telephone number for responsible officer",
-            classes: "govuk-label--s"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "responsibleOfficerPhoneNumber",
-          name: "responsibleOfficerPhoneNumber",
-          value: responsibleOfficerPhoneNumber,
-          errorMessage: errors.responsibleOfficerPhoneNumber,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Telephone number for responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "responsibleOfficerPhoneNumber",
+        name: "responsibleOfficerPhoneNumber",
+        value: responsibleOfficerPhoneNumber,
+        errorMessage: errors.responsibleOfficerPhoneNumber,
+        disabled: not isOrderEditable
+      }) }}
     {% endcall %}
 
     {% call govukFieldset({

@@ -217,9 +217,9 @@ context('The kitchen sink', () => {
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      if (takeScreenshots) cy.screenshot('15. interestedPartiesPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('10. interestedPartiesPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
-      if (takeScreenshots) cy.screenshot('16. interestedPartiesPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('10. interestedPartiesPage', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
