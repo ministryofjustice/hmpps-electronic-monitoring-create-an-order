@@ -32,7 +32,7 @@ export default class EnforcementZoneFormComponent extends FormComponent {
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'End date of monitoring(optional)')
+    return new FormDateComponent(this.form, 'End date of monitoring (optional)')
   }
 
   get uploadField(): FormFileUploadComponent {

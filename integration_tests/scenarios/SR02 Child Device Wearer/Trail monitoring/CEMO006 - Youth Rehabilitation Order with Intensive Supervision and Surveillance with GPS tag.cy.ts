@@ -288,7 +288,10 @@ context('Scenarios', () => {
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        // indexPage.ordersListItems().contains('Submitted')
+        indexPage
+          .ordersList()
+          .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
+          .should('exist')
       })
     },
   )

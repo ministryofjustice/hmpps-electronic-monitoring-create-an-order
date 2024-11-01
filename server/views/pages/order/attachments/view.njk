@@ -51,27 +51,28 @@
     <dd class="govuk-summary-list__value">
        <a href="/order/{{order.id}}/attachments/licence/{{licenceFileName}}" class="govuk-link">{{licenceFileName}}</a>
     </dd>
-    {% else %}  
+    {% else %}
      <dd class="govuk-summary-list__value">
        No licence document uploaded
-    </dd>   
+    </dd>
     {% endif %}
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> name</span></a>
     </dd>
   </div>
-   <div class="govuk-summary-list__row">
+
+  <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      Photo ID
+      Photo ID (optional)
     </dt>
     {% if photoFileName %}
     <dd class="govuk-summary-list__value">
      <a href="/order/{{order.id}}/attachments/photoId/{{photoFileName}}" class="govuk-link">{{photoFileName}}</a>
     </dd>
-     {% else %}  
+     {% else %}
      <dd class="govuk-summary-list__value">
        No photo id document uploaded
-    </dd>   
+    </dd>
     {% endif %}
     <dd class="govuk-summary-list__actions">
       <a class="govuk-link" href="/order/{{order.id}}/attachments/photoId">Change<span class="govuk-visually-hidden"> name</span></a>
@@ -80,7 +81,7 @@
 </dl>
 {{ govukButton({
             text: "Back to form section",
-            href: "/order/" + order.id + "/summary"           
+            href: "/order/" + order.id + "/summary"
         }) }}
 
 {% endblock %}

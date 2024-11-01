@@ -44,114 +44,122 @@
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    {{ govukInput({
-      label: {
-        text: "NOMIS ID",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "nomis-id",
-      name: "nomisId",
-      value: nomisId.value,
-      errorMessage: nomisId.error,
-      disabled: not isOrderEditable
-    }) }}
+    {% call govukFieldset({
+      legend: {
+        text: "Identity numbers",
+        classes: "govuk-fieldset__legend--m",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukInput({
+        label: {
+          text: "National Offender Management Information System (NOMIS) ID (optional)"
+        },
+        classes: "govuk-input--width-10",
+        id: "nomis-id",
+        name: "nomisId",
+        value: nomisId.value,
+        errorMessage: nomisId.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukInput({
-      label: {
-        text: "PNC ID",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "pnc-id",
-      name: "pncId",
-      value: pncId.value,
-      errorMessage: pncId.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukInput({
+        label: {
+          text: "Police National Computer (PNC) ID (optional)"
+        },
+        classes: "govuk-input--width-10",
+        id: "pnc-id",
+        name: "pncId",
+        value: pncId.value,
+        errorMessage: pncId.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukInput({
-      label: {
-        text: "DELIUS ID",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "delius-id",
-      name: "deliusId",
-      value: deliusId.value,
-      errorMessage: deliusId.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukInput({
+        label: {
+          text: "Delius ID (optional)"
+        },
+        classes: "govuk-input--width-10",
+        id: "delius-id",
+        name: "deliusId",
+        value: deliusId.value,
+        errorMessage: deliusId.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukInput({
-      label: {
-        text: "Prison Number",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "prison-number",
-      name: "prisonNumber",
-      value: prisonNumber.value,
-      errorMessage: prisonNumber.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukInput({
+        label: {
+          text: "Prison Number (Optional)"
+        },
+        classes: "govuk-input--width-10",
+        id: "prison-number",
+        name: "prisonNumber",
+        value: prisonNumber.value,
+        errorMessage: prisonNumber.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukInput({
-      label: {
-        text: "Home Office Reference Number",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "home-office-reference-number",
-      name: "homeOfficeReferenceNumber",
-      value: homeOfficeReferenceNumber.value,
-      errorMessage: homeOfficeReferenceNumber.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukInput({
+        label: {
+          text: "Home Office Reference Number (Optional)"
+        },
+        classes: "govuk-input--width-10",
+        id: "home-office-reference-number",
+        name: "homeOfficeReferenceNumber",
+        value: homeOfficeReferenceNumber.value,
+        errorMessage: homeOfficeReferenceNumber.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
 
-    {{ govukInput({
-      label: {
-        text: "First name",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "first-name",
-      name: "firstName",
-      value: firstName.value,
-      errorMessage: firstName.error,
-      disabled: not isOrderEditable
-    }) }}
+    {% call govukFieldset({
+      legend: {
+        text: "Name of the device wearer",
+        classes: "govuk-fieldset__legend--m",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukInput({
+        label: {
+          text: "First names"
+        },
+        classes: "govuk-input--width-10",
+        id: "first-name",
+        name: "firstName",
+        value: firstName.value,
+        errorMessage: firstName.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukInput({
-      label: {
-        text: "Last name",
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "last-name",
-      name: "lastName",
-      value: lastName.value,
-      errorMessage: lastName.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukInput({
+        label: {
+          text: "Last name"
+        },
+        classes: "govuk-input--width-10",
+        id: "last-name",
+        name: "lastName",
+        value: lastName.value,
+        errorMessage: lastName.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukInput({
-      label: {
-        text: "Alias (optional)",
-        classes: "govuk-label--s"
-      },
-      hint: {
-          text: "For example a nickname or alias the device wearer is also known as"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "alias",
-      name: "alias",
-      value: alias.value,
-      errorMessage: alias.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukInput({
+        label: {
+          text: "Preferred name or alias (optional)"
+        },
+        hint: {
+            text: "For example a nickname or alias the device wearer is also known as"
+        },
+        classes: "govuk-input--width-10",
+        id: "alias",
+        name: "alias",
+        value: alias.value,
+        errorMessage: alias.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
 
-    {% set disabled = {} if isOrderEditable else { disabled:true } %}
+    {% set isDisabled = {} if isOrderEditable else { disabled: true } %}
 
     {{ govukDateInput({
       id: "dateOfBirth",
@@ -160,7 +168,7 @@
         legend: {
           text: "Date of birth",
           isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
+          classes: "govuk-fieldset__legend--m"
         }
       },
       hint: {
@@ -171,19 +179,19 @@
           name: "day",
           classes: "govuk-input--width-2",
           value: dateOfBirth_day.value,
-          attributes: disabled
+          attributes: isDisabled
         },
         {
           name: "month",
           classes: "govuk-input--width-2",
           value: dateOfBirth_month.value,
-          attributes: disabled
+          attributes: isDisabled
         },
         {
           name: "year",
           classes: "govuk-input--width-4",
           value: dateOfBirth_year.value,
-          attributes: disabled
+          attributes: isDisabled
         }
       ],
       errorMessage: dateOfBirth.error
@@ -198,9 +206,6 @@
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
-      },
-      hint: {
-        text: "Select one option"
       },
       items: [
         {
@@ -225,11 +230,11 @@
         legend: {
           text: "Sex",
           isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
+          classes: "govuk-fieldset__legend--m"
         }
       },
       hint: {
-        text: "Select the device wearer's sex"
+        text: "What sex was the devise wearer assigned at birth?"
       },
       items: [
         {
@@ -264,11 +269,11 @@
         legend: {
           text: "Gender identity",
           isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
+          classes: "govuk-fieldset__legend--m"
         }
       },
       hint: {
-        text: "Select the device wearer's gender"
+        text: "How does the device wearer describe themselves?"
       },
       items: [
         {
@@ -283,7 +288,7 @@
         },
         {
           value: "non-binary",
-          text: "Non-binary",
+          text: "Non binary",
           disabled: not isOrderEditable
         },
         {
@@ -307,13 +312,13 @@
       classes: "govuk-checkboxes--small",
       fieldset: {
         legend: {
-          text: "Disabilities",
+          text: "Disability (optional)",
           isPageHeading: true,
           classes: "govuk-fieldset__legend--m"
         }
       },
       hint: {
-        text: "Does the device wearer have any disabilities"
+        text: "Does the device wearer have any disabilities or accessibility needs?"
       },
       items: [
         {
@@ -370,45 +375,18 @@
       disabled: not isOrderEditable
     }) }}
 
-
-
-    {{ govukRadios({
-      name: "interpreterRequired",
-      classes: "govuk-radios--inline",
-      fieldset:{
-        legend: {
-          text: "Language",
-          classes: "govuk-fieldset__legend--m",
-          isPageHeading: false
-        }
-      },
-      hint: {
-        text: "Is an interpreter needed"
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: interpreterRequired.value,
-      errorMessage: interpreterRequired.error,
-      disabled: not isOrderEditable
-    }) }}
-    {{ govukSelect({
+    {% call govukFieldset({
+      legend: {
+        text: "Language",
+        classes: "govuk-fieldset__legend--m",
+        isPageHeading: false
+      }
+    }) %}
+     {{ govukSelect({
         id: "language",
         name: "language",
         label: {
-          text: "What is the device wearer's main language"
-        },
-        hint:{
-          text:"Select One"
+          text: "What is the device wearer's main language?"
         },
         items: [
           { text: 'Select', value: '' },
@@ -525,10 +503,33 @@
         value: language.value,
         errorMessage: language.error,
         disabled: not isOrderEditable
-     }) }}
+      }) }}
 
-
-
+      {{ govukRadios({
+        name: "interpreterRequired",
+        classes: "govuk-radios--inline",
+        fieldset:{
+          legend: {
+            text: "Is an interpreter needed?"
+          }
+        },
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "false",
+            text: "No",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: interpreterRequired.value,
+        errorMessage: interpreterRequired.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
