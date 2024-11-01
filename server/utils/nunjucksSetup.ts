@@ -39,5 +39,14 @@ export default function nunjucksSetup(app: express.Express): void {
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('formatKey', (input: string) => {
+    if (typeof input !== 'string') return input
+
+    const lowerCaseKey = input.replace(/([A-Z])/g, ' $1').toLowerCase()
+
+    const sentenceCaseKey = lowerCaseKey.charAt(0).toUpperCase() + lowerCaseKey.slice(1)
+
+    return sentenceCaseKey.trim()
+  })
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
 }
