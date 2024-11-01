@@ -7,25 +7,24 @@ export default class PdfService {
       const browser = await puppeteer.launch()
       const page = await browser.newPage()
 
-      console.log('going to the url')
+      console.log('going to auth login page')
       console.log(`${config.loginUrl}`)
       await page.goto(`${config.downloadBaseUrl}${uri}`, { waitUntil: 'networkidle0' })
       await page.waitForSelector('#username')
+
       console.log('writing username')
       await page.type('#username', `${config.username}`)
       console.log('writing password')
       await page.type('#password', `${config.password}`)
-      console.log('clicking submit')
+      console.log('logging in')
       await page.click('#submit')
-
-      console.log('clicked submit, waiting for navigation')
       await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
-      console.log('waiting for url to load')
+      console.log('going to receipt page')
       await page.goto(`${config.downloadBaseUrl}${uri}`, { waitUntil: 'networkidle0' })
 
       // Create the PDF
-      console.log('creating the pdf')
+      console.log('creating the pdf from the page')
       await page.emulateMediaType('screen')
       const bufferArray = await page.pdf({
         format: 'A4',

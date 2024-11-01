@@ -1,5 +1,3 @@
-import puppeteer from 'puppeteer'
-import { readFile } from 'node:fs/promises'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import OrderModel, { Order } from '../models/Order'
@@ -29,9 +27,7 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-
   async downloadReceipt(input: OrderRequestInput): Promise<Buffer> {
-    console.log('in Order.service downloadReceipt')
     const orderReceiptUri = `/order/${input.orderId}/receipt/view`
 
     return PdfService.generatePdf(orderReceiptUri)

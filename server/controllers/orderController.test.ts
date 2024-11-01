@@ -189,11 +189,8 @@ describe('OrderController', () => {
       await orderController.submit(req, res, next)
 
       // Then
-      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({
-        accessToken: 'fakeUserToken',
-        orderId: mockOrder.id,
-      })
-      expect(res.redirect).toHaveBeenCalledWith('/order/submit/success')
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/success`)
     })
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {
@@ -208,7 +205,7 @@ describe('OrderController', () => {
 
       // Then
       expect(mockOrderService.submitOrder).toHaveBeenCalledTimes(0)
-      expect(res.redirect).toHaveBeenCalledWith('/order/submit/failed')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/failed`)
     })
   })
 

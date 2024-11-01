@@ -20,10 +20,25 @@
     }
   }) }}
 
-  <div class="govuk-button-group">
-    {{ govukButton({
-      text: "Back to your applications",
-      href: "/"
-    }) }}
+{{ govukPanel({
+  titleText: "Application successfully submitted",
+  html: "Your reference number is <br><strong>EXAMPLE</strong>",
+  attributes: {
+    "data-qa": "confirmation-panel"
+  }
+}) }}
+
+<div class="govuk-button-group">
+      {{ govukButton({
+          text: "Download PDF receipt",
+          href: "/order/" + orderId + "/receipt/download"
+      }) }}
+  </div>
+
+<div class="govuk-button-group">
+      {{ govukButton({
+          text: "Back to your applications",
+          href: "/"
+      }) }}
   </div>
 {% endblock %}

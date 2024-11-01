@@ -91,27 +91,35 @@ export default class OrderController {
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/submit-success')
+    const orderId = req.order!.id
+
+    res.render('pages/order/submit-success', {
+      orderId,
+    })
   }
 
   getReceipt: RequestHandler = async (req: Request, res: Response) => {
-    console.log("in order controller getReceipt")
     const order = req.order!
-    console.log("rendeding the receipt page")
-    res.render(`pages/order/receipt`, order)
+    console.log('rendering the receipt page')
+    res.render(`pages/order/receipt`, {
+      order,
+    })
   }
 
   downloadReciept: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
-    console.log("in order controller download receipt")
+    const orderId = req.order!.id
+    const downloadDate = new Date().toISOString()
+    console.log('downloading receipt')
 
     const receipt = await this.orderService.downloadReceipt({
       accessToken: res.locals.user.token,
-      orderId: order.id,
+      orderId,
     })
 
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', `attachment; filename="user_answers.pdf"`)
+    res.setHeader('Content-Disposition', `attachment; filename="${downloadDate}-receipt-order-${orderId}.pdf"`)
     res.send(receipt)
+    res.end()
+    console.log('receipt download complete')
   }
 }

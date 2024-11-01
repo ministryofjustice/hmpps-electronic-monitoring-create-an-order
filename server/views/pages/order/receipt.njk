@@ -14,8 +14,8 @@
 }) }}
 
 {{ govukPanel({
-  titleText: "RECEIPT",
-  html: "",
+  titleText: "RECEIPT for order: " + order.id,
+  html: orderId,
   attributes: {
     "data-qa": "confirmation-panel"
   }
