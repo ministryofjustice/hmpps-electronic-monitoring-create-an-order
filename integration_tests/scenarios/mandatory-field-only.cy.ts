@@ -84,6 +84,10 @@ context('Mandatory fields only', () => {
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',
       ],
+      // API requires something in this field due to
+      // java.lang.NullPointerException: null
+      //     at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:204)
+      devicesRequired: ['Alcohol, remote breath'],
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -93,9 +97,13 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      // API requires this field due to
+      // java.lang.NullPointerException: null
+      //    at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:199)
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 150), // 150 days
       addresses: ['Primary address'],
     }
-    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
       {
         day,
@@ -304,6 +312,10 @@ context('Mandatory fields only', () => {
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',
       ],
+      // API requires something in this field due to
+      // java.lang.NullPointerException: null
+      //     at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:204)
+      devicesRequired: ['Alcohol, remote breath'],
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -313,9 +325,13 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      // API requires this field due to
+      // java.lang.NullPointerException: null
+      //    at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:199)
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 150), // 150 days
       addresses: ['Primary address'],
     }
-    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
       {
         day,

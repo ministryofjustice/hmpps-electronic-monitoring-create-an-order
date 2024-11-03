@@ -526,7 +526,11 @@ const resetDB = async () => {
   // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
   // console.log(rows)
 
-  await emptyNextTable(client)
+  try {
+    await emptyNextTable(client)
+  } catch (error) {
+    // quite fail
+  }
   await client.end()
 
   return true

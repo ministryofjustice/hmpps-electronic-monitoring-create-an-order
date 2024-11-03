@@ -199,7 +199,8 @@ context('Scenarios', () => {
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
             .replace("don't know", 'unknown')
-            .replace('self identify', 'self-identify'),
+            .replace('self identify', 'self-identify')
+            .replace('non binary', 'non-binary'),
           disability: [{ disability: '' }],
           address_1: primaryAddressDetails.line1,
           address_2: primaryAddressDetails.line2,
