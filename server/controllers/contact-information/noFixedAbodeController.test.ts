@@ -5,6 +5,7 @@ import DeviceWearerService from '../../services/deviceWearerService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import NoFixedAbodeController from './noFixedAbodeController'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -38,6 +39,7 @@ describe('NoFixedAbodeController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerService: jest.Mocked<DeviceWearerService>
   let controller: NoFixedAbodeController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -53,7 +55,7 @@ describe('NoFixedAbodeController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockDeviceWearerService = new DeviceWearerService(mockRestClient) as jest.Mocked<DeviceWearerService>
-    controller = new NoFixedAbodeController(mockAuditService, mockDeviceWearerService)
+    controller = new NoFixedAbodeController(mockAuditService, mockDeviceWearerService, taskListService)
   })
 
   describe('get', () => {
@@ -150,14 +152,16 @@ describe('NoFixedAbodeController', () => {
   describe('post', () => {
     it('should redirect to the primary address page if the user selects "yes"', async () => {
       // Given
+      const order = createMockOrder(null)
       const req = createMockRequest({
+        order,
         body: {
           action: 'continue',
           noFixedAbode: 'false',
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: order.id,
         },
       })
       const res = createMockResponse()
@@ -185,19 +189,21 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/addresses/primary')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/addresses/primary`)
     })
 
     it('should redirect to the notifying organisation form if the user selects "no"', async () => {
       // Given
+      const order = createMockOrder(null)
       const req = createMockRequest({
+        order,
         body: {
           action: 'continue',
           noFixedAbode: 'true',
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: order.id,
         },
       })
       const res = createMockResponse()
@@ -225,18 +231,20 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/notifying-organisation`)
     })
 
     it('should redirect to the summary page if the user selects back', async () => {
+      const order = createMockOrder(null)
       const req = createMockRequest({
+        order,
         body: {
           action: 'back',
           noFixedAbode: 'false',
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: order.id,
         },
       })
       const res = createMockResponse()
@@ -264,17 +272,19 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
     })
 
     it('should redirect to the form if the user doesnt select an option', async () => {
+      const order = createMockOrder(null)
       const req = createMockRequest({
+        order,
         body: {
           action: 'continue',
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: order.id,
         },
       })
       const res = createMockResponse()
@@ -290,7 +300,7 @@ describe('NoFixedAbodeController', () => {
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         { error: 'You must indicate whether the device wearer has a fixed abode', field: 'noFixedAbode' },
       ])
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/no-fixed-abode')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/no-fixed-abode`)
     })
   })
 })

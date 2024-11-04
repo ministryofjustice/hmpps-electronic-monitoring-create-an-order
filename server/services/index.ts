@@ -16,6 +16,7 @@ import MonitoringConditionsService from './monitoringConditionsService'
 import NotifyingOrganisationService from './notifyingOrganisationService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
+import TaskListService from './taskListService'
 import TrailMonitoringService from './trailMonitoringService'
 
 export const services = () => {
@@ -38,6 +39,7 @@ export const services = () => {
   const zoneService = new EnforcementZoneService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
+  const taskListService = new TaskListService()
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
 
   return {
@@ -58,6 +60,7 @@ export const services = () => {
     notifyingOrganisationService,
     orderSearchService,
     orderService,
+    taskListService,
     trailMonitoringService,
     zoneService,
   }

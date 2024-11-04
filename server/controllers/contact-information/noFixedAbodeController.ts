@@ -5,6 +5,7 @@ import { AuditService } from '../../services'
 import DeviceWearerService from '../../services/deviceWearerService'
 import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
+import TaskListService from '../../services/taskListService'
 
 const FormDataModel = z.object({
   action: z.string().default('continue'),
@@ -15,6 +16,7 @@ export default class NoFixedAbodeController {
   constructor(
     private readonly auditService: AuditService,
     private readonly deviceWearerService: DeviceWearerService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -45,17 +47,18 @@ export default class NoFixedAbodeController {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
       res.redirect(paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', orderId))
-    } else if (action === 'back') {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
-    } else if (result.noFixedAbode) {
-      res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
-    } else {
+    } else if (action === 'continue') {
       res.redirect(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId).replace(
-          ':addressType(primary|secondary|tertiary)',
-          'primary',
-        ),
+        this.taskListService.getNextPage('NO_FIXED_ABODE', {
+          ...req.order!,
+          deviceWearer: {
+            ...req.order!.deviceWearer,
+            noFixedAbode: result.noFixedAbode,
+          },
+        }),
       )
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }
 }

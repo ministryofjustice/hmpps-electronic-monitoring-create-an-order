@@ -7,6 +7,7 @@ import { AddressField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import NotifyingOrganisationService from '../../services/notifyingOrganisationService'
 import { getError } from '../../utils/utils'
+import TaskListService from '../../services/taskListService'
 
 const NotifyingOrganisationFormDataModel = z.object({
   action: z.string(),
@@ -41,6 +42,7 @@ export default class NotifyingOrganisationController {
   constructor(
     private readonly auditService: AuditService,
     private readonly notifyingOrganisationService: NotifyingOrganisationService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private constructViewModel(
@@ -162,7 +164,7 @@ export default class NotifyingOrganisationController {
 
       res.redirect(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(paths.INSTALLATION_AND_RISK.replace(':orderId', orderId))
+      res.redirect(this.taskListService.getNextPage('NOTIFYING_ORGANISATION', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

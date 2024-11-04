@@ -5,11 +5,13 @@ import { AuditService } from '../../services'
 import CurfewConditionsService from '../../services/curfewConditionsService'
 import CurfewConditionsFormDataModel from '../../models/form-data/curfewConditions'
 import CurfewConditionsViewModel from '../../models/view-models/curfewConditions'
+import TaskListService from '../../services/taskListService'
 
 export default class CurfewConditionsController {
   constructor(
     private readonly auditService: AuditService,
     private readonly curfewConditionsService: CurfewConditionsService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -37,7 +39,7 @@ export default class CurfewConditionsController {
 
       res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
     } else {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+      res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
     }
   }
 }

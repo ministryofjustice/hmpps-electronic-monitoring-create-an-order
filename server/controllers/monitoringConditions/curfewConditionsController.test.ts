@@ -7,6 +7,7 @@ import AuditService from '../../services/auditService'
 import CurfewConditionsService from '../../services/curfewConditionsService'
 import CurfewConditionsController from './curfewConditionsController'
 import paths from '../../constants/paths'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -17,9 +18,9 @@ const mockId = uuidv4()
 describe('CurfewConditionsController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-
   let mockCurfewReleaseDateService: jest.Mocked<CurfewConditionsService>
   let controller: CurfewConditionsController
+  const taskListService = new TaskListService()
   let req: Request
   let res: Response
   let next: NextFunction
@@ -38,7 +39,7 @@ describe('CurfewConditionsController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockCurfewReleaseDateService = new CurfewConditionsService(mockRestClient) as jest.Mocked<CurfewConditionsService>
-    controller = new CurfewConditionsController(mockAuditService, mockCurfewReleaseDateService)
+    controller = new CurfewConditionsController(mockAuditService, mockCurfewReleaseDateService, taskListService)
 
     req = {
       // @ts-expect-error stubbing session
@@ -186,6 +187,23 @@ describe('CurfewConditionsController', () => {
     })
 
     it('Shoud redirect to curfew condition page', async () => {
+      req.order = getMockOrder({
+        monitoringConditions: {
+          acquisitiveCrime: false,
+          alcohol: false,
+          dapol: false,
+          devicesRequired: [],
+          exclusionZone: false,
+          mandatoryAttendance: false,
+          orderType: '',
+          trail: false,
+          curfew: true,
+          conditionType: '',
+          endDate: '',
+          orderTypeDescription: '',
+          startDate: '',
+        },
+      })
       req.body = {
         action: 'next',
         address: ['PRIMARY', 'SECONDARY'],
@@ -200,9 +218,7 @@ describe('CurfewConditionsController', () => {
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', mockId),
-      )
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order.id}/monitoring-conditions/curfew/timetable`)
     })
   })
 })

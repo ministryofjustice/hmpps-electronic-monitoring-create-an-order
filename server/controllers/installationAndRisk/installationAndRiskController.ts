@@ -7,6 +7,7 @@ import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import InstallationAndRiskService from '../../services/installationAndRiskService'
 import { getError } from '../../utils/utils'
+import TaskListService from '../../services/taskListService'
 
 const installationAndRiskFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -33,6 +34,7 @@ export default class InstallationAndRiskController {
   constructor(
     private readonly auditService: AuditService,
     private readonly installationAndRiskService: InstallationAndRiskService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private constructViewModel(
@@ -109,6 +111,8 @@ export default class InstallationAndRiskController {
       req.flash('validationErrors', updateResult)
 
       res.redirect(paths.INSTALLATION_AND_RISK.replace(':orderId', orderId))
+    } else if (formData.action === 'continue') {
+      res.redirect(this.taskListService.getNextPage('INSTALLATION_AND_RISK', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

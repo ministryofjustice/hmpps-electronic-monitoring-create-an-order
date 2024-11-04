@@ -26,6 +26,21 @@ const mockInProgressCurfewReleaseDate = {
 
 const mockEmptyCurfewReleaseDate = {
   ...mockApiOrder('SUBMITTED'),
+  monitoringConditions: {
+    orderType: null,
+    acquisitiveCrime: null,
+    dapol: null,
+    curfew: true,
+    exclusionZone: null,
+    trail: null,
+    mandatoryAttendance: null,
+    alcohol: null,
+    devicesRequired: null,
+    orderTypeDescription: null,
+    conditionType: null,
+    startDate: null,
+    endDate: null,
+  },
   curfewReleaseDateConditions: {
     curfewAddress: null,
     releaseDate: null,
@@ -34,6 +49,7 @@ const mockEmptyCurfewReleaseDate = {
     endTime: null,
   },
   status: 'IN_PROGRESS',
+  id: mockOrderId,
 }
 
 const checkFormFields = () => {

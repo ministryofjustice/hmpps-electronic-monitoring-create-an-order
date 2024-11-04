@@ -7,7 +7,7 @@ import { DateField, MultipleChoiceField, TextField } from '../../models/view-mod
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
 import { deserialiseDate, getError, serialiseDate } from '../../utils/utils'
-import { getSelectedMonitoringTypes } from './nextPage'
+import TaskListService from '../../services/taskListService'
 
 const monitoringConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -54,10 +54,19 @@ type MonitoringConditionsViewModel = {
   endDate: DateField
 }
 
+const monitoringTypes: (keyof MonitoringConditions)[] = [
+  'curfew',
+  'exclusionZone',
+  'trail',
+  'mandatoryAttendance',
+  'alcohol',
+]
+
 export default class MonitoringConditionsController {
   constructor(
     private readonly auditService: AuditService,
     private readonly monitoringConditionsService: MonitoringConditionsService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private constructViewModel(
@@ -72,10 +81,19 @@ export default class MonitoringConditionsController {
     return this.createViewModelFromMonitoringConditions(monitoringConditions)
   }
 
+  private getSelectedMonitoringTypes(monitoringConditions: MonitoringConditions): string[] {
+    return monitoringTypes.reduce((acc: string[], val) => {
+      if (monitoringConditions[val]) {
+        acc.push(val)
+      }
+      return acc
+    }, [])
+  }
+
   private createViewModelFromMonitoringConditions(
     monitoringConditions: MonitoringConditions,
   ): MonitoringConditionsViewModel {
-    const monitoringRequiredValues = getSelectedMonitoringTypes(monitoringConditions)
+    const monitoringRequiredValues = this.getSelectedMonitoringTypes(monitoringConditions)
 
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditions?.startDate)
     const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditions?.endDate)
@@ -177,12 +195,7 @@ export default class MonitoringConditionsController {
       req.flash('validationErrors', updateMonitoringConditionsResult)
       res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(
-        paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', orderId).replace(
-          ':addressType(installation)',
-          'installation',
-        ),
-      )
+      res.redirect(this.taskListService.getNextPage('MONITORING_CONDITIONS', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

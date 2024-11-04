@@ -6,6 +6,7 @@ import { createMockRequest, createMockResponse } from '../../../test/mocks/mockE
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import AddressController from './addressController'
 import { AddressTypeEnum } from '../../models/Address'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -59,6 +60,7 @@ describe('AddressController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockAddressService: jest.Mocked<AddressService>
   let addressController: AddressController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -74,7 +76,7 @@ describe('AddressController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAddressService = new AddressService(mockRestClient) as jest.Mocked<AddressService>
-    addressController = new AddressController(mockAuditService, mockAddressService)
+    addressController = new AddressController(mockAuditService, mockAddressService, taskListService)
   })
 
   describe('getAddress', () => {
@@ -91,7 +93,7 @@ describe('AddressController', () => {
           order: mockOrder,
           flash: jest.fn().mockReturnValue([]),
           params: {
-            orderId: '123456789',
+            orderId: mockOrder.id,
             addressType: param,
           },
         })
@@ -115,7 +117,7 @@ describe('AddressController', () => {
       const req = createMockRequest({
         order: mockOrder,
         params: {
-          orderId: '123456789',
+          orderId: mockOrder.id,
           addressType: 'primary',
         },
         flash: jest
@@ -180,7 +182,7 @@ describe('AddressController', () => {
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: mockOrder.id,
           addressType: 'primary',
         },
       })
@@ -210,7 +212,7 @@ describe('AddressController', () => {
         { error: 'Address line 2 is required', field: 'addressLine2' },
         { error: 'Postcode is required', field: 'postcode' },
       ])
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/addresses/primary')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/addresses/primary`)
     })
 
     it('should save and redirect to the order summary page if the user selects back', async () => {
@@ -227,7 +229,7 @@ describe('AddressController', () => {
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: mockOrder.id,
           addressType: 'primary',
         },
       })
@@ -248,12 +250,12 @@ describe('AddressController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
     })
 
     it.each([
-      ['Primary', 'primary', '/order/123456789/contact-information/addresses/secondary'],
-      ['Secondary', 'secondary', '/order/123456789/contact-information/addresses/tertiary'],
+      ['Primary', 'primary', `/order/${mockOrder.id}/contact-information/addresses/secondary`],
+      ['Secondary', 'secondary', `/order/${mockOrder.id}/contact-information/addresses/tertiary`],
     ])(
       'should go to the next address form if the user indicates they have another address',
       async (_: string, param: string, expectedLocation: string) => {
@@ -271,7 +273,7 @@ describe('AddressController', () => {
           },
           flash: jest.fn(),
           params: {
-            orderId: '123456789',
+            orderId: mockOrder.id,
             addressType: param,
           },
         })
@@ -298,8 +300,8 @@ describe('AddressController', () => {
     )
 
     it.each([
-      ['Primary', 'primary', '/order/123456789/contact-information/notifying-organisation'],
-      ['Secondary', 'secondary', '/order/123456789/contact-information/notifying-organisation'],
+      ['Primary', 'primary', `/order/${mockOrder.id}/contact-information/notifying-organisation`],
+      ['Secondary', 'secondary', `/order/${mockOrder.id}/contact-information/notifying-organisation`],
     ])(
       'should go to the notifying organisation page if the user indicates they do not have another address',
       async (_: string, param: string, expectedLocation: string) => {
@@ -317,7 +319,7 @@ describe('AddressController', () => {
           },
           flash: jest.fn(),
           params: {
-            orderId: '123456789',
+            orderId: mockOrder.id,
             addressType: param,
           },
         })
@@ -358,7 +360,7 @@ describe('AddressController', () => {
         },
         flash: jest.fn(),
         params: {
-          orderId: '123456789',
+          orderId: mockOrder.id,
           addressType: 'tertiary',
         },
       })
@@ -379,7 +381,7 @@ describe('AddressController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/notifying-organisation')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/notifying-organisation`)
     })
   })
 })

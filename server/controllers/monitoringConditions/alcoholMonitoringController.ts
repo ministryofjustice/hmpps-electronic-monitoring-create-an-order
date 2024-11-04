@@ -2,14 +2,15 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import { AlcoholMonitoringService, AuditService } from '../../services'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
 import alcoholMonitoringViewModel from '../../models/view-models/alcoholMonitoring'
 import AlcoholMonitoringFormDataModel from '../../models/form-data/alcoholMonitoring'
+import TaskListService from '../../services/taskListService'
 
 export default class AlcoholMonitoringController {
   constructor(
     private readonly auditService: AuditService,
     private readonly alcoholMonitoringService: AlcoholMonitoringService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -49,8 +50,7 @@ export default class AlcoholMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      const { monitoringConditions } = req.order!
-      res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'alcohol').replace(':orderId', orderId))
+      res.redirect(this.taskListService.getNextPage('ALCOHOL', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

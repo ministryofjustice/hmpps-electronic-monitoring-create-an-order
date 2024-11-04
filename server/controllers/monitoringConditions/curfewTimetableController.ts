@@ -6,7 +6,7 @@ import { isValidationListResult, ValidationErrorModel } from '../../models/Valid
 import { MultipleChoiceField, TimeSpanField } from '../../models/view-models/utils'
 import { AuditService, CurfewTimetableService } from '../../services'
 import { deserialiseTime, getError, getErrors, serialiseTime } from '../../utils/utils'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
+import TaskListService from '../../services/taskListService'
 
 const timetableForm = z.object({
   timeStartHours: z.string(),
@@ -61,6 +61,7 @@ export default class CurfewTimetableController {
   constructor(
     private readonly auditService: AuditService,
     private readonly curfewTimetableService: CurfewTimetableService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private constructViewModel(
@@ -216,8 +217,7 @@ export default class CurfewTimetableController {
 
         res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
       } else {
-        const { monitoringConditions } = req.order!
-        res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'curfew').replace(':orderId', orderId))
+        res.redirect(this.taskListService.getNextPage('CURFEW_TIMETABLE', req.order!))
       }
     }
   }
