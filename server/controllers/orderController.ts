@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
 import TaskListService from '../services/taskListService'
-import paths from "../constants/paths"
+import paths from '../constants/paths'
 
 export default class OrderController {
   constructor(
