@@ -5,6 +5,7 @@ import RestClient from '../data/restClient'
 import AuditService from '../services/auditService'
 import DeviceWearerService from '../services/deviceWearerService'
 import DeviceWearerController from './deviceWearerController'
+import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -39,6 +40,7 @@ describe('DeviceWearerController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerService: jest.Mocked<DeviceWearerService>
   let deviceWearerController: DeviceWearerController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -54,7 +56,7 @@ describe('DeviceWearerController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockDeviceWearerService = new DeviceWearerService(mockRestClient) as jest.Mocked<DeviceWearerService>
-    deviceWearerController = new DeviceWearerController(mockAuditService, mockDeviceWearerService)
+    deviceWearerController = new DeviceWearerController(mockAuditService, mockDeviceWearerService, taskListService)
 
     jest.useFakeTimers()
     jest.setSystemTime(new Date('2020-01-01'))
@@ -63,10 +65,9 @@ describe('DeviceWearerController', () => {
   describe('view', () => {
     it('should render the form using the saved device wearer data', async () => {
       // Given
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await deviceWearerController.view(req, res, next)
@@ -98,32 +99,34 @@ describe('DeviceWearerController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({
+        order: mockOrder,
+        flash: jest
+          .fn()
+          .mockReturnValueOnce([{ error: 'Date of birth must be in the past', field: 'dateOfBirth' }])
+          .mockReturnValueOnce([
+            {
+              nomisId: 'nomis',
+              pncId: 'pnc',
+              deliusId: 'delius',
+              prisonNumber: 'prison',
+              firstName: 'new',
+              lastName: 'name',
+              alias: 'new',
+              'dateOfBirth-day': '02',
+              'dateOfBirth-month': '03',
+              'dateOfBirth-year': '1990',
+              adultAtTimeOfInstallation: 'true',
+              sex: 'female',
+              gender: 'female',
+              disabilities: ['Vision', 'Hearing'],
+              interpreterRequired: 'true',
+              language: 'British Sign',
+            },
+          ]),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest
-        .fn()
-        .mockReturnValueOnce([{ error: 'Date of birth must be in the past', field: 'dateOfBirth' }])
-        .mockReturnValueOnce([
-          {
-            nomisId: 'nomis',
-            pncId: 'pnc',
-            deliusId: 'delius',
-            prisonNumber: 'prison',
-            firstName: 'new',
-            lastName: 'name',
-            alias: 'new',
-            'dateOfBirth-day': '02',
-            'dateOfBirth-month': '03',
-            'dateOfBirth-year': '1990',
-            adultAtTimeOfInstallation: 'true',
-            sex: 'female',
-            gender: 'female',
-            disabilities: ['Vision', 'Hearing'],
-            interpreterRequired: 'true',
-            language: 'British Sign',
-          },
-        ])
 
       // When
       await deviceWearerController.view(req, res, next)
@@ -157,30 +160,36 @@ describe('DeviceWearerController', () => {
   describe('update', () => {
     it('should persist data and redirect to the form when the user submits invalid values', async () => {
       // Given
-      const req = createMockRequest()
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: 'homeoffice',
+          firstName: 'new',
+          lastName: 'name',
+          alias: 'new',
+          'dateOfBirth-day': '02',
+          'dateOfBirth-month': '03',
+          'dateOfBirth-year': '1990',
+          adultAtTimeOfInstallation: 'true',
+          sex: 'female',
+          gender: 'female',
+          disabilities: 'Vision',
+          interpreterRequired: 'true',
+          language: 'British Sign',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn()
-      req.body = {
-        action: 'continue',
-        nomisId: 'nomis',
-        pncId: 'pnc',
-        deliusId: 'delius',
-        prisonNumber: 'prison',
-        homeOfficeReferenceNumber: 'homeoffice',
-        firstName: 'new',
-        lastName: 'name',
-        alias: 'new',
-        'dateOfBirth-day': '02',
-        'dateOfBirth-month': '03',
-        'dateOfBirth-year': '1990',
-        adultAtTimeOfInstallation: 'true',
-        sex: 'female',
-        gender: 'female',
-        disabilities: 'Vision',
-        interpreterRequired: 'true',
-        language: 'British Sign',
-      }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue([
         { error: 'Date of birth must be in the past', field: 'dateOfBirth' },
       ])
@@ -215,35 +224,38 @@ describe('DeviceWearerController', () => {
           field: 'dateOfBirth',
         },
       ])
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer`)
     })
 
     it('should save and redirect to the contact details page if the device wearer is an adult', async () => {
       // Given
-      const req = createMockRequest()
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: 'homeoffice',
+          firstName: 'new',
+          lastName: 'name',
+          alias: 'new',
+          'dateOfBirth-day': '02',
+          'dateOfBirth-month': '03',
+          'dateOfBirth-year': '1990',
+          adultAtTimeOfInstallation: 'true',
+          sex: 'female',
+          gender: 'female',
+          disabilities: ['Vision', 'Hearing'],
+          interpreterRequired: 'true',
+          language: 'British Sign',
+        },
+        flash: jest.fn(),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn()
-      req.body = {
-        action: 'continue',
-        nomisId: 'nomis',
-        pncId: 'pnc',
-        deliusId: 'delius',
-        prisonNumber: 'prison',
-        homeOfficeReferenceNumber: 'homeoffice',
-        firstName: 'new',
-        lastName: 'name',
-        alias: 'new',
-        'dateOfBirth-day': '02',
-        'dateOfBirth-month': '03',
-        'dateOfBirth-year': '1990',
-        adultAtTimeOfInstallation: 'true',
-        sex: 'female',
-        gender: 'female',
-        disabilities: ['Vision', 'Hearing'],
-        interpreterRequired: 'true',
-        language: 'British Sign',
-      }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
         nomisId: null,
         pncId: null,
@@ -268,35 +280,38 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/contact-details')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/contact-details`)
     })
 
     it('should save and redirect to the responsible adult page if the device wearer is not an adult', async () => {
       // Given
-      const req = createMockRequest()
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: 'homeoffice',
+          firstName: 'new',
+          lastName: 'name',
+          alias: 'new',
+          'dateOfBirth-day': '02',
+          'dateOfBirth-month': '03',
+          'dateOfBirth-year': '1990',
+          adultAtTimeOfInstallation: 'true',
+          sex: 'female',
+          gender: 'female',
+          disabilities: ['Vision', 'Hearing'],
+          interpreterRequired: 'true',
+          language: 'British Sign',
+        },
+        flash: jest.fn(),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn()
-      req.body = {
-        action: 'continue',
-        nomisId: 'nomis',
-        pncId: 'pnc',
-        deliusId: 'delius',
-        prisonNumber: 'prison',
-        homeOfficeReferenceNumber: 'homeOffice',
-        firstName: 'new',
-        lastName: 'name',
-        alias: 'new',
-        'dateOfBirth-day': '02',
-        'dateOfBirth-month': '03',
-        'dateOfBirth-year': '1990',
-        adultAtTimeOfInstallation: 'true',
-        sex: 'female',
-        gender: 'female',
-        disabilities: ['Vision', 'Hearing'],
-        interpreterRequired: 'true',
-        language: 'British Sign',
-      }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
         nomisId: null,
         pncId: null,
@@ -321,35 +336,41 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/responsible-adult')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/responsible-adult`)
     })
 
     it('should save and redirect to the order summary page if the user chooses', async () => {
       // Given
-      const req = createMockRequest()
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'back',
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          homeOfficeReferenceNumber: 'homeoffice',
+          prisonNumber: 'prison',
+          firstName: 'new',
+          lastName: 'name',
+          alias: 'new',
+          'dateOfBirth-day': '02',
+          'dateOfBirth-month': '03',
+          'dateOfBirth-year': '1990',
+          adultAtTimeOfInstallation: 'true',
+          sex: 'female',
+          gender: 'female',
+          disabilities: ['Vision', 'Hearing'],
+          interpreterRequired: 'true',
+          language: 'British Sign',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn()
-      req.body = {
-        action: 'back',
-        nomisId: 'nomis',
-        pncId: 'pnc',
-        deliusId: 'delius',
-        prisonNumber: 'prison',
-        homeOfficeReferenceNumber: 'homeoffice',
-        firstName: 'new',
-        lastName: 'name',
-        alias: 'new',
-        'dateOfBirth-day': '02',
-        'dateOfBirth-month': '03',
-        'dateOfBirth-year': '1990',
-        adultAtTimeOfInstallation: 'true',
-        sex: 'female',
-        gender: 'female',
-        disabilities: ['Vision', 'Hearing'],
-        interpreterRequired: 'true',
-        language: 'British Sign',
-      }
       mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
         nomisId: null,
         pncId: null,
@@ -374,7 +395,7 @@ describe('DeviceWearerController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
     })
   })
 })

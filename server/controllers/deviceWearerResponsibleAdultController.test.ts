@@ -5,6 +5,7 @@ import DeviceWearerResponsibleAdultController from './deviceWearerResponsibleAdu
 import RestClient from '../data/restClient'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import { getMockOrder } from '../../test/mocks/mockOrder'
+import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -28,6 +29,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerResponsibleAdultService: jest.Mocked<DeviceWearerResponsibleAdultService>
   let deviceWearerResponsibleAdultController: DeviceWearerResponsibleAdultController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -48,6 +50,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
     deviceWearerResponsibleAdultController = new DeviceWearerResponsibleAdultController(
       mockAuditService,
       mockDeviceWearerResponsibleAdultService,
+      taskListService,
     )
   })
 
@@ -55,10 +58,12 @@ describe('DeviceWearerResponsibleAdultController', () => {
     it('should render the form using the saved responsible adult data', async () => {
       // Given
       const mockOrder = createMockOrder('Parent Name')
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({
+        order: mockOrder,
+        flash: jest.fn().mockReturnValue([]),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await deviceWearerResponsibleAdultController.view(req, res, next)
@@ -77,19 +82,21 @@ describe('DeviceWearerResponsibleAdultController', () => {
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
       const mockOrder = createMockOrder('')
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({
+        order: mockOrder,
+        flash: jest
+          .fn()
+          .mockReturnValueOnce([{ error: 'Full name is required', field: 'fullName' }])
+          .mockReturnValueOnce([
+            {
+              relationship: 'parent',
+              fullName: '',
+              contactNumber: '01234567890',
+            },
+          ]),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest
-        .fn()
-        .mockReturnValueOnce([{ error: 'Full name is required', field: 'fullName' }])
-        .mockReturnValueOnce([
-          {
-            relationship: 'parent',
-            fullName: '',
-            contactNumber: '01234567890',
-          },
-        ])
 
       // When
       await deviceWearerResponsibleAdultController.view(req, res, next)
@@ -109,17 +116,23 @@ describe('DeviceWearerResponsibleAdultController', () => {
   describe('update', () => {
     it('should persist data and redirect to the form when the user submits invalid values', async () => {
       // Given
-      const req = createMockRequest()
+      const order = createMockOrder('Parent Name')
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          relationship: 'parent',
+          otherRelationshipDetails: '',
+          fullName: '',
+          contactNumber: '01234567890',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn()
-      req.body = {
-        action: 'continue',
-        relationship: 'parent',
-        otherRelationshipDetails: '',
-        fullName: '',
-        contactNumber: '01234567890',
-      }
       mockDeviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult.mockResolvedValue([
         { error: 'Full name is required', field: 'fullName' },
       ])
@@ -141,22 +154,25 @@ describe('DeviceWearerResponsibleAdultController', () => {
           field: 'fullName',
         },
       ])
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/about-the-device-wearer/responsible-adult')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/responsible-adult`)
     })
 
     it('should save and redirect to the contact details page', async () => {
       // Given
-      const req = createMockRequest()
+      const order = createMockOrder('Parent Name')
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          relationship: 'parent',
+          otherRelationshipDetails: '',
+          fullName: 'Parent Name',
+          contactNumber: '01234567890',
+        },
+        flash: jest.fn(),
+      })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn()
-      req.body = {
-        action: 'continue',
-        relationship: 'parent',
-        otherRelationshipDetails: '',
-        fullName: 'Parent Name',
-        contactNumber: '01234567890',
-      }
       mockDeviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult.mockResolvedValue({
         relationship: 'parent',
         otherRelationshipDetails: '',
@@ -169,23 +185,29 @@ describe('DeviceWearerResponsibleAdultController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/contact-information/contact-details')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/contact-details`)
     })
   })
 
   it('should save and redirect to the order summary page if the user chooses', async () => {
     // Given
-    const req = createMockRequest()
+    const order = createMockOrder('Parent Name')
+    const req = createMockRequest({
+      order,
+      body: {
+        action: 'back',
+        relationship: 'parent',
+        otherRelationshipDetails: '',
+        fullName: 'Parent Name',
+        contactNumber: '01234567890',
+      },
+      params: {
+        orderId: order.id,
+      },
+      flash: jest.fn(),
+    })
     const res = createMockResponse()
     const next = jest.fn()
-    req.flash = jest.fn()
-    req.body = {
-      action: 'back',
-      relationship: 'parent',
-      otherRelationshipDetails: '',
-      fullName: 'Parent Name',
-      contactNumber: '01234567890',
-    }
     mockDeviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult.mockResolvedValue({
       relationship: 'parent',
       otherRelationshipDetails: '',
@@ -198,6 +220,6 @@ describe('DeviceWearerResponsibleAdultController', () => {
 
     // Then
     expect(req.flash).not.toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
+    expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
   })
 })

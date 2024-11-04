@@ -7,7 +7,7 @@ import { AddressField, FormField, TextField, TimeField } from '../../models/view
 import { AuditService } from '../../services'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
 import { deserialiseDate, deserialiseTime, getError, serialiseDate, serialiseTime } from '../../utils/utils'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
+import TaskListService from '../../services/taskListService'
 
 const attendanceMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -53,6 +53,7 @@ export default class AttendanceMonitoringController {
   constructor(
     private readonly auditService: AuditService,
     private readonly attendanceMonitoringService: AttendanceMonitoringService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private createViewModelFromAttendanceMonitoring(
@@ -167,7 +168,6 @@ export default class AttendanceMonitoringController {
 
   create: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { monitoringConditions } = req.order!
     const formData = attendanceMonitoringFormDataModel.parse(req.body)
 
     const updateResult = await this.attendanceMonitoringService.update({
@@ -185,12 +185,7 @@ export default class AttendanceMonitoringController {
       if (formData.addAnother === 'true') {
         res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
       } else {
-        res.redirect(
-          nextPage(getSelectedMonitoringTypes(monitoringConditions), 'mandatoryAttendance').replace(
-            ':orderId',
-            orderId,
-          ),
-        )
+        res.redirect(this.taskListService.getNextPage('ATTENDANCE', req.order!))
       }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))

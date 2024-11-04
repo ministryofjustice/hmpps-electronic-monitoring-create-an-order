@@ -7,6 +7,7 @@ import AuditService from '../../services/auditService'
 import CurfewTimetableService from '../../services/curfewTimetableService'
 import CurfewTimetableController from './curfewTimetableController'
 import paths from '../../constants/paths'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -17,9 +18,9 @@ const mockId = uuidv4()
 describe('CurfewTimetableController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-
   let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
+  const taskListService = new TaskListService()
   let req: Request
   let res: Response
   let next: NextFunction
@@ -39,7 +40,7 @@ describe('CurfewTimetableController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockCurfewTimetableService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
-    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetableService)
+    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetableService, taskListService)
 
     req = {
       // @ts-expect-error stubbing session
@@ -806,7 +807,7 @@ describe('CurfewTimetableController', () => {
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', mockId))
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/attachments`)
     })
   })
 })

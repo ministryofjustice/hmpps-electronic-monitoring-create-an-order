@@ -4,7 +4,7 @@ import { AuditService, EnforcementZoneService } from '../../services'
 import { deserialiseDate, getErrorsViewModel } from '../../utils/utils'
 import paths from '../../constants/paths'
 import { ErrorsViewModel } from '../../models/view-models/utils'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
+import TaskListService from '../../services/taskListService'
 
 const ZoneFormDataModel = z.object({
   action: z.string(),
@@ -24,6 +24,7 @@ export default class EnforcementZoneController {
   constructor(
     private readonly auditService: AuditService,
     private readonly zoneService: EnforcementZoneService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
@@ -74,10 +75,7 @@ export default class EnforcementZoneController {
             ),
           )
         else {
-          const { monitoringConditions } = req.order!
-          res.redirect(
-            nextPage(getSelectedMonitoringTypes(monitoringConditions), 'exclusionZone').replace(':orderId', orderId),
-          )
+          res.redirect(this.taskListService.getNextPage('ZONE', req.order!))
         }
       } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

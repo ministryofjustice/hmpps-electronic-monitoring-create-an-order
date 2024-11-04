@@ -6,6 +6,7 @@ import { isValidationResult, ValidationResult } from '../models/Validation'
 import { MultipleChoiceField, TextField } from '../models/view-models/utils'
 import { AuditService, DeviceWearerService } from '../services'
 import { deserialiseDate, getError } from '../utils/utils'
+import TaskListService from '../services/taskListService'
 
 // Basic validation of user submitted form data
 const DeviceWearerFormDataModel = z.object({
@@ -60,6 +61,7 @@ export default class DeviceWearerController {
   constructor(
     private readonly auditService: AuditService,
     private readonly deviceWearerService: DeviceWearerService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private createViewModelFromFormData(
@@ -168,11 +170,12 @@ export default class DeviceWearerController {
 
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      if (updateDeviceWearerResult.adultAtTimeOfInstallation) {
-        res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
-      } else {
-        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
-      }
+      res.redirect(
+        this.taskListService.getNextPage('DEVICE_WEARER', {
+          ...req.order!,
+          deviceWearer: updateDeviceWearerResult,
+        }),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

@@ -9,6 +9,7 @@ import AuditService from '../../services/auditService'
 import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import EnforcementZoneController from './enforcementZoneController'
 import { EnforcementZone } from '../../models/EnforcementZone'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -20,9 +21,9 @@ const mockId = uuidv4()
 describe('EnforcementZoneController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-
   let mockEnforcementZoneService: jest.Mocked<EnforcementZoneService>
   let controller: EnforcementZoneController
+  const taskListService = new TaskListService()
   let req: Request
   let res: Response
   let next: NextFunction
@@ -41,7 +42,7 @@ describe('EnforcementZoneController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockEnforcementZoneService = new EnforcementZoneService(mockRestClient) as jest.Mocked<EnforcementZoneService>
-    controller = new EnforcementZoneController(mockAuditService, mockEnforcementZoneService)
+    controller = new EnforcementZoneController(mockAuditService, mockEnforcementZoneService, taskListService)
 
     req = {
       // @ts-expect-error stubbing session

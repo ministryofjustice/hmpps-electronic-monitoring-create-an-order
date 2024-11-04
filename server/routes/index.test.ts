@@ -10,6 +10,7 @@ import DeviceWearerService from '../services/deviceWearerService'
 import OrderSearchService from '../services/orderSearchService'
 import OrderService from '../services/orderService'
 import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
+import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -33,7 +34,7 @@ const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditServ
 const orderSearchService = new OrderSearchService(restClient) as jest.Mocked<OrderSearchService>
 const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService(restClient) as jest.Mocked<DeviceWearerService>
-
+const taskListService = new TaskListService()
 const mockSubmittedOrder = getMockSubmittedOrder()
 const mockDraftOrder = getMockOrder()
 
@@ -61,6 +62,7 @@ describe('authorised user', () => {
         orderService,
         deviceWearerService,
         orderSearchService,
+        taskListService,
       },
       userSupplier: () => user,
     })

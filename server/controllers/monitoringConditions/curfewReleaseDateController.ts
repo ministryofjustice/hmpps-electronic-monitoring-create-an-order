@@ -5,11 +5,13 @@ import { AuditService } from '../../services'
 import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateFormDataModel from '../../models/form-data/curfewReleaseDate'
 import curfewReleaseDateViewModel from '../../models/view-models/curfewReleaseDate'
+import TaskListService from '../../services/taskListService'
 
 export default class CurfewReleaseDateController {
   constructor(
     private readonly auditService: AuditService,
     private readonly curfewReleaseDateService: CurfewReleaseDateService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -37,7 +39,7 @@ export default class CurfewReleaseDateController {
 
       res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
     } else {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
+      res.redirect(this.taskListService.getNextPage('CURFEW_RELEASE_DATE', req.order!))
     }
   }
 }

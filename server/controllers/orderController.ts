@@ -1,11 +1,13 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
+import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 
 export default class OrderController {
   constructor(
     private readonly auditService: AuditService,
     private readonly orderService: OrderService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -15,8 +17,10 @@ export default class OrderController {
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
+    const sections = this.taskListService.getTasksBySection(req.order!)
     res.render('pages/order/summary', {
       order: req.order,
+      sections,
     })
   }
 

@@ -6,6 +6,7 @@ import { OrderStatusEnum } from '../models/Order'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
+import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -18,6 +19,7 @@ describe('OrderController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -33,7 +35,7 @@ describe('OrderController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
-    orderController = new OrderController(mockAuditService, mockOrderService)
+    orderController = new OrderController(mockAuditService, mockOrderService, taskListService)
   })
 
   describe('summary', () => {
