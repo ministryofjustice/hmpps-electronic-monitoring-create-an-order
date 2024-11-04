@@ -37,16 +37,46 @@ export default function nunjucksSetup(app: express.Express): void {
     },
   )
 
-  njkEnv.addFilter('initialiseName', initialiseName)
-  njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
-  njkEnv.addFilter('formatKey', (input: string) => {
-    if (typeof input !== 'string') return input
+  function toSentenceCase(key: string) {
+    if (typeof key !== 'string') return key
 
-    const lowerCaseKey = input.replace(/([A-Z])/g, ' $1').toLowerCase()
+    const lowerCaseKey = key.replace(/([A-Z])/g, ' $1').toLowerCase()
 
     const sentenceCaseKey = lowerCaseKey.charAt(0).toUpperCase() + lowerCaseKey.slice(1)
 
     return sentenceCaseKey.trim()
-  })
+  }
+
+  function checkType(value: unknown): string {
+    if (Array.isArray(value)) {
+      return 'array'
+    }
+    if (typeof value === 'object') {
+      return 'object'
+    }
+    if (typeof value === 'string') {
+      return 'string'
+    }
+    return 'other'
+  }
+
+  function isEmpty(value: unknown): boolean {
+    if (
+      value === null ||
+      value === undefined ||
+      value === '' ||
+      (Array.isArray(value) && value.length === 0) ||
+      (typeof value === 'object' && Object.keys(value).length === 0)
+    ) {
+      return true
+    }
+    return false
+  }
+
+  njkEnv.addFilter('initialiseName', initialiseName)
+  njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('toSentenceCase', toSentenceCase)
+  njkEnv.addFilter('checkType', checkType)
+  njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
 }

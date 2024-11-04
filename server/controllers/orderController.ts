@@ -102,7 +102,7 @@ export default class OrderController {
     const order = req.order!
 
     console.log('rendering the receipt page')
-    res.render(`pages/order/receipt`, order)
+    res.render(`pages/order/receipt`, { order })
   }
 
   downloadReciept: RequestHandler = async (req: Request, res: Response) => {
