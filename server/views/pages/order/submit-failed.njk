@@ -19,6 +19,13 @@
   }) }}
 
   <div class="govuk-button-group">
+      {{ govukButton({
+          text: "Download answers as PDF",
+          href: "/order/" + orderId + "/receipt/download"
+      }) }}
+  </div>
+
+<div class="govuk-button-group">
     {{ govukButton({
       text: "Back to your applications",
       href: "/"

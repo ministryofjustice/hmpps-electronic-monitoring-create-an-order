@@ -1,5 +1,24 @@
 import * as govukFrontend from 'govuk-frontend'
 import * as mojFrontend from '@ministryofjustice/frontend'
+import html2pdf from 'html2pdf.js'
 
 govukFrontend.initAll()
 mojFrontend.initAll()
+
+const downloadButton = document.getElementById('download-pdf')
+if (downloadButton) {
+  downloadButton.addEventListener('click', () => {
+    const element = document.getElementById('receipt')
+    if (element) {
+      const opt = {
+        margin: [1, 75, 1, 20],
+        filename: 'order-receipt.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' },
+      }
+
+      html2pdf().from(element).toCanvas().set(opt).save()
+    }
+  })
+}

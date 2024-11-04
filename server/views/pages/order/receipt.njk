@@ -9,17 +9,20 @@
 
 {% block content %}
 
-{{ govukBackLink({
+  {{ govukBackLink({
   text: "Back",
   href: "/"
 }) }}
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+  <button id="download-pdf">Download as PDF</button>
 
-      <h1 class="govuk-heading-l">Submitted electronic monitoring order details</h1>
+  <div id="receipt" class="container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      {{ govukSummaryList({
+        <h1 class="govuk-heading-l">Submitted electronic monitoring order details</h1>
+
+        {{ govukSummaryList({
         classes: "govuk-!-margin-bottom-9",
         rows: [
           {
@@ -32,271 +35,274 @@
           }]
       }) }}
 
-      <h1 class="govuk-heading-l">About the device wearer</h1>
-      <h2 class="govuk-heading-m">Personal details</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                  {% for key, value in deviceWearer %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                {% for key, value in deviceWearerContactDetails %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+        <h1 class="govuk-heading-l">About the device wearer</h1>
+        <h2 class="govuk-heading-m">Personal details</h2>
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% for key, value in deviceWearer %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+            {% for key, value in deviceWearerContactDetails %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
-{% if deviceWearerResponsibleAdult %}
-        <h2 class="govuk-heading-m">Responsible Adult</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {% if deviceWearerResponsibleAdult %}
+          <h2 class="govuk-heading-m">Responsible Adult</h2>
+          <div class="govuk-grid-row">
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in deviceWearerResponsibleAdult %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
-  {% endif %}
+              {% for key, value in deviceWearerResponsibleAdult %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ key | formatKey }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ value }}
+                  </dd>
+                </div>
+              {% endfor %}
+            </dl>
+          </div>
+        {% endif %}
 
-{# NEEDS ATTENTION RE MODEL #}
         <h2 class="govuk-heading-m">Addresses</h2>
         {% for address in addresses %}
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                  <h3 class="govuk-heading-s">Address Type: {{address.addressType | capitalize }}</h3>
-                    {% for key, value in address %}
-                      <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                          {{ key | formatKey }}
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                          {{ value }}
-                        </dd>
-                      </div>
-                    {% endfor %}
-                </dl>
-            </div>
-            {% endfor %}
+          <div class="govuk-grid-row">
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              <h3 class="govuk-heading-s">Address Type: {{address.addressType | capitalize }}</h3>
+              {% for key, value in address %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ key | formatKey }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ value }}
+                  </dd>
+                </div>
+              {% endfor %}
+            </dl>
+          </div>
+        {% endfor %}
 
+        {# TODO: Review following rebase #}
         <h2 class="govuk-heading-m">Interested parties</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in notifyingOrganisation %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+            {% for key, value in notifyingOrganisation %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
         <h1 class="govuk-heading-l">Monitoring Conditions</h1>
         <h2 class="govuk-heading-m">Overview</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in monitoringConditions %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
-
+            {% for key, value in monitoringConditions %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
         <h2 class="govuk-heading-m">Enforcement zone conditions</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-
-                  {% for key, value in enforcementZoneConditions %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+        {% for enforcementZoneCondition in enforcementZoneConditions %}
+          <div class="govuk-grid-row">
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              <h3 class="govuk-heading-s">Zone type: {{enforcementZoneCondition.zoneType | capitalize }}</h3>
+              {% for key, value in enforcementZoneCondition %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ key | formatKey }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ value }}
+                  </dd>
+                </div>
+              {% endfor %}
+            </dl>
+          </div>
+        {% endfor %}
 
         <h2 class="govuk-heading-m">Trail monitoring conditions</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in monitoringConditionsTrail %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+            {% for key, value in monitoringConditionsTrail %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
         <h2 class="govuk-heading-m">Alcohol monitoring conditions</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in monitoringConditionsAlcohol %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+            {% for key, value in monitoringConditionsAlcohol %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
         <h2 class="govuk-heading-m">Curfew conditions</h2>
         <h3 class="govuk-heading-s">Curfew monitoring conditions</h3>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in curfewConditions %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+            {% for key, value in curfewConditions %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
         <h3 class="govuk-heading-s">Curfew release date conditions</h3>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in curfewReleaseDateConditions %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+            {% for key, value in curfewReleaseDateConditions %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
         <h3 class="govuk-heading-s">Curfew timetable conditions</h3>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                  {% for curfew in curfewTimeTable %}
-                    {% for key, value in curfew %}
-                      <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                          {{ key | formatKey }}
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                          {{ value }}
-                        </dd>
-                      </div>
-                  {% endfor %}
-                {% endfor %}
-                </dl>
-            </div>
-        
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% for curfew in curfewTimeTable %}
+              {% for key, value in curfew %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ key | formatKey }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ value }}
+                  </dd>
+                </div>
+              {% endfor %}
+            {% endfor %}
+          </dl>
+        </div>
 
         <h2 class="govuk-heading-m">Attendance monitoring conditions</h2>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                {% for attendanceMonitoring in monitoringConditionsAttendance %}
-                  {% for key, value in attendanceMonitoring %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                  {% endfor %}
-                {% endfor %}
-                </dl>
-            </div>
+        {% for monitoringCondition in monitoringConditionsAttendance %}
+          <div class="govuk-grid-row">
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              <h3 class="govuk-heading-s">Appointment: {{monitoringCondition.purpose | capitalize }}</h3>
+              {% for key, value in monitoringCondition %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ key | formatKey }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ value }}
+                  </dd>
+                </div>
+              {% endfor %}
+            </dl>
+          </div>
+        {% endfor %}
 
-
-      <h1 class="govuk-heading-l">Installation and risk</h1>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                  {% for key, value in installationAndRisk %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+        <h1 class="govuk-heading-l">Installation and risk</h1>
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% for key, value in installationAndRisk %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
         <h1 class="govuk-heading-l">Additional Documents</h1>
-            <div class="govuk-grid-row">
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <div class="govuk-grid-row">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-                  {% for key, value in additionalDocuments %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        {{ key | formatKey }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                         {{ value }}
-                      </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+            {% for key, value in additionalDocuments %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | formatKey }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        </div>
 
-
-
-<div class="govuk-button-group">
-      {{ govukButton({
+        <div class="govuk-button-group">
+          {{ govukButton({
           text: "Back to your applications",
           href: "/"
       }) }}
+        </div>
+
+      </div>
+
+    </div>
   </div>
 
-{% endblock %}
+  {% endblock %}

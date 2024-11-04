@@ -1,3 +1,19 @@
 .govuk-main-wrapper {
   min-height: 600px;
 }
+
+@media print {
+  body {
+      font-size: 8pt; /* Change font size for print */
+      color: black; /* Change text color for print */
+  }
+  /* Adjust widths and margins */
+  .container {
+      width: 50%; /* Make sure it fits the page */
+      margin: 0; /* Remove margins */
+  }
+  /* You can also adjust specific elements */
+  h1, h2, h3 {
+      page-break-after: avoid; /* Prevent breaking after headings */
+  }
+}
