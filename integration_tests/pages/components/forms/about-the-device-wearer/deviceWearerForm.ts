@@ -25,28 +25,28 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // FIELDS
 
   get nomisIdField(): FormInputComponent {
-    const label = 'NOMIS ID'
+    const label = 'National Offender Management Information System (NOMIS) ID (optional)'
     return new FormInputComponent(this.form, label)
   }
 
   get pncIdField(): FormInputComponent {
-    const label = 'PNC ID'
+    const label = 'Police National Computer (PNC) ID (optional)'
     return new FormInputComponent(this.form, label)
   }
 
   get deliusIdField(): FormInputComponent {
-    const label = 'DELIUS ID'
+    const label = 'Delius ID (optional)'
     return new FormInputComponent(this.form, label)
   }
 
   get prisonNumberField(): FormInputComponent {
-    const label = 'Prison Number'
+    const label = 'Prison Number (Optional)'
     return new FormInputComponent(this.form, label)
   }
 
   get homeOfficeReferenceNumberField(): FormInputComponent {
-    const lable = 'Home Office Reference Number'
-    return new FormInputComponent(this.form, lable)
+    const label = 'Home Office Reference Number (Optional)'
+    return new FormInputComponent(this.form, label)
   }
   // NAMES
 
@@ -61,7 +61,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get aliasField(): FormInputComponent {
-    const label = 'Alias (optional)'
+    const label = 'Preferred name or alias (optional)'
     return new FormInputComponent(this.form, label)
   }
 
@@ -90,7 +90,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   get genderIdentityField(): FormRadiosComponent {
     const label = 'Gender identity'
-    return new FormRadiosComponent(this.form, label, ['Male', 'Female', 'Non-binary', "Don't know", 'Self identify'])
+    return new FormRadiosComponent(this.form, label, ['Male', 'Female', 'Non binary', "Don't know", 'Self identify'])
   }
 
   // Interpreter
@@ -101,7 +101,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get languageField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, "What is the device wearer's main language", [
+    return new FormSelectComponent(this.form, "What is the device wearer's main language?", [
       'British Sign',
       'Lipspeak (English)',
       'Palantypists',
@@ -220,21 +220,33 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     if (profile.nomisId) {
       this.nomisIdField.set(profile.nomisId)
     }
-
     if (profile.pncId) {
       this.pncIdField.set(profile.pncId)
     }
+    if (profile.deliusId) {
+      this.deliusIdField.set(profile.deliusId)
+    }
+    if (profile.prisonNumber) {
+      this.prisonNumberField.set(profile.prisonNumber)
+    }
+    if (profile.homeOfficeReferenceNumber) {
+      this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
+    }
 
-    this.deliusIdField.set(profile.deliusId)
-    this.prisonNumberField.set(profile.prisonNumber)
-    this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
+    if (profile.firstNames) {
+      this.firstNamesField.set(profile.firstNames)
+    }
+    if (profile.lastName) {
+      this.lastNameField.set(profile.lastName)
+    }
 
-    this.firstNamesField.set(profile.firstNames)
-    this.lastNameField.set(profile.lastName)
+    if (profile.alias) {
+      this.aliasField.set(profile.alias)
+    }
 
-    this.aliasField.set(profile.alias)
-
-    this.dateOfBirthField.set(profile.dob)
+    if (profile.dob) {
+      this.dateOfBirthField.set(profile.dob)
+    }
 
     if (profile.is18 !== undefined) {
       this.is18Field.set(profile.is18 ? 'Yes' : 'No')

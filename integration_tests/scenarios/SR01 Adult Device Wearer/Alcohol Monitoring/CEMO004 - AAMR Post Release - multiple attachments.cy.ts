@@ -19,6 +19,7 @@ import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/al
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import AttachmentPage from '../../../pages/order/attachment'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -118,9 +119,6 @@ context('Scenarios', () => {
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.saveAndContinueButton().click()
 
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-        orderSummaryPage.MonitoringConditionsSectionItem().click()
-
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
         monitoringConditionsPage.form.saveAndContinueButton.click()
@@ -132,6 +130,9 @@ context('Scenarios', () => {
         const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
         alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
         alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+        const attachmentPage = Page.verifyOnPage(AttachmentPage)
+        attachmentPage.backToFormSectionButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         orderSummaryPage.submissionFormButton().click()
@@ -150,7 +151,8 @@ context('Scenarios', () => {
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace("don't know", 'unknown')
-              .replace('self identify', 'self-identify'),
+              .replace('self identify', 'self-identify')
+              .replace('non binary', 'non-binary'),
             disability: [{ disability: '' }],
             address_1: primaryAddressDetails.line1,
             address_2: primaryAddressDetails.line2,
@@ -283,7 +285,10 @@ context('Scenarios', () => {
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        // indexPage.ordersListItems().contains('Submitted')
+        indexPage
+          .ordersList()
+          .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
+          .should('exist')
       })
     },
   )

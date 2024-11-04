@@ -40,32 +40,27 @@
       }
     }) }}
   </div>
+  <h2>{{ addressType | capitalize }} address</h2>
 
   <form action="" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     {% call govukFieldset({
       legend: {
-        text: addressType | capitalize + " address",
+        text: "What is the device wearer's " + (addressType | lower) + " address?",
         classes: "govuk-fieldset__legend--l",
         isPageHeading: false
       }
     }) %}
-
-      <div class="govuk-!-width-two-thirds">
-        <h4 class="govuk-heading-s">What is the device wearer's {{ addressType | lower }} address?</h4>
-        {% if addressType | lower == "primary" %}
-          <p>
-            If the device wearer has multiple addresses, enter the address where they spend most of their time or have registered as their home residence
-          </p>
-        {% endif %}
-      </div>
+      {% if lower == "primary" %}
+        <p class="govuk-body">
+          If the device wearer has multiple addresses, enter the address where they spend
+          most of their time or have registered as their home residence
+        </p>
+      {% endif %}
 
       {{ govukInput({
-        label: {
-          text: "Address line 1"
-        },
-        classes: "govuk-!-width-two-thirds",
+        label: { text: "Address line 1" },
         id: "address-line-1",
         name: "addressLine1",
         value: addressLine1,
@@ -74,10 +69,7 @@
       }) }}
 
       {{ govukInput({
-        label: {
-          text: "Address line 2"
-        },
-        classes: "govuk-!-width-two-thirds",
+        label: { text: "Address line 2" },
         id: "address-line-2",
         name: "addressLine2",
         value: addressLine2,
@@ -86,9 +78,7 @@
       }) }}
 
       {{ govukInput({
-        label: {
-          text: "Address line 3"
-        },
+        label: { text: "Address line 3 (optional)" },
         classes: "govuk-!-width-two-thirds",
         id: "address-line-3",
         name: "addressLine3",
@@ -98,9 +88,7 @@
       }) }}
 
       {{ govukInput({
-        label: {
-          text: "Address line 4"
-        },
+        label: { text: "Address line 4 (optional)" },
         classes: "govuk-!-width-two-thirds",
         id: "address-line-4",
         name: "addressLine4",
@@ -110,10 +98,8 @@
       }) }}
 
       {{ govukInput({
-        label: {
-          text: "Postcode"
-        },
-        classes: "govuk-!-width-two-thirds",
+        label: { text: "Postcode" },
+        classes: "govuk-input--width-10",
         id: "postcode",
         name: "postcode",
         value: postcode,
@@ -122,40 +108,37 @@
       }) }}
 
       {% if (addressType | lower == "primary") or (addressType | lower == 'secondary') %}
-
         {{ govukRadios({
-            name: "hasAnotherAddress",
-            classes: "govuk-radios--inline",
-            fieldset: {
+          name: "hasAnotherAddress",
+          classes: "govuk-radios--inline",
+          fieldset: {
             legend: {
-                text: "Does the device wearer have another address they will be monitored at?",
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--s"
+              text: "Does the device wearer have another address they will be monitored at?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
             }
-            },
-            hint: {
+          },
+          hint: {
             text: "For example, the device wearer will spend curfew hours at another address. Examples of additional addresses include living part time in another address due to separated parents or living on-site at a school or university during term time.",
             classes: "govuk-!-width-two-thirds"
-            },
-            items: [
+          },
+          items: [
             {
-                value: "true",
-                text: "Yes",
-                disabled: not isOrderEditable
+              value: "true",
+              text: "Yes",
+              disabled: not isOrderEditable
             },
             {
-                value: "false",
-                text: "No",
-                disabled: not isOrderEditable
+              value: "false",
+              text: "No",
+              disabled: not isOrderEditable
             }
-            ],
-            value: hasAnotherAddress,
-            errorMessage: errors.hasAnotherAddress,
-            disabled: not isOrderEditable
+          ],
+          value: hasAnotherAddress,
+          errorMessage: errors.hasAnotherAddress,
+          disabled: not isOrderEditable
         }) }}
-
-    {% endif %}
-
+      {% endif %}
     {% endcall %}
 
     <div class="govuk-button-group">

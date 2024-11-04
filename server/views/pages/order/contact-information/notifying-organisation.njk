@@ -20,15 +20,15 @@
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
   <div class="homepage-content">
@@ -50,20 +50,20 @@
       }
     }) %}
       {{ govukInput({
-          label: {
-            text: "Email address for the notifying organisation ",
-            classes: "govuk-label--s"
-          },
-          hint: {
-            text: "For example functional mailbox"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "notifyingOrganisationEmail",
-          name: "notifyingOrganisationEmail",
-          value: notifyingOrganisationEmail.value,
-          errorMessage: notifyingOrganisationEmail.error,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Email address for the notifying organisation ",
+          classes: "govuk-label--s"
+        },
+        hint: {
+          text: "For example functional mailbox"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "notifyingOrganisationEmail",
+        name: "notifyingOrganisationEmail",
+        value: notifyingOrganisationEmail.value,
+        errorMessage: notifyingOrganisationEmail.error,
+        disabled: not isOrderEditable
+      }) }}
     {% endcall %}
 
 
@@ -75,30 +75,30 @@
       }
     }) %}
       {{ govukInput({
-          label: {
-            text: "Full name of responsible officer",
-            classes: "govuk-label--s"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "officerName",
-          name: "officerName",
-          value: officerName.value,
-          errorMessage: officerName.error,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Full name of responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "officerName",
+        name: "officerName",
+        value: officerName.value,
+        errorMessage: officerName.error,
+        disabled: not isOrderEditable
+      }) }}
 
       {{ govukInput({
-          label: {
-            text: "Telephone number for responsible officer",
-            classes: "govuk-label--s"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "officerPhoneNumber",
-          name: "officerPhoneNumber",
-          value: officerPhoneNumber.value,
-          errorMessage: officerPhoneNumber.error,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Telephone number for responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "officerPhoneNumber",
+        name: "officerPhoneNumber",
+        value: officerPhoneNumber.value,
+        errorMessage: officerPhoneNumber.error,
+        disabled: not isOrderEditable
+      }) }}
     {% endcall %}
 
     {% call govukFieldset({
@@ -158,7 +158,7 @@
 
       {{ govukInput({
         label: {
-          text: "What region is the responsible organisation in?",
+          text: "What region is the responsible organisation in? (optional)",
           classes: "govuk-label--s"
         },
         classes: "govuk-!-width-one-half",
