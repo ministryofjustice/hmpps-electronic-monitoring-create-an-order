@@ -32,7 +32,10 @@ context('Contact information', () => {
               field: 'responsibleOrganisationAddressLine2',
               error: expectedValidationErrors.reponsibleOrganisationAddressLine2,
             },
-            { field: 'responsibleOrganisationAddressPostcode', error: expectedValidationErrors.reponsibleOrganisationPostcode },
+            {
+              field: 'responsibleOrganisationAddressPostcode',
+              error: expectedValidationErrors.reponsibleOrganisationPostcode,
+            },
           ],
         })
 

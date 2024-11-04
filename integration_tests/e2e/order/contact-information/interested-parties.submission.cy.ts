@@ -47,7 +47,7 @@ context('Contact information', () => {
               addressLine2: 'line2',
               addressLine3: 'line3',
               addressLine4: 'line4',
-              postcode: 'postcode'
+              postcode: 'postcode',
             },
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
