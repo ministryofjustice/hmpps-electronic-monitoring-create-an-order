@@ -39,7 +39,7 @@ context('Screenshots', () => {
     cy.screenshot('NoFixedAbodePage', { overwrite: true })
 
     cy.visit(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId))
-    cy.screenshot('NotifyingOrganisationPage', { overwrite: true })
+    cy.screenshot('InterestedPartiesPage', { overwrite: true })
 
     cy.visit(
       paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', mockOrderId).replace(
