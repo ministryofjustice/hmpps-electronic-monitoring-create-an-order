@@ -18,7 +18,7 @@ const FormDataModel = z.object({
   responsibleOrganisationAddressLine2: z.string(),
   responsibleOrganisationAddressLine3: z.string(),
   responsibleOrganisationAddressLine4: z.string(),
-  responsibleOrganisationPostcode: z.string(),
+  responsibleOrganisationAddressPostcode: z.string(),
   responsibleOrganisationPhoneNumber: z.string(),
   responsibleOrganisationEmail: z.string(),
 })
@@ -35,7 +35,13 @@ export default class InterestedPartiesController {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
-    res.render('pages/order/contact-information/notifying-organisation', {
+    console.log( {
+      ...interestedParties,
+      ...(formData.length > 0 ? (formData[0] as never) : {}),
+      errors: getErrorsViewModel(errors as never),
+    })
+
+    res.render('pages/order/contact-information/interested-parties', {
       ...interestedParties,
       ...(formData.length > 0 ? (formData[0] as never) : {}),
       errors: getErrorsViewModel(errors as never),

@@ -1,4 +1,4 @@
-import FormAddressComponent from '../../formAddressComponent'
+import FormAddressComponent, { FormAddressData } from '../../formAddressComponent'
 import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
@@ -10,13 +10,7 @@ export type InteredPartiesFormData = {
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
   responsibleOrganisationRegion?: string
-  responsbibleOrganisationAddress?: {
-    line1?: string
-    line2?: string
-    city?: string
-    county?: string
-    postcode?: string
-  }
+  responsbibleOrganisationAddress?: FormAddressData
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string

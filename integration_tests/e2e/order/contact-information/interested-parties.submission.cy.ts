@@ -8,16 +8,16 @@ const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
 const sampleFormData = {
   notifyingOrganisationEmailAddress: 'notifying@organisation',
-  responsibleOrganisationName: 'org',
+  responsibleOrganisationName: 'Police',
   responsibleOrganisationContactNumber: '01234567890',
   responsibleOrganisationEmailAddress: 'responsible@organisation',
   responsibleOrganisationRegion: 'region',
   responsbibleOrganisationAddress: {
     line1: 'line1',
     line2: 'line2',
-    city: 'line3',
-    county: 'line4',
-    postcode: 'line5',
+    line3: 'line3',
+    line4: 'line4',
+    postcode: 'postcode',
   },
   responsibleOfficerName: 'name',
   responsibleOfficerContactNumber: '01234567891',
@@ -36,7 +36,21 @@ context('Contact information', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            contactNumber: '01234567890',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'org',
+            responsibleOrganisationPhoneNumber: '01234567890',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'region',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: 'line1',
+              addressLine2: 'line2',
+              addressLine3: 'line3',
+              addressLine4: 'line4',
+              postcode: 'postcode'
+            },
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
           },
         })
 
@@ -52,20 +66,18 @@ context('Contact information', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            notifyingOrganisationEmailAddress: 'notifying@organisation',
-
-            responsibleOrganisationName: 'org',
-            responsibleOrganisationContactNumber: '01234567890',
-            responsibleOrganisationEmailAddress: 'responsible@organisation',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationPhoneNumber: '01234567890',
+            responsibleOrganisationEmail: 'responsible@organisation',
             responsibleOrganisationRegion: 'region',
-            responsbibleOrganisationAddressLine1: 'line1',
-            responsbibleOrganisationAddressLine2: 'line2',
-            responsbibleOrganisationAddressLine3: 'line3',
-            responsbibleOrganisationAddressLin4: 'line4',
-            responsbibleOrganisationAddressPostcode: 'line5',
-
+            responsibleOrganisationAddressLine1: 'line1',
+            responsibleOrganisationAddressLine2: 'line2',
+            responsibleOrganisationAddressLine3: 'line3',
+            responsibleOrganisationAddressLine4: 'line4',
+            responsibleOrganisationAddressPostcode: 'postcode',
             responsibleOfficerName: 'name',
-            responsibleOfficerContactNumber: '01234567891',
+            responsibleOfficerPhoneNumber: '01234567891',
           },
         }).should('be.true')
       })

@@ -25,14 +25,14 @@ context('Contact information', () => {
           subPath: apiPath,
           response: [
             {
-              field: 'reponsibleOrganisationAddressLine1',
+              field: 'responsibleOrganisationAddressLine1',
               error: expectedValidationErrors.reponsibleOrganisationAddressLine1,
             },
             {
-              field: 'reponsibleOrganisationAddressLine2',
+              field: 'responsibleOrganisationAddressLine2',
               error: expectedValidationErrors.reponsibleOrganisationAddressLine2,
             },
-            { field: 'reponsibleOrganisationPostcode', error: expectedValidationErrors.reponsibleOrganisationPostcode },
+            { field: 'responsibleOrganisationAddressPostcode', error: expectedValidationErrors.reponsibleOrganisationPostcode },
           ],
         })
 

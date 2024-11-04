@@ -19,7 +19,7 @@ const InterestedPartiesModel = z
       responsibleOrganisationAddressLine2: responsibleOrganisationAddress.addressLine2,
       responsibleOrganisationAddressLine3: responsibleOrganisationAddress.addressLine3,
       responsibleOrganisationAddressLine4: responsibleOrganisationAddress.addressLine4,
-      responsibleOrganisationPostcode: responsibleOrganisationAddress.postcode,
+      responsibleOrganisationAddressPostcode: responsibleOrganisationAddress.postcode,
     }
   })
 
