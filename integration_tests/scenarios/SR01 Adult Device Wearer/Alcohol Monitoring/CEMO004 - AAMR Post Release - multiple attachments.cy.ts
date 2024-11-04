@@ -111,9 +111,9 @@ context('Scenarios', () => {
         primaryAddressPage.form.fillInWith(primaryAddressDetails)
         primaryAddressPage.form.saveAndContinueButton.click()
 
-        const InterestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-        InterestedPartiesPage.form.fillInWith(notifyingOrganisation)
-        InterestedPartiesPage.form.saveAndContinueButton.click()
+        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+        interestedPartiesPage.form.fillInWith(notifyingOrganisation)
+        interestedPartiesPage.form.saveAndContinueButton.click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.saveAndContinueButton().click()

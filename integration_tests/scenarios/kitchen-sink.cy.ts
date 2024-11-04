@@ -219,14 +219,13 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('14. tertiaryAddressPage', { overwrite: true })
       tertiaryAddressPage.form.saveAndContinueButton.click()
 
-      // no validation
-      let InterestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      // InterestedPartiesPage.form.saveAndContinueButton.click()
-      InterestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      interestedPartiesPage.form.saveAndContinueButton.click()
+      interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('15. InterestedPartiesPage - validation', { overwrite: true })
-      InterestedPartiesPage.form.fillInWith(notifyingOrganisation)
+      interestedPartiesPage.form.fillInWith(notifyingOrganisation)
       if (takeScreenshots) cy.screenshot('16. InterestedPartiesPage - validation', { overwrite: true })
-      InterestedPartiesPage.form.saveAndContinueButton.click()
+      interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
