@@ -5,7 +5,7 @@ import AttachmentsController from '../controllers/attachmentController'
 import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
-import NotifyingOrganisationController from '../controllers/contact-information/notifyingOrganisationController'
+import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
@@ -39,7 +39,7 @@ export default function routes({
   deviceWearerService,
   installationAndRiskService,
   monitoringConditionsService,
-  notifyingOrganisationService,
+  interestedPartiesService,
   orderService,
   orderSearchService,
   taskListService,
@@ -87,9 +87,9 @@ export default function routes({
     taskListService,
   )
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
-  const notifyingOrganisationController = new NotifyingOrganisationController(
+  const notifyingOrganisationController = new InterestedPartiesController(
     auditService,
-    notifyingOrganisationService,
+    interestedPartiesService,
     taskListService,
   )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
@@ -149,8 +149,8 @@ export default function routes({
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
   // Device wearer addresses
-  get(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.view)
-  post(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.update)
+  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
+  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
 
   /**
    * INSTALLATION AND RISK

@@ -20,7 +20,7 @@ const paths = {
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
     NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
     ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType(primary|secondary|tertiary)',
-    NOTIFYING_ORGANISATION: '/order/:orderId/contact-information/notifying-organisation',
+    INTERESTED_PARTIES: '/order/:orderId/contact-information/interested-parties',
   },
 
   INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
