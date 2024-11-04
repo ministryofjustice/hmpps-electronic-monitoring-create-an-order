@@ -14,7 +14,7 @@ import AboutDeviceWearerPage from '../pages/order/about-the-device-wearer/device
 import ContactDetailsPage from '../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../pages/order/contact-information/primary-address'
-import NotifyingOrganisationPage from '../pages/order/contact-information/notifyingOrganisation'
+import InterestedPartiesPage from '../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../pages/order/monitoring-conditions'
 import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../pages/order/submit-success'
@@ -173,14 +173,13 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('07. primaryAddressPage - minimum', { overwrite: true })
       primaryAddressPage.form.saveAndContinueButton.click()
 
-      // no validation
-      let notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-      // notifyingOrganisationPage.form.saveAndContinueButton.click()
-      notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
+      let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      interestedPartiesPage.form.saveAndContinueButton.click()
+      interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
-      // notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
+      interestedPartiesPage.form.fillInWith(notifyingOrganisation)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
-      notifyingOrganisationPage.form.saveAndContinueButton.click()
+      interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
