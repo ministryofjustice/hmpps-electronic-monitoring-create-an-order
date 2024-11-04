@@ -37,6 +37,10 @@ type Task = {
   status: 'INCOMPLETE' | 'COMPLETE'
 }
 
+type TasksBySections = {
+  [k in Section]: Array<Task>
+}
+
 type FormData = Record<string, string | boolean>
 
 export default class TaskListService {
@@ -190,7 +194,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ATTACHMENTS',
       name: 'ATTACHMENT',
       path: paths.ATTACHMENT.ATTACHMENTS,
       required: true,
@@ -214,13 +218,18 @@ export default class TaskListService {
 
   getTasksBySection(order: Order) {
     const tasks = this.getTasks(order)
-    const sections = tasks.reduce((acc, task) => {
-      acc.set(task.section, [...(acc.get(task.section) || []), task])
+    return tasks.reduce((acc, task) => {
+      if (!acc[task.section]) {
+        acc[task.section] = []
+      }
+
+      acc[task.section].push({
+        ...task,
+        path: task.path.replace(':orderId', order.id),
+      })
 
       return acc
-    }, new Map<string, Array<Task>>())
-
-    return sections
+    }, {} as TasksBySections)
   }
 }
 

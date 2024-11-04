@@ -27,10 +27,10 @@
     Complete all sections before submitting the form.
   </p>
 
-{% macro _lineItem(name, order, url, complete, describedBy) %}
+{% macro _lineItem(name, url, complete, describedBy) %}
   <li class="govuk-task-list__item govuk-task-list__item--with-link">
     <div class="govuk-task-list__name-and-hint">
-      <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}{{ url }}" aria-describedby="{{ describedBy }}">
+      <a class="govuk-link govuk-task-list__link" href="{{ url }}" aria-describedby="{{ describedBy }}">
           {{ name }}
       </a>
     </div>
@@ -47,11 +47,9 @@
 {% endmacro %}
 
   <ul class="govuk-task-list">
-    {{ _lineItem("About the device wearer", order, "/about-the-device-wearer", order.deviceWearer.isComplete, "order-section-device-wearer") }}
-    {{ _lineItem("Contact information", order, "/contact-information/contact-details", order.contactDetails.isComplete, "order-section-contact-details") }}
-    {{ _lineItem("Installation and risk", order, "/installation-and-risk", order.installationAndRisk.isComplete, "order-section-installation-and-risk") }}
-    {{ _lineItem("Monitoring conditions", order, "/monitoring-conditions", order.monitoringConditions.isComplete, "order-section-monitoring-conditions") }}
-    {{ _lineItem("Attachments", order, "/attachments", order.attachments.isComplete, "order-section-attachments") }}
+    {% for section, tasks in sections %}
+      {{ _lineItem(section | replace("_", " ") | capitalize, tasks[0].path, false, "order-section-" + section | replace("_", "-") | lower) }}  
+    {% endfor %}
   </ul>
 
   {% if order.status == "IN_PROGRESS" %}
