@@ -15,7 +15,7 @@ export default class ResponsibleAdultFormComponent extends FormComponent {
     this.relationshipField(relationship).click()
   }
 
-  relationshipFieldset = (): PageElement => this.form.getByLegend('How do they know the device wearer')
+  relationshipFieldset = (): PageElement => this.form.getByLegend('What is the relationship to the device wearer?')
 
   relationshipField = (relationship: string): PageElement => this.relationshipFieldset().getByLabel(relationship)
 

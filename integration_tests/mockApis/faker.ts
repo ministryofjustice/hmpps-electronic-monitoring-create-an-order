@@ -2,7 +2,7 @@ import { fakerEN_GB as faker } from '@faker-js/faker'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', "Don't know"]
 
-const genderOptions = ['Male', 'Female', 'Non-binary', "Don't know", 'Self identify']
+const genderOptions = ['Male', 'Female', 'Non binary', "Don't know", 'Self identify']
 
 const organisationTypes = [
   'Youth Justice Service (YJS)',

@@ -48,23 +48,6 @@
         isPageHeading: false
       }
     }) %}
-
-    {% set otherRelationshipDetailsHtml %}
-      {{
-        govukInput({
-        label: {
-          text: "Enter details of relationship to device wearer"
-        },
-        id: "relationship-detail",
-        name: "otherRelationshipDetails",
-        classes: "govuk-!-width-one-third",
-        errorMessage: otherRelationshipDetails.error,
-        disabled: not isOrderEditable,
-        value: otherRelationshipDetails.value
-        })
-      }}
-    {% endset %}
-
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <p class="govuk-body">
@@ -76,17 +59,28 @@
         </div>
       </div>
 
+      {% set otherRelationshipDetailsHtml %}
+        {{
+          govukInput({
+          label: {
+            text: "Enter details of relationship to device wearer"
+          },
+          id: "relationship-detail",
+          name: "otherRelationshipDetails",
+          classes: "govuk-!-width-one-third",
+          errorMessage: otherRelationshipDetails.error,
+          disabled: not isOrderEditable,
+          value: otherRelationshipDetails.value
+          })
+        }}
+      {% endset %}
+
       {{ govukRadios({
         name: "relationship",
         fieldset: {
           legend: {
-            text: "How do they know the device wearer",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
+            text: "What is the relationship to the device wearer?"
           }
-        },
-        hint: {
-          text: "Select an option"
         },
         items: [
           {
@@ -115,10 +109,13 @@
 
       {{ govukInput({
         label: {
-          text: "Full name",
+          text: "Full name of responsible adult",
           classes: "govuk-label--s"
         },
-        classes: "govuk-!-width-two-thirds",
+        hint: {
+          text: "Provide first names and last name"
+        },
+        classes: "govuk-input--width-20",
         id: "full-name",
         name: "fullName",
         autocomplete: "name",
@@ -129,13 +126,13 @@
 
       {{ govukInput({
         label: {
-          text: "Parent / guardian contact number",
+          text: "Parent / guardian contact number (optional)",
           classes: "govuk-label--s"
         },
         hint: {
           text: "Provide either a landline or mobile number"
         },
-        classes: "govuk-!-width-two-thirds",
+        classes: "govuk-input--width-10",
         id: "contact-number",
         name: "contactNumber",
         autocomplete: "tel tel-national",
