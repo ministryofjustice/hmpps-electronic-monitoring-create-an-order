@@ -21,6 +21,7 @@ import InstallationAddressPage from '../../../pages/order/monitoring-conditions/
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
+import AttachmentPage from '../../../pages/order/attachment'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -123,9 +124,6 @@ context('Scenarios', () => {
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.saveAndContinueButton().click()
 
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-        orderSummaryPage.MonitoringConditionsSectionItem().click()
-
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
         monitoringConditionsPage.form.saveAndContinueButton.click()
@@ -137,6 +135,9 @@ context('Scenarios', () => {
         const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
         trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
         trailMonitoringPage.form.saveAndContinueButton.click()
+
+        const attachmentPage = Page.verifyOnPage(AttachmentPage)
+        attachmentPage.backToFormSectionButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         orderSummaryPage.submissionFormButton().click()

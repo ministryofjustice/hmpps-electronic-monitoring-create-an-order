@@ -23,6 +23,7 @@ import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
+import AttachmentPage from '../../../pages/order/attachment'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -159,9 +160,6 @@ context('Scenarios', () => {
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       installationAndRiskPage.saveAndContinueButton().click()
 
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.MonitoringConditionsSectionItem().click()
-
       const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
@@ -181,6 +179,9 @@ context('Scenarios', () => {
       const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
       curfewTimetablePage.form.fillInWith(curfewTimetable)
       curfewTimetablePage.form.saveAndContinueButton.click()
+
+      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      attachmentPage.backToFormSectionButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submissionFormButton().click()

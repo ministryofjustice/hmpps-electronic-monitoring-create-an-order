@@ -19,6 +19,7 @@ import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/al
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import AttachmentPage from '../../../pages/order/attachment'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -116,9 +117,6 @@ context('Scenarios', () => {
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       installationAndRiskPage.saveAndContinueButton().click()
 
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.MonitoringConditionsSectionItem().click()
-
       const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
@@ -130,6 +128,9 @@ context('Scenarios', () => {
       const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      attachmentPage.backToFormSectionButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submissionFormButton().click()

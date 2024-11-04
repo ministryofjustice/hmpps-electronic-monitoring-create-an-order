@@ -19,8 +19,7 @@ export default defineConfig({
   taskTimeout: 60000,
   e2e: {
     setupNodeEvents(on) {
-      const seed = Math.random() * Number.MAX_SAFE_INTEGER
-      faker.seed(seed)
+      const seed = faker.seed(Math.random() * Number.MAX_SAFE_INTEGER)
 
       // eslint-disable-next-line no-console
       console.log(`Random seed: ${seed}`)

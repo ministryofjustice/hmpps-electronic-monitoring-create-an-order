@@ -26,6 +26,7 @@ import CurfewConditionsPage from '../pages/order/monitoring-conditions/curfew-co
 import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcement-zone'
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
 import ResponsibleAdultPage from '../pages/order/about-the-device-wearer/responsible-adult-details'
+import AttachmentPage from '../pages/order/attachment'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = true
@@ -190,9 +191,6 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.saveAndContinueButton().click()
 
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.MonitoringConditionsSectionItem().click()
-
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()
       monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
@@ -256,6 +254,10 @@ context('Mandatory fields only', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
+      attachmentPage.backToFormSectionButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submissionFormButton().click()
@@ -426,9 +428,6 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.saveAndContinueButton().click()
 
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.MonitoringConditionsSectionItem().click()
-
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()
       monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
@@ -492,6 +491,10 @@ context('Mandatory fields only', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
+      attachmentPage.backToFormSectionButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submissionFormButton().click()
