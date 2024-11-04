@@ -500,15 +500,15 @@ const tables = [
   'orders',
 ]
 
-const emptyNextTable = async (client: PostgresqlClient) => {
+const emptyNextTable = async (client: PostgresqlClient): Promise<boolean> => {
   const table = tables.shift()
+  if (table) {
+    await client.query(`DELETE FROM ${table}`)
 
-  if (!table) {
-    return
+    await emptyNextTable(client)
   }
 
-  await client.query(`DELETE FROM ${table}`)
-  await emptyNextTable(client)
+  return true
 }
 
 const resetDB = async () => {
@@ -527,7 +527,6 @@ const resetDB = async () => {
   // console.log(rows)
 
   await emptyNextTable(client)
-
   await client.end()
 
   return true

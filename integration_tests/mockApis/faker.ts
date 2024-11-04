@@ -60,6 +60,7 @@ export type PersonOfInterest = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
+  homeOfficeReferenceNumber?: string
 
   firstName: string
   firstNames: string
@@ -89,7 +90,6 @@ export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
   const firstName = faker.person.firstName(sexType)
   const middleName = faker.person.middleName(sexType)
   const lastName = faker.person.lastName()
-  const fullName = `${firstName} ${lastName}`
   const alias = faker.animal.bird()
   const sex = faker.helpers.arrayElement(sexOptions)
   const genderIdentity = faker.helpers.arrayElement(genderOptions)
@@ -101,7 +101,7 @@ export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
     firstName,
     firstNames: [firstName, middleName].join(' '),
     lastName,
-    fullName,
+    fullName: [firstName, middleName, '', lastName].join(' '),
     alias,
 
     dob,

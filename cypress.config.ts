@@ -5,6 +5,7 @@ import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import cemo from './integration_tests/mockApis/cemo'
+import fms from './integration_tests/mockApis/fms'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -29,6 +30,7 @@ export default defineConfig({
         ...auth,
         ...tokenVerification,
         ...cemo,
+        ...fms,
         /*
          * used to output summary accessibility testing issues found to console during integration testing
          */

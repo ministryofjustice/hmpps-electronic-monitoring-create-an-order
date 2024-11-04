@@ -1,8 +1,9 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import OrderModel, { Order } from '../models/Order'
+import { SanitisedError } from '../sanitisedError'
 
-type GetOrderRequestInput = AuthenticatedRequestInput & {
+type OrderRequestInput = AuthenticatedRequestInput & {
   orderId: string
 }
 
@@ -17,7 +18,7 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async getOrder(input: GetOrderRequestInput): Promise<Order> {
+  async getOrder(input: OrderRequestInput): Promise<Order> {
     const result = await this.apiClient.get({
       path: `/api/orders/${input.orderId}`,
       token: input.accessToken,
@@ -26,19 +27,27 @@ export default class OrderService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async deleteOrder(id: string) {
+  async deleteOrder(input: OrderRequestInput) {
     // Do nothing for now
     return Promise.resolve()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async submitOrder(id: string) {
-    // Do nothing for now
-    // Will call API endpoint(s):
-    //  - Updating order status to SUBMITTED in CEMO DB
-    //  - Submitting order to Serco
-    //  - Returning reference number from Serco
-    //  - Generating a PDF of form to download (and eventually emailing to user)
-    return Promise.resolve()
+  async submitOrder(input: OrderRequestInput) {
+    try {
+      const result = await this.apiClient.post({
+        path: `/api/orders/${input.orderId}/submit`,
+        token: input.accessToken,
+      })
+
+      return result
+    } catch (e) {
+      const sanitisedError = e as SanitisedError
+
+      if (sanitisedError.status === 400) {
+        return e as SanitisedError
+      }
+
+      throw e
+    }
   }
 }

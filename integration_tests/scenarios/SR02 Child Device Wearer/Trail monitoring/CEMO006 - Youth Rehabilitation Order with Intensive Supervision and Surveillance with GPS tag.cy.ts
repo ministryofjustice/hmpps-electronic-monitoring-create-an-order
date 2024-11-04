@@ -5,8 +5,9 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import {
-  createFakeAdultDeviceWearer,
+  createFakeYouthDeviceWearer,
   createFakeResponsibleOfficer,
+  createFakeResponsibleAdult,
   createFakeAddress,
   createFakeOrganisation,
 } from '../../../mockApis/faker'
@@ -15,12 +16,11 @@ import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
+import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
-import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
-import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
-import SubmitSuccessPage from '../../../pages/order/submit-success'
+import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
+import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -54,13 +54,14 @@ context('Scenarios', () => {
   })
 
   context(
-    'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
+    'Youth Rehabilitation Order with Intensive Supervision and Surveillance (Community) with GPS Tag (Location - Fitted).',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeYouthDeviceWearer(),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
+      const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createFakeAddress()
       const primaryAddressDetails = {
         ...fakePrimaryAddress,
@@ -74,52 +75,16 @@ context('Scenarios', () => {
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-        monitoringRequired: 'Curfew with electronic monitoring',
-        devicesRequired: 'Location, not fitted',
+        orderType: 'Community',
+        orderTypeDescription: 'GPS Acquisitive Crime Parole',
+        conditionType: 'Requirement of a Community Order',
+        monitoringRequired: 'Trail monitoring',
+        devicesRequired: 'Location, fitted',
       }
-      const curfewReleaseDetails = {
-        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-        startTime: '19:00:00',
-        endTime: '07:00:00',
-        address: 'Primary address',
-      }
-      const curfewConditionDetails = {
+      const trailMonitoringOrder = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 35), // 35 days
-        addresses: ['Primary address'],
       }
-      const curfewNights = ['SATURDAY', 'SUNDAY']
-      const curfewTimetable = [
-        {
-          day: 'FRIDAY',
-          startTime: curfewReleaseDetails.startTime,
-          endTime: '11:59:00',
-          addresses: curfewConditionDetails.addresses,
-        },
-        ...curfewNights.flatMap((day: string) => [
-          {
-            day,
-            startTime: '00:00:00',
-            endTime: curfewReleaseDetails.endTime,
-            addresses: curfewConditionDetails.addresses,
-          },
-          {
-            day,
-            startTime: curfewReleaseDetails.startTime,
-            endTime: '11:59:00',
-            addresses: curfewConditionDetails.addresses,
-          },
-        ]),
-        {
-          day: 'MONDAY',
-          startTime: '00:00:00',
-          endTime: curfewReleaseDetails.endTime,
-          addresses: curfewConditionDetails.addresses,
-        },
-      ]
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -134,6 +99,10 @@ context('Scenarios', () => {
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
         aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+        const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
+        responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
+        responsibleAdultDetailsPage.form.saveAndContinueButton.click()
 
         const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
         contactDetailsPage.form.fillInWith(deviceWearerDetails)
@@ -165,17 +134,9 @@ context('Scenarios', () => {
         installationAddress.form.fillInWith(installationAddressDetails)
         installationAddress.form.saveAndContinueButton.click()
 
-        const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-        curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-        curfewReleaseDatePage.form.saveAndContinueButton.click()
-
-        const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-        curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-        curfewConditionsPage.form.saveAndContinueButton.click()
-
-        const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-        curfewTimetablePage.form.fillInWith(curfewTimetable)
-        curfewTimetablePage.form.saveAndContinueButton.click()
+        const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
+        trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+        trailMonitoringPage.form.saveAndContinueButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         orderSummaryPage.submissionFormButton().click()
@@ -189,7 +150,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-            adult_child: 'adult',
+            adult_child: 'child',
             sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
@@ -213,15 +174,15 @@ context('Scenarios', () => {
             mappa: '',
             mappa_case_type: '',
             risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: 'null',
+            responsible_adult_required: 'true',
+            parent: responsibleAdultDetails.fullName,
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: null,
+            parent_phone_number: responsibleAdultDetails.contactNumber,
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -241,13 +202,13 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+                condition_type: 'Requirement of a Community Order',
                 court: '',
                 court_order_email: '',
                 describe_exclusion: '',
                 device_type: ',',
                 device_wearer: deviceWearerDetails.fullName,
-                enforceable_condition: [{ condition: 'Curfew with EM' }],
+                enforceable_condition: [{ condition: 'Location Monitoring (Fitted Device)' }],
                 exclusion_allday: '',
                 interim_court_date: '',
                 issuing_organisation: '',
@@ -270,8 +231,8 @@ context('Scenarios', () => {
                 order_id: orderId,
                 order_request_type: '',
                 order_start: monitoringConditions.startDate.toISOString().split('T')[0],
-                order_type: 'post_release',
-                order_type_description: 'DAPOL HDC',
+                order_type: 'community',
+                order_type_description: 'GPS Acquisitive Crime Parole',
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
@@ -300,51 +261,14 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
+                conditional_release_date: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
-                curfew_start: curfewConditionDetails.startDate.toISOString().split('T')[0],
-                curfew_end: curfewConditionDetails.endDate.toISOString().split('T')[0],
-                curfew_duration: [
-                  {
-                    location: 'primary',
-                    allday: '',
-                    schedule: [
-                      {
-                        day: 'Mo',
-                        start: '00:00:00',
-                        end: '07:00:00',
-                      },
-                      {
-                        day: 'Fr',
-                        start: '19:00:00',
-                        end: '11:59:00',
-                      },
-                      {
-                        day: 'Sa',
-                        start: '00:00:00',
-                        end: '07:00:00',
-                      },
-                      {
-                        day: 'Sa',
-                        start: '19:00:00',
-                        end: '11:59:00',
-                      },
-                      {
-                        day: 'Su',
-                        start: '00:00:00',
-                        end: '07:00:00',
-                      },
-                      {
-                        day: 'Su',
-                        start: '19:00:00',
-                        end: '11:59:00',
-                      },
-                    ],
-                  },
-                ],
-                trail_monitoring: '',
+                curfew_start: '',
+                curfew_end: '',
+                curfew_duration: [],
+                trail_monitoring: 'true',
                 exclusion_zones: '',
                 exclusion_zones_duration: '',
                 inclusion_zones: '',

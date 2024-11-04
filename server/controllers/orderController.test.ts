@@ -43,6 +43,7 @@ describe('OrderController', () => {
       const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.summary(req, res, next)
@@ -82,6 +83,7 @@ describe('OrderController', () => {
       const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.confirmDelete(req, res, next)
@@ -119,7 +121,10 @@ describe('OrderController', () => {
       await orderController.delete(req, res, next)
 
       // Then
-      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/success')
     })
 
@@ -145,12 +150,13 @@ describe('OrderController', () => {
       const req = createMockRequest()
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.deleteFailed(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/delete-failed')
+      expect(res.render).toHaveBeenCalledWith('pages/order/delete-failed', { errors: [] })
     })
   })
 
@@ -181,7 +187,10 @@ describe('OrderController', () => {
       await orderController.submit(req, res, next)
 
       // Then
-      expect(mockOrderService.submitOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
       expect(res.redirect).toHaveBeenCalledWith('/order/submit/success')
     })
 
@@ -207,12 +216,13 @@ describe('OrderController', () => {
       const req = createMockRequest()
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.submitFailed(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/submit-failed')
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-failed', { errors: [] })
     })
   })
 
