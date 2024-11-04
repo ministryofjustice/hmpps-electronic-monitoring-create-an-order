@@ -2,7 +2,6 @@ import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
 import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
-import pdf from 'html-pdf'
 
 export default class OrderController {
   constructor(
@@ -107,58 +106,19 @@ export default class OrderController {
   }
 
   downloadReciept: RequestHandler = async (req: Request, res: Response) => {
-    const html = `
-    <html>
-    <head>
-        <style>
-            body { font-family: Arial, sans-serif; }
-            h1 { text-align: center; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
-            th { background-color: #f2f2f2; }
-        </style>
-    </head>
-    <body>
-        <h1>Order Details</h1>
-        <table>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer Name</th>
-                <th>Total</th>
-            </tr>
-            <tr>
-            </tr>
-        </table>
-    </body>
-    </html>
-`
+    const orderId = req.order!.id
+    const downloadDate = new Date().toISOString()
+    console.log('downloading receipt')
 
-    // Create PDF from HTML
-    pdf.create(html).toBuffer((err, buffer) => {
-      if (err) {
-        res.status(500).send('Error generating PDF')
-        return
-      }
-
-      // Set the response headers
-      res.setHeader('Content-Disposition', `attachment; filename="order.pdf"`)
-      res.setHeader('Content-Type', 'application/pdf')
-      res.end(buffer)
+    const receipt = await this.orderService.downloadReceipt({
+      accessToken: res.locals.user.token,
+      orderId,
     })
 
-    // const orderId = req.order!.id
-    // const downloadDate = new Date().toISOString()
-    // console.log('downloading receipt')
-
-    // const receipt = await this.orderService.downloadReceipt({
-    //   accessToken: res.locals.user.token,
-    //   orderId,
-    // })
-
-    // res.setHeader('Content-Type', 'application/pdf')
-    // res.setHeader('Content-Disposition', `attachment; filename="${downloadDate}-receipt-order-${orderId}.pdf"`)
-    // res.send(receipt)
-    // res.end()
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', `attachment; filename="${downloadDate}-receipt-order-${orderId}.pdf"`)
+    res.send(receipt)
+    res.end()
     console.log('receipt download complete')
   }
 }

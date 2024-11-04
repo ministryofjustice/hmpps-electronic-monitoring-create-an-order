@@ -14,11 +14,13 @@
   href: "/"
 }) }}
 
-  <button id="download-pdf">Download as PDF</button>
+  <div class="govuk-button-group" id="download-pdf">
+      {{ govukButton({
+          text: "Download page as PDF receipt"
+      }) }}
+  </div>
 
   <div id="receipt" class="container">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds-from-desktop">
 
         <h1 class="govuk-heading-l">Submitted electronic monitoring order details</h1>
 
@@ -37,7 +39,6 @@
 
         <h1 class="govuk-heading-l">About the device wearer</h1>
         <h2 class="govuk-heading-m">Personal details</h2>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% for key, value in deviceWearer %}
               <div class="govuk-summary-list__row">
@@ -60,11 +61,9 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         {% if deviceWearerResponsibleAdult %}
           <h2 class="govuk-heading-m">Responsible Adult</h2>
-          <div class="govuk-grid-row">
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
               {% for key, value in deviceWearerResponsibleAdult %}
@@ -78,12 +77,10 @@
                 </div>
               {% endfor %}
             </dl>
-          </div>
         {% endif %}
 
         <h2 class="govuk-heading-m">Addresses</h2>
         {% for address in addresses %}
-          <div class="govuk-grid-row">
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
               <h3 class="govuk-heading-s">Address Type: {{address.addressType | capitalize }}</h3>
               {% for key, value in address %}
@@ -97,12 +94,10 @@
                 </div>
               {% endfor %}
             </dl>
-          </div>
         {% endfor %}
 
         {# TODO: Review following rebase #}
         <h2 class="govuk-heading-m">Interested parties</h2>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in notifyingOrganisation %}
@@ -116,11 +111,9 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <h1 class="govuk-heading-l">Monitoring Conditions</h1>
         <h2 class="govuk-heading-m">Overview</h2>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in monitoringConditions %}
@@ -134,11 +127,9 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <h2 class="govuk-heading-m">Enforcement zone conditions</h2>
         {% for enforcementZoneCondition in enforcementZoneConditions %}
-          <div class="govuk-grid-row">
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
               <h3 class="govuk-heading-s">Zone type: {{enforcementZoneCondition.zoneType | capitalize }}</h3>
               {% for key, value in enforcementZoneCondition %}
@@ -152,11 +143,9 @@
                 </div>
               {% endfor %}
             </dl>
-          </div>
         {% endfor %}
 
         <h2 class="govuk-heading-m">Trail monitoring conditions</h2>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in monitoringConditionsTrail %}
@@ -170,10 +159,8 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <h2 class="govuk-heading-m">Alcohol monitoring conditions</h2>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in monitoringConditionsAlcohol %}
@@ -187,11 +174,9 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <h2 class="govuk-heading-m">Curfew conditions</h2>
         <h3 class="govuk-heading-s">Curfew monitoring conditions</h3>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in curfewConditions %}
@@ -205,10 +190,8 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <h3 class="govuk-heading-s">Curfew release date conditions</h3>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in curfewReleaseDateConditions %}
@@ -222,9 +205,8 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
+
         <h3 class="govuk-heading-s">Curfew timetable conditions</h3>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% for curfew in curfewTimeTable %}
               {% for key, value in curfew %}
@@ -239,11 +221,9 @@
               {% endfor %}
             {% endfor %}
           </dl>
-        </div>
 
         <h2 class="govuk-heading-m">Attendance monitoring conditions</h2>
         {% for monitoringCondition in monitoringConditionsAttendance %}
-          <div class="govuk-grid-row">
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
               <h3 class="govuk-heading-s">Appointment: {{monitoringCondition.purpose | capitalize }}</h3>
               {% for key, value in monitoringCondition %}
@@ -257,11 +237,9 @@
                 </div>
               {% endfor %}
             </dl>
-          </div>
         {% endfor %}
 
         <h1 class="govuk-heading-l">Installation and risk</h1>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% for key, value in installationAndRisk %}
               <div class="govuk-summary-list__row">
@@ -274,10 +252,8 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <h1 class="govuk-heading-l">Additional Documents</h1>
-        <div class="govuk-grid-row">
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
             {% for key, value in additionalDocuments %}
@@ -291,7 +267,6 @@
               </div>
             {% endfor %}
           </dl>
-        </div>
 
         <div class="govuk-button-group">
           {{ govukButton({
@@ -299,10 +274,6 @@
           href: "/"
       }) }}
         </div>
-
-      </div>
-
-    </div>
   </div>
 
   {% endblock %}

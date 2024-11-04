@@ -28,10 +28,21 @@
   }
 }) }}
 
+<h2>This button downloads a PDF receipt using puppeteer to take a screenshot of a non-visible page</h2>
+
 <div class="govuk-button-group">
       {{ govukButton({
           text: "Download PDF receipt",
           href: "/order/" + orderId + "/receipt/download"
+      }) }}
+  </div>
+
+  <h2>This button takes you to a receipt page where you can download the page as a PDF</h2>
+
+<div class="govuk-button-group">
+      {{ govukButton({
+          text: "See order details",
+          href: "/order/" + orderId + "/receipt/view"
       }) }}
   </div>
 

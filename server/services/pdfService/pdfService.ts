@@ -28,7 +28,6 @@ export default class PdfService {
       await page.emulateMediaType('screen')
       const bufferArray = await page.pdf({
         format: 'A4',
-        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
         printBackground: true,
       })
 
