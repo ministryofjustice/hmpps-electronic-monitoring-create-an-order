@@ -35,12 +35,6 @@ export default class InterestedPartiesController {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
-    console.log( {
-      ...interestedParties,
-      ...(formData.length > 0 ? (formData[0] as never) : {}),
-      errors: getErrorsViewModel(errors as never),
-    })
-
     res.render('pages/order/contact-information/interested-parties', {
       ...interestedParties,
       ...(formData.length > 0 ? (formData[0] as never) : {}),
