@@ -231,7 +231,7 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/notifying-organisation`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/interested-parties`)
     })
 
     it('should redirect to the summary page if the user selects back', async () => {
