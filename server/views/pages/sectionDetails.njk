@@ -13,15 +13,13 @@
     href: "/hdc"
   }) }}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
+  {{ mojPageHeaderActions({
     heading: {
       text: section.title
-    }  
-    }) }}
-  </div>
+    }
+  }) }}
 
-  <dl class="govuk-summary-list">  
+  <dl class="govuk-summary-list">
     {% for question in section.questions %}
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -33,7 +31,7 @@
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="{{question.ref}}">Change<span class="govuk-visually-hidden"> name</span></a>
         </dd>
-      </div>    
+      </div>
     {% endfor %}
   </dl>
 

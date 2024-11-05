@@ -5,32 +5,33 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+
 {% block content %}
-
-<div class="homepage-content">
   {{ mojPageHeaderActions({
-  heading: {
-    text: 'Identity Numbers'
-  }
-}) }}
- <form action="/section/next" method="post" >
-<input type="hidden" name="_csrf" value="{{ csrfToken }}">
-{{ govukInput({
-  label: {
-    text: "National offender management information system (NOMIS ID)"
-  },
-  id: "input-nomisId",
-  name: "nomisId",
-  value: formData.nomisId,
-  errorMessage: error.nomisId,
-  classes: "govuk-input--width-10"
-}) }}
-{{govukButton({
-        text: 'Next',
-        type: 'submit'
-      })}}
-</form>
+    heading: {
+      text: 'Identity Numbers'
+    }
+  }) }}
 
+  <form action="/section/next" method="post" >
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {{ govukInput({
+      label: {
+        text: "National offender management information system (NOMIS ID)"
+      },
+      id: "input-nomisId",
+      name: "nomisId",
+      value: formData.nomisId,
+      errorMessage: error.nomisId,
+      classes: "govuk-input--width-10"
+    }) }}
+
+    {{govukButton({
+      text: 'Next',
+      type: 'submit'
+    })}}
+  </form>
 </div>
 
 {% endblock %}

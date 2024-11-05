@@ -5,7 +5,7 @@ import paths from '../../../server/constants/paths'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
-    super('Apply for electronic monitoring', paths.ORDER.SUMMARY)
+    super('Tag request form', paths.ORDER.SUMMARY, 'Form sections')
   }
 
   orderSections = (): PageElement => cy.get('.govuk-task-list')

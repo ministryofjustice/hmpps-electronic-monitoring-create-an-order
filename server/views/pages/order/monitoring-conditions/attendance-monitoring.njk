@@ -1,16 +1,14 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Monitoring conditions - Attendance monitoring - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "../../../partials/timeInput.njk" import timeInput %}
 {% from "../../../partials/addressInput.njk" import addressInput %}
 
@@ -33,13 +31,11 @@
       }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Monitoring conditions"
-      }
-    }) }}
-  </div>
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "Monitoring conditions"
+    }
+  }) }}
   <h2 class="govuk-heading-l">Attendance monitoring</h2>
 
   <form method="post">

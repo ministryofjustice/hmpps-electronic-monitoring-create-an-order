@@ -1,44 +1,36 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Monitoring conditions - Trail monitoring - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% block content %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Monitoring conditions"
-      }
-    }) }}
-  </div>
-
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "Monitoring conditions"
+    }
+  }) }}
   <h2 class="govuk-heading-l">Trail monitoring</h2>
 
   <form method="post">
@@ -51,7 +43,7 @@
       namePrefix: "startDate",
       fieldset: {
         legend: {
-          text: "Enter the date when the monitoring starts",
+          text: "Enter the date for when monitoring starts.",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -87,7 +79,7 @@
       namePrefix: "endDate",
       fieldset: {
         legend: {
-          text: "Enter the date when the monitoring ends (optional)",
+          text: "Enter the date for when monitoring ends. (optional)",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -125,6 +117,7 @@
             name: "action",
             value: "continue"
         }) }}
+
         {{ govukButton({
             text: "Save and return back to form section menu",
             classes: "govuk-button--secondary",

@@ -7,23 +7,24 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
-{{ govukBackLink({
-  text: "Back",
-  href: "/newForm"
-}) }}
- {{ mojPageHeaderActions({
-  heading: {
-    text: 'Home Detention Curfew (HDC) form'
-  }  
-}) }}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/newForm"
+  }) }}
 
-<div id=''>
-    <h2 id="" tabindex="-1" class="govuk-heading-m"> Overview</h2>
+  {{ mojPageHeaderActions({
+    heading: {
+        text: 'Home Detention Curfew (HDC) form'
+    }
+  }) }}
+  <h2 class="govuk-heading-m">Overview</h2>
+
+  <div>
     <p>
         Home Detention Curfew (HDC) is a scheme which allows some people to be released from custody if they have a suitable address to go to.
         The person will wear a device which will monitor if they follow the rules set out in their curfew.
-
     </p>
+
     <form action="/createForm" method="post" >
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
     <input type="hidden" name="formType" value="HDC">

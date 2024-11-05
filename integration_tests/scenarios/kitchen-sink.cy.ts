@@ -158,7 +158,7 @@ context('The kitchen sink', () => {
 
       let indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('01. indexPage', { overwrite: true })
-      indexPage.newOrderFormButton().click()
+      indexPage.newOrderFormButton.click()
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
@@ -312,10 +312,8 @@ context('The kitchen sink', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('22. indexPageAfterSubmission', { overwrite: true })
-      indexPage
-        .ordersList()
-        .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
-        .should('exist')
+      const orderName = `${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName}`
+      indexPage.SubmittedOrderFor(orderName).should('exist')
     })
   })
 })

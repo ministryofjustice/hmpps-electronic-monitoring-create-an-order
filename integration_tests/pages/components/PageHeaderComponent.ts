@@ -15,7 +15,7 @@ export default class PageHeaderComponent {
   }
 
   checkHasHeader(): void {
-    this.element.contains('Hmpps Electronic Monitoring Create An Order', { log: false })
+    this.element.contains('Electronic monitoring', { log: false })
   }
 
   signOut = (): PageElement => this.element.get('[data-qa=signOut]')

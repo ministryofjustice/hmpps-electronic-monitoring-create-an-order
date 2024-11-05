@@ -97,7 +97,7 @@ context('Scenarios', () => {
         cy.signIn()
 
         let indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.newOrderFormButton().click()
+        indexPage.newOrderFormButton.click()
 
         let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
@@ -296,10 +296,8 @@ context('Scenarios', () => {
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage
-          .ordersList()
-          .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
-          .should('exist')
+        const orderName = `${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName}`
+        indexPage.SubmittedOrderFor(orderName).should('exist')
       })
     },
   )

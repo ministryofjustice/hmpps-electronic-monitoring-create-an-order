@@ -33,7 +33,7 @@ context('Authorisation', () => {
 
     it('should be able to create an order', () => {
       const page = Page.visit(IndexPage)
-      page.newOrderFormButton().click()
+      page.newOrderFormButton.click()
     })
   })
 })
