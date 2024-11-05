@@ -47,12 +47,17 @@ export class Address {
   }
 }
 
-export type ResponsibleOrganisation = {
-  name?: string
-  contactNumber?: string
-  emailAddress?: string
-  region?: string
-  address?: Partial<Address>
+export type InterestedParties = {
+  notifyingOrganisationEmailAddress?: string
+
+  responsibleOrganisationName?: string
+  responsibleOrganisationContactNumber?: string
+  responsibleOrganisationEmailAddress?: string
+  responsibleOrganisationRegion?: string
+  responsbibleOrganisationAddress?: Partial<Address>
+
+  responsibleOfficerName?: string
+  responsibleOfficerContactNumber?: string
 }
 
 export type PersonOfInterest = {
@@ -76,7 +81,7 @@ export type PersonOfInterest = {
   sex: string
   genderIdentity: string
 
-  organisation?: ResponsibleOrganisation
+  interestedParties?: InterestedParties
   relationship?: string
 }
 
@@ -123,18 +128,23 @@ export const createFakeAddress = (): Address => {
   )
 }
 
-export const createFakeOrganisation = (): Partial<ResponsibleOrganisation> => {
-  const name = faker.helpers.arrayElement(organisationTypes)
-  const contactNumber = createFakeUkPhoneNumber()
-  const emailAddress = `${name.toLowerCase().replace(/\s/g, '-')}@example.com`
+export const createFakeInterestedParties = (): Partial<InterestedParties> => {
+  const sexType = faker.person.sexType()
+  const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
+  const officerContactNumber = createFakeUkPhoneNumber()
+  const organisation = faker.helpers.arrayElement(organisationTypes)
+  const orgContactNumber = createFakeUkPhoneNumber()
+  const orgEmailAddress = `${organisation.toLowerCase().replace(/\s/g, '-')}@example.com`
   const address = createFakeAddress()
 
   return {
-    name,
-    contactNumber,
-    emailAddress,
-    region: undefined,
-    address,
+    responsibleOfficerName: officerName,
+    responsibleOfficerContactNumber: officerContactNumber,
+    responsibleOrganisationName: organisation,
+    responsibleOrganisationContactNumber: orgContactNumber,
+    responsibleOrganisationEmailAddress: orgEmailAddress,
+    responsibleOrganisationRegion: undefined,
+    responsbibleOrganisationAddress: address,
   }
 }
 
@@ -190,16 +200,6 @@ export const createFakeYouthDeviceWearer = (): PersonOfInterest => {
     homeOfficeReferenceNumber,
     ...fakeYouth,
   } as PersonOfInterest
-}
-
-export const createFakeResponsibleOfficer = (): PersonOfInterest => {
-  const person = createFakeAdult()
-  const organisation = createFakeOrganisation()
-
-  return {
-    ...person,
-    organisation,
-  }
 }
 
 export const createFakeResponsibleAdult = (): PersonOfInterest => {

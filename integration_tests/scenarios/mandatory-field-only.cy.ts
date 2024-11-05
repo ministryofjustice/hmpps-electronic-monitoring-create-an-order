@@ -5,6 +5,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeResponsibleAdult,
   createFakeAddress,
+  createFakeInterestedParties,
 } from '../mockApis/faker'
 
 import Page from '../pages/page'
@@ -73,6 +74,7 @@ context('Mandatory fields only', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = fakeAddress
+    const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       orderType: 'Post Release',
@@ -177,7 +179,7 @@ context('Mandatory fields only', () => {
       interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
-      interestedPartiesPage.form.fillInWith(notifyingOrganisation)
+      interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
@@ -301,6 +303,7 @@ context('Mandatory fields only', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = fakeAddress
+    const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       orderType: 'Post Release',
@@ -409,14 +412,13 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('07. primaryAddressPage - minimum', { overwrite: true })
       primaryAddressPage.form.saveAndContinueButton.click()
 
-      // no validation
-      let notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-      // notifyingOrganisationPage.form.saveAndContinueButton.click()
-      notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
+      let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      interestedPartiesPage.form.saveAndContinueButton.click()
+      interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
-      // notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
+      interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
-      notifyingOrganisationPage.form.saveAndContinueButton.click()
+      interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)

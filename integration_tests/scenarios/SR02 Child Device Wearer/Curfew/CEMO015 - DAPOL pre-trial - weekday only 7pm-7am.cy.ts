@@ -7,10 +7,9 @@ import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/
 import ResponsibleAdultDetailsPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import {
   createFakeYouthDeviceWearer,
-  createFakeResponsibleOfficer,
+  createFakeInterestedParties,
   createFakeResponsibleAdult,
   createFakeAddress,
-  createFakeOrganisation,
 } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
@@ -76,10 +75,7 @@ context('Scenarios', () => {
         ...createFakeAddress(),
         hasAnotherAddress: 'No',
       }
-      const notifyingOrganisation = {
-        ...createFakeOrganisation(),
-        responsibleOfficer: createFakeResponsibleOfficer(),
-      }
+      const interestedParties = createFakeInterestedParties()
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -165,7 +161,7 @@ context('Scenarios', () => {
         secondaryAddressPage.form.saveAndContinueButton.click()
 
         const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-        interestedPartiesPage.form.fillInWith(notifyingOrganisation)
+        interestedPartiesPage.form.fillInWith(interestedParties)
         interestedPartiesPage.form.saveAndContinueButton.click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
