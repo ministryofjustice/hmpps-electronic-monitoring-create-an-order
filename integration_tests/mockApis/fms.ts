@@ -1,5 +1,7 @@
 import assert from 'assert'
+
 import jsonDiff from 'json-diff'
+
 import { getMatchingRequests, stubFor } from './wiremock'
 
 type CreateStubOptions = {

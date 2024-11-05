@@ -1,4 +1,3 @@
-import { dataAccess } from '../data'
 import AddressService from './addressService'
 import AlcoholMonitoringService from './alcoholMonitoringService'
 import AttachmentService from './attachmentService'
@@ -18,6 +17,7 @@ import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import TaskListService from './taskListService'
 import TrailMonitoringService from './trailMonitoringService'
+import { dataAccess } from '../data'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()

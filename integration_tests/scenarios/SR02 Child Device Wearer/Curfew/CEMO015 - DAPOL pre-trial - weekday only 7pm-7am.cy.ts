@@ -6,10 +6,10 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import ResponsibleAdultDetailsPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import {
-  createFakeYouthDeviceWearer,
+  createFakeAddress,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createFakeAddress,
+  createFakeYouthDeviceWearer,
 } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'

@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import OrderModel from './Order'
 
 const OrderListModel = z.array(OrderModel)

@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express'
 import { jwtDecode } from 'jwt-decode'
+
 import logger from '../../logger'
 import { convertToTitleCase } from '../utils/utils'
 

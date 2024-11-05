@@ -1,7 +1,7 @@
 import nock from 'nock'
 
-import { AgentConfig } from '../config'
 import RestClient from './restClient'
+import { AgentConfig } from '../config'
 
 const restClient = new RestClient('api-name', {
   url: 'http://localhost:8080/api',

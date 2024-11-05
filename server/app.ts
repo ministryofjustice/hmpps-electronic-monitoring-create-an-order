@@ -1,8 +1,7 @@
+import createError from 'http-errors'
+import multer from 'multer'
 import express from 'express'
 
-import createError from 'http-errors'
-
-import multer from 'multer'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
@@ -15,7 +14,6 @@ import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
-
 import routes from './routes'
 import type { Services } from './services'
 

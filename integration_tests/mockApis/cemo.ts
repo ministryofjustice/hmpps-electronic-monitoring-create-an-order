@@ -1,11 +1,12 @@
 import assert from 'assert'
+
 import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
 import { Client as PostgresqlClient } from 'pg'
 
-import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
+import { Order } from '../../server/models/Order'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
 

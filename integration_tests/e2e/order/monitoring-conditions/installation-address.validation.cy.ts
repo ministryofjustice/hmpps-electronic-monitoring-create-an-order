@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+
 import Page from '../../../pages/page'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 

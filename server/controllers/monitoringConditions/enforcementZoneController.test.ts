@@ -1,13 +1,15 @@
-import type { NextFunction, Request, Response } from 'express'
 import { Readable } from 'stream'
+
 import { v4 as uuidv4 } from 'uuid'
+import type { NextFunction, Request, Response } from 'express'
+
+import EnforcementZoneController from './enforcementZoneController'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import EnforcementZoneService from '../../services/enforcementZoneServices'
 import AuditService from '../../services/auditService'
 import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
-import EnforcementZoneController from './enforcementZoneController'
 import { EnforcementZone } from '../../models/EnforcementZone'
 import TaskListService from '../../services/taskListService'
 

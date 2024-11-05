@@ -1,5 +1,5 @@
-import { defineConfig } from 'cypress'
 import { fakerEN_GB as faker } from '@faker-js/faker'
+import { defineConfig } from 'cypress'
 
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'

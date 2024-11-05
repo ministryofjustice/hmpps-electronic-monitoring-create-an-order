@@ -1,6 +1,8 @@
-import type { Express } from 'express'
-import request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
+import request from 'supertest'
+import type { Express } from 'express'
+
+import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
 import { getMockOrder, getMockSubmittedOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
@@ -9,7 +11,6 @@ import AuditService, { Page } from '../services/auditService'
 import DeviceWearerService from '../services/deviceWearerService'
 import OrderSearchService from '../services/orderSearchService'
 import OrderService from '../services/orderService'
-import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
 import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')

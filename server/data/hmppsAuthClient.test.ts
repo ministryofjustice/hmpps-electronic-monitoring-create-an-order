@@ -1,9 +1,9 @@
 import nock from 'nock'
 
-import config from '../config'
 import HmppsAuthClient from './hmppsAuthClient'
 import TokenStore from './tokenStore/redisTokenStore'
 import { RedisClient } from './redisClient'
+import config from '../config'
 
 jest.mock('./tokenStore/redisTokenStore')
 jest.mock('./redisClient')

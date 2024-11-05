@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import { ValidationError, ValidationErrorModel } from '../../models/Validation'
 
 const dateModel = z.object({

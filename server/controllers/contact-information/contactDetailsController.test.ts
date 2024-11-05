@@ -1,10 +1,10 @@
+import ContactDetailsController from './contactDetailsController'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
 import ContactDetailsService from '../../services/contactDetailsService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import ContactDetailsController from './contactDetailsController'
 import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')

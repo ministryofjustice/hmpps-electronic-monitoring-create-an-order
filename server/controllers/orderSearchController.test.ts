@@ -1,4 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
+
+import OrderSearchController from './orderSearchController'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
@@ -6,7 +8,6 @@ import { OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
-import OrderSearchController from './orderSearchController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')

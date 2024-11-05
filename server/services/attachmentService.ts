@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'

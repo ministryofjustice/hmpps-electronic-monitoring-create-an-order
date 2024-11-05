@@ -1,7 +1,7 @@
+import AlcoholMonitoringController from './alcoholMonitoringController'
 import AuditService from '../../services/auditService'
 import AlcoholMonitoringService from '../../services/alcoholMonitoringService'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
-import AlcoholMonitoringController from './alcoholMonitoringController'
 import RestClient from '../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'

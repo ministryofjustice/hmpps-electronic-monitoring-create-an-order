@@ -1,4 +1,3 @@
-import { ValidationError } from '../models/Validation'
 import {
   calculateAge,
   convertToTitleCase,
@@ -9,6 +8,7 @@ import {
   serialiseDate,
   serialiseTime,
 } from './utils'
+import { ValidationError } from '../models/Validation'
 
 describe('convert to title case', () => {
   it.each([

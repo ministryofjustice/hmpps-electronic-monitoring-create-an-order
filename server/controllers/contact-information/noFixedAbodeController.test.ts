@@ -1,10 +1,10 @@
+import NoFixedAbodeController from './noFixedAbodeController'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
 import DeviceWearerService from '../../services/deviceWearerService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import NoFixedAbodeController from './noFixedAbodeController'
 import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')

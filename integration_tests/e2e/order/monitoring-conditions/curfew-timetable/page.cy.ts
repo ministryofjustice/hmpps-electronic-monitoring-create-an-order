@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+
 import { NotFoundErrorPage } from '../../../../pages/error'
 import CurfewTimetablePage from '../../../../pages/order/monitoring-conditions/curfew-timetable'
 import Page from '../../../../pages/page'

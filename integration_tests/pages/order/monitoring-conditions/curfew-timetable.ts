@@ -1,7 +1,5 @@
 import AppFormPage from '../../appFormPage'
-
 import paths from '../../../../server/constants/paths'
-
 import CurfewTimetableFormComponent from '../../components/forms/monitoring-conditions/curfewTimetableFormComponent'
 
 export default class CurfewTimetablePage extends AppFormPage {

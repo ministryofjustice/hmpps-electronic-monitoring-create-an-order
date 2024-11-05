@@ -1,11 +1,12 @@
-import { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
+import { Request, Response } from 'express'
+
+import populateCurrentOrder from './populateCurrentOrder'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import RestClient from '../data/restClient'
 import { OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import OrderService from '../services/orderService'
-import populateCurrentOrder from './populateCurrentOrder'
 
 jest.mock('../data/restClient')
 jest.mock('../services/orderService')

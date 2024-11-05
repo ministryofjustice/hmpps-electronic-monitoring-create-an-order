@@ -1,7 +1,7 @@
+import { DateField, MultipleChoiceField } from './utils'
 import { deserialiseDate, getError } from '../../utils/utils'
 import { CurfewConditions } from '../CurfewConditions'
 import { ValidationResult } from '../Validation'
-import { DateField, MultipleChoiceField } from './utils'
 import { CurfewConditionsFormData } from '../form-data/curfewConditions'
 
 type CurfewConditionsViewModel = {

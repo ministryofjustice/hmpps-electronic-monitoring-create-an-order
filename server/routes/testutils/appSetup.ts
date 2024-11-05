@@ -1,17 +1,18 @@
-import express, { Express } from 'express'
-import { NotFound } from 'http-errors'
-import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
+import { v4 as uuidv4 } from 'uuid'
+import { NotFound } from 'http-errors'
+import express, { Express } from 'express'
+
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
-import type { Services } from '../../services'
 import AuditService from '../../services/auditService'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import authorisationMiddleware, { cemoAuthorisedRoles } from '../../middleware/authorisationMiddleware'
+import type { Services } from '../../services'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')

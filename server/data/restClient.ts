@@ -4,9 +4,9 @@ import Agent, { HttpsAgent } from 'agentkeepalive'
 import superagent from 'superagent'
 
 import logger from '../../logger'
+import sanitiseError from '../sanitisedError'
 import type { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
-import sanitiseError from '../sanitisedError'
 
 interface Request {
   path: string

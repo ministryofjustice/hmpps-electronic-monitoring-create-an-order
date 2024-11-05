@@ -1,7 +1,5 @@
 import AppFormPage from '../../appFormPage'
-
 import paths from '../../../../server/constants/paths'
-
 import ResponsibleAdultFormComponent from '../../components/forms/about-the-device-wearer/responsibleAdultForm'
 
 export default class ResponsibleAdultPage extends AppFormPage {

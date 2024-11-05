@@ -1,7 +1,5 @@
 import AppFormPage from '../../appFormPage'
-
 import paths from '../../../../server/constants/paths'
-
 import NoFixedAbodeFormComponent from '../../components/forms/contact-information/noFixedAbodeForm'
 
 export default class NoFixedAbodePage extends AppFormPage {

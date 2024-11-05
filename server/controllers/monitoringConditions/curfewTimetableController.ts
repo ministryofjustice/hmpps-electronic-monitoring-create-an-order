@@ -1,8 +1,9 @@
-import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
+import { Request, RequestHandler, Response } from 'express'
+
 import paths from '../../constants/paths'
 import { CurfewTimetable } from '../../models/CurfewTimetable'
-import { isValidationListResult, ValidationErrorModel } from '../../models/Validation'
+import { ValidationErrorModel, isValidationListResult } from '../../models/Validation'
 import { MultipleChoiceField, TimeSpanField } from '../../models/view-models/utils'
 import { AuditService, CurfewTimetableService } from '../../services'
 import { deserialiseTime, getError, getErrors, serialiseTime } from '../../utils/utils'

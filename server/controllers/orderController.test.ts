@@ -1,3 +1,4 @@
+import OrderController from './orderController'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import HmppsAuditClient from '../data/hmppsAuditClient'
@@ -5,7 +6,6 @@ import RestClient from '../data/restClient'
 import { OrderStatusEnum } from '../models/Order'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
-import OrderController from './orderController'
 import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')

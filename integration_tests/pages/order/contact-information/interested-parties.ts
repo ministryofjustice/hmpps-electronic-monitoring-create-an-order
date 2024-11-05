@@ -1,7 +1,5 @@
 import AppFormPage from '../../appFormPage'
-
 import paths from '../../../../server/constants/paths'
-
 import InterestedPartiesFormComponent from '../../components/forms/contact-information/interestedPartiesForm'
 
 export default class InterestedPartiesPage extends AppFormPage {

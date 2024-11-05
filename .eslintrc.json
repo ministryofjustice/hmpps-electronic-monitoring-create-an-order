@@ -56,7 +56,19 @@
             "semi": false
           }
         ],
-        "sort-imports": "error"
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "always",
+            "groups": [
+              "builtin",
+              "external",
+              ["sibling", "parent"],
+              "index",
+              "object"
+            ]
+          }
+        ]
       }
     }
   ],

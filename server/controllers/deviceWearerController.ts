@@ -1,8 +1,9 @@
-import { Request, RequestHandler, Response } from 'express'
 import z from 'zod'
+import { Request, RequestHandler, Response } from 'express'
+
 import paths from '../constants/paths'
 import { DeviceWearer } from '../models/DeviceWearer'
-import { isValidationResult, ValidationResult } from '../models/Validation'
+import { ValidationResult, isValidationResult } from '../models/Validation'
 import { MultipleChoiceField, TextField } from '../models/view-models/utils'
 import { AuditService, DeviceWearerService } from '../services'
 import { deserialiseDate, getError } from '../utils/utils'

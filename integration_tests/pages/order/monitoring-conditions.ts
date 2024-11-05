@@ -1,7 +1,5 @@
 import AppFormPage from '../appFormPage'
-
 import paths from '../../../server/constants/paths'
-
 import MonitoringConditionsFormComponent from '../components/forms/monitoringConditionsFormComponent'
 
 export default class MonitoringConditionsPage extends AppFormPage {

@@ -1,9 +1,9 @@
+import { DateField, TextField } from './utils'
 import { deserialiseDate, getError } from '../../utils/utils'
 import { Address, AddressTypeEnum } from '../Address'
 import { AlcoholMonitoring } from '../AlcoholMonitoring'
 import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField } from './utils'
 
 type AlcoholMonitoringViewModel = {
   monitoringType: TextField

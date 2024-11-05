@@ -1,5 +1,4 @@
 import AppPage from '../appPage'
-
 import paths from '../../../server/constants/paths'
 import { PageElement } from '../page'
 

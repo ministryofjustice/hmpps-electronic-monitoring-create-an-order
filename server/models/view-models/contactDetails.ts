@@ -1,8 +1,8 @@
+import { ViewModel } from './utils'
 import { getError } from '../../utils/utils'
 import { ContactDetails } from '../ContactDetails'
 import { ContactDetailsFormData } from '../form-data/contactDetails'
 import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
 
 type ContactDetailsViewModel = ViewModel<ContactDetails>
 

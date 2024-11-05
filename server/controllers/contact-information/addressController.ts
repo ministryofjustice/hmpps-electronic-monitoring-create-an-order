@@ -1,5 +1,6 @@
-import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
+import { Request, RequestHandler, Response } from 'express'
+
 import paths from '../../constants/paths'
 import { AuditService } from '../../services'
 import AddressService from '../../services/addressService'

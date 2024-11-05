@@ -1,5 +1,4 @@
 import AppFormPage from './appFormPage'
-
 import AddressFormComponent from './components/forms/addressForm'
 import { PageElement } from './page'
 

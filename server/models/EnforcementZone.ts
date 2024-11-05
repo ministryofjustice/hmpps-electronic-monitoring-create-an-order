@@ -1,4 +1,5 @@
 import { z } from 'zod'
+
 import EnforcementZoneTypes from './EnforcementZoneTypes'
 
 const EnforcementZoneModel = z.object({

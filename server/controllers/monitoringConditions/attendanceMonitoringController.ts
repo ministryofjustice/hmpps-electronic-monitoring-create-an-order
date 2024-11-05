@@ -1,8 +1,9 @@
-import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
+import { Request, RequestHandler, Response } from 'express'
+
 import paths from '../../constants/paths'
 import { AttendanceMonitoring } from '../../models/AttendanceMonitoring'
-import { isValidationResult, ValidationResult } from '../../models/Validation'
+import { ValidationResult, isValidationResult } from '../../models/Validation'
 import { AddressField, FormField, TextField, TimeField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'

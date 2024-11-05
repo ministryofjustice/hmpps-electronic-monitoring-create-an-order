@@ -1,8 +1,8 @@
+import { DateField, TextField, TimeSpanField } from './utils'
 import { deserialiseDate, deserialiseTime, getError, getErrors } from '../../utils/utils'
 import { CurfewReleaseDate } from '../CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../form-data/curfewReleaseDate'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField, TimeSpanField } from './utils'
 
 type CurfewReleaseDateViewModel = {
   address: TextField

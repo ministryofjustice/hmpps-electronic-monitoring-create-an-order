@@ -1,5 +1,4 @@
 import AddressPage from '../../addressPage'
-
 import paths from '../../../../server/constants/paths'
 
 export default class InstallationAddressPage extends AddressPage {

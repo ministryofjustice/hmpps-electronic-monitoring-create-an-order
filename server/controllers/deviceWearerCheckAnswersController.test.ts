@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express'
+
+import DeviceWearerCheckAnswersController from './deviceWearersCheckAnswersController'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import { Order, OrderStatus, OrderStatusEnum } from '../models/Order'
 import AuditService from '../services/auditService'
-import DeviceWearerCheckAnswersController from './deviceWearersCheckAnswersController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')

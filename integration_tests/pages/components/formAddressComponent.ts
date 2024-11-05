@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { PageElement } from '../page'
 import FormInputComponent from './formInputComponent'
+import { PageElement } from '../page'
 
 export type FormAddressData = {
   line1?: string

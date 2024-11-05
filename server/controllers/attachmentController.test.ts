@@ -1,6 +1,9 @@
-import type { NextFunction, Request, Response } from 'express'
 import { Readable } from 'stream'
+
 import { v4 as uuidv4 } from 'uuid'
+import type { NextFunction, Request, Response } from 'express'
+
+import AttachmentController from './attachmentController'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
@@ -9,7 +12,6 @@ import { OrderStatusEnum } from '../models/Order'
 import AttachmentService from '../services/attachmentService'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
-import AttachmentController from './attachmentController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')

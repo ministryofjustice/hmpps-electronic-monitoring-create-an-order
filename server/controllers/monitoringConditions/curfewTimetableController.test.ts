@@ -1,11 +1,12 @@
-import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
+import type { NextFunction, Request, Response } from 'express'
+
+import CurfewTimetableController from './curfewTimetableController'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
 import CurfewTimetableService from '../../services/curfewTimetableService'
-import CurfewTimetableController from './curfewTimetableController'
 import paths from '../../constants/paths'
 import TaskListService from '../../services/taskListService'
 

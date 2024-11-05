@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
+
+import expectations from './expectations'
 import CurfewTimetablePage from '../../../../pages/order/monitoring-conditions/curfew-timetable'
 import Page from '../../../../pages/page'
-import expectations from './expectations'
 
 const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions-curfew-timetable'

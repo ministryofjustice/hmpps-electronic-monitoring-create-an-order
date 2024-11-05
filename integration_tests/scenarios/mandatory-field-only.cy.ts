@@ -1,13 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  createFakeAdultDeviceWearer,
-  createFakeYouthDeviceWearer,
-  createFakeResponsibleAdult,
   createFakeAddress,
+  createFakeAdultDeviceWearer,
   createFakeInterestedParties,
+  createFakeResponsibleAdult,
+  createFakeYouthDeviceWearer,
 } from '../mockApis/faker'
-
 import Page from '../pages/page'
 import IndexPage from '../pages/index'
 import OrderSummaryPage from '../pages/order/summary'

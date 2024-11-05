@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode'
 import type { RequestHandler } from 'express'
 
-import logger from '../../logger'
 import asyncMiddleware from './asyncMiddleware'
+import logger from '../../logger'
 
 export enum HMPPS_AUTH_ROLES {
   ROLE_EM_CEMO__CREATE_ORDER = 'ROLE_EM_CEMO__CREATE_ORDER',

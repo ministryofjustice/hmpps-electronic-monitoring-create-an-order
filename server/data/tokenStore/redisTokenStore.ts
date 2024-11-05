@@ -1,7 +1,6 @@
-import type { RedisClient } from '../redisClient'
-
-import logger from '../../../logger'
 import TokenStore from './tokenStore'
+import logger from '../../../logger'
+import type { RedisClient } from '../redisClient'
 
 export default class RedisTokenStore implements TokenStore {
   private readonly prefix = 'systemToken:'

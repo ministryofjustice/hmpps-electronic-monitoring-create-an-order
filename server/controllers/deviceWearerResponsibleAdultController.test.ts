@@ -1,7 +1,7 @@
+import DeviceWearerResponsibleAdultController from './deviceWearerResponsibleAdultController'
 import AuditService from '../services/auditService'
 import DeviceWearerResponsibleAdultService from '../services/deviceWearerResponsibleAdultService'
 import HmppsAuditClient from '../data/hmppsAuditClient'
-import DeviceWearerResponsibleAdultController from './deviceWearerResponsibleAdultController'
 import RestClient from '../data/restClient'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import { getMockOrder } from '../../test/mocks/mockOrder'

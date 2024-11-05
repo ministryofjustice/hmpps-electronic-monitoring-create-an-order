@@ -1,4 +1,5 @@
 import { z } from 'zod'
+
 import AddressModel from './Address'
 
 const InterestedPartiesModel = z

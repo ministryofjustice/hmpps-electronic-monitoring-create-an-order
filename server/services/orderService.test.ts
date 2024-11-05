@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
+
+import OrderService from './orderService'
 import { mockApiOrder } from '../../integration_tests/mockApis/cemo'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import RestClient from '../data/restClient'
 import { SanitisedError } from '../sanitisedError'
-import OrderService from './orderService'
 
 jest.mock('../data/restClient')
 

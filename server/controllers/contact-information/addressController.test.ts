@@ -1,10 +1,10 @@
+import AddressController from './addressController'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
 import AddressService from '../../services/addressService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import AddressController from './addressController'
 import { AddressTypeEnum } from '../../models/Address'
 import TaskListService from '../../services/taskListService'
 

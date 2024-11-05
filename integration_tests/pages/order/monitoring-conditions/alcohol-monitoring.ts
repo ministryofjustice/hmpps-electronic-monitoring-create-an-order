@@ -1,7 +1,5 @@
 import AppFormPage from '../../appFormPage'
-
 import paths from '../../../../server/constants/paths'
-
 import AlcoholMonitoringFormComponent from '../../components/forms/monitoring-conditions/alcoholMonitoringFormComponent'
 
 export default class AlcoholMonitoringPage extends AppFormPage {

@@ -1,8 +1,10 @@
 /* eslint-disable no-param-reassign */
+import fs from 'fs'
 import path from 'path'
+
 import nunjucks from 'nunjucks'
 import express from 'express'
-import fs from 'fs'
+
 import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
