@@ -22,9 +22,11 @@ export default class OrderTasksPage extends AppPage {
 
   AttachmentsSectionItem = (): PageElement => this.orderSections().contains('Attachments')
 
-  submissionForm = (): PageElement => cy.get('form[action*="submit"]')
+  get submitOrderButton(): PageElement {
+    return cy.contains('button', 'Submit order')
+  }
 
-  submissionFormButton = (): PageElement => cy.get('form[action*="submit"] button[type=submit]')
-
-  backToSearchButton = (): PageElement => cy.get('a#backToSearch[href="/"]')
+  get backToSearchButton(): PageElement {
+    return cy.contains('a', 'Back')
+  }
 }

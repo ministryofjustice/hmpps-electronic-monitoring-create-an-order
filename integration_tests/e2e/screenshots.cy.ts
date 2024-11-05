@@ -38,7 +38,7 @@ context('Screenshots', () => {
     cy.visit(paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', mockOrderId))
     cy.screenshot('NoFixedAbodePage', { overwrite: true })
 
-    cy.visit(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId))
+    cy.visit(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', mockOrderId))
     cy.screenshot('InterestedPartiesPage', { overwrite: true })
 
     cy.visit(
@@ -74,10 +74,10 @@ context('Screenshots', () => {
     cy.screenshot('AlcoholPage', { overwrite: true })
 
     cy.visit(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', mockOrderId))
-    cy.screenshot('AttendencePage', { overwrite: true })
+    cy.screenshot('AttendancePage', { overwrite: true })
 
     // cy.visit(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(':orderId', mockOrderId).replace(':conditionId', '0'))
-    // cy.screenshot('AttendenceItemPage', { overwrite: true })
+    // cy.screenshot('AttendanceItemPage', { overwrite: true })
 
     cy.visit(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', mockOrderId))
     cy.screenshot('CurfewConditionsPage', { overwrite: true })

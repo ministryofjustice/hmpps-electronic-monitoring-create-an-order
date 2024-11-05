@@ -122,10 +122,10 @@ context('Scenarios', () => {
       alcoholMonitoringPage.form.saveAndContinueButton.click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
-      attachmentPage.backToFormSectionButton.click()
+      attachmentPage.backToSummaryButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.submissionFormButton().click()
+      orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
         httpStatus: 200,
@@ -275,8 +275,7 @@ context('Scenarios', () => {
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      const orderName = `${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName}`
-      indexPage.SubmittedOrderFor(orderName).should('exist')
+      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

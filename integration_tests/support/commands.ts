@@ -47,6 +47,9 @@ Cypress.Commands.add('isAccessible', () => {
           'EN-301-549',
         ],
       },
+      rules: {
+        'aria-allowed-attr': { enabled: false }, // https://accessibility.blog.gov.uk/2021/09/21/an-update-on-the-accessibility-of-conditionally-revealed-questions/
+      },
     },
     terminalLog,
   )

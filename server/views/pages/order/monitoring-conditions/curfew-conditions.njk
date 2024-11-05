@@ -119,37 +119,38 @@
         isPageHeading: false
       }
     }) %}
-    {{ govukCheckboxes({
-      name: "addresses",
-      fieldset: {
-        legend: {
-          text: "What address or addresses will the device wearer use during curfew hours?",
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "Select all that apply."
-      },
-      items: [
-        {
-          text: 'Primary address',
-          value: 'PRIMARY',
-          disabled: not isOrderEditable
+      {{ govukCheckboxes({
+        name: "addresses",
+        fieldset: {
+          legend: {
+            text: "What address or addresses will the device wearer use during curfew hours?",
+            classes: "govuk-fieldset__legend--s"
+          }
         },
-        {
-          text: 'Secondary address',
-          value: 'SECONDARY',
-          disabled: not isOrderEditable
+        hint: {
+          text: "Select all that apply."
         },
-        {
-          text: 'Tertiary address',
-          value: 'TERTIARY',
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: addresses.error,
-      values: addresses.values
-    }) }}
+        items: [
+          {
+            text: 'Primary address',
+            value: 'PRIMARY',
+            disabled: not isOrderEditable
+          },
+          {
+            text: 'Secondary address',
+            value: 'SECONDARY',
+            disabled: not isOrderEditable
+          },
+          {
+            text: 'Tertiary address',
+            value: 'TERTIARY',
+            disabled: not isOrderEditable
+          }
+        ],
+        errorMessage: addresses.error,
+        values: addresses.values
+      }) }}
+    {% endcall %}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
@@ -170,5 +171,4 @@
       {% endif %}
     </div>
   </form>
-
 {% endblock %}

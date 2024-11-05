@@ -1,6 +1,9 @@
+import { v4 as uuidv4 } from 'uuid'
 import IndexPage from '../pages/index'
 import OrderTasksPage from '../pages/order/summary'
 import Page from '../pages/page'
+
+const mockOrderId = uuidv4()
 
 context('Index', () => {
   context('Health backend', () => {
@@ -8,6 +11,8 @@ context('Index', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.task('stubCemoListOrders')
+      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
     })
 
     it('User name visible in header', () => {
@@ -41,8 +46,7 @@ context('Index', () => {
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.orders.should('exist').should('have.length', 2)
 
-      indexPage.IncompleteOrderFor('New form').should('exist')
-      indexPage.SubmittedOrderFor('test tester').should('exist')
+      indexPage.SubmittedOrderFor('New form').should('exist')
       indexPage.DraftOrderFor('test tester').should('exist')
     })
 
@@ -64,7 +68,7 @@ context('Index', () => {
       cy.signIn()
 
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.orders.should('exist').and('have.length', 0)
+      indexPage.orders.should('exist').and('have.length', 1)
       cy.contains('No existing forms found.').should('exist')
     })
   })

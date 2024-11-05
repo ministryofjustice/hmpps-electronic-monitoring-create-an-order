@@ -22,7 +22,7 @@ export default class IndexPage extends AppPage {
   }
 
   get orders(): PageElement {
-    return this.ordersList.get('li')
+    return this.ordersList.get('.govuk-task-list__item')
   }
 
   SubmittedOrderFor(name: string): PageElement {

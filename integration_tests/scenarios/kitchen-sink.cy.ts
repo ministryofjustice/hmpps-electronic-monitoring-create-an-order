@@ -22,6 +22,7 @@ import InstallationAndRiskPage from '../pages/order/installationAndRisk'
 import CurfewConditionsPage from '../pages/order/monitoring-conditions/curfew-conditions'
 import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcement-zone'
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
+import AttachmentPage from '../pages/order/attachment'
 
 context('The kitchen sink', () => {
   const takeScreenshots = true
@@ -303,17 +304,20 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
 
+      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
+      attachmentPage.saveAndReturnButton.click()
+
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.submissionFormButton().click()
+      orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('21. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('22. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('22. indexPageAfterSubmission', { overwrite: true })
-      const orderName = `${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName}`
-      indexPage.SubmittedOrderFor(orderName).should('exist')
+      if (takeScreenshots) cy.screenshot('23. indexPageAfterSubmission', { overwrite: true })
+      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

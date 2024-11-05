@@ -1,5 +1,6 @@
-import { PageElement } from '../../../page'
 import FormComponent from '../../formComponent'
+import FormInputComponent from '../../formInputComponent'
+import FormRadiosComponent from '../../formRadiosComponent'
 
 export type ResponsibleAdultFormData = {
   relationship?: string
@@ -11,58 +12,45 @@ export type ResponsibleAdultFormData = {
 export default class ResponsibleAdultFormComponent extends FormComponent {
   // FIELDS
 
-  setRelationship(relationship: string) {
-    this.relationshipField(relationship).click()
+  get relationshipField(): FormRadiosComponent {
+    const label = 'What is the relationship to the device wearer?'
+    return new FormRadiosComponent(this.form, label, ['Parent', 'Guardian', 'Other'])
   }
 
-  relationshipFieldset = (): PageElement => this.form.getByLegend('What is the relationship to the device wearer?')
-
-  relationshipField = (relationship: string): PageElement => this.relationshipFieldset().getByLabel(relationship)
-
-  relationshipParentField = (): PageElement => this.relationshipFieldset().getByLabel('Parent')
-
-  relationshipGuardianField = (): PageElement => this.relationshipFieldset().getByLabel('Guardian')
-
-  relationshipOtherField = (): PageElement => this.relationshipFieldset().getByLabel('Other')
-
-  setOtherRelationshipDetails(otherRelationshipDetails: string) {
-    this.otherRelationshipDetailsField().type(otherRelationshipDetails)
+  get relationshipDetailsField(): FormInputComponent {
+    const label = 'Relationship to device wearer'
+    return new FormInputComponent(this.form, label)
   }
-
-  otherRelationshipDetailsField = (): PageElement =>
-    this.form.getByLabel('Enter details of relationship to device wearer')
 
   // CONTACT DETAILS
 
-  setFullName(fullName: string) {
-    this.fullNameField().type(fullName)
+  get fullNameField(): FormInputComponent {
+    const label = 'Full name'
+    return new FormInputComponent(this.form, label)
   }
 
-  fullNameField = (): PageElement => this.form.getByLabel('Full name')
-
-  setContactNumber(contactNumber: string) {
-    this.contactNumberField().type(contactNumber)
+  get contactNumberField(): FormInputComponent {
+    const label = 'Telephone number for responsible adult (optional)'
+    return new FormInputComponent(this.form, label)
   }
-
-  contactNumberField = (): PageElement => this.form.getByLabel('Parent / guardian contact number')
 
   // FORM HELPERS
 
   fillInWith = (profile: ResponsibleAdultFormData): undefined => {
     if (profile.relationship) {
-      this.setRelationship(profile.relationship)
-    }
-
-    if (profile.relationship === 'Other' && profile.otherRelationshipDetails) {
-      this.setOtherRelationshipDetails(profile.otherRelationshipDetails)
+      this.relationshipField.set(profile.relationship)
     }
 
     if (profile.fullName) {
-      this.setFullName(profile.fullName)
+      this.fullNameField.set(profile.fullName)
     }
 
     if (profile.contactNumber) {
-      this.setContactNumber(profile.contactNumber)
+      this.contactNumberField.set(profile.contactNumber)
+    }
+
+    if (profile.relationship === 'Other' && profile.otherRelationshipDetails) {
+      this.relationshipDetailsField.set(profile.otherRelationshipDetails)
     }
   }
 }

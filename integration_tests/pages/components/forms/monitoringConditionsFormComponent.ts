@@ -89,7 +89,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'End date of monitoring(optional)')
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends (optional)')
   }
 
   // FORM HELPERS

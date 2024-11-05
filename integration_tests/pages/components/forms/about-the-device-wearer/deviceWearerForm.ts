@@ -93,6 +93,37 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     return new FormRadiosComponent(this.form, label, ['Male', 'Female', 'Non binary', "Don't know", 'Self identify'])
   }
 
+  get otherGenderField(): FormInputComponent {
+    const label = 'Other gender'
+    return new FormInputComponent(this.form, label)
+  }
+
+  // Disabilities
+
+  get disabilityField(): FormRadiosComponent {
+    const label = 'Disability (optional)'
+    return new FormRadiosComponent(this.form, label, [
+      'Vision',
+      'Hearing',
+      'Mobility',
+      'Dexterity',
+      'Learning, understanding or concentrating',
+      'Memory',
+      'Mental health',
+      'Stamina or breathing or fatigue',
+      'Other',
+      'None of the above',
+      'Prefer Not to Say',
+    ])
+  }
+
+  get otherDisabilityField(): FormInputComponent {
+    const label = 'Other disability'
+    return new FormInputComponent(this.form, label)
+  }
+
+  disabilities
+
   // Interpreter
 
   get interpreterRequiredField(): FormRadiosComponent {

@@ -11,7 +11,7 @@ export default class AttachmentPage extends AppPage {
 
   // ACTIONS
 
-  get backToFormSectionButton(): PageElement {
-    return cy.contains('Back to form section')
+  get saveAndReturnButton(): PageElement {
+    return cy.contains('Save and return back to form section menu')
   }
 }

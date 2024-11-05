@@ -12,7 +12,7 @@ const sampleFormData = {
   responsibleOrganisationContactNumber: '01234567890',
   responsibleOrganisationEmailAddress: 'responsible@organisation',
   responsibleOrganisationRegion: 'region',
-  responsbibleOrganisationAddress: {
+  responsibleOrganisationAddress: {
     line1: 'line1',
     line2: 'line2',
     line3: 'line3',
@@ -137,7 +137,7 @@ context('Contact information', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
-          responsbibleOrganisationAddress: {
+          responsibleOrganisationAddress: {
             line1: 'line1',
             line2: 'line2',
             line3: '',

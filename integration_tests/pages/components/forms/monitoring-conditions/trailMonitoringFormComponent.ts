@@ -10,11 +10,11 @@ export default class TrailMonitoringFormComponent extends FormComponent {
   // FIELDS
 
   get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date when the monitoring starts')
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts.')
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date when the monitoring ends (optional)')
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends. (optional)')
   }
 
   // FORM HELPERS

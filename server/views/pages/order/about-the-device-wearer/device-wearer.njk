@@ -258,18 +258,18 @@
       disabled: not isOrderEditable
     }) }}
 
-    {% set selfIdentifyHtml %}
+    {% set otherGenderHtml %}
       {{
         govukInput({
         label: {
-          text: "Enter the device wearer's identity"
+          text: "Other gender"
         },
-        id: "self-identify",
-        name: "selfIdentify",
+        id: "other-gender",
+        name: "otherGender",
         classes: "govuk-!-width-one-third",
-        errorMessage: selfIdentify.error,
+        errorMessage: otherGender.error,
         disabled: not isOrderEditable,
-        value: selfIdentify.value
+        value: otherGender.value
         })
       }}
     {% endset %}
@@ -310,10 +310,10 @@
         {
           value: "self-identify",
           text: "Self identify",
-          disabled: not isOrderEditable,
           conditional: {
-            html: selfIdentifyHtml
-          }
+            html: otherGenderHtml
+          },
+          disabled: not isOrderEditable
         }
       ],
       value: gender.value,
@@ -325,7 +325,7 @@
       {{
         govukInput({
         label: {
-          text: "Enter details of other disability"
+          text: "Other disability"
         },
         id: "disabilities-detail",
         name: "otherDisability",

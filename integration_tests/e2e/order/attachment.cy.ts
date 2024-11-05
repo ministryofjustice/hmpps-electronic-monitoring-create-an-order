@@ -42,7 +42,7 @@ context('Attachment', () => {
       cy.get('.govuk-summary-list__key').contains('Licence').should('exist')
       cy.get('.govuk-summary-list__value').contains('No licence document uploaded').should('exist')
       cy.get('.govuk-summary-list__key').contains('Photo ID').should('exist')
-      cy.get('.govuk-summary-list__value').contains('No photo id document uploaded').should('exist')
+      cy.get('.govuk-summary-list__value').contains('No photo ID document uploaded').should('exist')
       cy.get('a:contains("Change")').should('have.length', 2)
     })
 
@@ -103,7 +103,7 @@ context('Attachment', () => {
       cy.get('.govuk-file-upload').should('exist')
       uploadPage.uploadFile()
       uploadPage.saveAndContinueButton().click()
-      cy.get('#licence-error').contains('Mock Error').should('exist')
+      cy.get('#file-to-upload-error').contains('Mock Error').should('exist')
     })
 
     it('Upload licence successful, return to summary page', () => {
@@ -131,7 +131,7 @@ context('Attachment', () => {
       cy.get('.govuk-file-upload').should('exist')
       uploadPage.uploadFile()
       uploadPage.saveAndContinueButton().click()
-      cy.get('#licence-error').contains('Mock Error').should('exist')
+      cy.get('#file-to-upload-error').contains('Mock Error').should('exist')
     })
 
     it('Upload photo successful, return to summary page', () => {

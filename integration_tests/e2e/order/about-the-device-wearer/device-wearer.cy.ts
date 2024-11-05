@@ -43,6 +43,55 @@ context('About the device wearer', () => {
     })
   })
 
+  context('Collect other details', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: 'test',
+            lastName: 'tester',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: 'self-identify',
+            otherGender: 'Furby',
+            disabilities: 'Other',
+            otherDisability: 'Broken arm',
+            noFixedAbode: null,
+          },
+        },
+      })
+
+      cy.signIn()
+    })
+
+    it('Should display a text input for a gender identity of "Self identify"', () => {
+      const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+      page.form.genderIdentityField.shouldHaveValue('Self identify')
+      page.form.otherGenderField.shouldHaveValue('Furby')
+    })
+
+    it('Should display a text input for a disability of "Other"', () => {
+      const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+      page.form.disabilityField.shouldHaveValue('Other')
+      page.form.otherDisabilityField.shouldHaveValue('Broken arm')
+    })
+  })
+
   context('Submitting a valid order', () => {
     beforeEach(() => {
       cy.task('reset')
@@ -74,8 +123,10 @@ context('About the device wearer', () => {
             adultAtTimeOfInstallation: true,
             sex: 'male',
             gender: 'male',
+            otherGender: '',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
+            otherDisability: '',
             noFixedAbode: null,
             interpreterRequired: true,
             language: 'British Sign',
@@ -121,8 +172,10 @@ context('About the device wearer', () => {
             adultAtTimeOfInstallation: 'true',
             sex: 'male',
             gender: 'male',
+            otherGender: '',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
+            otherDisability: '',
             interpreterRequired: 'true',
             language: 'British Sign',
           },
@@ -152,8 +205,10 @@ context('About the device wearer', () => {
             adultAtTimeOfInstallation: false,
             sex: 'male',
             gender: 'male',
+            otherGender: '',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
+            otherDisability: '',
             noFixedAbode: null,
             interpreterRequired: false,
           },
@@ -197,8 +252,10 @@ context('About the device wearer', () => {
             adultAtTimeOfInstallation: 'false',
             sex: 'male',
             gender: 'male',
+            otherGender: '',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
+            otherDisability: '',
             interpreterRequired: 'false',
             language: '',
           },
@@ -213,10 +270,9 @@ context('About the device wearer', () => {
     it('should show error when date of birth is provided in the wrong format', () => {
       cy.signIn().visit(`/order/${mockOrderId}/about-the-device-wearer`)
       const page = Page.verifyOnPage(AboutDeviceWearerPage)
-      cy.get('#dateOfBirth-day').type('text')
+      page.form.dateOfBirthField.setDay('text')
       page.form.saveAndContinueButton.click()
-      cy.get('#dateOfBirth-error').should(
-        'contain',
+      page.form.dateOfBirthField.shouldHaveValidationMessage(
         'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
       )
     })
