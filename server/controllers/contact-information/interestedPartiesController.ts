@@ -1,27 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
-import { z } from 'zod'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import { AuditService } from '../../services'
 import InterestedPartiesService from '../../services/interestedPartiesService'
 import { getErrorsViewModel } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
-
-const FormDataModel = z.object({
-  action: z.string().default('continue'),
-  notifyingOrganisationEmail: z.string(),
-  responsibleOfficerName: z.string(),
-  responsibleOfficerPhoneNumber: z.string(),
-  responsibleOrganisation: z.string().default(''),
-  responsibleOrganisationRegion: z.string(),
-  responsibleOrganisationAddressLine1: z.string(),
-  responsibleOrganisationAddressLine2: z.string(),
-  responsibleOrganisationAddressLine3: z.string(),
-  responsibleOrganisationAddressLine4: z.string(),
-  responsibleOrganisationAddressPostcode: z.string(),
-  responsibleOrganisationPhoneNumber: z.string(),
-  responsibleOrganisationEmail: z.string(),
-})
+import InterestedPartiesFormDataModel from '../../models/form-data/interestedParties'
 
 export default class InterestedPartiesController {
   constructor(
@@ -44,7 +28,7 @@ export default class InterestedPartiesController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { action, ...formData } = FormDataModel.parse(req.body)
+    const { action, ...formData } = InterestedPartiesFormDataModel.parse(req.body)
 
     const result = await this.interestedPartiesService.update({
       accessToken: res.locals.user.token,

@@ -37,7 +37,7 @@ context('Contact information', () => {
           subPath: apiPath,
           response: {
             notifyingOrganisationEmail: 'notifying@organisation',
-            responsibleOrganisation: 'org',
+            responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
             responsibleOrganisationRegion: 'region',
