@@ -100,5 +100,73 @@ context('Contact information', () => {
         Page.verifyOnPage(OrderSummaryPage)
       })
     })
+
+    context('Submitting partial data', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            notifyingOrganisationEmail: '',
+            responsibleOrganisation: null,
+            responsibleOrganisationPhoneNumber: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: 'line1',
+              addressLine2: 'line2',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: 'postcode',
+            },
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: null,
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('should submit an interested parties submission with some fields not completed', () => {
+        const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          responsbibleOrganisationAddress: {
+            line1: 'line1',
+            line2: 'line2',
+            line3: '',
+            line4: '',
+            postcode: 'postcode',
+          },
+        })
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(InstallationAndRiskPage)
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            notifyingOrganisationEmail: '',
+            responsibleOrganisation: null,
+            responsibleOrganisationPhoneNumber: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+            responsibleOrganisationAddressLine1: 'line1',
+            responsibleOrganisationAddressLine2: 'line2',
+            responsibleOrganisationAddressLine3: '',
+            responsibleOrganisationAddressLine4: '',
+            responsibleOrganisationAddressPostcode: 'postcode',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: null,
+          },
+        }).should('be.true')
+      })
+    })
   })
 })
