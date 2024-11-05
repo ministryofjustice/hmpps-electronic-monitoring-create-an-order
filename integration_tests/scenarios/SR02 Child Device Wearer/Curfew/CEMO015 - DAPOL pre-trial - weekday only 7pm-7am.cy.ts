@@ -15,7 +15,7 @@ import {
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
@@ -164,9 +164,9 @@ context('Scenarios', () => {
         secondaryAddressPage.form.fillInWith(secondaryAddressDetails)
         secondaryAddressPage.form.saveAndContinueButton.click()
 
-        const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-        notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
-        notifyingOrganisationPage.form.saveAndContinueButton.click()
+        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+        interestedPartiesPage.form.fillInWith(notifyingOrganisation)
+        interestedPartiesPage.form.saveAndContinueButton.click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.saveAndContinueButton().click()

@@ -13,7 +13,7 @@ import DeviceWearerService from './deviceWearerService'
 import EnforcementZoneService from './enforcementZoneServices'
 import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
-import NotifyingOrganisationService from './notifyingOrganisationService'
+import InterestedPartiesService from './interestedPartiesService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import TaskListService from './taskListService'
@@ -35,7 +35,7 @@ export const services = () => {
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
-  const notifyingOrganisationService = new NotifyingOrganisationService(cemoApiClient)
+  const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
   const zoneService = new EnforcementZoneService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
@@ -57,7 +57,7 @@ export const services = () => {
     deviceWearerService,
     installationAndRiskService,
     monitoringConditionsService,
-    notifyingOrganisationService,
+    interestedPartiesService,
     orderSearchService,
     orderService,
     taskListService,

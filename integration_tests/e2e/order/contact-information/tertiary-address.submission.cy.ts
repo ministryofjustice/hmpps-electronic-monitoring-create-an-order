@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import TertiaryAddressPage from '../../../pages/order/contact-information/tertiary-adddress'
-import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import OrderSummaryPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
@@ -79,7 +79,7 @@ context('Contact information', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(NotifyingOrganisationPage)
+        Page.verifyOnPage(InterestedPartiesPage)
       })
 
       it('should return to the summary page', () => {

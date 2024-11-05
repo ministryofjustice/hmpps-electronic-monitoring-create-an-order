@@ -16,7 +16,7 @@ type Page =
   | 'PRIMARY_ADDRESS'
   | 'SECONDARY_ADDRESS'
   | 'TERTIARY_ADDRESS'
-  | 'NOTIFYING_ORGANISATION'
+  | 'INTERESTED_PARTIES'
   | 'INSTALLATION_AND_RISK'
   | 'MONITORING_CONDITIONS'
   | 'INSTALLATION_ADDRESS'
@@ -107,8 +107,8 @@ export default class TaskListService {
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
-      name: 'NOTIFYING_ORGANISATION',
-      path: paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION,
+      name: 'INTERESTED_PARTIES',
+      path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       required: true,
       status: 'INCOMPLETE',
     })

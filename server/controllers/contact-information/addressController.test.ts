@@ -300,8 +300,8 @@ describe('AddressController', () => {
     )
 
     it.each([
-      ['Primary', 'primary', `/order/${mockOrder.id}/contact-information/notifying-organisation`],
-      ['Secondary', 'secondary', `/order/${mockOrder.id}/contact-information/notifying-organisation`],
+      ['Primary', 'primary', `/order/${mockOrder.id}/contact-information/interested-parties`],
+      ['Secondary', 'secondary', `/order/${mockOrder.id}/contact-information/interested-parties`],
     ])(
       'should go to the notifying organisation page if the user indicates they do not have another address',
       async (_: string, param: string, expectedLocation: string) => {
@@ -381,7 +381,7 @@ describe('AddressController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/notifying-organisation`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/interested-parties`)
     })
   })
 })

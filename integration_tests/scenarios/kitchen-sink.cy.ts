@@ -16,7 +16,7 @@ import NoFixedAbodePage from '../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../pages/order/contact-information/primary-address'
 import SecondaryAddressPage from '../pages/order/contact-information/secondary-address'
 import TertiaryAddressPage from '../pages/order/contact-information/tertiary-adddress'
-import NotifyingOrganisationPage from '../pages/order/contact-information/notifyingOrganisation'
+import InterestedPartiesPage from '../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../pages/order/monitoring-conditions'
 import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../pages/order/submit-success'
@@ -222,14 +222,13 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('09. tertiaryAddressPage', { overwrite: true })
       tertiaryAddressPage.form.saveAndContinueButton.click()
 
-      // no validation
-      let notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-      // notifyingOrganisationPage.form.saveAndContinueButton.click()
-      notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-      if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
-      notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
-      if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage', { overwrite: true })
-      notifyingOrganisationPage.form.saveAndContinueButton.click()
+      let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      interestedPartiesPage.form.saveAndContinueButton.click()
+      interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      if (takeScreenshots) cy.screenshot('15. InterestedPartiesPage - validation', { overwrite: true })
+      interestedPartiesPage.form.fillInWith(notifyingOrganisation)
+      if (takeScreenshots) cy.screenshot('16. InterestedPartiesPage - validation', { overwrite: true })
+      interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
