@@ -6,25 +6,34 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% block content %}
 
   {{ govukBackLink({
-  text: "Back",
-  href: "/"
-}) }}
+    text: "Back",
+    href: "/"
+  }) }}
 
-  <div class="govuk-button-group" id="download-pdf">
+  <div id="pdf-download">
+    {{ govukNotificationBanner({
+      text: "This tag request form summary page is designed to be downloaded as a PDF for your records."
+    }) }}
+
     {{ govukButton({
-          text: "Download page as PDF receipt"
-      }) }}
+      text: "Download tag request form as PDF",
+      id: "download-pdf"
+    }) }}
   </div>
 
-    <h1 class="govuk-heading-l">Submitted electronic monitoring order details</h1>
+  <br><br><br>
+
+  <div id="form-summary">
+    <h1 class="govuk-heading-xl">Submitted electronic monitoring order details</h1>
 
     {% for orderKey, orderValue in order %}
       {% if not orderValue | isEmpty %}
-        <h2 class="govuk-heading-l">{{ orderKey | toSentenceCase }}</h2>
+        <h2 class="govuk-heading-l=">{{ orderKey | toSentenceCase }}</h2>
 
         {# String format #}
         {% if orderValue | checkType == 'string' %}
@@ -60,7 +69,7 @@
         {# Array Format #}
         {% if orderValue | checkType == 'array' %}
           {% for item in orderValue %}
-            <h3 class="govuk-heading-s">{{ orderKey | toSentenceCase }} item {{ loop.index }}</h3>
+            <h3 class="govuk-heading-m">{{ orderKey | toSentenceCase }} item {{ loop.index }}</h3>
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
               {% for key, value in item %}
                 <div class="govuk-summary-list__row">
@@ -82,12 +91,13 @@
 
       {% endif %}
     {% endfor %}
+  </div>
 
-    <div class="govuk-button-group">
-      {{ govukButton({
+  <div class="govuk-button-group">
+    {{ govukButton({
           text: "Back to your applications",
           href: "/"
       }) }}
-    </div>
+  </div>
 
 {% endblock %}

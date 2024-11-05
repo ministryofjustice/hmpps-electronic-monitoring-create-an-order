@@ -2,25 +2,19 @@
 
 {% set pageTitle = "Application successfully submitted - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
+
   {{ govukBackLink({
-    text: "Back",
-    href: "/"
-  }) }}
+  text: "Back",
+  href: "/"
+}) }}
 
   {{ govukPanel({
-    titleText: "Application successfully submitted",
-    html: "Your reference number<br><strong>EXAMPLE</strong>",
-    attributes: {
-      "data-qa": "confirmation-panel"
-    }
-  }) }}
-
-{{ govukPanel({
   titleText: "Application successfully submitted",
   html: "Your reference number is <br><strong>EXAMPLE</strong>",
   attributes: {
@@ -28,10 +22,10 @@
   }
 }) }}
 
-<h2>This button downloads a PDF receipt using puppeteer to take a screenshot of a non-visible page</h2>
+  <h2>This button downloads a PDF receipt using puppeteer to take a screenshot of a non-visible page</h2>
 
-<div class="govuk-button-group">
-      {{ govukButton({
+  <div class="govuk-button-group">
+    {{ govukButton({
           text: "Download PDF receipt",
           href: "/order/" + orderId + "/receipt/download"
       }) }}
@@ -39,15 +33,17 @@
 
   <h2>This button takes you to a receipt page where you can download the page as a PDF</h2>
 
-<div class="govuk-button-group">
-      {{ govukButton({
-          text: "See order details",
-          href: "/order/" + orderId + "/receipt/view"
-      }) }}
-  </div>
+  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
 
-<div class="govuk-button-group">
-      {{ govukButton({
+  {{ govukButton({
+          text: "Get tag request form summary for download",
+          href: "/order/" + orderId + "/receipt/view",
+          classes: "govuk-button--secondary"
+      }) }}
+  <br><br>
+
+  <div class="govuk-button-group">
+    {{ govukButton({
           text: "Back to your applications",
           href: "/"
       }) }}
