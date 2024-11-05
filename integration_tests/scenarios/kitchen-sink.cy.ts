@@ -1,11 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import {
-  createFakeAdultDeviceWearer,
-  createFakeResponsibleOfficer,
-  createFakeAddress,
-  createFakeOrganisation,
-} from '../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../mockApis/faker'
 
 import Page from '../pages/page'
 import IndexPage from '../pages/index'
@@ -69,10 +64,7 @@ context('The kitchen sink', () => {
     }
     const tertiaryAddressDetails = createFakeAddress()
     const installationAddressDetails = createFakeAddress()
-    const notifyingOrganisation = {
-      ...createFakeOrganisation(),
-      responsibleOfficer: createFakeResponsibleOfficer(),
-    }
+    const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -225,9 +217,9 @@ context('The kitchen sink', () => {
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      if (takeScreenshots) cy.screenshot('15. InterestedPartiesPage - validation', { overwrite: true })
-      interestedPartiesPage.form.fillInWith(notifyingOrganisation)
-      if (takeScreenshots) cy.screenshot('16. InterestedPartiesPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15. interestedPartiesPage - validation', { overwrite: true })
+      interestedPartiesPage.form.fillInWith(interestedParties)
+      if (takeScreenshots) cy.screenshot('16. interestedPartiesPage - validation', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
