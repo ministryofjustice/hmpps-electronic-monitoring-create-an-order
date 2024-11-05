@@ -412,7 +412,6 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('07. primaryAddressPage - minimum', { overwrite: true })
       primaryAddressPage.form.saveAndContinueButton.click()
 
-      // no validation
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
