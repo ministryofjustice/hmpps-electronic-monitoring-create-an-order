@@ -231,7 +231,7 @@ describe('authorised user', () => {
       return request(app)
         .post(`/order/${mockSubmittedOrder.id}/submit`)
         .expect(302)
-        .expect('Location', `/order/${mockDraftOrder.id}/submit/failed`)
+        .expect('Location', `/order/${mockSubmittedOrder.id}/submit/failed`)
     })
   })
 })

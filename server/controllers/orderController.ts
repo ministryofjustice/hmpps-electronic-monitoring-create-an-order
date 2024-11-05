@@ -69,13 +69,13 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect(paths.ORDER.SUBMIT_FAILED)
+      res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
     } else {
       try {
         const { token } = res.locals.user
         await this.orderService.submitOrder({ accessToken: token, orderId: order.id })
 
-        res.redirect(paths.ORDER.SUBMIT_SUCCESS)
+        res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
       } catch (error) {
         req.flash('validationErrors', error)
 
@@ -91,7 +91,7 @@ export default class OrderController {
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const { orderId } = req.params
 
     res.render('pages/order/submit-success', {
       orderId,
@@ -101,24 +101,6 @@ export default class OrderController {
   getReceipt: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    console.log('rendering the receipt page')
     res.render(`pages/order/receipt`, { order })
-  }
-
-  downloadReciept: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
-    const downloadDate = new Date().toISOString()
-    console.log('downloading receipt')
-
-    const receipt = await this.orderService.downloadReceipt({
-      accessToken: res.locals.user.token,
-      orderId,
-    })
-
-    res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', `attachment; filename="${downloadDate}-receipt-order-${orderId}.pdf"`)
-    res.send(receipt)
-    res.end()
-    console.log('receipt download complete')
   }
 }

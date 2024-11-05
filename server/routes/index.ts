@@ -116,8 +116,7 @@ export default function routes({
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
-  get(paths.ORDER.VIEW_RECEIPT, orderController.getReceipt)
-  get(paths.ORDER.DOWNLOAD_RECEIPT, orderController.downloadReciept)
+  get(paths.ORDER.RECEIPT, orderController.getReceipt)
 
   /**
    * ABOUT THE DEVICE WEARER

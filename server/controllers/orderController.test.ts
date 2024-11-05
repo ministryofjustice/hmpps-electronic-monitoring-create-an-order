@@ -181,7 +181,12 @@ describe('OrderController', () => {
     it('should submit the order and redirect to a success page for a draft order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({
+        order: mockOrder,
+        params: {
+          orderId: mockOrder.id,
+        },
+      })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -189,7 +194,10 @@ describe('OrderController', () => {
       await orderController.submit(req, res, next)
 
       // Then
-      expect(mockOrderService.submitOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/success`)
     })
 
@@ -236,7 +244,7 @@ describe('OrderController', () => {
       await orderController.submitSuccess(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success')
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', { orderId: '123456789' })
     })
   })
 })

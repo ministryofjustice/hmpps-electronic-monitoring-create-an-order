@@ -2,7 +2,6 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import OrderModel, { Order } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
-import PdfService from './pdfService/pdfService'
 
 type OrderRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -25,12 +24,6 @@ export default class OrderService {
       token: input.accessToken,
     })
     return OrderModel.parse(result)
-  }
-
-  async downloadReceipt(input: OrderRequestInput): Promise<Buffer> {
-    const orderReceiptUri = `/order/${input.orderId}/receipt/view`
-
-    return PdfService.generatePdf(orderReceiptUri)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
