@@ -1,148 +1,101 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Monitoring conditions - Curfew release date - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set section = "Monitoring conditions" %}
+{% set subsection = "Curfew for day of release" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../../partials/timeSpanInput.njk" import timeSpanInput %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
+{% block formInputs %}
+
+  {% set disabled = {} if isOrderEditable else { disabled:true } %}
+
+  {{ govukDateInput({
+    id: "releaseDate",
+    fieldset: {
+      legend: {
+        text: "Release date",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "Provide the date the device wearer will be released from custody. For example, 21 05 2011"
+    },
+    items: [
+      {
+        name: "releaseDateDay",
+        classes: "govuk-input--width-2",
+        label: "Day",
+        id:"releaseDateDay",
+        value: releaseDate.value.day,
+        attributes: disabled
+      },
+      {
+        name: "releaseDateMonth",
+        classes: "govuk-input--width-2",
+          label: "Month",
+          id:"releaseDateMonth",
+        value: releaseDate.value.month,
+        attributes: disabled
+      },
+      {
+        name: "releaseDateYear",
+        classes: "govuk-input--width-4",
+          label: "Year",
+          id:"releaseDateYear",
+        value: releaseDate.value.year,
+        attributes: disabled
+      }
+    ],
+    errorMessage: releaseDate.error
   }) }}
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
 
-    {{ govukNotificationBanner({
-      html: html
+
+  {{ timeSpanInput({
+      label: "Curfew hours on the day of release",
+      hint: "Enter the start and end times of the curfew. For example 09:45 - 15:30 (24 hours)",
+      id: "curfewTimes",
+      namePrefix: "curfewTimes",
+      value: curfewTimes.value,
+      errorMessage: curfewTimes.error,
+      disabled: not isOrderEditable
     }) }}
-  {% endif %}
 
-  {{ mojPageHeaderActions({
-    heading: {
-        text: "Monitoring conditions"
-    }
-  }) }}
-  <h2 class="govuk-heading-l">Curfew for day of release</h2>
-
-  <form method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-    {% set disabled = {} if isOrderEditable else { disabled:true } %}
-
-    {{ govukDateInput({
-      id: "releaseDate",
+  {{ govukRadios({
+      name: "address",
       fieldset: {
-        legend: {
-          text: "Release date",
-          isPageHeading: false,
+          legend: {
+          text: "Curfew address on the day of release",
+          isPageHeading: true,
           classes: "govuk-fieldset__legend--s"
-        }
+          }
       },
       hint: {
-        text: "Provide the date the device wearer will be released from custody. For example, 21 05 2011"
+          text: "What address will the device wearer be at during curfew hours on their day of release? Select one option"
       },
       items: [
-        {
-          name: "releaseDateDay",
-          classes: "govuk-input--width-2",
-          label: "Day",
-          id:"releaseDateDay",
-          value: releaseDate.value.day,
-          attributes: disabled
-        },
-        {
-          name: "releaseDateMonth",
-          classes: "govuk-input--width-2",
-           label: "Month",
-            id:"releaseDateMonth",
-          value: releaseDate.value.month,
-          attributes: disabled
-        },
-        {
-          name: "releaseDateYear",
-          classes: "govuk-input--width-4",
-           label: "Year",
-            id:"releaseDateYear",
-          value: releaseDate.value.year,
-          attributes: disabled
-        }
+          {
+          value: "PRIMARY",
+          text: "Primary address",
+          disabled: not isOrderEditable
+          },
+          {
+          value: "SECONDARY",
+          text: "Secondary address",
+          disabled: not isOrderEditable
+          },
+          {
+          value: "TERTIARY",
+          text: "Tertiary address",
+          disabled: not isOrderEditable
+          }
       ],
-      errorMessage: releaseDate.error
-    }) }}
-
-
-
-    {{ timeSpanInput({
-        label: "Curfew hours on the day of release",
-        hint: "Enter the start and end times of the curfew. For example 09:45 - 15:30 (24 hours)",
-        id: "curfewTimes",
-        namePrefix: "curfewTimes",
-        value: curfewTimes.value,
-        errorMessage: curfewTimes.error,
-        disabled: not isOrderEditable
+      value: address.value,
+      errorMessage: address.error
       }) }}
-
-    {{ govukRadios({
-        name: "address",
-        fieldset: {
-            legend: {
-            text: "Curfew address on the day of release",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
-            }
-        },
-        hint: {
-            text: "What address will the device wearer be at during curfew hours on their day of release? Select one option"
-        },
-        items: [
-            {
-            value: "PRIMARY",
-            text: "Primary address",
-            disabled: not isOrderEditable
-            },
-            {
-            value: "SECONDARY",
-            text: "Secondary address",
-            disabled: not isOrderEditable
-            },
-            {
-            value: "TERTIARY",
-            text: "Tertiary address",
-            disabled: not isOrderEditable
-            }
-        ],
-        value: address.value,
-        errorMessage: address.error
-        }) }}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
-        }) }}
-        {{ govukButton({
-            text: "Save and return back to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
 
 {% endblock %}

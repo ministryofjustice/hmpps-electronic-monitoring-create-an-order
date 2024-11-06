@@ -1,285 +1,237 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Contact information - Notifying organisation - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set section = "Contact information" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../../../partials/addressInput.njk" import addressInput %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
-  }) }}
-
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
-
-  {{ mojPageHeaderActions({
-    heading: {
-      text: "Contact information"
+{% block formInputs %}
+  
+  {% call govukFieldset({
+    legend: {
+      text: "Notifying organisation",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
     }
-  }) }}
+  }) %}
+    {{ govukInput({
+      label: {
+        text: "Email address for the notifying organisation",
+        classes: "govuk-label--s"
+      },
+      hint: {
+        text: "For example functional mailbox"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "notifyingOrganisationEmail",
+      name: "notifyingOrganisationEmail",
+      value: notifyingOrganisationEmail,
+      errorMessage: errors.notifyingOrganisationEmail,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
 
-  <form action="" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  {% call govukFieldset({
+    legend: {
+      text: "Responsible Officer",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  }) %}
+    {{ govukInput({
+      label: {
+        text: "Full name of responsible officer",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "responsibleOfficerName",
+      name: "responsibleOfficerName",
+      value: responsibleOfficerName,
+      errorMessage: errors.responsibleOfficerName,
+      disabled: not isOrderEditable
+    }) }}
 
-    {% call govukFieldset({
-      legend: {
-        text: "Notifying organisation",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
-      {{ govukInput({
-        label: {
-          text: "Email address for the notifying organisation",
-          classes: "govuk-label--s"
-        },
-        hint: {
-          text: "For example functional mailbox"
-        },
-        classes: "govuk-!-width-one-half",
-        id: "notifyingOrganisationEmail",
-        name: "notifyingOrganisationEmail",
-        value: notifyingOrganisationEmail,
-        errorMessage: errors.notifyingOrganisationEmail,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
+    {{ govukInput({
+      label: {
+        text: "Telephone number for responsible officer",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "responsibleOfficerPhoneNumber",
+      name: "responsibleOfficerPhoneNumber",
+      type: "tel",
+      autocomplete: "tel tel-national",
+      value: responsibleOfficerPhoneNumber,
+      errorMessage: errors.responsibleOfficerPhoneNumber,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
 
-    {% call govukFieldset({
-      legend: {
-        text: "Responsible Officer",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
-      {{ govukInput({
-        label: {
-          text: "Full name of responsible officer",
-          classes: "govuk-label--s"
-        },
-        classes: "govuk-!-width-one-half",
-        id: "responsibleOfficerName",
-        name: "responsibleOfficerName",
-        value: responsibleOfficerName,
-        errorMessage: errors.responsibleOfficerName,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "Telephone number for responsible officer",
-          classes: "govuk-label--s"
-        },
-        classes: "govuk-!-width-one-half",
-        id: "responsibleOfficerPhoneNumber",
-        name: "responsibleOfficerPhoneNumber",
-        type: "tel",
-        autocomplete: "tel tel-national",
-        value: responsibleOfficerPhoneNumber,
-        errorMessage: errors.responsibleOfficerPhoneNumber,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
-
-    {% call govukFieldset({
-      legend: {
-        text: "Responsible Organisation",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
-      {{ govukRadios({
-        name: "responsibleOrganisation",
-        fieldset: {
-          legend: {
-            text: "What organisation is the responsible officer part of?",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        value: responsibleOrganisation,
-        errorMessage: errors.responsibleOrganisation,
-        items: [
-          {
-            value: "YJS",
-            text: "Youth Justice Service (YJS)",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "YCS",
-            text: "Youth Custody Service (YCS)",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "PROBATION",
-            text: "Probation",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "FIELD_MONITORING_SERVICE",
-            text: "Field monitoring service",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "HOME_OFFICE",
-            text: "Home Office",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "POLICE",
-            text: "Police",
-            disabled: not isOrderEditable
-          }
-        ]
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "What region is the responsible organisation in? (optional)",
-          classes: "govuk-label--s"
-        },
-        classes: "govuk-!-width-one-half",
-        id: "organisationRegion",
-        name: "responsibleOrganisationRegion",
-        value: responsibleOrganisationRegion,
-        errorMessage: errors.responsibleOrganisationRegion,
-        disabled: not isOrderEditable
-      }) }}
-
-
-      {% call govukFieldset({
+  {% call govukFieldset({
+    legend: {
+      text: "Responsible Organisation",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  }) %}
+    {{ govukRadios({
+      name: "responsibleOrganisation",
+      fieldset: {
         legend: {
-          text: "What is the address of the responsible organisation?",
-          classes: "govuk-fieldset__legend--l",
-          isPageHeading: false
+          text: "What organisation is the responsible officer part of?",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
         }
-      }) %}
-        {{ govukInput({
-          label: {
-            text: "Address line 1"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "address-line-1",
-          name: "responsibleOrganisationAddressLine1",
-          value: responsibleOrganisationAddressLine1,
-          errorMessage: errors.responsibleOrganisationAddressLine1,
+      },
+      value: responsibleOrganisation,
+      errorMessage: errors.responsibleOrganisation,
+      items: [
+        {
+          value: "YJS",
+          text: "Youth Justice Service (YJS)",
           disabled: not isOrderEditable
-        }) }}
-
-        {{ govukInput({
-          label: {
-            text: "Address line 2"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "address-line-2",
-          name: "responsibleOrganisationAddressLine2",
-          value: responsibleOrganisationAddressLine2,
-          errorMessage: errors.responsibleOrganisationAddressLine2,
+        },
+        {
+          value: "YCS",
+          text: "Youth Custody Service (YCS)",
           disabled: not isOrderEditable
-        }) }}
-
-        {{ govukInput({
-          label: {
-            text: "Address line 3"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "address-line-3",
-          name: "responsibleOrganisationAddressLine3",
-          value: responsibleOrganisationAddressLine3,
-          errorMessage: errors.responsibleOrganisationAddressLine3,
+        },
+        {
+          value: "PROBATION",
+          text: "Probation",
           disabled: not isOrderEditable
-        }) }}
-
-        {{ govukInput({
-          label: {
-            text: "Address line 4"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "address-line-4",
-          name: "responsibleOrganisationAddressLine4",
-          value: responsibleOrganisationAddressLine4,
-          errorMessage: errors.responsibleOrganisationAddressLine4,
+        },
+        {
+          value: "FIELD_MONITORING_SERVICE",
+          text: "Field monitoring service",
           disabled: not isOrderEditable
-        }) }}
-
-        {{ govukInput({
-          label: {
-            text: "Postcode"
-          },
-          classes: "govuk-!-width-two-thirds",
-          id: "postcode",
-          name: "responsibleOrganisationAddressPostcode",
-          value: responsibleOrganisationAddressPostcode,
-          errorMessage: errors.responsibleOrganisationAddressPostcode,
+        },
+        {
+          value: "HOME_OFFICE",
+          text: "Home Office",
           disabled: not isOrderEditable
-        }) }}
+        },
+        {
+          value: "POLICE",
+          text: "Police",
+          disabled: not isOrderEditable
+        }
+      ]
+    }) }}
 
-      {% endcall %}
+    {{ govukInput({
+      label: {
+        text: "What region is the responsible organisation in? (optional)",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "organisationRegion",
+      name: "responsibleOrganisationRegion",
+      value: responsibleOrganisationRegion,
+      errorMessage: errors.responsibleOrganisationRegion,
+      disabled: not isOrderEditable
+    }) }}
 
+
+    {% call govukFieldset({
+      legend: {
+        text: "What is the address of the responsible organisation?",
+        classes: "govuk-fieldset__legend--s",
+        isPageHeading: false
+      }
+    }) %}
       {{ govukInput({
         label: {
-          text: "Telephone number for responsible organisation",
-          classes: "govuk-label--s"
+          text: "Address line 1"
         },
-        classes: "govuk-!-width-one-half",
-        id: "responsibleOrganisationPhoneNumber",
-        name: "responsibleOrganisationPhoneNumber",
-        type: "tel",
-        autocomplete: "tel tel-national",
-        value: responsibleOrganisationPhoneNumber,
-        errorMessage: errors.responsibleOrganisationPhoneNumber,
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-1",
+        name: "responsibleOrganisationAddressLine1",
+        value: responsibleOrganisationAddressLine1,
+        errorMessage: errors.responsibleOrganisationAddressLine1,
         disabled: not isOrderEditable
       }) }}
 
       {{ govukInput({
         label: {
-          text: "Email address for responsible organisation",
-          classes: "govuk-label--s"
+          text: "Address line 2"
         },
-        classes: "govuk-!-width-one-half",
-        id: "responsibleOrganisationEmail",
-        name: "responsibleOrganisationEmail",
-        value: responsibleOrganisationEmail,
-        errorMessage: errors.responsibleOrganisationEmail,
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-2",
+        name: "responsibleOrganisationAddressLine2",
+        value: responsibleOrganisationAddressLine2,
+        errorMessage: errors.responsibleOrganisationAddressLine2,
         disabled: not isOrderEditable
       }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Address line 3"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-3",
+        name: "responsibleOrganisationAddressLine3",
+        value: responsibleOrganisationAddressLine3,
+        errorMessage: errors.responsibleOrganisationAddressLine3,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Address line 4"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "address-line-4",
+        name: "responsibleOrganisationAddressLine4",
+        value: responsibleOrganisationAddressLine4,
+        errorMessage: errors.responsibleOrganisationAddressLine4,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Postcode"
+        },
+        classes: "govuk-!-width-two-thirds",
+        id: "postcode",
+        name: "responsibleOrganisationAddressPostcode",
+        value: responsibleOrganisationAddressPostcode,
+        errorMessage: errors.responsibleOrganisationAddressPostcode,
+        disabled: not isOrderEditable
+      }) }}
+
     {% endcall %}
 
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-          text: "Save and continue",
-          name: "action",
-          value: "continue"
-        }) }}
+    {{ govukInput({
+      label: {
+        text: "Telephone number for responsible organisation",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "responsibleOrganisationPhoneNumber",
+      name: "responsibleOrganisationPhoneNumber",
+      type: "tel",
+      autocomplete: "tel tel-national",
+      value: responsibleOrganisationPhoneNumber,
+      errorMessage: errors.responsibleOrganisationPhoneNumber,
+      disabled: not isOrderEditable
+    }) }}
 
-        {{ govukButton({
-          text: "Save and return back to form section menu",
-          classes: "govuk-button--secondary",
-          name: "action",
-          value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
+    {{ govukInput({
+      label: {
+        text: "Email address for responsible organisation",
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-one-half",
+      id: "responsibleOrganisationEmail",
+      name: "responsibleOrganisationEmail",
+      value: responsibleOrganisationEmail,
+      errorMessage: errors.responsibleOrganisationEmail,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
+
 
 {% endblock %}

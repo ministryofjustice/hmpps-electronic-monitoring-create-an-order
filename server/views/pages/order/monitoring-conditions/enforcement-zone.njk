@@ -1,273 +1,227 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Monitoring conditions - Enforcement zone - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set section = "Monitoring conditions" %}
+{% set subsection = "Exclusion and inclusion zones" %}
+{% set formEncoding = 'encType=multipart/form-data' %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
+{% block formInputs %}
+
+  {{ govukRadios({
+    classes: "govuk-radios--inline",
+    name: "zoneType",
+    fieldset: {
+      legend: {
+        text: "Is monitoring for an exclusion or inclusion zone?",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    items: [
+      {
+        value: "EXCLUSION",
+        text: "Exclusion zone",
+        disabled: not isOrderEditable
+      },
+      {
+        value: "INCLUSION",
+        text: "Inclusion zone",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: zone.zoneType,
+    errorMessage:error.zoneType
   }) }}
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
+  {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
+
+  {{ govukDateInput({
+    id: "startDate",
+
+    fieldset: {
+      legend: {
+        text: "Enter the date for when monitoring starts.",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "For example, 21 05 2032"
+    },
+    items: [
+      {
+        name: "startDay",
+        classes: "govuk-input--width-2",
+        label: "Day",
+        value: zone.startDay,
+        attributes: attributes
+      },
+      {
+        name: "startMonth",
+        classes: "govuk-input--width-2",
+        label: "Month",
+        value: zone.startMonth,
+        attributes: attributes
+      },
+      {
+        name: "startYear",
+        classes: "govuk-input--width-4",
+        label: "Year",
+        value: zone.startYear,
+        attributes: attributes
+      }
+    ],
+    errorMessage: error.startDate
+  }) }}
+
+  {{ govukDateInput({
+    id: "endDate",
+    fieldset: {
+      legend: {
+        text: "Enter the date for when monitoring ends. (optional)",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "For example, 21 05 2032"
+    },
+    items: [
+      {
+        name: "endDay",
+        label: "Day",
+        classes: "govuk-input--width-2",
+        value: zone.endDay,
+        attributes: attributes
+      },
+      {
+        name: "endMonth",
+        label: "Month",
+        classes: "govuk-input--width-2",
+        value: zone.endMonth,
+        attributes: attributes
+      },
+      {
+        name: "endYear",
+        label: "Year",
+        classes: "govuk-input--width-4",
+        value: zone.endYear,
+        attributes: attributes
+      }
+    ],
+    errorMessage: error.endDate
+  }) }}
+
+  {% call govukFieldset({
+    legend: {
+      text: "Monitoring zone map (optional)",
+      classes: "govuk-fieldset__legend--s",
+      isPageHeading: false
+    }
+  }) %}
+    {% set fileHintHTML %}
+      <p class="govuk-hint">
+        Upload a map to show us where the exclusion or inclusion zone is.
+      </p>
+
+      <p class="govuk-hint">
+        Use the <a href="https://mapmaker.field-dynamics.co.uk/moj/map/default">'map tool' </a>  to create a map or create your own.
+      </p>
+
+      <p class="govuk-hint">
+        You can upload a PDF or JPEG under 10MB.
       </p>
     {% endset %}
 
-    {{ govukNotificationBanner({
-      html: html
+    {{ govukFileUpload({
+      id: "file",
+      name: "file",
+      label: {
+        text: "Upload map"
+      },
+      hint: {
+        html: fileHintHTML
+      },
+      errorMessage:error.file,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
+
+  {% set descriptionHintHTML %}
+    <p class="govuk-hint">
+      Write a description of the exclusion or inclusion zone including additional information that will help us understand the exclusion zone restrictions.
+    </p>
+
+    <p class="govuk-hint">
+      For example include door numbers, building names or landmarks that pinpoint where the zone starts and ends
+    </p>
+  {% endset %}
+
+  {{ govukTextarea({
+    name: "description",
+    id: "description",
+    value: zone.description,
+    errorMessage: error.description,
+    disabled: not isOrderEditable,
+    label: {
+      text: "Monitoring zone description",
+      classes: "govuk-label--s"
+    },
+    hint: {
+      html: descriptionHintHTML
+    }
+  }) }}
+
+  {{ govukTextarea({
+    name: "duration",
+    id: "duration",
+    value: zone.duration,
+    errorMessage: error.duration,
+    disabled: not isOrderEditable,
+    label: {
+      text: "Monitoring zone duration",
+      classes: "govuk-label--s"
+    },
+    hint: {
+      text: "Enter days and times the exclusion or inclusion zone must be followed"
+    }
+  }) }}
+
+  {% if isOrderEditable %}
+    {{ govukRadios({
+      classes: "govuk-radios--inline",
+      name: "anotherZone",
+      fieldset: {
+        legend: {
+          text: "Add another exclusion or inclusion zone?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "For example another zone the device wearer is restricted from entering."
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: anotherZone.value,
+      errorMessage: error.anotherZone
     }) }}
   {% endif %}
 
-  {{ mojPageHeaderActions({
-    heading: {
-        text: "Monitoring conditions"
-    }
-  }) }}
-  <h2 class="govuk-heading-l">Exclusion and inclusion zones</h2>
-
-  <form method="post" encType="multipart/form-data">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-    {{ govukRadios({
-      classes: "govuk-radios--inline",
-      name: "zoneType",
-      fieldset: {
-        legend: {
-          text: "Is monitoring for an exclusion or inclusion zone?",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      items: [
-        {
-          value: "EXCLUSION",
-          text: "Exclusion zone",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "INCLUSION",
-          text: "Inclusion zone",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: zone.zoneType,
-      errorMessage:error.zoneType
-    }) }}
-
-    {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
-
-    {{ govukDateInput({
-      id: "startDate",
-
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring starts.",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "startDay",
-          classes: "govuk-input--width-2",
-          label: "Day",
-          value: zone.startDay,
-          attributes: attributes
-        },
-        {
-          name: "startMonth",
-          classes: "govuk-input--width-2",
-          label: "Month",
-          value: zone.startMonth,
-          attributes: attributes
-        },
-        {
-          name: "startYear",
-          classes: "govuk-input--width-4",
-          label: "Year",
-          value: zone.startYear,
-          attributes: attributes
-        }
-      ],
-      errorMessage: error.startDate
-    }) }}
-
-    {{ govukDateInput({
-      id: "endDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring ends. (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "endDay",
-          label: "Day",
-          classes: "govuk-input--width-2",
-          value: zone.endDay,
-          attributes: attributes
-        },
-        {
-          name: "endMonth",
-          label: "Month",
-          classes: "govuk-input--width-2",
-          value: zone.endMonth,
-          attributes: attributes
-        },
-        {
-          name: "endYear",
-          label: "Year",
-          classes: "govuk-input--width-4",
-          value: zone.endYear,
-          attributes: attributes
-        }
-      ],
-      errorMessage: error.endDate
-    }) }}
-
-    {% call govukFieldset({
-      legend: {
-        text: "Monitoring zone map (optional)",
-        classes: "govuk-fieldset__legend--s",
-        isPageHeading: false
-      }
-    }) %}
-      {% set fileHintHTML %}
-        <p class="govuk-hint">
-          Upload a map to show us where the exclusion or inclusion zone is.
-        </p>
-
-        <p class="govuk-hint">
-          Use the <a href="https://mapmaker.field-dynamics.co.uk/moj/map/default">'map tool' </a>  to create a map or create your own.
-        </p>
-
-        <p class="govuk-hint">
-          You can upload a PDF or JPEG under 10MB.
-        </p>
-      {% endset %}
-
-      {{ govukFileUpload({
-        id: "file",
-        name: "file",
-        label: {
-          text: "Upload map"
-        },
-        hint: {
-          html: fileHintHTML
-        },
-        errorMessage:error.file,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
-
-    {% set descriptionHintHTML %}
-      <p class="govuk-hint">
-        Write a description of the exclusion or inclusion zone including additional information that will help us understand the exclusion zone restrictions.
-      </p>
-
-      <p class="govuk-hint">
-        For example include door numbers, building names or landmarks that pinpoint where the zone starts and ends
-      </p>
-    {% endset %}
-
-    {{ govukTextarea({
-      name: "description",
-      id: "description",
-      value: zone.description,
-      errorMessage: error.description,
-      disabled: not isOrderEditable,
-      label: {
-        text: "Monitoring zone description",
-        classes: "govuk-label--s"
-      },
-      hint: {
-        html: descriptionHintHTML
-      }
-    }) }}
-
-    {{ govukTextarea({
-      name: "duration",
-      id: "duration",
-      value: zone.duration,
-      errorMessage: error.duration,
-      disabled: not isOrderEditable,
-      label: {
-        text: "Monitoring zone duration",
-        classes: "govuk-label--s"
-      },
-      hint: {
-        text: "Enter days and times the exclusion or inclusion zone must be followed"
-      }
-    }) }}
-
-    {% if isOrderEditable %}
-      {{ govukRadios({
-        classes: "govuk-radios--inline",
-        name: "anotherZone",
-        fieldset: {
-          legend: {
-            text: "Add another exclusion or inclusion zone?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        hint: {
-          text: "For example another zone the device wearer is restricted from entering."
-        },
-        items: [
-          {
-            value: "true",
-            text: "Yes",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "false",
-            text: "No",
-            disabled: not isOrderEditable
-          }
-        ],
-        value: anotherZone.value,
-        errorMessage: error.anotherZone
-      }) }}
-    {% endif %}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-          text: "Save and continue",
-          name: "action",
-          value: "continue"
-        }) }}
-
-        {{ govukButton({
-          text: "Save and return back to form section menu",
-          classes: "govuk-button--secondary",
-          name: "action",
-          value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
 {% endblock %}

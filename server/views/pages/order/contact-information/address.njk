@@ -1,157 +1,109 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set section = "Monitoring conditions" if (addressType | lower) == "installation" else "Contact information" %}
 {% set pageTitle = section + " - " + (addressType | capitalize) + " address - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set subsection = addressType | capitalize + " address" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
-  }) }}
+{% block formInputs %}
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
-
-  {{ mojPageHeaderActions({
-    heading: {
-      text: section
+  {% call govukFieldset({
+    legend: {
+      text: "What is the device wearer's " + (addressType | lower) + " address?",
+      classes: "govuk-fieldset__legend--s",
+      isPageHeading: false
     }
-  }) }}
-  <h2 class="govuk-heading-l">{{ addressType | capitalize }} address</h2>
+  }) %}
+    {% if (addressType | lower) == "primary" %}
+      <p class="govuk-body">
+        If the device wearer has multiple addresses, enter the address where they spend
+        most of their time or have registered as their home residence
+      </p>
+    {% endif %}
 
-  <form action="" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    {{ govukInput({
+      label: { text: "Address line 1" },
+      id: "address-line-1",
+      name: "addressLine1",
+      value: addressLine1,
+      errorMessage: errors.addressLine1,
+      disabled: not isOrderEditable
+    }) }}
 
-    {% call govukFieldset({
-      legend: {
-        text: "What is the device wearer's " + (addressType | lower) + " address?",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
-      {% if (addressType | lower) == "primary" %}
-        <p class="govuk-body">
-          If the device wearer has multiple addresses, enter the address where they spend
-          most of their time or have registered as their home residence
-        </p>
-      {% endif %}
+    {{ govukInput({
+      label: { text: "Address line 2" },
+      id: "address-line-2",
+      name: "addressLine2",
+      value: addressLine2,
+      errorMessage: errors.addressLine2,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: { text: "Address line 1" },
-        id: "address-line-1",
-        name: "addressLine1",
-        value: addressLine1,
-        errorMessage: errors.addressLine1,
-        disabled: not isOrderEditable
-      }) }}
+    {{ govukInput({
+      label: { text: "Address line 3 (optional)" },
+      classes: "govuk-!-width-two-thirds",
+      id: "address-line-3",
+      name: "addressLine3",
+      value: addressLine3,
+      errorMessage: errors.addressLine3,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: { text: "Address line 2" },
-        id: "address-line-2",
-        name: "addressLine2",
-        value: addressLine2,
-        errorMessage: errors.addressLine2,
-        disabled: not isOrderEditable
-      }) }}
+    {{ govukInput({
+      label: { text: "Address line 4 (optional)" },
+      classes: "govuk-!-width-two-thirds",
+      id: "address-line-4",
+      name: "addressLine4",
+      value: addressLine4,
+      errorMessage: errors.addressLine4,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: { text: "Address line 3 (optional)" },
-        classes: "govuk-!-width-two-thirds",
-        id: "address-line-3",
-        name: "addressLine3",
-        value: addressLine3,
-        errorMessage: errors.addressLine3,
-        disabled: not isOrderEditable
-      }) }}
+    {{ govukInput({
+      label: { text: "Postcode" },
+      classes: "govuk-input--width-10",
+      id: "postcode",
+      name: "postcode",
+      value: postcode,
+      errorMessage: errors.postcode,
+      disabled: not isOrderEditable
+    }) }}
 
-      {{ govukInput({
-        label: { text: "Address line 4 (optional)" },
-        classes: "govuk-!-width-two-thirds",
-        id: "address-line-4",
-        name: "addressLine4",
-        value: addressLine4,
-        errorMessage: errors.addressLine4,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: { text: "Postcode" },
-        classes: "govuk-input--width-10",
-        id: "postcode",
-        name: "postcode",
-        value: postcode,
-        errorMessage: errors.postcode,
-        disabled: not isOrderEditable
-      }) }}
-
-      {% if (addressType | lower == "primary") or (addressType | lower == 'secondary') %}
-        {{ govukRadios({
-          name: "hasAnotherAddress",
-          classes: "govuk-radios--inline",
-          fieldset: {
-            legend: {
-              text: "Does the device wearer have another address they will be monitored at?",
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--s"
-            }
+    {% if (addressType | lower == "primary") or (addressType | lower == 'secondary') %}
+      {{ govukRadios({
+        name: "hasAnotherAddress",
+        classes: "govuk-radios--inline",
+        fieldset: {
+          legend: {
+            text: "Does the device wearer have another address they will be monitored at?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        hint: {
+          text: "For example, the device wearer will spend curfew hours at another address. Examples of additional addresses include living part time in another address due to separated parents or living on-site at a school or university during term time.",
+          classes: "govuk-!-width-two-thirds"
+        },
+        items: [
+          {
+            value: "true",
+            text: "Yes",
+            disabled: not isOrderEditable
           },
-          hint: {
-            text: "For example, the device wearer will spend curfew hours at another address. Examples of additional addresses include living part time in another address due to separated parents or living on-site at a school or university during term time.",
-            classes: "govuk-!-width-two-thirds"
-          },
-          items: [
-            {
-              value: "true",
-              text: "Yes",
-              disabled: not isOrderEditable
-            },
-            {
-              value: "false",
-              text: "No",
-              disabled: not isOrderEditable
-            }
-          ],
-          value: hasAnotherAddress,
-          errorMessage: errors.hasAnotherAddress,
-          disabled: not isOrderEditable
-        }) }}
-      {% endif %}
-    {% endcall %}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
-        }) }}
-        {{ govukButton({
-            text: "Save and return back to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
+          {
+            value: "false",
+            text: "No",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: hasAnotherAddress,
+        errorMessage: errors.hasAnotherAddress,
+        disabled: not isOrderEditable
+      }) }}
+    {% endif %}
+  {% endcall %}
 
 {% endblock %}

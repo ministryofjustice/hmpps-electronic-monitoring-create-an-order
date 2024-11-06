@@ -1,98 +1,50 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Contact information - Fixed address - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set section = "Contact information" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
-  }) }}
+{% block formInputs %}
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
-
-  {{ mojPageHeaderActions({
-    heading: {
-      text: "Contact information"
+  {% call govukFieldset({
+    legend: {
+      text: "Primary address",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
     }
-  }) }}
-
-  <form action="" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-    {% call govukFieldset({
-      legend: {
-        text: "Primary address",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
-      {{ govukRadios({
-        name: "noFixedAbode",
-        classes: "govuk-radios--inline",
-        fieldset: {
-          legend: {
-            text: "Does the device wearer have a fixed address?",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
+  }) %}
+    {{ govukRadios({
+      name: "noFixedAbode",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: "Does the device wearer have a fixed address?",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+          text: "For example, the device wearer has a tenancy or permanent address they are registered at.",
+          classes: "govuk-!-width-two-thirds"
+      },
+      items: [
+        {
+          value: "false",
+          text: "Yes, they have a fixed address",
+          disabled: not isOrderEditable
         },
-        hint: {
-            text: "For example, the device wearer has a tenancy or permanent address they are registered at.",
-            classes: "govuk-!-width-two-thirds"
-        },
-        items: [
-          {
-            value: "false",
-            text: "Yes, they have a fixed address",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "true",
-            text: "No, they have no fixed address",
-            disabled: not isOrderEditable
-          }
-        ],
-        value: noFixedAbode,
-        errorMessage: errors.noFixedAbode,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-          text: "Save and continue",
-          name: "action",
-          value: "continue"
-        }) }}
-
-        {{ govukButton({
-          text: "Save and return back to form section menu",
-          classes: "govuk-button--secondary",
-          name: "action",
-          value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
+        {
+          value: "true",
+          text: "No, they have no fixed address",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: noFixedAbode,
+      errorMessage: errors.noFixedAbode,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
 
 {% endblock %}

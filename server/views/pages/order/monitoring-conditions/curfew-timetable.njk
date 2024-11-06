@@ -1,71 +1,24 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Monitoring conditions - Curfew timetable - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set section = "Monitoring conditions" %}
+{% set subsection = "Timetable for curfew with electronic monitoring" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../../partials/timeTable.njk" import timeTable %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
-  }) }}
+{% block formInputs %}
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
-
-  {{ mojPageHeaderActions({
-    heading: {
-      text: "Monitoring conditions"
+  {% call govukFieldset({
+    legend: {
+      text: 'Enter curfew hours and address for each day.',
+      classes: "govuk-fieldset__legend--xs",
+      isPageHeading: false
     }
-  }) }}
-  <h2 class="govuk-heading-l">Timetable for curfew with electronic monitoring</h2>
+  }) %}
+    <span class="govuk-hint">For example from 09:30 to 18:00</span>
 
-  <form method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    {{ timeTable(curfewTimetable, not isOrderEditable) }}
+  {% endcall %}
 
-    {% call govukFieldset({
-      legend: {
-        text: 'Enter curfew hours and address for each day.',
-        classes: "govuk-fieldset__legend--m",
-        isPageHeading: false
-      }
-    }) %}
-      <span class="govuk-hint">For example from 09:30 to 18:00</span>
-
-      {{ timeTable(curfewTimetable, not isOrderEditable) }}
-    {% endcall %}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-          text: "Save and continue",
-          name: "action",
-          value: "continue"
-        }) }}
-
-        {{ govukButton({
-          text: "Save and return back to form section menu",
-          classes: "govuk-button--secondary",
-          name: "action",
-          value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
 {% endblock %}

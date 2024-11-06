@@ -1,164 +1,115 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Device wearer details - Responsible adult - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% set section = "About the device wearer" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% block content %}
+{% block formInputs %}
 
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
-  }) }}
+  {% call govukFieldset({
+    legend: {
+      text: "Responsible Adult",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  }) %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body">
+          A device wearer who is under 18 requires a responsible adult. This is
+          someone who will attend installation.
+        </p>
+        <p class="govuk-body">
+          Provide details of the device wearer's responsible adult.
+        </p>
+      </div>
+    </div>
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
+    {% set otherRelationshipDetailsHtml %}
+      {{
+        govukInput({
+          label: {
+            text: "Relationship to device wearer"
+          },
+          id: "relationship-detail",
+          name: "otherRelationshipDetails",
+          classes: "govuk-!-width-one-third",
+          errorMessage: otherRelationshipDetails.error,
+          disabled: not isOrderEditable,
+          value: otherRelationshipDetails.value
+        })
+      }}
     {% endset %}
 
-    {{ govukNotificationBanner({
-      html: html
+    {{ govukRadios({
+      name: "relationship",
+      fieldset: {
+        legend: {
+          text: "What is the relationship to the device wearer?"
+        }
+      },
+      items: [
+        {
+          value: "parent",
+          text: "Parent",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "guardian",
+          text: "Guardian",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "other",
+          text: "Other",
+          disabled: not isOrderEditable,
+          conditional: {
+            html: otherRelationshipDetailsHtml
+          }
+        }
+      ],
+      value: relationship.value,
+      errorMessage: relationship.error,
+      disabled: not isOrderEditable
     }) }}
-  {% endif %}
 
-  {{ mojPageHeaderActions({
-    heading: {
-      text: "About the device wearer"
-    }
-  }) }}
+    {{ govukInput({
+      label: {
+        text: "Full name of responsible adult",
+        classes: "govuk-label--s"
+      },
+      hint: {
+        text: "Provide first name and last name"
+      },
+      classes: "govuk-input--width-20",
+      id: "full-name",
+      name: "fullName",
+      autocomplete: "name",
+      value: fullName.value,
+      errorMessage: fullName.error,
+      disabled: not isOrderEditable
+    }) }}
 
-  <form action="{{ formActionUri }}" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-    {% call govukFieldset({
-      legend: {
-        text: "Responsible Adult",
-        classes: "govuk-fieldset__legend--l",
-        isPageHeading: false
-      }
-    }) %}
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <p class="govuk-body">
-            A device wearer who is under 18 requires a responsible adult. This is
-            someone who will attend installation.
-          </p>
-          <p class="govuk-body">
-            Provide details of the device wearer's responsible adult.
-          </p>
-        </div>
-      </div>
-
-      {% set otherRelationshipDetailsHtml %}
-        {{
-          govukInput({
-            label: {
-              text: "Relationship to device wearer"
-            },
-            id: "relationship-detail",
-            name: "otherRelationshipDetails",
-            classes: "govuk-!-width-one-third",
-            errorMessage: otherRelationshipDetails.error,
-            disabled: not isOrderEditable,
-            value: otherRelationshipDetails.value
-          })
-        }}
-      {% endset %}
-
-      {{ govukRadios({
-        name: "relationship",
-        fieldset: {
-          legend: {
-            text: "What is the relationship to the device wearer?"
-          }
-        },
-        items: [
-          {
-            value: "parent",
-            text: "Parent",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "guardian",
-            text: "Guardian",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "other",
-            text: "Other",
-            disabled: not isOrderEditable,
-            conditional: {
-              html: otherRelationshipDetailsHtml
-            }
-          }
-        ],
-        value: relationship.value,
-        errorMessage: relationship.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "Full name of responsible adult",
-          classes: "govuk-label--s"
-        },
-        hint: {
-          text: "Provide first name and last name"
-        },
-        classes: "govuk-input--width-20",
-        id: "full-name",
-        name: "fullName",
-        autocomplete: "name",
-        value: fullName.value,
-        errorMessage: fullName.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "Telephone number for responsible adult (optional)",
-          classes: "govuk-label--s"
-        },
-        hint: {
-          text: "Provide either a landline or mobile number"
-        },
-        classes: "govuk-input--width-10",
-        id: "contact-number",
-        name: "contactNumber",
-        type: "tel",
-        autocomplete: "tel tel-national",
-        value: contactNumber.value,
-        errorMessage: contactNumber.error,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
-        }) }}
-
-        {{ govukButton({
-            text: "Save and return back to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
+    {{ govukInput({
+      label: {
+        text: "Telephone number for responsible adult (optional)",
+        classes: "govuk-label--s"
+      },
+      hint: {
+        text: "Provide either a landline or mobile number"
+      },
+      classes: "govuk-input--width-10",
+      id: "contact-number",
+      name: "contactNumber",
+      type: "tel",
+      autocomplete: "tel tel-national",
+      value: contactNumber.value,
+      errorMessage: contactNumber.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
 
 {% endblock %}
