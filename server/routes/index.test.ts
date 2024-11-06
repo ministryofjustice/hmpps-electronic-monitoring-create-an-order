@@ -222,7 +222,7 @@ describe('authorised user', () => {
       return request(app)
         .post(`/order/${mockDraftOrder.id}/submit`)
         .expect(302)
-        .expect('Location', '/order/submit/success')
+        .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
     })
 
     it('should not submit an already submitted order and redirect to the failed page', () => {
@@ -231,7 +231,7 @@ describe('authorised user', () => {
       return request(app)
         .post(`/order/${mockSubmittedOrder.id}/submit`)
         .expect(302)
-        .expect('Location', '/order/submit/failed')
+        .expect('Location', `/order/${mockSubmittedOrder.id}/submit/failed`)
     })
   })
 })

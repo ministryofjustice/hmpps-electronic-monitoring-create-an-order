@@ -69,13 +69,13 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect(paths.ORDER.SUBMIT_FAILED)
+      res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
     } else {
       try {
         const { token } = res.locals.user
         await this.orderService.submitOrder({ accessToken: token, orderId: order.id })
 
-        res.redirect(paths.ORDER.SUBMIT_SUCCESS)
+        res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
       } catch (error) {
         req.flash('validationErrors', error)
 
@@ -91,6 +91,16 @@ export default class OrderController {
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/submit-success')
+    const { orderId } = req.params
+
+    res.render('pages/order/submit-success', {
+      orderId,
+    })
+  }
+
+  getReceipt: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+
+    res.render(`pages/order/receipt`, { order })
   }
 }

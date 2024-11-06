@@ -1,6 +1,5 @@
 import { type RequestHandler, Router } from 'express'
 
-import paths from '../constants/paths'
 import AttachmentsController from '../controllers/attachmentController'
 import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
@@ -23,6 +22,7 @@ import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
+import paths from '../constants/paths'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -116,6 +116,7 @@ export default function routes({
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
+  get(paths.ORDER.RECEIPT, orderController.getReceipt)
 
   /**
    * ABOUT THE DEVICE WEARER

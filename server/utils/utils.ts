@@ -100,3 +100,39 @@ export const getErrorsViewModel = (validationErrors: ValidationResult): ErrorsVi
   })
   return viewModel
 }
+
+export const camelCaseToSentenceCase = (input: string): string => {
+  if (typeof input !== 'string') return input
+
+  const lowerCaseKey = input.replace(/([A-Z])/g, ' $1').toLowerCase()
+
+  const sentenceCaseKey = lowerCaseKey.charAt(0).toUpperCase() + lowerCaseKey.slice(1)
+
+  return sentenceCaseKey.trim()
+}
+
+export const checkType = (input: unknown): string => {
+  if (Array.isArray(input)) {
+    return 'array'
+  }
+  if (typeof input === 'object') {
+    return 'object'
+  }
+  if (typeof input === 'string') {
+    return 'string'
+  }
+  return 'other'
+}
+
+export const isEmpty = (input: unknown): boolean => {
+  if (
+    input === null ||
+    input === undefined ||
+    input === '' ||
+    (Array.isArray(input) && input.length === 0) ||
+    (typeof input === 'object' && Object.keys(input).length === 0)
+  ) {
+    return true
+  }
+  return false
+}

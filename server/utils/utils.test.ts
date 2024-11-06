@@ -1,11 +1,14 @@
 import { ValidationError } from '../models/Validation'
 import {
   calculateAge,
+  camelCaseToSentenceCase,
+  checkType,
   convertToTitleCase,
   deserialiseDate,
   deserialiseTime,
   getError,
   initialiseName,
+  isEmpty,
   serialiseDate,
   serialiseTime,
 } from './utils'
@@ -108,5 +111,47 @@ describe('getError', () => {
     },
   ])('getError($errors, $field)', ({ errors, field, expected }) => {
     expect(getError(errors, field)).toEqual(expected)
+  })
+})
+
+describe('receipt utils', () => {
+  const exampleObject = {
+    data: 'example',
+  }
+
+  const exampleArray: string[] = ['example', 'array']
+
+  describe('convert camel case to sentence case', () => {
+    it.each([
+      ['empty string', '', ''],
+      ['Single word', 'start', 'Start'],
+      ['Multiple words', 'startDate', 'Start date'],
+    ])('%s camelCaseToSentenceCase(%s, %s)', (_: string, a: string, expected: string) => {
+      expect(camelCaseToSentenceCase(a)).toEqual(expected)
+    })
+  })
+
+  describe('check type', () => {
+    it.each([
+      ['empty string', '', 'string'],
+      ['string', 'word', 'string'],
+      ['object', {}, 'object'],
+      ['array', exampleArray, 'array'],
+    ])('%s checkType(%s, %s)', (_: string, a: unknown, expected: string) => {
+      expect(checkType(a)).toEqual(expected)
+    })
+  })
+
+  describe('is empty', () => {
+    it.each([
+      ['empty string', '', true],
+      ['string', 'word', false],
+      ['empty object', {}, true],
+      ['object', exampleObject, false],
+      ['empty array', [], true],
+      ['array', exampleArray, false],
+    ])('%s isEmpty(%s, %s)', (_: string, a: unknown, expected: boolean) => {
+      expect(isEmpty(a)).toEqual(expected)
+    })
   })
 })

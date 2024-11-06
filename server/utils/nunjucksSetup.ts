@@ -3,7 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
 
@@ -39,5 +39,8 @@ export default function nunjucksSetup(app: express.Express): void {
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('camelCaseToSentenceCase', camelCaseToSentenceCase)
+  njkEnv.addFilter('checkType', checkType)
+  njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
 }
