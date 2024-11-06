@@ -30,13 +30,11 @@
     }) }}
   {% endif %}
 
-  <div class="homepage-content">
     {{ mojPageHeaderActions({
       heading: {
           text: "Monitoring conditions"
       }
     }) }}
-  </div>
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
