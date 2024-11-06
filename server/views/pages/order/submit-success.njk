@@ -27,14 +27,14 @@
   {{ govukButton({
           text: "Get tag request form summary for download",
           href: "/order/" + orderId + "/receipt",
-          classes: "govuk-button--secondary"
+          classes: "govuk-button--secondary",
+          id: "receipt-button"
       }) }}
   <br><br>
 
-  <div class="govuk-button-group">
-    {{ govukButton({
+  {{ govukButton({
           text: "Back to your applications",
-          href: "/"
+          href: "/",
+          id: "back-to-applications-button"
       }) }}
-  </div>
 {% endblock %}

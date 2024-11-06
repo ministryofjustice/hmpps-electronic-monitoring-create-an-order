@@ -3,10 +3,12 @@ import AppPage from '../appPage'
 import paths from '../../../server/constants/paths'
 import { PageElement } from '../page'
 
-export default class SubmitSuccessPage extends AppPage {
+export default class SubmitFailedsPage extends AppPage {
   constructor() {
-    super('Application successfully submitted', paths.ORDER.SUBMIT_SUCCESS)
+    super('Application submission failed', paths.ORDER.SUBMIT_FAILED)
   }
+
+  warningText = (): PageElement => cy.get('.govuk-warning-text')
 
   receiptButton = (): PageElement => cy.get('#receipt-button')
 
