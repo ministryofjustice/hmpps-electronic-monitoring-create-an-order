@@ -77,8 +77,10 @@ export default class OrderService {
           }
         }
 
-        if (apiError.developerMessage === 'This order has encountered an error and cannot be submitted' ||
-          'The order could not be submitted to Serco') {
+        if (
+          apiError.developerMessage === 'This order has encountered an error and cannot be submitted' ||
+          apiError.developerMessage === 'The order could not be submitted to Serco'
+        ) {
           return {
             submitted: false,
             type: 'errorStatus',
