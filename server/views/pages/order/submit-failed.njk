@@ -2,21 +2,39 @@
 
 {% set pageTitle = "Application submission failed - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block content %}
+
   {{ govukBackLink({
-    text: "Back",
-    href: "/"
+  text: "Back",
+  href: "/"
   }) }}
 
   {{ govukPanel({
-    titleText: "Application submission failed",
-    html: "Your reference number<br><strong>EXAMPLE</strong>",
-    classes: "govuk-panel--error"
+  titleText: "Application submission failed",
+  classes: "govuk-panel--error"
   }) }}
+
+  <br>
+
+  {{ govukWarningText({
+  text: "As your tag request submission has failed, you may want to download a PDF copy of your tag request form and send this directly to the supplier.",
+  iconFallbackText: "Warning"
+  }) }}
+
+  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+
+  {{ govukButton({
+          text: "Get tag request form summary for download",
+          href: "/order/" + orderId + "/receipt",
+          classes: "govuk-button--secondary"
+      }) }}
+  <br><br>
 
   <div class="govuk-button-group">
     {{ govukButton({
@@ -24,4 +42,5 @@
       href: "/"
     }) }}
   </div>
+
 {% endblock %}

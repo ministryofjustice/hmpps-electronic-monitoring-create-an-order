@@ -2,28 +2,39 @@
 
 {% set pageTitle = "Application successfully submitted - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
+
   {{ govukBackLink({
-    text: "Back",
-    href: "/"
-  }) }}
+  text: "Back",
+  href: "/"
+}) }}
 
   {{ govukPanel({
-    titleText: "Application successfully submitted",
-    html: "Your reference number<br><strong>EXAMPLE</strong>",
-    attributes: {
-      "data-qa": "confirmation-panel"
-    }
-  }) }}
+  titleText: "Application successfully submitted",
+  html: "Your reference number is <br><strong>EXAMPLE</strong>",
+  attributes: {
+    "data-qa": "confirmation-panel"
+  }
+}) }}
+
+  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+
+  {{ govukButton({
+          text: "Get tag request form summary for download",
+          href: "/order/" + orderId + "/receipt",
+          classes: "govuk-button--secondary"
+      }) }}
+  <br><br>
 
   <div class="govuk-button-group">
     {{ govukButton({
-      text: "Back to your applications",
-      href: "/"
-    }) }}
+          text: "Back to your applications",
+          href: "/"
+      }) }}
   </div>
 {% endblock %}

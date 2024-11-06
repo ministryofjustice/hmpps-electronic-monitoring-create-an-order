@@ -1,0 +1,103 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Form Details" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% block content %}
+
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
+
+  <div id="pdf-download">
+    {{ govukNotificationBanner({
+      text: "This tag request form summary page is designed to be downloaded as a PDF for your records."
+    }) }}
+
+    {{ govukButton({
+      text: "Download tag request form as PDF",
+      id: "download-pdf"
+    }) }}
+  </div>
+
+  <br><br><br>
+
+  <div id="form-summary">
+    <h1 class="govuk-heading-xl">Submitted electronic monitoring order details</h1>
+
+    {% for orderKey, orderValue in order %}
+      {% if not orderValue | isEmpty %}
+        <h2 class="govuk-heading-l=">{{ orderKey | camelCaseToSentenceCase }}</h2>
+
+        {# String format #}
+        {% if orderValue | checkType == 'string' %}
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+              <dd class="govuk-summary-list__value">
+                {{ orderValue }}
+              </dd>
+            </div>
+          </dl>
+        {% endif %}
+
+        {# Object format #}
+        {% if orderValue | checkType == 'object' %}
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% for key, value in orderValue %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key | camelCaseToSentenceCase }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {% if value | checkType == 'array' %}
+                    {{ value | join(', ') }}
+                  {% else %}
+                    {{ value }}
+                  {% endif %}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        {% endif %}
+
+        {# Array Format #}
+        {% if orderValue | checkType == 'array' %}
+          {% for item in orderValue %}
+            <h3 class="govuk-heading-m">{{ orderKey | camelCaseToSentenceCase }} item {{ loop.index }}</h3>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              {% for key, value in item %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ key | camelCaseToSentenceCase }}
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {% if value | checkType == 'array' %}
+                      {{ value | join(', ') }}
+                    {% else %}
+                      {{ value }}
+                    {% endif %}
+                  </dd>
+                </div>
+              {% endfor %}
+            </dl>
+          {% endfor %}
+        {% endif %}
+
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="govuk-button-group">
+    {{ govukButton({
+          text: "Back to your applications",
+          href: "/"
+      }) }}
+  </div>
+
+{% endblock %}
