@@ -3,7 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
 
@@ -37,45 +37,9 @@ export default function nunjucksSetup(app: express.Express): void {
     },
   )
 
-  function toSentenceCase(key: string) {
-    if (typeof key !== 'string') return key
-
-    const lowerCaseKey = key.replace(/([A-Z])/g, ' $1').toLowerCase()
-
-    const sentenceCaseKey = lowerCaseKey.charAt(0).toUpperCase() + lowerCaseKey.slice(1)
-
-    return sentenceCaseKey.trim()
-  }
-
-  function checkType(value: unknown): string {
-    if (Array.isArray(value)) {
-      return 'array'
-    }
-    if (typeof value === 'object') {
-      return 'object'
-    }
-    if (typeof value === 'string') {
-      return 'string'
-    }
-    return 'other'
-  }
-
-  function isEmpty(value: unknown): boolean {
-    if (
-      value === null ||
-      value === undefined ||
-      value === '' ||
-      (Array.isArray(value) && value.length === 0) ||
-      (typeof value === 'object' && Object.keys(value).length === 0)
-    ) {
-      return true
-    }
-    return false
-  }
-
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
-  njkEnv.addFilter('toSentenceCase', toSentenceCase)
+  njkEnv.addFilter('camelCaseToSentenceCase', camelCaseToSentenceCase)
   njkEnv.addFilter('checkType', checkType)
   njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))

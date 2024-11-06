@@ -33,7 +33,7 @@
 
     {% for orderKey, orderValue in order %}
       {% if not orderValue | isEmpty %}
-        <h2 class="govuk-heading-l=">{{ orderKey | toSentenceCase }}</h2>
+        <h2 class="govuk-heading-l=">{{ orderKey | camelCaseToSentenceCase }}</h2>
 
         {# String format #}
         {% if orderValue | checkType == 'string' %}
@@ -52,7 +52,7 @@
             {% for key, value in orderValue %}
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                  {{ key | toSentenceCase }}
+                  {{ key | camelCaseToSentenceCase }}
                 </dt>
                 <dd class="govuk-summary-list__value">
                   {% if value | checkType == 'array' %}
@@ -69,12 +69,12 @@
         {# Array Format #}
         {% if orderValue | checkType == 'array' %}
           {% for item in orderValue %}
-            <h3 class="govuk-heading-m">{{ orderKey | toSentenceCase }} item {{ loop.index }}</h3>
+            <h3 class="govuk-heading-m">{{ orderKey | camelCaseToSentenceCase }} item {{ loop.index }}</h3>
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
               {% for key, value in item %}
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    {{ key | toSentenceCase }}
+                    {{ key | camelCaseToSentenceCase }}
                   </dt>
                   <dd class="govuk-summary-list__value">
                     {% if value | checkType == 'array' %}
