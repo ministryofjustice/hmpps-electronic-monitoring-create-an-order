@@ -128,43 +128,43 @@ workflows:
             branches:
               only:
                 - main
-#      - hmpps/deploy_env:
-#          name: deploy_dev
-#          env: "dev"
-#          jira_update: true
-#          pipeline_id: <<pipeline.id>>
-#          pipeline_number: <<pipeline.number>>
-#          context: hmpps-common-vars
-#          filters:
-#            branches:
-#              only:
-#                - main
-#          requires:
-#            - helm_lint
-#            - unit_test
-#            - integration_test
-#            - build_docker
-#          helm_timeout: 5m
       - hmpps/deploy_env:
-         name: deploy_preprod
-         env: "preprod"
-         jira_update: true
-         jira_env_type: staging
-         pipeline_id: <<pipeline.id>>
-         pipeline_number: <<pipeline.number>>
-         context:
-           - hmpps-common-vars
-           - hmpps-ems-cemo-ui-preprod
-         filters:
+          name: deploy_dev
+          env: "dev"
+          jira_update: true
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          context: hmpps-common-vars
+          filters:
             branches:
               only:
                 - main
-         requires:
-           - helm_lint
-           - unit_test
-           - integration_test
-           - build_docker
-         helm_timeout: 5m
+          requires:
+            - helm_lint
+            - unit_test
+            - integration_test
+            - build_docker
+          helm_timeout: 5m
+      - hmpps/deploy_env:
+          name: deploy_preprod
+          env: "preprod"
+          jira_update: true
+          jira_env_type: staging
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          context:
+            - hmpps-common-vars
+            - hmpps-ems-cemo-ui-preprod
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - helm_lint
+            - unit_test
+            - integration_test
+            - build_docker
+          helm_timeout: 5m
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
