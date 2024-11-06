@@ -1,7 +1,8 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = "Installation and risk - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
+{% set section = "Installation and risk information" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
@@ -11,337 +12,292 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
+{% block formInputs %}
+  <p class="govuk-body">Provide risk information to help plan installation.</p>
+
+  <p class="govuk-body">Answer questions based on what you know about the device wearer's previous behaviour and offence.</p>
+
+  {{ govukRadios({
+    name: "riskOfSeriousHarm",
+    fieldset: {
+      legend: {
+        text: "What is the risk of violence or threatening behaviour towards installation staff members?",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
+    },
+    items: [
+      {
+        text: "Very high",
+        value: "VERY_HIGH",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "High",
+        value: "HIGH",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "Medium",
+        value: "MEDIUM",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "Low",
+        value: "LOW",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "Don't know",
+        value: "UNKNOWN",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: riskOfSeriousHarm.value,
+    errorMessage: riskOfSeriousHarm.error,
+    disabled: not isOrderEditable
   }) }}
 
-  {% if not isOrderEditable %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
+  {{ govukRadios({
+    name: "riskOfSelfHarm",
+    fieldset: {
+      legend: {
+        text: "What is the risk of the device wearer causing serious harm to themself? (optional)",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
+    },
+    items: [
+      {
+        text: "Very high",
+        value: "VERY_HIGH",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "High",
+        value: "HIGH",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "Medium",
+        value: "MEDIUM",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "Low",
+        value: "LOW",
+        disabled: not isOrderEditable
+      },
+      {
+        text: "Don't know",
+        value: "UNKNOWN",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: riskOfSelfHarm.value,
+    errorMessage: riskOfSelfHarm.error,
+    disabled: not isOrderEditable
+  }) }}
 
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
+  {{ govukCheckboxes({
+    idPrefix: "riskCategory",
+    name: "riskCategory[]",
+    fieldset: {
+      legend: {
+        text: "Select the risks that apply to the device wearer",
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "Select one or more from the list."
+    },
+    items: [
+      {
+        text: 'Threats of Violence',
+        value: 'VIOLENCE',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Sexual Offences',
+        value: 'SEXUAL_OFFENCES',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Risk to Specific Gender',
+        value: 'GENDER',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Racial Abuse or Threats',
+        value: 'RACIAL',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'History of Substance Abuse',
+        value: 'SUBSTANCE_ABUSE',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Diversity Concerns (mental health issues, learning difficulties etc.)',
+        value: 'DIVERSITY',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Dangerous Dogs/Pets at Premises',
+        value: 'ANIMALS',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Is the Subject managed through IOM?',
+        value: 'IOM',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Safeguarding Issues',
+        value: 'SAFEGUARDING',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Other occupants who pose a risk to staff',
+        value: 'OTHER_OCCUPANTS',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Other known Risks',
+        value: 'OTHER_RISKS',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Is there evidence known to the subject having homophobic views?',
+        value: 'HOMOPHOBIC',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Offence Risk',
+        value: 'OFFENCE_RISK',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Postcode Risk',
+        value: 'POSTCODE_RISK',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Under 18 living at property',
+        value: 'UNDER_18',
+        disabled: not isOrderEditable
+      }
+    ],
+    errorMessage: riskCategory.error,
+    values: riskCategory.values
+  }) }}
 
-  {{ mojPageHeaderActions({
-    heading: {
-      text: "Installation and risk information"
+  {{ govukTextarea({
+    name: "riskDetails",
+    id: "riskDetails",
+    value: riskDetails.value,
+    errorMessage: riskDetails.error,
+    disabled: not isOrderEditable,
+    label: {
+      text: "Provide details that will help lower risk of violence or threatening behaviour at installation.",
+      classes: "govuk-label--s"
+    },
+    hint: {
+      text: "Include details about the device wearer's behaviour and if there are risks at the installation property we should know of."
     }
   }) }}
 
-  <form method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-    <p class="govuk-body">Provide risk information to help plan installation.</p>
-
-    <p class="govuk-body">Answer questions based on what you know about the device wearer's previous behaviour and offence.</p>
+  {% call govukFieldset({
+    legend: {
+      text: "Multi-Agency Public Protection Arrangements (MAPPA)",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  }) %}
+    <p class="govuk-body">If you are a Home Office employee, answer the below questions:</p>
 
     {{ govukRadios({
-      name: "riskOfSeriousHarm",
+      name: "mappaLevel",
       fieldset: {
         legend: {
-          text: "What is the risk of violence or threatening behaviour towards installation staff members?",
+          text: "Which level of MAPPA applies? (optional)",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
       },
-      hint: {
-        text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
-      },
       items: [
         {
-          text: "Very high",
-          value: "VERY_HIGH",
+          text: "MAPPA 1",
+          value: "MAPPA1",
           disabled: not isOrderEditable
         },
         {
-          text: "High",
-          value: "HIGH",
+          text: "MAPPA 2",
+          value: "MAPPA2",
           disabled: not isOrderEditable
         },
         {
-          text: "Medium",
-          value: "MEDIUM",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Low",
-          value: "LOW",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Don't know",
-          value: "UNKNOWN",
+          text: "MAPPA 3",
+          value: "MAPPA3",
           disabled: not isOrderEditable
         }
       ],
-      value: riskOfSeriousHarm.value,
-      errorMessage: riskOfSeriousHarm.error,
+      value: mappaLevel.value,
+      errorMessage: mappaLevel.error,
       disabled: not isOrderEditable
     }) }}
 
     {{ govukRadios({
-      name: "riskOfSelfHarm",
+      name: "mappaCaseType",
       fieldset: {
         legend: {
-          text: "What is the risk of the device wearer causing serious harm to themself? (optional)",
+          text: "What is the MAPPA case type? (optional)",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
       },
-      hint: {
-        text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
-      },
       items: [
         {
-          text: "Very high",
-          value: "VERY_HIGH",
+          text: "Serious Organised Crime",
+          value: "SOC",
           disabled: not isOrderEditable
         },
         {
-          text: "High",
-          value: "HIGH",
+          text: "Terrorism Act, Counter Terrorism",
+          value: "TERRORISM_ACT",
           disabled: not isOrderEditable
         },
         {
-          text: "Medium",
-          value: "MEDIUM",
+          text: "Terrorism Prevention and Investigation measures",
+          value: "TERRORISM_PREVENTION",
           disabled: not isOrderEditable
         },
         {
-          text: "Low",
-          value: "LOW",
+          text: "Special Immigration Appeals Commission",
+          value: "SPECIAL_IMMIGRATION_APPEALS",
           disabled: not isOrderEditable
         },
         {
-          text: "Don't know",
-          value: "UNKNOWN",
+          text: "High Profile Immigration",
+          value: "HIGH_PROFILE_IMMIGRATION",
+          disabled: not isOrderEditable
+        },
+        {
+          text: "Critical Public Protection Case ",
+          value: "CPP_CASE",
           disabled: not isOrderEditable
         }
       ],
-      value: riskOfSelfHarm.value,
-      errorMessage: riskOfSelfHarm.error,
+      value: mappaCaseType.value,
+      errorMessage: mappaCaseType.error,
       disabled: not isOrderEditable
     }) }}
-
-    {{ govukCheckboxes({
-      idPrefix: "riskCategory",
-      name: "riskCategory[]",
-      fieldset: {
-        legend: {
-          text: "Select the risks that apply to the device wearer",
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "Select one or more from the list."
-      },
-      items: [
-        {
-          text: 'Threats of Violence',
-          value: 'VIOLENCE',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Sexual Offences',
-          value: 'SEXUAL_OFFENCES',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Risk to Specific Gender',
-          value: 'GENDER',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Racial Abuse or Threats',
-          value: 'RACIAL',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'History of Substance Abuse',
-          value: 'SUBSTANCE_ABUSE',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Diversity Concerns (mental health issues, learning difficulties etc.)',
-          value: 'DIVERSITY',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Dangerous Dogs/Pets at Premises',
-          value: 'ANIMALS',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Is the Subject managed through IOM?',
-          value: 'IOM',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Safeguarding Issues',
-          value: 'SAFEGUARDING',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Other occupants who pose a risk to staff',
-          value: 'OTHER_OCCUPANTS',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Other known Risks',
-          value: 'OTHER_RISKS',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Is there evidence known to the subject having homophobic views?',
-          value: 'HOMOPHOBIC',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Offence Risk',
-          value: 'OFFENCE_RISK',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Postcode Risk',
-          value: 'POSTCODE_RISK',
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Under 18 living at property',
-          value: 'UNDER_18',
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: riskCategory.error,
-      values: riskCategory.values
-    }) }}
-
-    {{ govukTextarea({
-      name: "riskDetails",
-      id: "riskDetails",
-      value: riskDetails.value,
-      errorMessage: riskDetails.error,
-      disabled: not isOrderEditable,
-      label: {
-        text: "Provide details that will help lower risk of violence or threatening behaviour at installation.",
-        classes: "govuk-label--s"
-      },
-      hint: {
-        text: "Include details about the device wearer's behaviour and if there are risks at the installation property we should know of."
-      }
-    }) }}
-
-    {% call govukFieldset({
-      legend: {
-        text: "Multi-Agency Public Protection Arrangements (MAPPA)",
-        classes: "govuk-fieldset__legend--m",
-        isPageHeading: false
-      }
-    }) %}
-      <p class="govuk-body">If you are a Home Office employee, answer the below questions:</p>
-
-      {{ govukRadios({
-        name: "mappaLevel",
-        fieldset: {
-          legend: {
-            text: "Which level of MAPPA applies? (optional)",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            text: "MAPPA 1",
-            value: "MAPPA1",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "MAPPA 2",
-            value: "MAPPA2",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "MAPPA 3",
-            value: "MAPPA3",
-            disabled: not isOrderEditable
-          }
-        ],
-        value: mappaLevel.value,
-        errorMessage: mappaLevel.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukRadios({
-        name: "mappaCaseType",
-        fieldset: {
-          legend: {
-            text: "What is the MAPPA case type? (optional)",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            text: "Serious Organised Crime",
-            value: "SOC",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "Terrorism Act, Counter Terrorism",
-            value: "TERRORISM_ACT",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "Terrorism Prevention and Investigation measures",
-            value: "TERRORISM_PREVENTION",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "Special Immigration Appeals Commission",
-            value: "SPECIAL_IMMIGRATION_APPEALS",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "High Profile Immigration",
-            value: "HIGH_PROFILE_IMMIGRATION",
-            disabled: not isOrderEditable
-          },
-          {
-            text: "Critical Public Protection Case ",
-            value: "CPP_CASE",
-            disabled: not isOrderEditable
-          }
-        ],
-        value: mappaCaseType.value,
-        errorMessage: mappaCaseType.error,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
-
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
-        }) }}
-        {{ govukButton({
-            text: "Save and return back to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
+  {% endcall %}
 
 {% endblock %}
