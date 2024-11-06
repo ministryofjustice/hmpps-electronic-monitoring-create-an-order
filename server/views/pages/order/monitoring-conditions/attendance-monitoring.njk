@@ -10,7 +10,7 @@
 {% from "../../../partials/timeInput.njk" import timeInput %}
 {% from "../../../partials/addressInput.njk" import addressInput %}
 
-{% block content %}
+{% block formInputs %}
 
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
 

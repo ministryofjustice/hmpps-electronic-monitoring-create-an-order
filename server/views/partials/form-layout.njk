@@ -35,7 +35,7 @@
     <h2 class="govuk-heading-m">{{ subsection }}</h2>
   {% endif %}
 
-  <form action="" method="post">
+  <form action="" method="post" {{ formEncoding }}>
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     {% block formInputs %}
