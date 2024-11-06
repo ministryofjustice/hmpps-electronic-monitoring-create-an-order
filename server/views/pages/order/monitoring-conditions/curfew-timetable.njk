@@ -8,17 +8,16 @@
 {% from "../../../partials/timeTable.njk" import timeTable %}
 
 {% block formInputs %}
-
   {% call govukFieldset({
     legend: {
-      text: 'Enter curfew hours and address for each day.',
-      classes: "govuk-fieldset__legend--xs",
+      text: 'Enter curfew hours and addresses for each day.',
+      classes: "govuk-fieldset__legend--m",
       isPageHeading: false
     }
   }) %}
-    <span class="govuk-hint">For example from 09:30 to 18:00</span>
+    <span class="govuk-hint">For example entering a curfew 19:00 to 07:00 on Monday
+      for a curfew spanning Monday 19:00 to Tuesday 07:00</span>
 
     {{ timeTable(curfewTimetable, not isOrderEditable) }}
   {% endcall %}
-
 {% endblock %}

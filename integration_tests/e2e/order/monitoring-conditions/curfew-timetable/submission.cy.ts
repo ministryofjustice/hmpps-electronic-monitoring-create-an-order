@@ -535,6 +535,107 @@ context('Monitoring conditions - Curfew timetable', () => {
     })
   })
 
+  context('when the user chooses to auto-populate the other days', () => {
+    it('copies the monday entry to all empty days', () => {
+      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+
+      page.form.fillInWith([
+        {
+          day: 'Monday',
+          startTime: '19:00:00',
+          endTime: '10:00:00',
+          addresses: ['Primary address'],
+        },
+      ])
+
+      page.form.autoPopulateTimetable()
+      page.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: expectations.allDays(mockOrderId, '19:00:00', '10:00:00', 'PRIMARY_ADDRESS'),
+      }).should('be.true')
+    })
+
+    it('copies the monday entry over all filled days', () => {
+      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+
+      page.form.fillInWith([
+        {
+          day: 'Monday',
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+          addresses: ['Primary address'],
+        },
+        {
+          day: 'Wednesday',
+          startTime: '07:00:00',
+          endTime: '10:00:00',
+          addresses: ['Secondary address'],
+        },
+        {
+          day: 'Friday',
+          startTime: '21:00:00',
+          endTime: '07:00:00',
+          addresses: ['Primary address', 'Secondary address'],
+        },
+      ])
+
+      page.form.autoPopulateTimetable()
+      page.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: expectations.allDays(mockOrderId, '19:00:00', '07:00:00', 'PRIMARY_ADDRESS'),
+      }).should('be.true')
+    })
+
+    it('copies the monday entry over all days and removes additional entries', () => {
+      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+
+      page.form.fillInWith([
+        {
+          day: 'Monday',
+          startTime: '16:00:00',
+          endTime: '04:00:00',
+          addresses: ['Primary address'],
+        },
+        {
+          day: 'Tuesday',
+          startTime: '22:00:00',
+          endTime: '23:59:00',
+          addresses: ['Secondary address'],
+        },
+        {
+          day: 'Tuesday',
+          startTime: '00:00:00',
+          endTime: '10:00:00',
+          addresses: ['Secondary address'],
+        },
+        {
+          day: 'Thursday',
+          startTime: '19:00:00',
+          endTime: '23:59:00',
+          addresses: ['Primary address', 'Secondary address'],
+        },
+        {
+          day: 'Thursday',
+          startTime: '00:00:00',
+          endTime: '07:00:00',
+          addresses: ['Primary address', 'Secondary address'],
+        },
+      ])
+
+      page.form.autoPopulateTimetable()
+      page.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: expectations.allDays(mockOrderId, '16:00:00', '04:00:00', 'PRIMARY_ADDRESS'),
+      }).should('be.true')
+    })
+  })
+
   // context('when other orders indicated', () => {})
   //   it('should return to the summary page', () => {})
 

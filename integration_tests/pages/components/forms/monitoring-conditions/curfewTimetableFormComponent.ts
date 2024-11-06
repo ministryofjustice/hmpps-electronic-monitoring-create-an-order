@@ -17,6 +17,10 @@ export default class CurfewTimetableFormComponent extends FormComponent {
   checkHasForm(): void {
     super.checkHasForm()
 
+    this.cacheFormFieldsAfterLoad()
+  }
+
+  cacheFormFieldsAfterLoad(): void {
     allDays.forEach((dayOfWeek: string) => {
       this.form.getByLegend(dayOfWeek).as(`${this.elementCacheId}-${dayOfWeek.toLowerCase()}`)
     })
@@ -25,7 +29,43 @@ export default class CurfewTimetableFormComponent extends FormComponent {
   // FIELDS
 
   day(day: string): PageElement {
-    return this.form.get(`@${this.elementCacheId}-${day.toLowerCase()}`, { log: false })
+    return this.form.get(`@${this.elementCacheId}-${day.toLowerCase()}`, { log: true })
+  }
+
+  get autoPopulateTimetableButton(): PageElement {
+    return this.day('Monday').contains('Auto populate the other days with the same curfew hours')
+  }
+
+  autoPopulateTimetable(): void {
+    this.autoPopulateTimetableButton.click()
+    this.cacheFormFieldsAfterLoad()
+  }
+
+  fillInDay(dayOfWeek: string, entries: CurfewTimetableFormData[]): void {
+    entries.forEach((entry: CurfewTimetableFormData, index: number) => {
+      const cacheId = `${dayOfWeek}-${index}-${uuidv4()}`
+
+      this.day(dayOfWeek).within(() => {
+        cy.get('.schedule').eq(index).as(cacheId)
+
+        const [startHours, startMinutes] = deserialiseTime(entry.startTime)
+        cy.get(`@${cacheId}`).getByLabel('Start Hour').type(startHours)
+        cy.get(`@${cacheId}`).getByLabel('Start Minutes').type(startMinutes)
+
+        const [endHours, endMinutes] = deserialiseTime(entry.endTime)
+        cy.get(`@${cacheId}`).getByLabel('End Hour').type(endHours)
+        cy.get(`@${cacheId}`).getByLabel('End Minutes').type(endMinutes)
+
+        entry.addresses?.forEach((address: string) => {
+          cy.get(`@${cacheId}`).getByLabel(address).check()
+        })
+
+        if (index < entries.length - 1) {
+          cy.contains('Add another time').click()
+          this.cacheFormFieldsAfterLoad()
+        }
+      })
+    })
   }
 
   // FORM HELPERS
@@ -44,35 +84,7 @@ export default class CurfewTimetableFormComponent extends FormComponent {
     }, {})
 
     Object.keys(grouped).forEach((dayOfWeek: string) => {
-      this.day(dayOfWeek).should('exist')
-
-      grouped[dayOfWeek].forEach((entry: CurfewTimetableFormData, index: number) => {
-        const cacheId = `${dayOfWeek}-${index}-${uuidv4()}`
-        this.day(dayOfWeek).within(() => {
-          cy.get('.schedule').eq(index).as(cacheId)
-
-          const [startHours, startMinutes] = deserialiseTime(entry.startTime)
-          cy.get(`@${cacheId}`).getByLabel('Start Hour').type(startHours)
-          cy.get(`@${cacheId}`).getByLabel('Start Minutes').type(startMinutes)
-
-          const [endHours, endMinutes] = deserialiseTime(entry.endTime)
-          cy.get(`@${cacheId}`).getByLabel('End Hour').type(endHours)
-          cy.get(`@${cacheId}`).getByLabel('End Minutes').type(endMinutes)
-
-          entry.addresses?.forEach((address: string) => {
-            cy.get(`@${cacheId}`).getByLabel(address).check()
-          })
-
-          if (index < grouped[dayOfWeek].length - 1) {
-            cy.contains('Add another time').click()
-
-            // have to refresh cache after page load
-            allDays.forEach((dayName: string) => {
-              this.form.getByLegend(dayName).as(`${this.elementCacheId}-${dayName.toLowerCase()}`)
-            })
-          }
-        })
-      })
+      this.fillInDay(dayOfWeek, grouped[dayOfWeek])
     })
   }
 
@@ -87,7 +99,7 @@ export default class CurfewTimetableFormComponent extends FormComponent {
   shouldBeDisplayed(entries?: string[]): void {
     const allEntries = entries || allDays
 
-    allEntries.forEach((day: string) => {
+    allEntries.forEach((day: string, index: number) => {
       this.day(day).should('exist')
       this.day(day).getByLabel('Start Hour').should('exist')
       this.day(day).getByLabel('Start Minutes').should('exist')
@@ -98,13 +110,18 @@ export default class CurfewTimetableFormComponent extends FormComponent {
       this.day(day).getByLabel('Primary address').should('exist')
       this.day(day).getByLabel('Secondary address').should('exist')
       this.day(day).getByLabel('Tertiary address').should('exist')
+
+      this.day(day).contains('Add another time').should('exist')
+      if (index === 0) {
+        this.autoPopulateTimetableButton.should('exist')
+      }
     })
   }
 
   shouldBeDisabled(entries?: string[]): void {
     const allEntries = entries || allDays
 
-    allEntries.forEach((day: string) => {
+    allEntries.forEach((day: string, index: number) => {
       this.day(day).should('exist')
       this.day(day).getByLabel('Start Hour').should('be.disabled')
       this.day(day).getByLabel('Start Minutes').should('be.disabled')
@@ -115,6 +132,11 @@ export default class CurfewTimetableFormComponent extends FormComponent {
       this.day(day).getByLabel('Primary address').should('be.disabled')
       this.day(day).getByLabel('Secondary address').should('be.disabled')
       this.day(day).getByLabel('Tertiary address').should('be.disabled')
+
+      this.day(day).contains('Add another time').should('not.exist')
+      if (index === 0) {
+        this.autoPopulateTimetableButton.should('not.exist')
+      }
     })
   }
 

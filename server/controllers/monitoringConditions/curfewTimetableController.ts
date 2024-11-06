@@ -179,7 +179,7 @@ export default class CurfewTimetableController {
     res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
   }
 
-  private removeTimeToCurfewDay(req: Request, res: Response, formData: CurfewTimetableFormData, orderId: string) {
+  private removeTimeFromCurfewDay(req: Request, res: Response, formData: CurfewTimetableFormData, orderId: string) {
     const action = formData.action.split('-')
     const day = action[2]
     const index = Number.parseInt(action[3], 10)
@@ -190,6 +190,25 @@ export default class CurfewTimetableController {
     res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
   }
 
+  private copyTimeAcrossCurfewDays(req: Request, res: Response, formData: CurfewTimetableFormData, orderId: string) {
+    const sourceDay = formData.curfewTimetable.monday
+
+    req.flash('formData', {
+      action: formData.action,
+      curfewTimetable: {
+        monday: sourceDay,
+        tuesday: sourceDay,
+        wednesday: sourceDay,
+        thursday: sourceDay,
+        friday: sourceDay,
+        saturday: sourceDay,
+        sunday: sourceDay,
+      },
+    })
+
+    res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+  }
+
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
 
@@ -197,7 +216,9 @@ export default class CurfewTimetableController {
     if (formData.action.startsWith('add-time-')) {
       this.addTimeToCurfewDay(req, res, formData, orderId)
     } else if (formData.action.startsWith('remove-time-')) {
-      this.removeTimeToCurfewDay(req, res, formData, orderId)
+      this.removeTimeFromCurfewDay(req, res, formData, orderId)
+    } else if (formData.action === 'copy-times') {
+      this.copyTimeAcrossCurfewDays(req, res, formData, orderId)
     } else {
       const apiModel = this.createApiModelFromFormData(formData, orderId)
       const updateResult = await this.curfewTimetableService.update({
