@@ -35,6 +35,7 @@ const OrderModel = z.object({
   curfewConditions: CurfewConditionsModel.nullable().optional(),
   curfewTimeTable: CurfewTimetableModel.optional(),
   notifyingOrganisation: NotifyingOrganisationModel.optional(),
+  isValid: z.boolean().optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
+import paths from '../constants/paths'
 
 export default class OrderController {
   constructor(
@@ -14,8 +15,10 @@ export default class OrderController {
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
+    const error = req.flash('submissionError')
     res.render('pages/order/summary', {
       order: req.order,
+      error: error && error.length > 0 ? error[0] : undefined,
     })
   }
 
@@ -53,14 +56,18 @@ export default class OrderController {
   submit: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    if (order.status === 'SUBMITTED') {
-      res.redirect(`/order/${order.id}/submit/failed`)
-    } else {
-      await this.orderService.submitOrder({
-        accessToken: res.locals.user.token,
-        orderId: order.id,
-      })
-      res.redirect(`/order/${order.id}/submit/success`)
+    const result = await this.orderService.submitOrder({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
+
+    if (result.submitted) {
+      res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
+    } else if (result.type === 'alreadySubmitted' || result.type === 'incomplete') {
+      req.flash('submissionError', result.error)
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    } else if (result.type === 'errorStatus') {
+      res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
     }
   }
 

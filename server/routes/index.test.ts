@@ -223,13 +223,13 @@ describe('authorised user', () => {
         .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
     })
 
-    it('should not submit an already submitted order and redirect to the failed page', () => {
+    it('should not submit an already submitted order and redirect to the summary page', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
 
       return request(app)
         .post(`/order/${mockSubmittedOrder.id}/submit`)
         .expect(302)
-        .expect('Location', `/order/${mockSubmittedOrder.id}/submit/failed`)
+        .expect('Location', `/order/${mockSubmittedOrder.id}/summary`)
     })
   })
 })

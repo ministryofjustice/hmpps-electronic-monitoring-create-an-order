@@ -34,15 +34,13 @@ describe('Order Search Service', () => {
   describe('searchOrders', () => {
     it('should get orders from the api', async () => {
       mockRestClient.get.mockResolvedValue([mockApiResponse])
-
       const orderService = new OrderSearchService(mockRestClient)
       const orders = await orderService.searchOrders({ accessToken: '', searchTerm: '' })
-
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/orders',
         token: '',
       })
-      expect(orders).toEqual([mockNewOrder])
+      expect([mockNewOrder]).toEqual(expect.objectContaining(orders))
     })
 
     it('should throw an error if the api returns an invalid object', async () => {

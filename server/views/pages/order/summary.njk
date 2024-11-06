@@ -1,12 +1,14 @@
 {% extends "../../partials/layout.njk" %}
 
 {% set pageTitle = applicationName + " - Form Details" %}
+{% set error = error %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/search/macro.njk" import mojSearch -%}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block content %}
 
@@ -21,8 +23,20 @@
     text: "Apply for electronic monitoring"
   }
 }) }}
-
 </div>
+
+  {% if error %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem",
+    errorList: [
+      {
+        text: error,
+        href: "#"
+      }
+    ]
+  }) }}
+  {% endif %}
+
   <p class="govuk-body-l">
     Complete all sections before submitting the form.
   </p>
@@ -59,7 +73,8 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div class="govuk-button-group">
         {{ govukButton({
-            text: "Submit order"
+            text: "Submit order",
+            disabled: not order.isValid
         }) }}
       </div>
     </form>

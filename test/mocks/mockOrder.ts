@@ -40,8 +40,13 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   },
   monitoringConditionsTrail: null,
   monitoringConditionsAlcohol: null,
+  isValid: true,
   ...overrideProperties,
 })
+
+// export const getMockResponseOrder = (overrideProperties?: Partial<Order>) => {
+//   return getMockOrder({ ...overrideProperties, isValid: true })
+// }
 
 export const getMockSubmittedOrder = (overrideProperties?: Partial<Order>) => {
   return getMockOrder({ ...overrideProperties, status: OrderStatusEnum.Enum.SUBMITTED })
