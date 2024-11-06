@@ -32,7 +32,7 @@ context('Order Summary', () => {
       page.submitOrderButton.should('exist')
     })
 
-    it.skip('Should be accessible', () => {
+    it('Should be accessible', () => {
       cy.signIn().visit(`/order/${mockOrderId}/summary`)
       const page = Page.verifyOnPage(OrderTasksPage)
       page.checkIsAccessible()
