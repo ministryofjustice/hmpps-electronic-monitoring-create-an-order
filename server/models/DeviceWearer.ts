@@ -13,10 +13,12 @@ const DeviceWearerModel = z.object({
   adultAtTimeOfInstallation: z.boolean().nullable(),
   sex: z.string().nullable(),
   gender: z.string().nullable(),
+  otherGender: z.string().nullable().optional(),
   disabilities: z
     .string()
     .nullable()
     .transform(val => (val === null ? [] : val.split(','))),
+  otherDisability: z.string().nullable().optional(),
   noFixedAbode: z.boolean().nullable(),
   language: z.string().nullable().optional(),
   interpreterRequired: z.boolean().nullable().optional(),

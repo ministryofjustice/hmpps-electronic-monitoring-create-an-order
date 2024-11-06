@@ -81,7 +81,7 @@ describe('authorised user', () => {
         .get('/')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Electronic Monitoring Application Forms')
+          expect(res.text).toContain('Electronic Monitoring Application forms')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
             correlationId: expect.any(String),
@@ -97,7 +97,7 @@ describe('authorised user', () => {
         .get('/')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Electronic Monitoring Application Forms')
+          expect(res.text).toContain('Electronic Monitoring Application forms')
           expect(res.text).toContain('No existing forms found.')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
@@ -116,7 +116,7 @@ describe('authorised user', () => {
         .get(`/order/${mockSubmittedOrder.id}/summary`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Apply for electronic monitoring')
+          expect(res.text).toContain('Tag request form')
         })
     })
   })
@@ -138,7 +138,7 @@ describe('authorised user', () => {
         .get('/order/delete/success')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('The application form has been deleted successfully')
+          expect(res.text).toContain('The application form has been successfully deleted')
         })
     })
   })
@@ -151,7 +151,7 @@ describe('authorised user', () => {
         .get(`/order/${mockDraftOrder.id}/delete`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Are you sure you want to delete this order?')
+          expect(res.text).toContain('Are you sure you want to delete this form?')
         })
     })
 

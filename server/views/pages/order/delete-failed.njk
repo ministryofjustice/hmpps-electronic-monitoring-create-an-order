@@ -1,31 +1,27 @@
 {% extends "../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Application cannot be deleted - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
 
-{{ govukBackLink({
-  text: "Back",
-  href: "/"
-}) }}
-
-<div class="homepage-content">
   {{ mojPageHeaderActions({
-  heading: {
-    text: "You cannot delete an application that has been submitted"
-  }
-}) }}
-</div>
+    heading: {
+      text: "You cannot delete an application that has been submitted"
+    }
+  }) }}
 
-<div class="govuk-button-group">
+  <div class="govuk-button-group">
     {{ govukButton({
-        text: "Back to your applications",
-        href: "/"
+      text: "Back to your applications",
+      href: "/"
     }) }}
-</div>
-
+  </div>
 {% endblock %}

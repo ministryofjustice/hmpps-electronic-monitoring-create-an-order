@@ -1,44 +1,39 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Installation and risk - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% block content %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Installation and risk information"
-      }
-    }) }}
-  </div>
+  {{ mojPageHeaderActions({
+    heading: {
+      text: "Installation and risk information"
+    }
+  }) }}
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -56,7 +51,7 @@
         }
       },
       hint: {
-        text: "For example is there a  higher level of risk because of  the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
+        text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
       },
       items: [
         {
@@ -100,7 +95,7 @@
         }
       },
       hint: {
-        text: "For example is there a  higher level of risk because of  the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
+        text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
       },
       items: [
         {
@@ -242,85 +237,93 @@
       }
     }) }}
 
-    {{ govukRadios({
-      name: "mappaLevel",
-      fieldset: {
-        legend: {
-          text: "Multi-Agency Public Protection Arrangements (MAPPA) (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "If you are a Home Office employee, select which level of MAPPA applies."
-      },
-      items: [
-        {
-          text: "MAPPA 1",
-          value: "MAPPA1",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "MAPPA 2",
-          value: "MAPPA2",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "MAPPA 3",
-          value: "MAPPA3",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: mappaLevel.value,
-      errorMessage: mappaLevel.error,
-      disabled: not isOrderEditable
-    }) }}
+    {% call govukFieldset({
+      legend: {
+        text: "Multi-Agency Public Protection Arrangements (MAPPA)",
+        classes: "govuk-fieldset__legend--m",
+        isPageHeading: false
+      }
+    }) %}
+      <p class="govuk-body">If you are a Home Office employee, answer the below questions:</p>
 
-    {{ govukRadios({
-      name: "mappaCaseType",
-      fieldset: {
-        legend: {
-          text: "What is the MAPPA case type? (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      items: [
-        {
-          text: "Serious Organised Crime",
-          value: "SOC",
-          disabled: not isOrderEditable
+      {{ govukRadios({
+        name: "mappaLevel",
+        fieldset: {
+          legend: {
+            text: "Which level of MAPPA applies? (optional)",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
         },
-        {
-          text: "Terrorism Act, Counter Terrorism",
-          value: "TERRORISM_ACT",
-          disabled: not isOrderEditable
+        items: [
+          {
+            text: "MAPPA 1",
+            value: "MAPPA1",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "MAPPA 2",
+            value: "MAPPA2",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "MAPPA 3",
+            value: "MAPPA3",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: mappaLevel.value,
+        errorMessage: mappaLevel.error,
+        disabled: not isOrderEditable
+      }) }}
+
+      {{ govukRadios({
+        name: "mappaCaseType",
+        fieldset: {
+          legend: {
+            text: "What is the MAPPA case type? (optional)",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
         },
-        {
-          text: "Terrorism Prevention and Investigation measures",
-          value: "TERRORISM_PREVENTION",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Special Immigration Appeals Commission",
-          value: "SPECIAL_IMMIGRATION_APPEALS",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "High Profile Immigration",
-          value: "HIGH_PROFILE_IMMIGRATION",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Critical Public Protection Case ",
-          value: "CPP_CASE",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: mappaCaseType.value,
-      errorMessage: mappaCaseType.error,
-      disabled: not isOrderEditable
-    }) }}
+        items: [
+          {
+            text: "Serious Organised Crime",
+            value: "SOC",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "Terrorism Act, Counter Terrorism",
+            value: "TERRORISM_ACT",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "Terrorism Prevention and Investigation measures",
+            value: "TERRORISM_PREVENTION",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "Special Immigration Appeals Commission",
+            value: "SPECIAL_IMMIGRATION_APPEALS",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "High Profile Immigration",
+            value: "HIGH_PROFILE_IMMIGRATION",
+            disabled: not isOrderEditable
+          },
+          {
+            text: "Critical Public Protection Case ",
+            value: "CPP_CASE",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: mappaCaseType.value,
+        errorMessage: mappaCaseType.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
+
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}

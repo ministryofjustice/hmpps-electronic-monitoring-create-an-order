@@ -58,6 +58,7 @@ context('Mandatory fields only', () => {
     const deviceWearerDetails = {
       firstNames: fullDeviceWearerDetails.firstNames,
       lastName: fullDeviceWearerDetails.lastName,
+      fullName: fullDeviceWearerDetails.fullName,
       dob: fullDeviceWearerDetails.dob,
       is18: true,
       sex: fullDeviceWearerDetails.sex,
@@ -136,7 +137,7 @@ context('Mandatory fields only', () => {
 
       let indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('01. indexPage', { overwrite: true })
-      indexPage.newOrderFormButton().click()
+      indexPage.newOrderFormButton.click()
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
@@ -258,10 +259,10 @@ context('Mandatory fields only', () => {
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
-      attachmentPage.backToFormSectionButton.click()
+      attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.submissionFormButton().click()
+      orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
       if (takeScreenshots) cy.screenshot('21. submitSuccessPage', { overwrite: true })
@@ -269,10 +270,7 @@ context('Mandatory fields only', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('22. indexPageAfterSubmission', { overwrite: true })
-      indexPage
-        .ordersList()
-        .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
-        .should('exist')
+      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 
@@ -281,6 +279,7 @@ context('Mandatory fields only', () => {
     const deviceWearerDetails = {
       firstNames: fullDeviceWearerDetails.firstNames,
       lastName: fullDeviceWearerDetails.lastName,
+      fullName: fullDeviceWearerDetails.fullName,
       dob: fullDeviceWearerDetails.dob,
       is18: false,
       sex: fullDeviceWearerDetails.sex,
@@ -365,7 +364,7 @@ context('Mandatory fields only', () => {
 
       let indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('01. indexPage', { overwrite: true })
-      indexPage.newOrderFormButton().click()
+      indexPage.newOrderFormButton.click()
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
@@ -495,21 +494,18 @@ context('Mandatory fields only', () => {
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
-      attachmentPage.backToFormSectionButton.click()
+      attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.submissionFormButton().click()
+      orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('21. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('22. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('22. indexPageAfterSubmission', { overwrite: true })
-      indexPage
-        .ordersList()
-        .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
-        .should('exist')
+      if (takeScreenshots) cy.screenshot('23. indexPageAfterSubmission', { overwrite: true })
+      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

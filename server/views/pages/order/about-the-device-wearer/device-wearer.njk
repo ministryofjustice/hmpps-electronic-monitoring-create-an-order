@@ -1,6 +1,6 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Device wearer details - About the device wearer - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
@@ -13,33 +13,29 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-
 {% block content %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "About the device wearer"
-      }
-    }) }}
-  </div>
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "About the device wearer"
+    }
+  }) }}
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -203,8 +199,7 @@
       fieldset: {
         legend: {
           text: "Will the device wearer be 18 years old when the device is installed?",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
+          isPageHeading: false
         }
       },
       items: [
@@ -263,6 +258,22 @@
       disabled: not isOrderEditable
     }) }}
 
+    {% set otherGenderHtml %}
+      {{
+        govukInput({
+        label: {
+          text: "Other gender"
+        },
+        id: "other-gender",
+        name: "otherGender",
+        classes: "govuk-!-width-one-third",
+        errorMessage: otherGender.error,
+        disabled: not isOrderEditable,
+        value: otherGender.value
+        })
+      }}
+    {% endset %}
+
     {{ govukRadios({
       name: "gender",
       fieldset: {
@@ -299,6 +310,9 @@
         {
           value: "self-identify",
           text: "Self identify",
+          conditional: {
+            html: otherGenderHtml
+          },
           disabled: not isOrderEditable
         }
       ],
@@ -306,6 +320,22 @@
       errorMessage: gender.error,
       disabled: not isOrderEditable
     }) }}
+
+    {% set otherDisabilityHtml %}
+      {{
+        govukInput({
+        label: {
+          text: "Other disability"
+        },
+        id: "disabilities-detail",
+        name: "otherDisability",
+        classes: "govuk-!-width-one-third",
+        errorMessage: otherDisability.error,
+        disabled: not isOrderEditable,
+        value: otherDisability.value
+        })
+      }}
+    {% endset %}
 
     {{ govukCheckboxes({
       name: "disabilities",
@@ -359,7 +389,10 @@
         },
         {
           value: "Other",
-          text: "Other"
+          text: "Other",
+          conditional: {
+            html: otherDisabilityHtml
+          }
         },
         {
           value: "None of the above",

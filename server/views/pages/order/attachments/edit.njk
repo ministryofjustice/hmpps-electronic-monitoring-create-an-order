@@ -8,41 +8,49 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
 {% block content %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/order/" + orderId + "/attachments"
+  }) }}
 
-{{ govukBackLink({
-  text: "Back",
-  href: "/order/" + orderId + "/attachments"
-}) }}
-
-<div class="homepage-content">
   {{ mojPageHeaderActions({
     heading: {
         text: "Additional documents"
     }
   }) }}
-</div>
- <form method="post" encType="multipart/form-data">
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-  {{ govukFileUpload({
-    id: "licence",
-    name: "file",
-    label: {
-      text: "Upload the "+fileType
-    },
-    hint: {
-      text: "Upload a copy of the "+ fileType
-    },
-    errorMessage:error
-  }) }}
 
-  <div class="govuk-button-group">
-    {{ govukButton({
-        text: "Save and continue",
-        type: 'submit',
-        value: "continue"
-    }) }}  
-    <a class="govuk-link" href="/order/{{ orderId }}/attachments">Return to attachment summary page</a>
-    
-  </div>
-</form>
+  <form method="post" encType="multipart/form-data">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {{ govukFileUpload({
+      id: "file-to-upload",
+      name: "file",
+      label: {
+        text: "Upload the " + fileType
+      },
+      hint: {
+        text: "Upload a copy of the " + fileType
+      },
+      errorMessage:error
+    }) }}
+
+    <div class="govuk-button-group">
+      {% if isOrderEditable %}
+        {{ govukButton({
+            text: "Save and continue",
+            name: "action",
+            value: "continue"
+        }) }}
+
+        {{ govukButton({
+            text: "Save and return back to form section menu",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "back"
+        }) }}
+      {% else %}
+        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
+      {% endif %}
+    </div>
+  </form>
 {% endblock %}

@@ -52,11 +52,11 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   }
 
   get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Start date of alcohol monitoring')
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'End date of alcohol monitoring')
+    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends')
   }
 
   get installLocationField(): FormRadiosComponent {

@@ -1,76 +1,70 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Monitoring conditions - Alcohol monitoring - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% block content %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Monitoring conditions"
-      }
-    }) }}
-  </div>
-
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "Monitoring conditions"
+    }
+  }) }}
   <h2 class="govuk-heading-l">Alcohol monitoring</h2>
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     {{ govukRadios({
-        name: "monitoringType",
-        fieldset: {
-            legend: {
-            text: "What type of alcohol monitoring is needed?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
-            }
+      name: "monitoringType",
+      fieldset: {
+          legend: {
+          text: "What type of alcohol monitoring is needed?",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+          }
+      },
+      hint: {
+          text: "Select one option"
+      },
+      items: [
+        {
+          value: "ALCOHOL_LEVEL",
+          text: "Alcohol level",
+          disabled: not isOrderEditable
         },
-        hint: {
-            text: "Select one option"
-        },
-        items: [
-            {
-            value: "ALCOHOL_LEVEL",
-            text: "Alcohol level",
-            disabled: not isOrderEditable
-            },
-            {
-            value: "ALCOHOL_ABSTINENCE",
-            text: "Alcohol abstinence",
-            disabled: not isOrderEditable
-            }
-        ],
-        value: monitoringType.value,
-        errorMessage: monitoringType.error
-        }) }}
+        {
+          value: "ALCOHOL_ABSTINENCE",
+          text: "Alcohol abstinence",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: monitoringType.value,
+      errorMessage: monitoringType.error
+    }) }}
 
     {% set disabled = {} if isOrderEditable else { disabled:true } %}
 
@@ -79,7 +73,7 @@
       namePrefix: "startDate",
       fieldset: {
         legend: {
-          text: "Start date of alcohol monitoring",
+          text: "Enter the date for when monitoring starts.",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -115,7 +109,7 @@
       namePrefix: "endDate",
       fieldset: {
         legend: {
-          text: "End date of alcohol monitoring",
+          text: "Enter the date for when monitoring ends.",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -177,76 +171,73 @@
     {% endset -%}
 
     {{ govukRadios({
-        name: "installationLocation",
-        fieldset: {
-            legend: {
-            text: "Where will alcohol monitoring equipment installation take place?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
-            }
+      name: "installationLocation",
+      fieldset: {
+        legend: {
+          text: "Where will alcohol monitoring equipment installation take place?",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "INSTALLATION",
+          text: "at Installation Address (not provided)" if not installationAddressView.value else "at Installation Address: "+installationAddressView.value,
+          disabled: not isOrderEditable or not installationAddressView.value
         },
-        hint: {
-            text: "Select one option"
+        {
+          value: "PRIMARY",
+          text: "at Primary Address (not provided)" if not primaryAddressView.value else "at Primary Address: "+primaryAddressView.value,
+          disabled: not isOrderEditable or not primaryAddressView.value
         },
-        items: [
-          {
-            value: "INSTALLATION",
-            text: "at Installation Address (not provided)" if not installationAddressView.value else "at Installation Address: "+installationAddressView.value,
-            disabled: not isOrderEditable or not installationAddressView.value
-          },
-          {
-            value: "PRIMARY",
-            text: "at Primary Address (not provided)" if not primaryAddressView.value else "at Primary Address: "+primaryAddressView.value,
-            disabled: not isOrderEditable or not primaryAddressView.value
-          },
-          {
-            value: "SECONDARY",
-            text: "at Secondary Address (not provided)" if not secondaryAddressView.value else "at Secondary Address: "+secondaryAddressView.value,
-            disabled: not isOrderEditable or not secondaryAddressView.value
-          },
-          {
-            value: "TERTIARY",
-            text: "at Tertiary Address (not provided)" if not tertiaryAddressView.value else "at Tertiary Address: "+tertiaryAddressView.value,
-            disabled: not isOrderEditable or not tertiaryAddressView.value
-          },
-          {
-            value: "PROBATION_OFFICE",
-            text: "at the probation office",
-            disabled: not isOrderEditable,
-            conditional: {
-              html: probationHtml
-            }
-          },
-          {
-            value: "PRISON",
-            text: "at prison",
-            disabled: not isOrderEditable,
-            conditional: {
-              html: prisonHtml
-            }
+        {
+          value: "SECONDARY",
+          text: "at Secondary Address (not provided)" if not secondaryAddressView.value else "at Secondary Address: "+secondaryAddressView.value,
+          disabled: not isOrderEditable or not secondaryAddressView.value
+        },
+        {
+          value: "TERTIARY",
+          text: "at Tertiary Address (not provided)" if not tertiaryAddressView.value else "at Tertiary Address: "+tertiaryAddressView.value,
+          disabled: not isOrderEditable or not tertiaryAddressView.value
+        },
+        {
+          value: "PROBATION_OFFICE",
+          text: "at the probation office",
+          disabled: not isOrderEditable,
+          conditional: {
+            html: probationHtml
           }
-        ],
-        value: installationLocation.value,
-        errorMessage: installationLocation.error
-        }) }}
+        },
+        {
+          value: "PRISON",
+          text: "at prison",
+          disabled: not isOrderEditable,
+          conditional: {
+            html: prisonHtml
+          }
+        }
+      ],
+      value: installationLocation.value,
+      errorMessage: installationLocation.error
+    }) }}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
         {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
+          text: "Save and continue",
+          name: "action",
+          value: "continue"
         }) }}
+
         {{ govukButton({
-            text: "Save and return back to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
+          text: "Save and return back to form section menu",
+          classes: "govuk-button--secondary",
+          name: "action",
+          value: "back"
         }) }}
       {% else %}
         <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
       {% endif %}
     </div>
   </form>
-
 {% endblock %}

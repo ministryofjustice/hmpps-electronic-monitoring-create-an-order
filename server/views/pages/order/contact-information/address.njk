@@ -1,6 +1,7 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set section = "Monitoring conditions" if (addressType | lower) == "installation" else "Contact information" %}
+{% set pageTitle = section + " - " + (addressType | capitalize) + " address - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
@@ -8,38 +9,32 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
-
-  {% set section = "Monitoring conditions" if addressType | lower == "installation" else "Contact information" %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: section
-      }
-    }) }}
-  </div>
-  <h2>{{ addressType | capitalize }} address</h2>
+  {{ mojPageHeaderActions({
+    heading: {
+      text: section
+    }
+  }) }}
+  <h2 class="govuk-heading-l">{{ addressType | capitalize }} address</h2>
 
   <form action="" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -51,7 +46,7 @@
         isPageHeading: false
       }
     }) %}
-      {% if lower == "primary" %}
+      {% if (addressType | lower) == "primary" %}
         <p class="govuk-body">
           If the device wearer has multiple addresses, enter the address where they spend
           most of their time or have registered as their home residence

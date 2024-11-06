@@ -1,6 +1,6 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Device wearer details - Check your answers - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
@@ -27,13 +27,11 @@
       }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "About the device wearer"
-      }
-    }) }}
-  </div>
+{{ mojPageHeaderActions({
+    heading: {
+        text: "About the device wearer"
+    }
+}) }}
 
   <h2 class="govuk-heading-l">Check your answers</h2>
 

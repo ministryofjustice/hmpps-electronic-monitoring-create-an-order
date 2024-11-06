@@ -1,6 +1,6 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Contact information - Notifying organisation - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
@@ -8,12 +8,10 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../../partials/addressInput.njk" import addressInput %}
 
 {% block content %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
@@ -31,13 +29,11 @@
     }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Contact information"
-      }
-    }) }}
-  </div>
+  {{ mojPageHeaderActions({
+    heading: {
+      text: "Contact information"
+    }
+  }) }}
 
   <form action="" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -51,7 +47,7 @@
     }) %}
       {{ govukInput({
         label: {
-          text: "Email address for the notifying organisation ",
+          text: "Email address for the notifying organisation",
           classes: "govuk-label--s"
         },
         hint: {
@@ -66,7 +62,6 @@
       }) }}
     {% endcall %}
 
-
     {% call govukFieldset({
       legend: {
         text: "Responsible Officer",
@@ -75,30 +70,32 @@
       }
     }) %}
       {{ govukInput({
-          label: {
-            text: "Full name of responsible officer",
-            classes: "govuk-label--s"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "responsibleOfficerName",
-          name: "responsibleOfficerName",
-          value: responsibleOfficerName,
-          errorMessage: errors.responsibleOfficerName,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Full name of responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "responsibleOfficerName",
+        name: "responsibleOfficerName",
+        value: responsibleOfficerName,
+        errorMessage: errors.responsibleOfficerName,
+        disabled: not isOrderEditable
+      }) }}
 
       {{ govukInput({
-          label: {
-            text: "Telephone number for responsible officer",
-            classes: "govuk-label--s"
-          },
-          classes: "govuk-!-width-one-half",
-          id: "responsibleOfficerPhoneNumber",
-          name: "responsibleOfficerPhoneNumber",
-          value: responsibleOfficerPhoneNumber,
-          errorMessage: errors.responsibleOfficerPhoneNumber,
-          disabled: not isOrderEditable
-        }) }}
+        label: {
+          text: "Telephone number for responsible officer",
+          classes: "govuk-label--s"
+        },
+        classes: "govuk-!-width-one-half",
+        id: "responsibleOfficerPhoneNumber",
+        name: "responsibleOfficerPhoneNumber",
+        type: "tel",
+        autocomplete: "tel tel-national",
+        value: responsibleOfficerPhoneNumber,
+        errorMessage: errors.responsibleOfficerPhoneNumber,
+        disabled: not isOrderEditable
+      }) }}
     {% endcall %}
 
     {% call govukFieldset({
@@ -112,13 +109,10 @@
         name: "responsibleOrganisation",
         fieldset: {
           legend: {
-            text: "What type of organisation is the responsible officer part of?",
+            text: "What organisation is the responsible officer part of?",
             isPageHeading: false,
             classes: "govuk-fieldset__legend--m"
           }
-        },
-        hint: {
-          text: "Select one option"
         },
         value: responsibleOrganisation,
         errorMessage: errors.responsibleOrganisation,
@@ -247,6 +241,8 @@
         classes: "govuk-!-width-one-half",
         id: "responsibleOrganisationPhoneNumber",
         name: "responsibleOrganisationPhoneNumber",
+        type: "tel",
+        autocomplete: "tel tel-national",
         value: responsibleOrganisationPhoneNumber,
         errorMessage: errors.responsibleOrganisationPhoneNumber,
         disabled: not isOrderEditable
@@ -269,16 +265,16 @@
     <div class="govuk-button-group">
       {% if isOrderEditable %}
         {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
+          text: "Save and continue",
+          name: "action",
+          value: "continue"
         }) }}
 
         {{ govukButton({
-            text: "Save and return back to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
+          text: "Save and return back to form section menu",
+          classes: "govuk-button--secondary",
+          name: "action",
+          value: "back"
         }) }}
       {% else %}
         <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>

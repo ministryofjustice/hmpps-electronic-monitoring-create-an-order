@@ -8,21 +8,17 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block content %}
-{{ govukBackLink({
-  text: "Back",
-  href: "/hdc"
-}) }}
-<div class="homepage-content">
+  {{ govukBackLink({
+    text: "Back",
+    href: "/hdc"
+  }) }}
+
   {{ mojPageHeaderActions({
-  heading: {
-    text: form.title
-  }
- 
-}) }}
-</div>
-
- <span class="govuk-caption-l">Application sections</span>
-
+    heading: {
+      text: form.title
+    }
+  }) }}
+  <h2 class="govuk-caption-l">Application sections</h2>
 
   <ul class="govuk-task-list">
     {% for section in form.sections %}
@@ -36,17 +32,17 @@
         <div class="govuk-task-list__status" >
           Completed
         </div>
-      {% else %}               
+      {% else %}
         <div class="govuk-task-list__status" >
            <strong class="govuk-tag govuk-tag--grey">
             Incomplete
           </strong>
         </div>
       {% endif %}
-      
+
     </li>
     {% endfor %}
   </ul>
-  
+
 
 {% endblock %}

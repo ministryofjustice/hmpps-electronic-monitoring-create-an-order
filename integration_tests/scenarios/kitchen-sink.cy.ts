@@ -22,6 +22,7 @@ import InstallationAndRiskPage from '../pages/order/installationAndRisk'
 import CurfewConditionsPage from '../pages/order/monitoring-conditions/curfew-conditions'
 import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcement-zone'
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
+import AttachmentPage from '../pages/order/attachment'
 
 context('The kitchen sink', () => {
   const takeScreenshots = true
@@ -158,7 +159,7 @@ context('The kitchen sink', () => {
 
       let indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('01. indexPage', { overwrite: true })
-      indexPage.newOrderFormButton().click()
+      indexPage.newOrderFormButton.click()
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
@@ -217,9 +218,9 @@ context('The kitchen sink', () => {
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      if (takeScreenshots) cy.screenshot('15. interestedPartiesPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('10. interestedPartiesPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
-      if (takeScreenshots) cy.screenshot('16. interestedPartiesPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('10. interestedPartiesPage', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
       // no validation
@@ -303,19 +304,20 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
 
+      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
+      attachmentPage.saveAndReturnButton.click()
+
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.submissionFormButton().click()
+      orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('21. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('22. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('22. indexPageAfterSubmission', { overwrite: true })
-      indexPage
-        .ordersList()
-        .contains(`${deviceWearerDetails.firstNames} ${deviceWearerDetails.lastName} Submitted`)
-        .should('exist')
+      if (takeScreenshots) cy.screenshot('23. indexPageAfterSubmission', { overwrite: true })
+      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

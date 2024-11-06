@@ -3,14 +3,14 @@ import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
 
-export type InteredPartiesFormData = {
+export type InterestedPartiesFormData = {
   notifyingOrganisationEmailAddress?: string
 
   responsibleOrganisationName?: string
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
   responsibleOrganisationRegion?: string
-  responsbibleOrganisationAddress?: FormAddressData
+  responsibleOrganisationAddress?: FormAddressData
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
@@ -35,7 +35,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   }
 
   get responsibleOrganisationNameField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What type of organisation is the responsible officer part of?', [
+    return new FormRadiosComponent(this.form, 'What organisation is the responsible officer part of?', [
       'Youth Justice Service (YJS)',
       'Youth Custody Service (YCS)',
       'Probation',
@@ -67,7 +67,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   // FORM HELPERS
 
-  fillInWith(profile: InteredPartiesFormData): void {
+  fillInWith(profile: InterestedPartiesFormData): void {
     if (profile.notifyingOrganisationEmailAddress) {
       this.notifyOrganisationEmailAddressField.set(profile.notifyingOrganisationEmailAddress)
     }
@@ -88,8 +88,8 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       this.responsibleOrganisationEmailAddressField.set(profile.responsibleOrganisationEmailAddress)
     }
 
-    if (profile.responsbibleOrganisationAddress) {
-      this.responsibleOrganisationAddressField.set(profile.responsbibleOrganisationAddress)
+    if (profile.responsibleOrganisationAddress) {
+      this.responsibleOrganisationAddressField.set(profile.responsibleOrganisationAddress)
     }
 
     if (profile.responsibleOfficerName) {

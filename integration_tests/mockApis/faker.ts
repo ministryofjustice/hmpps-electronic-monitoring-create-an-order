@@ -54,7 +54,7 @@ export type InterestedParties = {
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
   responsibleOrganisationRegion?: string
-  responsbibleOrganisationAddress?: Partial<Address>
+  responsibleOrganisationAddress?: Partial<Address>
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
@@ -106,7 +106,7 @@ export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
     firstName,
     firstNames: [firstName, middleName].join(' '),
     lastName,
-    fullName: [firstName, middleName, '', lastName].join(' '),
+    fullName: [firstName, middleName, lastName].join(' '),
     alias,
 
     dob,
@@ -144,7 +144,7 @@ export const createFakeInterestedParties = (): Partial<InterestedParties> => {
     responsibleOrganisationContactNumber: orgContactNumber,
     responsibleOrganisationEmailAddress: orgEmailAddress,
     responsibleOrganisationRegion: undefined,
-    responsbibleOrganisationAddress: address,
+    responsibleOrganisationAddress: address,
   }
 }
 

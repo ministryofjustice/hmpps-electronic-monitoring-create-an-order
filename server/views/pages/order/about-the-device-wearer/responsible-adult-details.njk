@@ -1,6 +1,6 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Device wearer details - Responsible adult - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
@@ -8,7 +8,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
@@ -19,24 +18,22 @@
   }) }}
 
   {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+        You are viewing a submitted order.
+      </p>
+    {% endset %}
 
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "About the device wearer"
-      }
-    }) }}
-  </div>
+  {{ mojPageHeaderActions({
+    heading: {
+      text: "About the device wearer"
+    }
+  }) }}
 
   <form action="{{ formActionUri }}" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -51,7 +48,8 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <p class="govuk-body">
-            A device wearer who is under 18 requires a responsible adult. This is someone who will attend installation.
+            A device wearer who is under 18 requires a responsible adult. This is
+            someone who will attend installation.
           </p>
           <p class="govuk-body">
             Provide details of the device wearer's responsible adult.
@@ -62,15 +60,15 @@
       {% set otherRelationshipDetailsHtml %}
         {{
           govukInput({
-          label: {
-            text: "Enter details of relationship to device wearer"
-          },
-          id: "relationship-detail",
-          name: "otherRelationshipDetails",
-          classes: "govuk-!-width-one-third",
-          errorMessage: otherRelationshipDetails.error,
-          disabled: not isOrderEditable,
-          value: otherRelationshipDetails.value
+            label: {
+              text: "Relationship to device wearer"
+            },
+            id: "relationship-detail",
+            name: "otherRelationshipDetails",
+            classes: "govuk-!-width-one-third",
+            errorMessage: otherRelationshipDetails.error,
+            disabled: not isOrderEditable,
+            value: otherRelationshipDetails.value
           })
         }}
       {% endset %}
@@ -113,7 +111,7 @@
           classes: "govuk-label--s"
         },
         hint: {
-          text: "Provide first names and last name"
+          text: "Provide first name and last name"
         },
         classes: "govuk-input--width-20",
         id: "full-name",
@@ -126,7 +124,7 @@
 
       {{ govukInput({
         label: {
-          text: "Parent / guardian contact number (optional)",
+          text: "Telephone number for responsible adult (optional)",
           classes: "govuk-label--s"
         },
         hint: {
@@ -135,12 +133,12 @@
         classes: "govuk-input--width-10",
         id: "contact-number",
         name: "contactNumber",
+        type: "tel",
         autocomplete: "tel tel-national",
         value: contactNumber.value,
         errorMessage: contactNumber.error,
         disabled: not isOrderEditable
       }) }}
-
     {% endcall %}
 
     <div class="govuk-button-group">
@@ -150,6 +148,7 @@
             name: "action",
             value: "continue"
         }) }}
+
         {{ govukButton({
             text: "Save and return back to form section menu",
             classes: "govuk-button--secondary",

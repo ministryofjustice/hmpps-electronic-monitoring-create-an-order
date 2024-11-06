@@ -5,7 +5,7 @@ import paths from '../../../server/constants/paths'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
-    super('Apply for electronic monitoring', paths.ORDER.SUMMARY)
+    super('Tag request form', paths.ORDER.SUMMARY, 'Form sections')
   }
 
   orderSections = (): PageElement => cy.get('.govuk-task-list')
@@ -22,9 +22,11 @@ export default class OrderTasksPage extends AppPage {
 
   AttachmentsSectionItem = (): PageElement => this.orderSections().contains('Attachments')
 
-  submissionForm = (): PageElement => cy.get('form[action*="submit"]')
+  get submitOrderButton(): PageElement {
+    return cy.contains('button', 'Submit order')
+  }
 
-  submissionFormButton = (): PageElement => cy.get('form[action*="submit"] button[type=submit]')
-
-  backToSearchButton = (): PageElement => cy.get('a#backToSearch[href="/"]')
+  get backToSearchButton(): PageElement {
+    return cy.contains('a', 'Back')
+  }
 }

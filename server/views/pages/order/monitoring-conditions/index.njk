@@ -1,9 +1,8 @@
 {% extends "../../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Monitoring conditions - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
@@ -14,7 +13,6 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block content %}
-
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
@@ -32,93 +30,98 @@
     }) }}
   {% endif %}
 
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Monitoring conditions"
-      }
-    }) }}
-  </div>
+  {{ mojPageHeaderActions({
+    heading: {
+        text: "Monitoring conditions"
+    }
+  }) }}
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    {{ govukDateInput({
-      id: "startDate",
+    {% call govukFieldset({
+      legend: {
+        text: "When should the monitoring take place",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukDateInput({
+        id: "startDate",
+        fieldset: {
+          legend: {
+            text: "Enter the date for when monitoring starts",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        hint: {
+          text: "For example, 21 05 2032"
+        },
+        items: [
+          {
+            name: "startDay",
+            classes: "govuk-input--width-2",
+            label: "Day",
+            value: startDate.value.day,
+            disabled: not isOrderEditable
+          },
+          {
+            name: "startMonth",
+            classes: "govuk-input--width-2",
+            label: "Month",
+            value: startDate.value.month,
+            disabled: not isOrderEditable
+          },
+          {
+            name: "startYear",
+            classes: "govuk-input--width-4",
+            label: "Year",
+            value: startDate.value.year,
+            disabled: not isOrderEditable
+          }
+        ],
+        errorMessage: startDate.error
+      }) }}
 
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring starts",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "startDay",
-          classes: "govuk-input--width-2",
-          label: "Day",
-          value: startDate.value.day,
-          disabled: not isOrderEditable
+      {{ govukDateInput({
+        id: "endDate",
+        fieldset: {
+          legend: {
+            text: "Enter the date for when monitoring ends (optional)",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
         },
-        {
-          name: "startMonth",
-          classes: "govuk-input--width-2",
-          label: "Month",
-          value: startDate.value.month,
-           disabled: not isOrderEditable
+        hint: {
+          text: "For example, 21 05 2032"
         },
-        {
-          name: "startYear",
-          classes: "govuk-input--width-4",
-          label: "Year",
-          value: startDate.value.year,
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: startDate.error
-    }) }}
-
-    {{ govukDateInput({
-      id: "endDate",
-      fieldset: {
-        legend: {
-          text: "End date of monitoring(optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "endDay",
-          label: "Day",
-          classes: "govuk-input--width-2",
-          value: endDate.value.day,
-           disabled: not isOrderEditable
-        },
-        {
-          name: "endMonth",
-          label: "Month",
-          classes: "govuk-input--width-2",
-          value: endDate.value.month,
-           disabled: not isOrderEditable
-        },
-        {
-          name: "endYear",
-          label: "Year",
-          classes: "govuk-input--width-4",
-          value:endDate.value.year,
-           disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: endDate.error
-    }) }}
+        items: [
+          {
+            name: "endDay",
+            label: "Day",
+            classes: "govuk-input--width-2",
+            value: endDate.value.day,
+            disabled: not isOrderEditable
+          },
+          {
+            name: "endMonth",
+            label: "Month",
+            classes: "govuk-input--width-2",
+            value: endDate.value.month,
+            disabled: not isOrderEditable
+          },
+          {
+            name: "endYear",
+            label: "Year",
+            classes: "govuk-input--width-4",
+            value:endDate.value.year,
+            disabled: not isOrderEditable
+          }
+        ],
+        errorMessage: endDate.error
+      }) }}
+    {% endcall %}
 
     {% call govukFieldset({
       legend: {
@@ -138,7 +141,7 @@
           }
         },
         hint: {
-          text: "Not available to device wearers under 18. If selected the device wearer must be trail monitored as part of the project requirements."
+          text: "Not available to device wearers under 18. If selected the device wearer must be trail monitored as part of the project requirements."
         },
         items: [
           {
@@ -215,7 +218,7 @@
         disabled: not isOrderEditable
       }) }}
 
-       {{ govukSelect({
+      {{ govukSelect({
         id: "orderTypeDescription",
         name: "orderTypeDescription",
         label: {
@@ -233,7 +236,7 @@
         disabled: not isOrderEditable
       }) }}
 
-       {{ govukSelect({
+      {{ govukSelect({
         id: "conditionType",
         name: "conditionType",
         label: {
@@ -252,115 +255,127 @@
       }) }}
     {% endcall %}
 
-    {{ govukCheckboxes({
-      name: "monitoringRequired",
-      fieldset: {
-        legend: {
-          text: "Monitoring required",
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
-        }
-      },
-      hint: {
-        text: "What monitoring does the device wearer need? Select all that apply."
-      },
-      items: [
-        {
-          value: "curfew",
-          text: "Curfew with electronic monitoring",
-          hint: {
-            text: "The device wearer must stay inside an address at specific times during the day and night."
-          },
-          checked: monitoringRequired.values | select("equalto", "curfew") | length,
-          disabled: not isOrderEditable
+    {% call govukFieldset({
+      legend: {
+        text: "Monitoring required",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukCheckboxes({
+        name: "monitoringRequired",
+        fieldset: {
+          legend: {
+            text: "What monitoring does the device wearer need?"
+          }
         },
-        {
-          value: "exclusionZone",
-          text: "Exclusion and inclusion zone monitoring",
-          hint: {
-            text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
-          },
-          checked: monitoringRequired.values | select("equalto", "exclusionZone") | length,
-          disabled: not isOrderEditable
+        hint: {
+          text: "Select all that apply."
         },
-        {
-          value: "trail",
-          text: "Trail monitoring",
-          hint: {
-            text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
+        items: [
+          {
+            value: "curfew",
+            text: "Curfew with electronic monitoring",
+            hint: {
+              text: "The device wearer must stay inside an address at specific times during the day and night."
+            },
+            checked: monitoringRequired.values | select("equalto", "curfew") | length,
+            disabled: not isOrderEditable
           },
-          checked: monitoringRequired.values | select("equalto", "trail") | length,
-          disabled: not isOrderEditable
-        },
-        {
-          value: "mandatoryAttendance",
-          text: "Mandatory attendance monitoring",
-          hint: {
-            text: "Attendance of the device wearer at appointments is monitored."
+          {
+            value: "exclusionZone",
+            text: "Exclusion and inclusion zone monitoring",
+            hint: {
+              text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
+            },
+            checked: monitoringRequired.values | select("equalto", "exclusionZone") | length,
+            disabled: not isOrderEditable
           },
-          checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length,
-          disabled: not isOrderEditable
-        },
-        {
-          value: "alcohol",
-          text: "Alcohol monitoring",
-          hint: {
-            text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
+          {
+            value: "trail",
+            text: "Trail monitoring",
+            hint: {
+              text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
+            },
+            checked: monitoringRequired.values | select("equalto", "trail") | length,
+            disabled: not isOrderEditable
           },
-          checked: monitoringRequired.values | select("equalto", "alcohol") | length,
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: monitoringRequired.error,
-      disabled: not isOrderEditable
-    }) }}
+          {
+            value: "mandatoryAttendance",
+            text: "Mandatory attendance monitoring",
+            hint: {
+              text: "Attendance of the device wearer at appointments is monitored."
+            },
+            checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length,
+            disabled: not isOrderEditable
+          },
+          {
+            value: "alcohol",
+            text: "Alcohol monitoring",
+            hint: {
+              text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
+            },
+            checked: monitoringRequired.values | select("equalto", "alcohol") | length,
+            disabled: not isOrderEditable
+          }
+        ],
+        errorMessage: monitoringRequired.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
 
-    {{ govukCheckboxes({
-      name: "devicesRequired",
-      fieldset: {
-        legend: {
-          text: "Devices required (optional)",
-          isPageHeading: true,
-          classes: "govuk-fieldset__legend--l"
-        }
-      },
-      hint: {
-        text: "Select the device to be installed. Select all that apply."
-      },
-      items: [
-        {
-          text: 'Location, fitted',
-          value: 'Location - fitted',
-          checked: devicesRequired.values | select("equalto", "Location - fitted") | length,
-          disabled: not isOrderEditable
+    {% call govukFieldset({
+      legend: {
+        text: "Devices required (optional)",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: false
+      }
+    }) %}
+      {{ govukCheckboxes({
+        name: "devicesRequired",
+        fieldset: {
+          legend: {
+            text: "Select the device to be installed."
+          }
         },
-        {
-          text: 'Location, not fitted',
-          value: 'Location - non-fitted',
-          checked: devicesRequired.values | select("equalto", "Location - non-fitted") | length,
-          disabled: not isOrderEditable
+        hint: {
+          text: "Select all that apply."
         },
-        {
-          text: 'Radio frequency',
-          value: 'RF',
-          checked: devicesRequired.values | select("equalto", "RF") | length,
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Alcohol, transdermal',
-          value: 'Alcohol (Transdermal)',
-          checked: devicesRequired.values | select("equalto", "Alcohol (Transdermal)") | length,
-          disabled: not isOrderEditable
-        },
-        {
-          text: 'Alcohol, remote breath',
-          value: 'Alcohol (Remote Breath)',
-          checked: devicesRequired.values | select("equalto", "Alcohol (Remote Breath)") | length,
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: devicesRequired.error
-    }) }}
+        items: [
+          {
+            text: 'Location, fitted',
+            value: 'Location - fitted',
+            checked: devicesRequired.values | select("equalto", "Location - fitted") | length,
+            disabled: not isOrderEditable
+          },
+          {
+            text: 'Location, not fitted',
+            value: 'Location - non-fitted',
+            checked: devicesRequired.values | select("equalto", "Location - non-fitted") | length,
+            disabled: not isOrderEditable
+          },
+          {
+            text: 'Radio frequency',
+            value: 'RF',
+            checked: devicesRequired.values | select("equalto", "RF") | length,
+            disabled: not isOrderEditable
+          },
+          {
+            text: 'Alcohol, transdermal',
+            value: 'Alcohol (Transdermal)',
+            checked: devicesRequired.values | select("equalto", "Alcohol (Transdermal)") | length,
+            disabled: not isOrderEditable
+          },
+          {
+            text: 'Alcohol, remote breath',
+            value: 'Alcohol (Remote Breath)',
+            checked: devicesRequired.values | select("equalto", "Alcohol (Remote Breath)") | length,
+            disabled: not isOrderEditable
+          }
+        ],
+        errorMessage: devicesRequired.error
+      }) }}
+    {% endcall %}
 
     <div class="govuk-button-group">
       {% if isOrderEditable %}
@@ -369,6 +384,7 @@
             name: "action",
             value: "continue"
         }) }}
+
         {{ govukButton({
             text: "Save and return back to form section menu",
             classes: "govuk-button--secondary",
