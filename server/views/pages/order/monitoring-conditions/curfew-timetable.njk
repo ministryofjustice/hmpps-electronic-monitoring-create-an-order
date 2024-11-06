@@ -32,7 +32,7 @@
       text: "Monitoring conditions"
     }
   }) }}
-  <h2 class="govuk-heading-l">Timetable for curfew with electronic monitoring</h2>
+  <h2 class="govuk-heading-m">Timetable for curfew with electronic monitoring</h2>
 
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -40,7 +40,7 @@
     {% call govukFieldset({
       legend: {
         text: 'Enter curfew hours and address for each day.',
-        classes: "govuk-fieldset__legend--m",
+        classes: "govuk-fieldset__legend--xs",
         isPageHeading: false
       }
     }) %}
