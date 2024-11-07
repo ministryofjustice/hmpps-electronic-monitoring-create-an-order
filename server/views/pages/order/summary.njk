@@ -25,21 +25,21 @@
 
   <h2 class="govuk-heading-l">Form sections</h2>
 
-    {% if error %}
-  {{ govukErrorSummary({
-    titleText: "There is a problem",
-    errorList: [
-      {
-        text: error,
-        href: "#"
-      }
-    ]
-  }) }}
-  {% endif %}
-
-<p class="govuk-body-l">
+  <p class="govuk-body-l">
     Complete all sections before submitting the form.
   </p>
+
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "The form could not be submitted",
+      errorList: [
+        {
+          text: error,
+          href: "#"
+        }
+      ]
+    }) }}
+  {% endif %}
 
 {% set taskListItems = [] %}
 {% for section, tasks in sections %}
