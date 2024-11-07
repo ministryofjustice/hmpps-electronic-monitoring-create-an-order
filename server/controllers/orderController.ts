@@ -83,6 +83,7 @@ export default class OrderController {
     } else if (result.type === 'errorStatus') {
       res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
     } else {
+      req.flash('submissionError', 'Something unexpected happened. Please try again in a few minutes.')
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }
   }
