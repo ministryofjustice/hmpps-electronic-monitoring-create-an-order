@@ -1,20 +1,39 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import AppPage from './appPage'
+
 import { PageElement } from './page'
 
 export default class IndexPage extends AppPage {
+  protected elementCacheId: string = uuidv4()
+
   constructor() {
-    super('Electronic Monitoring Application Forms', '/')
+    super('Electronic Monitoring Application forms', '/', 'Existing application forms')
+
+    cy.get('#ordersList', { log: false }).as(`${this.elementCacheId}-orders`)
   }
 
-  newOrderForm = (): PageElement => cy.get('form[action="/order/create"]')
+  get newOrderFormButton(): PageElement {
+    return cy.contains('Start new form')
+  }
 
-  newOrderFormButton = (): PageElement => this.newOrderForm().get('button[type=submit]')
+  get ordersList(): PageElement {
+    return cy.get(`@${this.elementCacheId}-orders`)
+  }
 
-  searchInput = (): PageElement => cy.get('#keyword')
+  get orders(): PageElement {
+    return this.ordersList.get('.govuk-task-list__item')
+  }
 
-  searchButton = (): PageElement => cy.get('button:contains("Search")')
+  SubmittedOrderFor(name: string): PageElement {
+    return this.ordersList.contains('li', name).contains('Submitted')
+  }
 
-  ordersList = (): PageElement => cy.get('#ordersList')
+  IncompleteOrderFor(name: string): PageElement {
+    return this.ordersList.contains('li', name).contains('Incomplete')
+  }
 
-  ordersListItems = (): PageElement => cy.get('#ordersList ul li')
+  DraftOrderFor(name: string): PageElement {
+    return this.ordersList.contains('li', name).contains('Draft')
+  }
 }

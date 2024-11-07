@@ -6,6 +6,7 @@ import RestClient from '../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import { AddressTypeEnum } from '../../models/Address'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -41,6 +42,7 @@ describe('AlcoholMonitoringController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockAlcoholMonitoringService: jest.Mocked<AlcoholMonitoringService>
   let alcoholMonitoringController: AlcoholMonitoringController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -56,7 +58,11 @@ describe('AlcoholMonitoringController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAlcoholMonitoringService = new AlcoholMonitoringService(mockRestClient) as jest.Mocked<AlcoholMonitoringService>
-    alcoholMonitoringController = new AlcoholMonitoringController(mockAuditService, mockAlcoholMonitoringService)
+    alcoholMonitoringController = new AlcoholMonitoringController(
+      mockAuditService,
+      mockAlcoholMonitoringService,
+      taskListService,
+    )
   })
 
   describe('view', () => {
@@ -224,7 +230,7 @@ describe('AlcoholMonitoringController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/order/123456789/summary')
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
     })
   })
 

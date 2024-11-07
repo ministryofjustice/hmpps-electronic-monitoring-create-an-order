@@ -7,6 +7,7 @@ import AuditService from '../../services/auditService'
 import CurfewTimetableService from '../../services/curfewTimetableService'
 import CurfewTimetableController from './curfewTimetableController'
 import paths from '../../constants/paths'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -17,9 +18,9 @@ const mockId = uuidv4()
 describe('CurfewTimetableController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-
-  let mockCurfewTimetablService: jest.Mocked<CurfewTimetableService>
+  let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
+  const taskListService = new TaskListService()
   let req: Request
   let res: Response
   let next: NextFunction
@@ -38,8 +39,8 @@ describe('CurfewTimetableController', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockCurfewTimetablService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
-    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetablService)
+    mockCurfewTimetableService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
+    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetableService, taskListService)
 
     req = {
       // @ts-expect-error stubbing session
@@ -80,8 +81,8 @@ describe('CurfewTimetableController', () => {
     next = jest.fn()
   })
 
-  describe('View curefew timetable', () => {
-    it('Shoud render with validationErrors, if flash exist', async () => {
+  describe('View curfew timetable', () => {
+    it('Should render with validationErrors, if flash exist', async () => {
       const validationErrors = days.map(day => {
         return {
           dayOfWeek: day.toUpperCase(),
@@ -227,7 +228,7 @@ describe('CurfewTimetableController', () => {
       })
     })
 
-    it('Shoud render with formData, if flash exist', async () => {
+    it('Should render with formData, if flash exist', async () => {
       const formData: { curfewTimetable: { [k: string]: [object] } } = { curfewTimetable: {} }
       days.forEach(day => {
         formData.curfewTimetable[day] = [
@@ -705,7 +706,7 @@ describe('CurfewTimetableController', () => {
       })
       req.body = formData
 
-      mockCurfewTimetablService.update = jest.fn().mockReturnValueOnce([
+      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([
         { index: 0, errors: [{ field: 'startTime', error: 'Mock Start Time Error' }] },
         { index: 3, errors: [{ field: 'curfewAddress', error: 'Mock Address Error' }] },
       ])
@@ -784,7 +785,7 @@ describe('CurfewTimetableController', () => {
       )
     })
 
-    it('Shoud redirect to next page', async () => {
+    it('Should redirect to next page', async () => {
       const formData: { curfewTimetable: { [k: string]: [object] }; action: string } = {
         action: '',
         curfewTimetable: {},
@@ -802,11 +803,11 @@ describe('CurfewTimetableController', () => {
       })
       req.body = formData
 
-      mockCurfewTimetablService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
+      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', mockId))
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/attachments`)
     })
   })
 })

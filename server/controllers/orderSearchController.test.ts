@@ -21,6 +21,7 @@ const mockSubmittedOrder = getMockOrder({
     pncId: null,
     deliusId: null,
     prisonNumber: null,
+    homeOfficeReferenceNumber: null,
     firstName: 'first',
     lastName: 'last',
     alias: null,

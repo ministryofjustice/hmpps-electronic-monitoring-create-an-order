@@ -3,7 +3,6 @@ import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
-import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -109,8 +108,7 @@ context('Attendance monitoring', () => {
 
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
-      const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.subHeader().should('contain.text', 'Attendance monitoring')
+      const page = Page.verifyOnPage(AttendanceMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -128,7 +126,7 @@ context('Attendance monitoring', () => {
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="text"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })

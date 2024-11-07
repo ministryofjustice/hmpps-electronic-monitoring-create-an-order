@@ -1,5 +1,9 @@
+import { v4 as uuidv4 } from 'uuid'
 import IndexPage from '../pages/index'
+import OrderTasksPage from '../pages/order/summary'
 import Page from '../pages/page'
+
+const mockOrderId = uuidv4()
 
 context('Index', () => {
   context('Health backend', () => {
@@ -7,6 +11,8 @@ context('Index', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.task('stubCemoListOrders')
+      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
     })
 
     it('User name visible in header', () => {
@@ -21,43 +27,27 @@ context('Index', () => {
       indexPage.header.phaseBanner().should('contain.text', 'dev')
     })
 
-    it('Create new form should exist', () => {
+    it('Create new form button should exist', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.newOrderForm().should('exist')
+      indexPage.newOrderFormButton.should('exist')
     })
 
     it('Create new form button redirects user to new form page', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.newOrderFormButton().click()
-      cy.url().should('to.match', /order\/create$/)
+      indexPage.newOrderFormButton.click()
+      Page.verifyOnPage(OrderTasksPage)
     })
 
     it('Should display search results to the user', () => {
       cy.signIn()
 
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.ordersList().should('exist')
-      indexPage.ordersListItems().should('exist').should('have.length', 2)
+      indexPage.orders.should('exist').should('have.length', 2)
 
-      indexPage.ordersListItems().eq(0).find('.govuk-link').should('contain', 'New form')
-
-      indexPage
-        .ordersListItems()
-        .eq(0)
-        .find('.govuk-tag')
-        .should('have.class', 'govuk-tag--green')
-        .should('contain', 'Submitted')
-
-      indexPage.ordersListItems().eq(1).find('.govuk-link').should('contain', 'test tester')
-
-      indexPage
-        .ordersListItems()
-        .eq(1)
-        .find('.govuk-tag')
-        .should('have.class', 'govuk-tag--grey')
-        .should('contain', 'Draft')
+      indexPage.SubmittedOrderFor('New form').should('exist')
+      indexPage.DraftOrderFor('test tester').should('exist')
     })
 
     it('Should be accessible', () => {
@@ -78,9 +68,8 @@ context('Index', () => {
       cy.signIn()
 
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.ordersList().should('exist')
-      indexPage.ordersListItems().should('exist').should('have.length', 1)
-      indexPage.ordersListItems().eq(0).should('contain', 'No existing forms found.')
+      indexPage.orders.should('exist').and('have.length', 1)
+      cy.contains('No existing forms found.').should('exist')
     })
   })
 })

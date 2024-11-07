@@ -1,11 +1,13 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
+import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 
 export default class OrderController {
   constructor(
     private readonly auditService: AuditService,
     private readonly orderService: OrderService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -15,9 +17,11 @@ export default class OrderController {
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
+    const sections = this.taskListService.getTasksBySection(req.order!)
     const error = req.flash('submissionError')
     res.render('pages/order/summary', {
       order: req.order,
+      sections,
       error: error && error.length > 0 ? error[0] : undefined,
     })
   }
@@ -26,7 +30,7 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect('/order/delete/failed')
+      res.redirect(paths.ORDER.DELETE_FAILED)
     } else {
       res.render('pages/order/delete-confirm', {
         order,
@@ -38,15 +42,25 @@ export default class OrderController {
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
-      res.redirect('/order/delete/failed')
+      res.redirect(paths.ORDER.DELETE_FAILED)
     } else {
-      await this.orderService.deleteOrder(order.id)
-      res.redirect('/order/delete/success')
+      try {
+        const { token } = res.locals.user
+        await this.orderService.deleteOrder({ accessToken: token, orderId: order.id })
+
+        res.redirect(paths.ORDER.DELETE_SUCCESS)
+      } catch (error) {
+        req.flash('validationErrors', error)
+
+        res.redirect(paths.ORDER.DELETE_FAILED)
+      }
     }
   }
 
   deleteFailed: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/delete-failed')
+    const errors = req.flash('validationErrors')
+
+    res.render('pages/order/delete-failed', { errors })
   }
 
   deleteSuccess: RequestHandler = async (req: Request, res: Response) => {
@@ -72,10 +86,22 @@ export default class OrderController {
   }
 
   submitFailed: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/submit-failed')
+    const errors = req.flash('validationErrors')
+
+    res.render('pages/order/submit-failed', { errors })
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/submit-success')
+    const { orderId } = req.params
+
+    res.render('pages/order/submit-success', {
+      orderId,
+    })
+  }
+
+  getReceipt: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+
+    res.render(`pages/order/receipt`, { order })
   }
 }

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
-import TrailMonitoringPage from '../../../pages/order/trailMonitoring'
+import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -13,6 +13,8 @@ const mockEmptyTrailMonitoring = {
   },
   monitoringConditions: {
     orderType: 'immigration',
+    orderTypeDescription: null,
+    conditionType: null,
     acquisitiveCrime: true,
     dapol: true,
     curfew: false,
@@ -27,6 +29,8 @@ const mockEmptyTrailMonitoring = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: null,
+    endDate: null,
   },
 }
 
@@ -37,6 +41,8 @@ const mockSubmittedTrailMonitoring = {
   },
   monitoringConditions: {
     orderType: 'immigration',
+    orderTypeDescription: null,
+    conditionType: null,
     acquisitiveCrime: true,
     dapol: true,
     curfew: true,
@@ -51,6 +57,8 @@ const mockSubmittedTrailMonitoring = {
       'Alcohol (Transdermal)',
       'Alcohol (Remote Breath)',
     ],
+    startDate: null,
+    endDate: null,
   },
 }
 
@@ -73,7 +81,6 @@ context('Trail monitoring', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.subHeader().should('contain.text', 'Trail monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -91,7 +98,7 @@ context('Trail monitoring', () => {
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="text"]').should('be.disabled')
       cy.get('input[type="text"]').should('be.disabled')
       cy.get('#startDate-day').invoke('val').should('equal', '27')
@@ -100,8 +107,8 @@ context('Trail monitoring', () => {
       cy.get('#endDate-day').invoke('val').should('equal', '28')
       cy.get('#endDate-month').invoke('val').should('equal', '4')
       cy.get('#endDate-year').invoke('val').should('equal', '2025')
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
@@ -116,21 +123,45 @@ context('Trail monitoring', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-trail',
-        response: [
-          { field: 'startDate', error: 'You must enter a valid date' },
-          { field: 'endDate', error: 'You must enter a valid date' },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with an empty form submission', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-trail',
+          response: [
+            { field: 'startDate', error: 'You must enter a valid date' },
+            { field: 'endDate', error: 'You must enter a valid date' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
+        const page = Page.verifyOnPage(TrailMonitoringPage)
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#endDate-error').should('contain', 'You must enter a valid date')
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
-      const page = Page.verifyOnPage(TrailMonitoringPage)
-      page.saveAndContinueButton().click()
-      cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+
+      it('should show an error when startDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
+        const page = Page.verifyOnPage(TrailMonitoringPage)
+        cy.get('#startDate-day').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
+
+      it('should show an error when endDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
+        const page = Page.verifyOnPage(TrailMonitoringPage)
+        cy.get('#endDate-month').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#endDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
@@ -148,7 +179,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-day').type('28')
       cy.get('#endDate-month').type('4')
       cy.get('#endDate-year').type('2025')
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-trail`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({

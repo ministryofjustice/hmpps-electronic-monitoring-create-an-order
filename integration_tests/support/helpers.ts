@@ -15,7 +15,6 @@ Cypress.Commands.add(
       .contains('label', label, { log })
       .invoke({ log }, 'attr', 'for')
       .then(id => cy.get(`#${id}`, { log, ...options }))
-      .first({ log })
   },
 )
 
@@ -34,6 +33,6 @@ Cypress.Commands.add(
     return cy
       .wrap(subject, { log })
       .contains('legend', legend, { log })
-      .parent('fieldset', { log, ...options })
+      .then($legend => cy.wrap($legend, { log }).parent('fieldset', { log, ...options }))
   },
 )

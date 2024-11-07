@@ -10,6 +10,7 @@ import DeviceWearerService from '../services/deviceWearerService'
 import OrderSearchService from '../services/orderSearchService'
 import OrderService from '../services/orderService'
 import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
+import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -33,7 +34,7 @@ const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditServ
 const orderSearchService = new OrderSearchService(restClient) as jest.Mocked<OrderSearchService>
 const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService(restClient) as jest.Mocked<DeviceWearerService>
-
+const taskListService = new TaskListService()
 const mockSubmittedOrder = getMockSubmittedOrder()
 const mockDraftOrder = getMockOrder()
 
@@ -61,6 +62,7 @@ describe('authorised user', () => {
         orderService,
         deviceWearerService,
         orderSearchService,
+        taskListService,
       },
       userSupplier: () => user,
     })
@@ -79,7 +81,7 @@ describe('authorised user', () => {
         .get('/')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Electronic Monitoring Application Forms')
+          expect(res.text).toContain('Electronic Monitoring Application forms')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
             correlationId: expect.any(String),
@@ -95,7 +97,7 @@ describe('authorised user', () => {
         .get('/')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Electronic Monitoring Application Forms')
+          expect(res.text).toContain('Electronic Monitoring Application forms')
           expect(res.text).toContain('No existing forms found.')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
@@ -114,7 +116,7 @@ describe('authorised user', () => {
         .get(`/order/${mockSubmittedOrder.id}/summary`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Apply for electronic monitoring')
+          expect(res.text).toContain('Tag request form')
         })
     })
   })
@@ -136,7 +138,7 @@ describe('authorised user', () => {
         .get('/order/delete/success')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('The application form has been deleted successfully')
+          expect(res.text).toContain('The application form has been successfully deleted')
         })
     })
   })
@@ -149,7 +151,7 @@ describe('authorised user', () => {
         .get(`/order/${mockDraftOrder.id}/delete`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Are you sure you want to delete this order?')
+          expect(res.text).toContain('Are you sure you want to delete this form?')
         })
     })
 
@@ -221,6 +223,7 @@ describe('authorised user', () => {
       return request(app)
         .post(`/order/${mockDraftOrder.id}/submit`)
         .expect(302)
+        .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
         .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
     })
 

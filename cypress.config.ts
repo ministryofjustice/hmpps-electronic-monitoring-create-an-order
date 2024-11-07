@@ -1,8 +1,11 @@
 import { defineConfig } from 'cypress'
+import { fakerEN_GB as faker } from '@faker-js/faker'
+
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import cemo from './integration_tests/mockApis/cemo'
+import fms from './integration_tests/mockApis/fms'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -16,11 +19,17 @@ export default defineConfig({
   taskTimeout: 60000,
   e2e: {
     setupNodeEvents(on) {
+      const seed = faker.seed(Math.random() * Number.MAX_SAFE_INTEGER)
+
+      // eslint-disable-next-line no-console
+      console.log(`Random seed: ${seed}`)
+
       on('task', {
         reset: resetStubs,
         ...auth,
         ...tokenVerification,
         ...cemo,
+        ...fms,
         /*
          * used to output summary accessibility testing issues found to console during integration testing
          */

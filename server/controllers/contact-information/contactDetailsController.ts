@@ -4,11 +4,13 @@ import { AuditService, ContactDetailsService } from '../../services'
 import { isValidationResult } from '../../models/Validation'
 import contactDetailsViewModel from '../../models/view-models/contactDetails'
 import ContactDetailsFormDataModel from '../../models/form-data/contactDetails'
+import TaskListService from '../../services/taskListService'
 
 export default class ContactDetailsController {
   constructor(
     private readonly auditService: AuditService,
     private readonly contactDetailsService: ContactDetailsService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -40,7 +42,7 @@ export default class ContactDetailsController {
 
       res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      res.redirect(paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', orderId))
+      res.redirect(this.taskListService.getNextPage('CONTACT_DETAILS', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

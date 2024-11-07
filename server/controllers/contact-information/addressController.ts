@@ -6,8 +6,7 @@ import AddressService from '../../services/addressService'
 import { AddressType, AddressTypeEnum } from '../../models/Address'
 import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
-import { Order } from '../../models/Order'
-import nextPage, { getSelectedMonitoringTypes } from '../monitoringConditions/nextPage'
+import TaskListService, { Page } from '../../services/taskListService'
 
 const FormDataModel = z.object({
   action: z.string().default('continue'),
@@ -35,32 +34,31 @@ export default class AddressController {
   constructor(
     private readonly auditService: AuditService,
     private readonly addressService: AddressService,
+    private readonly taskListService: TaskListService,
   ) {}
 
-  getCurrentPage(addressType: string) {
+  getCurrentPage(addressType: string): Page {
+    if (addressType.toUpperCase() === 'INSTALLATION') {
+      return 'INSTALLATION_ADDRESS'
+    }
+
+    if (addressType.toUpperCase() === 'SECONDARY') {
+      return 'SECONDARY_ADDRESS'
+    }
+
+    if (addressType.toUpperCase() === 'TERTIARY') {
+      return 'TERTIARY_ADDRESS'
+    }
+
+    return 'PRIMARY_ADDRESS'
+  }
+
+  getCurrentPageUrl(addressType: string) {
     if (addressType.toUpperCase() === 'INSTALLATION') {
       return paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', addressType)
     }
 
     return paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', addressType)
-  }
-
-  getNextPage(addressType: string, order: Order, hasAnotherAddress: string) {
-    if (addressType.toUpperCase() === 'INSTALLATION') {
-      return nextPage(getSelectedMonitoringTypes(order.monitoringConditions))
-    }
-
-    if (hasAnotherAddress === 'true') {
-      if (addressType.toUpperCase() === 'PRIMARY') {
-        return paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary')
-      }
-
-      if (addressType.toUpperCase() === 'SECONDARY') {
-        return paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
-      }
-    }
-
-    return paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -82,7 +80,6 @@ export default class AddressController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
     const { orderId, addressType } = req.params
     const { action, hasAnotherAddress, ...formData } = FormDataModel.parse(req.body)
 
@@ -99,11 +96,16 @@ export default class AddressController {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
 
-      res.redirect(this.getCurrentPage(addressType).replace(':orderId', orderId))
-    } else if (action === 'back') {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      res.redirect(this.getCurrentPageUrl(addressType).replace(':orderId', orderId))
+    } else if (action === 'continue') {
+      res.redirect(
+        this.taskListService.getNextPage(this.getCurrentPage(addressType), req.order!, {
+          hasAnotherAddress: hasAnotherAddress === 'true',
+          addressType,
+        }),
+      )
     } else {
-      res.redirect(this.getNextPage(addressType, order, hasAnotherAddress).replace(':orderId', orderId))
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }
 }

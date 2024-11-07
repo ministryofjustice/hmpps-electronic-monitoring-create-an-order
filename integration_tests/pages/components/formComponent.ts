@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { PageElement } from '../page'
 
 export default abstract class FormComponent {
-  private elementCacheId: string = uuidv4()
+  protected elementCacheId: string = uuidv4()
 
   constructor() {
-    cy.get('form').as(this.elementCacheId)
+    cy.get('form', { log: false }).as(this.elementCacheId)
   }
 
   protected get form(): PageElement {
@@ -24,10 +24,10 @@ export default abstract class FormComponent {
   // ACTIONS
 
   get saveAndContinueButton(): PageElement {
-    return this.form.get('button[type=submit][value="continue"]')
+    return this.form.contains('Save and continue')
   }
 
   get saveAndReturnButton(): PageElement {
-    return this.form.get('button[type=submit][value="back"]')
+    return this.form.contains('Save and return back to form section menu')
   }
 }

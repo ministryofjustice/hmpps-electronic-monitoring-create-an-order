@@ -1,133 +1,106 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Monitoring conditions - Curfew conditions - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% set section = "Monitoring conditions" %}
+{% set subsection = "Curfew with electronic monitoring" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% block content %}
+{% block formInputs %}
 
-  {{ govukBackLink({
-    text: "Back",
-    href: orderSummaryUri
+  {% set disabled = {} if isOrderEditable else { disabled:true } %}
+
+  {{ govukDateInput({
+    id: "startDate",
+    namePrefix: "startDate",
+    fieldset: {
+      legend: {
+        text: "Enter the date for when monitoring starts",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: "For example, 21 05 2011"
+    },
+    items: [
+      {
+        name: "day",
+        classes: "govuk-input--width-2",
+        value: startDate.value.day,
+        attributes: disabled
+      },
+      {
+        name: "month",
+        classes: "govuk-input--width-2",
+        value: startDate.value.month,
+        attributes: disabled
+      },
+      {
+        name: "year",
+        classes: "govuk-input--width-4",
+        value: startDate.value.year,
+        attributes: disabled
+      }
+    ],
+    errorMessage: startDate.error
   }) }}
 
-  {% if not isOrderEditable %}
-      {% set html %}
-        <p class="govuk-notification-banner__heading">
-          You are viewing a submitted order.
-        </p>
-      {% endset %}
-
-      {{ govukNotificationBanner({
-        html: html
-      }) }}
-  {% endif %}
-
-  <div class="homepage-content">
-    {{ mojPageHeaderActions({
-      heading: {
-          text: "Monitoring conditions"
+  {{ govukDateInput({
+    id: "endDate",
+    namePrefix: "endDate",
+    fieldset: {
+      legend: {
+        text: "Enter the date for when monitoring ends. (optional)",
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
       }
-    }) }}
-  </div>
-
-  <h2 class="govuk-heading-m">Curfew with electronic monitoring</h2>
-
-  <form method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-    {% set disabled = {} if isOrderEditable else { disabled:true } %}
-
-    {{ govukDateInput({
-      id: "startDate",
-      namePrefix: "startDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring starts",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
+    },
+    hint: {
+      text: "For example, 21 05 2011"
+    },
+    items: [
+      {
+        name: "day",
+        classes: "govuk-input--width-2",
+        value: endDate.value.day,
+        attributes: disabled
       },
-      hint: {
-        text: "For example, 21 05 2011"
+      {
+        name: "month",
+        classes: "govuk-input--width-2",
+        value: endDate.value.month,
+        attributes: disabled
       },
-      items: [
-        {
-          name: "day",
-          classes: "govuk-input--width-2",
-          value: startDate.value.day,
-          attributes: disabled
-        },
-        {
-          name: "month",
-          classes: "govuk-input--width-2",
-          value: startDate.value.month,
-          attributes: disabled
-        },
-        {
-          name: "year",
-          classes: "govuk-input--width-4",
-          value: startDate.value.year,
-          attributes: disabled
-        }
-      ],
-      errorMessage: startDate.error
-    }) }}
+      {
+        name: "year",
+        classes: "govuk-input--width-4",
+        value: endDate.value.year,
+        attributes: disabled
+      }
+    ],
+    errorMessage: endDate.error
+  }) }}
 
-    {{ govukDateInput({
-      id: "endDate",
-      namePrefix: "endDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring ends. (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2011"
-      },
-      items: [
-        {
-          name: "day",
-          classes: "govuk-input--width-2",
-          value: endDate.value.day,
-          attributes: disabled
-        },
-        {
-          name: "month",
-          classes: "govuk-input--width-2",
-          value: endDate.value.month,
-          attributes: disabled
-        },
-        {
-          name: "year",
-          classes: "govuk-input--width-4",
-          value: endDate.value.year,
-          attributes: disabled
-        }
-      ],
-      errorMessage: endDate.error
-    }) }}
-
+  {% call govukFieldset({
+    legend: {
+      text: "Curfew addresses",
+      classes: "govuk-fieldset__legend--m",
+      isPageHeading: false
+    }
+  }) %}
     {{ govukCheckboxes({
-      name: "addresses[]",
+      name: "addresses",
       fieldset: {
         legend: {
-          text: "Curfew addresses ",
+          text: "What address or addresses will the device wearer use during curfew hours?",
           classes: "govuk-fieldset__legend--s"
         }
       },
       hint: {
-        text: "What address or addresses will the device wearer use during curfew hours? Select all that apply."
+        text: "Select all that apply."
       },
       items: [
         {
@@ -141,7 +114,7 @@
           disabled: not isOrderEditable
         },
         {
-          text: 'Third address',
+          text: 'Tertiary address',
           value: 'TERTIARY',
           disabled: not isOrderEditable
         }
@@ -149,24 +122,6 @@
       errorMessage: addresses.error,
       values: addresses.values
     }) }}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
-        }) }}
-        {{ govukButton({
-            text: "Save and return back to to form section menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
+  {% endcall %}
 
 {% endblock %}

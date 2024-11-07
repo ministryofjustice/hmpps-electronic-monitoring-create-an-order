@@ -6,7 +6,7 @@ import { isValidationListResult, ValidationErrorModel } from '../../models/Valid
 import { MultipleChoiceField, TimeSpanField } from '../../models/view-models/utils'
 import { AuditService, CurfewTimetableService } from '../../services'
 import { deserialiseTime, getError, getErrors, serialiseTime } from '../../utils/utils'
-import nextPage, { getSelectedMonitoringTypes } from './nextPage'
+import TaskListService from '../../services/taskListService'
 
 const timetableForm = z.object({
   timeStartHours: z.string(),
@@ -61,18 +61,19 @@ export default class CurfewTimetableController {
   constructor(
     private readonly auditService: AuditService,
     private readonly curfewTimetableService: CurfewTimetableService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private constructViewModel(
     curfewTimetable: CurfewTimetable | undefined,
-    curefewTimetableApiDto: CurfewTimetableApiDto[],
+    apiDto: CurfewTimetableApiDto[],
     formData: [CurfewTimetableFormData],
   ): CurfewTimetableViewModel {
     if (formData?.length > 0) {
       return this.createViewModelFromFormData(formData[0])
     }
 
-    if (!curefewTimetableApiDto || curefewTimetableApiDto.length === 0) {
+    if (!apiDto || apiDto.length === 0) {
       const curfewTimetableAsApiDto =
         curfewTimetable?.map(item => {
           return {
@@ -82,7 +83,7 @@ export default class CurfewTimetableController {
         }) ?? []
       return this.createViewModelFromApiDto(curfewTimetableAsApiDto)
     }
-    return this.createViewModelFromApiDto(curefewTimetableApiDto)
+    return this.createViewModelFromApiDto(apiDto)
   }
 
   private createViewModelFromApiDto(validationErrors: CurfewTimetableApiDto[]): CurfewTimetableViewModel {
@@ -202,7 +203,7 @@ export default class CurfewTimetableController {
       const updateResult = await this.curfewTimetableService.update({
         accessToken: res.locals.user.token,
         orderId,
-        data: apiModel,
+        data: apiModel.filter(t => t.curfewAddress + t.startTime + t.endTime !== ''),
       })
 
       if (isValidationListResult(updateResult)) {
@@ -216,8 +217,7 @@ export default class CurfewTimetableController {
 
         res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
       } else {
-        const { monitoringConditions } = req.order!
-        res.redirect(nextPage(getSelectedMonitoringTypes(monitoringConditions), 'curfew').replace(':orderId', orderId))
+        res.redirect(this.taskListService.getNextPage('CURFEW_TIMETABLE', req.order!))
       }
     }
   }

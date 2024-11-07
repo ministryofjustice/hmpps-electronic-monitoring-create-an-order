@@ -6,6 +6,7 @@ import { OrderStatusEnum } from '../models/Order'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
+import TaskListService from '../services/taskListService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -18,6 +19,7 @@ describe('OrderController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
+  const taskListService = new TaskListService()
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -33,7 +35,7 @@ describe('OrderController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
-    orderController = new OrderController(mockAuditService, mockOrderService)
+    orderController = new OrderController(mockAuditService, mockOrderService, taskListService)
   })
 
   describe('summary', () => {
@@ -43,6 +45,7 @@ describe('OrderController', () => {
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.summary(req, res, next)
@@ -82,6 +85,7 @@ describe('OrderController', () => {
       const req = createMockRequest({ order: mockOrder })
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.confirmDelete(req, res, next)
@@ -119,7 +123,10 @@ describe('OrderController', () => {
       await orderController.delete(req, res, next)
 
       // Then
-      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith(mockOrder.id)
+      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/success')
     })
 
@@ -145,12 +152,13 @@ describe('OrderController', () => {
       const req = createMockRequest()
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.deleteFailed(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/delete-failed')
+      expect(res.render).toHaveBeenCalledWith('pages/order/delete-failed', { errors: [] })
     })
   })
 
@@ -173,7 +181,12 @@ describe('OrderController', () => {
     it('should submit the order and redirect to a success page for a draft order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({
+        order: mockOrder,
+        params: {
+          orderId: mockOrder.id,
+        },
+      })
       const res = createMockResponse()
       const next = jest.fn()
       mockOrderService.submitOrder.mockResolvedValue({
@@ -217,12 +230,13 @@ describe('OrderController', () => {
       const req = createMockRequest()
       const res = createMockResponse()
       const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.submitFailed(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/submit-failed')
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-failed', { errors: [] })
     })
   })
 
@@ -237,7 +251,7 @@ describe('OrderController', () => {
       await orderController.submitSuccess(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success')
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', { orderId: '123456789' })
     })
   })
 })

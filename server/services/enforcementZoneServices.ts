@@ -4,6 +4,7 @@ import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import { serialiseDate } from '../utils/utils'
+import DateValidator from '../utils/validators/dateValidator'
 
 type UpdateZoneRequestInpput = AuthenticatedRequestInput & {
   orderId: string
@@ -29,6 +30,26 @@ export default class EnforcementZoneService {
   constructor(private readonly apiClient: RestClient) {}
 
   async updateZone(input: UpdateZoneRequestInpput): Promise<ValidationResult | null> {
+    const dateValidationErrors: ValidationResult = []
+
+    const isStartDateValid = DateValidator.isValidDateFormat(
+      input.startDay,
+      input.startMonth,
+      input.startYear,
+      'startDate',
+    )
+    const isEndDateValid = DateValidator.isValidDateFormat(input.endDay, input.endMonth, input.endYear, 'endDate')
+    if (isStartDateValid.result === false) {
+      dateValidationErrors.push(isStartDateValid.error!)
+    }
+    if (isEndDateValid.result === false) {
+      dateValidationErrors.push(isEndDateValid.error!)
+    }
+
+    if (dateValidationErrors.length > 0) {
+      return ValidationResultModel.parse(dateValidationErrors)
+    }
+
     try {
       await this.apiClient.put({
         path: `/api/orders/${input.orderId}/enforcementZone`,

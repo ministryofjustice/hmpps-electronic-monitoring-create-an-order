@@ -6,7 +6,7 @@ export const AddressTypeEnum = z.enum([
   'TERTIARY',
   'RESPONSIBLE_ADULT',
   'INSTALLATION',
-  'NOTIFYING_ORGANISATION',
+  'RESPONSIBLE_ORGANISATION',
 ])
 
 const AddressModel = z.object({

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import NotifyingOrganisationPage from '../../../pages/order/contact-information/notifyingOrganisation'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import OrderSummaryPage from '../../../pages/order/summary'
 import SecondaryAddressPage from '../../../pages/order/contact-information/secondary-address'
 
@@ -103,7 +103,7 @@ context('Contact information', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(NotifyingOrganisationPage)
+        Page.verifyOnPage(InterestedPartiesPage)
       })
 
       it('should return to the summary page', () => {

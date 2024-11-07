@@ -7,6 +7,7 @@ import paths from '../constants/paths'
 import { isValidationResult, ValidationResult } from '../models/Validation'
 import { getError } from '../utils/utils'
 import DeviceWearerResponsibleAdultService from '../services/deviceWearerResponsibleAdultService'
+import TaskListService from '../services/taskListService'
 
 const DeviceWearerResponsibleAdultFormDataModel = z.object({
   action: z.string(),
@@ -31,6 +32,7 @@ export default class DeviceWearerResponsibleAdultController {
   constructor(
     private readonly auditService: AuditService,
     private readonly deviceWearerResponsibleAdultService: DeviceWearerResponsibleAdultService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private createViewModelFromFormData(
@@ -116,7 +118,7 @@ export default class DeviceWearerResponsibleAdultController {
 
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
+      res.redirect(this.taskListService.getNextPage('RESPONSIBLE_ADULT', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

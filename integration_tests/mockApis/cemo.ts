@@ -30,6 +30,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     pncId: null,
     deliusId: null,
     prisonNumber: null,
+    homeOfficeReferenceNumber: null,
     firstName: null,
     lastName: null,
     alias: null,
@@ -47,6 +48,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     contactNumber: null,
   },
   installationAndRisk: null,
+  interestedParties: null,
   additionalDocuments: [],
   monitoringConditions: {
     orderType: null,
@@ -58,6 +60,10 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     mandatoryAttendance: null,
     alcohol: null,
     devicesRequired: null,
+    orderTypeDescription: null,
+    conditionType: null,
+    startDate: null,
+    endDate: null,
   },
   monitoringConditionsTrail: null,
   monitoringConditionsAlcohol: null,
@@ -80,6 +86,7 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
         pncId: null,
         deliusId: null,
         prisonNumber: null,
+        homeOfficeReferenceNumber: null,
         firstName: 'test',
         lastName: 'tester',
         alias: null,
@@ -303,6 +310,7 @@ const defaultPutDeviceWearerOptions = {
     pncId: null,
     deliusId: null,
     prisonNumber: null,
+    homeOfficeReferenceNumber: null,
     firstName: null,
     lastName: null,
     alias: null,
@@ -450,17 +458,22 @@ const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
       throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
     }
 
-    if (options.body) {
-      assert.deepEqual(requests[0], options.body, jsonDiff.diffString(options.body, requests[0], { color: false }))
-    }
+    const expected = options.body || options.fileContents
+    const diffResult = jsonDiff.diff(expected, requests[0], { sort: true })
 
-    if (options.fileContents) {
-      assert.deepEqual(
-        requests[0],
-        options.fileContents,
-        jsonDiff.diffString(options.fileContents, requests[0], { color: false }),
-      )
-    }
+    const message = `
+Expected:
+${JSON.stringify(expected, null, 2)}
+
+But received:
+${JSON.stringify(requests[0], null, 2)}
+
+Difference:
+${jsonDiff.diffString(expected, requests[0], { color: false })}
+
+`
+
+    assert.strictEqual(undefined, diffResult, message)
 
     return true
   })
@@ -489,15 +502,15 @@ const tables = [
   'orders',
 ]
 
-const emptyNextTable = async (client: PostgresqlClient) => {
+const emptyNextTable = async (client: PostgresqlClient): Promise<boolean> => {
   const table = tables.shift()
+  if (table) {
+    await client.query(`DELETE FROM ${table}`)
 
-  if (!table) {
-    return
+    await emptyNextTable(client)
   }
 
-  await client.query(`DELETE FROM ${table}`)
-  await emptyNextTable(client)
+  return true
 }
 
 const resetDB = async () => {
@@ -515,8 +528,11 @@ const resetDB = async () => {
   // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
   // console.log(rows)
 
-  await emptyNextTable(client)
-
+  try {
+    await emptyNextTable(client)
+  } catch (error) {
+    // quite fail
+  }
   await client.end()
 
   return true

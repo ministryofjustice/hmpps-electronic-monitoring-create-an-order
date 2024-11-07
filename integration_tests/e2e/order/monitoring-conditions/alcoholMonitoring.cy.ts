@@ -3,7 +3,7 @@ import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import Page from '../../../pages/page'
-import OrderTasksPage from '../../../pages/order/summary'
+import AttachmentPage from '../../../pages/order/attachment'
 
 const mockOrderId = uuidv4()
 
@@ -77,7 +77,7 @@ context('Alcohol monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -106,7 +106,7 @@ context('Alcohol monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -183,61 +183,85 @@ context('Alcohol monitoring', () => {
       })
     })
 
-    it('should show errors with probation office selected', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-alcohol',
-        response: [
-          { field: 'monitoringType', error: 'Monitoring type is required' },
-          { field: 'startDate', error: 'Start date is required' },
-          { field: 'endDate', error: 'End date is required' },
-          { field: 'installationLocation', error: 'Installation location is required' },
-          {
-            field: 'probationOfficeName',
-            error: 'You must enter a probation office name if the installation location is a probation office',
-          },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with probation office selected', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-alcohol',
+          response: [
+            { field: 'monitoringType', error: 'Monitoring type is required' },
+            { field: 'startDate', error: 'Start date is required' },
+            { field: 'endDate', error: 'End date is required' },
+            { field: 'installationLocation', error: 'Installation location is required' },
+            {
+              field: 'probationOfficeName',
+              error: 'You must enter a probation office name if the installation location is a probation office',
+            },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
+        const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        cy.get('input[type="radio"][value="PROBATION_OFFICE"]').check()
+        page.form.saveAndContinueButton.click()
+        cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
+        cy.get('#startDate-error').should('contain', 'Start date is required')
+        cy.get('#endDate-error').should('contain', 'End date is required')
+        cy.get('#installationLocation-error').should('contain', 'Installation location is required')
+        cy.get('#probationOfficeName-error').should(
+          'contain',
+          'You must enter a probation office name if the installation location is a probation office',
+        )
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
-      const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      cy.get('input[type="radio"][value="PROBATION_OFFICE"]').check()
-      page.form.saveAndContinueButton.click()
-      cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
-      cy.get('#startDate-error').should('contain', 'Start date is required')
-      cy.get('#endDate-error').should('contain', 'End date is required')
-      cy.get('#installationLocation-error').should('contain', 'Installation location is required')
-      cy.get('#probationOfficeName-error').should(
-        'contain',
-        'You must enter a probation office name if the installation location is a probation office',
-      )
-    })
 
-    it('should show errors with prison selected', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-alcohol',
-        response: [
-          { field: 'monitoringType', error: 'Monitoring type is required' },
-          { field: 'startDate', error: 'Start date is required' },
-          { field: 'endDate', error: 'End date is required' },
-          { field: 'installationLocation', error: 'Installation location is required' },
-          { field: 'prisonName', error: 'You must enter a prison name if the installation location is a prison' },
-        ],
+      it('should show errors with prison selected', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-alcohol',
+          response: [
+            { field: 'monitoringType', error: 'Monitoring type is required' },
+            { field: 'startDate', error: 'Start date is required' },
+            { field: 'endDate', error: 'End date is required' },
+            { field: 'installationLocation', error: 'Installation location is required' },
+            { field: 'prisonName', error: 'You must enter a prison name if the installation location is a prison' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
+        const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        cy.get('input[type="radio"][value="PRISON"]').check()
+        page.form.saveAndContinueButton.click()
+        cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
+        cy.get('#startDate-error').should('contain', 'Start date is required')
+        cy.get('#endDate-error').should('contain', 'End date is required')
+        cy.get('#installationLocation-error').should('contain', 'Installation location is required')
+        cy.get('#prisonName-error').should(
+          'contain',
+          'You must enter a prison name if the installation location is a prison',
+        )
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
-      const page = Page.verifyOnPage(AlcoholMonitoringPage)
-      cy.get('input[type="radio"][value="PRISON"]').check()
-      page.form.saveAndContinueButton.click()
-      cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
-      cy.get('#startDate-error').should('contain', 'Start date is required')
-      cy.get('#endDate-error').should('contain', 'End date is required')
-      cy.get('#installationLocation-error').should('contain', 'Installation location is required')
-      cy.get('#prisonName-error').should(
-        'contain',
-        'You must enter a prison name if the installation location is a prison',
-      )
+
+      it('should show an error when startDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
+        const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        cy.get('#startDate-day').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
+
+      it('should show an error when endDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
+        const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        cy.get('#endDate-year').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#endDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     const baseExpectedApiRequest = {
@@ -268,7 +292,7 @@ context('Alcohol monitoring', () => {
           probationOfficeName: 'Probation Office',
         })
       })
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(AttachmentPage)
     })
 
     it('should correctly submit the data to the CEMO API and move to the next page (prison)', () => {
@@ -290,7 +314,7 @@ context('Alcohol monitoring', () => {
           prisonName: 'Prison Name',
         })
       })
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(AttachmentPage)
     })
   })
 

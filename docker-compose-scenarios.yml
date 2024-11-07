@@ -29,12 +29,14 @@ services:
 
       - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/docs
 
-      - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth
+      - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth/oauth/token
       - SERCO_CLIENT_ID=clientid
       - SERCO_CLIENT_SECRET=clientsecret
       - SERCO_USERNAME=serco
       - SERCO_PASSWORD=serco
-      - SERCO_URL=http://cemo-wiremock:8080/serco
+      - SERCO_URL=http://cemo-wiremock:8080/fms
+
+      - CP_INTEGRATION_ENABLED=false
 
   cemo-db:
     container_name: cemo-db

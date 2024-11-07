@@ -8,7 +8,7 @@ export default class SubmitSuccessPage extends AppPage {
     super('Application successfully submitted', paths.ORDER.SUBMIT_SUCCESS)
   }
 
-  get backToYourApplications(): PageElement {
-    return cy.contains('Back to your applications')
-  }
+  receiptButton = (): PageElement => cy.get('#receipt-button')
+
+  backToYourApplications = (): PageElement => cy.get('#back-to-applications-button')
 }

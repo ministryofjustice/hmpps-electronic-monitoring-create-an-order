@@ -1,11 +1,10 @@
 import { type RequestHandler, Router } from 'express'
 
-import paths from '../constants/paths'
 import AttachmentsController from '../controllers/attachmentController'
 import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
-import NotifyingOrganisationController from '../controllers/contact-information/notifyingOrganisationController'
+import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
@@ -23,6 +22,7 @@ import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
+import paths from '../constants/paths'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -39,9 +39,10 @@ export default function routes({
   deviceWearerService,
   installationAndRiskService,
   monitoringConditionsService,
-  notifyingOrganisationService,
+  interestedPartiesService,
   orderService,
   orderSearchService,
+  taskListService,
   trailMonitoringService,
   zoneService,
 }: Services): Router {
@@ -49,28 +50,57 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  const addressController = new AddressController(auditService, addressService)
-  const alcoholMonitoringController = new AlcoholMonitoringController(auditService, alcoholMonitoringService)
-  const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
-  const attendanceMonitoringController = new AttendanceMonitoringController(auditService, attendanceMonitoringService)
-  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService)
-  const curfewReleaseDateController = new CurfewReleaseDateController(auditService, curfewReleaseDateService)
-  const curfewTimetableController = new CurfewTimetableController(auditService, curfewTimetableService)
-  const curfewConditionsController = new CurfewConditionsController(auditService, curfewConditionsService)
-  const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService)
-  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
-  const installationAndRiskController = new InstallationAndRiskController(auditService, installationAndRiskService)
-  const monitoringConditionsController = new MonitoringConditionsController(auditService, monitoringConditionsService)
-  const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService)
-  const notifyingOrganisationController = new NotifyingOrganisationController(
+  const addressController = new AddressController(auditService, addressService, taskListService)
+  const alcoholMonitoringController = new AlcoholMonitoringController(
     auditService,
-    notifyingOrganisationService,
+    alcoholMonitoringService,
+    taskListService,
+  )
+  const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
+  const attendanceMonitoringController = new AttendanceMonitoringController(
+    auditService,
+    attendanceMonitoringService,
+    taskListService,
+  )
+  const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService, taskListService)
+  const curfewReleaseDateController = new CurfewReleaseDateController(
+    auditService,
+    curfewReleaseDateService,
+    taskListService,
+  )
+  const curfewTimetableController = new CurfewTimetableController(auditService, curfewTimetableService, taskListService)
+  const curfewConditionsController = new CurfewConditionsController(
+    auditService,
+    curfewConditionsService,
+    taskListService,
+  )
+  const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, taskListService)
+  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
+  const installationAndRiskController = new InstallationAndRiskController(
+    auditService,
+    installationAndRiskService,
+    taskListService,
+  )
+  const monitoringConditionsController = new MonitoringConditionsController(
+    auditService,
+    monitoringConditionsService,
+    taskListService,
+  )
+  const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
+  const notifyingOrganisationController = new InterestedPartiesController(
+    auditService,
+    interestedPartiesService,
+    taskListService,
   )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  const orderController = new OrderController(auditService, orderService)
-  const responsibleAdultController = new ResponsibleAdultController(auditService, deviceWearerResponsibleAdultService)
-  const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService)
-  const zoneController = new EnforcementZoneController(auditService, zoneService)
+  const orderController = new OrderController(auditService, orderService, taskListService)
+  const responsibleAdultController = new ResponsibleAdultController(
+    auditService,
+    deviceWearerResponsibleAdultService,
+    taskListService,
+  )
+  const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
+  const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -86,6 +116,7 @@ export default function routes({
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
+  get(paths.ORDER.RECEIPT, orderController.getReceipt)
 
   /**
    * ABOUT THE DEVICE WEARER
@@ -119,8 +150,8 @@ export default function routes({
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
   // Device wearer addresses
-  get(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.view)
-  post(paths.CONTACT_INFORMATION.NOTIFYING_ORGANISATION, notifyingOrganisationController.update)
+  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
+  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
 
   /**
    * INSTALLATION AND RISK

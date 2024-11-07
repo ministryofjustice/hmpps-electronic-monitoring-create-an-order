@@ -58,6 +58,7 @@ const createMockOrder = (status: OrderStatus): Order => {
       pncId: null,
       deliusId: null,
       prisonNumber: null,
+      homeOfficeReferenceNumber: null,
       firstName: 'tester',
       lastName: 'testington',
       alias: 'test',

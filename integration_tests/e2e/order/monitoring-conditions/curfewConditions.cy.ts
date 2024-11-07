@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
-import CurfewConditionsPage from '../../../pages/order/curfewConditions'
-import CurfewTimetablePage from '../../../pages/order/curfewTimetable'
+import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
+import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -59,7 +59,6 @@ context('Curfew conditions', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
-      page.subHeader().should('contain.text', 'Curfew with electronic monitoring')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -74,7 +73,7 @@ context('Curfew conditions', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="checkbox"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -82,8 +81,8 @@ context('Curfew conditions', () => {
         cy.wrap($el).should('be.disabled')
       })
       checkFormFields()
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
     })
   })
 
@@ -108,8 +107,8 @@ context('Curfew conditions', () => {
         cy.wrap($el).should('not.be.disabled')
       })
       checkFormFields()
-      page.saveAndContinueButton().should('exist')
-      page.saveAndReturnButton().should('exist')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndReturnButton.should('exist')
     })
   })
 
@@ -123,23 +122,47 @@ context('Curfew conditions', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-curfew-conditions',
-        response: [
-          { field: 'startDate', error: 'You must enter a valid date' },
-          { field: 'endDate', error: 'You must enter a valid date' },
-          { field: 'curfewAddress', error: 'You must select a valid address' },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with an empty form submission', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-curfew-conditions',
+          response: [
+            { field: 'startDate', error: 'You must enter a valid date' },
+            { field: 'endDate', error: 'You must enter a valid date' },
+            { field: 'curfewAddress', error: 'You must select a valid address' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+        const page = Page.verifyOnPage(CurfewConditionsPage)
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#addresses-error').should('contain', 'You must select a valid address')
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
-      const page = Page.verifyOnPage(CurfewConditionsPage)
-      page.saveAndContinueButton().click()
-      cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#endDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#addresses-error').should('contain', 'You must select a valid address')
+
+      it('should show an error when startDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+        const page = Page.verifyOnPage(CurfewConditionsPage)
+        cy.get('#startDate-day').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#startDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
+
+      it('should show an error when endDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+        const page = Page.verifyOnPage(CurfewConditionsPage)
+        cy.get('#endDate-year').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#endDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
@@ -152,7 +175,7 @@ context('Curfew conditions', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
       page.fillInForm()
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
@@ -162,8 +185,7 @@ context('Curfew conditions', () => {
           endDate: '2026-04-28T00:00:00.000Z',
         })
       })
-      const nextPage = Page.verifyOnPage(CurfewTimetablePage)
-      nextPage.subHeader().should('contain.text', 'Timetable for curfew with electronic monitoring')
+      Page.verifyOnPage(CurfewTimetablePage)
     })
   })
 

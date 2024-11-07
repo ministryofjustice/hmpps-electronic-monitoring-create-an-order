@@ -1,32 +1,40 @@
 {% extends "../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Application successfully submitted - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block content %}
 
-{{ govukBackLink({
+  {{ govukBackLink({
   text: "Back",
   href: "/"
 }) }}
 
-{{ govukPanel({
+  {{ govukPanel({
   titleText: "Application successfully submitted",
-  html: "Your reference number<br><strong>EXAMPLE</strong>",
+  html: "Your reference number is <br><strong>EXAMPLE</strong>",
   attributes: {
     "data-qa": "confirmation-panel"
   }
 }) }}
 
+  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
 
-<div class="govuk-button-group">
-      {{ govukButton({
-          text: "Back to your applications",
-          href: "/"
+  {{ govukButton({
+          text: "Get tag request form summary for download",
+          href: "/order/" + orderId + "/receipt",
+          classes: "govuk-button--secondary",
+          id: "receipt-button"
       }) }}
-  </div>
+  <br><br>
 
+  {{ govukButton({
+          text: "Back to your applications",
+          href: "/",
+          id: "back-to-applications-button"
+      }) }}
 {% endblock %}

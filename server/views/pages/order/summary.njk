@@ -1,31 +1,31 @@
 {% extends "../../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Form Details" %}
+{% set pageTitle = "Application summary - " + applicationName %}
 {% set error = error %}
 {% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{%- from "moj/components/search/macro.njk" import mojSearch -%}
-{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 
 {% block content %}
 
-{{ govukBackLink({
-  text: "Back",
-  href: "/"
-}) }}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
 
-<div class="homepage-content">
   {{ mojPageHeaderActions({
-  heading: {
-    text: "Apply for electronic monitoring"
-  }
-}) }}
-</div>
+    heading: {
+      text: "Tag request form"
+    }
+  }) }}
 
-  {% if error %}
+  <h2 class="govuk-heading-l">Form sections</h2>
+
+    {% if error %}
   {{ govukErrorSummary({
     titleText: "There is a problem",
     errorList: [
@@ -37,36 +37,61 @@
   }) }}
   {% endif %}
 
-  <p class="govuk-body-l">
+<p class="govuk-body-l">
+>>>>>>> main
     Complete all sections before submitting the form.
   </p>
 
-{% macro _lineItem(name, order, url, complete, describedBy) %}
-  <li class="govuk-task-list__item govuk-task-list__item--with-link">
-    <div class="govuk-task-list__name-and-hint">
-      <a class="govuk-link govuk-task-list__link" href="/order/{{ order.id }}{{ url }}" aria-describedby="{{ describedBy }}">
-          {{ name }}
-      </a>
-    </div>
-    {% if complete === true %}
-      <div class="govuk-task-list__status" >
-        <strong class="govuk-tag govuk-tag--green">Complete</strong>
-      </div>
-    {% else %}               
-      <div class="govuk-task-list__status" >
-        <strong class="govuk-tag govuk-tag--grey">Incomplete</strong>
-      </div>
-    {% endif %}
-  </li>
-{% endmacro %}
+{% set taskListItems = [] %}
+{% for section, tasks in sections %}
+  {% set task = tasks[0] %}
+  {% set name = section | replace("_", " ") | capitalize %}
+  {% set href = task.path %}
+  {% set complete = task.status != 'INCOMPLETE' %}
 
-  <ul class="govuk-task-list">
-    {{ _lineItem("About the device wearer", order, "/about-the-device-wearer", order.deviceWearer.isComplete, "order-section-device-wearer") }}
-    {{ _lineItem("Contact information", order, "/contact-information/contact-details", order.contactDetails.isComplete, "order-section-contact-details") }}
-    {{ _lineItem("Installation and risk", order, "/installation-and-risk", order.installationAndRisk.isComplete, "order-section-installation-and-risk") }}
-    {{ _lineItem("Monitoring conditions", order, "/monitoring-conditions", order.monitoringConditions.isComplete, "order-section-monitoring-conditions") }}
-    {{ _lineItem("Attachments", order, "/attachments", order.attachments.isComplete, "order-section-attachments") }}
-  </ul>
+  {% if task.required %}
+    {% set taskListItems = (taskListItems.push({
+        idPrefix: "order-section",
+        title: { text: name },
+        href: href,
+        status: {
+          tag: {
+            text: "Completed" if complete === true else "Incomplete",
+            classes: "govuk-tag--green" if complete === true else "govuk-tag--grey"
+          }
+        }
+      }), taskListItems) %}
+  {% endif %}
+{% endfor %}
+{{ govukTaskList({ idPrefix: "sections", items: taskListItems }) }}
+
+{#
+  {% for section, tasks in sections %}
+    <h3 class="govuk-heading-m">{{ section | replace("_", " ") | capitalize }}</h3>
+
+    {% set taskListItems = [] %}
+    {% for task in tasks %}
+      {% set name = task.name | replace("_", " ") | capitalize %}
+      {% set href = task.path %}
+      {% set complete = task.status != 'INCOMPLETE' %}
+
+      {% if task.required %}
+        {% set taskListItems = (taskListItems.push({
+          idPrefix: "order-section",
+          title: { text: name },
+          href: href,
+          status: {
+            tag: {
+              text: "Completed" if complete === true else "Incomplete",
+              classes: "govuk-tag--green" if complete === true else "govuk-tag--grey"
+            }
+          }
+        }), taskListItems) %}
+      {% endif %}
+    {% endfor %}
+    {{ govukTaskList({ idPrefix: "sections", items: taskListItems }) }}
+  {% endfor %}
+#}
 
   {% if order.status == "IN_PROGRESS" %}
     <form action="/order/{{ order.id }}/submit" method="post">
@@ -76,11 +101,18 @@
             text: "Submit order",
             disabled: not order.isValid
         }) }}
-      </div>
-    </form>
-  {% else %}
-    <div class="govuk-button-group">
-      <a id="backToSearch" class="govuk-link" href="/">Return to order search view</a>
     </div>
-  {% endif %}
+  </form>
+{% else %}
+  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+  {{ govukButton({
+          text: "Get tag request form summary for download",
+          href: "/order/" + orderId + "/receipt",
+          classes: "govuk-button--secondary"
+      }) }}
+
+  <div class="govuk-button-group">
+    <a id="backToSearch" class="govuk-link" href="/">Return to order search view</a>
+  </div>
+{% endif %}
 {% endblock %}

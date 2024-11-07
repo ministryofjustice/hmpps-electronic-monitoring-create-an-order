@@ -142,7 +142,7 @@ context('About the device wearer - Responsible Adult', () => {
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
 
-        page.form.setRelationship('Guardian')
+        page.form.relationshipField.set('Guardian')
         page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
@@ -174,7 +174,7 @@ context('About the device wearer - Responsible Adult', () => {
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
 
-        page.form.setFullName('Martha Steward')
+        page.form.fullNameField.set('Martha Steward')
         page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
@@ -206,7 +206,7 @@ context('About the device wearer - Responsible Adult', () => {
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
 
-        page.form.setContactNumber('999999')
+        page.form.contactNumberField.set('999999')
         page.form.saveAndContinueButton.click()
 
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {

@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import { NotFoundErrorPage } from '../../../pages/error'
-import CurfewConditionsPage from '../../../pages/order/curfewConditions'
-import CurfewReleaseDatePage from '../../../pages/order/curfewReleaseDate'
+import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
+import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -26,6 +26,21 @@ const mockInProgressCurfewReleaseDate = {
 
 const mockEmptyCurfewReleaseDate = {
   ...mockApiOrder('SUBMITTED'),
+  monitoringConditions: {
+    orderType: null,
+    acquisitiveCrime: null,
+    dapol: null,
+    curfew: true,
+    exclusionZone: null,
+    trail: null,
+    mandatoryAttendance: null,
+    alcohol: null,
+    devicesRequired: null,
+    orderTypeDescription: null,
+    conditionType: null,
+    startDate: null,
+    endDate: null,
+  },
   curfewReleaseDateConditions: {
     curfewAddress: null,
     releaseDate: null,
@@ -34,6 +49,7 @@ const mockEmptyCurfewReleaseDate = {
     endTime: null,
   },
   status: 'IN_PROGRESS',
+  id: mockOrderId,
 }
 
 const checkFormFields = () => {
@@ -62,7 +78,6 @@ context('Curfew monitoring - release date', () => {
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      page.subHeader().should('contain.text', 'Curfew for day of release')
       page.header.userName().should('contain.text', 'J. Smith')
     })
   })
@@ -77,7 +92,7 @@ context('Curfew monitoring - release date', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      page.submittedBanner().should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
@@ -85,8 +100,8 @@ context('Curfew monitoring - release date', () => {
         cy.wrap($el).should('be.disabled')
       })
       checkFormFields()
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
     })
   })
 
@@ -111,8 +126,8 @@ context('Curfew monitoring - release date', () => {
         cy.wrap($el).should('not.be.disabled')
       })
       checkFormFields()
-      page.saveAndContinueButton().should('exist')
-      page.saveAndReturnButton().should('exist')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndReturnButton.should('exist')
     })
   })
 
@@ -126,27 +141,40 @@ context('Curfew monitoring - release date', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 400,
-        id: mockOrderId,
-        subPath: '/monitoring-conditions-curfew-release-date',
-        response: [
-          { field: 'releaseDate', error: 'You must enter a valid date' },
-          { field: 'startTime', error: 'You must enter a valid start time' },
-          { field: 'endTime', error: 'You must enter a valid end time' },
-          { field: 'curfewAddress', error: 'You must enter a valid address' },
-        ],
+    context('Submitting an invalid order', () => {
+      it('should show errors with an empty form submission', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/monitoring-conditions-curfew-release-date',
+          response: [
+            { field: 'releaseDate', error: 'You must enter a valid date' },
+            { field: 'startTime', error: 'You must enter a valid start time' },
+            { field: 'endTime', error: 'You must enter a valid end time' },
+            { field: 'curfewAddress', error: 'You must enter a valid address' },
+          ],
+        })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
+        const page = Page.verifyOnPage(CurfewReleaseDatePage)
+        page.form.saveAndContinueButton.click()
+        cy.get('#releaseDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#curfewTimes-error').should(
+          'contain',
+          'You must enter a valid start time, You must enter a valid end time',
+        )
+        cy.get('#address-error').should('contain', 'You must enter a valid address')
       })
-      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
-      const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      page.saveAndContinueButton().click()
-      cy.get('#releaseDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#curfewTimes-error').should(
-        'contain',
-        'You must enter a valid start time, You must enter a valid end time',
-      )
-      cy.get('#address-error').should('contain', 'You must enter a valid address')
+
+      it('should show an error when releaseDate is provided in the wrong format', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
+        const page = Page.verifyOnPage(CurfewReleaseDatePage)
+        cy.get('#releaseDateDay').type('text')
+        page.form.saveAndContinueButton.click()
+        cy.get('#releaseDate-error').should(
+          'contain',
+          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+      })
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
@@ -159,7 +187,7 @@ context('Curfew monitoring - release date', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
       page.fillInForm()
-      page.saveAndContinueButton().click()
+      page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-release-date`).then(
         requests => {
           expect(requests).to.have.lengthOf(1)
@@ -172,8 +200,7 @@ context('Curfew monitoring - release date', () => {
           })
         },
       )
-      const nextPage = Page.verifyOnPage(CurfewConditionsPage)
-      nextPage.subHeader().should('contain.text', 'Curfew with electronic monitoring')
+      Page.verifyOnPage(CurfewConditionsPage)
     })
   })
 

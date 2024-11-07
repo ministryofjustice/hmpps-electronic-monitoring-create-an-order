@@ -6,6 +6,7 @@ import { isValidationResult, ValidationResult } from '../models/Validation'
 import { MultipleChoiceField, TextField } from '../models/view-models/utils'
 import { AuditService, DeviceWearerService } from '../services'
 import { deserialiseDate, getError } from '../utils/utils'
+import TaskListService from '../services/taskListService'
 
 // Basic validation of user submitted form data
 const DeviceWearerFormDataModel = z.object({
@@ -14,18 +15,23 @@ const DeviceWearerFormDataModel = z.object({
   pncId: z.string(),
   deliusId: z.string(),
   prisonNumber: z.string(),
+  homeOfficeReferenceNumber: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   alias: z.string(),
   'dateOfBirth-day': z.string(),
   'dateOfBirth-month': z.string(),
   'dateOfBirth-year': z.string(),
+  language: z.string(),
+  interpreterRequired: z.string().default(''),
   adultAtTimeOfInstallation: z.string().default(''),
   sex: z.string().default(''),
   gender: z.string().default(''),
+  otherGender: z.string().optional(),
   disabilities: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
+  otherDisability: z.string().optional(),
 })
 
 type DeviceWearerFormData = z.infer<typeof DeviceWearerFormDataModel>
@@ -37,6 +43,7 @@ type DeviceWearerViewModel = {
   pncId: TextField
   deliusId: TextField
   prisonNumber: TextField
+  homeOfficeReferenceNumber: TextField
   firstName: TextField
   lastName: TextField
   alias: TextField
@@ -47,13 +54,18 @@ type DeviceWearerViewModel = {
   adultAtTimeOfInstallation: TextField
   sex: TextField
   gender: TextField
+  otherGender: TextField
   disabilities: MultipleChoiceField
+  otherDisability: TextField
+  language: TextField
+  interpreterRequired: TextField
 }
 
 export default class DeviceWearerController {
   constructor(
     private readonly auditService: AuditService,
     private readonly deviceWearerService: DeviceWearerService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   private createViewModelFromFormData(
@@ -68,6 +80,10 @@ export default class DeviceWearerController {
       pncId: { value: formData.pncId, error: getError(validationErrors, 'pncId') },
       deliusId: { value: formData.deliusId, error: getError(validationErrors, 'deliusId') },
       prisonNumber: { value: formData.prisonNumber, error: getError(validationErrors, 'prisonNumber') },
+      homeOfficeReferenceNumber: {
+        value: formData.homeOfficeReferenceNumber,
+        error: getError(validationErrors, 'homeOfficeReferenceNumber'),
+      },
       firstName: { value: formData.firstName, error: getError(validationErrors, 'firstName') },
       lastName: { value: formData.lastName, error: getError(validationErrors, 'lastName') },
       alias: { value: formData.alias, error: getError(validationErrors, 'alias') },
@@ -81,7 +97,14 @@ export default class DeviceWearerController {
       },
       sex: { value: formData.sex || '', error: getError(validationErrors, 'sex') },
       gender: { value: formData.gender || '', error: getError(validationErrors, 'gender') },
+      otherGender: { value: formData.otherGender || '', error: getError(validationErrors, 'otherGender') },
       disabilities: { values: formData.disabilities || '', error: getError(validationErrors, 'disabilities') },
+      otherDisability: { value: formData.otherDisability || '', error: getError(validationErrors, 'otherDisability') },
+      language: { value: formData.language || '', error: getError(validationErrors, 'language') },
+      interpreterRequired: {
+        value: formData.interpreterRequired || '',
+        error: getError(validationErrors, 'interpreterRequired'),
+      },
     }
   }
 
@@ -95,6 +118,7 @@ export default class DeviceWearerController {
       pncId: { value: deviceWearer.pncId || '' },
       deliusId: { value: deviceWearer.deliusId || '' },
       prisonNumber: { value: deviceWearer.prisonNumber || '' },
+      homeOfficeReferenceNumber: { value: deviceWearer.homeOfficeReferenceNumber || '' },
       firstName: { value: deviceWearer.firstName || '' },
       lastName: { value: deviceWearer.lastName || '' },
       alias: { value: deviceWearer.alias || '' },
@@ -107,7 +131,11 @@ export default class DeviceWearerController {
       adultAtTimeOfInstallation: { value: String(deviceWearer.adultAtTimeOfInstallation) },
       sex: { value: deviceWearer.sex || '' },
       gender: { value: deviceWearer.gender || '' },
+      otherGender: { value: deviceWearer.otherGender || '' },
       disabilities: { values: deviceWearer.disabilities ?? [] },
+      otherDisability: { value: deviceWearer.otherDisability || '' },
+      language: { value: deviceWearer.language || '' },
+      interpreterRequired: { value: String(deviceWearer.interpreterRequired) || '' },
     }
   }
 
@@ -150,11 +178,12 @@ export default class DeviceWearerController {
 
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      if (updateDeviceWearerResult.adultAtTimeOfInstallation) {
-        res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
-      } else {
-        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', orderId))
-      }
+      res.redirect(
+        this.taskListService.getNextPage('DEVICE_WEARER', {
+          ...req.order!,
+          deviceWearer: updateDeviceWearerResult,
+        }),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
