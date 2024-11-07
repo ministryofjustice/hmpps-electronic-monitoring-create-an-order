@@ -224,7 +224,6 @@ describe('authorised user', () => {
         .post(`/order/${mockDraftOrder.id}/submit`)
         .expect(302)
         .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
-        .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
     })
 
     it('should not submit an already submitted order and redirect to the summary page', () => {

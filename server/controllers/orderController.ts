@@ -82,6 +82,8 @@ export default class OrderController {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     } else if (result.type === 'errorStatus') {
       res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }
   }
 
