@@ -35,7 +35,6 @@ const mockEmptyCurfewReleaseDate = {
     trail: null,
     mandatoryAttendance: null,
     alcohol: null,
-    devicesRequired: null,
     orderTypeDescription: null,
     conditionType: null,
     startDate: null,

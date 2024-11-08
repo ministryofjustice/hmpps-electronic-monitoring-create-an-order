@@ -76,7 +76,6 @@ context('Scenarios', () => {
         orderTypeDescription: 'DAPOL HDC',
         conditionType: 'Bail Order',
         monitoringRequired: 'Exclusion and inclusion zone monitoring',
-        devicesRequired: 'Location, fitted',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',

@@ -67,7 +67,6 @@ context('Scenarios', () => {
       orderTypeDescription: 'DAPOL',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
-      devicesRequired: 'Location, fitted',
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days

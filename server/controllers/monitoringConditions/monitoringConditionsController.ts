@@ -27,9 +27,6 @@ const monitoringConditionsFormDataModel = z.object({
   monitoringRequired: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
-  devicesRequired: z
-    .union([z.string(), z.array(z.string()).default([])])
-    .transform(val => (Array.isArray(val) ? val : [val])),
   orderTypeDescription: z.coerce.string(),
   conditionType: z.coerce.string(),
   endDay: z.string().default(''),
@@ -47,7 +44,6 @@ type MonitoringConditionsViewModel = {
   dapol: TextField
   orderType: TextField
   monitoringRequired: MultipleChoiceField
-  devicesRequired: MultipleChoiceField
   orderTypeDescription: TextField
   conditionType: TextField
   startDate: DateField
@@ -104,9 +100,6 @@ export default class MonitoringConditionsController {
       monitoringRequired: {
         values: monitoringRequiredValues,
       },
-      devicesRequired: {
-        values: monitoringConditions.devicesRequired ?? [],
-      },
       orderTypeDescription: { value: monitoringConditions.orderTypeDescription ?? '' },
       conditionType: { value: monitoringConditions.conditionType ?? '' },
       startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
@@ -132,16 +125,11 @@ export default class MonitoringConditionsController {
         values: formData.monitoringRequired,
         error: getError(validationErrors, 'updateMonitoringConditionsDto'),
       },
-      devicesRequired: {
-        values: formData.devicesRequired,
-        error: getError(validationErrors, 'devicesRequired'),
-      },
       orderTypeDescription: {
         value: formData.orderTypeDescription,
         error: getError(validationErrors, 'orderTypeDescription'),
       },
       conditionType: { value: formData.conditionType, error: getError(validationErrors, 'conditionType') },
-
       startDate: {
         value: { day: formData.startDay, month: formData.startMonth, year: formData.startYear },
         error: getError(validationErrors, 'startDate'),
@@ -163,7 +151,6 @@ export default class MonitoringConditionsController {
       trail: formData.monitoringRequired.includes('trail'),
       mandatoryAttendance: formData.monitoringRequired.includes('mandatoryAttendance'),
       alcohol: formData.monitoringRequired.includes('alcohol'),
-      devicesRequired: formData.devicesRequired.length > 0 ? formData.devicesRequired : null,
       orderTypeDescription: formData.orderTypeDescription === '' ? null : formData.orderTypeDescription,
       conditionType: formData.conditionType === '' ? null : formData.conditionType,
       startDate: serialiseDate(formData.startYear, formData.startMonth, formData.startDay),
