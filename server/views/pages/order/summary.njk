@@ -1,19 +1,21 @@
 {% extends "../../partials/layout.njk" %}
 
 {% set pageTitle = "Application summary - " + applicationName %}
+{% set error = error %}
 {% set mainClasses = "app-container govuk-body" %}
 {% set formDownloadIcon = '/assets/images/form_download.svg' %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 
 {% block content %}
 
   {{ govukBackLink({
-  text: "Back",
-  href: "/"
-}) }}
+    text: "Back",
+    href: "/"
+  }) }}
 
   {{ mojPageHeaderActions({
     heading: {
@@ -23,9 +25,21 @@
 
   <h2 class="govuk-heading-l">Form sections</h2>
 
-<p class="govuk-body-l">
+  <p class="govuk-body-l">
     Complete all sections before submitting the form.
   </p>
+
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "The form could not be submitted",
+      errorList: [
+        {
+          text: error,
+          href: "#"
+        }
+      ]
+    }) }}
+  {% endif %}
 
 {% set taskListItems = [] %}
 {% for section, tasks in sections %}
@@ -78,12 +92,13 @@
   {% endfor %}
 #}
 
-{% if order.status == "IN_PROGRESS" %}
-  <form action="/order/{{ order.id }}/submit" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-    <div class="govuk-button-group">
-      {{ govukButton({
-            text: "Submit order"
+  {% if order.status == "IN_PROGRESS" %}
+    <form action="/order/{{ order.id }}/submit" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+      <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Submit order",
+            disabled: not order.isValid
         }) }}
     </div>
   </form>

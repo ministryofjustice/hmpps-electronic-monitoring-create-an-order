@@ -42,7 +42,7 @@ describe('OrderController', () => {
     it('should render a summary of the order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
@@ -189,31 +189,38 @@ describe('OrderController', () => {
       })
       const res = createMockResponse()
       const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: true,
+        data: mockOrder,
+      })
 
       // When
       await orderController.submit(req, res, next)
 
       // Then
-      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({
-        accessToken: 'fakeUserToken',
-        orderId: mockOrder.id,
-      })
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({ accessToken: 'fakeUserToken', orderId: mockOrder.id })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/success`)
     })
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {
       // Given
       const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: false,
+        error: 'This order has already been submitted',
+        type: 'alreadySubmitted',
+      })
 
       // When
       await orderController.submit(req, res, next)
 
       // Then
-      expect(mockOrderService.submitOrder).toHaveBeenCalledTimes(0)
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/failed`)
+      expect(mockOrderService.submitOrder).toHaveBeenCalledWith({ accessToken: 'fakeUserToken', orderId: mockOrder.id })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(req.flash).toHaveBeenCalledWith('submissionError', 'This order has already been submitted')
     })
   })
 

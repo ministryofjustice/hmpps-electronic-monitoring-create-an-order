@@ -18,9 +18,11 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const sections = this.taskListService.getTasksBySection(req.order!)
+    const error = req.flash('submissionError')
     res.render('pages/order/summary', {
       order: req.order,
       sections,
+      error: error && error.length > 0 ? error[0] : undefined,
     })
   }
 
@@ -68,19 +70,21 @@ export default class OrderController {
   submit: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    if (order.status === 'SUBMITTED') {
+    const result = await this.orderService.submitOrder({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
+
+    if (result.submitted) {
+      res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
+    } else if (result.type === 'alreadySubmitted' || result.type === 'incomplete') {
+      req.flash('submissionError', result.error)
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    } else if (result.type === 'errorStatus') {
       res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
     } else {
-      try {
-        const { token } = res.locals.user
-        await this.orderService.submitOrder({ accessToken: token, orderId: order.id })
-
-        res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
-      } catch (error) {
-        req.flash('validationErrors', error)
-
-        res.redirect(paths.ORDER.SUBMIT_FAILED)
-      }
+      req.flash('submissionError', 'Something unexpected happened. Please try again in a few minutes.')
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }
   }
 

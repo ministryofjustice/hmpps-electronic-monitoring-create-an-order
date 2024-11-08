@@ -1,7 +1,7 @@
 import AppPage from '../appPage'
+import { PageElement } from '../page'
 
 import paths from '../../../server/constants/paths'
-import { PageElement } from '../page'
 
 export default class SubmitSuccessPage extends AppPage {
   constructor() {
@@ -10,5 +10,7 @@ export default class SubmitSuccessPage extends AppPage {
 
   receiptButton = (): PageElement => cy.get('#receipt-button')
 
-  backToYourApplications = (): PageElement => cy.get('#back-to-applications-button')
+  get backToYourApplications(): PageElement {
+    return cy.contains('Back to your applications')
+  }
 }

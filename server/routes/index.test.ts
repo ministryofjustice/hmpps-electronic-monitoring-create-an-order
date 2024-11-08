@@ -218,6 +218,7 @@ describe('authorised user', () => {
   describe('POST /order/:orderId/submit', () => {
     it('should submit a draft order and redirect to the success page', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
+      orderService.submitOrder.mockResolvedValue({ submitted: true, data: mockDraftOrder })
 
       return request(app)
         .post(`/order/${mockDraftOrder.id}/submit`)
@@ -225,13 +226,18 @@ describe('authorised user', () => {
         .expect('Location', `/order/${mockDraftOrder.id}/submit/success`)
     })
 
-    it('should not submit an already submitted order and redirect to the failed page', () => {
+    it('should not submit an already submitted order and redirect to the summary page', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      orderService.submitOrder.mockResolvedValue({
+        submitted: false,
+        type: 'alreadySubmitted',
+        error: 'This order has already been submitted',
+      })
 
       return request(app)
         .post(`/order/${mockSubmittedOrder.id}/submit`)
         .expect(302)
-        .expect('Location', `/order/${mockSubmittedOrder.id}/submit/failed`)
+        .expect('Location', `/order/${mockSubmittedOrder.id}/summary`)
     })
   })
 })
