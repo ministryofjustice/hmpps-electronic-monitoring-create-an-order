@@ -8,21 +8,27 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block formInputs %}
+
+    {% set notifyingOrganisationHint %}
+        For example, provide an email address for a shared mailbox that your team has access to.
+        <br/>
+        Do not provide a personal email address.
+    {% endset %}
   
   {% call govukFieldset({
     legend: {
-      text: "Notifying organisation",
+      text: "Team details",
       classes: "govuk-fieldset__legend--m",
       isPageHeading: false
     }
   }) %}
     {{ govukInput({
       label: {
-        text: "Email address for the notifying organisation",
+        text: "What is the email address for your team?",
         classes: "govuk-label--s"
       },
       hint: {
-        text: "For example functional mailbox"
+        html: notifyingOrganisationHint
       },
       classes: "govuk-!-width-one-half",
       id: "notifyingOrganisationEmail",
