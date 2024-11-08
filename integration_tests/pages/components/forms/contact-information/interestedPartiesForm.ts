@@ -20,7 +20,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   // FIELDS
 
   get notifyOrganisationEmailAddressField(): FormInputComponent {
-    const label = 'Email address for the notifying organisation'
+    const label = 'What is the email address for your team?'
     return new FormInputComponent(this.form, label)
   }
 
