@@ -38,8 +38,14 @@ export default class CurfewReleaseDateController {
       req.flash('validationErrors', updateResult)
 
       res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
-    } else {
-      res.redirect(this.taskListService.getNextPage('CURFEW_RELEASE_DATE', req.order!))
+      return
     }
+
+    if (formData.action === 'continue') {
+      res.redirect(this.taskListService.getNextPage('CURFEW_RELEASE_DATE', req.order!))
+      return
+    }
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 }
