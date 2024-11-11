@@ -57,7 +57,7 @@
       }
     }) %}
       {% if dayData | length === 0 %}
-        {{ timeTableDay(day, 0, {}, disabled)}}
+        {{ timeTableDay(day, 0, {}, disabled) }}
       {% else %}
         {% for timetable in dayData %}
           {{ timeTableDay(day, loop.index0, timetable, disabled, dayData.length !== 1 ) }}
@@ -66,11 +66,20 @@
 
       {% if not disabled %}
         {{ govukButton({
-            text: "Add another time",
+          text: "Add another time",
+          classes: "govuk-button--secondary",
+          name: "action",
+          value: "add-time-" + day
+        }) }}
+
+        {% if day == "monday" %}
+          {{ govukButton({
+            text: "Auto populate the other days with the same curfew hours",
             classes: "govuk-button--secondary",
             name: "action",
-            value: "add-time-" + day
-        }) }}
+            value: "copy-times"
+          }) }}
+        {% endif %}
       {% endif %}
     {% endcall %}
   {% endfor %}

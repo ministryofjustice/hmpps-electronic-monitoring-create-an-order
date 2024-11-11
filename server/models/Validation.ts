@@ -5,7 +5,7 @@ export const ValidationErrorModel = z.object({
   error: z.string(),
 })
 
-export const ListItemvalidationErrorModel = z.object({
+export const ListItemValidationErrorModel = z.object({
   errors: z.array(ValidationErrorModel),
   index: z.number().int(),
 })
@@ -16,9 +16,9 @@ export type ValidationError = z.infer<typeof ValidationErrorModel>
 
 export type ValidationResult = z.infer<typeof ValidationResultModel>
 
-export const ListValidationResultModel = z.array(ListItemvalidationErrorModel)
+export const ListValidationResultModel = z.array(ListItemValidationErrorModel)
 
-export type ListItemvalidationError = z.infer<typeof ListItemvalidationErrorModel>
+export type ListItemValidationError = z.infer<typeof ListItemValidationErrorModel>
 
 export type ListValidationResult = z.infer<typeof ListValidationResultModel>
 
@@ -34,7 +34,7 @@ export const isValidationListResult = (result: unknown): result is ListValidatio
   return (
     Array.isArray(result) &&
     result.every(
-      r => (r as ListItemvalidationError).errors !== undefined && (r as ListItemvalidationError).index !== undefined,
+      r => (r as ListItemValidationError).errors !== undefined && (r as ListItemValidationError).index !== undefined,
     )
   )
 }

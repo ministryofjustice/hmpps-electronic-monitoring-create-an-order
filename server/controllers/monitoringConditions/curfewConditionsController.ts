@@ -38,8 +38,14 @@ export default class CurfewConditionsController {
       req.flash('validationErrors', updateResult)
 
       res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
-    } else {
-      res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
+      return
     }
+
+    if (formData.action === 'continue') {
+      res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
+      return
+    }
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 }

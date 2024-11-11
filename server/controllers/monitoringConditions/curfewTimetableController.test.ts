@@ -508,7 +508,6 @@ describe('CurfewTimetableController', () => {
       await controller.update(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('formData', {
-        action: 'add-time-monday',
         curfewTimetable: {
           monday: [
             {
@@ -616,7 +615,6 @@ describe('CurfewTimetableController', () => {
       await controller.update(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('formData', {
-        action: 'remove-time-monday-0',
         curfewTimetable: {
           monday: [
             {
@@ -689,8 +687,12 @@ describe('CurfewTimetableController', () => {
     })
 
     it('Should redirect view with validation error, when service return validation error', async () => {
+      const validationErrors = [
+        { index: 0, errors: [{ field: 'startTime', error: 'Mock Start Time Error' }] },
+        { index: 3, errors: [{ field: 'curfewAddress', error: 'Mock Address Error' }] },
+      ]
       const formData: { curfewTimetable: { [k: string]: [object] }; action: string } = {
-        action: '',
+        action: 'continue',
         curfewTimetable: {},
       }
       days.forEach(day => {
@@ -706,77 +708,64 @@ describe('CurfewTimetableController', () => {
       })
       req.body = formData
 
-      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([
-        { index: 0, errors: [{ field: 'startTime', error: 'Mock Start Time Error' }] },
-        { index: 3, errors: [{ field: 'curfewAddress', error: 'Mock Address Error' }] },
-      ])
+      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce(validationErrors)
       await controller.update(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         {
           dayOfWeek: 'MONDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
-          errors: [
-            {
-              field: 'startTime',
-              error: 'Mock Start Time Error',
-            },
-          ],
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
+          errors: [{ field: 'startTime', error: 'Mock Start Time Error' }],
         },
         {
           dayOfWeek: 'TUESDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
           errors: [],
         },
         {
           dayOfWeek: 'WEDNESDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
           errors: [],
         },
         {
           dayOfWeek: 'THURSDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
-          errors: [
-            {
-              field: 'curfewAddress',
-              error: 'Mock Address Error',
-            },
-          ],
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
+          errors: [{ field: 'curfewAddress', error: 'Mock Address Error' }],
         },
         {
           dayOfWeek: 'FRIDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
           errors: [],
         },
         {
           dayOfWeek: 'SATURDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
           errors: [],
         },
         {
           dayOfWeek: 'SUNDAY',
-          orderId: mockId,
-          curfewAddress: 'PRIMARY_ADDRESS',
           startTime: '19:00:00',
           endTime: '23:59:00',
+          curfewAddress: 'PRIMARY_ADDRESS',
+          orderId: mockId,
           errors: [],
         },
       ])
@@ -787,7 +776,7 @@ describe('CurfewTimetableController', () => {
 
     it('Should redirect to next page', async () => {
       const formData: { curfewTimetable: { [k: string]: [object] }; action: string } = {
-        action: '',
+        action: 'continue',
         curfewTimetable: {},
       }
       days.forEach(day => {
@@ -808,6 +797,31 @@ describe('CurfewTimetableController', () => {
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/attachments`)
+    })
+
+    it('Should redirect back to summary page', async () => {
+      const formData: { curfewTimetable: { [k: string]: [object] }; action: string } = {
+        action: 'back',
+        curfewTimetable: {},
+      }
+      days.forEach(day => {
+        formData.curfewTimetable[day] = [
+          {
+            timeStartHours: '19',
+            timeStartMinutes: '00',
+            timeEndHours: '23',
+            timeEndMinutes: '59',
+            addresses: ['PRIMARY_ADDRESS'],
+          },
+        ]
+      })
+      req.body = formData
+
+      mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/summary`)
     })
   })
 })

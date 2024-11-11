@@ -20,11 +20,13 @@ context('Monitoring conditions - Curfew timetable', () => {
 
     it('Should display the user name visible in header', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+
       page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Should display the phase banner in header', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
@@ -45,11 +47,13 @@ context('Monitoring conditions - Curfew timetable', () => {
     it('Should display the timetable form', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
 
+      page.form.shouldBeDisplayed()
       page.form.shouldBeEmpty()
     })
 
     it('Should be accessible', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+
       page.checkIsAccessible()
     })
   })

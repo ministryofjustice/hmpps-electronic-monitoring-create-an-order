@@ -87,7 +87,7 @@ describe('CurfewConditionsController', () => {
         { field: 'startDate', error: 'mock start date Error' },
       ]
       const mockFormData = {
-        action: 'next',
+        action: 'continue',
         addresses: ['PRIMARY', 'SECONDARY'],
         'startDate-day': '11',
         'startDate-month': '09',
@@ -162,7 +162,7 @@ describe('CurfewConditionsController', () => {
   describe('Update curfew conditions', () => {
     it('Should redirect to view and save form and validation error flash when service return validation error', async () => {
       req.body = {
-        action: 'next',
+        action: 'continue',
         addresses: ['PRIMARY', 'SECONDARY'],
         'startDate-day': '11',
         'startDate-month': '09',
@@ -186,8 +186,9 @@ describe('CurfewConditionsController', () => {
       )
     })
 
-    it('Shoud redirect to curfew condition page', async () => {
+    it('Should redirect to curfew condition page', async () => {
       req.order = getMockOrder({
+        id: mockId,
         monitoringConditions: {
           acquisitiveCrime: false,
           alcohol: false,
@@ -205,7 +206,7 @@ describe('CurfewConditionsController', () => {
         },
       })
       req.body = {
-        action: 'next',
+        action: 'continue',
         address: ['PRIMARY', 'SECONDARY'],
         'startDate-day': '11',
         'startDate-month': '09',
@@ -218,7 +219,43 @@ describe('CurfewConditionsController', () => {
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order.id}/monitoring-conditions/curfew/timetable`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+    })
+
+    it('Should redirect back to summary page', async () => {
+      req.order = getMockOrder({
+        id: mockId,
+        monitoringConditions: {
+          acquisitiveCrime: false,
+          alcohol: false,
+          dapol: false,
+          devicesRequired: [],
+          exclusionZone: false,
+          mandatoryAttendance: false,
+          orderType: '',
+          trail: false,
+          curfew: true,
+          conditionType: '',
+          endDate: '',
+          orderTypeDescription: '',
+          startDate: '',
+        },
+      })
+      req.body = {
+        action: 'back',
+        address: ['PRIMARY', 'SECONDARY'],
+        'startDate-day': '11',
+        'startDate-month': '09',
+        'startDate-year': '2024',
+        'endDate-day': '11',
+        'endDate-month': '09',
+        'endDate-year': '2025',
+      }
+      mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/summary`)
     })
   })
 })
