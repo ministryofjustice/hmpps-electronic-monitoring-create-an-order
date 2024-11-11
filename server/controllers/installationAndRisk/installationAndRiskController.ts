@@ -11,8 +11,7 @@ import TaskListService from '../../services/taskListService'
 
 const installationAndRiskFormDataModel = z.object({
   action: z.string().default('continue'),
-  riskOfSeriousHarm: z.string().optional(),
-  riskOfSelfHarm: z.string().optional(),
+  offence: z.string().optional(),
   riskCategory: z.array(z.string()).optional(),
   riskDetails: z.string(),
   mappaLevel: z.string().optional(),
@@ -22,8 +21,8 @@ const installationAndRiskFormDataModel = z.object({
 type InstallationAndRiskFormData = z.infer<typeof installationAndRiskFormDataModel>
 
 type InstallationAndRiskViewModel = {
-  riskOfSeriousHarm: TextField
-  riskOfSelfHarm: TextField
+  offence: TextField
+
   riskCategory: MultipleChoiceField
   riskDetails: TextField
   mappaLevel: TextField
@@ -53,8 +52,7 @@ export default class InstallationAndRiskController {
     installationAndRisk: InstallationAndRisk | null,
   ): InstallationAndRiskViewModel {
     return {
-      riskOfSeriousHarm: { value: installationAndRisk?.riskOfSeriousHarm ?? '' },
-      riskOfSelfHarm: { value: installationAndRisk?.riskOfSelfHarm ?? '' },
+      offence: { value: installationAndRisk?.offence ?? '' },
       riskCategory: { values: installationAndRisk?.riskCategory ?? [] },
       riskDetails: { value: installationAndRisk?.riskDetails ?? '' },
       mappaLevel: { value: installationAndRisk?.mappaLevel ?? '' },
@@ -67,8 +65,7 @@ export default class InstallationAndRiskController {
     errors: ValidationResult,
   ): InstallationAndRiskViewModel {
     return {
-      riskOfSeriousHarm: { value: formData.riskOfSeriousHarm ?? '', error: getError(errors, 'riskOfSeriousHarm') },
-      riskOfSelfHarm: { value: formData.riskOfSelfHarm ?? '', error: getError(errors, 'riskOfSelfHarm') },
+      offence: { value: formData.offence ?? '', error: getError(errors, 'offence') },
       riskCategory: { values: formData.riskCategory ?? [], error: getError(errors, 'riskCategory') },
       riskDetails: { value: formData.riskDetails ?? '', error: getError(errors, 'riskDetails') },
       mappaLevel: { value: formData.mappaLevel ?? '', error: getError(errors, 'mappaLevel') },
@@ -78,8 +75,7 @@ export default class InstallationAndRiskController {
 
   private createApiModelFromFormData(formData: InstallationAndRiskFormData): InstallationAndRisk {
     return {
-      riskOfSeriousHarm: formData.riskOfSeriousHarm ?? null,
-      riskOfSelfHarm: formData.riskOfSelfHarm ?? null,
+      offence: formData.offence ?? null,
       riskCategory: formData.riskCategory ?? null,
       riskDetails: formData.riskDetails ?? null,
       mappaLevel: formData.mappaLevel ?? null,

@@ -2,16 +2,15 @@ import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../mockApis/cemo'
 import ErrorPage from '../../pages/error'
 import InstallationAndRiskPage from '../../pages/order/installationAndRisk'
-import OrderTasksPage from '../../pages/order/summary'
 import Page from '../../pages/page'
+import MonitoringConditionsPage from '../../pages/order/monitoring-conditions'
 
 const mockOrderId = uuidv4()
 
 const mockSubmittedInstallationAndRisk = {
   ...mockApiOrder('SUBMITTED'),
   installationAndRisk: {
-    riskOfSeriousHarm: 'MEDIUM',
-    riskOfSelfHarm: 'LOW',
+    offence: 'Robbery',
     riskCategory: ['VIOLENCE', 'GENDER', 'SUBSTANCE_ABUSE'],
     riskDetails: 'Details about the risk',
     mappaLevel: 'MAPPA2',
@@ -28,8 +27,7 @@ const mockInProgressInstallationAndRisk = {
 const mockEmptyInstallationAndRisk = {
   ...mockApiOrder('IN_PROGRESS'),
   installationAndRisk: {
-    riskOfSeriousHarm: null,
-    riskOfSelfHarm: null,
+    offence: null,
     riskCategory: null,
     riskDetails: null,
     mappaLevel: null,
@@ -39,8 +37,7 @@ const mockEmptyInstallationAndRisk = {
 }
 
 const checkFormFields = () => {
-  cy.get('input[name="riskOfSeriousHarm"][value="MEDIUM"]').should('be.checked')
-  cy.get('input[name="riskOfSelfHarm"][value="LOW"]').should('be.checked')
+  cy.get('select[name="offence"]').should('have.value', 'Robbery')
   cy.get('input[name="riskCategory[]"][value="VIOLENCE"]').should('be.checked')
   cy.get('input[name="riskCategory[]"][value="GENDER"]').should('be.checked')
   cy.get('input[name="riskCategory[]"][value="SUBSTANCE_ABUSE"]').should('be.checked')
@@ -126,7 +123,7 @@ context('Installation and risk section', () => {
     })
   })
 
-  context.skip('Submitting the form', () => {
+  context('Submitting the form', () => {
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -142,8 +139,6 @@ context('Installation and risk section', () => {
         id: mockOrderId,
         subPath: '/installation-and-risk',
         response: [
-          { field: 'riskOfSeriousHarm', error: 'You must select an option' },
-          { field: 'riskOfSelfHarm', error: 'You must select an option' },
           { field: 'riskCategory', error: 'You must select an option' },
           { field: 'riskDetails', error: 'You must enter some text' },
           { field: 'mappaLevel', error: 'You must select an option' },
@@ -153,8 +148,6 @@ context('Installation and risk section', () => {
       cy.signIn().visit(`/order/${mockOrderId}/installation-and-risk`)
       const page = Page.verifyOnPage(InstallationAndRiskPage)
       page.saveAndContinueButton().click()
-      cy.get('#riskOfSeriousHarm-error').should('contain', 'You must select an option')
-      cy.get('#riskOfSelfHarm-error').should('contain', 'You must select an option')
       cy.get('#riskCategory-error').should('contain', 'You must select an option')
       cy.get('#riskDetails-error').should('contain', 'You must enter some text')
       cy.get('#mappaLevel-error').should('contain', 'You must select an option')
@@ -175,15 +168,14 @@ context('Installation and risk section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/installation-and-risk`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          riskOfSeriousHarm: 'MEDIUM',
-          riskOfSelfHarm: 'LOW',
+          offence: 'Robbery',
           riskCategory: ['VIOLENCE', 'GENDER', 'SUBSTANCE_ABUSE'],
           riskDetails: 'Details about the risk',
           mappaLevel: 'MAPPA2',
           mappaCaseType: 'SPECIAL_IMMIGRATION_APPEALS',
         })
       })
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(MonitoringConditionsPage)
     })
   })
 
