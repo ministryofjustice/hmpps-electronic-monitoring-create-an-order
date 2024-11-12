@@ -27,6 +27,7 @@ import AttachmentPage from '../pages/order/attachment'
 context('The kitchen sink', () => {
   const takeScreenshots = true
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
   const uploadFile = {
     contents: 'I am a map of London football grounds',
     fileName: 'london-football-grounds.pdf',
@@ -52,9 +53,10 @@ context('The kitchen sink', () => {
     })
 
     cy.task('stubUploadDocument', {
+      id: '(.*)',
       httpStatus: 200,
       response: {
-        documentUuid: uuidv4(),
+        documentUuid: hmppsDocumentId,
         documentFilename: uploadFile.fileName,
         filename: uploadFile.fileName,
         fileExtension: uploadFile.fileName.split('.')[1],
@@ -213,8 +215,9 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('09. tertiaryAddressPage', { overwrite: true })
       tertiaryAddressPage.form.saveAndContinueButton.click()
 
+      // no validation
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.saveAndContinueButton.click()
+      // interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. interestedPartiesPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)

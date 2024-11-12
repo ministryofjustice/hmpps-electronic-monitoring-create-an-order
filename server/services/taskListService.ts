@@ -295,7 +295,9 @@ export default class TaskListService {
       return paths.ORDER.SUMMARY.replace(':orderId', order.id)
     }
 
-    return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    return availableTasks[currentTaskIndex + 1].path
+      .replace(':orderId', order.id)
+      .replace(':zoneId', `${order.enforcementZoneConditions.length}`)
   }
 
   getTasksBySection(order: Order) {
@@ -308,7 +310,7 @@ export default class TaskListService {
 
       acc[task.section].push({
         ...task,
-        path: task.path.replace(':orderId', order.id),
+        path: task.path.replace(':orderId', order.id).replace(':zoneId', '0'),
       })
 
       return acc
