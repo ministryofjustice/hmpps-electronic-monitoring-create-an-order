@@ -4,7 +4,7 @@ import { ContactDetailsFormData } from '../form-data/contactDetails'
 import { ValidationResult } from '../Validation'
 import { ViewModel } from './utils'
 
-type ContactDetailsViewModel = ViewModel<ContactDetails>
+type ContactDetailsViewModel = ViewModel<NonNullable<ContactDetails>>
 
 const constructFromFormData = (formData: ContactDetailsFormData, validationErrors: ValidationResult) => {
   return {
@@ -16,9 +16,16 @@ const constructFromFormData = (formData: ContactDetailsFormData, validationError
 }
 
 const constructFromEntity = (contactDetails: ContactDetails) => {
+  if (contactDetails) {
+    return {
+      contactNumber: {
+        value: contactDetails.contactNumber ?? '',
+      },
+    }
+  }
   return {
     contactNumber: {
-      value: contactDetails.contactNumber ?? '',
+      value: '',
     },
   }
 }

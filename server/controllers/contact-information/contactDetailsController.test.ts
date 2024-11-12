@@ -43,9 +43,30 @@ describe('ContactDetailsController', () => {
   })
 
   describe('get', () => {
+    it('should render the form when there are no saved contact details', async () => {
+      // Given
+      const mockOrder = getMockOrder({ contactDetails: null })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await contactDetailsController.view(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/contact-information/contact-details',
+        expect.objectContaining({
+          contactNumber: {
+            value: '',
+          },
+        }),
+      )
+    })
+
     it('should render the form using the saved contact details data', async () => {
       // Given
-      const mockOrder = getMockOrder({ deviceWearerContactDetails: { contactNumber: '01234567890' } })
+      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890' } })
       const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
       const res = createMockResponse()
       const next = jest.fn()
@@ -66,7 +87,7 @@ describe('ContactDetailsController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const mockOrder = getMockOrder({ deviceWearerContactDetails: { contactNumber: '01234567890' } })
+      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890' } })
       const req = createMockRequest({
         order: mockOrder,
         flash: jest
