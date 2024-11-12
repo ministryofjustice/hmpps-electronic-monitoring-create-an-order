@@ -228,7 +228,6 @@ describe('CurfewConditionsController', () => {
           acquisitiveCrime: false,
           alcohol: false,
           dapol: false,
-          devicesRequired: [],
           exclusionZone: false,
           mandatoryAttendance: false,
           orderType: '',

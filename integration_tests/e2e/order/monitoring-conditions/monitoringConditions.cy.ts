@@ -181,7 +181,6 @@ context('Monitoring conditions main section', () => {
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       cy.get('input[type="radio"][value="true"]').check()
       cy.get('input[type="checkbox"][value="alcohol"]').check()
-      cy.get('input[type="checkbox"][value="Alcohol (Transdermal)"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('DAPOL')
       cy.get('select[name="conditionType"]').select('Requirement of a Community Order')
