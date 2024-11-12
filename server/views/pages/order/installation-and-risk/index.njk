@@ -11,100 +11,47 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% block formInputs %}
   <p class="govuk-body">Provide risk information to help plan installation.</p>
 
   <p class="govuk-body">Answer questions based on what you know about the device wearer's previous behaviour and offence.</p>
 
-  {{ govukRadios({
-    name: "riskOfSeriousHarm",
-    fieldset: {
-      legend: {
-        text: "What is the risk of violence or threatening behaviour towards installation staff members?",
+
+ 
+  {{ govukSelect({
+    id: "offence",
+    name: "offence", 
+     label: {
+        text: "Select the offence committed by the device wearer(optional)",
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
-      }
-    },
+      }, 
     hint: {
-      text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
+      text: "Select one"
     },
     items: [
-      {
-        text: "Very high",
-        value: "VERY_HIGH",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "High",
-        value: "HIGH",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "Medium",
-        value: "MEDIUM",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "Low",
-        value: "LOW",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "Don't know",
-        value: "UNKNOWN",
-        disabled: not isOrderEditable
-      }
+      { text: 'Select', value: '' },
+      { text: "	Violence against the person", value: "Violence against the person" },
+      { text: "Sexual offences", value: "Sexual offences" },
+      { text: "Robbery", value: "Robbery" },
+      { text: "Theft Offences", value: "Theft Offences" },
+      { text: "Criminal damage and arson", value: "Criminal damage and arson" },
+      { text: "Drug offences", value: "Drug offences" },
+      { text: "Possession of weapons", value: "Possession of weapons" },
+      { text: "Public order offences", value: "Public order offences" },
+      { text: "Miscellaneous crimes against society", value: "Miscellaneous crimes against society" },
+      { text: "Fraud Offences", value: "Fraud Offences" },
+      { text: "Summary Non-Motoring", value: "Summary Non-Motoring" },
+      { text: "Summary motoring", value: "Summary motoring" },
+      { text: "Offence not recorded", value: "Offence not recorded" }     
     ],
-    value: riskOfSeriousHarm.value,
-    errorMessage: riskOfSeriousHarm.error,
+    value: offence.value,
+    errorMessage: offence.error,
     disabled: not isOrderEditable
   }) }}
-
-  {{ govukRadios({
-    name: "riskOfSelfHarm",
-    fieldset: {
-      legend: {
-        text: "What is the risk of the device wearer causing serious harm to themself? (optional)",
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: "For example is there a higher level of risk because of the staff member's gender, race, sexual orientation. or other personal characteristics? (optional)"
-    },
-    items: [
-      {
-        text: "Very high",
-        value: "VERY_HIGH",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "High",
-        value: "HIGH",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "Medium",
-        value: "MEDIUM",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "Low",
-        value: "LOW",
-        disabled: not isOrderEditable
-      },
-      {
-        text: "Don't know",
-        value: "UNKNOWN",
-        disabled: not isOrderEditable
-      }
-    ],
-    value: riskOfSelfHarm.value,
-    errorMessage: riskOfSelfHarm.error,
-    disabled: not isOrderEditable
-  }) }}
-
+ 
   {{ govukCheckboxes({
     idPrefix: "riskCategory",
     name: "riskCategory[]",
