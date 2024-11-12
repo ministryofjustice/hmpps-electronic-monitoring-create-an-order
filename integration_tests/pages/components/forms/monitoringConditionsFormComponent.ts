@@ -9,7 +9,6 @@ export type MonitoringConditionsFormData = {
   isPartOfDAPOL?: string
   orderType?: string
   monitoringRequired?: string | string[]
-  devicesRequired?: string | string[]
   orderTypeDescription?: string
   conditionType?: string
   startDate?: Date
@@ -74,16 +73,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
-  get devicesRequiredField(): FormCheckboxesComponent {
-    return new FormCheckboxesComponent(this.form, 'Devices required', [
-      'Location, fitted',
-      'Location, not fitted',
-      'Radio frequency',
-      'Alcohol, transdermal',
-      'Alcohol, remote breath',
-    ])
-  }
-
   get startDateField(): FormDateComponent {
     return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
   }
@@ -111,10 +100,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       this.monitoringRequiredField.set(data.monitoringRequired)
     }
 
-    if (data.devicesRequired) {
-      this.devicesRequiredField.set(data.devicesRequired)
-    }
-
     if (data.orderTypeDescription) {
       this.orderTypeDescriptionField.set(data.orderTypeDescription)
     }
@@ -137,7 +122,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.isPartOfDAPOLField.shouldNotHaveValidationMessage()
     this.orderTypeField.shouldNotHaveValidationMessage()
     this.monitoringRequiredField.shouldNotHaveValidationMessage()
-    this.devicesRequiredField.shouldNotHaveValidationMessage()
     this.orderTypeDescriptionField.shouldNotHaveValidationMessage()
     this.conditionTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
@@ -149,7 +133,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.isPartOfDAPOLField.shouldBeDisabled()
     this.orderTypeField.shouldBeDisabled()
     this.monitoringRequiredField.shouldBeDisabled()
-    this.devicesRequiredField.shouldBeDisabled()
     this.orderTypeDescriptionField.shouldBeDisabled()
     this.conditionTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()

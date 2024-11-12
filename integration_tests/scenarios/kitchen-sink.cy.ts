@@ -81,13 +81,6 @@ context('The kitchen sink', () => {
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',
       ],
-      devicesRequired: [
-        'Location, fitted',
-        'Location, not fitted',
-        'Radio frequency',
-        'Alcohol, transdermal',
-        'Alcohol, remote breath',
-      ],
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

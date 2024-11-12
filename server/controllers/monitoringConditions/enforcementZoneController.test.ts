@@ -60,7 +60,6 @@ describe('EnforcementZoneController', () => {
           curfew: false,
           dapol: false,
           mandatoryAttendance: true,
-          devicesRequired: [],
           exclusionZone: false,
           trail: false,
           orderTypeDescription: '',

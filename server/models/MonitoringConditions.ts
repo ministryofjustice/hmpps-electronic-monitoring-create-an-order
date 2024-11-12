@@ -11,7 +11,6 @@ const MonitoringConditionsModel = z.object({
   trail: z.boolean().nullable(),
   mandatoryAttendance: z.boolean().nullable(),
   alcohol: z.boolean().nullable(),
-  devicesRequired: z.array(z.string()).nullable(),
   conditionType: z.string().nullable(),
   orderTypeDescription: z.string().nullable(),
 })

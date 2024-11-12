@@ -76,7 +76,6 @@ context('Scenarios', () => {
         orderTypeDescription: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
-        devicesRequired: 'Location, fitted',
       }
       const trailMonitoringOrder = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days

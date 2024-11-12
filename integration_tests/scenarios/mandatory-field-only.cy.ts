@@ -88,10 +88,6 @@ context('Mandatory fields only', () => {
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',
       ],
-      // API requires something in this field due to
-      // java.lang.NullPointerException: null
-      //     at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:204)
-      devicesRequired: ['Alcohol, remote breath'],
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -315,10 +311,6 @@ context('Mandatory fields only', () => {
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',
       ],
-      // API requires something in this field due to
-      // java.lang.NullPointerException: null
-      //     at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:204)
-      devicesRequired: ['Alcohol, remote breath'],
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

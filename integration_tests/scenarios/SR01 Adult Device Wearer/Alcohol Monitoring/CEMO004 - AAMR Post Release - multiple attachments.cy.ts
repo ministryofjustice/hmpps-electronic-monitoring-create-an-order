@@ -69,7 +69,6 @@ context('Scenarios', () => {
         orderTypeDescription: 'DAPOL HDC',
         conditionType: 'Bail Order',
         monitoringRequired: 'Alcohol monitoring',
-        devicesRequired: 'Alcohol, remote breath',
       }
       const alcoholMonitoringOrder = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days

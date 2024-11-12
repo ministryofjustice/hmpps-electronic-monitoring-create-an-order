@@ -71,7 +71,6 @@ context('Scenarios', () => {
         orderTypeDescription: 'DAPOL HDC',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
         monitoringRequired: 'Curfew with electronic monitoring',
-        devicesRequired: 'Location, not fitted',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

@@ -17,13 +17,6 @@ const monitoringConditions = {
   trail: false,
   mandatoryAttendance: true,
   alcohol: true,
-  devicesRequired: [
-    'Location - fitted',
-    'Location - non-fitted',
-    'RF',
-    'Alcohol (Transdermal)',
-    'Alcohol (Remote Breath)',
-  ],
 }
 
 const mockEmptyAttendanceMonitoring = {

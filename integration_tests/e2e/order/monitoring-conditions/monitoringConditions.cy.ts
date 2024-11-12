@@ -16,13 +16,6 @@ const mockSubmittedMonitoringRequirements = {
     trail: true,
     mandatoryAttendance: true,
     alcohol: true,
-    devicesRequired: [
-      'Location - fitted',
-      'Location - non-fitted',
-      'RF',
-      'Alcohol (Transdermal)',
-      'Alcohol (Remote Breath)',
-    ],
     startDate: '2024-10-10T00:00:00.000Z',
     endDate: '2024-10-11T00:00:00.000Z',
   },
@@ -39,7 +32,6 @@ const mockEmptyMonitoringConditions = {
     trail: null,
     mandatoryAttendance: null,
     alcohol: null,
-    devicesRequired: null,
     startDate: null,
     endDate: null,
   },
@@ -117,7 +109,6 @@ context('Monitoring conditions main section', () => {
           { field: 'orderTypeDescription', error: 'You must select an option' },
           { field: 'conditionType', error: 'You must select an option' },
           { field: 'updateMonitoringConditionsDto', error: 'You must select an option' },
-          { field: 'devicesRequired', error: 'You must select an option' },
           { field: 'startDate', error: 'You must select an option' },
           { field: 'endDate', error: 'You must select an option' },
         ],
@@ -134,7 +125,6 @@ context('Monitoring conditions main section', () => {
       cy.get('#orderTypeDescription-error').should('contain', 'You must select an option')
       cy.get('#conditionType-error').should('contain', 'You must select an option')
       cy.get('#monitoringRequired-error').should('contain', 'You must select an option')
-      cy.get('#devicesRequired-error').should('contain', 'You must select an option')
       cy.get('#startDate-error').should('contain', 'You must select an option')
       cy.get('#endDate-error').should('contain', 'You must select an option')
     })
@@ -174,13 +164,6 @@ context('Monitoring conditions main section', () => {
           trail: true,
           mandatoryAttendance: true,
           alcohol: true,
-          devicesRequired: [
-            'Location - fitted',
-            'Location - non-fitted',
-            'RF',
-            'Alcohol (Transdermal)',
-            'Alcohol (Remote Breath)',
-          ],
           startDate: '2024-03-27T00:00:00.000Z',
           endDate: '2025-04-28T00:00:00.000Z',
         })
@@ -198,7 +181,6 @@ context('Monitoring conditions main section', () => {
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       cy.get('input[type="radio"][value="true"]').check()
       cy.get('input[type="checkbox"][value="alcohol"]').check()
-      cy.get('input[type="checkbox"][value="Alcohol (Transdermal)"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('DAPOL')
       cy.get('select[name="conditionType"]').select('Requirement of a Community Order')
@@ -219,7 +201,6 @@ context('Monitoring conditions main section', () => {
           trail: false,
           mandatoryAttendance: false,
           alcohol: true,
-          devicesRequired: ['Alcohol (Transdermal)'],
           startDate: '2024-03-27T00:00:00.000Z',
           endDate: null,
         })

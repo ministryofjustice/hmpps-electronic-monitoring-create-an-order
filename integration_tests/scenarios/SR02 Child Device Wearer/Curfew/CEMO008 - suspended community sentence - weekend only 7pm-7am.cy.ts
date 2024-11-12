@@ -76,7 +76,6 @@ context('Scenarios', () => {
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew with electronic monitoring',
-      devicesRequired: 'Location, fitted',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
