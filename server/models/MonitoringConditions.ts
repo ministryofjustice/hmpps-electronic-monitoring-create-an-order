@@ -4,8 +4,6 @@ const MonitoringConditionsModel = z.object({
   startDate: z.string().datetime().nullable(),
   endDate: z.string().datetime().nullable(),
   orderType: z.string().nullable(),
-  acquisitiveCrime: z.boolean().nullable(),
-  dapol: z.boolean().nullable(),
   curfew: z.boolean().nullable(),
   exclusionZone: z.boolean().nullable(),
   trail: z.boolean().nullable(),
