@@ -14,14 +14,10 @@ export default class ContactDetailsController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { deviceWearerContactDetails } = req.order!
+    const { contactDetails } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = contactDetailsViewModel.construct(
-      deviceWearerContactDetails,
-      formData[0] as never,
-      errors as never,
-    )
+    const viewModel = contactDetailsViewModel.construct(contactDetails, formData[0] as never, errors as never)
 
     res.render('pages/order/contact-information/contact-details', viewModel)
   }

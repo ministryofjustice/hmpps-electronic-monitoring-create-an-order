@@ -23,7 +23,7 @@ const OrderModel = z.object({
   deviceWearer: DeviceWearerModel,
   addresses: z.array(AddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),
-  deviceWearerContactDetails: DeviceWearerContactDetailsModel,
+  contactDetails: DeviceWearerContactDetailsModel,
   enforcementZoneConditions: z.array(EnforcementZoneModel),
   additionalDocuments: z.array(AttachmentModel),
   installationAndRisk: InstallationAndRiskModel.nullable(),
