@@ -133,7 +133,7 @@ context('Mandatory fields only', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
-      orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+      orderSummaryPage.deviceWearerTask.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -353,7 +353,7 @@ context('Mandatory fields only', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
-      orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+      orderSummaryPage.deviceWearerTask.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()

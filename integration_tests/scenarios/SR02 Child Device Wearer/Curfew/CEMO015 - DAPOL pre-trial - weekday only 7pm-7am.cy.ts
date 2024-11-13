@@ -133,7 +133,7 @@ context('Scenarios', () => {
 
         let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+        orderSummaryPage.deviceWearerTask.click()
 
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -258,7 +258,7 @@ context('Scenarios', () => {
                 court: '',
                 court_order_email: '',
                 describe_exclusion: '',
-                device_type: ',',
+                device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [{ condition: 'Curfew with EM' }],
                 exclusion_allday: '',

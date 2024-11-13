@@ -163,7 +163,7 @@ context('The kitchen sink', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
-      orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+      orderSummaryPage.deviceWearerTask.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
