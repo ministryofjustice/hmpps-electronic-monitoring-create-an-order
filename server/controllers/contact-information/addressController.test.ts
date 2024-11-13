@@ -3,7 +3,7 @@ import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
 import AddressService from '../../services/addressService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
+import { createDeviceWearer, getMockOrder } from '../../../test/mocks/mockOrder'
 import AddressController from './addressController'
 import { AddressTypeEnum } from '../../models/Address'
 import TaskListService from '../../services/taskListService'
@@ -51,6 +51,7 @@ const installationAddress = {
 }
 
 const mockOrder = getMockOrder({
+  deviceWearer: createDeviceWearer({ noFixedAbode: false }),
   addresses: [primaryAddress, secondaryAddress, tertiaryAddress, installationAddress],
 })
 
@@ -282,7 +283,6 @@ describe('AddressController', () => {
 
         mockAddressService.updateAddress.mockResolvedValue({
           addressType: 'PRIMARY',
-
           addressLine1: 'a',
           addressLine2: 'b',
           addressLine3: 'c',
@@ -303,7 +303,7 @@ describe('AddressController', () => {
       ['Primary', 'primary', `/order/${mockOrder.id}/contact-information/interested-parties`],
       ['Secondary', 'secondary', `/order/${mockOrder.id}/contact-information/interested-parties`],
     ])(
-      'should go to the notifying organisation page if the user indicates they do not have another address',
+      'should go to the interested parties page if the user indicates they do not have another address',
       async (_: string, param: string, expectedLocation: string) => {
         // Given
         const req = createMockRequest({
@@ -328,7 +328,6 @@ describe('AddressController', () => {
 
         mockAddressService.updateAddress.mockResolvedValue({
           addressType: 'PRIMARY',
-
           addressLine1: 'a',
           addressLine2: 'b',
           addressLine3: 'c',

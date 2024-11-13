@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { Readable } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
+import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import EnforcementZoneService from '../../services/enforcementZoneServices'
@@ -53,18 +53,7 @@ describe('EnforcementZoneController', () => {
       },
       order: getMockOrder({
         id: mockId,
-        monitoringConditions: {
-          orderType: '',
-          alcohol: false,
-          curfew: false,
-          mandatoryAttendance: true,
-          exclusionZone: false,
-          trail: false,
-          orderTypeDescription: '',
-          conditionType: '',
-          startDate: '',
-          endDate: '',
-        },
+        monitoringConditions: createMonitoringConditions({ mandatoryAttendance: true }),
       }),
       user: {
         username: 'fakeUserName',

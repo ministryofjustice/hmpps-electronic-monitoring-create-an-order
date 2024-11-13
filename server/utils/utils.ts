@@ -136,3 +136,26 @@ export const isEmpty = (input: unknown): boolean => {
   }
   return false
 }
+
+export const convertBooleanToEnum = <T extends string>(
+  value: boolean | null,
+  nullValue: T,
+  truthyValue: T,
+  falsyValue: T,
+) => {
+  if (value === null) {
+    return nullValue
+  }
+
+  if (value) {
+    return truthyValue
+  }
+
+  return falsyValue
+}
+
+export const isNullOrUndefined = <T>(value: T | null | undefined): value is null | undefined => {
+  return value === null || value === undefined
+}
+
+export const isNotNullOrUndefined = <T>(value: T | null | undefined): value is T => !isNullOrUndefined(value)

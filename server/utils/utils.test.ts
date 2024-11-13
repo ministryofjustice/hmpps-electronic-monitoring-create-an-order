@@ -3,12 +3,15 @@ import {
   calculateAge,
   camelCaseToSentenceCase,
   checkType,
+  convertBooleanToEnum,
   convertToTitleCase,
   deserialiseDate,
   deserialiseTime,
   getError,
   initialiseName,
   isEmpty,
+  isNotNullOrUndefined,
+  isNullOrUndefined,
   serialiseDate,
   serialiseTime,
 } from './utils'
@@ -111,6 +114,40 @@ describe('getError', () => {
     },
   ])('getError($errors, $field)', ({ errors, field, expected }) => {
     expect(getError(errors, field)).toEqual(expected)
+  })
+})
+
+describe('convertBooleanToEnum', () => {
+  it.each([
+    [null, 'null', 'true', 'false', 'null'],
+    [true, 'null', 'true', 'false', 'true'],
+    [false, 'null', 'true', 'false', 'false'],
+  ])('convertBooleanToEnum(%s, %s, %s, %s', (value, nullValue, truthyValue, falsyValue, expectedValue) => {
+    expect(convertBooleanToEnum(value, nullValue, truthyValue, falsyValue)).toEqual(expectedValue)
+  })
+})
+
+describe('isNullOrUndefined', () => {
+  it.each([
+    ['object', {}, false],
+    ['number', 0, false],
+    ['string', '', false],
+    ['undefined', undefined, true],
+    ['null', null, true],
+  ])('%s isNullOrUndefined(%s)', (_: string, value: unknown, expected: boolean) => {
+    expect(isNullOrUndefined(value)).toBe(expected)
+  })
+})
+
+describe('isNotNullOrUndefined', () => {
+  it.each([
+    ['object', {}, true],
+    ['number', 0, true],
+    ['string', '', true],
+    ['undefined', undefined, false],
+    ['null', null, false],
+  ])('%s isNotNullOrUndefined(%s)', (_: string, value: unknown, expected: boolean) => {
+    expect(isNotNullOrUndefined(value)).toBe(expected)
   })
 })
 
