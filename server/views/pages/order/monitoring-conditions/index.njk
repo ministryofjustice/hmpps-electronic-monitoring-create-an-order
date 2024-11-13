@@ -94,75 +94,7 @@
       errorMessage: endDate.error
     }) }}
   {% endcall %}
-
-  {% call govukFieldset({
-    legend: {
-      text: "Monitoring projects",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    {{ govukRadios({
-      name: "acquisitiveCrime",
-      classes: "govuk-radios--inline",
-      fieldset: {
-        legend: {
-          text: "Is the device wearer part of the Acquisitive Crime project? (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "Not available to device wearers under 18. If selected the device wearer must be trail monitored as part of the project requirements."
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: acquisitiveCrime.value,
-      errorMessage: acquisitiveCrime.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukRadios({
-      name: "dapol",
-      classes: "govuk-radios--inline",
-      fieldset: {
-        legend: {
-          text: "Is the device wearer part of the Domestic Abuse Perpetrators on Licence (DAPOL) project? (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "Not available to device wearers under 18."
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: dapol.value,
-      errorMessage: dapol.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endcall %}
-
+ 
   {% call govukFieldset({
     legend: {
       text: "Order information",
@@ -194,10 +126,11 @@
       id: "orderTypeDescription",
       name: "orderTypeDescription",
       label: {
-        text: "Select order type description"
+        text: "Select order type description (optional)"
       },
       items: [
         { text: 'Select', value: '' },
+        { text: 'DAPO', value: 'DAPO' },
         { text: 'DAPOL', value: 'DAPOL' },
         { text: 'DAPOL HDC', value: 'DAPOL_HDC' },
         { text: 'GPS Acquisitive Crime HDC', value: 'GPS_ACQUISITIVE_CRIME_HDC' },

@@ -190,9 +190,7 @@ describe('CurfewConditionsController', () => {
       req.order = getMockOrder({
         id: mockId,
         monitoringConditions: {
-          acquisitiveCrime: false,
           alcohol: false,
-          dapol: false,
           exclusionZone: false,
           mandatoryAttendance: false,
           orderType: '',
@@ -225,9 +223,7 @@ describe('CurfewConditionsController', () => {
       req.order = getMockOrder({
         id: mockId,
         monitoringConditions: {
-          acquisitiveCrime: false,
           alcohol: false,
-          dapol: false,
           exclusionZone: false,
           mandatoryAttendance: false,
           orderType: '',

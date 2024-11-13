@@ -29,8 +29,6 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   additionalDocuments: [],
   monitoringConditions: {
     orderType: null,
-    acquisitiveCrime: null,
-    dapol: null,
     curfew: null,
     exclusionZone: null,
     trail: null,

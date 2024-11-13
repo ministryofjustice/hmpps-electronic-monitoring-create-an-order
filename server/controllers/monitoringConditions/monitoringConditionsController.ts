@@ -11,18 +11,6 @@ import TaskListService from '../../services/taskListService'
 
 const monitoringConditionsFormDataModel = z.object({
   action: z.string().default('continue'),
-  acquisitiveCrime: z.union([z.string(), z.undefined()]).transform(value => {
-    if (value === undefined) {
-      return null
-    }
-    return value === 'true'
-  }),
-  dapol: z.union([z.string(), z.undefined()]).transform(value => {
-    if (value === undefined) {
-      return null
-    }
-    return value === 'true'
-  }),
   orderType: z.coerce.string(),
   monitoringRequired: z
     .union([z.string(), z.array(z.string()).default([])])
@@ -40,8 +28,6 @@ const monitoringConditionsFormDataModel = z.object({
 type MonitoringConditionsFormData = z.infer<typeof monitoringConditionsFormDataModel>
 
 type MonitoringConditionsViewModel = {
-  acquisitiveCrime: TextField
-  dapol: TextField
   orderType: TextField
   monitoringRequired: MultipleChoiceField
   orderTypeDescription: TextField
@@ -94,8 +80,6 @@ export default class MonitoringConditionsController {
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditions?.startDate)
     const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditions?.endDate)
     return {
-      acquisitiveCrime: { value: String(monitoringConditions.acquisitiveCrime) },
-      dapol: { value: String(monitoringConditions.dapol) },
       orderType: { value: monitoringConditions.orderType ?? '' },
       monitoringRequired: {
         values: monitoringRequiredValues,
@@ -112,14 +96,6 @@ export default class MonitoringConditionsController {
     validationErrors: ValidationResult,
   ): MonitoringConditionsViewModel {
     return {
-      acquisitiveCrime: {
-        value: String(formData.acquisitiveCrime),
-        error: getError(validationErrors, 'acquisitiveCrime'),
-      },
-      dapol: {
-        value: String(formData.dapol),
-        error: getError(validationErrors, 'dapol'),
-      },
       orderType: { value: formData.orderType, error: getError(validationErrors, 'orderType') },
       monitoringRequired: {
         values: formData.monitoringRequired,
@@ -143,8 +119,6 @@ export default class MonitoringConditionsController {
 
   createApiModelFromFormData(formData: MonitoringConditionsFormData): MonitoringConditions {
     return {
-      acquisitiveCrime: formData.acquisitiveCrime === null ? null : Boolean(formData.acquisitiveCrime),
-      dapol: formData.dapol === null ? null : Boolean(formData.dapol),
       orderType: formData.orderType === '' ? null : formData.orderType,
       curfew: formData.monitoringRequired.includes('curfew'),
       exclusionZone: formData.monitoringRequired.includes('exclusionZone'),

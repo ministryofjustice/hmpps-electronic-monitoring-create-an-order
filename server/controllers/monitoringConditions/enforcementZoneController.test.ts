@@ -55,10 +55,8 @@ describe('EnforcementZoneController', () => {
         id: mockId,
         monitoringConditions: {
           orderType: '',
-          acquisitiveCrime: true,
           alcohol: false,
           curfew: false,
-          dapol: false,
           mandatoryAttendance: true,
           exclusionZone: false,
           trail: false,

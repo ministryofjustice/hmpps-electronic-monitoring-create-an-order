@@ -9,8 +9,6 @@ const mockSubmittedMonitoringRequirements = {
     orderType: 'immigration',
     orderTypeDescription: 'DAPOL',
     conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
-    acquisitiveCrime: true,
-    dapol: true,
     curfew: true,
     exclusionZone: true,
     trail: true,
@@ -25,8 +23,6 @@ const mockEmptyMonitoringConditions = {
     orderType: null,
     orderTypeDescription: null,
     conditionType: null,
-    acquisitiveCrime: null,
-    dapol: null,
     curfew: null,
     exclusionZone: null,
     trail: null,
@@ -73,9 +69,6 @@ context('Monitoring conditions main section', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      cy.get('input[type="radio"][value="true"]').each($el => {
-        cy.wrap($el).should('be.checked').and('be.disabled')
-      })
       cy.get('input[type="checkbox"]').each($el => {
         cy.wrap($el).should('be.checked').and('be.disabled')
       })
@@ -103,8 +96,6 @@ context('Monitoring conditions main section', () => {
         id: mockOrderId,
         subPath: '/monitoring-conditions',
         response: [
-          { field: 'acquisitiveCrime', error: 'You must select an option' },
-          { field: 'dapol', error: 'You must select an option' },
           { field: 'orderType', error: 'You must select an option' },
           { field: 'orderTypeDescription', error: 'You must select an option' },
           { field: 'conditionType', error: 'You must select an option' },
@@ -115,12 +106,9 @@ context('Monitoring conditions main section', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
-      cy.get('input[type="radio"]').should('not.be.checked')
       cy.get('input[type="checkbox"]').should('not.be.checked')
       cy.get('select[name="orderType"]').invoke('val').should('deep.equal', '')
       page.form.saveAndContinueButton.click()
-      cy.get('#acquisitiveCrime-error').should('contain', 'You must select an option')
-      cy.get('#dapol-error').should('contain', 'You must select an option')
       cy.get('#orderType-error').should('contain', 'You must select an option')
       cy.get('#orderTypeDescription-error').should('contain', 'You must select an option')
       cy.get('#conditionType-error').should('contain', 'You must select an option')
@@ -138,7 +126,6 @@ context('Monitoring conditions main section', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
-      cy.get('input[type="radio"][value="true"]').check()
       cy.get('input[type="checkbox"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('GPS Acquisitive Crime HDC')
@@ -154,8 +141,6 @@ context('Monitoring conditions main section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          acquisitiveCrime: true,
-          dapol: true,
           orderType: 'immigration',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
           conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
@@ -179,7 +164,6 @@ context('Monitoring conditions main section', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
-      cy.get('input[type="radio"][value="true"]').check()
       cy.get('input[type="checkbox"][value="alcohol"]').check()
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('DAPOL')
@@ -191,8 +175,6 @@ context('Monitoring conditions main section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          acquisitiveCrime: true,
-          dapol: true,
           orderType: 'immigration',
           orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
