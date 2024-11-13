@@ -219,7 +219,7 @@ export default class TaskListService {
         'REQUIRED',
         'NOT_REQUIRED',
       ),
-      completed: isNotNullOrUndefined(order.curfewTimeTable),
+      completed: isNotNullOrUndefined(order.curfewTimeTable) && order.curfewTimeTable.length > 0,
     })
 
     tasks.push({
