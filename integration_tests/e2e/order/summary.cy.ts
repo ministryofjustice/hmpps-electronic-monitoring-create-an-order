@@ -442,6 +442,7 @@ context('Order Summary', () => {
       page.alcoholTask.shouldHaveStatus('Complete')
       page.alcoholTask.shouldBeEnabled()
 
+      // N.B. Attachments can never be complete (atm)
       page.attachmentsTask.shouldHaveStatus('Incomplete')
       page.attachmentsTask.shouldHaveStatus('Optional')
       page.attachmentsTask.shouldBeEnabled()
