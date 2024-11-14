@@ -2,25 +2,88 @@ import AppPage from '../appPage'
 import { PageElement } from '../page'
 
 import paths from '../../../server/constants/paths'
+import Task from '../components/task'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
     super('Tag request form', paths.ORDER.SUMMARY, 'Form sections')
   }
 
-  orderSections = (): PageElement => cy.get('.govuk-task-list')
+  get deviceWearerTask(): Task {
+    return new Task('Device wearer')
+  }
 
-  orderSectionsItems = (): PageElement => cy.get('govuk-task-list li')
+  get responsibleAdultTask(): Task {
+    return new Task('Responsible adult')
+  }
 
-  AboutTheDeviceWearerSectionItem = (): PageElement => this.orderSections().contains('About the device wearer')
+  get contactDetailsTask(): Task {
+    return new Task('Contact details')
+  }
 
-  ContactInformationSectionItem = (): PageElement => this.orderSections().contains('Contact information')
+  get noFixedAbodeTask(): Task {
+    return new Task('No fixed abode')
+  }
 
-  InformationAndRiskSectionItem = (): PageElement => this.orderSections().contains('Information and risk')
+  get primaryAddressTask(): Task {
+    return new Task('Primary address')
+  }
 
-  MonitoringConditionsSectionItem = (): PageElement => this.orderSections().contains('Monitoring conditions')
+  get secondaryAddressTask(): Task {
+    return new Task('Secondary address')
+  }
 
-  AttachmentsSectionItem = (): PageElement => this.orderSections().contains('Attachments')
+  get tertiaryAddressTask(): Task {
+    return new Task('Tertiary address')
+  }
+
+  get interestedPartiesTask(): Task {
+    return new Task('Interested parties')
+  }
+
+  get installationAndRiskTask(): Task {
+    return new Task('Installation and risk')
+  }
+
+  get monitoringConditionsTask(): Task {
+    return new Task('Monitoring conditions')
+  }
+
+  get installationAddressTask(): Task {
+    return new Task('Installation address')
+  }
+
+  get curfewReleaseDateTask(): Task {
+    return new Task('Curfew release date')
+  }
+
+  get curfewConditionsTask(): Task {
+    return new Task('Curfew conditions')
+  }
+
+  get curfewTimetableTask(): Task {
+    return new Task('Curfew timetable')
+  }
+
+  get zoneTask(): Task {
+    return new Task('Zone')
+  }
+
+  get trailTask(): Task {
+    return new Task('Trail')
+  }
+
+  get attendanceTask(): Task {
+    return new Task('Attendance')
+  }
+
+  get alcoholTask(): Task {
+    return new Task('Alcohol')
+  }
+
+  get attachmentsTask(): Task {
+    return new Task('Attachment')
+  }
 
   get submitOrderButton(): PageElement {
     return cy.contains('button', 'Submit order')
