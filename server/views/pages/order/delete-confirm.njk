@@ -12,46 +12,27 @@
     href: "/order/" + order.id + "/summary"
   }) }}
 
-  <form action="/order/{{ order.id }}/delete" method="post">
+  <h1 class="govuk-heading-l">
+    Are you sure you want to delete this form?
+  </h1>
+
+  <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    {{ govukRadios({
-      name: "confirmDelete",
-      classes: "govuk-radios--inline",
-      fieldset: {
-        legend: {
-          text: "Are you sure you want to delete this form?",
-          isPageHeading: true
-        }
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: confirmDelete,
-      errorMessage: errors.confirmDelete,
-      disabled: not isOrderEditable
-    }) }}
-
     <div class="govuk-button-group">
-        {{ govukButton({
-          text: "Back",
-          classes: "govuk-button--secondary",
-          href: "/order/" + order.id + "/summary"
-        }) }}
+      {{ govukButton({
+        text: "Back",
+        classes: "govuk-button--secondary",
+        name: "action",
+        value: "back"
+      })}}
 
-        {{ govukButton({
-          text: "Delete",
-          classes: "govuk-button--warning"
-        }) }}
+      {{ govukButton({
+        text: "Delete",
+        classes: "govuk-button--warning",
+        name: "action",
+        value: "continue"
+      })}}
     </div>
   </form>
 {% endblock %}

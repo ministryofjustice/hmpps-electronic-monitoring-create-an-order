@@ -30,36 +30,34 @@ export default class OrderController {
   confirmDelete: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    if (order.status === 'SUBMITTED') {
-      res.redirect(paths.ORDER.DELETE_FAILED)
-    } else {
-      res.render('pages/order/delete-confirm', {
-        order,
-      })
-    }
+    res.render('pages/order/delete-confirm', {
+      order,
+    })
   }
 
   delete: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { action } = req.body
 
-    if (order.status === 'SUBMITTED') {
-      res.redirect(paths.ORDER.DELETE_FAILED)
-    } else {
-      try {
-        const { token } = res.locals.user
-        await this.orderService.deleteOrder({ accessToken: token, orderId: order.id })
+    if (action === 'continue') {
+      const result = await this.orderService.deleteOrder({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+      })
 
+      if (result.ok) {
         res.redirect(paths.ORDER.DELETE_SUCCESS)
-      } catch (error) {
-        req.flash('validationErrors', error)
-
+      } else {
+        req.flash('deletionErrors', result.error)
         res.redirect(paths.ORDER.DELETE_FAILED)
       }
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }
   }
 
   deleteFailed: RequestHandler = async (req: Request, res: Response) => {
-    const errors = req.flash('validationErrors')
+    const errors = req.flash('deletionErrors')
 
     res.render('pages/order/delete-failed', { errors })
   }
