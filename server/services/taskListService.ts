@@ -1,5 +1,7 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
+import { AddressType } from '../models/Address'
+import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 
 type Section =
   | 'ABOUT_THE_DEVICE_WEARER'
@@ -29,12 +31,14 @@ type Page =
   | 'ALCOHOL'
   | 'ATTACHMENT'
 
+type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED'
+
 type Task = {
   section: Section
   name: Page
   path: string
-  required: boolean
-  status: 'INCOMPLETE' | 'COMPLETE'
+  state: State
+  completed: boolean
 }
 
 type TasksBySections = {
@@ -43,181 +47,260 @@ type TasksBySections = {
 
 type FormData = Record<string, string | boolean>
 
+const canBeCompleted = (task: Task, formData: FormData): boolean => {
+  if (['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'].includes(task.name)) {
+    if (task.name === 'SECONDARY_ADDRESS') {
+      if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
+        return false
+      }
+    }
+    if (task.name === 'TERTIARY_ADDRESS') {
+      if (!(formData.hasAnotherAddress === true && formData.addressType === 'secondary')) {
+        return false
+      }
+    }
+  }
+
+  return ['OPTIONAL', 'REQUIRED'].includes(task.state)
+}
+const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === currentPage
+
+const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
+  return order.addresses.find(address => address.addressType === addressType) !== undefined
+}
+
 export default class TaskListService {
   constructor() {}
 
-  getTasks(order: Order, formData: FormData = {}): Array<Task> {
+  getTasks(order: Order): Array<Task> {
     const tasks: Array<Task> = []
 
     tasks.push({
       section: 'ABOUT_THE_DEVICE_WEARER',
       name: 'DEVICE_WEARER',
       path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'REQUIRED',
+      completed: isNotNullOrUndefined(order.deviceWearer.firstName),
     })
 
     tasks.push({
       section: 'ABOUT_THE_DEVICE_WEARER',
       name: 'RESPONSIBLE_ADULT',
       path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT,
-      required: !order.deviceWearer.adultAtTimeOfInstallation,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.deviceWearer.adultAtTimeOfInstallation,
+        'CANT_BE_STARTED',
+        'NOT_REQUIRED',
+        'REQUIRED',
+      ),
+      completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
     })
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
       name: 'CONTACT_DETAILS',
       path: paths.CONTACT_INFORMATION.CONTACT_DETAILS,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'OPTIONAL',
+      completed: isNotNullOrUndefined(order.contactDetails),
     })
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
       name: 'NO_FIXED_ABODE',
       path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'REQUIRED',
+      completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
     })
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
       name: 'PRIMARY_ADDRESS',
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
-      required: !order.deviceWearer.noFixedAbode,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.deviceWearer.noFixedAbode,
+        'CANT_BE_STARTED',
+        'NOT_REQUIRED',
+        'REQUIRED',
+      ),
+      completed: isCompletedAddress(order, 'PRIMARY'),
     })
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
       name: 'SECONDARY_ADDRESS',
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
-      required: formData.hasAnotherAddress === true && formData.addressType === 'primary',
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.deviceWearer.noFixedAbode,
+        'CANT_BE_STARTED',
+        'NOT_REQUIRED',
+        'OPTIONAL',
+      ),
+      completed: isCompletedAddress(order, 'SECONDARY'),
     })
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
       name: 'TERTIARY_ADDRESS',
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
-      required: formData.hasAnotherAddress === true && formData.addressType === 'secondary',
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.deviceWearer.noFixedAbode,
+        'CANT_BE_STARTED',
+        'NOT_REQUIRED',
+        'OPTIONAL',
+      ),
+      completed: isCompletedAddress(order, 'TERTIARY'),
     })
 
     tasks.push({
       section: 'CONTACT_INFORMATION',
       name: 'INTERESTED_PARTIES',
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'REQUIRED',
+      completed: isNotNullOrUndefined(order.interestedParties),
     })
 
     tasks.push({
       section: 'INSTALLATION_AND_RISK',
       name: 'INSTALLATION_AND_RISK',
       path: paths.INSTALLATION_AND_RISK,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'REQUIRED',
+      completed: isNotNullOrUndefined(order.installationAndRisk),
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.BASE_URL,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'REQUIRED',
+      completed: order.monitoringConditions.isValid,
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'INSTALLATION_ADDRESS',
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'REQUIRED',
+      completed: isCompletedAddress(order, 'INSTALLATION'),
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'CURFEW_RELEASE_DATE',
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
-      required: !!order.monitoringConditions.curfew,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'CURFEW_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
-      required: !!order.monitoringConditions.curfew,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed: isNotNullOrUndefined(order.curfewConditions),
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'CURFEW_TIMETABLE',
       path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
-      required: !!order.monitoringConditions.curfew,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed: isNotNullOrUndefined(order.curfewTimeTable) && order.curfewTimeTable.length > 0,
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'ZONE',
-      path: paths.MONITORING_CONDITIONS.ZONE,
-      required: !!order.monitoringConditions.exclusionZone,
-      status: 'INCOMPLETE',
+      path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.exclusionZone,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed: order.enforcementZoneConditions.length > 0,
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'TRAIL',
       path: paths.MONITORING_CONDITIONS.TRAIL,
-      required: !!order.monitoringConditions.trail,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.trail,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed: isNotNullOrUndefined(order.monitoringConditionsTrail),
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'ATTENDANCE',
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
-      required: !!order.monitoringConditions.mandatoryAttendance,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.mandatoryAttendance,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed:
+        isNotNullOrUndefined(order.monitoringConditionsAttendance) && order.monitoringConditionsAttendance.length > 0,
     })
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
       name: 'ALCOHOL',
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
-      required: !!order.monitoringConditions.alcohol,
-      status: 'INCOMPLETE',
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.alcohol,
+        'CANT_BE_STARTED',
+        'REQUIRED',
+        'NOT_REQUIRED',
+      ),
+      completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
     })
 
     tasks.push({
       section: 'ATTACHMENTS',
       name: 'ATTACHMENT',
       path: paths.ATTACHMENT.ATTACHMENTS,
-      required: true,
-      status: 'INCOMPLETE',
+      state: 'OPTIONAL',
+      completed: false,
     })
 
     return tasks
   }
 
   getNextPage(currentPage: Page, order: Order, formData: FormData = {}) {
-    const tasks = this.getTasks(order, formData)
-    const requiredTasks = tasks.filter(({ name, required }) => required || name === currentPage)
-    const currentTaskIndex = requiredTasks.findIndex(({ name }) => name === currentPage)
+    const tasks = this.getTasks(order)
+    const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
+    const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
 
-    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= requiredTasks.length) {
+    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
       return paths.ORDER.SUMMARY.replace(':orderId', order.id)
     }
 
-    return requiredTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
 
   getTasksBySection(order: Order) {
     const tasks = this.getTasks(order)
+
     return tasks.reduce((acc, task) => {
       if (!acc[task.section]) {
         acc[task.section] = []

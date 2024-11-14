@@ -11,6 +11,7 @@ const MonitoringConditionsModel = z.object({
   alcohol: z.boolean().nullable(),
   conditionType: z.string().nullable(),
   orderTypeDescription: z.string().nullable(),
+  isValid: z.boolean().default(false),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>

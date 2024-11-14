@@ -117,7 +117,7 @@ export default class MonitoringConditionsController {
     }
   }
 
-  createApiModelFromFormData(formData: MonitoringConditionsFormData): MonitoringConditions {
+  createApiModelFromFormData(formData: MonitoringConditionsFormData): Omit<MonitoringConditions, 'isValid'> {
     return {
       orderType: formData.orderType === '' ? null : formData.orderType,
       curfew: formData.monitoringRequired.includes('curfew'),

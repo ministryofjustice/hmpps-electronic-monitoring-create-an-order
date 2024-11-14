@@ -41,30 +41,6 @@
     }) }}
   {% endif %}
 
-{% set taskListItems = [] %}
-{% for section, tasks in sections %}
-  {% set task = tasks[0] %}
-  {% set name = section | replace("_", " ") | capitalize %}
-  {% set href = task.path %}
-  {% set complete = task.status != 'INCOMPLETE' %}
-
-  {% if task.required %}
-    {% set taskListItems = (taskListItems.push({
-        idPrefix: "order-section",
-        title: { text: name },
-        href: href,
-        status: {
-          tag: {
-            text: "Completed" if complete === true else "Incomplete",
-            classes: "govuk-tag--green" if complete === true else "govuk-tag--grey"
-          }
-        }
-      }), taskListItems) %}
-  {% endif %}
-{% endfor %}
-{{ govukTaskList({ idPrefix: "sections", items: taskListItems }) }}
-
-{#
   {% for section, tasks in sections %}
     <h3 class="govuk-heading-m">{{ section | replace("_", " ") | capitalize }}</h3>
 
@@ -72,25 +48,64 @@
     {% for task in tasks %}
       {% set name = task.name | replace("_", " ") | capitalize %}
       {% set href = task.path %}
-      {% set complete = task.status != 'INCOMPLETE' %}
+      {% set status = 'COMPLETE' if task.completed else 'INCOMPLETE' %}
+      {% set tagColour = 'govuk-tag--green' if task.completed else 'govuk-tag--grey' %}
 
-      {% if task.required %}
+      {% if task.state == 'CANT_BE_STARTED' %}
+        {% set taskListItems = (taskListItems.push({
+          idPrefix: "order-section",
+          title: { text: name },
+          status: {
+            text: 'Cannot start yet',
+            classes: "govuk-task-list__status--cannot-start-yet"
+            
+          }
+        }), taskListItems) %}
+      {% elif task.state == 'NOT_REQUIRED' %}
+        {% set taskListItems = (taskListItems.push({
+          idPrefix: "order-section",
+          title: { text: name },
+          status: {
+            text: 'Not required',
+            classes: "govuk-task-list__status--cannot-start-yet"
+            
+          }
+        }), taskListItems) %}
+      {% elif task.state == 'OPTIONAL' %}
+        {% set tagHtml %}
+            <strong class="govuk-tag govuk-tag--light-blue">
+              Optional
+            </strong>
+            <strong class="govuk-tag {{ tagColour }}">
+              {{ status | capitalize }} 
+            </strong>
+        {% endset %}
+
+        {% set taskListItems = (taskListItems.push({
+            idPrefix: "order-section",
+            title: { text: name },
+            href: href,
+            status: {
+              html: tagHtml
+            }
+          }), taskListItems) %}
+      {% else %}
         {% set taskListItems = (taskListItems.push({
           idPrefix: "order-section",
           title: { text: name },
           href: href,
           status: {
             tag: {
-              text: "Completed" if complete === true else "Incomplete",
-              classes: "govuk-tag--green" if complete === true else "govuk-tag--grey"
+              text: status | capitalize,
+              classes: tagColour
             }
           }
         }), taskListItems) %}
+
       {% endif %}
     {% endfor %}
     {{ govukTaskList({ idPrefix: "sections", items: taskListItems }) }}
   {% endfor %}
-#}
 
   {% if order.status == "IN_PROGRESS" %}
     <form action="/order/{{ order.id }}/submit" method="post">
@@ -100,18 +115,18 @@
             text: "Submit order",
             disabled: not order.isValid
         }) }}
-    </div>
-  </form>
-{% else %}
-  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
-  {{ govukButton({
-          text: "Get tag request form summary for download",
-          href: "/order/" + orderId + "/receipt",
-          classes: "govuk-button--secondary"
-      }) }}
+      </div>
+    </form>
+  {% else %}
+    <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+    {{ govukButton({
+      text: "Get tag request form summary for download",
+      href: "/order/" + orderId + "/receipt",
+      classes: "govuk-button--secondary"
+    }) }}
 
-  <div class="govuk-button-group">
-    <a id="backToSearch" class="govuk-link" href="/">Return to order search view</a>
-  </div>
-{% endif %}
+    <div class="govuk-button-group">
+      <a id="backToSearch" class="govuk-link" href="/">Return to order search view</a>
+    </div>
+  {% endif %}
 {% endblock %}

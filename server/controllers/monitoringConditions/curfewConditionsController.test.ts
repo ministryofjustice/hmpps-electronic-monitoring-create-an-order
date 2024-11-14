@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
+import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
 import AuditService from '../../services/auditService'
@@ -189,18 +189,7 @@ describe('CurfewConditionsController', () => {
     it('Should redirect to curfew condition page', async () => {
       req.order = getMockOrder({
         id: mockId,
-        monitoringConditions: {
-          alcohol: false,
-          exclusionZone: false,
-          mandatoryAttendance: false,
-          orderType: '',
-          trail: false,
-          curfew: true,
-          conditionType: '',
-          endDate: '',
-          orderTypeDescription: '',
-          startDate: '',
-        },
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
       })
       req.body = {
         action: 'continue',
@@ -222,18 +211,7 @@ describe('CurfewConditionsController', () => {
     it('Should redirect back to summary page', async () => {
       req.order = getMockOrder({
         id: mockId,
-        monitoringConditions: {
-          alcohol: false,
-          exclusionZone: false,
-          mandatoryAttendance: false,
-          orderType: '',
-          trail: false,
-          curfew: true,
-          conditionType: '',
-          endDate: '',
-          orderTypeDescription: '',
-          startDate: '',
-        },
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
       })
       req.body = {
         action: 'back',

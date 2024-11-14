@@ -6,7 +6,7 @@ import { SanitisedError } from '../sanitisedError'
 
 type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string
-  data: MonitoringConditions
+  data: Omit<MonitoringConditions, 'isValid'>
 }
 export default class MonitoringConditionsService {
   constructor(private readonly apiClient: RestClient) {}
