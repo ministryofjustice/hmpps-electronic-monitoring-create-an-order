@@ -79,13 +79,12 @@ describe('OrderController', () => {
   })
 
   describe('confirmDelete', () => {
-    it('should render a confirmation page for a draft order', async () => {
+    it('should render a confirmation page for an order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
-      req.flash = jest.fn().mockReturnValue([])
 
       // When
       await orderController.confirmDelete(req, res, next)
@@ -95,29 +94,16 @@ describe('OrderController', () => {
         order: mockOrder,
       })
     })
-
-    it('should redirect to a failed page for a submitted order', async () => {
-      // Given
-      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
-      const req = createMockRequest({ order: mockOrder })
-      const res = createMockResponse()
-      const next = jest.fn()
-
-      // When
-      await orderController.confirmDelete(req, res, next)
-
-      // Then
-      expect(res.redirect).toHaveBeenCalledWith(`/order/delete/failed`)
-    })
   })
 
   describe('delete', () => {
     it('should delete the order and redirect to a success page for a draft order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
+      mockOrderService.deleteOrder.mockResolvedValue({ ok: true })
 
       // When
       await orderController.delete(req, res, next)
@@ -127,13 +113,66 @@ describe('OrderController', () => {
         accessToken: 'fakeUserToken',
         orderId: mockOrder.id,
       })
+      expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/order/delete/success')
     })
 
-    it('should not delete the order and reditect to a failed page for a submitted order', async () => {
+    it('should not delete the order and redirect to a failed page for a submitted order', async () => {
       // Given
       const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
-      const req = createMockRequest({ order: mockOrder })
+      const req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.deleteOrder.mockResolvedValue({
+        ok: false,
+        error: `Order with id ${mockOrder.id} cannot be deleted because it has already been submitted`,
+      })
+
+      // When
+      await orderController.delete(req, res, next)
+
+      // Then
+      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
+      expect(req.flash).toHaveBeenCalledWith(
+        'deletionErrors',
+        `Order with id ${mockOrder.id} cannot be deleted because it has already been submitted`,
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/order/delete/failed')
+    })
+
+    it('should not delete the order and redirect to a failed page for a submitted order', async () => {
+      // Given
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+      const req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.deleteOrder.mockResolvedValue({
+        ok: false,
+        error: `Order with id ${mockOrder.id} cannot be deleted because it is in an invalid state`,
+      })
+
+      // When
+      await orderController.delete(req, res, next)
+
+      // Then
+      expect(mockOrderService.deleteOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+      })
+      expect(req.flash).toHaveBeenCalledWith(
+        'deletionErrors',
+        `Order with id ${mockOrder.id} cannot be deleted because it is in an invalid state`,
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/order/delete/failed')
+    })
+
+    it('should redirect to the summary pages if the user does not confirm the delete', async () => {
+      // Given
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+      const req = createMockRequest({ body: { action: 'back' }, order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -141,8 +180,9 @@ describe('OrderController', () => {
       await orderController.delete(req, res, next)
 
       // Then
-      expect(mockOrderService.deleteOrder).toHaveBeenCalledTimes(0)
-      expect(res.redirect).toHaveBeenCalledWith('/order/delete/failed')
+      expect(mockOrderService.deleteOrder).not.toHaveBeenCalled()
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
     })
   })
 

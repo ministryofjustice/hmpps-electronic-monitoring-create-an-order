@@ -144,7 +144,7 @@ describe('authorised user', () => {
   })
 
   describe('GET /order/:orderId/delete', () => {
-    it('should render a confirmation page for a draft order', () => {
+    it('should render a confirmation page for an order', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
 
       return request(app)
@@ -154,34 +154,39 @@ describe('authorised user', () => {
           expect(res.text).toContain('Are you sure you want to delete this form?')
         })
     })
-
-    it('should redirect to a failed page for a submitted order', () => {
-      orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
-
-      return request(app)
-        .get(`/order/${mockSubmittedOrder.id}/delete`)
-        .expect(302)
-        .expect('Location', '/order/delete/failed')
-    })
   })
 
   describe('POST /order/:orderId/delete', () => {
     it('should delete a draft order and redirect to the success page', () => {
       orderService.getOrder.mockResolvedValue(mockDraftOrder)
+      orderService.deleteOrder.mockResolvedValue({ ok: true })
 
       return request(app)
         .post(`/order/${mockDraftOrder.id}/delete`)
+        .send('action=continue')
         .expect(302)
         .expect('Location', '/order/delete/success')
     })
 
     it('should not delete a submitted order and redirect to the failed page', () => {
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      orderService.deleteOrder.mockResolvedValue({ ok: false, error: '' })
 
       return request(app)
         .post(`/order/${mockSubmittedOrder.id}/delete`)
+        .send('action=continue')
         .expect(302)
         .expect('Location', '/order/delete/failed')
+    })
+
+    it('should return to the summary if the user chooses not to delete the form', () => {
+      orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+
+      return request(app)
+        .post(`/order/${mockSubmittedOrder.id}/delete`)
+        .send('action=back')
+        .expect(302)
+        .expect('Location', `/order/${mockSubmittedOrder.id}/summary`)
     })
   })
 

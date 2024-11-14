@@ -115,6 +115,11 @@
             text: "Submit order",
             disabled: not order.isValid
         }) }}
+        {{ govukButton({
+          text: "Delete order",
+          href: "/order/" + orderId + "/delete",
+          classes: "govuk-button--warning"
+        }) }}
       </div>
     </form>
   {% else %}

@@ -1,5 +1,6 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
+import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
 import OrderModel, { Order } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
@@ -40,10 +41,28 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async deleteOrder(input: OrderRequestInput) {
-    // Do nothing for now
-    return Promise.resolve()
+  async deleteOrder(input: OrderRequestInput): Promise<Result<void, string>> {
+    try {
+      await this.apiClient.delete({
+        path: `/api/orders/${input.orderId}`,
+        token: input.accessToken,
+      })
+
+      return {
+        ok: true,
+      }
+    } catch (e) {
+      const error = e as SanitisedError
+
+      if (error.status === 500) {
+        return {
+          ok: false,
+          error: error.message,
+        }
+      }
+
+      throw e
+    }
   }
 
   async submitOrder(input: OrderRequestInput): Promise<OrderSubmissionResult> {
