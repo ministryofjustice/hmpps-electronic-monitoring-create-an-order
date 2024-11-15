@@ -476,10 +476,8 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
   })
 
 const tables = [
-  'address',
   'alternative_contact_details',
   'device_wearer_contact_details',
-  'device_wearer',
 
   'curfew_timetable',
 
@@ -493,8 +491,11 @@ const tables = [
   'installation_and_risk',
   'enforcement_zone',
   'trail_monitoring',
+  'interested_parties',
   'responsible_adult',
-  'responsible_officer',
+
+  'device_wearer',
+  'address',
 
   'orders',
 ]

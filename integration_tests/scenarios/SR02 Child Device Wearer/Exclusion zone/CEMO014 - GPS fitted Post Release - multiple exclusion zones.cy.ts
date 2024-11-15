@@ -24,6 +24,11 @@ import AttachmentPage from '../../../pages/order/attachment'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const uploadFile = {
+    contents: 'I am a map of London football grounds',
+    fileName: 'london-football-grounds.pdf',
+  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -50,6 +55,18 @@ context('Scenarios', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: uploadFile.fileName,
+        filename: uploadFile.fileName,
+        fileExtension: uploadFile.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
     })
   })
 
@@ -81,12 +98,7 @@ context('Scenarios', () => {
         zoneType: 'Exclusion zone',
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-        /*
-        uploadFile: {
-          contents: 'I am a map of London football grounds',
-          fileName: 'london-football-grounds.pdf',
-        },
-        */
+        uploadFile,
         description: 'Excluded from Football Grounds',
         duration: '90 days',
         anotherZone: 'No',
@@ -100,7 +112,7 @@ context('Scenarios', () => {
 
         let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+        orderSummaryPage.deviceWearerTask.click()
 
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -178,8 +190,8 @@ context('Scenarios', () => {
             risk_serious_harm: '',
             risk_self_harm: '',
             risk_details: '',
-            mappa: '',
-            mappa_case_type: '',
+            mappa: null,
+            mappa_case_type: null,
             risk_categories: [],
             responsible_adult_required: 'true',
             parent: responsibleAdultDetails.fullName,
@@ -213,7 +225,7 @@ context('Scenarios', () => {
                 court: '',
                 court_order_email: '',
                 describe_exclusion: 'Excluded from Football Grounds',
-                device_type: ',',
+                device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [{ condition: 'EM Exclusion / Inclusion Zone' }],
                 exclusion_allday: '',
@@ -250,16 +262,20 @@ context('Scenarios', () => {
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
                 responsible_officer_email: '',
-                responsible_officer_phone: '',
-                responsible_officer_name: '',
-                responsible_organization: '',
-                ro_post_code: '',
+                responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
+                responsible_officer_name: interestedParties.responsibleOfficerName,
+                responsible_organization: interestedParties.responsibleOrganisationName
+                  .toUpperCase()
+                  .replace(/\s/g, '_')
+                  .replace('YOUTH_CUSTODY_SERVICE_(YCS)', 'YCS')
+                  .replace('YOUTH_JUSTICE_SERVICE_(YJS)', 'YJS'),
+                ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
                 ro_address_1: '',
                 ro_address_2: '',
                 ro_address_3: '',
                 ro_address_4: '',
-                ro_email: '',
-                ro_phone: '',
+                ro_email: interestedParties.responsibleOrganisationEmailAddress,
+                ro_phone: interestedParties.responsibleOrganisationContactNumber,
                 ro_region: '',
                 sentence_date: '',
                 sentence_expiry: '',
@@ -275,7 +291,7 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: '',
+                trail_monitoring: 'Yes',
                 exclusion_zones: 'true',
                 exclusion_zones_duration: '90 days',
                 inclusion_zones: '',

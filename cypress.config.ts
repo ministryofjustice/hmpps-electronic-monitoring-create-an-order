@@ -6,6 +6,7 @@ import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import cemo from './integration_tests/mockApis/cemo'
 import fms from './integration_tests/mockApis/fms'
+import hmppsDocumentManagement from './integration_tests/mockApis/hmppsDocumentManagement'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -30,6 +31,7 @@ export default defineConfig({
         ...tokenVerification,
         ...cemo,
         ...fms,
+        ...hmppsDocumentManagement,
         /*
          * used to output summary accessibility testing issues found to console during integration testing
          */

@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@8
-  slack: circleci/slack@4.12.5
+  hmpps: ministryofjustice/hmpps@10
+  slack: circleci/slack@5
 
 parameters:
   alerts-slack-channel:
@@ -20,6 +20,38 @@ parameters:
     type: string
     default: 20.12-browsers
 
+executors:
+  scenario-testing:
+    docker:
+      - image: cimg/node:20.18.0-browsers
+      - image: postgres:14
+        environment:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+      - image: redis:7.2
+      - image: wiremock/wiremock:latest
+        environment:
+          WIREMOCK_OPTIONS: '--port 9091 --verbose'
+      - image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest
+        environment:
+          SERVER_PORT: 8080
+          DB_SERVER: localhost
+          DB_NAME: postgres
+          DB_USER: postgres
+          DB_PASS: postgres
+          HMPPS_AUTH_URL: http://localhost:9091/auth
+          CLIENT_ID: clientid
+          CLIENT_SECRET: clientsecret
+          DOCUMENT_MANAGEMENT_URL: http://localhost:9091/hmpps
+          SERCO_AUTH_URL: http://localhost:9091/auth/oauth/token
+          SERCO_CLIENT_ID: clientid
+          SERCO_CLIENT_SECRET: clientsecret
+          SERCO_USERNAME: serco
+          SERCO_PASSWORD: serco
+          SERCO_URL: http://localhost:9091/fms
+          CP_INTEGRATION_ENABLED: false
+
 jobs:
   build:
     executor:
@@ -29,7 +61,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm install -g npm@latest'
+          command: sudo npm install -g npm@latest
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -90,7 +122,7 @@ jobs:
           command: java -jar wiremock.jar --port 9091
           background: true
       - run:
-          name: Run the node app.
+          name: Run the node app
           command: npm run start-feature
           background: true
       - run:
@@ -106,8 +138,40 @@ jobs:
       - store_artifacts:
           path: integration_tests/screenshots
 
+  scenario_test:
+    executor: scenario-testing
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Update npm
+          command: sudo npm install -g npm@latest
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci --no-audit
+      - run:
+          command: npm run build
+      - run:
+          name: Run the node app
+          command: npm run start-scenarios
+          background: true
+      - run:
+          name: Wait for node app to start
+          command: sleep 5
+      - run:
+          name: Run scenario tests
+          command: npm run int-test-scenarios
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: integration_tests/videos
+      - store_artifacts:
+          path: integration_tests/screenshots
+
 workflows:
-  version: 2
   build-test-and-deploy:
     jobs:
       - build:
@@ -120,6 +184,9 @@ workflows:
       - integration_test:
           requires:
             - build
+      - scenario_test:
+          requires:
+            - build
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
@@ -130,7 +197,7 @@ workflows:
                 - main
       - hmpps/deploy_env:
           name: deploy_dev
-          env: "dev"
+          env: 'dev'
           jira_update: true
           pipeline_id: <<pipeline.id>>
           pipeline_number: <<pipeline.number>>
@@ -147,7 +214,7 @@ workflows:
           helm_timeout: 5m
       - hmpps/deploy_env:
           name: deploy_preprod
-          env: "preprod"
+          env: 'preprod'
           jira_update: true
           jira_env_type: staging
           pipeline_id: <<pipeline.id>>
@@ -164,7 +231,7 @@ workflows:
           helm_timeout: 5m
       - hmpps/deploy_env:
           name: deploy_prod
-          env: "prod"
+          env: 'prod'
           jira_update: true
           jira_env_type: production
           pipeline_id: <<pipeline.id>>
@@ -181,7 +248,7 @@ workflows:
   security:
     triggers:
       - schedule:
-          cron: "30 5 * * 1-5"
+          cron: '30 5 * * 1-5'
           filters:
             branches:
               only:
@@ -204,7 +271,7 @@ workflows:
   security-weekly:
     triggers:
       - schedule:
-          cron: "0 5 * * 1"
+          cron: '0 5 * * 1'
           filters:
             branches:
               only:

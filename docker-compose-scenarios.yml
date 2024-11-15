@@ -1,14 +1,13 @@
 services:
-
   cemo-api:
     container_name: cemo-api
     image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest
     networks:
       - hmpps_integration
     ports:
-      - "8080:8080"
+      - '8080:8080'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/health/ping']
     depends_on:
       cemo-db:
         condition: service_healthy
@@ -27,7 +26,7 @@ services:
       - CLIENT_ID=clientid
       - CLIENT_SECRET=clientsecret
 
-      - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/docs
+      - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/hmpps
 
       - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth/oauth/token
       - SERCO_CLIENT_ID=clientid
@@ -47,7 +46,7 @@ services:
     ports:
       - '5432:5432'
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -71,7 +70,7 @@ services:
     networks:
       - hmpps_integration
     ports:
-      - "9091:8080"
+      - '9091:8080'
 
 networks:
   hmpps_integration:

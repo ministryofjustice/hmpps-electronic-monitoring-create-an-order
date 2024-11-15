@@ -85,7 +85,7 @@ context('Scenarios', () => {
 
         let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+        orderSummaryPage.deviceWearerTask.click()
 
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -159,8 +159,8 @@ context('Scenarios', () => {
             risk_serious_harm: '',
             risk_self_harm: '',
             risk_details: '',
-            mappa: '',
-            mappa_case_type: '',
+            mappa: null,
+            mappa_case_type: null,
             risk_categories: [],
             responsible_adult_required: 'false',
             parent: 'null',
@@ -194,7 +194,7 @@ context('Scenarios', () => {
                 court: '',
                 court_order_email: '',
                 describe_exclusion: '',
-                device_type: ',',
+                device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [{ condition: 'AAMR' }],
                 exclusion_allday: '',
@@ -231,16 +231,20 @@ context('Scenarios', () => {
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
                 responsible_officer_email: '',
-                responsible_officer_phone: '',
-                responsible_officer_name: '',
-                responsible_organization: '',
-                ro_post_code: '',
+                responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
+                responsible_officer_name: interestedParties.responsibleOfficerName,
+                responsible_organization: interestedParties.responsibleOrganisationName
+                  .toUpperCase()
+                  .replace(/\s/g, '_')
+                  .replace('YOUTH_CUSTODY_SERVICE_(YCS)', 'YCS')
+                  .replace('YOUTH_JUSTICE_SERVICE_(YJS)', 'YJS'),
+                ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
                 ro_address_1: '',
                 ro_address_2: '',
                 ro_address_3: '',
                 ro_address_4: '',
-                ro_email: '',
-                ro_phone: '',
+                ro_email: interestedParties.responsibleOrganisationEmailAddress,
+                ro_phone: interestedParties.responsibleOrganisationContactNumber,
                 ro_region: '',
                 sentence_date: '',
                 sentence_expiry: '',
@@ -261,7 +265,7 @@ context('Scenarios', () => {
                 exclusion_zones_duration: '',
                 inclusion_zones: '',
                 inclusion_zones_duration: '',
-                abstinence: 'true',
+                abstinence: 'Yes',
                 schedule: '',
                 checkin_schedule: '',
                 revocation_date: '',

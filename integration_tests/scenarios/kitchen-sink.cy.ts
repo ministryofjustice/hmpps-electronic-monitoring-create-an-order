@@ -27,6 +27,11 @@ import AttachmentPage from '../pages/order/attachment'
 context('The kitchen sink', () => {
   const takeScreenshots = true
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const uploadFile = {
+    contents: 'I am a map of London football grounds',
+    fileName: 'london-football-grounds.pdf',
+  }
 
   beforeEach(() => {
     cy.task('resetDB')
@@ -45,6 +50,18 @@ context('The kitchen sink', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: uploadFile.fileName,
+        filename: uploadFile.fileName,
+        fileExtension: uploadFile.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
     })
   })
 
@@ -112,12 +129,7 @@ context('The kitchen sink', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-      /*
-      uploadFile: {
-        contents: 'I am a map of London football grounds',
-        fileName: 'london-football-grounds.pdf',
-      },
-      */
+      uploadFile,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'Yes',
@@ -126,12 +138,7 @@ context('The kitchen sink', () => {
       zoneType: 'Inclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 200), // 200 days
-      /*
-      uploadFile: {
-        contents: 'I am a map of London football grounds',
-        fileName: 'london-football-grounds.pdf',
-      },
-      */
+      uploadFile,
       description: 'A second test description: Lorum ipsum dolar sit amet...',
       duration: 'A second test duration: one, two, three...',
       anotherZone: 'No',
@@ -156,7 +163,7 @@ context('The kitchen sink', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
-      orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+      orderSummaryPage.deviceWearerTask.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -208,8 +215,9 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('09. tertiaryAddressPage', { overwrite: true })
       tertiaryAddressPage.form.saveAndContinueButton.click()
 
+      // no validation
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.saveAndContinueButton.click()
+      // interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. interestedPartiesPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)

@@ -20,15 +20,23 @@ export default class Task {
     return this.element.find('.govuk-task-list__status')
   }
 
+  get link(): PageElement {
+    return this.element.find('a')
+  }
+
+  click(): void {
+    this.link.click()
+  }
+
   shouldHaveStatus(value: string): void {
     this.status.should('contain', value)
   }
 
   shouldBeDisabled(): void {
-    this.element.find('a').should('not.exist')
+    this.link.should('not.exist')
   }
 
   shouldBeEnabled(): void {
-    this.element.find('a').should('exist')
+    this.link.should('exist')
   }
 }

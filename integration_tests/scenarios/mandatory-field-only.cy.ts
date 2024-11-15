@@ -97,10 +97,6 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-      // API requires this field due to
-      // java.lang.NullPointerException: null
-      //    at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:199)
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 150), // 150 days
       addresses: ['Primary address'],
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -137,7 +133,7 @@ context('Mandatory fields only', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
-      orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+      orderSummaryPage.deviceWearerTask.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -172,8 +168,9 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('07. primaryAddressPage - minimum', { overwrite: true })
       primaryAddressPage.form.saveAndContinueButton.click()
 
+      // no validation
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.saveAndContinueButton.click()
+      // interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
@@ -320,10 +317,6 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-      // API requires this field due to
-      // java.lang.NullPointerException: null
-      //    at uk.gov.justice.digital.hmpps.hmppselectronicmonitoringcreateanorderapi.models.fms.MonitoringOrder$Companion.fromOrder(MonitoringOrder.kt:199)
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 150), // 150 days
       addresses: ['Primary address'],
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -360,7 +353,7 @@ context('Mandatory fields only', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
-      orderSummaryPage.AboutTheDeviceWearerSectionItem().click()
+      orderSummaryPage.deviceWearerTask.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -403,8 +396,9 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('07. primaryAddressPage - minimum', { overwrite: true })
       primaryAddressPage.form.saveAndContinueButton.click()
 
+      // no validation
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.saveAndContinueButton.click()
+      // interestedPartiesPage.form.saveAndContinueButton.click()
       interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
