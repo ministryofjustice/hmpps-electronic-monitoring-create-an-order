@@ -24,7 +24,7 @@
   }) %}
     {{ govukInput({
       label: {
-        text: "What is the email address for your team?",
+        text: "What is the email address for your team? (optional)",
         classes: "govuk-label--s"
       },
       hint: {
@@ -48,7 +48,7 @@
   }) %}
     {{ govukInput({
       label: {
-        text: "Full name of responsible officer",
+        text: "Full name of responsible officer (optional)",
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -61,7 +61,7 @@
 
     {{ govukInput({
       label: {
-        text: "Telephone number for responsible officer",
+        text: "Telephone number for responsible officer (optional)",
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -86,7 +86,7 @@
       name: "responsibleOrganisation",
       fieldset: {
         legend: {
-          text: "What organisation is the responsible officer part of?",
+          text: "What organisation is the responsible officer part of? (optional)",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -143,7 +143,7 @@
 
     {% call govukFieldset({
       legend: {
-        text: "What is the address of the responsible organisation?",
+        text: "What is the address of the responsible organisation? (optional)",
         classes: "govuk-fieldset__legend--s",
         isPageHeading: false
       }
@@ -212,7 +212,7 @@
 
     {{ govukInput({
       label: {
-        text: "Telephone number for responsible organisation",
+        text: "Telephone number for responsible organisation (optional)",
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -227,7 +227,7 @@
 
     {{ govukInput({
       label: {
-        text: "Email address for responsible organisation",
+        text: "Email address for responsible organisation (optional)",
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
