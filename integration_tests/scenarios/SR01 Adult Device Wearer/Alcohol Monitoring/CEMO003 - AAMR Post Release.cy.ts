@@ -15,6 +15,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import AttachmentPage from '../../../pages/order/attachment'
+import { formatAsFmsDateTime } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -213,10 +214,10 @@ context('Scenarios', () => {
               no_phone_number: '',
               offence: '',
               offence_date: '',
-              order_end: monitoringConditions.endDate.toISOString().split('T')[0],
+              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
               order_id: orderId,
               order_request_type: '',
-              order_start: monitoringConditions.startDate.toISOString().split('T')[0],
+              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: 'post_release',
               order_type_description: 'DAPOL',
               order_type_detail: '',
@@ -237,10 +238,10 @@ context('Scenarios', () => {
                 .replace('YOUTH_CUSTODY_SERVICE_(YCS)', 'YCS')
                 .replace('YOUTH_JUSTICE_SERVICE_(YJS)', 'YJS'),
               ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
-              ro_address_1: '',
-              ro_address_2: '',
-              ro_address_3: '',
-              ro_address_4: '',
+              ro_address_1: interestedParties.responsibleOrganisationAddress.line1,
+              ro_address_2: interestedParties.responsibleOrganisationAddress.line2,
+              ro_address_3: interestedParties.responsibleOrganisationAddress.line3,
+              ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
               ro_email: interestedParties.responsibleOrganisationEmailAddress,
               ro_phone: interestedParties.responsibleOrganisationContactNumber,
               ro_region: '',
