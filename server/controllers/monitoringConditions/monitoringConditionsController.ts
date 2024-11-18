@@ -3,10 +3,10 @@ import { z } from 'zod'
 import paths from '../../constants/paths'
 import { MonitoringConditions } from '../../models/MonitoringConditions'
 import { isValidationResult, ValidationResult } from '../../models/Validation'
-import { DateField, MultipleChoiceField, TextField } from '../../models/view-models/utils'
+import { DateField, MultipleChoiceField, TextField, TimeField } from '../../models/view-models/utils'
 import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
-import { deserialiseDate, getError, serialiseDate } from '../../utils/utils'
+import { deserialiseDate, deserialiseTime, getError, serialiseDate, serialiseTime } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
 
 const monitoringConditionsFormDataModel = z.object({
@@ -20,9 +20,13 @@ const monitoringConditionsFormDataModel = z.object({
   endDay: z.string().default(''),
   endMonth: z.string().default(''),
   endYear: z.string().default(''),
+  endTimeHours: z.string().default(''),
+  endTimeMinutes: z.string().default(''),
   startDay: z.string().default(''),
   startMonth: z.string().default(''),
   startYear: z.string().default(''),
+  startTimeHours: z.string().default(''),
+  startTimeMinutes: z.string().default(''),
 })
 
 type MonitoringConditionsFormData = z.infer<typeof monitoringConditionsFormDataModel>
@@ -33,7 +37,9 @@ type MonitoringConditionsViewModel = {
   orderTypeDescription: TextField
   conditionType: TextField
   startDate: DateField
+  startTime: TimeField
   endDate: DateField
+  endTime: TimeField
 }
 
 const monitoringTypes: (keyof MonitoringConditions)[] = [
@@ -79,6 +85,10 @@ export default class MonitoringConditionsController {
 
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditions?.startDate)
     const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditions?.endDate)
+
+    const [startTimeHours, startTimeMinutes] = deserialiseTime(monitoringConditions?.startTime)
+    const [endTimeHours, endTimeMinutes] = deserialiseTime(monitoringConditions?.endTime)
+
     return {
       orderType: { value: monitoringConditions.orderType ?? '' },
       monitoringRequired: {
@@ -87,7 +97,9 @@ export default class MonitoringConditionsController {
       orderTypeDescription: { value: monitoringConditions.orderTypeDescription ?? '' },
       conditionType: { value: monitoringConditions.conditionType ?? '' },
       startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
+      startTime: { value: { hours: startTimeHours, minutes: startTimeMinutes } },
       endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
+      endTime: { value: { hours: endTimeHours, minutes: endTimeMinutes } },
     }
   }
 
@@ -110,9 +122,17 @@ export default class MonitoringConditionsController {
         value: { day: formData.startDay, month: formData.startMonth, year: formData.startYear },
         error: getError(validationErrors, 'startDate'),
       },
+      startTime: {
+        value: { hours: formData.startTimeHours, minutes: formData.startTimeMinutes },
+        error: getError(validationErrors, 'startTime'),
+      },
       endDate: {
         value: { day: formData.endDay, month: formData.endMonth, year: formData.endYear },
         error: getError(validationErrors, 'endDate'),
+      },
+      endTime: {
+        value: { hours: formData.endTimeHours, minutes: formData.endTimeMinutes },
+        error: getError(validationErrors, 'endTime'),
       },
     }
   }
@@ -128,7 +148,9 @@ export default class MonitoringConditionsController {
       orderTypeDescription: formData.orderTypeDescription === '' ? null : formData.orderTypeDescription,
       conditionType: formData.conditionType === '' ? null : formData.conditionType,
       startDate: serialiseDate(formData.startYear, formData.startMonth, formData.startDay),
+      startTime: serialiseTime(formData.startTimeHours, formData.startTimeMinutes),
       endDate: serialiseDate(formData.endYear, formData.endMonth, formData.endDay),
+      endTime: serialiseTime(formData.endTimeHours, formData.endTimeMinutes),
     }
   }
 

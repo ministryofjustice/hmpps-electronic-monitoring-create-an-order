@@ -107,7 +107,9 @@ export const createMonitoringConditions = (
   orderTypeDescription: null,
   conditionType: null,
   startDate: null,
+  startTime: null,
   endDate: null,
+  endTime: null,
   isValid: false,
   ...overrideProperties,
 })
