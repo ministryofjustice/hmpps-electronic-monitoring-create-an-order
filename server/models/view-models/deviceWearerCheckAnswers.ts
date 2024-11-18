@@ -18,7 +18,6 @@ type DeviceWearerCheckAnswersViewModel = {
   sex: string
   gender: string
   disabilities: string[]
-  noFixedAbode: string
   language: string
   interpreterRequired: string
   nomisId: string
@@ -55,7 +54,6 @@ const createViewModelFromDeviceWearer = (
     sex: deviceWearer.sex || '',
     gender: deviceWearer.gender || '',
     disabilities: deviceWearer.disabilities || [],
-    noFixedAbode: convertBooleanToEnum<string>(deviceWearer.noFixedAbode, '', 'Yes', 'No'),
     language: deviceWearer.language || '',
     interpreterRequired: convertBooleanToEnum<string>(deviceWearer.interpreterRequired, '', 'Yes', 'No'),
     nomisId: deviceWearer.nomisId || '',

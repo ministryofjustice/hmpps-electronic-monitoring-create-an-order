@@ -235,23 +235,6 @@
                 }
                 ]
             }
-        },
-        {
-            key: {
-                text: "Does the person have no fixed abode?"
-            },
-            value: {
-                text: noFixedAbode
-            },
-            actions: {
-                items: [
-                {
-                    href: aboutTheDeviceWearerUri,
-                    text: "Change",
-                    visuallyHiddenText: "interpreter required"
-                }
-                ]
-            }
         }
     ]
   }) }}
@@ -429,18 +412,15 @@
     {% endif %}
 
     <div class="govuk-button-group">
-        {% if isOrderEditable %}
-            {{ govukButton({
-        text: "Continue",
-        href: orderSummaryUri
-      }) }}
-            {{ govukButton({
+        {{ govukButton({
+          text: "Continue",
+          href: "/order/" + orderId + "/contact-information/contact-details",
+          classes: "govuk-button--warning"
+        }) }}
+        {{ govukButton({
         text: "Return back to form section menu",
         href: orderSummaryUri
       }) }}
-        {% else %}
-            <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-        {% endif %}
     </div>
 
 {% endblock %}

@@ -126,7 +126,6 @@ describe('DeviceWearerCheckAnswersController', () => {
         interpreterRequired: 'No',
         language: '',
         lastName: 'testington',
-        noFixedAbode: '',
         nomisId: '',
         orderSummaryUri: '/order/123456789/summary',
         pncId: '',

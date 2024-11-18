@@ -9,7 +9,7 @@ export default class DeviceWearerCheckYourAnswersPage extends AppPage {
 
   phaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
 
-  continueButton = (): PageElement => cy.contains('Save and continue')
+  continueButton = (): PageElement => cy.contains('Continue')
 
   returnButton = (): PageElement => cy.contains('Return back to form section menu')
 

@@ -94,7 +94,7 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
         gender: null,
         disabilities: null,
         noFixedAbode: null,
-        intepreterRequired: null,
+        interpreterRequired: null,
       },
     },
   ],

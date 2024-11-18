@@ -107,7 +107,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
       'Hearing',
       'Mobility',
       'Dexterity',
-      'Learning, understanding or concentrating',
+      'Learning or understanding or concentrating',
       'Memory',
       'Mental health',
       'Stamina or breathing or fatigue',
