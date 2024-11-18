@@ -39,11 +39,11 @@
 
     {{ mojPageHeaderActions({
     heading: {
-        text: "About the device wearer"
+        text: "Check your answers"
     }
 }) }}
 
-    <h2 class="govuk-heading-l">Check your answers</h2>
+    <h2 class="govuk-heading-l">About the device wearer</h2>
 
     <h3 class="govuk-heading-m">Device wearer</h2>
 
@@ -350,7 +350,8 @@
   }) }}
 
     {% if displayResponsibleAdult %}
-        <br><h3 class="govuk-heading-m">Responsible adult</h3>
+        <br>
+        <h3 class="govuk-heading-m">Responsible adult</h3>
 
         {{ govukSummaryList({
     rows: [
@@ -430,7 +431,7 @@
     <div class="govuk-button-group">
         {% if isOrderEditable %}
             {{ govukButton({
-        text: "Save and continue",
+        text: "Continue",
         href: orderSummaryUri
       }) }}
             {{ govukButton({

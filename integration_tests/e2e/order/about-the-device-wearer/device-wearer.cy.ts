@@ -70,6 +70,7 @@ context('About the device wearer', () => {
             disabilities: 'Other',
             otherDisability: 'Broken arm',
             noFixedAbode: null,
+            interpreterRequired: null,
           },
         },
       })
