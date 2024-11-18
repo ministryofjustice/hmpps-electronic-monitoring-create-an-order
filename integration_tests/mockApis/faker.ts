@@ -123,7 +123,7 @@ export const createFakeAddress = (): Address => {
     faker.location.streetAddress(),
     faker.location.city(),
     faker.location.state(),
-    undefined,
+    '',
     faker.location.zipCode(),
   )
 }
