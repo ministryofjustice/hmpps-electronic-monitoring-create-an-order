@@ -9,16 +9,30 @@
 
   <h3 class="govuk-heading-m">Monitoring conditions</h2>
 
+  {{ govukSummaryList({ rows: monitoringConditions }) }}
+
   <h3 class="govuk-heading-m">Installation address</h2>
+
+  {{ govukSummaryList({ rows: installationAddress }) }}
 
   <h3 class="govuk-heading-m">Curfew monitoring conditions</h2>
 
+  {{ govukSummaryList({ rows: curfew }) }}
+
   <h3 class="govuk-heading-m">Exclusion zone conditions</h2>
+
+  {{ govukSummaryList({ rows: exclusionZone }) }}
 
   <h3 class="govuk-heading-m">Trail monitoring conditions</h2>
 
+  {{ govukSummaryList({ rows: trail }) }}
+
   <h3 class="govuk-heading-m">Attendance monitoring conditions</h2>
 
+  {{ govukSummaryList({ rows: attendance }) }}
+
   <h3 class="govuk-heading-m">Alcohol monitoring conditions</h2>
+
+  {{ govukSummaryList({ rows: alcohol }) }}
 
 {% endblock %}
