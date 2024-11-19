@@ -25,6 +25,7 @@ import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curf
 import SecondaryAddressPage from '../../../pages/order/contact-information/secondary-address'
 import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -143,6 +144,9 @@ context('Scenarios', () => {
         const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
         responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
         responsibleAdultDetailsPage.form.saveAndContinueButton.click()
+
+        const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+        deviceWearerCheckYourAnswersPage.continueButton().click()
 
         const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
         contactDetailsPage.form.fillInWith(deviceWearerDetails)

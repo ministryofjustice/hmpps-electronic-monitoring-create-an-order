@@ -22,6 +22,7 @@ import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trai
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -100,6 +101,9 @@ context('Scenarios', () => {
         const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
         responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
         responsibleAdultDetailsPage.form.saveAndContinueButton.click()
+
+        const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+        deviceWearerCheckYourAnswersPage.continueButton().click()
 
         const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
         contactDetailsPage.form.fillInWith(deviceWearerDetails)
