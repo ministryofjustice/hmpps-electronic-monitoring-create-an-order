@@ -37,6 +37,7 @@ const paths = {
     CURFEW_RELEASE_DATE: '/order/:orderId/monitoring-conditions/curfew/release-date',
     CURFEW_CONDITIONS: '/order/:orderId/monitoring-conditions/curfew/conditions',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
+    CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/check-your-answers',
   },
 
   ATTACHMENT: {

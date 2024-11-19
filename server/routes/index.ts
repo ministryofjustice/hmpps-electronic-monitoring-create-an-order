@@ -17,6 +17,7 @@ import CurfewTimetableController from '../controllers/monitoringConditions/curfe
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
+import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkYourAnswersContorller'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -101,6 +102,10 @@ export default function routes({
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
   const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
+  const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
+    auditService,
+    taskListService,
+  )
 
   router.param('orderId', populateOrder(orderService))
 
@@ -199,6 +204,11 @@ export default function routes({
   // Exclusion Inclusion Zone
   get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
   post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
+
+  // Check your answers
+  get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.view)
+  post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.update)
+
   /**
    * ATTACHMENTS
    */

@@ -17,6 +17,7 @@ import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trai
 import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -122,6 +123,9 @@ context('Scenarios', () => {
       const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
       trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
       trailMonitoringPage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       attachmentPage.backToSummaryButton.click()

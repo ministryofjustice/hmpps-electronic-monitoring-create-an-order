@@ -24,6 +24,7 @@ import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcemen
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentPage from '../pages/order/attachment'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
 
 context('The kitchen sink', () => {
   const takeScreenshots = true
@@ -308,6 +309,9 @@ context('The kitchen sink', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
