@@ -157,7 +157,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/responsible-adult`)
     })
 
-    it('should save and redirect to the contact details page', async () => {
+    it('should save and redirect to the device wearer check your answers page', async () => {
       // Given
       const order = createMockOrder('Parent Name')
       const req = createMockRequest({
@@ -185,7 +185,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/contact-details`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/check-your-answers`)
     })
   })
 

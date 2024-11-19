@@ -40,6 +40,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     gender: null,
     disabilities: null,
     noFixedAbode: null,
+    interpreterRequired: null,
   },
   deviceWearerResponsibleAdult: null,
   enforcementZoneConditions: [],
@@ -93,6 +94,7 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
         gender: null,
         disabilities: null,
         noFixedAbode: null,
+        interpreterRequired: null,
       },
     },
   ],
@@ -317,6 +319,7 @@ const defaultPutDeviceWearerOptions = {
     gender: null,
     disabilities: null,
     noFixedAbode: null,
+    interpreterRequired: null,
   },
 }
 

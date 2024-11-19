@@ -23,6 +23,7 @@ import CurfewConditionsPage from '../pages/order/monitoring-conditions/curfew-co
 import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcement-zone'
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentPage from '../pages/order/attachment'
+import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
 
 context('The kitchen sink', () => {
   const takeScreenshots = true
@@ -172,6 +173,9 @@ context('The kitchen sink', () => {
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      deviceWearerCheckYourAnswersPage.continueButton().click()
 
       let contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
       contactDetailsPage.form.fillInWith({ contactNumber: '0123456789' })

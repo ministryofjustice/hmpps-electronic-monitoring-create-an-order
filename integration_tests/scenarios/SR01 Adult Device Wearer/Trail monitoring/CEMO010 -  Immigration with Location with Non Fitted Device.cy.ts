@@ -16,6 +16,7 @@ import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -87,6 +88,9 @@ context('Scenarios', () => {
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      deviceWearerCheckYourAnswersPage.continueButton().click()
 
       const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
       contactDetailsPage.form.fillInWith(deviceWearerDetails)
