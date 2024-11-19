@@ -19,6 +19,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -154,6 +155,9 @@ context('Scenarios', () => {
       const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
       curfewTimetablePage.form.fillInWith(curfewTimetable)
       curfewTimetablePage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       attachmentPage.backToSummaryButton.click()

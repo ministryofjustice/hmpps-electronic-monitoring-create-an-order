@@ -29,6 +29,7 @@ import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-moni
 import ResponsibleAdultPage from '../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentPage from '../pages/order/attachment'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = true
@@ -253,6 +254,9 @@ context('Mandatory fields only', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
@@ -484,6 +488,9 @@ context('Mandatory fields only', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })

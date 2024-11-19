@@ -796,7 +796,7 @@ describe('CurfewTimetableController', () => {
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/attachments`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/check-your-answers`)
     })
 
     it('Should redirect back to summary page', async () => {

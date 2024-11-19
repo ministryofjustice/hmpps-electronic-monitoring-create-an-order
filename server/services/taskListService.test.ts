@@ -63,6 +63,19 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
+    it('should return contact details if current page is check your answers', () => {
+      // Given
+      const currentPage = 'CHECK_ANSWERS_DEVICE_WEARER'
+      const taskListService = new TaskListService()
+      const order = getMockOrder()
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id))
+    })
+
     it('should return no fixed abode if current page is contact details', () => {
       // Given
       const currentPage = 'CONTACT_DETAILS'
@@ -441,7 +454,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
     })
 
-    it('should return attachments if current page is curfew timetable and no other monitoring is selected', () => {
+    it('should return check your answers if current page is curfew timetable and no other monitoring is selected', () => {
       // Given
       const currentPage = 'CURFEW_TIMETABLE'
       const taskListService = new TaskListService()
@@ -455,7 +468,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return trail monitoring if current page is exclusion zone and trail is selected', () => {
@@ -512,7 +525,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
     })
 
-    it('should return attachments if current page is exclusion zone and no other monitoring is selected', () => {
+    it('should return check your answers if current page is exclusion zone and no other monitoring is selected', () => {
       // Given
       const currentPage = 'ZONE'
       const taskListService = new TaskListService()
@@ -526,7 +539,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return attendance monitoring if current page is trail monitoring and mandatoryAttendance is selected', () => {
@@ -565,7 +578,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
     })
 
-    it('should return attachments if current page is trail monitoring and no other monitoring is selected', () => {
+    it('should return check your answers if current page is trail monitoring and no other monitoring is selected', () => {
       // Given
       const currentPage = 'TRAIL'
       const taskListService = new TaskListService()
@@ -579,7 +592,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return alcohol monitoring if current page is attendance monitoring and alcohol monitoring is selected', () => {
@@ -600,7 +613,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
     })
 
-    it('should return attachments if current page is attendance monitoring and no other monitoring is selected', () => {
+    it('should return check your answers if current page is attendance monitoring and no other monitoring is selected', () => {
       // Given
       const currentPage = 'ATTENDANCE'
       const taskListService = new TaskListService()
@@ -614,10 +627,10 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return attachments if current page is alcohol monitoring and no other monitoring is selected', () => {
+    it('should return check your answers if current page is alcohol monitoring and no other monitoring is selected', () => {
       // Given
       const currentPage = 'ALCOHOL'
       const taskListService = new TaskListService()
@@ -626,6 +639,19 @@ describe('TaskListService', () => {
           alcohol: true,
         }),
       })
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('should return attachments if current page is check your answers', () => {
+      // Given
+      const currentPage = 'CHECK_ANSWERS_MONITORING_CONDITIONS'
+      const taskListService = new TaskListService()
+      const order = getMockOrder()
 
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
@@ -797,6 +823,13 @@ describe('TaskListService', () => {
             path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: false,
+          },
+          {
+            section: 'MONITORING_CONDITIONS',
+            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+            state: 'CHECK_YOUR_ANSWERS',
+            completed: true,
           },
         ],
         ATTACHMENTS: [
@@ -996,6 +1029,13 @@ describe('TaskListService', () => {
             state: 'CANT_BE_STARTED',
             completed: true,
           },
+          {
+            section: 'MONITORING_CONDITIONS',
+            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+            state: 'CHECK_YOUR_ANSWERS',
+            completed: true,
+          },
         ],
         ATTACHMENTS: [
           {
@@ -1183,6 +1223,13 @@ describe('TaskListService', () => {
             path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
             state: 'REQUIRED',
             completed: false,
+          },
+          {
+            section: 'MONITORING_CONDITIONS',
+            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+            state: 'CHECK_YOUR_ANSWERS',
+            completed: true,
           },
         ],
         ATTACHMENTS: [

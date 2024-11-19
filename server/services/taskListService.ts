@@ -30,6 +30,7 @@ type Page =
   | 'TRAIL'
   | 'ATTENDANCE'
   | 'ALCOHOL'
+  | 'CHECK_ANSWERS_MONITORING_CONDITIONS'
   | 'ATTACHMENT'
 
 type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED' | 'CHECK_YOUR_ANSWERS'
@@ -282,6 +283,14 @@ export default class TaskListService {
         'NOT_REQUIRED',
       ),
       completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
+    })
+
+    tasks.push({
+      section: 'MONITORING_CONDITIONS',
+      name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+      path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
+      state: 'CHECK_YOUR_ANSWERS',
+      completed: true,
     })
 
     tasks.push({

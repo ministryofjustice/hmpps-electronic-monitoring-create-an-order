@@ -17,6 +17,7 @@ import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -126,6 +127,9 @@ context('Scenarios', () => {
         const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
         alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
         alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+        const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+        monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
         const attachmentPage = Page.verifyOnPage(AttachmentPage)
         attachmentPage.backToSummaryButton.click()
