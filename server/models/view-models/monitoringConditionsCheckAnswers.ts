@@ -143,7 +143,7 @@ const createExclusionZoneAnswers = (order: Order) => {
       const fileName = enforcementZone.fileName || 'No file selected'
       return createHtmlAnswer(
         `${convertToTitleCase(zoneType)} zone ${zoneId + 1}`,
-        `${fileName}<br/><br/>${enforcementZone.description}<br><br/>${enforcementZone.duration}`,
+        `${fileName}<br/><br/>${enforcementZone.description}<br/><br/>${enforcementZone.duration}`,
         uri.replace(':zoneId', zoneId.toString()),
       )
     })
@@ -158,7 +158,7 @@ const createTrailAnswers = (order: Order) => {
 }
 
 const createAlcoholAnswers = (order: Order) => {
-  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id)
+  const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
   return [
     createTextAnswer('What type of alcohol monitoring is needed?', monitoringType, uri),
