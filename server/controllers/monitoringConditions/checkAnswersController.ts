@@ -17,7 +17,7 @@ export default class CheckAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    console.log(order)
+
     res.render(`pages/order/monitoring-conditions/check-your-answers`, createViewModel(order))
   }
 
