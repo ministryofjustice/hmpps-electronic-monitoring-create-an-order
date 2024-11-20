@@ -230,7 +230,7 @@ describe('AlcoholMonitoringController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/monitoring-conditions/check-your-answers`)
     })
   })
 

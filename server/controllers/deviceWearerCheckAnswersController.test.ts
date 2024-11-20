@@ -68,6 +68,14 @@ const createMockOrder = (status: OrderStatus): Order => {
       gender: 'male',
       disabilities: ['Vision', 'Mobilitiy'],
       noFixedAbode: null,
+      interpreterRequired: false,
+      language: null,
+    },
+    deviceWearerResponsibleAdult: {
+      relationship: 'Parent',
+      otherRelationshipDetails: null,
+      fullName: 'Firstname Lastname',
+      contactNumber: '07999999999',
     },
   }
 }
@@ -88,7 +96,7 @@ describe('DeviceWearerCheckAnswersController', () => {
     deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(mockAuditService)
   })
 
-  it('should render the page using the saved device wearer data', async () => {
+  it('should render the page using the saved device wearer and responsible adult data', async () => {
     // Given
     const mockOrder = createMockOrder(OrderStatusEnum.Enum.IN_PROGRESS)
     const req = createMockRequest(mockOrder)
@@ -103,22 +111,30 @@ describe('DeviceWearerCheckAnswersController', () => {
       'pages/order/about-the-device-wearer/check-your-answers',
       expect.objectContaining({
         aboutTheDeviceWearerUri: '/order/123456789/about-the-device-wearer',
+        adultAtTimeOfInstallation: 'No',
+        alias: 'test',
+        dateOfBirth_day: '1',
+        dateOfBirth_month: '1',
+        dateOfBirth_year: '1980',
+        deliusId: '',
+        deviceWearerResponsibleAdultUri: '/order/123456789/about-the-device-wearer/responsible-adult',
+        disabilities: ['Vision', 'Mobilitiy'],
+        displayResponsibleAdult: true,
+        firstName: 'tester',
+        gender: 'male',
+        homeOfficeReferenceNumber: '',
+        interpreterRequired: 'No',
+        language: '',
+        lastName: 'testington',
+        nomisId: '',
         orderSummaryUri: '/order/123456789/summary',
-        nomisId: { value: '' },
-        pncId: { value: '' },
-        deliusId: { value: '' },
-        prisonNumber: { value: '' },
-        firstName: { value: 'tester' },
-        lastName: { value: 'testington' },
-        alias: { value: 'test' },
-        dateOfBirth_day: { value: '1' },
-        dateOfBirth_month: { value: '1' },
-        dateOfBirth_year: { value: '1980' },
-        dateOfBirth: { value: '' },
-        adultAtTimeOfInstallation: { value: 'false' },
-        sex: { value: 'male' },
-        gender: { value: 'male' },
-        disabilities: { values: ['Vision', 'Mobilitiy'] },
+        pncId: '',
+        prisonNumber: '',
+        responsibleAdultContactNumber: '07999999999',
+        responsibleAdultFullName: 'Firstname Lastname',
+        responsibleAdultOtherRelationshipDetails: '',
+        responsibleAdultRelationship: 'Parent',
+        sex: 'male',
       }),
     )
   })

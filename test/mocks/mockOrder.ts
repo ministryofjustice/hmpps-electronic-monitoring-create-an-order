@@ -30,6 +30,7 @@ export const createDeviceWearer = (overrideProperties?: Partial<DeviceWearer>): 
   gender: null,
   disabilities: [],
   noFixedAbode: null,
+  interpreterRequired: null,
   ...overrideProperties,
 })
 

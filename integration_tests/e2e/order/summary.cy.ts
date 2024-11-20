@@ -118,6 +118,7 @@ context('Order Summary', () => {
             gender: null,
             disabilities: '',
             noFixedAbode: false,
+            interpreterRequired: null,
           },
           deviceWearerResponsibleAdult: null,
           contactDetails: null,
@@ -239,6 +240,7 @@ context('Order Summary', () => {
             gender: null,
             disabilities: '',
             noFixedAbode: false,
+            interpreterRequired: null,
           },
           deviceWearerResponsibleAdult: {
             contactNumber: null,

@@ -13,6 +13,7 @@ type Section =
 type Page =
   | 'DEVICE_WEARER'
   | 'RESPONSIBLE_ADULT'
+  | 'CHECK_ANSWERS_DEVICE_WEARER'
   | 'CONTACT_DETAILS'
   | 'NO_FIXED_ABODE'
   | 'PRIMARY_ADDRESS'
@@ -29,9 +30,10 @@ type Page =
   | 'TRAIL'
   | 'ATTENDANCE'
   | 'ALCOHOL'
+  | 'CHECK_ANSWERS_MONITORING_CONDITIONS'
   | 'ATTACHMENT'
 
-type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED'
+type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED' | 'CHECK_YOUR_ANSWERS'
 
 type Task = {
   section: Section
@@ -61,7 +63,7 @@ const canBeCompleted = (task: Task, formData: FormData): boolean => {
     }
   }
 
-  return ['OPTIONAL', 'REQUIRED'].includes(task.state)
+  return ['OPTIONAL', 'REQUIRED', 'CHECK_YOUR_ANSWERS'].includes(task.state)
 }
 const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === currentPage
 
@@ -94,6 +96,14 @@ export default class TaskListService {
         'REQUIRED',
       ),
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
+    })
+
+    tasks.push({
+      section: 'ABOUT_THE_DEVICE_WEARER',
+      name: 'CHECK_ANSWERS_DEVICE_WEARER',
+      path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
+      state: 'CHECK_YOUR_ANSWERS',
+      completed: true,
     })
 
     tasks.push({
@@ -273,6 +283,14 @@ export default class TaskListService {
         'NOT_REQUIRED',
       ),
       completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
+    })
+
+    tasks.push({
+      section: 'MONITORING_CONDITIONS',
+      name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+      path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
+      state: 'CHECK_YOUR_ANSWERS',
+      completed: true,
     })
 
     tasks.push({

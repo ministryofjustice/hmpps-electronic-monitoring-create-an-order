@@ -3,7 +3,7 @@ import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/device-wearer'
@@ -70,6 +70,7 @@ context('About the device wearer', () => {
             disabilities: 'Other',
             otherDisability: 'Broken arm',
             noFixedAbode: null,
+            interpreterRequired: null,
           },
         },
       })
@@ -106,7 +107,7 @@ context('About the device wearer', () => {
     context('for someone over 18 years old', () => {
       const birthYear = 1970
 
-      it('should continue to collect the contact details', () => {
+      it('should continue to check your answers page', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -181,7 +182,7 @@ context('About the device wearer', () => {
           },
         }).should('be.true')
 
-        Page.verifyOnPage(ContactDetailsPage)
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
       })
     })
 

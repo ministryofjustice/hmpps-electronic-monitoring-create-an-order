@@ -30,6 +30,7 @@ const createMockOrder = (noFixedAbode: boolean | null) =>
       gender: null,
       disabilities: [],
       noFixedAbode,
+      interpreterRequired: null,
     },
   })
 
@@ -182,6 +183,7 @@ describe('NoFixedAbodeController', () => {
         gender: null,
         disabilities: [],
         noFixedAbode: false,
+        interpreterRequired: null,
       })
 
       // When
@@ -224,6 +226,7 @@ describe('NoFixedAbodeController', () => {
         gender: null,
         disabilities: [],
         noFixedAbode: true,
+        interpreterRequired: null,
       })
 
       // When
@@ -265,6 +268,7 @@ describe('NoFixedAbodeController', () => {
         gender: null,
         disabilities: [],
         noFixedAbode: false,
+        interpreterRequired: null,
       })
 
       // When

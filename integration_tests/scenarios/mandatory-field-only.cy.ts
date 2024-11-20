@@ -28,6 +28,8 @@ import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcemen
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
 import ResponsibleAdultPage from '../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentPage from '../pages/order/attachment'
+import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = true
@@ -143,6 +145,9 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage - minimum', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
+      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      deviceWearerCheckYourAnswersPage.continueButton().click()
+
       let contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
       contactDetailsPage.form.fillInWith({ contactNumber: '0123456789' })
       contactDetailsPage.form.saveAndContinueButton.click()
@@ -249,6 +254,9 @@ context('Mandatory fields only', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
@@ -371,6 +379,9 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('04. responsibleAdultDetailsPage - minimum', { overwrite: true })
       responsibleAdultDetailsPage.form.saveAndContinueButton.click()
 
+      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      deviceWearerCheckYourAnswersPage.continueButton().click()
+
       let contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
       contactDetailsPage.form.fillInWith({ contactNumber: '0123456789' })
       contactDetailsPage.form.saveAndContinueButton.click()
@@ -477,6 +488,9 @@ context('Mandatory fields only', () => {
       alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentPage)
       if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })

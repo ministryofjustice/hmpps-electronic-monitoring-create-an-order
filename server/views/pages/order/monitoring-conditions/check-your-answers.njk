@@ -1,0 +1,24 @@
+{% extends "../../../partials/check-your-answers-layout.njk" %}
+
+{% set pageTitle = "Monitoring conditions - Check your answers - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block answers %}
+
+  <h3 class="govuk-heading-m">Monitoring conditions</h2>
+
+  <h3 class="govuk-heading-m">Installation address</h2>
+
+  <h3 class="govuk-heading-m">Curfew monitoring conditions</h2>
+
+  <h3 class="govuk-heading-m">Exclusion zone conditions</h2>
+
+  <h3 class="govuk-heading-m">Trail monitoring conditions</h2>
+
+  <h3 class="govuk-heading-m">Attendance monitoring conditions</h2>
+
+  <h3 class="govuk-heading-m">Alcohol monitoring conditions</h2>
+
+{% endblock %}

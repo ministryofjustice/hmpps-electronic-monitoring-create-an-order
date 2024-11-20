@@ -21,7 +21,7 @@ const DeviceWearerModel = z.object({
   otherDisability: z.string().nullable().optional(),
   noFixedAbode: z.boolean().nullable(),
   language: z.string().nullable().optional(),
-  interpreterRequired: z.boolean().nullable().optional(),
+  interpreterRequired: z.boolean().nullable(),
 })
 
 export type DeviceWearer = z.infer<typeof DeviceWearerModel>

@@ -48,7 +48,8 @@
     {% for task in tasks %}
       {% set name = task.name | replace("_", " ") | capitalize %}
       {% set href = task.path %}
-      {% set status = 'COMPLETE' if task.completed else 'INCOMPLETE' %}
+      {% set status = 'COMPLETE' if task.completed else 
+        'INCOMPLETE' %}
       {% set tagColour = 'govuk-tag--green' if task.completed else 'govuk-tag--grey' %}
 
       {% if task.state == 'CANT_BE_STARTED' %}
@@ -73,14 +74,13 @@
         }), taskListItems) %}
       {% elif task.state == 'OPTIONAL' %}
         {% set tagHtml %}
-            <strong class="govuk-tag govuk-tag--light-blue">
+        <strong class="govuk-tag govuk-tag--light-blue">
               Optional
             </strong>
-            <strong class="govuk-tag {{ tagColour }}">
-              {{ status | capitalize }} 
-            </strong>
+        <strong class="govuk-tag {{ tagColour }}">
+          {{ status | capitalize }}
+        </strong>
         {% endset %}
-
         {% set taskListItems = (taskListItems.push({
             idPrefix: "order-section",
             title: { text: name },
@@ -89,6 +89,8 @@
               html: tagHtml
             }
           }), taskListItems) %}
+      {% elif task.state == 'CHECK_YOUR_ANSWERS' %}
+        {# do not display #}
       {% else %}
         {% set taskListItems = (taskListItems.push({
           idPrefix: "order-section",

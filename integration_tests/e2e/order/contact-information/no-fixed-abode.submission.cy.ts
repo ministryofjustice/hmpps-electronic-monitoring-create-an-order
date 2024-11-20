@@ -35,6 +35,7 @@ context('Contact information', () => {
             dateOfBirth: null,
             disabilities: null,
             noFixedAbode: false,
+            interpreterRequired: null,
           },
         })
 
@@ -111,6 +112,7 @@ context('Contact information', () => {
             dateOfBirth: null,
             disabilities: null,
             noFixedAbode: true,
+            interpreterRequired: null,
           },
         })
 
