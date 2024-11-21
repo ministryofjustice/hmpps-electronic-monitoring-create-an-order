@@ -165,8 +165,8 @@ export default function routes({
   post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
 
   // Check your answers
-  get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
-  post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
+  get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
+  post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
 
   /**
    * INSTALLATION AND RISK
