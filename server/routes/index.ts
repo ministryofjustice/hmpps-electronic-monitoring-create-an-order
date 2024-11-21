@@ -7,7 +7,7 @@ import NoFixedAbodeController from '../controllers/contact-information/noFixedAb
 import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
-import DeviceWearerCheckAnswersController from '../controllers/deviceWearersCheckAnswersController'
+import DeviceWearerCheckAnswersController from '../controllers/deviceWearerCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
@@ -76,7 +76,7 @@ export default function routes({
     taskListService,
   )
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, taskListService)
-  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService)
+  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService, taskListService)
   const installationAndRiskController = new InstallationAndRiskController(
     auditService,
     installationAndRiskService,
@@ -137,6 +137,7 @@ export default function routes({
 
   // Check your answers
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.update)
 
   /**
    * CONTACT INFORMATION

@@ -34,7 +34,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
   })
 
   describe('view', () => {
-    it('should render the check answers without any answers completed', async () => {
+    it('should render the check answers page without any answers completed', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
