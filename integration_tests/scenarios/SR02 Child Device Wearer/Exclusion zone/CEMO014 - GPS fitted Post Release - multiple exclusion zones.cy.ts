@@ -184,11 +184,11 @@ context('Scenarios', () => {
               .replace("don't know", 'unknown')
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
-            disability: [{ disability: '' }],
+            disability: [],
             address_1: primaryAddressDetails.line1,
             address_2: primaryAddressDetails.line2,
             address_3: primaryAddressDetails.line3,
-            address_4: '',
+            address_4: 'N/A',
             address_post_code: primaryAddressDetails.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
@@ -244,7 +244,7 @@ context('Scenarios', () => {
                 new_order_received: '',
                 notifying_officer_email: '',
                 notifying_officer_name: '',
-                notifying_organization: '',
+                notifying_organization: 'N/A',
                 no_post_code: '',
                 no_address_1: '',
                 no_address_2: '',
