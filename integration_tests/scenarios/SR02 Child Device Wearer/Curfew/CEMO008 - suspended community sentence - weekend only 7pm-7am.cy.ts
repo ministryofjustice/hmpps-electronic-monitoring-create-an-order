@@ -266,7 +266,7 @@ context('Scenarios', () => {
               new_order_received: '',
               notifying_officer_email: '',
               notifying_officer_name: '',
-              notifying_organization: '',
+              notifying_organization: 'N/A',
               no_post_code: '',
               no_address_1: '',
               no_address_2: '',
