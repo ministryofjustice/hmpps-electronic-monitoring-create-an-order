@@ -1,3 +1,4 @@
+import { Address } from '../models/Address'
 import { ValidationResult } from '../models/Validation'
 import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 
@@ -159,3 +160,18 @@ export const isNullOrUndefined = <T>(value: T | null | undefined): value is null
 }
 
 export const isNotNullOrUndefined = <T>(value: T | null | undefined): value is T => !isNullOrUndefined(value)
+
+export const lookup = (map: Record<string, string>, value: string | null | undefined, defaultValue: string = '') => {
+  if (isNullOrUndefined(value)) {
+    return defaultValue
+  }
+
+  if (Object.keys(map).includes(value)) {
+    return map[value]
+  }
+
+  return defaultValue
+}
+
+export const createAddressPreview = (address: Address | null | undefined): string =>
+  isNullOrUndefined(address) ? '' : `${address.addressLine1}, ${address.addressLine2}, ${address.postcode}`

@@ -17,7 +17,7 @@ import CurfewTimetableController from '../controllers/monitoringConditions/curfe
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
-import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkYourAnswersContorller'
+import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'

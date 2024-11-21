@@ -7,18 +7,76 @@
 
 {% block answers %}
 
-  <h3 class="govuk-heading-m">Monitoring conditions</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Monitoring conditions"
+      }
+    },
+    rows: monitoringConditions
+  }) }}
 
-  <h3 class="govuk-heading-m">Installation address</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Installation address"
+      }
+    },
+    rows: installationAddress
+  }) }}
 
-  <h3 class="govuk-heading-m">Curfew monitoring conditions</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Curfew monitoring conditions"
+      }
+    },
+    rows: curfew
+  }) }}
 
-  <h3 class="govuk-heading-m">Exclusion zone conditions</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Curfew timetable"
+      }
+    },
+    rows: curfewTimetable
+  }) }}
 
-  <h3 class="govuk-heading-m">Trail monitoring conditions</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Exclusion zone conditions"
+      }
+    },
+    rows: exclusionZone
+  }) }}
 
-  <h3 class="govuk-heading-m">Attendance monitoring conditions</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Trail monitoring conditions"
+      }
+    },
+    rows: trail
+  }) }}
 
-  <h3 class="govuk-heading-m">Alcohol monitoring conditions</h2>
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Attendance monitoring conditions"
+      }
+    },
+    rows: attendance
+  }) }}
+
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Alcohol monitoring conditions"
+      }
+    },
+    rows: alcohol
+  }) }}
 
 {% endblock %}
