@@ -31,11 +31,11 @@ const createAddressAnswers = (order: Order) => {
   }
 
   if (secondaryAddress) {
-    answers.push(createAddressAnswer('Secondary address', secondaryAddress, secondaryAddressUri),)
+    answers.push(createAddressAnswer('Secondary address', secondaryAddress, secondaryAddressUri))
   }
 
-  if(tertiaryAddress) {
-    answers.push(createAddressAnswer('Tertiary address', tertiaryAddress, tertiaryddressUri),)
+  if (tertiaryAddress) {
+    answers.push(createAddressAnswer('Tertiary address', tertiaryAddress, tertiaryddressUri))
   }
 
   return answers
