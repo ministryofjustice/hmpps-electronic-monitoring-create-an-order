@@ -12,7 +12,7 @@ import { Order } from '../Order'
 
 const createDeviceWearerAnswers = (order: Order) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
-  const disabilities = order.deviceWearer.disabilities.map((disability) => lookup(disabilitiesMap, disability))
+  const disabilities = order.deviceWearer.disabilities.map(disability => lookup(disabilitiesMap, disability))
   return [
     createTextAnswer('First names', order.deviceWearer.firstName, uri),
     createTextAnswer('Last name', order.deviceWearer.lastName, uri),
