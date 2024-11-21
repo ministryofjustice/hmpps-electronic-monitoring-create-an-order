@@ -6,11 +6,11 @@ import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
-jest.mock('../services/deviceWearerService')
-jest.mock('../data/hmppsAuditClient')
-jest.mock('../data/restClient')
+jest.mock('../../services/auditService')
+jest.mock('../../services/orderService')
+jest.mock('../../services/deviceWearerService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../data/restClient')
 
 describe('ContactDetailsCheckAnswersController', () => {
   const taskListService = new TaskListService()
@@ -170,7 +170,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'What is the address of the responsible organisation?',
           },
           value: {
-            text: '',
+            html: '',
           },
           actions: {
             items: [
@@ -187,14 +187,14 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'Telephone number for responsible organisation',
           },
           value: {
-            html: '',
+            text: '',
           },
           actions: {
             items: [
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'Telephone number for responsible organisation',
+                visuallyHiddenText: 'telephone number for responsible organisation',
               },
             ],
           },
@@ -211,7 +211,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'Email address for responsible organisation',
+                visuallyHiddenText: 'email address for responsible organisation',
               },
             ],
           },
@@ -239,6 +239,14 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOrganisationPhoneNumber: '01234567891',
         responsibleOrganisationRegion: 'East',
       },
+      addresses: [
+        createAddress({
+          addressType: 'RESPONSIBLE_ORGANISATION',
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          postcode: 'Postcode',
+        }),
+      ],
     })
     const req = createMockRequest({ order })
     const res = createMockResponse()
@@ -248,7 +256,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     await controller.view(req, res, next)
 
     // Then
-    expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/check-your-answers', {
+    expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/check-your-answers', {
       contactDetails: [
         {
           key: {
@@ -315,7 +323,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'full name of responsible officer',
               },
@@ -332,7 +340,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'telephone number for responsible officer',
               },
@@ -349,7 +357,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what organisation is the responsible officer part of?',
               },
@@ -366,7 +374,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what region is the responsible organisation in? (optional)',
               },
@@ -378,12 +386,12 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'What is the address of the responsible organisation?',
           },
           value: {
-            text: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Postcode',
           },
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what is the address of the responsible organisation?',
               },
@@ -395,14 +403,14 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'Telephone number for responsible organisation',
           },
           value: {
-            html: '01234567891',
+            text: '01234567891',
           },
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'Telephone number for responsible organisation',
+                visuallyHiddenText: 'telephone number for responsible organisation',
               },
             ],
           },
@@ -417,9 +425,9 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'Email address for responsible organisation',
+                visuallyHiddenText: 'email address for responsible organisation',
               },
             ],
           },
@@ -465,6 +473,12 @@ describe('ContactDetailsCheckAnswersController', () => {
           addressLine2: 'Line 2',
           postcode: 'Postcode',
         }),
+        createAddress({
+          addressType: 'RESPONSIBLE_ORGANISATION',
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          postcode: 'Postcode',
+        }),
       ],
     })
     const req = createMockRequest({ order })
@@ -475,7 +489,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     await controller.view(req, res, next)
 
     // Then
-    expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/check-your-answers', {
+    expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/check-your-answers', {
       contactDetails: [
         {
           key: {
@@ -518,12 +532,15 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'Primary address',
           },
           value: {
-            text: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Postcode',
           },
           actions: {
             items: [
               {
-                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.ADDRESSES.replace(
+                  ':addressType(primary|secondary|tertiary)',
+                  'primary',
+                ).replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'primary address',
               },
@@ -535,12 +552,15 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'Secondary address',
           },
           value: {
-            text: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Postcode',
           },
           actions: {
             items: [
               {
-                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.ADDRESSES.replace(
+                  ':addressType(primary|secondary|tertiary)',
+                  'secondary',
+                ).replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'secondary address',
               },
@@ -552,12 +572,15 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'Tertiary address',
           },
           value: {
-            text: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Postcode',
           },
           actions: {
             items: [
               {
-                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.ADDRESSES.replace(
+                  ':addressType(primary|secondary|tertiary)',
+                  'tertiary',
+                ).replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'tertiary address',
               },
@@ -593,7 +616,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'full name of responsible officer',
               },
@@ -610,7 +633,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'telephone number for responsible officer',
               },
@@ -627,7 +650,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what organisation is the responsible officer part of?',
               },
@@ -644,7 +667,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what region is the responsible organisation in? (optional)',
               },
@@ -656,12 +679,12 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'What is the address of the responsible organisation?',
           },
           value: {
-            text: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Postcode',
           },
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what is the address of the responsible organisation?',
               },
@@ -673,14 +696,14 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: 'Telephone number for responsible organisation',
           },
           value: {
-            html: '01234567891',
+            text: '01234567891',
           },
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'Telephone number for responsible organisation',
+                visuallyHiddenText: 'telephone number for responsible organisation',
               },
             ],
           },
@@ -695,9 +718,9 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'Email address for responsible organisation',
+                visuallyHiddenText: 'email address for responsible organisation',
               },
             ],
           },

@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { AuditService } from '../../services'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
+import createViewModel from '../../models/view-models/contactInformationCheckAnswers'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
@@ -17,7 +18,7 @@ export default class CheckAnswersController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    res.render(`pages/order/contact-information/check-your-answers`)
+    res.render(`pages/order/contact-information/check-your-answers`, createViewModel(order))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

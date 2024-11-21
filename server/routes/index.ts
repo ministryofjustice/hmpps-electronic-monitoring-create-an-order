@@ -107,7 +107,10 @@ export default function routes({
     auditService,
     taskListService,
   )
-  const contactInformationCheckAnswersController = new ContactInformationCheckAnswersController(auditService, taskListService)
+  const contactInformationCheckAnswersController = new ContactInformationCheckAnswersController(
+    auditService,
+    taskListService,
+  )
 
   router.param('orderId', populateOrder(orderService))
 
