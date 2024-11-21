@@ -188,7 +188,7 @@ context('Scenarios', () => {
             address_1: primaryAddressDetails.line1,
             address_2: primaryAddressDetails.line2,
             address_3: primaryAddressDetails.line3,
-            address_4: '',
+            address_4: 'N/A',
             address_post_code: primaryAddressDetails.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
