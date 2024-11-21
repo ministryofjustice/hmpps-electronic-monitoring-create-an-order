@@ -1,0 +1,38 @@
+{% extends "../../../partials/check-your-answers-layout.njk" %}
+
+{% set section = "Contact information" %}
+{% set pageTitle = "Contact Information - Check your answers - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block answers %}
+
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Contact details"
+      }
+    },
+    rows: contactDetails
+  }) }}
+
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Addresses"
+      }
+    },
+    rows: addresses
+  }) }}
+
+  {{ govukSummaryList({
+    card: {
+      title: {
+        text: "Interested parties"
+      }
+    },
+    rows: interestedParties
+  }) }}
+
+{% endblock %}
