@@ -67,7 +67,7 @@ context('About the device wearer', () => {
             sex: null,
             gender: 'self-identify',
             otherGender: 'Furby',
-            disabilities: 'Other',
+            disabilities: 'OTHER',
             otherDisability: 'Broken arm',
             noFixedAbode: null,
             interpreterRequired: null,
