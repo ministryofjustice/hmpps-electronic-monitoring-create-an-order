@@ -1,5 +1,20 @@
 import { z } from 'zod'
 
+export const DisabilityEnum = z.enum([
+  'VISION',
+  'HEARING',
+  'MOBILITY',
+  'DEXTERITY',
+  'LEARNING_UNDERSTANDING_CONCENTRATING',
+  'MEMORY',
+  'MENTAL_HEALTH',
+  'STAMINA_BREATHING_FATIGUE',
+  'SOCIAL_BEHAVIOURAL',
+  'OTHER',
+  'NONE',
+  'PREFER_NOT_TO_SAY',
+])
+
 const DeviceWearerModel = z.object({
   nomisId: z.string().nullable(),
   pncId: z.string().nullable(),
@@ -17,7 +32,12 @@ const DeviceWearerModel = z.object({
   disabilities: z
     .string()
     .nullable()
-    .transform(val => (val === null ? [] : val.split(','))),
+    .transform(disabilities => {
+      if (disabilities === null || disabilities === '') {
+        return []
+      }
+      return disabilities.split(',').map(disability => DisabilityEnum.parse(disability))
+    }),
   otherDisability: z.string().nullable().optional(),
   noFixedAbode: z.boolean().nullable(),
   language: z.string().nullable().optional(),
