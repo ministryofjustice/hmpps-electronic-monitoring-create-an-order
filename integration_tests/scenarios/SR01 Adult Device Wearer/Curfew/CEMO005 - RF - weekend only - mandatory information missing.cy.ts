@@ -151,7 +151,7 @@ context('Scenarios', () => {
         interestedPartiesPage.form.saveAndContinueButton.click()
 
         const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-      contactInformationCheckYourAnswersPage.continueButton().click()
+        contactInformationCheckYourAnswersPage.continueButton().click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.saveAndContinueButton().click()
