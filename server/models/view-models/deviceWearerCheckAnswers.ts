@@ -1,4 +1,4 @@
-import { genderMap, sexMap } from '../../constants/about-the-device-wearer'
+import { disabilitiesMap, genderMap, sexMap } from '../../constants/about-the-device-wearer'
 import { relationshipMap } from '../../constants/about-the-device-wearer/responsibleAdult'
 import paths from '../../constants/paths'
 import {
@@ -12,6 +12,7 @@ import { Order } from '../Order'
 
 const createDeviceWearerAnswers = (order: Order) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
+  const disabilities = order.deviceWearer.disabilities.map((disability) => lookup(disabilitiesMap, disability))
   return [
     createTextAnswer('First names', order.deviceWearer.firstName, uri),
     createTextAnswer('Last name', order.deviceWearer.lastName, uri),
@@ -24,7 +25,7 @@ const createDeviceWearerAnswers = (order: Order) => {
     ),
     createTextAnswer('Sex', lookup(sexMap, order.deviceWearer.sex), uri),
     createTextAnswer('Gender', lookup(genderMap, order.deviceWearer.gender), uri),
-    createMultipleChoiceAnswer('Disabilities (optional)', order.deviceWearer.disabilities, uri),
+    createMultipleChoiceAnswer('Disabilities (optional)', disabilities, uri),
     createTextAnswer('Disability, if other (optional)', order.deviceWearer.otherDisability, uri),
     createTextAnswer('Main language', order.deviceWearer.language, uri),
     createBooleanAnswer('Is an interpreter required?', order.deviceWearer.interpreterRequired, uri),
