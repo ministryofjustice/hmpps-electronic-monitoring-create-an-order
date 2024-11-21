@@ -184,7 +184,7 @@ context('Scenarios', () => {
               .replace("don't know", 'unknown')
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
-            disability: [{ disability: '' }],
+            disability: [],
             address_1: primaryAddressDetails.line1,
             address_2: primaryAddressDetails.line2,
             address_3: primaryAddressDetails.line3,
