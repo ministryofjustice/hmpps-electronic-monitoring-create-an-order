@@ -411,9 +411,6 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('07. primaryAddressPage - minimum', { overwrite: true })
       primaryAddressPage.form.saveAndContinueButton.click()
 
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-      contactInformationCheckYourAnswersPage.continueButton().click()
-
       // no validation
       let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       // interestedPartiesPage.form.saveAndContinueButton.click()
@@ -422,6 +419,9 @@ context('Mandatory fields only', () => {
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      contactInformationCheckYourAnswersPage.continueButton().click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
