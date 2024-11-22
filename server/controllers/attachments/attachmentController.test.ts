@@ -11,11 +11,11 @@ import AuditService from '../../services/auditService'
 import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
-jest.mock('../data/hmppsAuditClient')
-jest.mock('../services/attachmentService')
-jest.mock('../data/restClient')
+jest.mock('../../services/auditService')
+jest.mock('../../services/orderService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../services/attachmentService')
+jest.mock('../../data/restClient')
 
 const mockId = uuidv4()
 

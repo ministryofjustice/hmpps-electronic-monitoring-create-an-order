@@ -7,11 +7,11 @@ import { createMockRequest, createMockResponse } from '../../../test/mocks/mockE
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import TaskListService from '../../services/taskListService'
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
-jest.mock('../services/deviceWearerResponsibleAdultService')
-jest.mock('../data/hmppsAuditClient')
-jest.mock('../data/restClient')
+jest.mock('../../services/auditService')
+jest.mock('../../services/orderService')
+jest.mock('../../services/deviceWearerResponsibleAdultService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../data/restClient')
 
 const createMockOrder = (name: string) =>
   getMockOrder({

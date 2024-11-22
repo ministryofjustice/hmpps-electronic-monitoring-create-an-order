@@ -7,11 +7,11 @@ import DeviceWearerService from '../../services/deviceWearerService'
 import DeviceWearerController from './deviceWearerController'
 import TaskListService from '../../services/taskListService'
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
-jest.mock('../services/deviceWearerService')
-jest.mock('../data/hmppsAuditClient')
-jest.mock('../data/restClient')
+jest.mock('../../services/auditService')
+jest.mock('../../services/orderService')
+jest.mock('../../services/deviceWearerService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../data/restClient')
 
 const mockOrder = getMockOrder({
   deviceWearer: {
