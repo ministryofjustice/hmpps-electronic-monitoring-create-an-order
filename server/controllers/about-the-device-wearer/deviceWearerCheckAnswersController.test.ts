@@ -1,10 +1,10 @@
-import { createDeviceWearer, createResponsibleAdult, getMockOrder } from '../../test/mocks/mockOrder'
-import HmppsAuditClient from '../data/hmppsAuditClient'
-import AuditService from '../services/auditService'
+import { createDeviceWearer, createResponsibleAdult, getMockOrder } from '../../../test/mocks/mockOrder'
+import HmppsAuditClient from '../../data/hmppsAuditClient'
+import AuditService from '../../services/auditService'
 import DeviceWearerCheckAnswersController from './deviceWearerCheckAnswersController'
-import TaskListService from '../services/taskListService'
-import paths from '../constants/paths'
-import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
+import TaskListService from '../../services/taskListService'
+import paths from '../../constants/paths'
+import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')

@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AttachmentService, AuditService, OrderService } from '../services'
-import AttachmentType from '../models/AttachmentType'
+import { AttachmentService, AuditService, OrderService } from '../../services'
+import AttachmentType from '../../models/AttachmentType'
 
 export default class AttachmentsController {
   constructor(
