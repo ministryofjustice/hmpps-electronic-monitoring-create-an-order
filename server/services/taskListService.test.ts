@@ -219,9 +219,22 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id))
     })
 
-    it('should return installation and risk if current page is interested parties', () => {
+    it('should return check your answers if current page is interested parties', () => {
       // Given
       const currentPage = 'INTERESTED_PARTIES'
+      const taskListService = new TaskListService()
+      const order = getMockOrder()
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('should return installation and risk if current page is check your answers', () => {
+      // Given
+      const currentPage = 'CHECK_ANSWERS_CONTACT_INFORMATION'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
@@ -747,6 +760,13 @@ describe('TaskListService', () => {
             state: 'REQUIRED',
             completed: false,
           },
+          {
+            section: 'CONTACT_INFORMATION',
+            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+            state: 'CHECK_YOUR_ANSWERS',
+            completed: true,
+          },
         ],
         INSTALLATION_AND_RISK: [
           {
@@ -952,6 +972,13 @@ describe('TaskListService', () => {
             state: 'REQUIRED',
             completed: true,
           },
+          {
+            section: 'CONTACT_INFORMATION',
+            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+            state: 'CHECK_YOUR_ANSWERS',
+            completed: true,
+          },
         ],
         INSTALLATION_AND_RISK: [
           {
@@ -1146,6 +1173,13 @@ describe('TaskListService', () => {
             path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
             state: 'REQUIRED',
             completed: false,
+          },
+          {
+            section: 'CONTACT_INFORMATION',
+            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+            state: 'CHECK_YOUR_ANSWERS',
+            completed: true,
           },
         ],
         INSTALLATION_AND_RISK: [

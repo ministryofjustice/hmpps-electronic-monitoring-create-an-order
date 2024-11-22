@@ -5,6 +5,7 @@ import AddressController from '../controllers/contact-information/addressControl
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
 import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
+import ContactInformationCheckAnswersController from '../controllers/contact-information/checkAnswersController'
 import DeviceWearerController from '../controllers/deviceWearerController'
 import ResponsibleAdultController from '../controllers/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/deviceWearerCheckAnswersController'
@@ -106,6 +107,10 @@ export default function routes({
     auditService,
     taskListService,
   )
+  const contactInformationCheckAnswersController = new ContactInformationCheckAnswersController(
+    auditService,
+    taskListService,
+  )
 
   router.param('orderId', populateOrder(orderService))
 
@@ -158,6 +163,10 @@ export default function routes({
   // Device wearer addresses
   get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
   post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
+
+  // Check your answers
+  get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
+  post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
 
   /**
    * INSTALLATION AND RISK
