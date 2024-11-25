@@ -486,7 +486,7 @@ describe('TaskListService', () => {
 
     it('should return trail monitoring if current page is exclusion zone and trail is selected', () => {
       // Given
-      const currentPage = 'ZONE'
+      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -504,7 +504,7 @@ describe('TaskListService', () => {
 
     it('should return attendance monitoring if current page is exclusion zone and mandatoryAttendance is selected', () => {
       // Given
-      const currentPage = 'ZONE'
+      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -522,7 +522,7 @@ describe('TaskListService', () => {
 
     it('should return alcohol monitoring if current page is exclusion zone and alcohol is selected', () => {
       // Given
-      const currentPage = 'ZONE'
+      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -540,7 +540,7 @@ describe('TaskListService', () => {
 
     it('should return check your answers if current page is exclusion zone and no other monitoring is selected', () => {
       // Given
-      const currentPage = 'ZONE'
+      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -557,7 +557,7 @@ describe('TaskListService', () => {
 
     it('should return attendance monitoring if current page is trail monitoring and mandatoryAttendance is selected', () => {
       // Given
-      const currentPage = 'TRAIL'
+      const currentPage = 'TRAIL_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -575,7 +575,7 @@ describe('TaskListService', () => {
 
     it('should return alcohol monitoring if current page is trail monitoring and alcohol is selected', () => {
       // Given
-      const currentPage = 'TRAIL'
+      const currentPage = 'TRAIL_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -593,7 +593,7 @@ describe('TaskListService', () => {
 
     it('should return check your answers if current page is trail monitoring and no other monitoring is selected', () => {
       // Given
-      const currentPage = 'TRAIL'
+      const currentPage = 'TRAIL_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -610,7 +610,7 @@ describe('TaskListService', () => {
 
     it('should return alcohol monitoring if current page is attendance monitoring and alcohol monitoring is selected', () => {
       // Given
-      const currentPage = 'ATTENDANCE'
+      const currentPage = 'ATTENDANCE_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -628,7 +628,7 @@ describe('TaskListService', () => {
 
     it('should return check your answers if current page is attendance monitoring and no other monitoring is selected', () => {
       // Given
-      const currentPage = 'ATTENDANCE'
+      const currentPage = 'ATTENDANCE_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -645,7 +645,7 @@ describe('TaskListService', () => {
 
     it('should return check your answers if current page is alcohol monitoring and no other monitoring is selected', () => {
       // Given
-      const currentPage = 'ALCOHOL'
+      const currentPage = 'ALCOHOL_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -818,28 +818,28 @@ describe('TaskListService', () => {
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ZONE',
+            name: 'ENFORCEMENT_ZONE_MONITORING',
             path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: false,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL',
+            name: 'TRAIL_MONITORING',
             path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: false,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE',
+            name: 'ATTENDANCE_MONITORING',
             path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: false,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL',
+            name: 'ALCOHOL_MONITORING',
             path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: false,
@@ -855,7 +855,7 @@ describe('TaskListService', () => {
         ATTACHMENTS: [
           {
             section: 'ATTACHMENTS',
-            name: 'ATTACHMENT',
+            name: 'ATTACHMENTS',
             path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
             state: 'OPTIONAL',
             completed: false,
@@ -1030,28 +1030,28 @@ describe('TaskListService', () => {
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ZONE',
+            name: 'ENFORCEMENT_ZONE_MONITORING',
             path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: true,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL',
+            name: 'TRAIL_MONITORING',
             path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: true,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE',
+            name: 'ATTENDANCE_MONITORING',
             path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: true,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL',
+            name: 'ALCOHOL_MONITORING',
             path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
             completed: true,
@@ -1067,7 +1067,7 @@ describe('TaskListService', () => {
         ATTACHMENTS: [
           {
             section: 'ATTACHMENTS',
-            name: 'ATTACHMENT',
+            name: 'ATTACHMENTS',
             path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
             state: 'OPTIONAL',
             completed: false,
@@ -1232,28 +1232,28 @@ describe('TaskListService', () => {
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ZONE',
+            name: 'ENFORCEMENT_ZONE_MONITORING',
             path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
             state: 'REQUIRED',
             completed: false,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL',
+            name: 'TRAIL_MONITORING',
             path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
             state: 'REQUIRED',
             completed: false,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE',
+            name: 'ATTENDANCE_MONITORING',
             path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
             state: 'REQUIRED',
             completed: false,
           },
           {
             section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL',
+            name: 'ALCOHOL_MONITORING',
             path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
             state: 'REQUIRED',
             completed: false,
@@ -1269,7 +1269,7 @@ describe('TaskListService', () => {
         ATTACHMENTS: [
           {
             section: 'ATTACHMENTS',
-            name: 'ATTACHMENT',
+            name: 'ATTACHMENTS',
             path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
             state: 'OPTIONAL',
             completed: false,

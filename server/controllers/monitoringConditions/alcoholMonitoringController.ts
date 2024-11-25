@@ -50,7 +50,7 @@ export default class AlcoholMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('ALCOHOL', req.order!))
+      res.redirect(this.taskListService.getNextPage('ALCOHOL_MONITORING', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
