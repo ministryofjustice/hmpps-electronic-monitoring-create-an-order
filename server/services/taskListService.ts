@@ -27,12 +27,12 @@ type Page =
   | 'CURFEW_RELEASE_DATE'
   | 'CURFEW_CONDITIONS'
   | 'CURFEW_TIMETABLE'
-  | 'ZONE'
-  | 'TRAIL'
-  | 'ATTENDANCE'
-  | 'ALCOHOL'
+  | 'ENFORCEMENT_ZONE_MONITORING'
+  | 'TRAIL_MONITORING'
+  | 'ATTENDANCE_MONITORING'
+  | 'ALCOHOL_MONITORING'
   | 'CHECK_ANSWERS_MONITORING_CONDITIONS'
-  | 'ATTACHMENT'
+  | 'ATTACHMENTS'
 
 type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED' | 'CHECK_YOUR_ANSWERS'
 
@@ -243,7 +243,7 @@ export default class TaskListService {
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
-      name: 'ZONE',
+      name: 'ENFORCEMENT_ZONE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.exclusionZone,
@@ -256,7 +256,7 @@ export default class TaskListService {
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
-      name: 'TRAIL',
+      name: 'TRAIL_MONITORING',
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.trail,
@@ -269,7 +269,7 @@ export default class TaskListService {
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
-      name: 'ATTENDANCE',
+      name: 'ATTENDANCE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.mandatoryAttendance,
@@ -283,7 +283,7 @@ export default class TaskListService {
 
     tasks.push({
       section: 'MONITORING_CONDITIONS',
-      name: 'ALCOHOL',
+      name: 'ALCOHOL_MONITORING',
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.alcohol,
@@ -304,7 +304,7 @@ export default class TaskListService {
 
     tasks.push({
       section: 'ATTACHMENTS',
-      name: 'ATTACHMENT',
+      name: 'ATTACHMENTS',
       path: paths.ATTACHMENT.ATTACHMENTS,
       state: 'OPTIONAL',
       completed: false,

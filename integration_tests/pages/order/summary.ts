@@ -66,23 +66,23 @@ export default class OrderTasksPage extends AppPage {
   }
 
   get zoneTask(): Task {
-    return new Task('Zone')
+    return new Task('Enforcement zone monitoring')
   }
 
   get trailTask(): Task {
-    return new Task('Trail')
+    return new Task('Trail monitoring')
   }
 
   get attendanceTask(): Task {
-    return new Task('Attendance')
+    return new Task('Attendance monitoring')
   }
 
   get alcoholTask(): Task {
-    return new Task('Alcohol')
+    return new Task('Alcohol monitoring')
   }
 
   get attachmentsTask(): Task {
-    return new Task('Attachment')
+    return new Task('Attachments')
   }
 
   get submitOrderButton(): PageElement {

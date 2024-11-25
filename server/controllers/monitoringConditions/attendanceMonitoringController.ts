@@ -185,7 +185,7 @@ export default class AttendanceMonitoringController {
       if (formData.addAnother === 'true') {
         res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
       } else {
-        res.redirect(this.taskListService.getNextPage('ATTENDANCE', req.order!))
+        res.redirect(this.taskListService.getNextPage('ATTENDANCE_MONITORING', req.order!))
       }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))

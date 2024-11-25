@@ -75,7 +75,7 @@ export default class EnforcementZoneController {
             ),
           )
         else {
-          res.redirect(this.taskListService.getNextPage('ZONE', req.order!))
+          res.redirect(this.taskListService.getNextPage('ENFORCEMENT_ZONE_MONITORING', req.order!))
         }
       } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
