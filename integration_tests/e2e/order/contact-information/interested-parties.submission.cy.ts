@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
@@ -88,7 +88,7 @@ context('Contact information', () => {
         page.form.fillInWith(sampleFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(InstallationAndRiskPage)
+        Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
       })
 
       it('should return to the summary page', () => {
@@ -147,7 +147,7 @@ context('Contact information', () => {
         })
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(InstallationAndRiskPage)
+        Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,

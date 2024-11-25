@@ -25,6 +25,7 @@ import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-moni
 import AttachmentPage from '../pages/order/attachment'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
+import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
 
 context('The kitchen sink', () => {
   const takeScreenshots = true
@@ -228,6 +229,9 @@ context('The kitchen sink', () => {
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. interestedPartiesPage', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      contactInformationCheckYourAnswersPage.continueButton().click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)

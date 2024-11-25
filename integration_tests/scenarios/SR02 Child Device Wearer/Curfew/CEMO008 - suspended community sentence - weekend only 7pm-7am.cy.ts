@@ -26,6 +26,7 @@ import AttachmentPage from '../../../pages/order/attachment'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -157,6 +158,9 @@ context('Scenarios', () => {
       const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       interestedPartiesPage.form.fillInWith(interestedParties)
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      contactInformationCheckYourAnswersPage.continueButton().click()
 
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       installationAndRiskPage.saveAndContinueButton().click()
