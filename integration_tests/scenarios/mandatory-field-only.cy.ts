@@ -30,6 +30,7 @@ import ResponsibleAdultPage from '../pages/order/about-the-device-wearer/respons
 import AttachmentPage from '../pages/order/attachment'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
+import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = true
@@ -181,6 +182,9 @@ context('Mandatory fields only', () => {
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      contactInformationCheckYourAnswersPage.continueButton().click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
@@ -415,6 +419,9 @@ context('Mandatory fields only', () => {
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      contactInformationCheckYourAnswersPage.continueButton().click()
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)

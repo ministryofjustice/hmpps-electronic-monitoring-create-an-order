@@ -1,17 +1,17 @@
-import AuditService from '../services/auditService'
-import DeviceWearerResponsibleAdultService from '../services/deviceWearerResponsibleAdultService'
-import HmppsAuditClient from '../data/hmppsAuditClient'
+import AuditService from '../../services/auditService'
+import DeviceWearerResponsibleAdultService from '../../services/deviceWearerResponsibleAdultService'
+import HmppsAuditClient from '../../data/hmppsAuditClient'
 import DeviceWearerResponsibleAdultController from './deviceWearerResponsibleAdultController'
-import RestClient from '../data/restClient'
-import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
-import { getMockOrder } from '../../test/mocks/mockOrder'
-import TaskListService from '../services/taskListService'
+import RestClient from '../../data/restClient'
+import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
+import { getMockOrder } from '../../../test/mocks/mockOrder'
+import TaskListService from '../../services/taskListService'
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
-jest.mock('../services/deviceWearerResponsibleAdultService')
-jest.mock('../data/hmppsAuditClient')
-jest.mock('../data/restClient')
+jest.mock('../../services/auditService')
+jest.mock('../../services/orderService')
+jest.mock('../../services/deviceWearerResponsibleAdultService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../data/restClient')
 
 const createMockOrder = (name: string) =>
   getMockOrder({

@@ -20,6 +20,7 @@ type Page =
   | 'SECONDARY_ADDRESS'
   | 'TERTIARY_ADDRESS'
   | 'INTERESTED_PARTIES'
+  | 'CHECK_ANSWERS_CONTACT_INFORMATION'
   | 'INSTALLATION_AND_RISK'
   | 'MONITORING_CONDITIONS'
   | 'INSTALLATION_ADDRESS'
@@ -167,6 +168,14 @@ export default class TaskListService {
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       state: 'REQUIRED',
       completed: isNotNullOrUndefined(order.interestedParties),
+    })
+
+    tasks.push({
+      section: 'CONTACT_INFORMATION',
+      name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+      path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
+      state: 'CHECK_YOUR_ANSWERS',
+      completed: true,
     })
 
     tasks.push({

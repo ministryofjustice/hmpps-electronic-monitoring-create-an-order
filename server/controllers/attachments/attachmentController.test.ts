@@ -1,21 +1,21 @@
 import type { NextFunction, Request, Response } from 'express'
 import { Readable } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
-import { getMockOrder } from '../../test/mocks/mockOrder'
-import HmppsAuditClient from '../data/hmppsAuditClient'
-import RestClient from '../data/restClient'
-import AttachmentType from '../models/AttachmentType'
-import { OrderStatusEnum } from '../models/Order'
-import AttachmentService from '../services/attachmentService'
-import AuditService from '../services/auditService'
-import OrderService from '../services/orderService'
+import { getMockOrder } from '../../../test/mocks/mockOrder'
+import HmppsAuditClient from '../../data/hmppsAuditClient'
+import RestClient from '../../data/restClient'
+import AttachmentType from '../../models/AttachmentType'
+import { OrderStatusEnum } from '../../models/Order'
+import AttachmentService from '../../services/attachmentService'
+import AuditService from '../../services/auditService'
+import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
 
-jest.mock('../services/auditService')
-jest.mock('../services/orderService')
-jest.mock('../data/hmppsAuditClient')
-jest.mock('../services/attachmentService')
-jest.mock('../data/restClient')
+jest.mock('../../services/auditService')
+jest.mock('../../services/orderService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../services/attachmentService')
+jest.mock('../../data/restClient')
 
 const mockId = uuidv4()
 
