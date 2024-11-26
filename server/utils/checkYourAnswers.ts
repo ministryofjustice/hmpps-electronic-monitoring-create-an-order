@@ -65,8 +65,14 @@ export const createHtmlAnswer = (key: string, value: Optional<string>, uri: stri
 const createDatePreview = (value: Optional<string>) =>
   isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString()
 
+const createTimePreview = (value: Optional<string>) =>
+  isNullOrUndefined(value) ? '' : new Date(value).toLocaleTimeString()
+
 export const createDateAnswer = (key: string, value: Optional<string>, uri: string): Answer =>
   createTextAnswer(key, createDatePreview(value), uri)
+
+export const createTimeAnswer = (key: string, value: Optional<string>, uri: string): Answer =>
+  createTextAnswer(key, createTimePreview(value), uri)
 
 export const createBooleanAnswer = (key: string, value: boolean | null, uri: string): Answer =>
   createTextAnswer(key, convertBooleanToEnum(value, '', 'Yes', 'No'), uri)
