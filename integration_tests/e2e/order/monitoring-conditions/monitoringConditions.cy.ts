@@ -15,7 +15,9 @@ const mockSubmittedMonitoringRequirements = {
     mandatoryAttendance: true,
     alcohol: true,
     startDate: '2024-10-10T00:00:00.000Z',
+    startTime: '11:00:00',
     endDate: '2024-10-11T00:00:00.000Z',
+    endTime: '11:00:00',
   },
 }
 const mockEmptyMonitoringConditions = {
@@ -29,7 +31,9 @@ const mockEmptyMonitoringConditions = {
     mandatoryAttendance: null,
     alcohol: null,
     startDate: null,
+    startTime: null,
     endDate: null,
+    endTime: null,
   },
 }
 
@@ -133,9 +137,13 @@ context('Monitoring conditions main section', () => {
       cy.get('#startDate-startDay').type('27')
       cy.get('#startDate-startMonth').type('3')
       cy.get('#startDate-startYear').type('2024')
+      cy.get('#startTime-hours').type('01')
+      cy.get('#startTime-minutes').type('02')
       cy.get('#endDate-endDay').type('28')
       cy.get('#endDate-endMonth').type('4')
       cy.get('#endDate-endYear').type('2025')
+      cy.get('#endTime-hours').type('03')
+      cy.get('#endTime-minutes').type('04')
       page.form.saveAndContinueButton.click()
       Page.verifyOnPage(InstallationAddressPage)
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
@@ -150,7 +158,9 @@ context('Monitoring conditions main section', () => {
           mandatoryAttendance: true,
           alcohol: true,
           startDate: '2024-03-27T00:00:00.000Z',
+          startTime: '01:02:00',
           endDate: '2025-04-28T00:00:00.000Z',
+          endTime: '03:04:00',
         })
       })
     })
@@ -171,6 +181,8 @@ context('Monitoring conditions main section', () => {
       cy.get('#startDate-startDay').type('27')
       cy.get('#startDate-startMonth').type('3')
       cy.get('#startDate-startYear').type('2024')
+      cy.get('#startTime-hours').type('01')
+      cy.get('#startTime-minutes').type('02')
       page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
@@ -184,7 +196,9 @@ context('Monitoring conditions main section', () => {
           mandatoryAttendance: false,
           alcohol: true,
           startDate: '2024-03-27T00:00:00.000Z',
+          startTime: '01:02:00',
           endDate: null,
+          endTime: null,
         })
       })
       Page.verifyOnPage(InstallationAddressPage)

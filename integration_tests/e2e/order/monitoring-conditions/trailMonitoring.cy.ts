@@ -23,7 +23,9 @@ const mockEmptyTrailMonitoring = {
     mandatoryAttendance: false,
     alcohol: true,
     startDate: null,
+    startTime: null,
     endDate: null,
+    endTime: null,
   },
 }
 
@@ -44,7 +46,9 @@ const mockSubmittedTrailMonitoring = {
     mandatoryAttendance: true,
     alcohol: true,
     startDate: null,
+    startTime: null,
     endDate: null,
+    endTime: null,
   },
 }
 

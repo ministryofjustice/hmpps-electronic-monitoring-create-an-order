@@ -8,6 +8,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../../../partials/timeInput.njk" import timeInput %}
 
 {% block formInputs %}
 
@@ -18,6 +19,7 @@
       isPageHeading: false
     }
   }) %}
+
     {{ govukDateInput({
       id: "startDate",
       fieldset: {
@@ -54,6 +56,16 @@
         }
       ],
       errorMessage: startDate.error
+    }) }}
+
+    {{ timeInput({
+      label: "Enter the time when monitoring starts",
+      hint: "For example 09:45 or 15:30 (24 hours)",
+      id: "startTime",
+      name: "startTime",
+      value: startTime.value,
+      errorMessage: startTime.error,
+      disabled: not isOrderEditable
     }) }}
 
     {{ govukDateInput({
@@ -93,8 +105,19 @@
       ],
       errorMessage: endDate.error
     }) }}
+
+    {{ timeInput({
+      label: "Enter the time when monitoring ends (optional)",
+      hint: "For example 09:45 or 15:30 (24 hours)",
+      id: "endTime",
+      name: "endTime",
+      value: endTime.value,
+      errorMessage: endTime.error,
+      disabled: not isOrderEditable
+    }) }}
+
   {% endcall %}
- 
+
   {% call govukFieldset({
     legend: {
       text: "Order information",
