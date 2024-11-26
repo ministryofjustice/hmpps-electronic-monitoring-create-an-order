@@ -42,9 +42,7 @@ RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
 ENV NODE_ENV='production'
 
 COPY . .
-RUN npm run build
-
-RUN npm prune --no-audit --omit=dev
+RUN npm run build && npm prune --no-audit --omit=dev
 
 # Stage: copy production assets and dependencies
 FROM base

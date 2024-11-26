@@ -3,6 +3,9 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@5
+  cypress: cypress-io/cypress@3.4.2
+  docker: circleci/docker@2.8.1
+  mem: circleci/rememborb@0.0.2
 
 parameters:
   alerts-slack-channel:
@@ -18,12 +21,33 @@ parameters:
 
   node-version:
     type: string
-    default: 20.12-browsers
+    default: 20.18-browsers
 
 executors:
+  integration-testing:
+    docker:
+      - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: wiremock/wiremock:latest
+        environment:
+          WIREMOCK_OPTIONS: '--port 9091 --verbose'
+      - image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order:Build.<< pipeline.git.revision >>
+        environment:
+          PORT: 3007
+          HMPPS_AUTH_URL: http://localhost:9091/auth
+          TOKEN_VERIFICATION_API_URL: http://localhost:9091/verification
+          TOKEN_VERIFICATION_ENABLED: true
+          REDIS_ENABLED: false
+          NODE_ENV: development
+          API_CLIENT_ID: clientid
+          API_CLIENT_SECRET: clientsecret
+          SYSTEM_CLIENT_ID: clientid
+          SYSTEM_CLIENT_SECRET: clientsecret
+          ENVIRONMENT_NAME: dev
+          CEMO_API_URL: http://localhost:9091/cemo
+
   scenario-testing:
     docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:<< pipeline.parameters.node-version >>
       - image: postgres:14
         environment:
           POSTGRES_PASSWORD: postgres
@@ -33,7 +57,7 @@ executors:
       - image: wiremock/wiremock:latest
         environment:
           WIREMOCK_OPTIONS: '--port 9091 --verbose'
-      - image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest
+      - image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api
         environment:
           SERVER_PORT: 8080
           DB_SERVER: localhost
@@ -51,6 +75,37 @@ executors:
           SERCO_PASSWORD: serco
           SERCO_URL: http://localhost:9091/fms
           CP_INTEGRATION_ENABLED: false
+      - image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order:Build.<< pipeline.git.revision >>
+        environment:
+          PORT: 3007
+          HMPPS_AUTH_URL: http://localhost:9091/auth
+          TOKEN_VERIFICATION_API_URL: http://localhost:9091/verification
+          TOKEN_VERIFICATION_ENABLED: true
+          REDIS_ENABLED: false
+          NODE_ENV: development
+          API_CLIENT_ID: clientid
+          API_CLIENT_SECRET: clientsecret
+          SYSTEM_CLIENT_ID: clientid
+          SYSTEM_CLIENT_SECRET: clientsecret
+          ENVIRONMENT_NAME: dev
+          CEMO_API_URL: http://localhost:8080
+
+commands:
+  create_app_version:
+    description: |
+      Creates an application version string, formatted [DATE].[CIRCLE_BUILD_NUM].[SHORT_SHA1] e.g 2020-04-24.487.fb30e99" Also uses mem/rememborb orb to remember the version as the env var APP_VERSION - which can be recalled in subsequent steps or jobs e.g. mem/recall
+    steps:
+      - run:
+          command: |
+            DATE=$(date '+%Y-%m-%d')
+            SHORT_SHA1=$(echo $CIRCLE_SHA1 | cut -c1-7)
+            VERSION=${DATE}.${CIRCLE_BUILD_NUM}.${SHORT_SHA1}
+            echo "Created version string: ${VERSION}"
+            echo "export VERSION=$VERSION" >> $BASH_ENV
+          name: Create app version string
+      - mem/remember:
+          env_var: APP_VERSION
+          value: ${VERSION}
 
 jobs:
   build:
@@ -73,8 +128,7 @@ jobs:
             - node_modules
             - ~/.cache
       - run:
-          command: |
-            npm run build
+          command: npm run build
       - run: # Run linter after build because the integration test code depend on compiled typescript...
           name: Linter check
           command: npm run lint
@@ -102,35 +156,14 @@ jobs:
           path: test_results/unit-test-reports.html
 
   integration_test:
-    executor:
-      name: hmpps/node
-      tag: << pipeline.parameters.node-version >>
+    executor: integration-testing
     steps:
       - checkout
       - attach_workspace:
           at: ~/app
-      - run:
-          name: Install missing OS dependency
-          command: sudo apt-get install libxss1
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.3.1/wiremock-standalone-3.3.1.jar
-      - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 9091
-          background: true
-      - run:
-          name: Run the node app
-          command: npm run start-feature
-          background: true
-      - run:
-          name: Wait for node app to start
-          command: sleep 5
-      - run:
-          name: integration tests
-          command: npm run int-test
+      - cypress/install
+      - cypress/run-tests:
+          cypress-command: npm run int-test
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -140,30 +173,14 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
+    parallelism: 4 # use 4 CircleCI machines to distribute specs
     steps:
       - checkout
       - attach_workspace:
           at: ~/app
-      - run:
-          name: Update npm
-          command: sudo npm install -g npm@latest
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: Install Dependencies
-          command: npm ci --no-audit
-      - run:
-          command: npm run build
-      - run:
-          name: Run the node app
-          command: npm run start-scenarios
-          background: true
-      - run:
-          name: Wait for node app to start
-          command: sleep 5
-      - run:
-          name: Run scenario tests
-          command: npm run int-test-scenarios
+      - cypress/install
+      - cypress/run-tests:
+          cypress-command: npm run int-test-scenarios -- --env split=true,spec=integration_tests/scenarios/**/*
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -171,9 +188,36 @@ jobs:
       - store_artifacts:
           path: integration_tests/screenshots
 
+  tag_docker:
+    executor:
+      name: hmpps/node
+      tag: << pipeline.parameters.node-version >>
+    parameters:
+      tag:
+        type: string
+        description: docker tag to be added to the image
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - create_app_version
+      - mem/recall:
+          env_var: APP_VERSION
+      - run: |
+          docker login -u="${QUAYIO_USERNAME}" -p="${QUAYIO_PASSWORD}" quay.io
+          docker load --input docker_cache/build_image.tar
+          docker image tag quay.io/hmpps/hmpps-electronic-monitoring-create-an-order:${APP_VERSION} quay.io/hmpps/hmpps-electronic-monitoring-create-an-order:<< parameters.tag >>
+          docker push quay.io/hmpps/hmpps-electronic-monitoring-create-an-order:<< parameters.tag >>
+
 workflows:
   build-test-and-deploy:
     jobs:
+      - hmpps/helm_lint:
+          name: helm_lint
+      - docker/hadolint:
+          name: docker_lint
+          trusted-registries: docker.io,quay.io
       - build:
           filters:
             tags:
@@ -181,20 +225,27 @@ workflows:
       - unit_test:
           requires:
             - build
-      - integration_test:
-          requires:
-            - build
-      - scenario_test:
-          requires:
-            - build
-      - hmpps/helm_lint:
-          name: helm_lint
       - hmpps/build_docker:
           name: build_docker
-          filters:
-            branches:
-              only:
-                - main
+          requires:
+            - build
+            - docker_lint
+          persist_container_image: true
+          additional_docker_tag: Build.<< pipeline.git.revision >>
+      - integration_test:
+          requires:
+            - unit_test
+            - build_docker
+      - scenario_test:
+          requires:
+            - unit_test
+            - build_docker
+      - tag_docker:
+          name: tag_verified_container
+          tag: verified-<< pipeline.git.revision >>
+          requires:
+            - scenario_test
+            - integration_test
       - hmpps/deploy_env:
           name: deploy_dev
           env: 'dev'
@@ -207,11 +258,15 @@ workflows:
               only:
                 - main
           requires:
-            - helm_lint
-            - unit_test
             - integration_test
-            - build_docker
+            - scenario_test
+            - helm_lint
           helm_timeout: 5m
+      - tag_docker:
+          name: tag_dev_container
+          tag: deployed-dev
+          requires:
+            - deploy_dev
       - hmpps/deploy_env:
           name: deploy_preprod
           env: 'preprod'
@@ -229,6 +284,11 @@ workflows:
           requires:
             - deploy_dev
           helm_timeout: 5m
+      - tag_docker:
+          name: tag_preprod_container
+          tag: deployed-preprod
+          requires:
+            - deploy_preprod
       - hmpps/deploy_env:
           name: deploy_prod
           env: 'prod'
@@ -244,6 +304,11 @@ workflows:
           requires:
             - deploy_preprod
           helm_timeout: 5m
+      - tag_docker:
+          name: tag_prod_container
+          tag: deployed-prod
+          requires:
+            - deploy_prod
 
   security:
     triggers:

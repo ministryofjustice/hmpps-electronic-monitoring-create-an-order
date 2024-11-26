@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress'
+import cypressSplit from 'cypress-split'
 import { fakerEN_GB as faker } from '@faker-js/faker'
 
 import { resetStubs } from './integration_tests/mockApis/wiremock'
@@ -19,7 +20,7 @@ export default defineConfig({
   },
   taskTimeout: 60000,
   e2e: {
-    setupNodeEvents(on) {
+    setupNodeEvents(on, config) {
       const seed = faker.seed(Math.random() * Number.MAX_SAFE_INTEGER)
 
       // eslint-disable-next-line no-console
@@ -51,6 +52,9 @@ export default defineConfig({
           return null
         },
       })
+
+      cypressSplit(on, config)
+      return config
     },
     baseUrl: 'http://localhost:3007',
     excludeSpecPattern: '**/!(*.cy).ts',
