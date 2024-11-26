@@ -51,7 +51,7 @@ export default class TrailMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('TRAIL', req.order!))
+      res.redirect(this.taskListService.getNextPage('TRAIL_MONITORING', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
