@@ -86,8 +86,8 @@ export default class MonitoringConditionsController {
     const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditions?.startDate)
     const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditions?.endDate)
 
-    const [startTimeHours, startTimeMinutes] = deserialiseTime(monitoringConditions?.startTime)
-    const [endTimeHours, endTimeMinutes] = deserialiseTime(monitoringConditions?.endTime)
+    const [startTimeHours, startTimeMinutes] = deserialiseTime(monitoringConditions?.startDate)
+    const [endTimeHours, endTimeMinutes] = deserialiseTime(monitoringConditions?.endDate)
 
     return {
       orderType: { value: monitoringConditions.orderType ?? '' },
