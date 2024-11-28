@@ -164,12 +164,15 @@ jobs:
       - run:
           name: Run scenario tests
           command: npm run int-test-scenarios
+      - run:
+          name: Archive screenshots
+          command:  tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
       - store_test_results:
           path: test_results
       - store_artifacts:
           path: integration_tests/videos
       - store_artifacts:
-          path: integration_tests/screenshots
+          path: integration_tests/screenshots.tar.gz
 
 workflows:
   build-test-and-deploy:
