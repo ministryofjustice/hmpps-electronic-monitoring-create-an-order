@@ -185,7 +185,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/check-your-answers`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
     })
   })
 

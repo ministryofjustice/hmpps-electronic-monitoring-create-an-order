@@ -31,6 +31,7 @@ import AttachmentPage from '../pages/order/attachment'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
+import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = true
@@ -69,6 +70,13 @@ context('Mandatory fields only', () => {
       interpreterRequired: false,
       contactNumber: undefined,
       hasFixedAddress: 'Yes',
+    }
+    const identityNumbers = {
+      nomisId: fullDeviceWearerDetails.nomisId,
+      deliusId: fullDeviceWearerDetails.deliusId,
+      pncId: fullDeviceWearerDetails.pncId,
+      prisonNumber: fullDeviceWearerDetails.prisonNumber,
+      homeOfficeReferenceNumber: fullDeviceWearerDetails.homeOfficeReferenceNumber,
     }
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
@@ -145,6 +153,11 @@ context('Mandatory fields only', () => {
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage - minimum', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(identityNumbers)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
       deviceWearerCheckYourAnswersPage.continueButton().click()
@@ -293,6 +306,13 @@ context('Mandatory fields only', () => {
       contactNumber: undefined,
       hasFixedAddress: 'Yes',
     }
+    const identityNumbers = {
+      nomisId: fullDeviceWearerDetails.nomisId,
+      deliusId: fullDeviceWearerDetails.deliusId,
+      pncId: fullDeviceWearerDetails.pncId,
+      prisonNumber: fullDeviceWearerDetails.prisonNumber,
+      homeOfficeReferenceNumber: fullDeviceWearerDetails.homeOfficeReferenceNumber,
+    }
     const fakeAdult = createFakeResponsibleAdult()
     const responsibleAdultDetails = {
       relationship: fakeAdult.relationship,
@@ -382,6 +402,11 @@ context('Mandatory fields only', () => {
       responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
       if (takeScreenshots) cy.screenshot('04. responsibleAdultDetailsPage - minimum', { overwrite: true })
       responsibleAdultDetailsPage.form.saveAndContinueButton.click()
+
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(identityNumbers)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
       deviceWearerCheckYourAnswersPage.continueButton().click()

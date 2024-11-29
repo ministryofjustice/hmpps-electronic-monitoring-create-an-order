@@ -3,7 +3,7 @@ import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/device-wearer'
@@ -107,7 +107,7 @@ context('About the device wearer', () => {
     context('for someone over 18 years old', () => {
       const birthYear = 1970
 
-      it('should continue to check your answers page', () => {
+      it('should continue to the identity numbers page', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -137,11 +137,6 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          nomisId: '1234567',
-          pncId: '1234567',
-          deliusId: '1234567',
-          prisonNumber: '1234567',
-          homeOfficeReferenceNumber: '1234567',
           firstNames: 'Barton',
           lastName: 'Fink',
           alias: 'Barty',
@@ -162,27 +157,22 @@ context('About the device wearer', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/device-wearer`,
           body: {
-            nomisId: '1234567',
-            pncId: '1234567',
-            deliusId: '1234567',
-            prisonNumber: '1234567',
-            homeOfficeReferenceNumber: '1234567',
             firstName: 'Barton',
             lastName: 'Fink',
             alias: 'Barty',
-            adultAtTimeOfInstallation: 'true',
+            adultAtTimeOfInstallation: true,
             sex: 'male',
             gender: 'male',
             otherGender: '',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
             otherDisability: '',
-            interpreterRequired: 'true',
+            interpreterRequired: true,
             language: 'British Sign',
           },
         }).should('be.true')
 
-        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+        Page.verifyOnPage(IdentityNumbersPage)
       })
     })
 
@@ -218,11 +208,6 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          nomisId: '1234567',
-          pncId: '1234567',
-          deliusId: '1234567',
-          prisonNumber: '1234567',
-          homeOfficeReferenceNumber: '1234567',
           firstNames: 'Barton',
           lastName: 'Fink',
           alias: 'Barty',
@@ -242,22 +227,17 @@ context('About the device wearer', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/device-wearer`,
           body: {
-            nomisId: '1234567',
-            pncId: '1234567',
-            deliusId: '1234567',
-            prisonNumber: '1234567',
-            homeOfficeReferenceNumber: '1234567',
             firstName: 'Barton',
             lastName: 'Fink',
             alias: 'Barty',
-            adultAtTimeOfInstallation: 'false',
+            adultAtTimeOfInstallation: false,
             sex: 'male',
             gender: 'male',
             otherGender: '',
             dateOfBirth: `${birthYear}-01-01T00:00:00.000Z`,
             disabilities: '',
             otherDisability: '',
-            interpreterRequired: 'false',
+            interpreterRequired: false,
             language: '',
           },
         }).should('be.true')

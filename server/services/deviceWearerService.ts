@@ -1,68 +1,60 @@
+import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import DeviceWearerModel, { DeviceWearer } from '../models/DeviceWearer'
+import { DeviceWearerFormDataValidator, DeviceWearerFormData } from '../models/form-data/deviceWearer'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
-import { serialiseDate } from '../utils/utils'
-import DateValidator from '../utils/validators/dateValidator'
+import { convertZodErrorToValidationError } from '../utils/errors'
 
 type UpdateDeviceWearerRequestInput = AuthenticatedRequestInput & {
   orderId: string
-  data: {
-    nomisId: string
-    pncId: string
-    deliusId: string
-    prisonNumber: string
-    firstName: string
-    lastName: string
-    alias: string
-    'dateOfBirth-day': string
-    'dateOfBirth-month': string
-    'dateOfBirth-year': string
-    adultAtTimeOfInstallation: string
-    sex: string
-    gender: string
-    disabilities: Array<string>
-  }
+  data: DeviceWearerFormData
 }
 
 type UpdateNoFixedAbodeRequest = AuthenticatedRequestInput & {
   orderId: string
-  data: {
-    noFixedAbode: string
-  }
+  data: Pick<DeviceWearer, 'noFixedAbode'>
+}
+
+type UpdateIdentityNumbersRequest = AuthenticatedRequestInput & {
+  orderId: string
+  data: Pick<DeviceWearer, 'nomisId' | 'pncId' | 'deliusId' | 'prisonNumber' | 'homeOfficeReferenceNumber'>
 }
 
 export default class DeviceWearerService {
   constructor(private readonly apiClient: RestClient) {}
 
   async updateDeviceWearer(input: UpdateDeviceWearerRequestInput): Promise<DeviceWearer | ValidationResult> {
-    const isDateOfBirthValid = DateValidator.isValidDateFormat(
-      input.data['dateOfBirth-day'],
-      input.data['dateOfBirth-month'],
-      input.data['dateOfBirth-year'],
-      'dateOfBirth',
-    )
-    if (isDateOfBirthValid.result === false) {
-      return ValidationResultModel.parse([isDateOfBirthValid.error])
-    }
-
     try {
-      const {
-        'dateOfBirth-day': dobDay,
-        'dateOfBirth-month': dobMonth,
-        'dateOfBirth-year': dobYear,
-        disabilities,
-        ...data
-      } = input.data
-
+      const requestBody = DeviceWearerFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/device-wearer`,
-        data: {
-          ...data,
-          dateOfBirth: serialiseDate(dobYear, dobMonth, dobDay),
-          disabilities: disabilities.join(','),
-        },
+        data: requestBody,
+        token: input.accessToken,
+      })
+
+      return DeviceWearerModel.parse(result)
+    } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
+
+      const sanitisedError = e as SanitisedError
+
+      if (sanitisedError.status === 400) {
+        return ValidationResultModel.parse(sanitisedError.data)
+      }
+
+      throw e
+    }
+  }
+
+  async updateIdentityNumbers(input: UpdateIdentityNumbersRequest): Promise<DeviceWearer | ValidationResult> {
+    try {
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/device-wearer/identity-numbers`,
+        data: input.data,
         token: input.accessToken,
       })
 

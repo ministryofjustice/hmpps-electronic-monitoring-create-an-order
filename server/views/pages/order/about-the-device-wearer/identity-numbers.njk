@@ -1,0 +1,70 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% set pageTitle = "Device wearer details - Identity numbers - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+{% set section = "Identity numbers" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block formInputs %}
+
+  {{ govukInput({
+    label: {
+    text: "National Offender Management Information System (NOMIS) ID (optional)"
+    },
+    classes: "govuk-input--width-10",
+    id: "nomis-id",
+    name: "nomisId",
+    value: nomisId,
+    errorMessage: errors.nomisId,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: {
+    text: "Police National Computer (PNC) ID (optional)"
+    },
+    classes: "govuk-input--width-10",
+    id: "pnc-id",
+    name: "pncId",
+    value: pncId,
+    errorMessage: errors.pncId,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: {
+    text: "Delius ID (optional)"
+    },
+    classes: "govuk-input--width-10",
+    id: "delius-id",
+    name: "deliusId",
+    value: deliusId,
+    errorMessage: errors.deliusId,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: {
+    text: "Prison Number (Optional)"
+    },
+    classes: "govuk-input--width-10",
+    id: "prison-number",
+    name: "prisonNumber",
+    value: prisonNumber,
+    errorMessage: errors.prisonNumber,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: {
+    text: "Home Office Reference Number (Optional)"
+    },
+    classes: "govuk-input--width-10",
+    id: "home-office-reference-number",
+    name: "homeOfficeReferenceNumber",
+    value: homeOfficeReferenceNumber,
+    errorMessage: errors.homeOfficeReferenceNumber,
+    disabled: not isOrderEditable
+  }) }}
+
+{% endblock %}
