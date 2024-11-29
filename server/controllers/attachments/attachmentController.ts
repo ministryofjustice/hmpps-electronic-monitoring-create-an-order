@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AttachmentService, AuditService, OrderService } from '../../services'
 import AttachmentType from '../../models/AttachmentType'
+import paths from '../../constants/paths'
 
 export default class AttachmentsController {
   constructor(
@@ -62,6 +63,42 @@ export default class AttachmentsController {
       correlationId: orderId,
       what: `Downloaded attachment : ${filename}`,
     })
+  }
+
+  async confirmDeleteView(req: Request, res: Response, fileType: string) {
+    const order = req.order!
+
+    res.render('pages/order/attachments/delete-confirm', { orderId: order.id, fileType })
+  }
+
+  async delete(req: Request, res: Response, fileType: AttachmentType) {
+    const order = req.order!
+    const { action } = req.body
+
+    if (action === 'continue') {
+      const result = await this.attachmentService.deleteAttachment({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+        fileType: fileType.toLocaleLowerCase(),
+      })
+
+      if (result.ok) {
+        res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      } else {
+        req.flash('deletionError', result.error)
+        res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      }
+    } else {
+      res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+    }
+  }
+
+  deleteLicence: RequestHandler = async (req: Request, res: Response) => {
+    await this.delete(req, res, AttachmentType.LICENCE)
+  }
+
+  confirmDeleteLicence: RequestHandler = async (req: Request, res: Response) => {
+    await this.confirmDeleteView(req, res, 'licence')
   }
 
   downloadLicence: RequestHandler = async (req: Request, res: Response) => {

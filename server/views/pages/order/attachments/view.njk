@@ -44,14 +44,18 @@
         <dd class="govuk-summary-list__value">
           <a href="/order/{{order.id}}/attachments/licence/{{licenceFileName}}" class="govuk-link">{{licenceFileName}}</a>
         </dd>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> license</span></a>
+      </dd>
       {% else %}
         <dd class="govuk-summary-list__value">
           No licence document uploaded
         </dd>
-      {% endif %}
-      <dd class="govuk-summary-list__actions">
-        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> license</span></a>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Add<span class="govuk-visually-hidden"> license</span></a>
+        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence/delete">Delete<span class="govuk-visually-hidden"> license</span></a>
       </dd>
+      {% endif %}
     </div>
 
     <div class="govuk-summary-list__row">
@@ -72,6 +76,12 @@
       </dd>
     </div>
   </dl>
+
+  {{ govukButton({
+        text: "DELETE",
+        classes: "govuk-button--secondary",
+        href: "/order/" + order.id + "/attachments/licence/delete"
+      }) }}
 
   <div class="govuk-button-group">
     {% if isOrderEditable %}

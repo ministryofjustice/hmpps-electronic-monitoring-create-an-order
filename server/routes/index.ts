@@ -231,8 +231,12 @@ export default function routes({
   post(paths.ATTACHMENT.LICENCE, attachmentsController.uploadLicence)
   get(paths.ATTACHMENT.PHOTO_ID, attachmentsController.photo)
   post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
+  get(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.confirmDeleteLicence)
+  post(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.deleteLicence)
   get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
   get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
+
+  // get(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.confirmDelete)
 
   return router
 }
