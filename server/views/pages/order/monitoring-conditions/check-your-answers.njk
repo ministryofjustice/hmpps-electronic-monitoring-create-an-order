@@ -26,58 +26,78 @@
     rows: installationAddress
   }) }}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Curfew monitoring conditions"
-      }
-    },
-    rows: curfew
-  }) }}
+  {% if curfew | length > 0 %}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Curfew timetable"
-      }
-    },
-    rows: curfewTimetable
-  }) }}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Curfew monitoring conditions"
+        }
+      },
+      rows: curfew
+    }) }}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Exclusion zone conditions"
-      }
-    },
-    rows: exclusionZone
-  }) }}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Curfew timetable"
+        }
+      },
+      rows: curfewTimetable
+    }) }}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Trail monitoring conditions"
-      }
-    },
-    rows: trail
-  }) }}
+  {% endif %}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Attendance monitoring conditions"
-      }
-    },
-    rows: attendance
-  }) }}
+  {% if exclusionZone | length > 0 %}
 
-  {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Alcohol monitoring conditions"
-      }
-    },
-    rows: alcohol
-  }) }}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Exclusion zone conditions"
+        }
+      },
+      rows: exclusionZone
+    }) }}
+
+  {% endif %}
+
+  {% if trail | length > 0 %}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Trail monitoring conditions"
+        }
+      },
+      rows: trail
+    }) }}
+
+  {% endif %}
+
+  {% if responsibleAdult | length > 0 %}
+  
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Attendance monitoring conditions"
+        }
+      },
+      rows: attendance
+    }) }}
+  
+  {% endif %}
+
+  {% if alcohol | length > 0 %}
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Alcohol monitoring conditions"
+        }
+      },
+      rows: alcohol
+    }) }}
+
+  {% endif %}
 
 {% endblock %}

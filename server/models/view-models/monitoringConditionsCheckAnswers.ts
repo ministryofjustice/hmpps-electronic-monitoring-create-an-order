@@ -88,6 +88,10 @@ const createCurfewTimetableAnswers = (order: Order) => {
   const timetable = order.curfewTimeTable
   const uri = paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
 
+  if (!order.monitoringConditions.curfew) {
+    return []
+  }
+
   if (isNullOrUndefined(timetable)) {
     return []
   }
@@ -110,6 +114,11 @@ const createCurfewTimetableAnswers = (order: Order) => {
 const createCurfewAnswers = (order: Order) => {
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
   const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+
+  if (!order.monitoringConditions.curfew) {
+    return []
+  }
+
   return [
     createDateAnswer('Release date', order.curfewReleaseDateConditions?.releaseDate, releaseDateUri),
     createTimeRangeAnswer(
@@ -135,6 +144,11 @@ const createCurfewAnswers = (order: Order) => {
 
 const createExclusionZoneAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
+
+  if (!order.monitoringConditions.exclusionZone) {
+    return []
+  }
+
   return order.enforcementZoneConditions
     .sort((a, b) => ((a.zoneId || 0) > (b.zoneId || 0) ? 1 : -1))
     .map(enforcementZone => {
@@ -151,6 +165,11 @@ const createExclusionZoneAnswers = (order: Order) => {
 
 const createTrailAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
+
+  if (!order.monitoringConditions.trail) {
+    return []
+  }
+
   return [
     createDateAnswer('Date when monitoring starts', order.monitoringConditionsTrail?.startDate, uri),
     createDateAnswer('Date when monitoring ends', order.monitoringConditionsTrail?.endDate, uri),
@@ -160,6 +179,11 @@ const createTrailAnswers = (order: Order) => {
 const createAlcoholAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
+
+  if (!order.monitoringConditions.alcohol) {
+    return []
+  }
+
   return [
     createTextAnswer('What type of alcohol monitoring is needed?', monitoringType, uri),
     createDateAnswer('Date when monitoring starts', order.monitoringConditionsAlcohol?.startDate, uri),
