@@ -5,11 +5,6 @@ import FormRadiosComponent from '../../formRadiosComponent'
 import FormSelectComponent from '../../formSelectComponent'
 
 export type AboutDeviceWearerFormData = {
-  nomisId?: string
-  pncId?: string
-  deliusId?: string
-  prisonNumber?: string
-  homeOfficeReferenceNumber?: string
   firstNames?: string
   lastName?: string
   alias?: string
@@ -24,30 +19,6 @@ export type AboutDeviceWearerFormData = {
 export default class AboutDeviceWearerFormComponent extends FormComponent {
   // FIELDS
 
-  get nomisIdField(): FormInputComponent {
-    const label = 'National Offender Management Information System (NOMIS) ID (optional)'
-    return new FormInputComponent(this.form, label)
-  }
-
-  get pncIdField(): FormInputComponent {
-    const label = 'Police National Computer (PNC) ID (optional)'
-    return new FormInputComponent(this.form, label)
-  }
-
-  get deliusIdField(): FormInputComponent {
-    const label = 'Delius ID (optional)'
-    return new FormInputComponent(this.form, label)
-  }
-
-  get prisonNumberField(): FormInputComponent {
-    const label = 'Prison Number (Optional)'
-    return new FormInputComponent(this.form, label)
-  }
-
-  get homeOfficeReferenceNumberField(): FormInputComponent {
-    const label = 'Home Office Reference Number (Optional)'
-    return new FormInputComponent(this.form, label)
-  }
   // NAMES
 
   get firstNamesField(): FormInputComponent {
@@ -248,25 +219,10 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // FORM HELPERS
 
   fillInWith = (profile: AboutDeviceWearerFormData): undefined => {
-    if (profile.nomisId) {
-      this.nomisIdField.set(profile.nomisId)
-    }
-    if (profile.pncId) {
-      this.pncIdField.set(profile.pncId)
-    }
-    if (profile.deliusId) {
-      this.deliusIdField.set(profile.deliusId)
-    }
-    if (profile.prisonNumber) {
-      this.prisonNumberField.set(profile.prisonNumber)
-    }
-    if (profile.homeOfficeReferenceNumber) {
-      this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
-    }
-
     if (profile.firstNames) {
       this.firstNamesField.set(profile.firstNames)
     }
+
     if (profile.lastName) {
       this.lastNameField.set(profile.lastName)
     }

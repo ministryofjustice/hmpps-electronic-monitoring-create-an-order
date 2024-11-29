@@ -36,8 +36,9 @@ const DeviceWearerModel = z.object({
       if (disabilities === null || disabilities === '') {
         return []
       }
-      return disabilities.split(',').map(disability => DisabilityEnum.parse(disability))
-    }),
+      return disabilities.split(',')
+    })
+    .pipe(z.array(DisabilityEnum)),
   otherDisability: z.string().nullable().optional(),
   noFixedAbode: z.boolean().nullable(),
   language: z.string().nullable().optional(),
@@ -45,5 +46,6 @@ const DeviceWearerModel = z.object({
 })
 
 export type DeviceWearer = z.infer<typeof DeviceWearerModel>
+export type Disability = z.infer<typeof DisabilityEnum>
 
 export default DeviceWearerModel

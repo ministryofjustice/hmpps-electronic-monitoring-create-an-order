@@ -14,74 +14,6 @@
 
   {% call govukFieldset({
     legend: {
-      text: "Identity numbers",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    {{ govukInput({
-      label: {
-        text: "National Offender Management Information System (NOMIS) ID (optional)"
-      },
-      classes: "govuk-input--width-10",
-      id: "nomis-id",
-      name: "nomisId",
-      value: nomisId.value,
-      errorMessage: nomisId.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukInput({
-      label: {
-        text: "Police National Computer (PNC) ID (optional)"
-      },
-      classes: "govuk-input--width-10",
-      id: "pnc-id",
-      name: "pncId",
-      value: pncId.value,
-      errorMessage: pncId.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukInput({
-      label: {
-        text: "Delius ID (optional)"
-      },
-      classes: "govuk-input--width-10",
-      id: "delius-id",
-      name: "deliusId",
-      value: deliusId.value,
-      errorMessage: deliusId.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukInput({
-      label: {
-        text: "Prison Number (Optional)"
-      },
-      classes: "govuk-input--width-10",
-      id: "prison-number",
-      name: "prisonNumber",
-      value: prisonNumber.value,
-      errorMessage: prisonNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukInput({
-      label: {
-        text: "Home Office Reference Number (Optional)"
-      },
-      classes: "govuk-input--width-10",
-      id: "home-office-reference-number",
-      name: "homeOfficeReferenceNumber",
-      value: homeOfficeReferenceNumber.value,
-      errorMessage: homeOfficeReferenceNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endcall %}
-
-  {% call govukFieldset({
-    legend: {
       text: "Name of the device wearer",
       classes: "govuk-fieldset__legend--m",
       isPageHeading: false
@@ -94,8 +26,8 @@
       classes: "govuk-input--width-10",
       id: "first-name",
       name: "firstName",
-      value: firstName.value,
-      errorMessage: firstName.error,
+      value: firstName,
+      errorMessage: errors.firstName,
       disabled: not isOrderEditable
     }) }}
 
@@ -106,8 +38,8 @@
       classes: "govuk-input--width-10",
       id: "last-name",
       name: "lastName",
-      value: lastName.value,
-      errorMessage: lastName.error,
+      value: lastName,
+      errorMessage: errors.lastName,
       disabled: not isOrderEditable
     }) }}
 
@@ -121,8 +53,8 @@
       classes: "govuk-input--width-10",
       id: "alias",
       name: "alias",
-      value: alias.value,
-      errorMessage: alias.error,
+      value: alias,
+      errorMessage: errors.alias,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
@@ -131,7 +63,6 @@
 
   {{ govukDateInput({
     id: "dateOfBirth",
-    namePrefix: "dateOfBirth",
     fieldset: {
       legend: {
         text: "Date of birth",
@@ -144,25 +75,31 @@
     },
     items: [
       {
-        name: "day",
+        id: "dateOfBirth-day",
+        name: "dateOfBirth[day]",
+        label: "Day",
         classes: "govuk-input--width-2",
-        value: dateOfBirth_day.value,
+        value: dateOfBirth.day,
         attributes: isDisabled
       },
       {
-        name: "month",
+        id: "dateOfBirth-month",
+        name: "dateOfBirth[month]",
+        label: "Month",
         classes: "govuk-input--width-2",
-        value: dateOfBirth_month.value,
+        value: dateOfBirth.month,
         attributes: isDisabled
       },
       {
-        name: "year",
+        id: "dateOfBirth-year",
+        name: "dateOfBirth[year]",
+        label: "Year",
         classes: "govuk-input--width-4",
-        value: dateOfBirth_year.value,
+        value: dateOfBirth.year,
         attributes: isDisabled
       }
     ],
-    errorMessage: dateOfBirth.error
+    errorMessage: errors.dateOfBirth
   }) }}
 
   {{ govukRadios({
@@ -186,8 +123,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: adultAtTimeOfInstallation.value,
-    errorMessage: adultAtTimeOfInstallation.error,
+    value: adultAtTimeOfInstallation,
+    errorMessage: errors.adultAtTimeOfInstallation,
     disabled: not isOrderEditable
   }) }}
 
@@ -225,8 +162,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: sex.value,
-    errorMessage: sex.error,
+    value: sex,
+    errorMessage: errors.sex,
     disabled: not isOrderEditable
   }) }}
 
@@ -239,9 +176,9 @@
       id: "other-gender",
       name: "otherGender",
       classes: "govuk-!-width-one-third",
-      errorMessage: otherGender.error,
+      errorMessage: errors.otherGender,
       disabled: not isOrderEditable,
-      value: otherGender.value
+      value: otherGender
       })
     }}
   {% endset %}
@@ -288,8 +225,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: gender.value,
-    errorMessage: gender.error,
+    value: gender,
+    errorMessage: errors.gender,
     disabled: not isOrderEditable
   }) }}
 
@@ -302,9 +239,9 @@
       id: "disabilities-detail",
       name: "otherDisability",
       classes: "govuk-!-width-one-third",
-      errorMessage: otherDisability.error,
+      errorMessage: errors.otherDisability,
       disabled: not isOrderEditable,
-      value: otherDisability.value
+      value: otherDisability
       })
     }}
   {% endset %}
@@ -375,8 +312,8 @@
         text: "Prefer Not to Say"
       }
     ],
-    values: disabilities.values,
-    errorMessage: disabilities.error,
+    values: disabilities,
+    errorMessage: errors.disabilities,
     disabled: not isOrderEditable
   }) }}
 
@@ -505,8 +442,8 @@
         { text: "Yoruba", value: "Yoruba" },
         { text: "Zaghawa", value: "Zaghawa" }
       ],
-      value: language.value,
-      errorMessage: language.error,
+      value: language,
+      errorMessage: errors.language,
       disabled: not isOrderEditable
     }) }}
 
@@ -530,8 +467,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: interpreterRequired.value,
-      errorMessage: interpreterRequired.error,
+      value: interpreterRequired,
+      errorMessage: errors.interpreterRequired,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}

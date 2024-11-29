@@ -55,7 +55,7 @@ context('Contact information', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            noFixedAbode: 'true',
+            noFixedAbode: true,
           },
         }).should('be.true')
       })

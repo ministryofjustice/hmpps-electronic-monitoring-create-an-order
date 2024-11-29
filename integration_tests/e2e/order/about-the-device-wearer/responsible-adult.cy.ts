@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 const mockOrderId = uuidv4()
 
@@ -78,7 +78,7 @@ context('About the device wearer - Responsible Adult', () => {
         },
       }).should('be.true')
 
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      Page.verifyOnPage(IdentityNumbersPage)
     })
   })
 
