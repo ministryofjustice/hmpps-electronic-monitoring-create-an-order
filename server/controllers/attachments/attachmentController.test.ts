@@ -218,7 +218,7 @@ describe('AttachmentController', () => {
         expect(res.render).toHaveBeenCalledWith(
           'pages/order/attachments/delete-confirm',
           expect.objectContaining({
-            fileType: 'LICENCE',
+            fileType: 'licence',
           }),
         )
       })
