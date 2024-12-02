@@ -5,17 +5,13 @@ import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import Result from '../interfaces/result'
 
-type DownloadAttachmentRequestInpput = AuthenticatedRequestInput & {
+type AttachmentRequestInpput = AuthenticatedRequestInput & {
   orderId: string
   fileType: string
 }
-type UploadAttachmentRequestInput = DownloadAttachmentRequestInpput & {
+type UploadAttachmentRequestInput = AttachmentRequestInpput & {
   file: Express.Multer.File
 }
-type DeleteAttachmentRequestInpput = AuthenticatedRequestInput & {
-  orderId: string
-  fileType: string
-} // TODO: This is a duplicate of the download one - consider deduplication
 
 export default class AttachmentService {
   constructor(private readonly apiClient: RestClient) {}
@@ -42,14 +38,14 @@ export default class AttachmentService {
     }
   }
 
-  async downloadAttachment(input: DownloadAttachmentRequestInpput): Promise<Readable> {
+  async downloadAttachment(input: AttachmentRequestInpput): Promise<Readable> {
     return this.apiClient.stream({
       path: `/api/orders/${input.orderId}/document-type/${input.fileType}/raw`,
       token: input.accessToken,
     })
   }
 
-  async deleteAttachment(input: DeleteAttachmentRequestInpput): Promise<Result<void, string>> {
+  async deleteAttachment(input: AttachmentRequestInpput): Promise<Result<void, string>> {
     try {
       await this.apiClient.delete({
         path: `/api/orders/${input.orderId}/document-type/${input.fileType}`,

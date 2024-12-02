@@ -83,6 +83,11 @@ export default class AttachmentsController {
       })
 
       if (result.ok) {
+        this.auditService.logAuditEvent({
+          who: res.locals.user.username,
+          correlationId: order.id,
+          what: `Delete attachment : ${fileType}`,
+        })
         res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
       } else {
         req.flash('deletionError', result.error)
@@ -97,8 +102,16 @@ export default class AttachmentsController {
     await this.delete(req, res, AttachmentType.LICENCE)
   }
 
+  deletePhotoId: RequestHandler = async (req: Request, res: Response) => {
+    await this.delete(req, res, AttachmentType.PHOTO_ID)
+  }
+
   confirmDeleteLicence: RequestHandler = async (req: Request, res: Response) => {
     await this.confirmDeleteView(req, res, 'licence')
+  }
+
+  confirmDeletePhotoId: RequestHandler = async (req: Request, res: Response) => {
+    await this.confirmDeleteView(req, res, 'photo id')
   }
 
   downloadLicence: RequestHandler = async (req: Request, res: Response) => {

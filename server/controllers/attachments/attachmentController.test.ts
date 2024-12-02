@@ -237,10 +237,13 @@ describe('AttachmentController', () => {
           orderId: mockOrder.id,
           fileType: 'LICENCE',
         })
+        expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
+          who: 'fakeUserName',
+          correlationId: req.order?.id,
+          what: 'Delete attachment : LICENCE',
+        })
         expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
       })
-
-      // TODO: Add auditing for deletion? Is this required?
     })
 
     it('should redirect to the attachments page if the user does not confirm the delete', async () => {

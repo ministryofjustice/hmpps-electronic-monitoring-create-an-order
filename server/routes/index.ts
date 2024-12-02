@@ -232,11 +232,11 @@ export default function routes({
   get(paths.ATTACHMENT.PHOTO_ID, attachmentsController.photo)
   post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
   get(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.confirmDeleteLicence)
+  get(paths.ATTACHMENT.DELETE_PHOTO_ID, attachmentsController.confirmDeletePhotoId)
   post(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.deleteLicence)
+  post(paths.ATTACHMENT.DELETE_PHOTO_ID, attachmentsController.deletePhotoId)
   get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
   get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
-
-  // get(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.confirmDelete)
 
   return router
 }
