@@ -56,12 +56,12 @@ export default class AttachmentService {
         ok: true,
       }
     } catch (e) {
-      const error = e as SanitisedError
-
-      if (error.status === 500) {
+      const sanitisedError = e as SanitisedError
+      const apiError = ErrorResponseModel.parse(sanitisedError.data)
+      if (apiError.status === 400) {
         return {
           ok: false,
-          error: error.message,
+          error: apiError.userMessage || '',
         }
       }
 

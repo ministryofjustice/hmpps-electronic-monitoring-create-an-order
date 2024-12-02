@@ -88,14 +88,11 @@ export default class AttachmentsController {
           correlationId: order.id,
           what: `Delete attachment : ${fileType}`,
         })
-        res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
       } else {
-        req.flash('deletionError', result.error)
-        res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+        req.flash('attachmentDeletionErrors', result.error)
       }
-    } else {
-      res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
     }
+    res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
   }
 
   deleteLicence: RequestHandler = async (req: Request, res: Response) => {
@@ -138,11 +135,13 @@ export default class AttachmentsController {
     const order = req.order!
     const licence = order.additionalDocuments.find(doc => doc.fileType === AttachmentType.LICENCE)
     const photo = order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID)
+    const error = req.flash('attachmentDeletionErrors')
 
     res.render(`pages/order/attachments/view`, {
       order: { id: order.id, status: order.status },
       licenceFileName: licence?.fileName,
       photoFileName: photo?.fileName,
+      error: error && error.length > 0 ? error[0] : undefined,
     })
   }
 }

@@ -259,6 +259,19 @@ const uploadAttachment = (options: UploadAttachmentStubOptions = defaultUploadAt
     },
   })
 
+const deleteAttachment = (options: UploadAttachmentStubOptions = defaultUploadAttachmentOptions) =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      urlPattern: `/cemo/api/orders/${options.id}/document-type/${options.type}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? {} : { status: 400, userMessage: 'Mock Error', developerMessage: '' },
+    },
+  })
+
 type ValidationErrors = Array<{
   erorr: string
   field: string
@@ -551,6 +564,7 @@ export default {
   stubCemoUpdateContactDetails: updateContactDetails,
   stubCemoPutResponsibleAdult: putResponsibleAdult,
   stubUploadAttachment: uploadAttachment,
+  stubDeleteAttachment: deleteAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
 

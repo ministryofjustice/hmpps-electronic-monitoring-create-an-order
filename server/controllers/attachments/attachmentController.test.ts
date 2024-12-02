@@ -59,6 +59,7 @@ describe('AttachmentController', () => {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
+      flash: jest.fn(),
     }
 
     // @ts-expect-error stubbing res.render
@@ -269,7 +270,7 @@ describe('AttachmentController', () => {
         fileType: 'LICENCE',
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
-      expect(req.flash).toHaveBeenNthCalledWith(1, 'deletionError', 'mock error message')
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'attachmentDeletionErrors', 'mock error message')
     })
   })
 })
