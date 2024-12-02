@@ -218,7 +218,7 @@ describe('AttachmentController', () => {
         expect(res.render).toHaveBeenCalledWith(
           'pages/order/attachments/delete-confirm',
           expect.objectContaining({
-            fileType: 'licence',
+            fileType: 'LICENCE',
           }),
         )
       })
@@ -235,7 +235,7 @@ describe('AttachmentController', () => {
         expect(mockAttachmentService.deleteAttachment).toHaveBeenCalledWith({
           accessToken: 'fakeUserToken',
           orderId: mockOrder.id,
-          fileType: 'licence',
+          fileType: 'LICENCE',
         })
         expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
       })
@@ -263,7 +263,7 @@ describe('AttachmentController', () => {
       expect(mockAttachmentService.deleteAttachment).toHaveBeenCalledWith({
         accessToken: 'fakeUserToken',
         orderId: mockOrder.id,
-        fileType: 'licence',
+        fileType: 'LICENCE',
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
       expect(req.flash).toHaveBeenNthCalledWith(1, 'deletionError', 'mock error message')

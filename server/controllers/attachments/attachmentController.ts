@@ -79,7 +79,7 @@ export default class AttachmentsController {
       const result = await this.attachmentService.deleteAttachment({
         orderId: order.id,
         accessToken: res.locals.user.token,
-        fileType: fileType.toLocaleLowerCase(),
+        fileType,
       })
 
       if (result.ok) {
