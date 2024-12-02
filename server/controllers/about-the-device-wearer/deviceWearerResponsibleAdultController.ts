@@ -14,7 +14,7 @@ const DeviceWearerResponsibleAdultFormDataModel = z.object({
   relationship: z.string().default(''),
   otherRelationshipDetails: z.string(),
   fullName: z.string(),
-  contactNumber: z.string(),
+  contactNumber: z.string().transform(val => (val === '' ? null : val)),
 })
 
 type DeviceWearerResponsibleAdultFormData = z.infer<typeof DeviceWearerResponsibleAdultFormDataModel>
