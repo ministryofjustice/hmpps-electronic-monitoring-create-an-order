@@ -13,6 +13,7 @@ type Section =
 type Page =
   | 'DEVICE_WEARER'
   | 'RESPONSIBLE_ADULT'
+  | 'IDENTITY_NUMBERS'
   | 'CHECK_ANSWERS_DEVICE_WEARER'
   | 'CONTACT_DETAILS'
   | 'NO_FIXED_ABODE'
@@ -97,6 +98,14 @@ export default class TaskListService {
         'REQUIRED',
       ),
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
+    })
+
+    tasks.push({
+      section: 'ABOUT_THE_DEVICE_WEARER',
+      name: 'IDENTITY_NUMBERS',
+      path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
+      state: 'OPTIONAL',
+      completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
     })
 
     tasks.push({

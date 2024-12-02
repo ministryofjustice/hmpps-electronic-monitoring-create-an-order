@@ -6,10 +6,11 @@ import DeviceWearerService from '../../services/deviceWearerService'
 import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
+import { BooleanInputModel } from '../../models/form-data/formData'
 
 const FormDataModel = z.object({
   action: z.string().default('continue'),
-  noFixedAbode: z.string().default(''),
+  noFixedAbode: BooleanInputModel,
 })
 
 export default class NoFixedAbodeController {

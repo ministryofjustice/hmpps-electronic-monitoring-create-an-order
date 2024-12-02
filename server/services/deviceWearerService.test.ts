@@ -1,4 +1,5 @@
 import RestClient from '../data/restClient'
+import { Disability } from '../models/DeviceWearer'
 import DeviceWearerService from './deviceWearerService'
 
 jest.mock('../data/restClient')
@@ -42,24 +43,21 @@ describe('Device wearer service', () => {
         accessToken: 'mockToken',
         orderId: 'mockUid',
         data: {
-          nomisId: '',
-          pncId: '',
-          deliusId: '',
-          prisonNumber: '',
-          homeOfficeReferenceNumber: '',
           firstName: 'First names',
           lastName: 'Surname',
           alias: '',
-          'dateOfBirth-day': '1',
-          'dateOfBirth-month': '4',
-          'dateOfBirth-year': '1996',
+          dateOfBirth: {
+            day: '1',
+            month: '4',
+            year: '1996',
+          },
           language: '',
           interpreterRequired: 'false',
           adultAtTimeOfInstallation: 'true',
           sex: 'male',
           gender: 'male',
           otherGender: '',
-          disabilities: ['MOBILITY', 'LEARNING_UNDERSTANDING_CONCENTRATING'],
+          disabilities: ['MOBILITY', 'LEARNING_UNDERSTANDING_CONCENTRATING'] as Array<Disability>,
           otherDisability: '',
         },
       }
@@ -68,18 +66,13 @@ describe('Device wearer service', () => {
 
       expect(mockRestClient.put).toHaveBeenCalledWith({
         data: {
-          nomisId: '',
-          pncId: '',
-          deliusId: '',
-          prisonNumber: '',
-          homeOfficeReferenceNumber: '',
           firstName: 'First names',
           lastName: 'Surname',
           alias: '',
           dateOfBirth: '1996-04-01T00:00:00.000Z',
-          interpreterRequired: 'false',
+          interpreterRequired: false,
           language: '',
-          adultAtTimeOfInstallation: 'true',
+          adultAtTimeOfInstallation: true,
           sex: 'male',
           gender: 'male',
           otherGender: '',

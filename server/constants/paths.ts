@@ -15,6 +15,7 @@ const paths = {
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
     DEVICE_WEARER: '/order/:orderId/about-the-device-wearer',
     RESPONSIBLE_ADULT: '/order/:orderId/about-the-device-wearer/responsible-adult',
+    IDENTITY_NUMBERS: '/order/:orderId/about-the-device-wearer/identity-numbers',
   },
 
   CONTACT_INFORMATION: {

@@ -20,7 +20,7 @@ import TaskListService from './taskListService'
 
 describe('TaskListService', () => {
   describe('getNextPage', () => {
-    it('should return check your answers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
+    it('should return idenity numbers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
       // Given
       const currentPage = 'DEVICE_WEARER'
       const taskListService = new TaskListService()
@@ -32,7 +32,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
     })
 
     it('should return responsible adult if current page is device wearer and adultAtTheTimeOfInstallation is false', () => {
@@ -50,9 +50,22 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id))
     })
 
-    it('should return check your answers if current page is responsible adult', () => {
+    it('should return idenity numbers if current page is responsible adult', () => {
       // Given
       const currentPage = 'RESPONSIBLE_ADULT'
+      const taskListService = new TaskListService()
+      const order = getMockOrder()
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
+    })
+
+    it('should return check your answers if current page is idenity numbers', () => {
+      // Given
+      const currentPage = 'IDENTITY_NUMBERS'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
@@ -702,6 +715,13 @@ describe('TaskListService', () => {
           },
           {
             section: 'ABOUT_THE_DEVICE_WEARER',
+            name: 'IDENTITY_NUMBERS',
+            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+            state: 'OPTIONAL',
+            completed: false,
+          },
+          {
+            section: 'ABOUT_THE_DEVICE_WEARER',
             name: 'CHECK_ANSWERS_DEVICE_WEARER',
             path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
             state: 'CHECK_YOUR_ANSWERS',
@@ -868,6 +888,7 @@ describe('TaskListService', () => {
       // Given
       const order = getMockOrder({
         deviceWearer: createDeviceWearer({
+          nomisId: '',
           firstName: '',
           noFixedAbode: true,
         }),
@@ -910,6 +931,13 @@ describe('TaskListService', () => {
             name: 'RESPONSIBLE_ADULT',
             path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
             state: 'CANT_BE_STARTED',
+            completed: true,
+          },
+          {
+            section: 'ABOUT_THE_DEVICE_WEARER',
+            name: 'IDENTITY_NUMBERS',
+            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+            state: 'OPTIONAL',
             completed: true,
           },
           {
@@ -1112,6 +1140,13 @@ describe('TaskListService', () => {
             name: 'RESPONSIBLE_ADULT',
             path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
             state: 'REQUIRED',
+            completed: false,
+          },
+          {
+            section: 'ABOUT_THE_DEVICE_WEARER',
+            name: 'IDENTITY_NUMBERS',
+            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+            state: 'OPTIONAL',
             completed: false,
           },
           {

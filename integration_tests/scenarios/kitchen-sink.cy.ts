@@ -26,6 +26,7 @@ import AttachmentPage from '../pages/order/attachment'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
+import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 
 context('The kitchen sink', () => {
   const takeScreenshots = true
@@ -175,6 +176,11 @@ context('The kitchen sink', () => {
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(deviceWearerDetails)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
       deviceWearerCheckYourAnswersPage.continueButton().click()
