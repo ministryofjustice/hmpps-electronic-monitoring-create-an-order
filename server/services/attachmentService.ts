@@ -3,14 +3,16 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
+import Result from '../interfaces/result'
 
-type DownloadAttachmentRequestInpput = AuthenticatedRequestInput & {
+type AttachmentRequestInpput = AuthenticatedRequestInput & {
   orderId: string
   fileType: string
 }
-type UploadAttachmentRequestInput = DownloadAttachmentRequestInpput & {
+type UploadAttachmentRequestInput = AttachmentRequestInpput & {
   file: Express.Multer.File
 }
+
 export default class AttachmentService {
   constructor(private readonly apiClient: RestClient) {}
 
@@ -36,10 +38,34 @@ export default class AttachmentService {
     }
   }
 
-  async downloadAttachment(input: DownloadAttachmentRequestInpput): Promise<Readable> {
+  async downloadAttachment(input: AttachmentRequestInpput): Promise<Readable> {
     return this.apiClient.stream({
       path: `/api/orders/${input.orderId}/document-type/${input.fileType}/raw`,
       token: input.accessToken,
     })
+  }
+
+  async deleteAttachment(input: AttachmentRequestInpput): Promise<Result<void, string>> {
+    try {
+      await this.apiClient.delete({
+        path: `/api/orders/${input.orderId}/document-type/${input.fileType}`,
+        token: input.accessToken,
+      })
+
+      return {
+        ok: true,
+      }
+    } catch (e) {
+      const sanitisedError = e as SanitisedError
+      const apiError = ErrorResponseModel.parse(sanitisedError.data)
+      if (apiError.status === 400) {
+        return {
+          ok: false,
+          error: apiError.userMessage || '',
+        }
+      }
+
+      throw e
+    }
   }
 }

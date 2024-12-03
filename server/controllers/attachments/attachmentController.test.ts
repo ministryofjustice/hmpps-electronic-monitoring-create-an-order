@@ -10,6 +10,7 @@ import AttachmentService from '../../services/attachmentService'
 import AuditService from '../../services/auditService'
 import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
+import { createMockRequest } from '../../../test/mocks/mockExpress'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -58,6 +59,7 @@ describe('AttachmentController', () => {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
+      flash: jest.fn(),
     }
 
     // @ts-expect-error stubbing res.render
@@ -206,6 +208,69 @@ describe('AttachmentController', () => {
         correlationId: req.order?.id,
         what: 'Downloaded attachment : licence.jpeg',
       })
+    })
+  })
+
+  describe('deletion process', () => {
+    describe('confirmDeleteLicence', () => {
+      it('renders a confirmation page where the user is asked to confirm the request for deletion of their licence', async () => {
+        controller.confirmDeleteLicence(req, res, next)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/order/attachments/delete-confirm',
+          expect.objectContaining({
+            fileType: 'licence',
+          }),
+        )
+      })
+    })
+
+    describe('deleteLicence', () => {
+      it('deletes the licence and redirects back to attachments page', async () => {
+        const mockOrder = getMockOrder()
+        req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
+        mockAttachmentService.deleteAttachment.mockResolvedValue({ ok: true })
+
+        await controller.deleteLicence(req, res, next)
+
+        expect(mockAttachmentService.deleteAttachment).toHaveBeenCalledWith({
+          accessToken: 'fakeUserToken',
+          orderId: mockOrder.id,
+          fileType: 'LICENCE',
+        })
+        expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
+          who: 'fakeUserName',
+          correlationId: req.order?.id,
+          what: 'Delete attachment : LICENCE',
+        })
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
+      })
+    })
+
+    it('should redirect to the attachments page if the user does not confirm the delete', async () => {
+      const mockOrder = getMockOrder()
+      req = createMockRequest({ body: { action: 'back' }, order: mockOrder, flash: jest.fn() })
+
+      await controller.deleteLicence(req, res, next)
+
+      expect(mockAttachmentService.deleteAttachment).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
+    })
+
+    it('shows an error when it fails to delete the attachment', async () => {
+      const mockOrder = getMockOrder()
+      req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
+      mockAttachmentService.deleteAttachment.mockResolvedValue({ ok: false, error: 'mock error message' })
+
+      await controller.deleteLicence(req, res, next)
+
+      expect(mockAttachmentService.deleteAttachment).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: mockOrder.id,
+        fileType: 'LICENCE',
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'attachmentDeletionErrors', 'mock error message')
     })
   })
 })

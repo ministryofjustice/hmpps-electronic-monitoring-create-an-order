@@ -6,7 +6,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% block content %}
   {{ govukBackLink({
     text: "Back",
@@ -25,6 +25,17 @@
     }) }}
   {% endif %}
 
+    {% if error %}
+    {{ govukErrorSummary({
+      titleText: "Error deleting attachment",
+      errorList: [
+        {
+          text: error
+         
+        }
+      ]
+    }) }}
+  {% endif %}
   {{ mojPageHeaderActions({
     heading: {
       text: "Attach a document"
@@ -44,14 +55,20 @@
         <dd class="govuk-summary-list__value">
           <a href="/order/{{order.id}}/attachments/licence/{{licenceFileName}}" class="govuk-link">{{licenceFileName}}</a>
         </dd>
+        <dd class="govuk-summary-list__actions">        
+        {% if isOrderEditable %}
+          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> license</span></a>
+          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence/delete">Delete<span class="govuk-visually-hidden"> license</span></a>
+        {% endif %}
+      </dd>
       {% else %}
         <dd class="govuk-summary-list__value">
           No licence document uploaded
         </dd>
-      {% endif %}
-      <dd class="govuk-summary-list__actions">
-        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> license</span></a>
+        <dd class="govuk-summary-list__actions">
+        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Add<span class="govuk-visually-hidden"> license</span></a>       
       </dd>
+      {% endif %}
     </div>
 
     <div class="govuk-summary-list__row">
@@ -62,17 +79,24 @@
         <dd class="govuk-summary-list__value">
           <a href="/order/{{order.id}}/attachments/photoId/{{photoFileName}}" class="govuk-link">{{photoFileName}}</a>
         </dd>
+        <dd class="govuk-summary-list__actions">          
+            {% if isOrderEditable %}
+              <a class="govuk-link" href="/order/{{order.id}}/attachments/photoId">Change<span class="govuk-visually-hidden"> photo ID</span></a>
+              <a class="govuk-link"  href="/order/{{order.id}}/attachments/photoId/delete">Delete<span class="govuk-visually-hidden"> photo ID</span></a>
+            {% endif %}
+          
+        </dd>
       {% else %}
         <dd class="govuk-summary-list__value">
           No photo ID document uploaded
         </dd>
+         <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/order/{{order.id}}/attachments/photoId">Add<span class="govuk-visually-hidden"> photo ID</span></a>
+        </dd>
       {% endif %}
-      <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/order/{{order.id}}/attachments/photoId">Change<span class="govuk-visually-hidden"> photo ID</span></a>
-      </dd>
+     
     </div>
-  </dl>
-
+  </dl> 
   <div class="govuk-button-group">
     {% if isOrderEditable %}
       {{ govukButton({
