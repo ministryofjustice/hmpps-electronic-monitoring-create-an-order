@@ -9,7 +9,7 @@ type UpdateDeviceWearerResponsibleAdultRequestInput = AuthenticatedRequestInput 
   data: {
     relationship: string
     fullName: string
-    contactNumber: string
+    contactNumber: string | null
   }
 }
 
