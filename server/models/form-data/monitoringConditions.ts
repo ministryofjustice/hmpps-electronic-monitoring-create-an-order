@@ -30,10 +30,10 @@ type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsForm
 const MonitoringConditionsFormDataValidator = z
   .object({
     action: z.string().default('continue'),
-    orderType: z.string(),
-    monitoringRequired: z.array(z.string()),
+    orderType: z.string().min(1, 'Order type is required'),
+    monitoringRequired: z.array(z.string()).min(1, 'At least one monitoring type must be selected'),
     orderTypeDescription: z.string(),
-    conditionType: z.string(),
+    conditionType: z.string().min(1, 'Condition type is required'),
     startDate: DateTimeInputModel.pipe(z.string({ message: 'Order start date is required' }).datetime()),
     endDate: DateTimeInputModel,
   })

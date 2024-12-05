@@ -50,10 +50,18 @@ const createViewModelFromMonitoringConditions = (monitoringConditions: Monitorin
   errors: {},
 })
 
-const createViewModelFromFormData = (formData: MonitoringConditionsFormData, errors: ValidationResult) => ({
-  ...formData,
-  errors: getErrorsViewModel(errors),
-})
+const createViewModelFromFormData = (formData: MonitoringConditionsFormData, errors: ValidationResult) => {
+  const viewModelErrors = getErrorsViewModel(errors)
+
+  if (viewModelErrors.updateMonitoringConditionsDto) {
+    viewModelErrors.monitoringRequired = viewModelErrors.updateMonitoringConditionsDto
+  }
+
+  return {
+    ...formData,
+    errors: viewModelErrors,
+  }
+}
 
 const createViewModel = (
   monitoringConditions: MonitoringConditions,
