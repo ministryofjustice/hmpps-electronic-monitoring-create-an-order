@@ -2,9 +2,7 @@ import { z } from 'zod'
 
 const MonitoringConditionsModel = z.object({
   startDate: z.string().datetime().nullable(),
-  startTime: z.string().nullable().optional(),
   endDate: z.string().datetime().nullable(),
-  endTime: z.string().nullable().optional(),
   orderType: z.string().nullable(),
   curfew: z.boolean().nullable(),
   exclusionZone: z.boolean().nullable(),
