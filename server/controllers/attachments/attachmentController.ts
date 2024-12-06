@@ -42,12 +42,12 @@ export default class AttachmentsController {
       })
     } else {
       res.redirect(`/order/${orderId}/attachments`)
+      this.auditService.logAuditEvent({
+        who: res.locals.user.username,
+        correlationId: orderId,
+        what: `Upload new attachment : ${attachment.filename}`,
+      })
     }
-    this.auditService.logAuditEvent({
-      who: res.locals.user.username,
-      correlationId: orderId,
-      what: `Upload new attachment : ${attachment.filename}`,
-    })
   }
 
   async download(req: Request, res: Response, fileType: AttachmentType) {
