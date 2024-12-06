@@ -9,6 +9,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../../../partials/timeInput.njk" import timeInput %}
+{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
 
 {% block formInputs %}
 
@@ -20,130 +21,27 @@
     }
   }) %}
 
-    {{ govukDateInput({
+    {{dateTimeInput({
       id: "startDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring starts",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "startDate[day]",
-          classes: "govuk-input--width-2",
-          label: "Day",
-          value: startDate.day,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "startDate[month]",
-          classes: "govuk-input--width-2",
-          label: "Month",
-          value: startDate.month,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "startDate[year]",
-          classes: "govuk-input--width-4",
-          label: "Year",
-          value: startDate.year,
-          disabled: not isOrderEditable
-        }
-      ],
+      name: "startDate",
+      date: startDate,
+      dateLabel: "Enter the date for when monitoring starts",
+      dateHint: "For example, 21 05 2032",
+      timeLabel: "Enter the time for when monitoring starts",
+      timeHint: "For example, 14 : 30",
       errorMessage: errors.startDate
-    }) }}
+    })}}
 
-    {{ govukInput({
-      label: {
-        text: "Start Hours"
-      },
-      classes: "govuk-input--width-10",
-      id: "startHours",
-      name: "startDate[hours]",
-      value: startDate.hours,
-      errorMessage: errors.startHours,
-      disabled: not isOrderEditable
-    }) }}
-    
-        {{ govukInput({
-      label: {
-        text: "Start Minutes"
-      },
-      classes: "govuk-input--width-10",
-      id: "startMinutes",
-      name: "startDate[minutes]",
-      value: startDate.minutes,
-      errorMessage: errors.startMinutes,
-      disabled: not isOrderEditable
-    }) }}
-
-
-    {{ govukDateInput({
+    {{dateTimeInput({
       id: "endDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring ends (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "endDate[day]",
-          label: "Day",
-          classes: "govuk-input--width-2",
-          value: endDate.day,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "endDate[month]",
-          label: "Month",
-          classes: "govuk-input--width-2",
-          value: endDate.month,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "endDate[year]",
-          label: "Year",
-          classes: "govuk-input--width-4",
-          value:endDate.year,
-          disabled: not isOrderEditable
-        }
-      ],
+      name: "endDate",
+      date: endDate,
+      dateLabel: "Enter the date for when monitoring ends (optional)",
+      dateHint: "For example, 21 05 2032",
+      timeLabel: "Enter the time for when monitoring ends (optional)",
+      timeHint: "For example, 14 : 30",
       errorMessage: errors.endDate
-    }) }}
-
-        {{ govukInput({
-      label: {
-        text: "End Hours"
-      },
-      classes: "govuk-input--width-10",
-      id: "endHours",
-      name: "endDate[hours]",
-      value: endDate.hours,
-      errorMessage: errors.endHours,
-      disabled: not isOrderEditable
-    }) }}
-    
-        {{ govukInput({
-      label: {
-        text: "End Minutes"
-      },
-      classes: "govuk-input--width-10",
-      id: "endMinutes",
-      name: "endDate[minutes]",
-      value: endDate.minutes,
-      errorMessage: errors.endMinutes,
-      disabled: not isOrderEditable
-    }) }}
+    })}}
 
   {% endcall %}
 
