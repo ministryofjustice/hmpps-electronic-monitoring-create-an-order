@@ -28,7 +28,7 @@ const DateInputModel = z
     },
     {
       message:
-        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
       path: ['date'],
     },
   )
@@ -63,28 +63,6 @@ const DateTimeInputModel = z
         return true
       }
 
-      // Non empty inputs should be valid integers
-      return z
-        .object({
-          day: z.coerce.number().int().min(1).max(31),
-          month: z.coerce.number().int().min(1).max(12),
-          year: z.coerce.number().int().min(1900).max(2200),
-        })
-        .safeParse(value).success
-    },
-    {
-      message:
-        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-      path: ['date'],
-    },
-  )
-  .refine(
-    value => {
-      // Empty inputs are valid
-      if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
-        return true
-      }
-
       // Inputs should be valid integers
       return z
         .object({
@@ -100,8 +78,30 @@ const DateTimeInputModel = z
         .safeParse(value).success
     },
     {
-      message: 'Time is in the incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
+      message: 'Time is in an incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
       path: ['time'],
+    },
+  )
+  .refine(
+    value => {
+      // Empty inputs are valid
+      if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
+        return true
+      }
+
+      // Non empty inputs should be valid integers
+      return z
+        .object({
+          day: z.coerce.number().int().min(1).max(31),
+          month: z.coerce.number().int().min(1).max(12),
+          year: z.coerce.number().int().min(1900).max(2200),
+        })
+        .safeParse(value).success
+    },
+    {
+      message:
+        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+      path: ['date'],
     },
   )
   .transform(value => {

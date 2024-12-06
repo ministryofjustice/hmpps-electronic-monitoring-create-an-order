@@ -54,7 +54,7 @@ describe('DateInputModel', () => {
         {
           code: 'custom',
           message:
-            'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
           path: ['date'],
         },
       ])
@@ -119,7 +119,7 @@ describe('DateTimeInputModel', () => {
         {
           code: 'custom',
           message:
-            'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
           path: ['date'],
         },
       ])
@@ -148,7 +148,7 @@ describe('DateTimeInputModel', () => {
         {
           code: 'custom',
           message:
-            'Time is in the incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
+            'Time is in an incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
           path: ['time'],
         },
       ])
@@ -171,14 +171,14 @@ describe('DateTimeInputModel', () => {
         {
           code: 'custom',
           message:
-            'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-          path: ['date'],
+            'Time is in an incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
+          path: ['time'],
         },
         {
           code: 'custom',
           message:
-            'Time is in the incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
-          path: ['time'],
+            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+          path: ['date'],
         },
       ])
     },

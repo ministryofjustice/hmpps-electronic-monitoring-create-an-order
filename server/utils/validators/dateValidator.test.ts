@@ -31,7 +31,7 @@ describe('DateValidator', () => {
       expect(isValid.result).toBe(false)
       expect(isValid.error?.field).toBe('date')
       expect(isValid.error?.error).toBe(
-        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
       )
     })
   })
