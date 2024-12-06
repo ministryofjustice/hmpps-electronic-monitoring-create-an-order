@@ -118,8 +118,18 @@ describe('OrderSearchController', () => {
         'pages/index',
         expect.objectContaining({
           orders: [
-            { displayName: 'New form', status: 'IN_PROGRESS', type: 'REQUEST', summaryUri: `/order/${mockDraftOrder.id}/summary` },
-            { displayName: 'first last', status: 'SUBMITTED', type: 'VARIATION', summaryUri: `/order/${mockSubmittedOrder.id}/summary` },
+            {
+              displayName: 'New form',
+              status: 'IN_PROGRESS',
+              type: 'REQUEST',
+              summaryUri: `/order/${mockDraftOrder.id}/summary`,
+            },
+            {
+              displayName: 'first last',
+              status: 'SUBMITTED',
+              type: 'VARIATION',
+              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
+            },
           ],
         }),
       )

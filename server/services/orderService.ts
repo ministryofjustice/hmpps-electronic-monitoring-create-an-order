@@ -34,7 +34,7 @@ export default class OrderService {
     const result = await this.apiClient.post({
       path: '/api/orders',
       token: input.accessToken,
-      data: input.data
+      data: input.data,
     })
     return OrderModel.parse(result)
   }
