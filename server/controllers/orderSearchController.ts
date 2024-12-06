@@ -3,6 +3,7 @@ import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
+import config from '../config'
 
 type OrderSearchViewModel = {
   orders: Array<{
@@ -11,6 +12,7 @@ type OrderSearchViewModel = {
     type: string
     summaryUri: string
   }>
+  variationsEnabled: boolean
 }
 
 export default class OrderSearchController {
@@ -41,6 +43,7 @@ export default class OrderSearchController {
           summaryUri: paths.ORDER.SUMMARY.replace(':orderId', order.id),
         }
       }),
+      variationsEnabled: config.variations.enabled,
     }
   }
 

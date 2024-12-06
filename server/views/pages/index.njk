@@ -23,11 +23,13 @@
             name: "type",
             value: "REQUEST"
         }) }}
-        {{ govukButton({
-            text: "Start new variation",
-            name: "type",
-            value: "VARIATION"
-        }) }}
+        {% if variationsEnabled %}
+          {{ govukButton({
+              text: "Start new variation",
+              name: "type",
+              value: "VARIATION"
+          }) }}
+        {% endif %}
     </div>
   </form>
 
