@@ -8,6 +8,7 @@ type OrderSearchViewModel = {
   orders: Array<{
     displayName: string
     status: string
+    type: string
     summaryUri: string
   }>
 }
@@ -20,6 +21,10 @@ export default class OrderSearchController {
 
   private getDisplayName(order: Order): string {
     if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
+      if (order.type === 'VARIATION') {
+        return 'New variation'
+      }
+
       return 'New form'
     }
 
@@ -32,6 +37,7 @@ export default class OrderSearchController {
         return {
           displayName: this.getDisplayName(order),
           status: order.status,
+          type: order.type,
           summaryUri: paths.ORDER.SUMMARY.replace(':orderId', order.id),
         }
       }),

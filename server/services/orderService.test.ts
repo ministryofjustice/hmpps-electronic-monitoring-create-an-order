@@ -36,11 +36,14 @@ describe('Order Service', () => {
       mockRestClient.post.mockResolvedValue(mockApiResponse)
 
       const orderService = new OrderService(mockRestClient)
-      const order = await orderService.createOrder({ accessToken: '' })
+      const order = await orderService.createOrder({ accessToken: '', data: { type: 'REQUEST' } })
 
       expect(mockRestClient.post).toHaveBeenCalledWith({
         path: '/api/orders',
         token: '',
+        data: {
+          type: 'REQUEST'
+        }
       })
       expect(order).toEqual(mockNewOrder)
     })
@@ -55,7 +58,7 @@ describe('Order Service', () => {
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createOrder({ accessToken: '' })
+        await orderService.createOrder({ accessToken: '', data: { type: 'REQUEST' }  })
       } catch (e) {
         expect((e as Error).name).toEqual('ZodError')
       }
@@ -66,7 +69,7 @@ describe('Order Service', () => {
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createOrder({ accessToken: '' })
+        await orderService.createOrder({ accessToken: '', data: { type: 'REQUEST' }  })
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(404)
         expect((e as SanitisedError).message).toEqual('Not Found')

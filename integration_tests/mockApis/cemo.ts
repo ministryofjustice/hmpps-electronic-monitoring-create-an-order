@@ -25,6 +25,7 @@ const ping = (httpStatus = 200) =>
 export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
+  type: 'REQUEST',
   deviceWearer: {
     nomisId: null,
     pncId: null,
