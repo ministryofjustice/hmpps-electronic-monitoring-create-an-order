@@ -2,8 +2,13 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
+import { CreateOrderFormData } from '../models/form-data/order'
 import OrderModel, { Order } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
+
+type CreateOrderRequest = AuthenticatedRequestInput & {
+  data: CreateOrderFormData
+}
 
 type OrderRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -25,10 +30,11 @@ type OrderSubmissionResult = OrderSubmissionSuccess | OrderSubmissionFailure
 export default class OrderService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async createOrder(input: AuthenticatedRequestInput): Promise<Order> {
+  async createOrder(input: CreateOrderRequest): Promise<Order> {
     const result = await this.apiClient.post({
       path: '/api/orders',
       token: input.accessToken,
+      data: input.data,
     })
     return OrderModel.parse(result)
   }

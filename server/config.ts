@@ -102,6 +102,9 @@ export default {
   sqs: {
     audit: auditConfig(),
   },
+  variations: {
+    enabled: get('VARIATIONS_ENABLED', 'false') === 'true',
+  },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   logLevel: get('LOG_LEVEL', 'debug'),

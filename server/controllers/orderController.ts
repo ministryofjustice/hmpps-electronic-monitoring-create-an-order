@@ -2,6 +2,7 @@ import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
 import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
+import { CreateOrderFormDataParser } from '../models/form-data/order'
 
 export default class OrderController {
   constructor(
@@ -11,7 +12,8 @@ export default class OrderController {
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
-    const order = await this.orderService.createOrder({ accessToken: res.locals.user.token })
+    const formData = CreateOrderFormDataParser.parse(req.body)
+    const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
 
     res.redirect(`/order/${order.id}/summary`)
   }

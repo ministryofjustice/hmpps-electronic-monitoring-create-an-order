@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { Order, OrderStatusEnum } from '../../server/models/Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../../server/models/Order'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { MonitoringConditions } from '../../server/models/MonitoringConditions'
 import { Address } from '../../server/models/Address'
@@ -181,6 +181,7 @@ export const createCurfewTimeTable = (overrideProperties?: Partial<CurfewTimetab
 export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
   status: OrderStatusEnum.Enum.IN_PROGRESS,
+  type: OrderTypeEnum.Enum.REQUEST,
   deviceWearer: createDeviceWearer(),
   deviceWearerResponsibleAdult: null,
   contactDetails: null,
