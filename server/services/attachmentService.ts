@@ -10,13 +10,21 @@ type AttachmentRequestInpput = AuthenticatedRequestInput & {
   fileType: string
 }
 type UploadAttachmentRequestInput = AttachmentRequestInpput & {
-  file: Express.Multer.File
+  file: Express.Multer.File | undefined
 }
 
 export default class AttachmentService {
   constructor(private readonly apiClient: RestClient) {}
 
   async uploadAttachment(input: UploadAttachmentRequestInput): Promise<ErrorResponse> {
+    if (input.file === undefined) {
+      return {
+        status: 400,
+        userMessage: 'No file uploaded.',
+        developerMessage: 'User did not upload a file.',
+      }
+    }
+
     try {
       await this.apiClient.postMultiPart({
         path: `/api/orders/${input.orderId}/document-type/${input.fileType}`,
