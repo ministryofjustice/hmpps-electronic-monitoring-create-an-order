@@ -51,6 +51,7 @@ executors:
           SERCO_PASSWORD: serco
           SERCO_URL: http://localhost:9091/fms
           CP_INTEGRATION_ENABLED: false
+          FMS_INTEGRATION_ENABLED: true
 
 jobs:
   build:

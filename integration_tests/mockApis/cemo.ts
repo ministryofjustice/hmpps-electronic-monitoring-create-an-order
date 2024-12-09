@@ -25,6 +25,7 @@ const ping = (httpStatus = 200) =>
 export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
+  type: 'REQUEST',
   deviceWearer: {
     nomisId: null,
     pncId: null,
@@ -261,6 +262,19 @@ const uploadAttachment = (options: UploadAttachmentStubOptions = defaultUploadAt
     },
   })
 
+const deleteAttachment = (options: UploadAttachmentStubOptions = defaultUploadAttachmentOptions) =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      urlPattern: `/cemo/api/orders/${options.id}/document-type/${options.type}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? {} : { status: 400, userMessage: 'Mock Error', developerMessage: '' },
+    },
+  })
+
 type ValidationErrors = Array<{
   erorr: string
   field: string
@@ -382,8 +396,8 @@ type RequestHeaders = {
   ['Content-Type']: string
 }
 
-const getStubbedRequest = (url: string, asBase64?: boolean) =>
-  getMatchingRequests({ urlPath: `/cemo/api${url}` }).then(response => {
+const getStubbedRequest = (url: string, asBase64?: boolean, method?: string) =>
+  getMatchingRequests({ urlPath: `/cemo/api${url}`, method }).then(response => {
     if (response?.body.requests && Array.isArray(response?.body.requests)) {
       return response.body.requests.map((request: Record<string, unknown>) => {
         if (asBase64) {
@@ -446,12 +460,13 @@ const putResponsibleAdult = (
 
 type VerifyStubbedRequestParams = {
   uri: string
+  method?: string
   body?: unknown
   fileContents?: string
 }
 
 const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
-  getStubbedRequest(options.uri, !!options.fileContents).then(requests => {
+  getStubbedRequest(options.uri, !!options.fileContents, options.method).then(requests => {
     if (requests.length === 0) {
       throw new Error(`No stub requests were found for the url <${options.uri}>`)
     }
@@ -553,6 +568,7 @@ export default {
   stubCemoUpdateContactDetails: updateContactDetails,
   stubCemoPutResponsibleAdult: putResponsibleAdult,
   stubUploadAttachment: uploadAttachment,
+  stubDeleteAttachment: deleteAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
 

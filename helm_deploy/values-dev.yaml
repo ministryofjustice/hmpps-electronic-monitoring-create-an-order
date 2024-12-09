@@ -19,6 +19,4 @@ generic-service:
     unrestricted: "0.0.0.0/0"
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service-dev
-
-
+  alertSeverity: hmpps-electronic-monitoring-create-an-order-dev

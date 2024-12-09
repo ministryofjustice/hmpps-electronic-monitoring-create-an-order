@@ -102,7 +102,6 @@ context('About the device wearer - Responsible Adult', () => {
           response: [
             { field: 'relationship', error: 'Relationship is required' },
             { field: 'fullName', error: 'Full name is required' },
-            { field: 'contactNumber', error: 'Phone number is in an incorrect format' },
           ],
         })
 
@@ -116,13 +115,12 @@ context('About the device wearer - Responsible Adult', () => {
           expect(requests).to.have.lengthOf(1)
           expect(requests[0]).to.deep.equal({
             fullName: '',
-            contactNumber: '',
+            contactNumber: null,
             relationship: '',
             otherRelationshipDetails: '',
           })
         })
         cy.get('#relationship-error').should('contain', 'Relationship is required')
-        cy.get('#contact-number-error').should('contain', 'Phone number is in an incorrect format')
         cy.get('#full-name-error').should('contain', 'Full name is required')
       })
     })
@@ -149,7 +147,7 @@ context('About the device wearer - Responsible Adult', () => {
           expect(requests).to.have.lengthOf(1)
           expect(requests[0]).to.deep.equal({
             fullName: '',
-            contactNumber: '',
+            contactNumber: null,
             relationship: 'guardian',
             otherRelationshipDetails: '',
           })
@@ -181,7 +179,7 @@ context('About the device wearer - Responsible Adult', () => {
           expect(requests).to.have.lengthOf(1)
           expect(requests[0]).to.deep.equal({
             fullName: 'Martha Steward',
-            contactNumber: '',
+            contactNumber: null,
             relationship: '',
             otherRelationshipDetails: '',
           })

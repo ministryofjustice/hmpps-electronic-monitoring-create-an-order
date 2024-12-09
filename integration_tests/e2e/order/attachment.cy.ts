@@ -43,10 +43,10 @@ context('Attachment', () => {
       cy.get('.govuk-summary-list__value').contains('No licence document uploaded').should('exist')
       cy.get('.govuk-summary-list__key').contains('Photo ID').should('exist')
       cy.get('.govuk-summary-list__value').contains('No photo ID document uploaded').should('exist')
-      cy.get('a:contains("Change")').should('have.length', 2)
+      cy.get('a:contains("Add")').should('have.length', 2)
     })
 
-    it('Should render summary page with download links', () => {
+    it('Should render summary page with download links and delete links', () => {
       cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
       Page.verifyOnPage(AttachmentPage)
       cy.get('.govuk-summary-list__key').contains('Licence').should('exist')
@@ -60,6 +60,8 @@ context('Attachment', () => {
         .should('exist')
         .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/photo.jpeg`)
       cy.get('a:contains("Change")').should('have.length', 2)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).should('exist')
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).should('exist')
     })
 
     it('Should be accessible', () => {
@@ -176,6 +178,116 @@ context('Attachment', () => {
       cy.signIn().visit(`/order/${mockOrderId}/attachments`, { failOnStatusCode: false })
 
       Page.verifyOnPage(ErrorPage, 'Not Found')
+    })
+  })
+
+  context('Delete attachment', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoListOrders')
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrderWithAttachments', {
+        httpStatus: 200,
+        id: mockOrderIdWithAttachments,
+        status: 'IN_PROGRESS',
+        attachments: [
+          { id: mockOrderId, orderId: mockOrderId, fileName: 'Licence.jpeg', fileType: 'LICENCE' },
+          { id: mockOrderId, orderId: mockOrderId, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
+        ],
+      })
+    })
+    it('Should render delete confirmation page', () => {
+      cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
+      Page.verifyOnPage(AttachmentPage)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).click()
+      cy.get('h1').contains('Are you sure you want to delete this licence?')
+      cy.get('button').contains('Delete').should('exist')
+      cy.get('button').contains('Back').should('exist')
+    })
+
+    it('Should redirect summary view and display error after failed to delete licence', () => {
+      cy.task('stubDeleteAttachment', { httpStatus: 500, id: mockOrderIdWithAttachments, type: 'LICENCE' })
+      cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
+      Page.verifyOnPage(AttachmentPage)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).click()
+      cy.get('button').contains('Delete').click()
+      cy.get('.govuk-error-summary__title').contains('Error deleting attachment').should('exist')
+      cy.get('.govuk-error-summary__list').get('li').contains('Mock Error').should('exist')
+      Page.verifyOnPage(AttachmentPage)
+    })
+
+    it('Should redirect summary view after confirm delete', () => {
+      cy.task('stubDeleteAttachment', { httpStatus: 200, id: mockOrderIdWithAttachments, type: 'LICENCE' })
+      cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
+      Page.verifyOnPage(AttachmentPage)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).click()
+      cy.get('button').contains('Delete').click()
+
+      cy.task('getStubbedRequest', `/orders/${mockOrderIdWithAttachments}/document-type/LICENCE`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+      })
+      Page.verifyOnPage(AttachmentPage)
+    })
+
+    it('Should redirect summary view and display error after failed to delete photoId', () => {
+      cy.task('stubDeleteAttachment', { httpStatus: 500, id: mockOrderIdWithAttachments, type: 'PHOTO_ID' })
+      cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
+      Page.verifyOnPage(AttachmentPage)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).click()
+      cy.get('button').contains('Delete').click()
+      cy.get('.govuk-error-summary__title').contains('Error deleting attachment').should('exist')
+      cy.get('.govuk-error-summary__list').get('li').contains('Mock Error').should('exist')
+      Page.verifyOnPage(AttachmentPage)
+    })
+
+    it('Should delete photo id after confirm delete', () => {
+      cy.task('stubDeleteAttachment', { httpStatus: 200, id: mockOrderIdWithAttachments, type: 'PHOTO_ID' })
+      cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
+      Page.verifyOnPage(AttachmentPage)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).click()
+      cy.get('button').contains('Delete').click()
+
+      cy.task('getStubbedRequest', `/orders/${mockOrderIdWithAttachments}/document-type/PHOTO_ID`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+      })
+      Page.verifyOnPage(AttachmentPage)
+    })
+  })
+
+  context('Submitted order', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoListOrders')
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrderWithAttachments', {
+        httpStatus: 200,
+        id: mockOrderIdWithAttachments,
+        status: 'SUBMITTED',
+        attachments: [
+          { id: mockOrderId, orderId: mockOrderId, fileName: 'Licence.jpeg', fileType: 'LICENCE' },
+          { id: mockOrderId, orderId: mockOrderId, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
+        ],
+      })
+    })
+
+    it('Should render summary page with no download links and no delete links', () => {
+      cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
+      Page.verifyOnPage(AttachmentPage)
+      cy.get('.govuk-summary-list__key').contains('Licence').should('exist')
+      cy.get('.govuk-summary-list__value')
+        .contains('Licence.jpeg')
+        .should('exist')
+        .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence/Licence.jpeg`)
+      cy.get('.govuk-summary-list__key').contains('Photo ID').should('exist')
+      cy.get('.govuk-summary-list__value')
+        .contains('photo.jpeg')
+        .should('exist')
+        .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/photo.jpeg`)
+      cy.get('a:contains("Change")').should('have.length', 0)
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).should('not.exist')
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).should('not.exist')
     })
   })
 })

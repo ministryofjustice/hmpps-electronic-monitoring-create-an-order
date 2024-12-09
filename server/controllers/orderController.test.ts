@@ -64,7 +64,11 @@ describe('OrderController', () => {
     it('should create an order and redirect to view the order', async () => {
       // Given
       const mockOrder = getMockOrder()
-      const req = createMockRequest()
+      const req = createMockRequest({
+        body: {
+          type: 'REQUEST',
+        },
+      })
       const res = createMockResponse()
       const next = jest.fn()
       mockOrderService.createOrder.mockResolvedValue(mockOrder)
@@ -73,7 +77,10 @@ describe('OrderController', () => {
       await orderController.create(req, res, next)
 
       // Then
-      expect(mockOrderService.createOrder).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' })
+      expect(mockOrderService.createOrder).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        data: { type: 'REQUEST' },
+      })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
     })
   })

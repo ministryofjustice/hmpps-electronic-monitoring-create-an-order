@@ -16,10 +16,12 @@ import TrailMonitoringModel from './TrailMonitoring'
 import InterestedPartiesModel from './InterestedParties'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
+export const OrderTypeEnum = z.enum(['REQUEST', 'VARIATION'])
 
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
+  type: OrderTypeEnum,
   deviceWearer: DeviceWearerModel,
   addresses: z.array(AddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),

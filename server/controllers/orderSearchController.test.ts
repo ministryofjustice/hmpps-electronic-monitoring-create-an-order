@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { OrderStatusEnum } from '../models/Order'
+import { OrderStatusEnum, OrderTypeEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
@@ -16,6 +16,7 @@ const mockDraftOrder = getMockOrder()
 
 const mockSubmittedOrder = getMockOrder({
   status: OrderStatusEnum.Enum.SUBMITTED,
+  type: OrderTypeEnum.Enum.VARIATION,
   deviceWearer: {
     nomisId: null,
     pncId: null,
@@ -117,8 +118,18 @@ describe('OrderSearchController', () => {
         'pages/index',
         expect.objectContaining({
           orders: [
-            { displayName: 'New form', status: 'IN_PROGRESS', summaryUri: `/order/${mockDraftOrder.id}/summary` },
-            { displayName: 'first last', status: 'SUBMITTED', summaryUri: `/order/${mockSubmittedOrder.id}/summary` },
+            {
+              displayName: 'New form',
+              status: 'IN_PROGRESS',
+              type: 'REQUEST',
+              summaryUri: `/order/${mockDraftOrder.id}/summary`,
+            },
+            {
+              displayName: 'first last',
+              status: 'SUBMITTED',
+              type: 'VARIATION',
+              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
+            },
           ],
         }),
       )

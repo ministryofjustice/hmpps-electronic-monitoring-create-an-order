@@ -19,8 +19,17 @@
 
     <div class="govuk-button-group">
         {{ govukButton({
-            text: "Start new form"
+            text: "Start new form",
+            name: "type",
+            value: "REQUEST"
         }) }}
+        {% if variationsEnabled %}
+          {{ govukButton({
+              text: "Start new variation",
+              name: "type",
+              value: "VARIATION"
+          }) }}
+        {% endif %}
     </div>
   </form>
 
@@ -106,19 +115,22 @@
               {{ order.displayName }}
             </a>
           </div>
-          {% if order.status == 'SUBMITTED' %}
-            <div class="govuk-task-list__status">
+          <div class="govuk-task-list__status">
+            {% if order.type == 'VARIATION' %}
+              <strong class="govuk-tag govuk-tag--blue">
+                Variation
+              </strong>
+            {% endif %}
+            {% if order.status == 'SUBMITTED' %}
               <strong class="govuk-tag govuk-tag--green">
                 Submitted
               </strong>
-            </div>
-          {% else %}
-            <div class="govuk-task-list__status" >
+            {% else %}
               <strong class="govuk-tag govuk-tag--grey">
                 Draft
               </strong>
-            </div>
-          {% endif %}
+            {% endif %}
+          </div>
         </li>
       {% endfor %}
     </ul>
