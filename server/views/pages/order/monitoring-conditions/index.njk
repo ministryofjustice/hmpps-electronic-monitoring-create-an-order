@@ -29,7 +29,8 @@
       dateHint: "For example, 21 05 2032",
       timeLabel: "Enter the time for when monitoring starts",
       timeHint: "For example, 14 : 30",
-      errorMessage: errors.startDate
+      errorMessage: errors.startDate,
+      disabled: not isOrderEditable
     })}}
 
     {{dateTimeInput({
@@ -40,7 +41,8 @@
       dateHint: "For example, 21 05 2032",
       timeLabel: "Enter the time for when monitoring ends (optional)",
       timeHint: "For example, 14 : 30",
-      errorMessage: errors.endDate
+      errorMessage: errors.endDate,
+      disabled: not isOrderEditable
     })}}
 
   {% endcall %}
