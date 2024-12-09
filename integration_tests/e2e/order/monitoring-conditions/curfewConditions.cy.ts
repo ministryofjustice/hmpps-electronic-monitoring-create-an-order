@@ -149,7 +149,7 @@ context('Curfew conditions', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#startDate-error').should(
           'contain',
-          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })
 
@@ -160,7 +160,7 @@ context('Curfew conditions', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#endDate-error').should(
           'contain',
-          'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })
     })

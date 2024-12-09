@@ -94,31 +94,61 @@ context('Monitoring conditions main section', () => {
       })
     })
 
-    it('should show errors with an empty form submission', () => {
+    it('should show frontend validation errors', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 400,
         id: mockOrderId,
         subPath: '/monitoring-conditions',
-        response: [
-          { field: 'orderType', error: 'You must select an option' },
-          { field: 'orderTypeDescription', error: 'You must select an option' },
-          { field: 'conditionType', error: 'You must select an option' },
-          { field: 'updateMonitoringConditionsDto', error: 'You must select an option' },
-          { field: 'startDate', error: 'You must select an option' },
-          { field: 'endDate', error: 'You must select an option' },
-        ],
+        response: [],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       cy.get('input[type="checkbox"]').should('not.be.checked')
       cy.get('select[name="orderType"]').invoke('val').should('deep.equal', '')
       page.form.saveAndContinueButton.click()
-      cy.get('#orderType-error').should('contain', 'You must select an option')
-      cy.get('#orderTypeDescription-error').should('contain', 'You must select an option')
-      cy.get('#conditionType-error').should('contain', 'You must select an option')
-      cy.get('#monitoringRequired-error').should('contain', 'You must select an option')
-      cy.get('#startDate-error').should('contain', 'You must select an option')
-      cy.get('#endDate-error').should('contain', 'You must select an option')
+      cy.get('#orderType-error').should('contain', 'Order type is required')
+      cy.get('#conditionType-error').should('contain', 'Condition type is required')
+      cy.get('#monitoringRequired-error').should('contain', 'At least one monitoring type must be selected')
+      cy.get('#startDate-error').should('contain', 'Order start date is required')
+    })
+
+    it('after frontend validation passses, should show errors from API response', () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 400,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions',
+        response: [
+          { field: 'orderType', error: 'Test error - order type' },
+          { field: 'orderTypeDescription', error: 'Test error - order type description' },
+          { field: 'conditionType', error: 'Test error - condition type' },
+          { field: 'updateMonitoringConditionsDto', error: 'Test error - monitoring required' },
+          { field: 'startDate', error: 'Test error - start date' },
+          { field: 'endDate', error: 'Test error - end date' },
+        ],
+      })
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
+      const page = Page.verifyOnPage(MonitoringConditionsPage)
+      cy.get('input[type="checkbox"]').check()
+      cy.get('select[name="orderType"]').select('immigration')
+      cy.get('select[name="orderTypeDescription"]').select('GPS Acquisitive Crime HDC')
+      cy.get('select[name="conditionType"]').select('License Condition of a Custodial Order')
+      cy.get('#startDateDay').type('27')
+      cy.get('#startDateMonth').type('3')
+      cy.get('#startDateYear').type('2024')
+      cy.get('#startDateHours').type('01')
+      cy.get('#startDateMinutes').type('02')
+      cy.get('#endDateDay').type('28')
+      cy.get('#endDateMonth').type('4')
+      cy.get('#endDateYear').type('2025')
+      cy.get('#endDateHours').type('03')
+      cy.get('#endDateMinutes').type('04')
+      page.form.saveAndContinueButton.click()
+      cy.get('#orderType-error').should('contain', 'Test error - order type')
+      cy.get('#orderTypeDescription-error').should('contain', 'Test error - order type description')
+      cy.get('#conditionType-error').should('contain', 'Test error - condition type')
+      cy.get('#monitoringRequired-error').should('contain', 'Test error - monitoring required')
+      cy.get('#startDate-error').should('contain', 'Test error - start date')
+      cy.get('#endDate-error').should('contain', 'Test error - end date')
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
@@ -134,21 +164,22 @@ context('Monitoring conditions main section', () => {
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('GPS Acquisitive Crime HDC')
       cy.get('select[name="conditionType"]').select('License Condition of a Custodial Order')
-      cy.get('#startDate-startDay').type('27')
-      cy.get('#startDate-startMonth').type('3')
-      cy.get('#startDate-startYear').type('2024')
-      cy.get('#startTime-hours').type('01')
-      cy.get('#startTime-minutes').type('02')
-      cy.get('#endDate-endDay').type('28')
-      cy.get('#endDate-endMonth').type('4')
-      cy.get('#endDate-endYear').type('2025')
-      cy.get('#endTime-hours').type('03')
-      cy.get('#endTime-minutes').type('04')
+      cy.get('#startDateDay').type('27')
+      cy.get('#startDateMonth').type('3')
+      cy.get('#startDateYear').type('2024')
+      cy.get('#startDateHours').type('01')
+      cy.get('#startDateMinutes').type('02')
+      cy.get('#endDateDay').type('28')
+      cy.get('#endDateMonth').type('4')
+      cy.get('#endDateYear').type('2025')
+      cy.get('#endDateHours').type('03')
+      cy.get('#endDateMinutes').type('04')
       page.form.saveAndContinueButton.click()
       Page.verifyOnPage(InstallationAddressPage)
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
+          action: 'continue',
           orderType: 'immigration',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
           conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
@@ -157,10 +188,8 @@ context('Monitoring conditions main section', () => {
           trail: true,
           mandatoryAttendance: true,
           alcohol: true,
-          startDate: '2024-03-27T00:00:00.000Z',
-          startTime: '01:02:00',
-          endDate: '2025-04-28T00:00:00.000Z',
-          endTime: '03:04:00',
+          startDate: '2024-03-27T01:02:00.000Z',
+          endDate: '2025-04-28T03:04:00.000Z',
         })
       })
     })
@@ -178,15 +207,16 @@ context('Monitoring conditions main section', () => {
       cy.get('select[name="orderType"]').select('immigration')
       cy.get('select[name="orderTypeDescription"]').select('DAPOL')
       cy.get('select[name="conditionType"]').select('Requirement of a Community Order')
-      cy.get('#startDate-startDay').type('27')
-      cy.get('#startDate-startMonth').type('3')
-      cy.get('#startDate-startYear').type('2024')
-      cy.get('#startTime-hours').type('01')
-      cy.get('#startTime-minutes').type('02')
+      cy.get('#startDateDay').type('27')
+      cy.get('#startDateMonth').type('3')
+      cy.get('#startDateYear').type('2024')
+      cy.get('#startDateHours').type('01')
+      cy.get('#startDateMinutes').type('02')
       page.form.saveAndContinueButton.click()
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
+          action: 'continue',
           orderType: 'immigration',
           orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
@@ -195,10 +225,8 @@ context('Monitoring conditions main section', () => {
           trail: false,
           mandatoryAttendance: false,
           alcohol: true,
-          startDate: '2024-03-27T00:00:00.000Z',
-          startTime: '01:02:00',
+          startDate: '2024-03-27T01:02:00.000Z',
           endDate: null,
-          endTime: null,
         })
       })
       Page.verifyOnPage(InstallationAddressPage)

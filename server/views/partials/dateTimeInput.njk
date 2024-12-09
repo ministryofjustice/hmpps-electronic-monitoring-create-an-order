@@ -28,6 +28,7 @@
           items: [
             {
               name: input.id + "[day]",
+              id: input.id + "Day",
               classes: "govuk-input--width-2",
               label: "Day",
               value: input.date.day,
@@ -35,6 +36,7 @@
             },
             {
               name: input.id + "[month]",
+              id: input.id + "Month",
               classes: "govuk-input--width-2",
               label: "Month",
               value: input.date.month,
@@ -42,6 +44,7 @@
             },
             {
               name: input.id + "[year]",
+              id: input.id + "Year",
               classes: "govuk-input--width-4",
               label: "Year",
               value: input.date.year,
@@ -52,6 +55,7 @@
       </div>
 
 
+{# The time input below is much like the timeInput.njk component, with small differences such as input names in the format eg. "StartDate[hours]" for use with the node package "qs". The existing timeInput.njk component could be replaced with this component in a future refactor. #}
       <div class="form-time govuk-form-group">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.timeLabel }}</legend>
