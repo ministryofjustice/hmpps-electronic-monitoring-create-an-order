@@ -73,7 +73,7 @@ const DateTimeInputModel = z
           minutes: z
             .string()
             .transform(val => (val === '' ? Number.isNaN : val))
-            .pipe(z.coerce.number().int().min(0).max(23)),
+            .pipe(z.coerce.number().int().min(0).max(59)),
         })
         .safeParse(value).success
     },

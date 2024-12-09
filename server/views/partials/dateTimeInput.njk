@@ -28,7 +28,7 @@
           items: [
             {
               name: input.id + "[day]",
-              id: input.id + "Day",
+              id: input.id + "-day",
               classes: "govuk-input--width-2",
               label: "Day",
               value: input.date.day,
@@ -36,7 +36,7 @@
             },
             {
               name: input.id + "[month]",
-              id: input.id + "Month",
+              id: input.id + "-month",
               classes: "govuk-input--width-2",
               label: "Month",
               value: input.date.month,
@@ -44,7 +44,7 @@
             },
             {
               name: input.id + "[year]",
-              id: input.id + "Year",
+              id: input.id + "-year",
               classes: "govuk-input--width-4",
               label: "Year",
               value: input.date.year,
@@ -78,7 +78,7 @@
             </label>
             <input
               class="govuk-input govuk-date-input__input govuk-input--width-2"
-              id="{{input.id}}Hours"
+              id="{{input.id}}-hours"
               name="{{input.name}}[hours]"
               value="{{input.date.hours}}"
               type="number"
@@ -105,7 +105,7 @@
             </label>
             <input
               class="govuk-input govuk-date-input__input govuk-input--width-2"
-              id="{{input.id}}Minutes"
+              id="{{input.id}}-minutes"
               name="{{input.name}}[minutes]"
               value="{{input.date.minutes}}"
               type="number"
