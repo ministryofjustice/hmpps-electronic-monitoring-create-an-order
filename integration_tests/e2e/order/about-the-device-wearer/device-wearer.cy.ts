@@ -254,7 +254,7 @@ context('About the device wearer', () => {
       page.form.dateOfBirthField.setDay('text')
       page.form.saveAndContinueButton.click()
       page.form.dateOfBirthField.shouldHaveValidationMessage(
-        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
       )
     })
   })

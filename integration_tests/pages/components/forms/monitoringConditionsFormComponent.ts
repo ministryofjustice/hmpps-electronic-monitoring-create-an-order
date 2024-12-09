@@ -1,7 +1,7 @@
 import FormCheckboxesComponent from '../formCheckboxesComponent'
 import FormComponent from '../formComponent'
 import FormSelectComponent from '../formSelectComponent'
-import FormDateComponent from '../formDateComponent'
+import FormDateTimeComponent from '../formDateTimeComponent'
 
 export type MonitoringConditionsFormData = {
   orderType?: string
@@ -55,12 +55,12 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
-  get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
+  get startDateField(): FormDateTimeComponent {
+    return new FormDateTimeComponent(this.form, 'startDate')
   }
 
-  get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends (optional)')
+  get endDateField(): FormDateTimeComponent {
+    return new FormDateTimeComponent(this.form, 'endDate')
   }
 
   // FORM HELPERS
