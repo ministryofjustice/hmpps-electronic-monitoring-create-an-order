@@ -309,7 +309,7 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: 'Yes',
+                trail_monitoring: 'No',
                 exclusion_zones: '',
                 exclusion_zones_duration: '90 days',
                 inclusion_zones: '',

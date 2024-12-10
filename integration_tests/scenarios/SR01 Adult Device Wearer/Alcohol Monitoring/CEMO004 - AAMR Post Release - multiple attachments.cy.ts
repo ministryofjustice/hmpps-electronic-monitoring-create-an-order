@@ -181,7 +181,7 @@ context('Scenarios', () => {
             mappa_case_type: null,
             risk_categories: [],
             responsible_adult_required: 'false',
-            parent: 'null',
+            parent: '',
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',

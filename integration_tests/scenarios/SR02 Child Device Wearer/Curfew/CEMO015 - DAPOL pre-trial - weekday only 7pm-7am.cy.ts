@@ -339,8 +339,8 @@ context('Scenarios', () => {
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
-                curfew_start: curfewConditionDetails.startDate.toISOString().split('T')[0],
-                curfew_end: curfewConditionDetails.endDate.toISOString().split('T')[0],
+                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
                 curfew_duration: [
                   {
                     location: 'primary',
