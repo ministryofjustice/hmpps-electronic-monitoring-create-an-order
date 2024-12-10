@@ -89,7 +89,7 @@
               html: tagHtml
             }
           }), taskListItems) %}
-      {% elif task.state == 'CHECK_YOUR_ANSWERS' %}
+      {% elif task.state == 'HIDDEN' %}
         {# do not display #}
       {% else %}
         {% set taskListItems = (taskListItems.push({

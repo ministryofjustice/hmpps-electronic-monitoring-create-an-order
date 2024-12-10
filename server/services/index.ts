@@ -18,6 +18,7 @@ import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import TaskListService from './taskListService'
 import TrailMonitoringService from './trailMonitoringService'
+import VariationService from './variationService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -41,6 +42,7 @@ export const services = () => {
   const orderService = new OrderService(cemoApiClient)
   const taskListService = new TaskListService()
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
+  const variationService = new VariationService(cemoApiClient)
 
   return {
     alcoholMonitoringService,
@@ -62,6 +64,7 @@ export const services = () => {
     orderService,
     taskListService,
     trailMonitoringService,
+    variationService,
     zoneService,
   }
 }
