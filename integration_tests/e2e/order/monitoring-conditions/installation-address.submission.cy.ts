@@ -35,9 +35,7 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: true,
               alcohol: true,
               startDate: null,
-              startTime: null,
               endDate: null,
-              endTime: null,
             },
           },
         })
@@ -151,9 +149,7 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: false,
               alcohol: false,
               startDate: null,
-              startTime: null,
               endDate: null,
-              endTime: null,
             },
           },
         })
@@ -218,9 +214,7 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: false,
               alcohol: true,
               startDate: null,
-              startTime: null,
               endDate: null,
-              endTime: null,
             },
           },
         })
@@ -285,9 +279,7 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: false,
               alcohol: false,
               startDate: null,
-              startTime: null,
               endDate: null,
-              endTime: null,
             },
           },
         })
@@ -352,9 +344,7 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: true,
               alcohol: false,
               startDate: null,
-              startTime: null,
               endDate: null,
-              endTime: null,
             },
           },
         })

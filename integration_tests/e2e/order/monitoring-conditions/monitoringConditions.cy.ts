@@ -14,10 +14,8 @@ const mockSubmittedMonitoringRequirements = {
     trail: true,
     mandatoryAttendance: true,
     alcohol: true,
-    startDate: '2024-10-10T00:00:00.000Z',
-    startTime: '11:00:00',
-    endDate: '2024-10-11T00:00:00.000Z',
-    endTime: '11:00:00',
+    startDate: '2024-10-10T11:00:00.000Z',
+    endDate: '2024-10-11T11:00:00.000Z',
   },
 }
 const mockEmptyMonitoringConditions = {
@@ -31,9 +29,7 @@ const mockEmptyMonitoringConditions = {
     mandatoryAttendance: null,
     alcohol: null,
     startDate: null,
-    startTime: null,
     endDate: null,
-    endTime: null,
   },
 }
 
