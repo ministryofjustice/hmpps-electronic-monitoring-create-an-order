@@ -159,7 +159,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       context('start date', () => {
         it('should show error when date of birth is provided in the wrong format', () => {
           const dateFormatValidationMessage =
-            'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.'
+            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.'
           const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
 
           cy.get('#startDate-startDay').type('text')
@@ -175,7 +175,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       context('end date', () => {
         it('should show error when date of birth is provided in the wrong format', () => {
           const dateFormatValidationMessage =
-            'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.'
+            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.'
           const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
 
           cy.get('#endDate-endDay').type('text')
