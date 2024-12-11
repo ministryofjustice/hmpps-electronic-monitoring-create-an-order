@@ -175,7 +175,6 @@ context('Monitoring conditions main section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          action: 'continue',
           orderType: 'immigration',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
           conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
@@ -212,7 +211,6 @@ context('Monitoring conditions main section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          action: 'continue',
           orderType: 'immigration',
           orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',

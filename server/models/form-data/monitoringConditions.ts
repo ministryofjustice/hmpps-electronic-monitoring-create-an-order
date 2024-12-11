@@ -29,7 +29,6 @@ type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsForm
 
 const MonitoringConditionsFormDataValidator = z
   .object({
-    action: z.string().default('continue'),
     orderType: z.string().min(1, 'Order type is required'),
     monitoringRequired: z.array(z.string()).min(1, 'At least one monitoring type must be selected'),
     orderTypeDescription: z.string(),
