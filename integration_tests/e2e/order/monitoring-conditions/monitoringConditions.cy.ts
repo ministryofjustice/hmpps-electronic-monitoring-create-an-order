@@ -105,7 +105,7 @@ context('Monitoring conditions main section', () => {
       cy.get('#orderType-error').should('contain', 'Order type is required')
       cy.get('#conditionType-error').should('contain', 'Condition type is required')
       cy.get('#monitoringRequired-error').should('contain', 'At least one monitoring type must be selected')
-      cy.get('#startDate-error').should('contain', 'Order start date is required')
+      cy.get('#startDate-error').should('contain', 'Order start date and time are required')
     })
 
     it('after frontend validation passses, should show errors from API response', () => {

@@ -34,7 +34,7 @@ const MonitoringConditionsFormDataValidator = z
     monitoringRequired: z.array(z.string()).min(1, 'At least one monitoring type must be selected'),
     orderTypeDescription: z.string(),
     conditionType: z.string().min(1, 'Condition type is required'),
-    startDate: DateTimeInputModel.pipe(z.string({ message: 'Order start date is required' }).datetime()),
+    startDate: DateTimeInputModel.pipe(z.string({ message: 'Order start date and time are required' }).datetime()),
     endDate: DateTimeInputModel,
   })
   .transform(({ monitoringRequired, orderType, orderTypeDescription, conditionType, ...formData }) => ({

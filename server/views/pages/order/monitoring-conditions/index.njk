@@ -29,7 +29,11 @@
       dateHint: "For example, 21 05 2032",
       timeLabel: "Enter the time for when monitoring starts",
       timeHint: "For example, 14 : 30",
-      errorMessage: errors.startDate,
+      errorMessages: {
+        field: errors.startDate,
+        date: errors.startDate_date,
+        time: errors.startDate_time
+      },
       disabled: not isOrderEditable
     })}}
 
@@ -41,7 +45,11 @@
       dateHint: "For example, 21 05 2032",
       timeLabel: "Enter the time for when monitoring ends (optional)",
       timeHint: "For example, 14 : 30",
-      errorMessage: errors.endDate,
+      errorMessages: {
+        field: errors.endDate,
+        date: errors.endDate_date,
+        time: errors.endDate_time
+      },
       disabled: not isOrderEditable
     })}}
 

@@ -25,8 +25,6 @@ describe('DateInputModel', () => {
       day: '',
       month: '',
       year: '',
-      hours: '',
-      minutes: '',
     })
 
     expect(validationResult.success).toBe(true)
@@ -55,7 +53,7 @@ describe('DateInputModel', () => {
           code: 'custom',
           message:
             'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-          path: ['date'],
+          path: [],
         },
       ])
     },
@@ -106,7 +104,7 @@ describe('DateTimeInputModel', () => {
   ])(
     'Should not parse an invalid date: day = %s, month = %s, year = %s, hours = %s, minutes = %s',
     (day: string, month: string, year: string, hours: string, minutes: string) => {
-      const validationResult = DateInputModel.safeParse({
+      const validationResult = DateTimeInputModel.safeParse({
         day,
         month,
         year,
