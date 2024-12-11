@@ -56,7 +56,7 @@ export default class FormCheckboxesComponent {
   }
 
   get validationMessage() {
-    return this.element.children('.govuk-error-message', { log: false })
+    return this.element.find('.govuk-error-message', { log: false })
   }
 
   shouldHaveValidationMessage(message: string): void {
