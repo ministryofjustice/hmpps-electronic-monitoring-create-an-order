@@ -74,8 +74,8 @@ context('Scenarios', () => {
       monitoringRequired: 'Trail monitoring',
     }
     const trailMonitoringOrder = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 35), // 35 days
+      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
     }
 
     it('Should successfully submit the order to the FMS API', () => {
