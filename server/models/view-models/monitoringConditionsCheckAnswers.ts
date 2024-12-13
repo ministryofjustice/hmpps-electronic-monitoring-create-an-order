@@ -14,6 +14,7 @@ import { Order } from '../Order'
 import {
   createAddressAnswer,
   createDateAnswer,
+  createTimeAnswer,
   createHtmlAnswer,
   createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
@@ -38,7 +39,9 @@ const createMonitoringConditionsAnswers = (order: Order) => {
   const orderTypeDescription = lookup(orderTypeDescriptionMap, order.monitoringConditions.orderTypeDescription)
   return [
     createDateAnswer('Start date', order.monitoringConditions.startDate, uri),
+    createTimeAnswer('Start time', order.monitoringConditions.startDate, uri),
     createDateAnswer('End date', order.monitoringConditions.endDate, uri),
+    createTimeAnswer('End time', order.monitoringConditions.endDate, uri),
     createTextAnswer('Order type', orderType, uri),
     createTextAnswer('Order type description', orderTypeDescription, uri),
     createTextAnswer('Condition type', conditionType, uri),

@@ -96,8 +96,8 @@ context('Scenarios', () => {
         address: 'Primary address',
       }
       const curfewConditionDetails = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 35), // 35 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: ['Primary address', 'Secondary address'],
       }
       const curfewNights = ['SATURDAY', 'SUNDAY']

@@ -14,6 +14,7 @@
   - [Run linter](#run-linter)
   - [Run tests](#run-tests)
     - [Running integration tests](#running-integration-tests)
+    - [Running end-to-end scenarios against the CEMO API](#running-end-to-end-scenarios-against-the-cemo-api)
 - [Change log](#change-log)
 
 
@@ -109,7 +110,7 @@ Instructions for this can be found in the readme of the [Create an EM Order API 
     `npm run start-scenarios` (or `npm run start-scenarios:dev` to run with auto-restart on changes)
 
 3. And then either:
-   - run scenario tests in headless mode with `npm run int-scenarios`
+   - run scenario tests in headless mode with `npm run int-test-scenarios`
    - Or run tests with the cypress UI `npm run int-test-ui`
 
 ## Change log

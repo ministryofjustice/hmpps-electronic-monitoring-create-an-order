@@ -1,0 +1,129 @@
+{% macro dateTimeInput(input) %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+  <div
+    id="{{input.id}}-form"
+    class="govuk-form-group{% if input.errorMessages.field %} govuk-form-group--error{% endif %}"
+  >
+
+    {% if input.errorMessages.field %}
+      <div class="govuk-error-message" id="{{input.id}}-error">
+        {{ input.errorMessages.field.text }}
+      </div>
+    {% endif %}
+
+      <div class="form-date govuk-form-group">
+        {{ govukDateInput({
+          id: input.id,
+          errorMessage: input.errorMessages.date,
+          fieldset: {
+            legend: {
+              text: input.dateLabel,
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: input.dateHint
+          },
+          items: [
+            {
+              name: input.id + "[day]",
+              id: input.id + "-day",
+              classes: "govuk-input--width-2",
+              label: "Day",
+              value: input.date.day,
+              disabled: input.disabled
+            },
+            {
+              name: input.id + "[month]",
+              id: input.id + "-month",
+              classes: "govuk-input--width-2",
+              label: "Month",
+              value: input.date.month,
+              disabled: input.disabled
+            },
+            {
+              name: input.id + "[year]",
+              id: input.id + "-year",
+              classes: "govuk-input--width-4",
+              label: "Year",
+              value: input.date.year,
+              disabled: input.disabled
+            }
+          ]
+        }) }}
+      </div>
+
+
+{# The time input below is much like the timeInput.njk component, with small differences such as input names in the format eg. "StartDate[hours]" for use with the node package "qs". The existing timeInput.njk component could be replaced with this component in a future refactor. #}
+      <div class="form-time govuk-form-group {% if input.errorMessages.time %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.timeLabel }}</legend>
+
+          {% if input.timeHint %}
+            <div class="govuk-hint">
+              {{ input.timeHint }}
+            </div>
+          {% endif %}
+
+          {% if input.errorMessages.time %}
+            <div class="govuk-error-message" id="{{input.id}}-error">
+              {{ input.errorMessages.time.text }}
+            </div>
+          {% endif %}
+
+          <div
+            class="govuk-form-group form-group-hours govuk-date-input__item"
+            style="display: inline"
+          >
+            <label
+              class="govuk-label govuk-date-input__label" 
+              for="{{input.id}}-hours"
+            >
+              Hour
+            </label>
+            <input
+              class="govuk-input govuk-date-input__input govuk-input--width-2"
+              id="{{input.id}}-hours"
+              name="{{input.name}}[hours]"
+              value="{{input.date.hours}}"
+              type="number"
+              pattern="[0-9]{2}"
+              min="0"
+              max="23"
+              {% if input.disabled %}disabled{% endif %}
+            />
+          </div>
+
+          <div
+            class="govuk-date-input__item"
+            style="display: inline"
+          >
+            :
+          </div>
+
+          <div
+            class="govuk-form-group form-group-minutes govuk-date-input__item"
+            style="display: inline"
+          >
+            <label class="govuk-label govuk-date-input__label" for="{{input.id}}-minutes">
+              Minute
+            </label>
+            <input
+              class="govuk-input govuk-date-input__input govuk-input--width-2"
+              id="{{input.id}}-minutes"
+              name="{{input.name}}[minutes]"
+              value="{{input.date.minutes}}"
+              type="number"
+              pattern="[0-9]{2}"
+              min="0"
+              max="59"
+              {% if input.disabled %}disabled{% endif %}
+            />
+          </div>
+        </fieldset>
+      </div>
+
+  </div>
+{% endmacro %}

@@ -6,7 +6,7 @@ export const convertZodErrorToValidationError = (error: ZodError): ValidationRes
   return error.issues.reduce((acc, issue) => {
     acc.push({
       error: issue.message,
-      field: issue.path[0].toString(),
+      field: issue.path.join('_').toString(),
     })
     return acc
   }, [] as ValidationResult)

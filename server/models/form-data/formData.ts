@@ -28,8 +28,7 @@ const DateInputModel = z
     },
     {
       message:
-        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-      path: ['date'],
+        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
     },
   )
   .transform(value => {
@@ -63,6 +62,32 @@ const DateTimeInputModel = z
         return true
       }
 
+      // Inputs should be valid integers
+      return z
+        .object({
+          hours: z
+            .string()
+            .transform(val => (val === '' ? Number.isNaN : val))
+            .pipe(z.coerce.number().int().min(0).max(23)),
+          minutes: z
+            .string()
+            .transform(val => (val === '' ? Number.isNaN : val))
+            .pipe(z.coerce.number().int().min(0).max(59)),
+        })
+        .safeParse(value).success
+    },
+    {
+      message: 'Time is in an incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
+      path: ['time'],
+    },
+  )
+  .refine(
+    value => {
+      // Empty inputs are valid
+      if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
+        return true
+      }
+
       // Non empty inputs should be valid integers
       return z
         .object({
@@ -74,34 +99,8 @@ const DateTimeInputModel = z
     },
     {
       message:
-        'Date is in the incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
       path: ['date'],
-    },
-  )
-  .refine(
-    value => {
-      // Empty inputs are valid
-      if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
-        return true
-      }
-
-      // Inputs should be valid integers
-      return z
-        .object({
-          hours: z
-            .string()
-            .transform(val => (val === '' ? Number.isNaN : val))
-            .pipe(z.coerce.number().int().min(0).max(23)),
-          minutes: z
-            .string()
-            .transform(val => (val === '' ? Number.isNaN : val))
-            .pipe(z.coerce.number().int().min(0).max(23)),
-        })
-        .safeParse(value).success
-    },
-    {
-      message: 'Time is in the incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
-      path: ['time'],
     },
   )
   .transform(value => {

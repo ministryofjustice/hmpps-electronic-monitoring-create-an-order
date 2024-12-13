@@ -8,6 +8,8 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../../../partials/timeInput.njk" import timeInput %}
+{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
 
 {% block formInputs %}
 
@@ -18,83 +20,41 @@
       isPageHeading: false
     }
   }) %}
-    {{ govukDateInput({
-      id: "startDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring starts",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "startDay",
-          classes: "govuk-input--width-2",
-          label: "Day",
-          value: startDate.value.day,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "startMonth",
-          classes: "govuk-input--width-2",
-          label: "Month",
-          value: startDate.value.month,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "startYear",
-          classes: "govuk-input--width-4",
-          label: "Year",
-          value: startDate.value.year,
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: startDate.error
-    }) }}
 
-    {{ govukDateInput({
+    {{dateTimeInput({
+      id: "startDate",
+      name: "startDate",
+      date: startDate,
+      dateLabel: "Enter the date for when monitoring starts",
+      dateHint: "For example, 21 05 2032",
+      timeLabel: "Enter the time for when monitoring starts",
+      timeHint: "For example, 14 : 30",
+      errorMessages: {
+        field: errors.startDate,
+        date: errors.startDate_date,
+        time: errors.startDate_time
+      },
+      disabled: not isOrderEditable
+    })}}
+
+    {{dateTimeInput({
       id: "endDate",
-      fieldset: {
-        legend: {
-          text: "Enter the date for when monitoring ends (optional)",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
+      name: "endDate",
+      date: endDate,
+      dateLabel: "Enter the date for when monitoring ends (optional)",
+      dateHint: "For example, 21 05 2032",
+      timeLabel: "Enter the time for when monitoring ends (optional)",
+      timeHint: "For example, 14 : 30",
+      errorMessages: {
+        field: errors.endDate,
+        date: errors.endDate_date,
+        time: errors.endDate_time
       },
-      hint: {
-        text: "For example, 21 05 2032"
-      },
-      items: [
-        {
-          name: "endDay",
-          label: "Day",
-          classes: "govuk-input--width-2",
-          value: endDate.value.day,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "endMonth",
-          label: "Month",
-          classes: "govuk-input--width-2",
-          value: endDate.value.month,
-          disabled: not isOrderEditable
-        },
-        {
-          name: "endYear",
-          label: "Year",
-          classes: "govuk-input--width-4",
-          value:endDate.value.year,
-          disabled: not isOrderEditable
-        }
-      ],
-      errorMessage: endDate.error
-    }) }}
+      disabled: not isOrderEditable
+    })}}
+
   {% endcall %}
- 
+
   {% call govukFieldset({
     legend: {
       text: "Order information",
@@ -117,8 +77,8 @@
         { text: 'Pre-Trial', value: 'pre_trial' },
         { text: 'Special', value: 'special' }
       ],
-      value: orderType.value,
-      errorMessage: orderType.error,
+      value: orderType,
+      errorMessage: errors.orderType,
       disabled: not isOrderEditable
     }) }}
 
@@ -136,8 +96,8 @@
         { text: 'GPS Acquisitive Crime HDC', value: 'GPS_ACQUISITIVE_CRIME_HDC' },
         { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' }
       ],
-      value: orderTypeDescription.value,
-      errorMessage: orderTypeDescription.error,
+      value: orderTypeDescription,
+      errorMessage: errors.orderTypeDescription,
       disabled: not isOrderEditable
     }) }}
 
@@ -154,8 +114,8 @@
         { text: 'Post-Sentence Supervision Requirement following on from an Adult Custody order', value: 'POST_SENTENCE_SUPERVISION_REQUIREMENT' },
         { text: 'Bail Order', value: 'BAIL_ORDER' }
       ],
-      value: conditionType.value,
-      errorMessage: conditionType.error,
+      value: conditionType,
+      errorMessage: errors.conditionType,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
@@ -184,7 +144,7 @@
           hint: {
             text: "The device wearer must stay inside an address at specific times during the day and night."
           },
-          checked: monitoringRequired.values | select("equalto", "curfew") | length,
+          checked: monitoringRequired | select("equalto", "curfew") | length,
           disabled: not isOrderEditable
         },
         {
@@ -193,7 +153,7 @@
           hint: {
             text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
           },
-          checked: monitoringRequired.values | select("equalto", "exclusionZone") | length,
+          checked: monitoringRequired | select("equalto", "exclusionZone") | length,
           disabled: not isOrderEditable
         },
         {
@@ -202,7 +162,7 @@
           hint: {
             text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
           },
-          checked: monitoringRequired.values | select("equalto", "trail") | length,
+          checked: monitoringRequired | select("equalto", "trail") | length,
           disabled: not isOrderEditable
         },
         {
@@ -211,7 +171,7 @@
           hint: {
             text: "Attendance of the device wearer at appointments is monitored."
           },
-          checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length,
+          checked: monitoringRequired | select("equalto", "mandatoryAttendance") | length,
           disabled: not isOrderEditable
         },
         {
@@ -220,11 +180,11 @@
           hint: {
             text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
           },
-          checked: monitoringRequired.values | select("equalto", "alcohol") | length,
+          checked: monitoringRequired | select("equalto", "alcohol") | length,
           disabled: not isOrderEditable
         }
       ],
-      errorMessage: monitoringRequired.error,
+      errorMessage: errors.monitoringRequired,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}

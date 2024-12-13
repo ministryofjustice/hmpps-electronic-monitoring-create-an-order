@@ -68,6 +68,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
+              text: 'Start time',
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'start time',
+                },
+              ],
+            },
+          },
+          {
+            key: {
               text: 'End date',
             },
             value: {
@@ -79,6 +96,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'end date',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'End time',
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'end time',
                 },
               ],
             },
@@ -274,12 +308,12 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           alcohol: true,
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
           curfew: true,
-          endDate: '2024-11-11T00:00:00Z',
+          endDate: '2024-11-11T01:01:00Z',
           exclusionZone: true,
           mandatoryAttendance: true,
           orderType: 'pre_trial',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
-          startDate: '2024-11-11T00:00:00Z',
+          startDate: '2024-11-11T01:01:00Z',
           trail: true,
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
@@ -364,7 +398,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             zoneType: 'EXCLUSION' as EnforcementZoneTypes,
-            startDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T01:00:00Z',
             endDate: '2024-12-11T00:00:00Z',
             description: 'Description here',
             duration: 'Duration here',
@@ -417,6 +451,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
+              text: 'Start time',
+            },
+            value: {
+              text: '1:01:00 AM',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'start time',
+                },
+              ],
+            },
+          },
+          {
+            key: {
               text: 'End date',
             },
             value: {
@@ -428,6 +479,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'end date',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'End time',
+            },
+            value: {
+              text: '1:01:00 AM',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'end time',
                 },
               ],
             },

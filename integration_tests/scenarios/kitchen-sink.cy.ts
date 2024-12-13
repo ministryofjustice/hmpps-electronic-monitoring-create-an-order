@@ -148,8 +148,8 @@ context('The kitchen sink', () => {
       anotherZone: 'No',
     }
     const alcoholMonitoringOrder = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 35), // 35 days
+      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       monitoringType: 'Alcohol abstinence',
       installLocation: `at Installation Address: ${installationAddressDetails}`,
     }
