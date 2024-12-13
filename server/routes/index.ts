@@ -25,6 +25,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 import paths from '../constants/paths'
+import VariationDetailsController from '../controllers/variation/variationDetailsController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -46,6 +47,7 @@ export default function routes({
   orderSearchService,
   taskListService,
   trailMonitoringService,
+  variationService,
   zoneService,
 }: Services): Router {
   const router = Router()
@@ -111,6 +113,7 @@ export default function routes({
     auditService,
     taskListService,
   )
+  const variationDetailsController = new VariationDetailsController(auditService, variationService, taskListService)
 
   router.param('orderId', populateOrder(orderService))
 
@@ -237,6 +240,12 @@ export default function routes({
   post(paths.ATTACHMENT.DELETE_PHOTO_ID, attachmentsController.deletePhotoId)
   get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
   get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
+
+  /**
+   * VARIATIONS
+   */
+  get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
+  post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
 
   return router
 }

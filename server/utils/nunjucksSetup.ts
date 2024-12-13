@@ -6,6 +6,7 @@ import fs from 'fs'
 import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
+import { variationTypeMap } from '../constants/variation'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -43,4 +44,14 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('checkType', checkType)
   njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
+  njkEnv.addFilter('toOptions', (values: Record<string, string>, disabled: boolean) => {
+    return Object.keys(values).map(key => ({
+      value: key,
+      text: values[key],
+      disabled,
+    }))
+  })
+
+  // Add data to global nunjucks env
+  njkEnv.addGlobal('variationTypes', variationTypeMap)
 }
