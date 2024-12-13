@@ -9,6 +9,7 @@ type Section =
   | 'INSTALLATION_AND_RISK'
   | 'MONITORING_CONDITIONS'
   | 'ATTACHMENTS'
+  | 'VARIATION'
 
 type Page =
   | 'DEVICE_WEARER'
@@ -34,8 +35,9 @@ type Page =
   | 'ALCOHOL_MONITORING'
   | 'CHECK_ANSWERS_MONITORING_CONDITIONS'
   | 'ATTACHMENTS'
+  | 'VARIATION_DETAILS'
 
-type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED' | 'CHECK_YOUR_ANSWERS'
+type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED' | 'DISABLED' | 'HIDDEN'
 
 type Task = {
   section: Section
@@ -65,7 +67,7 @@ const canBeCompleted = (task: Task, formData: FormData): boolean => {
     }
   }
 
-  return ['OPTIONAL', 'REQUIRED', 'CHECK_YOUR_ANSWERS'].includes(task.state)
+  return ['OPTIONAL', 'REQUIRED', 'HIDDEN'].includes(task.state)
 }
 const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === currentPage
 
@@ -78,6 +80,14 @@ export default class TaskListService {
 
   getTasks(order: Order): Array<Task> {
     const tasks: Array<Task> = []
+
+    tasks.push({
+      section: 'VARIATION',
+      name: 'VARIATION_DETAILS',
+      path: paths.VARIATION.VARIATION_DETAILS,
+      state: order.type === 'VARIATION' ? 'REQUIRED' : 'DISABLED',
+      completed: isNotNullOrUndefined(order.variationDetails),
+    })
 
     tasks.push({
       section: 'ABOUT_THE_DEVICE_WEARER',
@@ -112,7 +122,7 @@ export default class TaskListService {
       section: 'ABOUT_THE_DEVICE_WEARER',
       name: 'CHECK_ANSWERS_DEVICE_WEARER',
       path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
-      state: 'CHECK_YOUR_ANSWERS',
+      state: 'HIDDEN',
       completed: true,
     })
 
@@ -183,7 +193,7 @@ export default class TaskListService {
       section: 'CONTACT_INFORMATION',
       name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
       path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
-      state: 'CHECK_YOUR_ANSWERS',
+      state: 'HIDDEN',
       completed: true,
     })
 
@@ -307,7 +317,7 @@ export default class TaskListService {
       section: 'MONITORING_CONDITIONS',
       name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
-      state: 'CHECK_YOUR_ANSWERS',
+      state: 'HIDDEN',
       completed: true,
     })
 
@@ -335,7 +345,7 @@ export default class TaskListService {
   }
 
   getTasksBySection(order: Order) {
-    const tasks = this.getTasks(order)
+    const tasks = this.getTasks(order).filter(({ state }) => state !== 'DISABLED')
 
     return tasks.reduce((acc, task) => {
       if (!acc[task.section]) {

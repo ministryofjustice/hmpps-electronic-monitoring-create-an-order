@@ -51,6 +51,10 @@ const paths = {
     DELETE_LICENCE: '/order/:orderId/attachments/licence/delete',
     DELETE_PHOTO_ID: '/order/:orderId/attachments/photoId/delete',
   },
+
+  VARIATION: {
+    VARIATION_DETAILS: '/order/:orderId/variation/details',
+  },
 }
 
 export default paths

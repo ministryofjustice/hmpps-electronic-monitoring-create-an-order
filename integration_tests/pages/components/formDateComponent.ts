@@ -63,6 +63,12 @@ export default class FormDateComponent {
     this.year.should('be.disabled')
   }
 
+  shouldNotBeDisabled(): void {
+    this.day.should('not.be.disabled')
+    this.month.should('not.be.disabled')
+    this.year.should('not.be.disabled')
+  }
+
   get validationMessage() {
     return this.element.children('.govuk-error-message', { log: false })
   }
