@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-
+import config from '../support/config'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../mockApis/faker'
 
 import Page from '../pages/page'
@@ -29,7 +29,7 @@ import ContactInformationCheckYourAnswersPage from '../pages/order/contact-infor
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 
 context('The kitchen sink', () => {
-  const takeScreenshots = true
+  const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const uploadFile = {

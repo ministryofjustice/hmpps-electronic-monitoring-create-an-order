@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-
+import config from '../support/config'
 import {
   createFakeAdultDeviceWearer,
   createFakeYouthDeviceWearer,
@@ -34,7 +34,7 @@ import ContactInformationCheckYourAnswersPage from '../pages/order/contact-infor
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 
 context('Mandatory fields only', () => {
-  const takeScreenshots = true
+  const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
 
   beforeEach(() => {
