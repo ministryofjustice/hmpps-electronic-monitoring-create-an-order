@@ -139,7 +139,7 @@
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "axe-core": "^4.10.2",
-    "chokidar": "^3.6.0",
+    "chokidar": "^4.0.3",
     "concurrently": "^8.2.2",
     "cypress": "^13.15.2",
     "cypress-axe": "^1.5.0",
