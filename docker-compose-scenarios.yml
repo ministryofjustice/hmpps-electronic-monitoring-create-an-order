@@ -35,8 +35,7 @@ services:
       - SERCO_PASSWORD=serco
       - SERCO_URL=http://cemo-wiremock:8080/fms
 
-      - CP_INTEGRATION_ENABLED=false
-      - FMS_INTEGRATION_ENABLED=true
+      - CEMO_FMS_INTEGRATION_ENABLED=true
 
   cemo-db:
     container_name: cemo-db
