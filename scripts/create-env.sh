@@ -1,3 +1,5 @@
+#!/bin/sh
+
 SECRETS=$(kubectl get secret hmpps-electronic-monitoring-create-an-order -n hmpps-ems-cemo-ui-dev -o json)
 
 echo "API_CLIENT_ID=$(jq -r '.data.API_CLIENT_ID' <<< "${SECRETS}" | base64 -d)" > .env
