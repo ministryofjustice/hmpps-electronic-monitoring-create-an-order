@@ -16,7 +16,7 @@ import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curf
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import AttachmentPage from '../../../pages/order/attachment'
+import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
@@ -168,7 +168,7 @@ context('Scenarios', () => {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
-      const attachmentPage = Page.verifyOnPage(AttachmentPage)
+      const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
       attachmentPage.backToSummaryButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)

@@ -21,6 +21,10 @@ export default abstract class FormComponent {
     return this.form.should('have.attr', 'action', action)
   }
 
+  shouldHaveEncType(encType: string): PageElement {
+    return this.form.should('have.attr', 'encType', encType)
+  }
+
   // ACTIONS
 
   get saveAndContinueButton(): PageElement {

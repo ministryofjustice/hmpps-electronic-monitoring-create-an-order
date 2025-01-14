@@ -20,7 +20,7 @@ import InstallationAddressPage from '../../../pages/order/monitoring-conditions/
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import AttachmentPage from '../../../pages/order/attachment'
+import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
@@ -171,7 +171,7 @@ context('Scenarios', () => {
         const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
         monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
-        const attachmentPage = Page.verifyOnPage(AttachmentPage)
+        const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
         attachmentPage.backToSummaryButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
