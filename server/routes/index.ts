@@ -230,16 +230,11 @@ export default function routes({
    * ATTACHMENTS
    */
   get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
-  get(paths.ATTACHMENT.LICENCE, attachmentsController.licence)
-  post(paths.ATTACHMENT.LICENCE, attachmentsController.uploadLicence)
-  get(paths.ATTACHMENT.PHOTO_ID, attachmentsController.photo)
-  post(paths.ATTACHMENT.PHOTO_ID, attachmentsController.uploadPhoto)
-  get(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.confirmDeleteLicence)
-  get(paths.ATTACHMENT.DELETE_PHOTO_ID, attachmentsController.confirmDeletePhotoId)
-  post(paths.ATTACHMENT.DELETE_LICENCE, attachmentsController.deleteLicence)
-  post(paths.ATTACHMENT.DELETE_PHOTO_ID, attachmentsController.deletePhotoId)
-  get(paths.ATTACHMENT.DOWNLOAD_LICENCE, attachmentsController.downloadLicence)
-  get(paths.ATTACHMENT.DOWNLOAD_PHOTO_ID, attachmentsController.downloadPhoto)
+  get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
+  post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
+  get(paths.ATTACHMENT.DELETE_FILE, attachmentsController.confirmDeleteView)
+  post(paths.ATTACHMENT.DELETE_FILE, attachmentsController.deleteFile)
+  get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
 
   /**
    * VARIATIONS

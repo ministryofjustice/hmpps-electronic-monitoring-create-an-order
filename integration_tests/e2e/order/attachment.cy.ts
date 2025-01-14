@@ -58,10 +58,10 @@ context('Attachment', () => {
       cy.get('.govuk-summary-list__value')
         .contains('photo.jpeg')
         .should('exist')
-        .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/photo.jpeg`)
+        .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/photo.jpeg`)
       cy.get('a:contains("Change")').should('have.length', 2)
       cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).should('exist')
-      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).should('exist')
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photo_Id/delete"]`).should('exist')
     })
 
     it('Should be accessible', () => {
@@ -127,13 +127,15 @@ context('Attachment', () => {
       cy.signIn().visit(`/order/${mockOrderId}/attachments`)
       Page.verifyOnPage(AttachmentPage)
 
-      cy.get(`[href="/order/${mockOrderId}/attachments/photoId"]`).click()
+      cy.get(`[href="/order/${mockOrderId}/attachments/photo_Id"]`).click()
       const uploadPage = Page.verifyOnPage(AttachmentUploadPage)
 
       cy.get('.govuk-file-upload').should('exist')
       uploadPage.uploadFile()
       uploadPage.saveAndContinueButton().click()
       cy.get('#file-to-upload-error').contains('Mock Error').should('exist')
+      cy.get('.govuk-label').contains('Upload the photo id').should('exist')
+      cy.get('.govuk-hint').contains('Upload a copy of the photo id').should('exist')
     })
 
     it('Upload photo successful, return to summary page', () => {
@@ -141,7 +143,7 @@ context('Attachment', () => {
       cy.signIn().visit(`/order/${mockOrderId}/attachments`)
       Page.verifyOnPage(AttachmentPage)
 
-      cy.get(`[href="/order/${mockOrderId}/attachments/photoId"]`).click()
+      cy.get(`[href="/order/${mockOrderId}/attachments/photo_Id"]`).click()
       const uploadPage = Page.verifyOnPage(AttachmentUploadPage)
 
       cy.get('.govuk-file-upload').should('exist')
@@ -154,7 +156,7 @@ context('Attachment', () => {
       cy.signIn().visit(`/order/${mockOrderId}/attachments`)
       Page.verifyOnPage(AttachmentPage)
 
-      cy.get(`[href="/order/${mockOrderId}/attachments/photoId"]`).click()
+      cy.get(`[href="/order/${mockOrderId}/attachments/photo_Id"]`).click()
       const uploadPage = Page.verifyOnPage(AttachmentUploadPage)
       uploadPage.saveAndContinueButton().should('exist')
       cy.get(`[href="/order/${mockOrderId}/attachments"]`).should('exist')
@@ -230,11 +232,11 @@ context('Attachment', () => {
       Page.verifyOnPage(AttachmentPage)
     })
 
-    it('Should redirect summary view and display error after failed to delete photoId', () => {
+    it('Should redirect summary view and display error after failed to delete photo_Id', () => {
       cy.task('stubDeleteAttachment', { httpStatus: 500, id: mockOrderIdWithAttachments, type: 'PHOTO_ID' })
       cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
       Page.verifyOnPage(AttachmentPage)
-      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).click()
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photo_Id/delete"]`).click()
       cy.get('button').contains('Delete').click()
       cy.get('.govuk-error-summary__title').contains('Error deleting attachment').should('exist')
       cy.get('.govuk-error-summary__list').get('li').contains('Mock Error').should('exist')
@@ -245,7 +247,7 @@ context('Attachment', () => {
       cy.task('stubDeleteAttachment', { httpStatus: 200, id: mockOrderIdWithAttachments, type: 'PHOTO_ID' })
       cy.signIn().visit(`/order/${mockOrderIdWithAttachments}/attachments`)
       Page.verifyOnPage(AttachmentPage)
-      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).click()
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photo_Id/delete"]`).click()
       cy.get('button').contains('Delete').click()
 
       cy.task('getStubbedRequest', `/orders/${mockOrderIdWithAttachments}/document-type/PHOTO_ID`).then(requests => {
@@ -284,10 +286,10 @@ context('Attachment', () => {
       cy.get('.govuk-summary-list__value')
         .contains('photo.jpeg')
         .should('exist')
-        .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/photo.jpeg`)
+        .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/photo.jpeg`)
       cy.get('a:contains("Change")').should('have.length', 0)
       cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/licence/delete"]`).should('not.exist')
-      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photoId/delete"]`).should('not.exist')
+      cy.get(`[href="/order/${mockOrderIdWithAttachments}/attachments/photo_Id/delete"]`).should('not.exist')
     })
   })
 })
