@@ -39,6 +39,10 @@ export default class FormFileUploadComponent {
     this.element.should('be.disabled')
   }
 
+  shouldNotBeDisabled(): void {
+    this.element.should('not.be.disabled')
+  }
+
   get validationMessage(): PageElement {
     return this.element.siblings('.govuk-error-message', { log: false })
   }
