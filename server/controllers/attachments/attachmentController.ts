@@ -19,11 +19,10 @@ export default class AttachmentsController {
       fileType: fileType.toUpperCase(),
       file: attachment,
     })
-
     if (error.userMessage != null) {
       res.render(`pages/order/attachments/edit`, {
         orderId,
-        fileType: fileType.toLocaleLowerCase().replace('_', '·'),
+        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
         error: { text: error.userMessage },
       })
     } else {
@@ -44,7 +43,7 @@ export default class AttachmentsController {
     } else {
       res.render(`pages/order/attachments/edit`, {
         orderId: order.id,
-        fileType: fileType.toLocaleLowerCase().replace('_', '·'),
+        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
       })
     }
   }

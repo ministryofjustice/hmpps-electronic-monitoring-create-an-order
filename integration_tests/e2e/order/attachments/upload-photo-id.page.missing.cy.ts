@@ -4,7 +4,7 @@ import Page from '../../../pages/page'
 import { NotFoundErrorPage } from '../../../pages/error'
 
 const mockOrderId = uuidv4()
-const pagePath = '/attachments/photoId'
+const pagePath = '/attachments/photo_Id'
 
 context('Attachments', () => {
   context('Upload photo id', () => {

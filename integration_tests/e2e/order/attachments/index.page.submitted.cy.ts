@@ -48,7 +48,7 @@ context('Attachments', () => {
         page.photoIdTask.deleteAction.should('not.exist')
         page.photoIdTask.downloadAction
           .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderId}/attachments/photoId/photo.jpeg`)
+          .should('have.attr', 'href', `/order/${mockOrderId}/attachments/photo_Id/photo.jpeg`)
 
         // Buttons
         page.saveAndReturnButton.should('not.exist')

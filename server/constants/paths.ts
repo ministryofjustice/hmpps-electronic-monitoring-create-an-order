@@ -44,8 +44,6 @@ const paths = {
 
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
-    LICENCE: '/order/:orderId/attachments/licence',
-    PHOTO_ID: '/order/:orderId/attachments/photoId',
     FILE_VIEW: '/order/:orderId/attachments/:fileType',
     DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType/:filename',
     DELETE_FILE: '/order/:orderId/attachments/:fileType/delete',
