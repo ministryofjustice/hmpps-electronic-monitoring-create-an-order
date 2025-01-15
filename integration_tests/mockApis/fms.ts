@@ -11,7 +11,7 @@ const stubFMSCreateDeviceWearer = (options: CreateStubOptions) =>
   stubFor({
     request: {
       method: 'POST',
-      urlPattern: `/fms/device_wearer/createDW`,
+      urlPattern: `/fms/x_seem_cemo/device_wearer/createDW`,
     },
     response: {
       status: options.httpStatus,
@@ -24,7 +24,7 @@ const stubFMSCreateMonitoringOrder = (options: CreateStubOptions) =>
   stubFor({
     request: {
       method: 'POST',
-      urlPattern: `/fms/monitoring_order/createMO`,
+      urlPattern: `/fms/x_seem_cemo/monitoring_order/createMO`,
     },
     response: {
       status: options.httpStatus,
@@ -136,13 +136,13 @@ type VerifyStubbedFMSRequestParams = {
 const verifyFMSCreateDeviceWearerRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
   stubFMSVerifyRequestReceived({
     ...options,
-    uri: '/fms/device_wearer/createDW',
+    uri: '/fms/x_seem_cemo/device_wearer/createDW',
   })
 
 const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
   stubFMSVerifyRequestReceived({
     ...options,
-    uri: '/fms/monitoring_order/createMO',
+    uri: '/fms/x_seem_cemo/monitoring_order/createMO',
   })
 
 export default {

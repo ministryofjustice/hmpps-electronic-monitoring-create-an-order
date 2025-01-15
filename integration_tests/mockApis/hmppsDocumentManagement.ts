@@ -169,6 +169,7 @@ const verifyDeleteDocumentRequestReceived = (options: VerifyUploadDocumentReques
   })
 
 export default {
+  stubRequestReceived,
   stubUploadDocument,
   stubGetDocument,
   stubDeleteDocument,
