@@ -11,7 +11,7 @@ const stubFMSCreateDeviceWearer = (options: CreateStubOptions) =>
   stubFor({
     request: {
       method: 'POST',
-      urlPattern: `/fms/x_seem_cemo/device_wearer/createDW`,
+      urlPattern: '/fms/x_seem_cemo/device_wearer/createDW',
     },
     response: {
       status: options.httpStatus,
@@ -24,12 +24,48 @@ const stubFMSCreateMonitoringOrder = (options: CreateStubOptions) =>
   stubFor({
     request: {
       method: 'POST',
-      urlPattern: `/fms/x_seem_cemo/monitoring_order/createMO`,
+      urlPattern: '/fms/x_seem_cemo/monitoring_order/createMO',
     },
     response: {
       status: options.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       jsonBody: options?.response || '',
+    },
+  })
+
+type FmsAttachmentResponse = {
+  status: number
+  result: Record<string, string>
+}
+
+type UploadAttachmentStubOptions = {
+  httpStatus: number
+  fileName: string
+  deviceWearerId: string
+  response: FmsAttachmentResponse
+}
+
+const stubFmsUploadAttachment = (options: UploadAttachmentStubOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPath: `/fms/now/v1/attachment_csm/file`,
+      queryParameters: {
+        table_name: {
+          equalTo: 'x_serg2_ems_csm_sr_mo_new',
+        },
+        table_sys_id: {
+          equalTo: options.deviceWearerId,
+        },
+        file_name: {
+          equalTo: options.fileName,
+        }
+      },
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.response || '',
     },
   })
 
@@ -73,12 +109,13 @@ type RequestHeaders = {
 
 type VerifyStubbedRequestParams = {
   uri: string
+  request: Record<string, unknown>
   body?: unknown
   fileContents?: string
 }
 
 const stubFMSVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
-  getMatchingRequests({ urlPath: options.uri })
+  getMatchingRequests({ ...options.request, urlPath: options.uri })
     .then(response => {
       if (response?.body.requests && Array.isArray(response?.body.requests)) {
         return response.body.requests.map((request: Record<string, unknown>) => {
@@ -129,6 +166,7 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
     })
 
 type VerifyStubbedFMSRequestParams = {
+  request: Record<string, unknown>
   body?: unknown
   fileContents?: string
 }
@@ -145,9 +183,18 @@ const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMS
     uri: '/fms/x_seem_cemo/monitoring_order/createMO',
   })
 
+const verifyFmsCreateAttachmentRequestReceived = (options: VerifyStubbedFMSRequestParams) => 
+  stubFMSVerifyRequestReceived({
+    ...options,
+    uri: '/fms/now/v1/attachment_csm/file',
+  })
+
+
 export default {
   stubFMSCreateDeviceWearer,
   stubFMSCreateMonitoringOrder,
+  stubFmsUploadAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,
   verifyFMSCreateMonitoringOrderRequestReceived,
+  verifyFmsCreateAttachmentRequestReceived
 }

@@ -20,9 +20,15 @@ import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-dev
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const photoIdFile = {
+    contents: 'I am a id document',
+    fileName: 'passport.pdf',
+  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -49,6 +55,34 @@ context('Scenarios', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: photoIdFile.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: photoIdFile.fileName,
+        filename: photoIdFile.fileName,
+        fileExtension: photoIdFile.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.task('stubGetDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: photoIdFile.contents,
     })
   })
 
@@ -140,7 +174,14 @@ context('Scenarios', () => {
         const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
         monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
-        const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+        let attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+        attachmentPage.photoIdTask.addAction.click()
+        const uploadPhotoIdPage = Page.verifyOnPage(UploadPhotoIdPage)
+        uploadPhotoIdPage.form.fillInWith({
+          file: photoIdFile,
+        })
+        uploadPhotoIdPage.form.saveAndContinueButton.click()
+        attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
         attachmentPage.backToSummaryButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -304,6 +345,24 @@ context('Scenarios', () => {
             })
             .should('be.true')
         })
+
+        cy.task('verifyFmsCreateAttachmentRequestReceived', {
+          httpStatus: 200,
+          request: {
+            queryParameters: {
+              table_name: {
+                equalTo: 'x_serg2_ems_csm_sr_mo_new',
+              },
+              table_sys_id: {
+                equalTo: fmsCaseId,
+              },
+              file_name: {
+                equalTo: photoIdFile.fileName,
+              }
+            }
+          },
+          body: photoIdFile.contents
+        }).should('be.true')
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
