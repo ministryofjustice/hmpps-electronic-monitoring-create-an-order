@@ -9,7 +9,7 @@ export default class DeletePhotoIdPage extends AppFormPage {
   constructor() {
     super(
       'Are you sure you want to delete this photo id?',
-      paths.ATTACHMENT.DELETE_FILE.replace(':fileType', 'photo_id'),
+      paths.ATTACHMENT.DELETE_FILE.replace(':fileType(photo_Id|licence)', 'photo_id'),
     )
   }
 }
