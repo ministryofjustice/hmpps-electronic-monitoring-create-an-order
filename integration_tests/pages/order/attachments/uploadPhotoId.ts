@@ -7,6 +7,6 @@ export default class UploadPhotoIdPage extends AppFormPage {
   public form = new UploadAttachmentFormComponent()
 
   constructor() {
-    super('Additional documents', paths.ATTACHMENT.PHOTO_ID)
+    super('Additional documents', paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_id'))
   }
 }

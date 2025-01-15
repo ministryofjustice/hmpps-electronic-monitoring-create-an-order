@@ -54,4 +54,12 @@ export default class FormFileUploadComponent {
   shouldNotHaveValidationMessage(): void {
     this.validationMessage.should('not.exist')
   }
+
+  shouldHaveLabel(message: string): void {
+    this.element.siblings('.govuk-label').contains(message).should('exist')
+  }
+
+  shouldHaveHint(message: string): void {
+    this.element.siblings('.govuk-hint').contains(message).should('exist')
+  }
 }

@@ -28,7 +28,8 @@ context('Attachments', () => {
           },
         })
         page.form.saveAndContinueButton.click()
-
+        page.form.uploadField.shouldHaveLabel('Upload the photo id')
+        page.form.uploadField.shouldHaveHint('Upload a copy of the photo id')
         page.form.uploadField.shouldHaveValidationMessage('Mock Error')
       })
     })

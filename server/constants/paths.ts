@@ -44,12 +44,9 @@ const paths = {
 
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
-    LICENCE: '/order/:orderId/attachments/licence',
-    PHOTO_ID: '/order/:orderId/attachments/photoId',
-    DOWNLOAD_LICENCE: '/order/:orderId/attachments/licence/:filename',
-    DOWNLOAD_PHOTO_ID: '/order/:orderId/attachments/photoId/:filename',
-    DELETE_LICENCE: '/order/:orderId/attachments/licence/delete',
-    DELETE_PHOTO_ID: '/order/:orderId/attachments/photoId/delete',
+    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence)',
+    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/:filename',
+    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/delete',
   },
 
   VARIATION: {

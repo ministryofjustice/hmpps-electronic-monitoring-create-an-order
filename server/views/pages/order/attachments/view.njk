@@ -77,12 +77,12 @@
       </dt>
       {% if photoFileName %}
         <dd class="govuk-summary-list__value">
-          <a href="/order/{{order.id}}/attachments/photoId/{{photoFileName}}" class="govuk-link">{{photoFileName}}</a>
+          <a href="/order/{{order.id}}/attachments/photo_Id/{{photoFileName}}" class="govuk-link">{{photoFileName}}</a>
         </dd>
         <dd class="govuk-summary-list__actions">          
             {% if isOrderEditable %}
-              <a class="govuk-link" href="/order/{{order.id}}/attachments/photoId">Change<span class="govuk-visually-hidden"> photo ID</span></a>
-              <a class="govuk-link"  href="/order/{{order.id}}/attachments/photoId/delete">Delete<span class="govuk-visually-hidden"> photo ID</span></a>
+              <a class="govuk-link" href="/order/{{order.id}}/attachments/photo_Id">Change<span class="govuk-visually-hidden"> photo ID</span></a>
+              <a class="govuk-link"  href="/order/{{order.id}}/attachments/photo_Id/delete">Delete<span class="govuk-visually-hidden"> photo ID</span></a>
             {% endif %}
           
         </dd>
@@ -91,7 +91,7 @@
           No photo ID document uploaded
         </dd>
          <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/order/{{order.id}}/attachments/photoId">Add<span class="govuk-visually-hidden"> photo ID</span></a>
+          <a class="govuk-link" href="/order/{{order.id}}/attachments/photo_Id">Add<span class="govuk-visually-hidden"> photo ID</span></a>
         </dd>
       {% endif %}
      

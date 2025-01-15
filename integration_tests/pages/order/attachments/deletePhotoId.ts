@@ -7,6 +7,9 @@ export default class DeletePhotoIdPage extends AppFormPage {
   public form = new DeleteAttachmentFormComponent()
 
   constructor() {
-    super('Are you sure you want to delete this photo id?', paths.ATTACHMENT.DELETE_PHOTO_ID)
+    super(
+      'Are you sure you want to delete this photo id?',
+      paths.ATTACHMENT.DELETE_FILE.replace(':fileType(photo_Id|licence)', 'photo_id'),
+    )
   }
 }

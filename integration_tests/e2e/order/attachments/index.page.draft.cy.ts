@@ -76,13 +76,13 @@ context('Attachments', () => {
         page.photoIdTask.addAction.should('not.exist')
         page.photoIdTask.changeAction
           .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId`)
+          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id`)
         page.photoIdTask.deleteAction
           .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/delete`)
+          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/delete`)
         page.photoIdTask.downloadAction
           .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photoId/photo.jpeg`)
+          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/photo.jpeg`)
 
         // Buttons
         page.saveAndReturnButton.should('exist')
