@@ -109,13 +109,12 @@ type RequestHeaders = {
 
 type VerifyStubbedRequestParams = {
   uri: string
-  request: Record<string, unknown>
   body?: unknown
   fileContents?: string
 }
 
 const stubFMSVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
-  getMatchingRequests({ ...options.request, urlPath: options.uri })
+  getMatchingRequests({ urlPath: options.uri })
     .then(response => {
       if (response?.body.requests && Array.isArray(response?.body.requests)) {
         return response.body.requests.map((request: Record<string, unknown>) => {

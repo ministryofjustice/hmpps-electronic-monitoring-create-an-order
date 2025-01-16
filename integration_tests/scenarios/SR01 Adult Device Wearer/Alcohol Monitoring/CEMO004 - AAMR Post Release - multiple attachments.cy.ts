@@ -21,14 +21,21 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
-import { getMatchingFmsAttachmentRequests } from '../../../support/wiremock'
+import { getFmsAttachmentRequests } from '../../../support/wiremock'
+import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
-  const photoIdFile = {
-    contents: 'I am a id document',
-    fileName: 'passport.pdf',
+  const files = {
+    photoId: {
+      contents: 'I am a id document',
+      fileName: 'passport.jpeg',
+    },
+    licence: {
+      contents: 'I am a licence document',
+      fileName: 'licence.pdf',
+    },
   }
   let orderId: string
 
@@ -60,7 +67,17 @@ context('Scenarios', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: photoIdFile.fileName,
+      fileName: files.photoId.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.licence.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -73,17 +90,33 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: photoIdFile.fileName,
-        filename: photoIdFile.fileName,
-        fileExtension: photoIdFile.fileName.split('.')[1],
+        documentFilename: files.photoId.fileName,
+        filename: files.photoId.fileName,
+        fileExtension: files.photoId.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
     cy.task('stubGetDocument', {
+      scenario: {
+        name: 'CEMO004',
+        requiredState: 'Started',
+        nextState: 'second',
+      },
       id: '(.*)',
       httpStatus: 200,
-      response: photoIdFile.contents,
+      response: files.photoId.contents,
+    })
+
+    cy.task('stubGetDocument', {
+      scenario: {
+        name: 'CEMO004',
+        requiredState: 'second',
+        nextState: 'Started',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: files.licence.contents,
     })
   })
 
@@ -179,9 +212,16 @@ context('Scenarios', () => {
         attachmentPage.photoIdTask.addAction.click()
         const uploadPhotoIdPage = Page.verifyOnPage(UploadPhotoIdPage)
         uploadPhotoIdPage.form.fillInWith({
-          file: photoIdFile,
+          file: files.photoId,
         })
         uploadPhotoIdPage.form.saveAndContinueButton.click()
+        attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+        attachmentPage.licenseTask.addAction.click()
+        const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
+        uploadLicencePage.form.fillInWith({
+          file: files.licence,
+        })
+        uploadLicencePage.form.saveAndContinueButton.click()
         attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
         attachmentPage.backToSummaryButton.click()
 
@@ -347,17 +387,19 @@ context('Scenarios', () => {
             .should('be.true')
         })
 
-        // Verify the photo id attachment was sent to the FMS API
+        // Verify the attachments were sent to the FMS API
         cy.wrap(null)
-          .then(() =>
-            getMatchingFmsAttachmentRequests({
-              sysId: fmsCaseId,
-              fileName: photoIdFile.fileName,
-              fileContent: photoIdFile.contents,
-            }),
-          )
+          .then(() => getFmsAttachmentRequests())
           .then(requests => {
-            expect(requests).to.have.length(1, 'Could not find a correct upload attachment request')
+            expect(requests).to.have.length(2, 'Could not find correct number of attachment requests')
+            expect(requests[0].body).to.eq(
+              JSON.stringify(files.photoId.contents),
+              'Incorrect file content for uploaded photo id',
+            )
+            expect(requests[1].body).to.eq(
+              JSON.stringify(files.licence.contents),
+              'Incorrect file content for uploaded licence',
+            )
           })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

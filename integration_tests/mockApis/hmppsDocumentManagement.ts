@@ -5,6 +5,11 @@ import jsonDiff from 'json-diff'
 import { getMatchingRequests, stubFor } from './wiremock'
 
 type DocumentStubOptions = {
+  scenario?: {
+    name: string
+    requiredState: string
+    nextState: string
+  }
   id: string
   httpStatus: number
   response: Record<string, unknown>
@@ -23,8 +28,25 @@ const stubUploadDocument = (options: DocumentStubOptions) =>
     },
   })
 
-const stubGetDocument = (options: DocumentStubOptions) =>
-  stubFor({
+const stubGetDocument = (options: DocumentStubOptions) => {
+  if (options.scenario) {
+    return stubFor({
+      scenarioName: options.scenario.name,
+      requiredScenarioState: options.scenario.requiredState,
+      newScenarioState: options.scenario.nextState,
+      request: {
+        method: 'GET',
+        urlPattern: `/hmpps/documents/${options.id}/file`,
+      },
+      response: {
+        status: options.httpStatus,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        body: options?.response ? JSON.stringify(options?.response, null, 2) : '',
+      },
+    })
+  }
+
+  return stubFor({
     request: {
       method: 'GET',
       urlPattern: `/hmpps/documents/${options.id}/file`,
@@ -35,6 +57,7 @@ const stubGetDocument = (options: DocumentStubOptions) =>
       body: options?.response ? JSON.stringify(options?.response, null, 2) : '',
     },
   })
+}
 
 const stubDeleteDocument = (options: DocumentStubOptions) =>
   stubFor({
