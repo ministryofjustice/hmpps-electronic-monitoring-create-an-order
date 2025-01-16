@@ -59,7 +59,7 @@ const stubFmsUploadAttachment = (options: UploadAttachmentStubOptions) =>
         },
         file_name: {
           equalTo: options.fileName,
-        }
+        },
       },
     },
     response: {
@@ -183,18 +183,10 @@ const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMS
     uri: '/fms/x_seem_cemo/monitoring_order/createMO',
   })
 
-const verifyFmsCreateAttachmentRequestReceived = (options: VerifyStubbedFMSRequestParams) => 
-  stubFMSVerifyRequestReceived({
-    ...options,
-    uri: '/fms/now/v1/attachment_csm/file',
-  })
-
-
 export default {
   stubFMSCreateDeviceWearer,
   stubFMSCreateMonitoringOrder,
   stubFmsUploadAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,
   verifyFMSCreateMonitoringOrderRequestReceived,
-  verifyFmsCreateAttachmentRequestReceived
 }

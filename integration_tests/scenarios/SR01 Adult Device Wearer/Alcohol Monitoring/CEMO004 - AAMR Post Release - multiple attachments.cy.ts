@@ -21,6 +21,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
+import { getMatchingFmsAttachmentRequests } from '../../../support/wiremock'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -346,23 +347,18 @@ context('Scenarios', () => {
             .should('be.true')
         })
 
-        cy.task('verifyFmsCreateAttachmentRequestReceived', {
-          httpStatus: 200,
-          request: {
-            queryParameters: {
-              table_name: {
-                equalTo: 'x_serg2_ems_csm_sr_mo_new',
-              },
-              table_sys_id: {
-                equalTo: fmsCaseId,
-              },
-              file_name: {
-                equalTo: photoIdFile.fileName,
-              }
-            }
-          },
-          body: photoIdFile.contents
-        }).should('be.true')
+        // Verify the photo id attachment was sent to the FMS API
+        cy.wrap(null)
+          .then(() =>
+            getMatchingFmsAttachmentRequests({
+              sysId: fmsCaseId,
+              fileName: photoIdFile.fileName,
+              fileContent: photoIdFile.contents,
+            }),
+          )
+          .then(requests => {
+            expect(requests).to.have.length(1, 'Could not find a correct upload attachment request')
+          })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
