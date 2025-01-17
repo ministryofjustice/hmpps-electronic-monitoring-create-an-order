@@ -26,6 +26,7 @@ import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-dev
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+// import { getFmsAttachmentRequests } from '../../../support/wiremock'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -62,6 +63,16 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: uploadFile.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
     cy.task('stubUploadDocument', {
       id: '(.*)',
       httpStatus: 200,
@@ -72,6 +83,12 @@ context('Scenarios', () => {
         fileExtension: uploadFile.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
+    })
+
+    cy.task('stubGetDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: uploadFile.contents,
     })
   })
 
@@ -342,6 +359,13 @@ context('Scenarios', () => {
             })
             .should('be.true')
         })
+
+        // Verify the attachments were sent to the FMS API
+        // (disabled: enforcement zone attachments not currently uploaded to FMS)
+        // cy.wrap(null)
+        //   .then(() => getFmsAttachmentRequests())
+        //   .then(requests => requests.map(request => request.body))
+        //   .should('deep.equal', [JSON.stringify(uploadFile.contents)])
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()

@@ -20,9 +20,23 @@ import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-dev
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
+import { getFmsAttachmentRequests } from '../../../support/wiremock'
+import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    photoId: {
+      contents: 'I am a id document',
+      fileName: 'passport.jpeg',
+    },
+    licence: {
+      contents: 'I am a licence document',
+      fileName: 'licence.pdf',
+    },
+  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -49,6 +63,60 @@ context('Scenarios', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.photoId.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.licence.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.photoId.fileName,
+        filename: files.photoId.fileName,
+        fileExtension: files.photoId.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.task('stubGetDocument', {
+      scenario: {
+        name: 'CEMO004',
+        requiredState: 'Started',
+        nextState: 'second',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: files.photoId.contents,
+    })
+
+    cy.task('stubGetDocument', {
+      scenario: {
+        name: 'CEMO004',
+        requiredState: 'second',
+        nextState: 'Started',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: files.licence.contents,
     })
   })
 
@@ -140,7 +208,21 @@ context('Scenarios', () => {
         const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
         monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
-        const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+        let attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+        attachmentPage.photoIdTask.addAction.click()
+        const uploadPhotoIdPage = Page.verifyOnPage(UploadPhotoIdPage)
+        uploadPhotoIdPage.form.fillInWith({
+          file: files.photoId,
+        })
+        uploadPhotoIdPage.form.saveAndContinueButton.click()
+        attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+        attachmentPage.licenseTask.addAction.click()
+        const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
+        uploadLicencePage.form.fillInWith({
+          file: files.licence,
+        })
+        uploadLicencePage.form.saveAndContinueButton.click()
+        attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
         attachmentPage.backToSummaryButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -304,6 +386,12 @@ context('Scenarios', () => {
             })
             .should('be.true')
         })
+
+        // Verify the attachments were sent to the FMS API
+        cy.wrap(null)
+          .then(() => getFmsAttachmentRequests())
+          .then(requests => requests.map(request => request.body))
+          .should('deep.equal', [JSON.stringify(files.photoId.contents), JSON.stringify(files.licence.contents)])
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
