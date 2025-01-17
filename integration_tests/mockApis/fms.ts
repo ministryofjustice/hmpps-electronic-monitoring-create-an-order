@@ -165,7 +165,6 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
     })
 
 type VerifyStubbedFMSRequestParams = {
-  request: Record<string, unknown>
   body?: unknown
   fileContents?: string
 }

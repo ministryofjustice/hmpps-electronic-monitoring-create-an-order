@@ -390,17 +390,8 @@ context('Scenarios', () => {
         // Verify the attachments were sent to the FMS API
         cy.wrap(null)
           .then(() => getFmsAttachmentRequests())
-          .then(requests => {
-            expect(requests).to.have.length(2, 'Could not find correct number of attachment requests')
-            expect(requests[0].body).to.eq(
-              JSON.stringify(files.photoId.contents),
-              'Incorrect file content for uploaded photo id',
-            )
-            expect(requests[1].body).to.eq(
-              JSON.stringify(files.licence.contents),
-              'Incorrect file content for uploaded licence',
-            )
-          })
+          .then(requests => requests.map(request => request.body))
+          .should('deep.equal', [JSON.stringify(files.photoId.contents), JSON.stringify(files.licence.contents)])
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
