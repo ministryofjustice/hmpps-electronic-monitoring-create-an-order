@@ -87,7 +87,7 @@
     "@aws-sdk/client-sqs": "^3.687.0",
     "@ministryofjustice/frontend": "^2.2.5",
     "@types/multer": "^1.4.12",
-    "agentkeepalive": "^4.5.0",
+    "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",
     "bunyan": "^1.8.15",
