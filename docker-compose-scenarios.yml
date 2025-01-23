@@ -1,11 +1,11 @@
 services:
   cemo-api:
     container_name: cemo-api
-    image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest
+    image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest   
     networks:
-      - hmpps_integration
+      - hmpps_integration    
     ports:
-      - '8080:8080'
+      - '8080:8080'   
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:8080/health/ping']
     depends_on:
@@ -14,27 +14,19 @@ services:
         restart: true
       cemo-redis:
         condition: service_started
+    env_file: "fms-integration-test.env"
     environment:
       - SERVER_PORT=8080
-
+      - LOGGING_LEVEL_ROOT=DEBUG
       - DB_SERVER=cemo-db
       - DB_NAME=postgres
       - DB_USER=postgres
       - DB_PASS=postgres
-
       - HMPPS_AUTH_URL=http://cemo-wiremock:8080/auth
       - CLIENT_ID=clientid
       - CLIENT_SECRET=clientsecret
 
       - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/hmpps
-
-      - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth/oauth/token
-      - SERCO_CLIENT_ID=clientid
-      - SERCO_CLIENT_SECRET=clientsecret
-      - SERCO_USERNAME=serco
-      - SERCO_PASSWORD=serco
-      - SERCO_URL=http://cemo-wiremock:8080/fms
-
       - CEMO_FMS_INTEGRATION_ENABLED=true
 
   cemo-db:

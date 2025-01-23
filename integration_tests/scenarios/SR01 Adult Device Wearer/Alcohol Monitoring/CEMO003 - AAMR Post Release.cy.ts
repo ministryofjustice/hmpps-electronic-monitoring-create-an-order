@@ -40,16 +40,6 @@ context('Scenarios', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
     })
-
-    cy.task('stubFMSCreateDeviceWearer', {
-      httpStatus: 200,
-      response: { result: [{ id: fmsCaseId, message: '' }] },
-    })
-
-    cy.task('stubFMSCreateMonitoringOrder', {
-      httpStatus: 200,
-      response: { result: [{ id: uuidv4(), message: '' }] },
-    })
   })
 
   context('Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release)', () => {
@@ -143,67 +133,66 @@ context('Scenarios', () => {
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
-
-      cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        httpStatus: 200,
-        body: {
-          title: '',
-          first_name: deviceWearerDetails.firstNames,
-          middle_name: '',
-          last_name: deviceWearerDetails.lastName,
-          alias: deviceWearerDetails.alias,
-          date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-          adult_child: 'adult',
-          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
-          gender_identity: deviceWearerDetails.genderIdentity
-            .toLocaleLowerCase()
-            .replace("don't know", 'unknown')
-            .replace('self identify', 'self-identify')
-            .replace('non binary', 'non-binary'),
-          disability: [],
-          address_1: primaryAddressDetails.line1,
-          address_2: primaryAddressDetails.line2,
-          address_3: primaryAddressDetails.line3,
-          address_4: 'N/A',
-          address_post_code: primaryAddressDetails.postcode,
-          secondary_address_1: '',
-          secondary_address_2: '',
-          secondary_address_3: '',
-          secondary_address_4: '',
-          secondary_address_post_code: '',
-          phone_number: deviceWearerDetails.contactNumber,
-          risk_serious_harm: '',
-          risk_self_harm: '',
-          risk_details: '',
-          mappa: null,
-          mappa_case_type: null,
-          risk_categories: [],
-          responsible_adult_required: 'false',
-          parent: '',
-          guardian: '',
-          parent_address_1: '',
-          parent_address_2: '',
-          parent_address_3: '',
-          parent_address_4: '',
-          parent_address_post_code: '',
-          parent_phone_number: null,
-          parent_dob: '',
-          pnc_id: deviceWearerDetails.pncId,
-          nomis_id: deviceWearerDetails.nomisId,
-          delius_id: deviceWearerDetails.deliusId,
-          prison_number: deviceWearerDetails.prisonNumber,
-          home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
-          interpreter_required: 'false',
-          language: '',
-        },
-      }).should('be.true')
-
       cy.wrap(orderId).then(() => {
-        return cy
-          .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            httpStatus: 200,
-            body: {
-              case_id: fmsCaseId,
+        cy.task('verifyFmsCreateDeviceWearer', {
+          orderId: orderId,
+          body: {
+            title: '',
+            first_name: deviceWearerDetails.firstNames,
+            middle_name: '',
+            last_name: deviceWearerDetails.lastName,
+            alias: deviceWearerDetails.alias,
+            date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+            adult_child: 'adult',
+            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
+            gender_identity: deviceWearerDetails.genderIdentity
+              .toLocaleLowerCase()
+              .replace("don't know", 'unknown')
+              .replace('self identify', 'self-identify')
+              .replace('non binary', 'non-binary'),
+            disability: [],
+            address_1: primaryAddressDetails.line1,
+            address_2: primaryAddressDetails.line2,
+            address_3: primaryAddressDetails.line3,
+            address_4: 'N/A',
+            address_post_code: primaryAddressDetails.postcode,
+            secondary_address_1: '',
+            secondary_address_2: '',
+            secondary_address_3: '',
+            secondary_address_4: '',
+            secondary_address_post_code: '',
+            phone_number: deviceWearerDetails.contactNumber,
+            risk_serious_harm: '',
+            risk_self_harm: '',
+            risk_details: '',
+            mappa: null,
+            mappa_case_type: null,
+            risk_categories: [],
+            responsible_adult_required: 'false',
+            parent: '',
+            guardian: '',
+            parent_address_1: '',
+            parent_address_2: '',
+            parent_address_3: '',
+            parent_address_4: '',
+            parent_address_post_code: '',
+            parent_phone_number: null,
+            parent_dob: '',
+            pnc_id: deviceWearerDetails.pncId,
+            nomis_id: deviceWearerDetails.nomisId,
+            delius_id: deviceWearerDetails.deliusId,
+            prison_number: deviceWearerDetails.prisonNumber,
+            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            interpreter_required: 'false',
+            language: '',
+          },
+        }).should('be.true')
+    })
+
+    cy.wrap(orderId).then(() => {
+      cy.task('verifyFmsCreateOrder', {
+            orderId: orderId,
+            body: {              
               allday_lockdown: '',
               atv_allowance: '',
               condition_type: 'Bail Order',

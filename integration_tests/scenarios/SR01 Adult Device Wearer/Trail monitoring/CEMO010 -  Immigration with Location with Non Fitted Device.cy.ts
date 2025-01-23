@@ -142,8 +142,9 @@ context('Scenarios', () => {
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
-      cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        httpStatus: 200,
+      cy.wrap(orderId).then(() => {
+        cy.task('verifyFmsCreateDeviceWearer', {
+          orderId: orderId,
         body: {
           title: '',
           first_name: deviceWearerDetails.firstNames,
@@ -195,11 +196,10 @@ context('Scenarios', () => {
           language: '',
         },
       }).should('be.true')
-
+    })
       cy.wrap(orderId).then(() => {
-        return cy
-          .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            httpStatus: 200,
+        cy.task('verifyFmsCreateOrder', {
+              orderId: orderId,
             body: {
               case_id: fmsCaseId,
               allday_lockdown: '',

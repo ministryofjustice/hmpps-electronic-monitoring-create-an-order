@@ -103,88 +103,10 @@ const toMultipartData = (contents: string, boundary: string) => {
   return files
 }
 
-type RequestHeaders = {
-  ['Content-Type']: string
-}
 
-type VerifyStubbedRequestParams = {
-  uri: string
-  body?: unknown
-  fileContents?: string
-}
-
-const stubFMSVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
-  getMatchingRequests({ urlPath: options.uri })
-    .then(response => {
-      if (response?.body.requests && Array.isArray(response?.body.requests)) {
-        return response.body.requests.map((request: Record<string, unknown>) => {
-          if (options.fileContents) {
-            const boundary = (request.headers as RequestHeaders)['Content-Type' as keyof RequestHeaders].split(
-              'boundary=',
-            )[1]
-            const content = toMultipartData(request.body as string, boundary)
-            return content
-          }
-
-          try {
-            return JSON.parse(request.body as string)
-          } catch {
-            return request.body
-          }
-        })
-      }
-      return []
-    })
-    .then(requests => {
-      if (requests.length === 0) {
-        throw new Error(`No stub requests were found for the url <${options.uri}>`)
-      }
-
-      if (requests.length > 1) {
-        throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
-      }
-
-      const expected = options.body || options.fileContents
-      const diffResult = jsonDiff.diff(expected, requests[0], { sort: true })
-
-      const message = `
-Expected:
-${JSON.stringify(expected, null, 2)}
-
-But received:
-${JSON.stringify(requests[0], null, 2)}
-
-Difference:
-${jsonDiff.diffString(expected, requests[0], { color: false })}
-
-`
-
-      assert.strictEqual(undefined, diffResult, message)
-
-      return true
-    })
-
-type VerifyStubbedFMSRequestParams = {
-  body?: unknown
-  fileContents?: string
-}
-
-const verifyFMSCreateDeviceWearerRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
-  stubFMSVerifyRequestReceived({
-    ...options,
-    uri: '/fms/x_seem_cemo/device_wearer/createDW',
-  })
-
-const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
-  stubFMSVerifyRequestReceived({
-    ...options,
-    uri: '/fms/x_seem_cemo/monitoring_order/createMO',
-  })
 
 export default {
   stubFMSCreateDeviceWearer,
   stubFMSCreateMonitoringOrder,
   stubFmsUploadAttachment,
-  verifyFMSCreateDeviceWearerRequestReceived,
-  verifyFMSCreateMonitoringOrderRequestReceived,
 }

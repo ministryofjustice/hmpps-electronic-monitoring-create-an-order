@@ -530,7 +530,8 @@ const emptyNextTable = async (client: PostgresqlClient): Promise<boolean> => {
   return true
 }
 
-const resetDB = async () => {
+
+const resetDB = async () => {  
   const client = new PostgresqlClient({
     user: 'postgres',
     password: 'postgres',
@@ -554,6 +555,103 @@ const resetDB = async () => {
 
   return true
 }
+type VerifyFmsRequestParams = {
+  orderId:string,
+  body?: unknown
+}
+
+const verifyFmsCreateDeviceWearer = async(options: VerifyFmsRequestParams) =>{
+  const client = new PostgresqlClient({
+    user: 'postgres',
+    password: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    database: 'postgres',
+  })
+  await client.connect()
+
+  
+    const { rows }= await client.query(`Select * FROM fms_submission_result where order_id = '${options.orderId}'`)
+    
+    const fmsOrderQueryResult = await client.query(`Select * FROM fms_device_wearer_submission_result where id = '${rows[0].fms_device_wearer_result_id}'`)
+    if(fmsOrderQueryResult.rowCount==1){
+      if(fmsOrderQueryResult.rows[0].status!="SUCCESS"){
+        throw new Error(`Request for create FMS device wearer not successful`)
+      }
+
+      const expected = options.body
+      const storedRequest = JSON.parse(fmsOrderQueryResult.rows[0].payload)
+      const diffResult = jsonDiff.diff(expected, storedRequest, { sort: true })
+     
+      const message = `
+        Expected:
+        ${JSON.stringify(expected, null, 2)}
+
+        But received:
+        ${JSON.stringify(storedRequest, null, 2)}
+
+        Difference:
+        ${jsonDiff.diffString(expected, storedRequest, { color: false })}
+        `
+      
+       assert.strictEqual(undefined, diffResult, message)     
+       await client.end()
+
+       return true
+    }  
+    await client.end()
+
+    throw new Error(`Request to FMS not stored in DB`)
+}
+
+const verifyFmsCreateOrder = async(options: VerifyFmsRequestParams) =>{
+  const client = new PostgresqlClient({
+    user: 'postgres',
+    password: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    database: 'postgres',
+  })
+  await client.connect()
+
+  
+    const { rows }= await client.query(`Select * FROM fms_submission_result where order_id = '${options.orderId}'`)
+    
+    const fmsOrderQueryResult = await client.query(`Select * FROM fms_monitoring_order_submission_result where id = '${rows[0].fms_monitoring_order_result_id}'`)
+    if(fmsOrderQueryResult.rowCount==1){
+      if(fmsOrderQueryResult.rows[0].status!="SUCCESS"){
+        throw new Error(`Request for create FMS monitoring order not successful`)
+      }
+      
+      const expected = options.body
+     
+      const storedRequest = JSON.parse(fmsOrderQueryResult.rows[0].payload)
+      expected["case_id"] = storedRequest.case_id
+      const diffResult = jsonDiff.diff(expected, storedRequest, { sort: true })
+     
+      const message = `
+        Expected:
+        ${JSON.stringify(expected, null, 2)}
+
+        But received:
+        ${JSON.stringify(storedRequest, null, 2)}
+
+        Difference:
+        ${jsonDiff.diffString(expected, storedRequest, { color: false })}
+        `
+      
+       assert.strictEqual(undefined, diffResult, message)     
+       await client.end()
+
+       return true
+    }  
+    await client.end()
+
+    throw new Error(`Request to FMS not stored in DB`)
+}
+
+
+
 
 export default {
   stubCemoCreateOrder: createOrder,
@@ -568,8 +666,9 @@ export default {
   stubCemoPutResponsibleAdult: putResponsibleAdult,
   stubUploadAttachment: uploadAttachment,
   stubDeleteAttachment: deleteAttachment,
+  verifyFmsCreateDeviceWearer:verifyFmsCreateDeviceWearer,
+  verifyFmsCreateOrder:verifyFmsCreateOrder,
   getStubbedRequest,
-  stubCemoVerifyRequestReceived,
-
+  stubCemoVerifyRequestReceived, 
   resetDB,
 }
