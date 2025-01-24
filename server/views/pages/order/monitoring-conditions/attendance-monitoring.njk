@@ -19,7 +19,7 @@
     namePrefix: "startDate",
     fieldset: {
       legend: {
-        text: "Enter the date when the monitoring starts",
+        text: "What is the date the mandatory attendance monitoring starts?",
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
@@ -55,7 +55,7 @@
     namePrefix: "endDate",
     fieldset: {
       legend: {
-        text: "Enter the date when the monitoring ends (optional)",
+        text: "What is the date the mandatory attendance monitoring ends? (optional)",
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
@@ -90,10 +90,11 @@
 
   {{ govukInput({
       label: {
-        text: "What is the appointment for?"
+        text: "What is the appointment for?",
+        classes: "govuk-label--s"
       },
       hint: {
-        text: "For example education or medical appointment"
+        text: "For example, education or medical appointment"
       },
       classes: "govuk-!-width-one-half",
       id: "purpose",
@@ -105,7 +106,8 @@
 
   {{ govukInput({
       label: {
-        text: "Appointment day"
+        text: "On what day or days is the appointment?",
+        classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
       id: "appointmentDay",
@@ -116,7 +118,7 @@
     }) }}
 
   {{ timeInput({
-      label: "Appointment start time",
+      label: "What time does the appointment start",
       hint: "For example 09:45 or 15:30 (24 hours)",
       id: "startTime",
       name: "startTime",
@@ -126,7 +128,7 @@
     }) }}
 
   {{ timeInput({
-      label: "Appointment end time",
+      label: "What time does the appointment end?",
       hint: "For example 09:45 or 15:30 (24 hours)",
       id: "endTime",
       name: "endTime",
@@ -136,7 +138,7 @@
     }) }}
 
   {{ addressInput({
-      label: "Appointment location",
+      label: "What is the address where the appointment will take place?",
       id: "address",
       name: "address",
       value: address.value,
@@ -150,7 +152,7 @@
       classes: "govuk-radios--inline",
       fieldset: {
         legend: {
-          text: "Would you like to add another appointment?",
+          text: "Are there any other appointments the device wearer needs to attend?",
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }

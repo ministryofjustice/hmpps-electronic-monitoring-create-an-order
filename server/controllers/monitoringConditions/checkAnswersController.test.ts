@@ -411,6 +411,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           startDate: '2024-11-11T00:00:00Z',
           endDate: '2024-11-11T00:00:00Z',
         },
+        mandatoryAttendanceConditions: [
+          {
+            // TODO REPLACE TEST DATA
+            id: 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94',
+            startDate: '2025-01-01',
+            endDate: '2025-01-11',
+            purpose: 'test purpose',
+            appointmentDay: 'test day',
+            startTime: '01:11:00',
+            endTime: '11:11:00',
+            addressLine1: 'add 1',
+            addressLine2: 'add 2',
+            addressLine3: 'add 3',
+            addressLine4: '',
+            postcode: 'PC13DE',
+          },
+        ],
         monitoringConditionsAlcohol: {
           endDate: '2024-11-11T00:00:00Z',
           installationLocation: 'PRIMARY',
@@ -454,7 +471,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Start time',
             },
             value: {
-              text: '1:01:00 AM',
+              text: '01:01:00',
             },
             actions: {
               items: [
@@ -488,7 +505,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'End time',
             },
             value: {
-              text: '1:01:00 AM',
+              text: '01:01:00',
             },
             actions: {
               items: [
@@ -868,7 +885,180 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        attendance: [],
+        attendance: [
+          [
+            {
+              key: {
+                text: 'Date when mandatory attendance monitoring starts',
+              },
+              value: {
+                text: '01/01/2025',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'date when mandatory attendance monitoring starts',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Date when mandatory attendance monitoring ends',
+              },
+              value: {
+                text: '11/01/2025',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'date when mandatory attendance monitoring ends',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'What is the appointment for?',
+              },
+              value: {
+                text: 'test purpose',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'what is the appointment for?',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'What day or days is the appointment?',
+              },
+              value: {
+                text: 'test day',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'what day or days is the appointment?',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Time of the appointment',
+              },
+              value: {
+                text: '01:11:00 - 11:11:00',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'time of the appointment',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Address where the appointment will take place',
+              },
+              value: {
+                text: 'add 1',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'address where the appointment will take place',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Address line 2',
+              },
+              value: {
+                text: 'add 2',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'address line 2',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Town or City',
+              },
+              value: {
+                text: 'add 3',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'town or city',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'County',
+              },
+              value: {
+                text: '',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'county',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Postcode',
+              },
+              value: {
+                text: 'PC13DE',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'postcode',
+                  },
+                ],
+              },
+            },
+          ],
+        ],
         alcohol: [
           {
             key: {

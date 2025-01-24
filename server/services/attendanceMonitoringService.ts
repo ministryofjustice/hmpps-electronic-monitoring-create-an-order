@@ -6,31 +6,28 @@ import { SanitisedError } from '../sanitisedError'
 
 type AttendanceMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
-  data: AttendanceMonitoring
+  addressLine1: string | null
+  addressLine2: string | null
+  addressLine3: string | null
+  addressLine4: string | null
+  postcode: string | null
+  appointmentDay: string | null
+  endDate: string | null
+  endTime: string | null
+  purpose: string | null
+  startDate: string | null
+  startTime: string | null
+  id?: string | undefined
 }
 
 export default class AttendanceMonitoringService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: AttendanceMonitoringInput): Promise<AttendanceMonitoring | ValidationResult> {
-    return Promise.resolve({
-      addressLine1: '',
-      addressLine2: '',
-      addressLine3: '',
-      addressLine4: '',
-      postcode: '',
-      appointmentDay: '',
-      endDate: '',
-      endTime: '',
-      purpose: '',
-      startDate: '',
-      startTime: '',
-      id: '',
-    })
     try {
       const result = await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/monitoring-conditions-attendance`,
-        data: input.data,
+        path: `/api/orders/${input.orderId}/mandatory-attendance`,
+        data: input,
         token: input.accessToken,
       })
       return AttendanceMonitoringModel.parse(result)
