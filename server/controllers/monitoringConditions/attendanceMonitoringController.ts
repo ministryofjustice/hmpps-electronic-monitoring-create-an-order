@@ -155,7 +155,7 @@ export default class AttendanceMonitoringController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { conditionId } = req.params
-    const { monitoringConditionsAttendance } = req.order!
+    const { mandatoryAttendanceConditions: monitoringConditionsAttendance } = req.order!
     const condition = monitoringConditionsAttendance?.find(c => c.id === conditionId)
     if (!condition) {
       res.send(404)
@@ -170,10 +170,11 @@ export default class AttendanceMonitoringController {
     const { orderId } = req.params
     const formData = attendanceMonitoringFormDataModel.parse(req.body)
 
+    const record = this.createApiModelFromFormData(formData)
     const updateResult = await this.attendanceMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
-      data: this.createApiModelFromFormData(formData),
+      ...record,
     })
 
     if (isValidationResult(updateResult)) {

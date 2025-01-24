@@ -906,7 +906,7 @@ describe('TaskListService', () => {
         monitoringConditions: createMonitoringConditions({ isValid: true }),
         monitoringConditionsTrail: createMonitoringConditionsTrail(),
         monitoringConditionsAlcohol: createMonitoringConditionsAlcohol(),
-        monitoringConditionsAttendance: [createMonitoringConditionsAttendance()],
+        mandatoryAttendanceConditions: [createMonitoringConditionsAttendance()],
         curfewReleaseDateConditions: createCurfewReleaseDateConditions(),
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),

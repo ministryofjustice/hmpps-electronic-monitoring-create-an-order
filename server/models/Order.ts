@@ -32,7 +32,7 @@ const OrderModel = z.object({
   installationAndRisk: InstallationAndRiskModel.nullable(),
   monitoringConditions: MonitoringConditionsModel,
   monitoringConditionsTrail: TrailMonitoringModel.nullable(),
-  monitoringConditionsAttendance: z.array(AttendanceMonitoringModel).optional(),
+  mandatoryAttendanceConditions: z.array(AttendanceMonitoringModel),
   monitoringConditionsAlcohol: AlcoholMonitoringModel.nullable().optional(),
   curfewReleaseDateConditions: CurfewReleaseDateModel.nullable().optional(),
   curfewConditions: CurfewConditionsModel.nullable().optional(),
