@@ -30,8 +30,8 @@ context('Scenarios', () => {
   const hmppsDocumentId: string = uuidv4()
   const files = {
     photoId: {
-      contents: 'I am a id document',
-      fileName: 'passport.jpeg',
+      contents: 'cypress/fixtures/profile.jpeg',
+      fileName: 'profile.jpeg',
     },
   }
   let orderId: string
@@ -84,11 +84,14 @@ context('Scenarios', () => {
       },
     })
 
-    cy.task('stubGetDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: files.photoId.contents,
-    })
+    cy.readFile(files.photoId.contents,'base64').then((content)=>{
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+       contextType:"image/jpeg",
+       fileBase64Body: content,
+      })
+     })
   })
 
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus document attachment', () => {

@@ -623,7 +623,7 @@ const verifyFmsCreateOrder = async(options: VerifyFmsRequestParams) =>{
         throw new Error(`Request for create FMS monitoring order not successful`)
       }
       
-      const expected = options.body
+      const expected:any  = options.body
      
       const storedRequest = JSON.parse(fmsOrderQueryResult.rows[0].payload)
       expected["case_id"] = storedRequest.case_id

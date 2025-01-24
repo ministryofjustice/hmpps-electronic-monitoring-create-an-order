@@ -9,9 +9,11 @@ type DocumentStubOptions = {
     name: string
     requiredState: string
     nextState: string
-  }
+  },
+  contentType:string
   id: string
   httpStatus: number
+  fileBase64Body: string
   response: Record<string, unknown>
 }
 
@@ -40,8 +42,8 @@ const stubGetDocument = (options: DocumentStubOptions) => {
       },
       response: {
         status: options.httpStatus,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        body: options?.response ? JSON.stringify(options?.response, null, 2) : '',
+        headers: { 'Content-Type': options.contentType },
+        base64Body: options.fileBase64Body
       },
     })
   }
@@ -51,10 +53,10 @@ const stubGetDocument = (options: DocumentStubOptions) => {
       method: 'GET',
       urlPattern: `/hmpps/documents/${options.id}/file`,
     },
-    response: {
+    response: {     
       status: options.httpStatus,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      body: options?.response ? JSON.stringify(options?.response, null, 2) : '',
+      headers: { 'Content-Type': options.contentType },
+      base64Body: options.fileBase64Body
     },
   })
 }

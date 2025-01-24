@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 import { PageElement } from '../page'
+import { string } from 'zod'
 
 export type UploadFileOptions = {
   fileName: string
@@ -24,8 +25,10 @@ export default class FormFileUploadComponent {
   }
 
   uploadFile(options: UploadFileOptions): void {
+    
     this.element.selectFile({
       contents: Cypress.Buffer.from(options.contents),
+      //contents: cy.readFile(options.contents, null),
       fileName: options.fileName,
       lastModified: Date.now(),
     })

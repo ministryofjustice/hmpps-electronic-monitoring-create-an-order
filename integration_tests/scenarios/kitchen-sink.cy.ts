@@ -33,8 +33,8 @@ context('The kitchen sink', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const uploadFile = {
-    contents: 'I am a map of London football grounds',
-    fileName: 'london-football-grounds.pdf',
+    contents: 'cypress/fixtures/test.pdf',
+      fileName: 'licence.pdf',
   }
 
   beforeEach(() => {
@@ -78,11 +78,14 @@ context('The kitchen sink', () => {
       },
     })
 
-    cy.task('stubGetDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: uploadFile.contents,
-    })
+    cy.readFile(uploadFile.contents,'base64').then((content)=>{
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+       contextType:"application/pdf",
+       fileBase64Body: content,
+      })
+     })
   })
 
   context('Fill in everything "including the kitchen sink" and screenshot', () => {

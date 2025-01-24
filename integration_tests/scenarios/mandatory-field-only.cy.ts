@@ -68,7 +68,7 @@ context('Mandatory fields only', () => {
       sex: fullDeviceWearerDetails.sex,
       genderIdentity: fullDeviceWearerDetails.genderIdentity,
       interpreterRequired: false,
-      contactNumber: undefined,
+      contactNumber: "07403825855",
       hasFixedAddress: 'Yes',
     }
     const identityNumbers = {
@@ -166,7 +166,7 @@ context('Mandatory fields only', () => {
       contactDetailsPage.form.fillInWith({ contactNumber: '0123456789' })
       contactDetailsPage.form.saveAndContinueButton.click()
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage - validation', { overwrite: true })
-      contactDetailsPage.form.fillInWith({ contactNumber: '{selectall}{del}' })
+      contactDetailsPage.form.fillInWith({ contactNumber: '{selectall}{del}0113 496 0704' })
       contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage', { overwrite: true })
       contactDetailsPage.form.saveAndContinueButton.click()
@@ -303,7 +303,7 @@ context('Mandatory fields only', () => {
       sex: fullDeviceWearerDetails.sex,
       genderIdentity: fullDeviceWearerDetails.genderIdentity,
       interpreterRequired: false,
-      contactNumber: undefined,
+      contactNumber: "07403825855",
       hasFixedAddress: 'Yes',
     }
     const identityNumbers = {
@@ -415,7 +415,7 @@ context('Mandatory fields only', () => {
       contactDetailsPage.form.fillInWith({ contactNumber: '0123456789' })
       contactDetailsPage.form.saveAndContinueButton.click()
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage - validation', { overwrite: true })
-      contactDetailsPage.form.fillInWith({ contactNumber: '{selectall}{del}' })
+      contactDetailsPage.form.fillInWith({ contactNumber: '{selectall}{del}0113 496 0704' })
       contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage', { overwrite: true })
       contactDetailsPage.form.saveAndContinueButton.click()
