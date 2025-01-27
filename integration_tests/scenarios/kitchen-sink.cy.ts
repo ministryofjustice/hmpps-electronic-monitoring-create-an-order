@@ -56,6 +56,16 @@ context('The kitchen sink', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: uploadFile.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
     cy.task('stubUploadDocument', {
       id: '(.*)',
       httpStatus: 200,
@@ -66,6 +76,12 @@ context('The kitchen sink', () => {
         fileExtension: uploadFile.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
+    })
+
+    cy.task('stubGetDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: uploadFile.contents,
     })
   })
 
