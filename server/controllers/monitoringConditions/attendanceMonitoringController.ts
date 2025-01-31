@@ -166,7 +166,7 @@ export default class AttendanceMonitoringController {
     res.render('pages/order/monitoring-conditions/attendance-monitoring', viewModel)
   }
 
-  create: RequestHandler = async (req: Request, res: Response) => {
+  update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = attendanceMonitoringFormDataModel.parse(req.body)
 
@@ -191,11 +191,5 @@ export default class AttendanceMonitoringController {
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
-  }
-
-  update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
-
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 }

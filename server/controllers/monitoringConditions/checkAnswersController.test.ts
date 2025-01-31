@@ -284,6 +284,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed', async () => {
       // Given
+      const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94';
       const order = getMockOrder({
         addresses: [
           createAddress({
@@ -414,7 +415,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         mandatoryAttendanceConditions: [
           {
             // TODO REPLACE TEST DATA
-            id: 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94',
+            id: conditionId,
             startDate: '2025-01-01',
             endDate: '2025-01-11',
             purpose: 'test purpose',
@@ -897,7 +898,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'date when mandatory attendance monitoring starts',
                   },
@@ -914,7 +915,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'date when mandatory attendance monitoring ends',
                   },
@@ -931,7 +932,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'what is the appointment for?',
                   },
@@ -948,7 +949,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'what day or days is the appointment?',
                   },
@@ -965,7 +966,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'time of the appointment',
                   },
@@ -982,7 +983,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'address where the appointment will take place',
                   },
@@ -999,7 +1000,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'address line 2',
                   },
@@ -1016,7 +1017,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'town or city',
                   },
@@ -1033,7 +1034,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'county',
                   },
@@ -1050,7 +1051,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(`:orderId`, order.id),
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, conditionId),
                     text: 'Change',
                     visuallyHiddenText: 'postcode',
                   },

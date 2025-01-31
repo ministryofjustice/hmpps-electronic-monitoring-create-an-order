@@ -199,7 +199,7 @@ export default function routes({
   // Attendance monitoring page
   get(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.new)
   get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.view)
-  post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.create)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.update)
 
   // Alcohol monitoring page
