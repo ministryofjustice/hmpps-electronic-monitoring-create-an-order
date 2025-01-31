@@ -296,7 +296,7 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: 'community',
+              order_type: 'Community',
               order_type_description: 'DAPOL HDC',
               order_type_detail: '',
               order_variation_date: '',

@@ -6,7 +6,7 @@ import InstallationAddressPage from '../../../pages/order/monitoring-conditions/
 
 const mockSubmittedMonitoringRequirements = {
   monitoringConditions: {
-    orderType: 'immigration',
+    orderType: 'IMMIGRATION',
     orderTypeDescription: 'DAPOL',
     conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
     curfew: true,
@@ -35,7 +35,7 @@ const mockEmptyMonitoringConditions = {
 }
 
 const validFormData = {
-  orderType: 'immigration',
+  orderType: 'IMMIGRATION',
   orderTypeDescription: 'GPS Acquisitive Crime HDC',
   monitoringRequired: [
     'Curfew with electronic monitoring',
@@ -86,7 +86,7 @@ context('Monitoring conditions main section', () => {
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       page.form.monitoringRequiredField.shouldBeDisabled()
-      page.form.orderTypeField.shouldHaveValue('immigration')
+      page.form.orderTypeField.shouldHaveValue('IMMIGRATION')
       page.form.orderTypeField.shouldBeDisabled()
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
@@ -162,7 +162,7 @@ context('Monitoring conditions main section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          orderType: 'immigration',
+          orderType: 'IMMIGRATION',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
           conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
@@ -187,7 +187,7 @@ context('Monitoring conditions main section', () => {
       const page = Page.verifyOnPage(MonitoringConditionsPage)
 
       const limitedValidFormData = {
-        orderType: 'immigration',
+        orderType: 'IMMIGRATION',
         orderTypeDescription: 'DAPOL',
         monitoringRequired: ['Alcohol monitoring'],
         conditionType: 'Requirement of a Community Order',
@@ -199,7 +199,7 @@ context('Monitoring conditions main section', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          orderType: 'immigration',
+          orderType: 'IMMIGRATION',
           orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
           curfew: false,
