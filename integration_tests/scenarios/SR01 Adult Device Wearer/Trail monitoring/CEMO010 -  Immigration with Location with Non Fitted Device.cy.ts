@@ -239,7 +239,7 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: 'immigration',
+              order_type: 'Immigration',
               order_type_description: 'DAPOL',
               order_type_detail: '',
               order_variation_date: '',

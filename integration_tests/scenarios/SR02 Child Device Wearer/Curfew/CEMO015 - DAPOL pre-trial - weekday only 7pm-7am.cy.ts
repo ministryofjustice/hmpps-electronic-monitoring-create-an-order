@@ -306,7 +306,7 @@ context('Scenarios', () => {
                 order_id: orderId,
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: 'pre_trial',
+                order_type: 'Pre-Trial',
                 order_type_description: 'DAPOL',
                 order_type_detail: '',
                 order_variation_date: '',
