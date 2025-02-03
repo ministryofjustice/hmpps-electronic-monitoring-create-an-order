@@ -33,6 +33,19 @@ const stubFMSCreateMonitoringOrder = (options: CreateStubOptions) =>
     },
   })
 
+const stubFMSUpdateMonitoringOrder = (options: CreateStubOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/fms/x_seem_cemo/monitoring_order/updateMO',
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options?.response || '',
+    },
+  })
+
 type FmsAttachmentResponse = {
   status: number
   result: Record<string, string>
@@ -108,6 +121,7 @@ type RequestHeaders = {
 }
 
 type VerifyStubbedRequestParams = {
+  index: number
   uri: string
   body?: unknown
   fileContents?: string
@@ -140,22 +154,26 @@ const stubFMSVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
         throw new Error(`No stub requests were found for the url <${options.uri}>`)
       }
 
-      if (requests.length > 1) {
-        throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
+      const requestIndex = options.index || 0
+      if (requests.length <= requestIndex) {
+        throw new Error(
+          `Expected at least ${requestIndex} stub requests for the url <${options.uri}> but only received ${requests.length}`,
+        )
       }
 
       const expected = options.body || options.fileContents
-      const diffResult = jsonDiff.diff(expected, requests[0], { sort: true })
+      const request = requests[requestIndex]
+      const diffResult = jsonDiff.diff(expected, request, { sort: true })
 
       const message = `
 Expected:
 ${JSON.stringify(expected, null, 2)}
 
 But received:
-${JSON.stringify(requests[0], null, 2)}
+${JSON.stringify(request, null, 2)}
 
 Difference:
-${jsonDiff.diffString(expected, requests[0], { color: false })}
+${jsonDiff.diffString(expected, request, { color: false })}
 
 `
 
@@ -165,26 +183,38 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
     })
 
 type VerifyStubbedFMSRequestParams = {
+  index?: number
   body?: unknown
   fileContents?: string
 }
 
 const verifyFMSCreateDeviceWearerRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
   stubFMSVerifyRequestReceived({
+    index: 0,
     ...options,
     uri: '/fms/x_seem_cemo/device_wearer/createDW',
   })
 
 const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
   stubFMSVerifyRequestReceived({
+    index: 0,
     ...options,
     uri: '/fms/x_seem_cemo/monitoring_order/createMO',
+  })
+
+const verifyFMSUpdateMonitoringOrderRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
+  stubFMSVerifyRequestReceived({
+    index: 0,
+    ...options,
+    uri: '/fms/x_seem_cemo/monitoring_order/updateMO',
   })
 
 export default {
   stubFMSCreateDeviceWearer,
   stubFMSCreateMonitoringOrder,
+  stubFMSUpdateMonitoringOrder,
   stubFmsUploadAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,
   verifyFMSCreateMonitoringOrderRequestReceived,
+  verifyFMSUpdateMonitoringOrderRequestReceived,
 }

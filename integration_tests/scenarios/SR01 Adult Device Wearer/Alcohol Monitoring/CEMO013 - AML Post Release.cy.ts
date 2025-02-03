@@ -3,23 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -52,18 +38,13 @@ context('Scenarios', () => {
     })
   })
 
-  context('Alcohol Monitoring on License Order - AML (Post Release)', () => {
+  context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createFakeAddress()
-    const primaryAddressDetails = {
-      ...fakePrimaryAddress,
-      hasAnotherAddress: 'No',
-    }
-    const installationAddressDetails = fakePrimaryAddress
     const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
@@ -73,11 +54,11 @@ context('Scenarios', () => {
       conditionType: 'Bail Order',
       monitoringRequired: 'Alcohol monitoring',
     }
-    const alcoholMonitoringOrder = {
+    const alcoholMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       monitoringType: 'Alcohol abstinence',
-      installLocation: `at Installation Address: ${installationAddressDetails}`,
+      installLocation: `at Installation Address: ${fakePrimaryAddress}`,
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -86,62 +67,19 @@ context('Scenarios', () => {
       let indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
 
-      let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+      const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.deviceWearerTask.click()
-
-      const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      identityNumbersPage.form.saveAndContinueButton.click()
-
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
-      deviceWearerCheckYourAnswersPage.continueButton().click()
-
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith(deviceWearerDetails)
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith(primaryAddressDetails)
-      primaryAddressPage.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
-
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-      contactInformationCheckYourAnswersPage.continueButton().click()
-
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.saveAndContinueButton().click()
-
-      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(installationAddressDetails)
-      installationAddress.form.saveAndContinueButton.click()
-
-      const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
-      alcoholMonitoringPage.form.saveAndContinueButton.click()
-
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-      const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      attachmentPage.backToSummaryButton.click()
-
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+      orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+        deviceWearerDetails,
+        responsibleAdultDetails: undefined,
+        primaryAddressDetails: fakePrimaryAddress,
+        secondaryAddressDetails: undefined,
+        interestedParties,
+        monitoringConditions,
+        installationAddressDetails: fakePrimaryAddress,
+        alcoholMonitoringDetails,
+        files: undefined,
+      })
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
@@ -161,11 +99,11 @@ context('Scenarios', () => {
             .replace('self identify', 'self-identify')
             .replace('non binary', 'non-binary'),
           disability: [],
-          address_1: primaryAddressDetails.line1,
-          address_2: primaryAddressDetails.line2,
-          address_3: primaryAddressDetails.line3,
+          address_1: fakePrimaryAddress.line1,
+          address_2: fakePrimaryAddress.line2,
+          address_3: fakePrimaryAddress.line3,
           address_4: 'N/A',
-          address_post_code: primaryAddressDetails.postcode,
+          address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
@@ -206,16 +144,16 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'Bail Order',
+              condition_type: monitoringConditions.conditionType,
               court: '',
               court_order_email: '',
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'AAMR',
-                  start_date: formatAsFmsDateTime(alcoholMonitoringOrder.startDate),
-                  end_date: formatAsFmsDateTime(alcoholMonitoringOrder.endDate),
+                  condition: 'AML',
+                  start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
+                  end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -240,8 +178,8 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: 'Post Release',
-              order_type_description: 'DAPOL HDC',
+              order_type: monitoringConditions.orderType,
+              order_type_description: monitoringConditions.orderTypeDescription,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -290,11 +228,11 @@ context('Scenarios', () => {
               checkin_schedule: [],
               revocation_date: '',
               revocation_type: '',
-              installation_address_1: installationAddressDetails.line1,
-              installation_address_2: installationAddressDetails.line2,
-              installation_address_3: installationAddressDetails.line3 ?? '',
-              installation_address_4: installationAddressDetails.line4 ?? '',
-              installation_address_post_code: installationAddressDetails.postcode,
+              installation_address_1: fakePrimaryAddress.line1,
+              installation_address_2: fakePrimaryAddress.line2,
+              installation_address_3: fakePrimaryAddress.line3 ?? '',
+              installation_address_4: fakePrimaryAddress.line4 ?? '',
+              installation_address_post_code: fakePrimaryAddress.postcode,
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               order_status: 'Not Started',

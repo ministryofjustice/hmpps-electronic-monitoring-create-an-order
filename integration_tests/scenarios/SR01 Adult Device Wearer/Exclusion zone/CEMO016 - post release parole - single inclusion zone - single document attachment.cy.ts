@@ -11,15 +11,9 @@ import { getFmsAttachmentRequests } from '../../../support/wiremock'
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
-  const files = {
-    photoId: {
-      contents: 'I am an id document',
-      fileName: 'passport.jpg',
-    },
-    licence: {
-      contents: 'I am a licence document',
-      fileName: 'licence.pdf',
-    },
+  const uploadFile = {
+    contents: 'I am a map of London football grounds',
+    fileName: 'london-football-grounds.pdf',
   }
   let orderId: string
 
@@ -51,17 +45,7 @@ context('Scenarios', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.photoId.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.licence.fileName,
+      fileName: uploadFile.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -74,38 +58,22 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: files.photoId.fileName,
-        filename: files.photoId.fileName,
-        fileExtension: files.photoId.fileName.split('.')[1],
+        documentFilename: uploadFile.fileName,
+        filename: uploadFile.fileName,
+        fileExtension: uploadFile.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
     cy.task('stubGetDocument', {
-      scenario: {
-        name: 'CEMO004',
-        requiredState: 'Started',
-        nextState: 'second',
-      },
       id: '(.*)',
       httpStatus: 200,
-      response: files.photoId.contents,
-    })
-
-    cy.task('stubGetDocument', {
-      scenario: {
-        name: 'CEMO004',
-        requiredState: 'second',
-        nextState: 'Started',
-      },
-      id: '(.*)',
-      httpStatus: 200,
-      response: files.licence.contents,
+      response: uploadFile.contents,
     })
   })
 
   context(
-    'Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release), Photo and Multiple Document attachments',
+    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - single document attachment',
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer(),
@@ -115,18 +83,21 @@ context('Scenarios', () => {
       const fakePrimaryAddress = createFakeAddress()
       const interestedParties = createFakeInterestedParties()
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
-        monitoringRequired: 'Alcohol monitoring',
+        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        monitoringRequired: 'Exclusion and inclusion zone monitoring',
       }
-      const alcoholMonitoringDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        monitoringType: 'Alcohol abstinence',
-        installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+      const enforcementZoneDetails = {
+        zoneType: 'Exclusion zone',
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
+        uploadFile,
+        description: 'Excluded from Football Grounds',
+        duration: '90 days',
+        anotherZone: 'No',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -137,7 +108,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+        orderSummaryPage.fillInNewEnforcementZoneOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -145,8 +116,8 @@ context('Scenarios', () => {
           interestedParties,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          alcoholMonitoringDetails,
-          files,
+          enforcementZoneDetails,
+          files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -219,9 +190,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'AAMR',
-                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                    condition: 'EM Exclusion / Inclusion Zone',
+                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -288,10 +259,17 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: '',
-                exclusion_zones: [],
+                trail_monitoring: 'No',
+                exclusion_zones: [
+                  {
+                    description: enforcementZoneDetails.description,
+                    duration: enforcementZoneDetails.duration,
+                    start: enforcementZoneDetails.startDate.toISOString().split('T')[0],
+                    end: enforcementZoneDetails.endDate.toISOString().split('T')[0],
+                  },
+                ],
                 inclusion_zones: [],
-                abstinence: 'Yes',
+                abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
@@ -313,7 +291,7 @@ context('Scenarios', () => {
         cy.wrap(null)
           .then(() => getFmsAttachmentRequests())
           .then(requests => requests.map(request => request.body))
-          .should('deep.equal', [JSON.stringify(files.photoId.contents), JSON.stringify(files.licence.contents)])
+          .should('deep.equal', [JSON.stringify(uploadFile.contents)])
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()

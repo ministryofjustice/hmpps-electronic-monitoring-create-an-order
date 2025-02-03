@@ -52,25 +52,20 @@ context('Scenarios', () => {
     })
   })
 
-  context('Immigration with Location - NFD (Non Fitted Device) Pebble (NFD).', () => {
+  context('Immigration with GPS Tag (Location - Fitted)', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createFakeAddress()
-    const primaryAddressDetails = {
-      ...fakePrimaryAddress,
-      hasAnotherAddress: 'No',
-    }
-    const installationAddressDetails = fakePrimaryAddress
     const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Immigration',
       orderTypeDescription: 'DAPOL',
-      conditionType: 'License Condition of a Custodial Order',
+      conditionType: 'Licence Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
     }
     const trailMonitoringOrder = {
@@ -108,7 +103,10 @@ context('Scenarios', () => {
       noFixedAbode.form.saveAndContinueButton.click()
 
       const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith(primaryAddressDetails)
+      primaryAddressPage.form.fillInWith({
+        ...fakePrimaryAddress,
+        hasAnotherAddress: 'No',
+      })
       primaryAddressPage.form.saveAndContinueButton.click()
 
       const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
@@ -126,7 +124,7 @@ context('Scenarios', () => {
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
       const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(installationAddressDetails)
+      installationAddress.form.fillInWith(fakePrimaryAddress)
       installationAddress.form.saveAndContinueButton.click()
 
       const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
@@ -159,11 +157,11 @@ context('Scenarios', () => {
             .replace('self identify', 'self-identify')
             .replace('non binary', 'non-binary'),
           disability: [],
-          address_1: primaryAddressDetails.line1,
-          address_2: primaryAddressDetails.line2,
-          address_3: primaryAddressDetails.line3,
+          address_1: fakePrimaryAddress.line1,
+          address_2: fakePrimaryAddress.line2,
+          address_3: fakePrimaryAddress.line3,
           address_4: 'N/A',
-          address_post_code: primaryAddressDetails.postcode,
+          address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
@@ -204,10 +202,9 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'License Condition of a Custodial Order',
+              condition_type: monitoringConditions.conditionType,
               court: '',
               court_order_email: '',
-
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
@@ -239,8 +236,8 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: 'Immigration',
-              order_type_description: 'DAPOL',
+              order_type: monitoringConditions.orderType,
+              order_type_description: monitoringConditions.orderTypeDescription,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -289,11 +286,11 @@ context('Scenarios', () => {
               checkin_schedule: [],
               revocation_date: '',
               revocation_type: '',
-              installation_address_1: installationAddressDetails.line1,
-              installation_address_2: installationAddressDetails.line2,
-              installation_address_3: installationAddressDetails.line3 ?? '',
-              installation_address_4: installationAddressDetails.line4 ?? '',
-              installation_address_post_code: installationAddressDetails.postcode,
+              installation_address_1: fakePrimaryAddress.line1,
+              installation_address_2: fakePrimaryAddress.line2,
+              installation_address_3: fakePrimaryAddress.line3 ?? '',
+              installation_address_4: fakePrimaryAddress.line4 ?? '',
+              installation_address_post_code: fakePrimaryAddress.postcode,
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               order_status: 'Not Started',

@@ -33,11 +33,11 @@ context('Attachments', () => {
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
 
         // Licence Task
-        page.licenseTask.status.should('contain', 'Licence.jpeg')
-        page.licenseTask.addAction.should('not.exist')
-        page.licenseTask.changeAction.should('not.exist')
-        page.licenseTask.deleteAction.should('not.exist')
-        page.licenseTask.downloadAction
+        page.licenceTask.status.should('contain', 'Licence.jpeg')
+        page.licenceTask.addAction.should('not.exist')
+        page.licenceTask.changeAction.should('not.exist')
+        page.licenceTask.deleteAction.should('not.exist')
+        page.licenceTask.downloadAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderId}/attachments/licence/Licence.jpeg`)
 

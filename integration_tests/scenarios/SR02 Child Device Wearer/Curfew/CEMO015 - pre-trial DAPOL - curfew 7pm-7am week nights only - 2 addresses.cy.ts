@@ -3,24 +3,17 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import {
+  createFakeYouthDeviceWearer,
+  createFakeInterestedParties,
+  createFakeResponsibleAdult,
+  createFakeAddress,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
-import { getFmsAttachmentRequests } from '../../../support/wiremock'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
-  const hmppsDocumentId: string = uuidv4()
-  const files = {
-    photoId: {
-      contents: 'I am an id document',
-      fileName: 'passport.jpg',
-    },
-    licence: {
-      contents: 'I am a licence document',
-      fileName: 'licence.pdf',
-    },
-  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -48,86 +41,48 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.photoId.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.licence.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: files.photoId.fileName,
-        filename: files.photoId.fileName,
-        fileExtension: files.photoId.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.task('stubGetDocument', {
-      scenario: {
-        name: 'CEMO004',
-        requiredState: 'Started',
-        nextState: 'second',
-      },
-      id: '(.*)',
-      httpStatus: 200,
-      response: files.photoId.contents,
-    })
-
-    cy.task('stubGetDocument', {
-      scenario: {
-        name: 'CEMO004',
-        requiredState: 'second',
-        nextState: 'Started',
-      },
-      id: '(.*)',
-      httpStatus: 200,
-      response: files.licence.contents,
-    })
   })
 
   context(
-    'Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release), Photo and Multiple Document attachments',
+    'DAPOL (Pre Trial) with Radio Frequency (RF) (HMU + PID) Monday - Friday 7pm-7am. 2 address locations - one Requirement for each parent',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeYouthDeviceWearer(),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
+      const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createFakeAddress()
+      const fakeSecondaryAddress = createFakeAddress()
       const interestedParties = createFakeInterestedParties()
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
-        monitoringRequired: 'Alcohol monitoring',
+        orderType: 'Pre-Trial',
+        orderTypeDescription: 'DAPOL',
+        conditionType: 'Requirement of a Community Order',
+        monitoringRequired: 'Curfew with electronic monitoring',
       }
-      const alcoholMonitoringDetails = {
+      const curfewReleaseDetails = {
+        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+        startTime: '19:00:00',
+        endTime: '07:00:00',
+        address: 'Primary address',
+      }
+      const curfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        monitoringType: 'Alcohol abstinence',
-        installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+        addresses: ['Primary address', 'Secondary address'],
       }
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewTimetable = curfewNights.flatMap((day: string) => [
+        {
+          day,
+          startTime: curfewReleaseDetails.startTime,
+          endTime: curfewReleaseDetails.endTime,
+          addresses: curfewConditionDetails.addresses,
+        },
+      ])
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -137,16 +92,18 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+        orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
-          responsibleAdultDetails: undefined,
+          responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
-          secondaryAddressDetails: undefined,
+          secondaryAddressDetails: fakeSecondaryAddress,
           interestedParties,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          alcoholMonitoringDetails,
-          files,
+          curfewReleaseDetails,
+          curfewConditionDetails,
+          curfewTimetable,
+          files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -159,7 +116,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-            adult_child: 'adult',
+            adult_child: 'child',
             sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
@@ -172,11 +129,11 @@ context('Scenarios', () => {
             address_3: fakePrimaryAddress.line3,
             address_4: 'N/A',
             address_post_code: fakePrimaryAddress.postcode,
-            secondary_address_1: '',
-            secondary_address_2: '',
-            secondary_address_3: '',
-            secondary_address_4: '',
-            secondary_address_post_code: '',
+            secondary_address_1: fakeSecondaryAddress.line1,
+            secondary_address_2: fakeSecondaryAddress.line2,
+            secondary_address_3: fakeSecondaryAddress.line3,
+            secondary_address_4: 'N/A',
+            secondary_address_post_code: fakeSecondaryAddress.postcode,
             phone_number: deviceWearerDetails.contactNumber,
             risk_serious_harm: '',
             risk_self_harm: '',
@@ -184,15 +141,15 @@ context('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: '',
+            responsible_adult_required: 'true',
+            parent: responsibleAdultDetails.fullName,
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: null,
+            parent_phone_number: responsibleAdultDetails.contactNumber,
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -219,9 +176,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'AAMR',
-                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                    condition: 'Curfew with EM',
+                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                    end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -280,18 +237,81 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: '',
+                conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
                 curfew_description: '',
-                curfew_start: '',
-                curfew_end: '',
-                curfew_duration: [],
+                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                curfew_duration: [
+                  {
+                    location: 'primary',
+                    allday: '',
+                    schedule: [
+                      {
+                        day: 'Mo',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Tu',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Wed',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Th',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Fr',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                    ],
+                  },
+                  {
+                    location: 'secondary',
+                    allday: '',
+                    schedule: [
+                      {
+                        day: 'Mo',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Tu',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Wed',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Th',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Fr',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                    ],
+                  },
+                ],
                 trail_monitoring: '',
                 exclusion_zones: [],
                 inclusion_zones: [],
-                abstinence: 'Yes',
+                abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
@@ -308,12 +328,6 @@ context('Scenarios', () => {
             })
             .should('be.true')
         })
-
-        // Verify the attachments were sent to the FMS API
-        cy.wrap(null)
-          .then(() => getFmsAttachmentRequests())
-          .then(requests => requests.map(request => request.body))
-          .should('deep.equal', [JSON.stringify(files.photoId.contents), JSON.stringify(files.licence.contents)])
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()

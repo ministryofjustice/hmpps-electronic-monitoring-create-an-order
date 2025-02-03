@@ -44,7 +44,7 @@ const validFormData = {
     'Mandatory attendance monitoring',
     'Alcohol monitoring',
   ],
-  conditionType: 'License Condition of a Custodial Order',
+  conditionType: 'Licence Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
 }
@@ -122,7 +122,7 @@ context('Monitoring conditions main section', () => {
       page.form.startDateField.shouldHaveValidationMessage('Order start date and time are required')
     })
 
-    it('after frontend validation passses, should show errors from API response', () => {
+    it('after frontend validation passes, should show errors from API response', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 400,
         id: mockOrderId,
@@ -164,7 +164,7 @@ context('Monitoring conditions main section', () => {
         expect(requests[0]).to.deep.equal({
           orderType: 'IMMIGRATION',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
-          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+          conditionType: 'LICENCE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           exclusionZone: true,
           trail: true,
