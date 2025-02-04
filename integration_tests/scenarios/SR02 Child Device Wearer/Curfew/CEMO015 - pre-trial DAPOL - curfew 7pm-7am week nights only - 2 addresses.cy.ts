@@ -44,7 +44,7 @@ context('Scenarios', () => {
   })
 
   context(
-    'DAPOL (Pre Trial) with Radio Frequency (RF) (HMU + PID) Monday - Friday 7pm-7am. 2 address locations - one Requirement for each parent',
+    'DAPO (Pre Trial) with Radio Frequency (RF) (HMU + PID) Monday - Friday 7pm-7am. 2 address locations - one Requirement for each parent',
     () => {
       const deviceWearerDetails = {
         ...createFakeYouthDeviceWearer(),
@@ -59,7 +59,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        orderTypeDescription: 'DAPOL',
+        orderTypeDescription: 'DAPO',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Curfew with electronic monitoring',
       }

@@ -112,8 +112,8 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
+        orderTypeDescription: 'DAPO',
+        conditionType: 'License Condition of a Custodial Order',
         monitoringRequired: 'Exclusion and inclusion zone monitoring',
       }
       const enforcementZoneDetails = {
@@ -258,7 +258,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Bail Order',
+                condition_type: monitoringConditions.conditionType,
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -292,8 +292,8 @@ context('Scenarios', () => {
                 order_id: orderId,
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: 'Post Release',
-                order_type_description: 'DAPOL HDC',
+                order_type: monitoringConditions.orderType,
+                order_type_description: monitoringConditions.orderTypeDescription,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',

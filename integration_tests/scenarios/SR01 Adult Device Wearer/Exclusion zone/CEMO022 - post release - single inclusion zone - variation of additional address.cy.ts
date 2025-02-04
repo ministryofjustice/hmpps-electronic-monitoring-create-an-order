@@ -92,7 +92,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
+        conditionType: 'License Condition of a Custodial Order',
         monitoringRequired: 'Exclusion and inclusion zone monitoring',
       }
       const enforcementZoneDetails = {
