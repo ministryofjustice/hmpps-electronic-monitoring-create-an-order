@@ -57,11 +57,11 @@ context('Scenarios', () => {
     const alcoholMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      monitoringType: 'Alcohol abstinence',
+      monitoringType: 'Alcohol level',
       installLocation: `at Installation Address: ${fakePrimaryAddress}`,
     }
 
-    it.skip('Should successfully submit the order to the FMS API', () => {
+    it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
       let indexPage = Page.verifyOnPage(IndexPage)
@@ -225,7 +225,7 @@ context('Scenarios', () => {
               trail_monitoring: '',
               exclusion_zones: [],
               inclusion_zones: [],
-              abstinence: 'Yes',
+              abstinence: 'No',
               schedule: '',
               checkin_schedule: [],
               revocation_date: '',
