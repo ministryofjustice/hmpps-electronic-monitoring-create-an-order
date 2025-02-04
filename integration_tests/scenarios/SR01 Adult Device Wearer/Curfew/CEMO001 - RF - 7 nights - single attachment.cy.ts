@@ -108,7 +108,7 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Pre-Trial',
-      orderTypeDescription: 'DAPOL HDC',
+      orderTypeDescription: 'DAPO',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew with electronic monitoring',
     }
@@ -134,7 +134,7 @@ context('Scenarios', () => {
       {
         day,
         startTime: curfewReleaseDetails.startTime,
-        endTime: '11:59:00',
+        endTime: '23:59:00',
         addresses: curfewConditionDetails.addresses,
       },
     ])
@@ -315,7 +315,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: 'Pre-Trial',
-              order_type_description: 'DAPOL HDC',
+              order_type_description: 'DAPO',
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -368,7 +368,7 @@ context('Scenarios', () => {
                     {
                       day: 'Mo',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                     {
                       day: 'Tu',
@@ -378,7 +378,7 @@ context('Scenarios', () => {
                     {
                       day: 'Tu',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                     {
                       day: 'Wed',
@@ -388,7 +388,7 @@ context('Scenarios', () => {
                     {
                       day: 'Wed',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                     {
                       day: 'Th',
@@ -398,7 +398,7 @@ context('Scenarios', () => {
                     {
                       day: 'Th',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                     {
                       day: 'Fr',
@@ -408,7 +408,7 @@ context('Scenarios', () => {
                     {
                       day: 'Fr',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                     {
                       day: 'Sa',
@@ -418,7 +418,7 @@ context('Scenarios', () => {
                     {
                       day: 'Sa',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                     {
                       day: 'Su',
@@ -428,7 +428,7 @@ context('Scenarios', () => {
                     {
                       day: 'Su',
                       start: '19:00:00',
-                      end: '11:59:00',
+                      end: '23:59:00',
                     },
                   ],
                 },
