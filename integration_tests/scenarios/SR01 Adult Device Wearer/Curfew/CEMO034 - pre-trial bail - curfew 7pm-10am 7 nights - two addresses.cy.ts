@@ -3,23 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -52,26 +38,43 @@ context('Scenarios', () => {
     })
   })
 
-  context('Immigration with Location - NFD (Non Fitted Device) Pebble (NFD).', () => {
+  context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am at two addresses', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createFakeAddress()
+    const fakeSecondaryAddress = createFakeAddress()
     const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Immigration',
-      orderTypeDescription: 'DAPOL',
-      conditionType: 'Licence Condition of a Custodial Order',
-      monitoringRequired: 'Trail monitoring',
+      orderType: 'Pre-Trial',
+      orderTypeDescription: 'DAPO',
+      conditionType: 'Bail Order',
+      monitoringRequired: 'Curfew with electronic monitoring',
     }
-    const trailMonitoringOrder = {
+    const curfewReleaseDetails = {
+      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      startTime: '19:00:00',
+      endTime: '10:00:00',
+      address: 'Primary address',
+    }
+    const curfewConditionDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+      addresses: ['Primary address', 'Secondary address'],
     }
+    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewTimetable = curfewNights.flatMap((day: string) => [
+      {
+        day,
+        startTime: curfewReleaseDetails.startTime,
+        endTime: curfewReleaseDetails.endTime,
+        addresses: curfewConditionDetails.addresses,
+      },
+    ])
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -79,69 +82,25 @@ context('Scenarios', () => {
       let indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
 
-      let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+      const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.deviceWearerTask.click()
-
-      const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      identityNumbersPage.form.saveAndContinueButton.click()
-
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
-      deviceWearerCheckYourAnswersPage.continueButton().click()
-
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith(deviceWearerDetails)
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith({
-        ...fakePrimaryAddress,
-        hasAnotherAddress: 'No',
+      orderSummaryPage.fillInNewCurfewOrderWith({
+        deviceWearerDetails,
+        responsibleAdultDetails: undefined,
+        primaryAddressDetails: fakePrimaryAddress,
+        secondaryAddressDetails: fakeSecondaryAddress,
+        interestedParties,
+        monitoringConditions,
+        installationAddressDetails: fakePrimaryAddress,
+        curfewReleaseDetails,
+        curfewConditionDetails,
+        curfewTimetable,
+        files: undefined,
       })
-      primaryAddressPage.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
-
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-      contactInformationCheckYourAnswersPage.continueButton().click()
-
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.saveAndContinueButton().click()
-
-      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(fakePrimaryAddress)
-      installationAddress.form.saveAndContinueButton.click()
-
-      const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      trailMonitoringPage.form.saveAndContinueButton.click()
-
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-      const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      attachmentPage.backToSummaryButton.click()
-
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO010',
+        responseRecordFilename: 'CEMO034',
         httpStatus: 200,
         body: {
           title: '',
@@ -163,11 +122,11 @@ context('Scenarios', () => {
           address_3: fakePrimaryAddress.line3,
           address_4: 'N/A',
           address_post_code: fakePrimaryAddress.postcode,
-          secondary_address_1: '',
-          secondary_address_2: '',
-          secondary_address_3: '',
-          secondary_address_4: '',
-          secondary_address_post_code: '',
+          secondary_address_1: fakeSecondaryAddress.line1,
+          secondary_address_2: fakeSecondaryAddress.line2,
+          secondary_address_3: fakeSecondaryAddress.line3,
+          secondary_address_4: 'N/A',
+          secondary_address_post_code: fakeSecondaryAddress.postcode,
           phone_number: deviceWearerDetails.contactNumber,
           risk_serious_harm: '',
           risk_self_harm: '',
@@ -198,7 +157,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO010',
+            responseRecordFilename: 'CEMO034',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -207,14 +166,13 @@ context('Scenarios', () => {
               condition_type: monitoringConditions.conditionType,
               court: '',
               court_order_email: '',
-
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'Location Monitoring (Fitted Device)',
-                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate),
-                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate),
+                  condition: 'Curfew with EM',
+                  start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                  end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -273,15 +231,57 @@ context('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: '',
+              conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
               reason_for_order_ending_early: '',
               business_unit: '',
               service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
               curfew_description: '',
-              curfew_start: '',
-              curfew_end: '',
-              curfew_duration: [],
-              trail_monitoring: 'Yes',
+              curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+              curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+              curfew_duration: [
+                {
+                  location: 'primary',
+                  allday: '',
+                  schedule: [
+                    {
+                      day: 'Mo',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Tu',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Wed',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Th',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Fr',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Sa',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Su',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                  ],
+                },
+              ],
+              trail_monitoring: '',
               exclusion_zones: [],
               inclusion_zones: [],
               abstinence: '',

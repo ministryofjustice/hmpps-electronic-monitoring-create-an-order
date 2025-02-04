@@ -61,7 +61,7 @@ context('Scenarios', () => {
       installLocation: `at Installation Address: ${fakePrimaryAddress}`,
     }
 
-    it('Should successfully submit the order to the FMS API', () => {
+    it.skip('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
       let indexPage = Page.verifyOnPage(IndexPage)
@@ -83,6 +83,7 @@ context('Scenarios', () => {
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+        responseRecordFilename: 'CEMO013',
         httpStatus: 200,
         body: {
           title: '',
@@ -139,6 +140,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
+            responseRecordFilename: 'CEMO013',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,

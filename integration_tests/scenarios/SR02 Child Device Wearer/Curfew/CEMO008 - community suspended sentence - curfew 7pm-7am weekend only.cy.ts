@@ -105,6 +105,7 @@ context('Scenarios', () => {
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+        responseRecordFilename: 'CEMO008',
         httpStatus: 200,
         body: {
           title: '',
@@ -161,6 +162,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
+            responseRecordFilename: 'CEMO008',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,

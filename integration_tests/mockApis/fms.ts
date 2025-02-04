@@ -1,3 +1,6 @@
+import { writeFileSync, mkdirSync } from 'node:fs'
+import { dirname } from 'node:path'
+
 import assert from 'assert'
 import jsonDiff from 'json-diff'
 import { getMatchingRequests, stubFor } from './wiremock'
@@ -122,6 +125,7 @@ type RequestHeaders = {
 
 type VerifyStubbedRequestParams = {
   index: number
+  responseRecordFilename?: string
   uri: string
   body?: unknown
   fileContents?: string
@@ -179,11 +183,18 @@ ${jsonDiff.diffString(expected, request, { color: false })}
 
       assert.strictEqual(undefined, diffResult, message)
 
+      if (options.responseRecordFilename) {
+        const filename = `./test_results/cypress/requests/${options.responseRecordFilename}${options.uri}.json`
+        mkdirSync(dirname(filename), { recursive: true })
+        writeFileSync(filename, JSON.stringify(request, null, 2), 'utf8')
+      }
+
       return true
     })
 
 type VerifyStubbedFMSRequestParams = {
   index?: number
+  responseRecordFilename?: string
   body?: unknown
   fileContents?: string
 }
