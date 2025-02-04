@@ -63,10 +63,10 @@ export const createHtmlAnswer = (key: string, value: Optional<string>, uri: stri
 }
 
 const createDatePreview = (value: Optional<string>) =>
-  isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString()
+  isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString('en-GB')
 
 const createTimePreview = (value: Optional<string>) =>
-  isNullOrUndefined(value) ? '' : new Date(value).toLocaleTimeString()
+  isNullOrUndefined(value) ? '' : new Date(value).toLocaleTimeString('en-GB')
 
 export const createDateAnswer = (key: string, value: Optional<string>, uri: string): Answer =>
   createTextAnswer(key, createDatePreview(value), uri)

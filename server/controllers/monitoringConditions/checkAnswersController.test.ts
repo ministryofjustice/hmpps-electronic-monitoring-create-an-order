@@ -454,7 +454,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Start time',
             },
             value: {
-              text: '1:01:00 AM',
+              text: '01:01:00',
             },
             actions: {
               items: [
@@ -488,7 +488,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'End time',
             },
             value: {
-              text: '1:01:00 AM',
+              text: '01:01:00',
             },
             actions: {
               items: [
