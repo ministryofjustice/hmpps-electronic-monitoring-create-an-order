@@ -39,7 +39,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   get conditionTypeField(): FormSelectComponent {
     return new FormSelectComponent(this.form, 'Select condition type', [
       'Requirement of a Community Order',
-      'Licence Condition of a Custodial Order',
+      'License Condition of a Custodial Order',
       'Post-Sentence Supervision Requirement following on from an Adult Custody order',
       'Bail Order',
     ])

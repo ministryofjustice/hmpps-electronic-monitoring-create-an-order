@@ -44,7 +44,7 @@ const validFormData = {
     'Mandatory attendance monitoring',
     'Alcohol monitoring',
   ],
-  conditionType: 'Licence Condition of a Custodial Order',
+  conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
 }
@@ -164,7 +164,7 @@ context('Monitoring conditions main section', () => {
         expect(requests[0]).to.deep.equal({
           orderType: 'IMMIGRATION',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
-          conditionType: 'LICENCE_CONDITION_OF_A_CUSTODIAL_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           exclusionZone: true,
           trail: true,

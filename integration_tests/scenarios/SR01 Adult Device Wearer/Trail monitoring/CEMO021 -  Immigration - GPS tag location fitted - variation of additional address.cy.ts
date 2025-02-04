@@ -70,7 +70,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Immigration',
       orderTypeDescription: 'DAPOL',
-      conditionType: 'Licence Condition of a Custodial Order',
+      conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
     }
     const trailMonitoringOrder = {
