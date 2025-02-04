@@ -76,7 +76,7 @@ context('Scenarios', () => {
       },
     ])
 
-    it.skip('Should successfully submit the order to the FMS API', () => {
+    it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
       let indexPage = Page.verifyOnPage(IndexPage)
@@ -241,6 +241,47 @@ context('Scenarios', () => {
               curfew_duration: [
                 {
                   location: 'primary',
+                  allday: '',
+                  schedule: [
+                    {
+                      day: 'Mo',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Tu',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Wed',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Th',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Fr',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Sa',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Su',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                  ],
+                },
+                {
+                  location: 'secondary',
                   allday: '',
                   schedule: [
                     {
