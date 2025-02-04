@@ -57,7 +57,7 @@ context('Scenarios', () => {
     const alcoholMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      monitoringType: 'Alcohol abstinence',
+      monitoringType: 'Alcohol level',
       installLocation: `at Installation Address: ${fakePrimaryAddress}`,
     }
 
@@ -152,7 +152,7 @@ context('Scenarios', () => {
             device_wearer: deviceWearerDetails.fullName,
             enforceable_condition: [
               {
-                condition: 'AAMR',
+                condition: 'AML',
                 start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
                 end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
               },
