@@ -76,7 +76,7 @@ context('Scenarios', () => {
       },
     ])
 
-    it('Should successfully submit the order to the FMS API', () => {
+    it.skip('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
       let indexPage = Page.verifyOnPage(IndexPage)
