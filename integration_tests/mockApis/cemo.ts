@@ -275,7 +275,7 @@ const deleteAttachment = (options: UploadAttachmentStubOptions = defaultUploadAt
   })
 
 type ValidationErrors = Array<{
-  erorr: string
+  error: string
   field: string
 }>
 

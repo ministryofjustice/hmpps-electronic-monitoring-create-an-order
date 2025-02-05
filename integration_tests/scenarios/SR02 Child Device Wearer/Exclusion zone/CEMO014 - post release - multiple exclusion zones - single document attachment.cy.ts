@@ -26,8 +26,6 @@ import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-dev
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import { getFmsAttachmentRequests } from '../../../support/wiremock'
-import config from '../../../support/config'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -367,12 +365,13 @@ context('Scenarios', () => {
         })
 
         // Verify the attachments were sent to the FMS API
-        if (config.verify_fms_requests) {
-          cy.wrap(null)
-            .then(() => getFmsAttachmentRequests())
-            .then(requests => requests.map(request => request.body))
-            .should('deep.equal', [JSON.stringify(uploadFile.contents)])
-        }
+        cy.readFile(uploadFile.contents, 'base64').then(contentAsBase64 => {
+          cy.task('verifyFMSAttachmentRequestReceived', {
+            responseRecordFilename: 'CEMO001',
+            httpStatus: 200,
+            fileContents: contentAsBase64,
+          })
+        })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
