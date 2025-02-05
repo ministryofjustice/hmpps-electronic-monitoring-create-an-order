@@ -184,7 +184,7 @@ ${jsonDiff.diffString(expected, request, { color: false })}
       assert.strictEqual(undefined, diffResult, message)
 
       if (options.responseRecordFilename) {
-        const filename = `./test_results/cypress/requests/${options.responseRecordFilename}${options.uri}.json`
+        const filename = `./integration_tests/requests/${options.responseRecordFilename}${options.uri}.json`
         mkdirSync(dirname(filename), { recursive: true })
         writeFileSync(filename, JSON.stringify(request, null, 2), 'utf8')
       }
