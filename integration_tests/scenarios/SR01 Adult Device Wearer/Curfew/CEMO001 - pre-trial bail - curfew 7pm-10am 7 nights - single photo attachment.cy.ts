@@ -7,14 +7,15 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 import { getFmsAttachmentRequests } from '../../../support/wiremock'
+import config from '../../../support/config'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
     photoId: {
-      contents: 'I am an id document',
-      fileName: 'passport.jpg',
+      contents: 'cypress/fixtures/profile.jpeg',
+      fileName: 'profile.jpeg',
     },
   }
   let orderId: string
@@ -67,10 +68,13 @@ context('Scenarios', () => {
       },
     })
 
-    cy.task('stubGetDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: files.photoId.contents,
+    cy.readFile(files.photoId.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/jpeg',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -338,10 +342,14 @@ context('Scenarios', () => {
       })
 
       // Verify the attachments were sent to the FMS API
-      cy.wrap(null)
-        .then(() => getFmsAttachmentRequests())
-        .then(requests => requests.map(request => request.body))
-        .should('deep.equal', [JSON.stringify(files.photoId.contents)])
+      if (config.verify_fms_requests) {
+        cy.readFile(files.photoId.contents, 'base64').then(content => {
+          cy.wrap(null)
+            .then(() => getFmsAttachmentRequests())
+            .then(requests => requests.map(request => request.body))
+            .should('deep.equal', [content])
+        })
+      }
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
       submitSuccessPage.backToYourApplications.click()

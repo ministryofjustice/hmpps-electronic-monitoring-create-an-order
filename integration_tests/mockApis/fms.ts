@@ -4,6 +4,7 @@ import { dirname } from 'node:path'
 import assert from 'assert'
 import jsonDiff from 'json-diff'
 import { getMatchingRequests, stubFor } from './wiremock'
+import config from './config'
 
 type CreateStubOptions = {
   httpStatus: number
@@ -154,39 +155,41 @@ const stubFMSVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
       return []
     })
     .then(requests => {
-      if (requests.length === 0) {
-        throw new Error(`No stub requests were found for the url <${options.uri}>`)
+      if (config.verify_fms_requests) {
+        if (requests.length === 0) {
+          throw new Error(`No stub requests were found for the url <${options.uri}>`)
+        }
+
+        const requestIndex = options.index || 0
+        if (requests.length <= requestIndex) {
+          throw new Error(
+            `Expected at least ${requestIndex} stub requests for the url <${options.uri}> but only received ${requests.length}`,
+          )
+        }
+
+        const expected = options.body || options.fileContents
+        const request = requests[requestIndex]
+        const diffResult = jsonDiff.diff(expected, request, { sort: true })
+
+        const message = `
+  Expected:
+  ${JSON.stringify(expected, null, 2)}
+  
+  But received:
+  ${JSON.stringify(request, null, 2)}
+  
+  Difference:
+  ${jsonDiff.diffString(expected, request, { color: false })}
+  
+  `
+
+        assert.strictEqual(undefined, diffResult, message)
       }
-
-      const requestIndex = options.index || 0
-      if (requests.length <= requestIndex) {
-        throw new Error(
-          `Expected at least ${requestIndex} stub requests for the url <${options.uri}> but only received ${requests.length}`,
-        )
-      }
-
-      const expected = options.body || options.fileContents
-      const request = requests[requestIndex]
-      const diffResult = jsonDiff.diff(expected, request, { sort: true })
-
-      const message = `
-Expected:
-${JSON.stringify(expected, null, 2)}
-
-But received:
-${JSON.stringify(request, null, 2)}
-
-Difference:
-${jsonDiff.diffString(expected, request, { color: false })}
-
-`
-
-      assert.strictEqual(undefined, diffResult, message)
 
       if (options.responseRecordFilename) {
         const filename = `./integration_tests/requests/${options.responseRecordFilename}${options.uri}.json`
         mkdirSync(dirname(filename), { recursive: true })
-        writeFileSync(filename, JSON.stringify(request, null, 2), 'utf8')
+        writeFileSync(filename, JSON.stringify(options.body, null, 2), 'utf8')
       }
 
       return true

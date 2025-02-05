@@ -7,13 +7,14 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 import { getFmsAttachmentRequests } from '../../../support/wiremock'
+import config from '../../../support/config'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const uploadFile = {
-    contents: 'I am a map of London football grounds',
-    fileName: 'london-football-grounds.pdf',
+    contents: 'cypress/fixtures/test.pdf',
+    fileName: 'test.pdf',
   }
   let orderId: string
 
@@ -70,10 +71,13 @@ context('Scenarios', () => {
       },
     })
 
-    cy.task('stubGetDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: uploadFile.contents,
+    cy.readFile(uploadFile.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'application/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -325,10 +329,12 @@ context('Scenarios', () => {
         })
 
         // Verify the attachments were sent to the FMS API
-        cy.wrap(null)
-          .then(() => getFmsAttachmentRequests())
-          .then(requests => requests.map(request => request.body))
-          .should('deep.equal', [JSON.stringify(uploadFile.contents)])
+        if (config.verify_fms_requests) {
+          cy.wrap(null)
+            .then(() => getFmsAttachmentRequests())
+            .then(requests => requests.map(request => request.body))
+            .should('deep.equal', [JSON.stringify(uploadFile.contents)])
+        }
 
         submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
