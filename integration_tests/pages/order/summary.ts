@@ -124,6 +124,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
     curfewReleaseDetails,
@@ -139,6 +140,7 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
+      installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
     })
@@ -163,6 +165,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
     curfewReleaseDetails,
@@ -182,6 +185,7 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
+      installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
     })
@@ -205,6 +209,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
     enforcementZoneDetails,
@@ -218,6 +223,7 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
+      installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
     })
@@ -240,6 +246,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
     enforcementZoneDetails,
@@ -257,6 +264,7 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
+      installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
     })
@@ -278,6 +286,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
     alcoholMonitoringDetails,
@@ -291,6 +300,7 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
+      installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
     })
@@ -313,6 +323,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
     alcoholMonitoringDetails,
@@ -330,6 +341,7 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
+      installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
     })
@@ -351,6 +363,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails,
     secondaryAddressDetails,
     interestedParties,
+    installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
   }): void {
@@ -402,7 +415,8 @@ export default class OrderTasksPage extends AppPage {
     contactInformationCheckYourAnswersPage.continueButton().click()
 
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    installationAndRiskPage.saveAndContinueButton().click()
+    installationAndRiskPage.form.fillInWith(installationAndRisk)
+    installationAndRiskPage.form.saveAndContinueButton.click()
 
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.fillInWith(monitoringConditions)

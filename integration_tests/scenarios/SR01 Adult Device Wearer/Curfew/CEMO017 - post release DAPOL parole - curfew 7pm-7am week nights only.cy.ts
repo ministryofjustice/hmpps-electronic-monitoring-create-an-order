@@ -93,6 +93,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
+          installationAndRisk: undefined,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           curfewReleaseDetails,

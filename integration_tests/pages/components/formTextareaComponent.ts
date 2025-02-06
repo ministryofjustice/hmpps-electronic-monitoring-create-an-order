@@ -29,6 +29,10 @@ export default class FormTextareaComponent {
     this.element.should('be.disabled')
   }
 
+  shouldNotBeDisabled() {
+    this.element.should('not.be.disabled')
+  }
+
   get validationMessage() {
     return this.element.siblings('.govuk-error-message', { log: false })
   }
