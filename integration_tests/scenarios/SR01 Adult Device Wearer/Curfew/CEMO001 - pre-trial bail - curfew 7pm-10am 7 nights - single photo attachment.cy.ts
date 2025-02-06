@@ -3,11 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import {
-  createFakeAdultDeviceWearer,
-  createFakeInterestedParties,
-  createKnownAddress,
-} from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -93,7 +89,7 @@ context('Scenarios', () => {
       offence: 'Robbery',
       riskCategory: 'Postcode Risk',
       mappaLevel: 'MAPPA 1',
-      mappaCaseType: 'Serious Organised Crime'
+      mappaCaseType: 'Serious Organised Crime',
     }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
