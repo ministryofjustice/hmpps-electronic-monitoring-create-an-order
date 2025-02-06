@@ -32,9 +32,11 @@ context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
-  const uploadFile = {
-    contents: 'I am a map of London football grounds',
-    fileName: 'london-football-grounds.pdf',
+  const files = {
+    map: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
   }
 
   beforeEach(() => {
@@ -58,7 +60,7 @@ context('The kitchen sink', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: uploadFile.fileName,
+      fileName: files.map.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -71,17 +73,20 @@ context('The kitchen sink', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: uploadFile.fileName,
-        filename: uploadFile.fileName,
-        fileExtension: uploadFile.fileName.split('.')[1],
+        documentFilename: files.map.fileName,
+        filename: files.map.fileName,
+        fileExtension: files.map.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
-    cy.task('stubGetDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: uploadFile.contents,
+    cy.readFile(files.map.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -149,7 +154,7 @@ context('The kitchen sink', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-      uploadFile,
+      uploadFile: files.map,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'Yes',
@@ -158,7 +163,7 @@ context('The kitchen sink', () => {
       zoneType: 'Inclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 200), // 200 days
-      uploadFile,
+      uploadFile: files.map,
       description: 'A second test description: Lorum ipsum dolar sit amet...',
       duration: 'A second test duration: one, two, three...',
       anotherZone: 'No',

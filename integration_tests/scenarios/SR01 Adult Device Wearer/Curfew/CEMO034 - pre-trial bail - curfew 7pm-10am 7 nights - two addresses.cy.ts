@@ -38,28 +38,43 @@ context('Scenarios', () => {
     })
   })
 
-  context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
+  context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am at two addresses', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createFakeAddress()
+    const fakeSecondaryAddress = createFakeAddress()
     const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL HDC',
+      orderType: 'Pre-Trial',
+      orderTypeDescription: 'DAPO',
       conditionType: 'Bail Order',
-      monitoringRequired: 'Alcohol monitoring',
+      monitoringRequired: 'Curfew with electronic monitoring',
     }
-    const alcoholMonitoringDetails = {
+    const curfewReleaseDetails = {
+      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+      startTime: '19:00:00',
+      endTime: '10:00:00',
+      address: 'Primary address',
+    }
+    const curfewConditionDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      monitoringType: 'Alcohol level',
-      installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+      addresses: ['Primary address', 'Secondary address'],
     }
+    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewTimetable = curfewNights.flatMap((day: string) => [
+      {
+        day,
+        startTime: curfewReleaseDetails.startTime,
+        endTime: curfewReleaseDetails.endTime,
+        addresses: curfewConditionDetails.addresses,
+      },
+    ])
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -69,21 +84,23 @@ context('Scenarios', () => {
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+      orderSummaryPage.fillInNewCurfewOrderWith({
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails: fakePrimaryAddress,
-        secondaryAddressDetails: undefined,
+        secondaryAddressDetails: fakeSecondaryAddress,
         interestedParties,
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
-        alcoholMonitoringDetails,
+        curfewReleaseDetails,
+        curfewConditionDetails,
+        curfewTimetable,
         files: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO013',
+        responseRecordFilename: 'CEMO034',
         httpStatus: 200,
         body: {
           title: '',
@@ -105,11 +122,11 @@ context('Scenarios', () => {
           address_3: fakePrimaryAddress.line3,
           address_4: 'N/A',
           address_post_code: fakePrimaryAddress.postcode,
-          secondary_address_1: '',
-          secondary_address_2: '',
-          secondary_address_3: '',
-          secondary_address_4: '',
-          secondary_address_post_code: '',
+          secondary_address_1: fakeSecondaryAddress.line1,
+          secondary_address_2: fakeSecondaryAddress.line2,
+          secondary_address_3: fakeSecondaryAddress.line3,
+          secondary_address_4: 'N/A',
+          secondary_address_post_code: fakeSecondaryAddress.postcode,
           phone_number: deviceWearerDetails.contactNumber,
           risk_serious_harm: '',
           risk_self_harm: '',
@@ -140,7 +157,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO013',
+            responseRecordFilename: 'CEMO034',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -153,9 +170,9 @@ context('Scenarios', () => {
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'AML',
-                  start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                  end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                  condition: 'Curfew with EM',
+                  start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                  end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -214,18 +231,101 @@ context('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: '',
+              conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
               reason_for_order_ending_early: '',
               business_unit: '',
               service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
               curfew_description: '',
-              curfew_start: '',
-              curfew_end: '',
-              curfew_duration: [],
+              curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+              curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+              curfew_duration: [
+                {
+                  location: 'primary',
+                  allday: '',
+                  schedule: [
+                    {
+                      day: 'Mo',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Tu',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Wed',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Th',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Fr',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Sa',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Su',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                  ],
+                },
+                {
+                  location: 'secondary',
+                  allday: '',
+                  schedule: [
+                    {
+                      day: 'Mo',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Tu',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Wed',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Th',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Fr',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Sa',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                    {
+                      day: 'Su',
+                      start: '19:00:00',
+                      end: '10:00:00',
+                    },
+                  ],
+                },
+              ],
               trail_monitoring: '',
               exclusion_zones: [],
               inclusion_zones: [],
-              abstinence: 'No',
+              abstinence: '',
               schedule: '',
               checkin_schedule: [],
               revocation_date: '',

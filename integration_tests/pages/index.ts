@@ -30,14 +30,18 @@ export default class IndexPage extends AppPage {
   }
 
   SubmittedOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', name).contains('Submitted')
+    return this.ordersList.contains('li', `${name} Submitted`)
+  }
+
+  SubmittedVariationFor(name: string): PageElement {
+    return this.ordersList.contains('li', `${name} Variation Submitted`)
   }
 
   IncompleteOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', name).contains('Incomplete')
+    return this.ordersList.contains('li', `${name} Incomplete`)
   }
 
   DraftOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', name).contains('Draft')
+    return this.ordersList.contains('li', `${name} Draft`)
   }
 }

@@ -3,37 +3,16 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import ResponsibleAdultDetailsPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import {
-  createFakeYouthDeviceWearer,
-  createFakeInterestedParties,
-  createFakeResponsibleAdult,
-  createFakeAddress,
-} from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
-import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import { getFmsAttachmentRequests } from '../../../support/wiremock'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const uploadFile = {
-    contents: 'I am a map of London football grounds',
-    fileName: 'london-football-grounds.pdf',
+    contents: 'cypress/fixtures/test.pdf',
+    fileName: 'test.pdf',
   }
   let orderId: string
 
@@ -63,6 +42,11 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFMSUpdateMonitoringOrder', {
+      httpStatus: 200,
+      response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
       fileName: uploadFile.fileName,
@@ -85,35 +69,32 @@ context('Scenarios', () => {
       },
     })
 
-    cy.task('stubGetDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: uploadFile.contents,
+    cy.readFile(uploadFile.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'application/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
   context(
-    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Grounds, document attachment',
+    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - Variation of additional address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer(),
+        ...createFakeAdultDeviceWearer(),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createFakeAddress()
-      const primaryAddressDetails = {
-        ...fakePrimaryAddress,
-        hasAnotherAddress: 'No',
-      }
-      const installationAddressDetails = fakePrimaryAddress
       const interestedParties = createFakeInterestedParties()
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
+        conditionType: 'License Condition of a Custodial Order',
         monitoringRequired: 'Exclusion and inclusion zone monitoring',
       }
       const enforcementZoneDetails = {
@@ -126,6 +107,12 @@ context('Scenarios', () => {
         anotherZone: 'No',
       }
 
+      const variationDetails = {
+        variationType: 'Change of address',
+        variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+      }
+      const fakeVariationSecondaryAddress = createFakeAddress()
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -134,67 +121,45 @@ context('Scenarios', () => {
 
         let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.deviceWearerTask.click()
+        orderSummaryPage.fillInNewEnforcementZoneOrderWith({
+          deviceWearerDetails,
+          responsibleAdultDetails: undefined,
+          primaryAddressDetails: fakePrimaryAddress,
+          secondaryAddressDetails: undefined,
+          interestedParties,
+          monitoringConditions,
+          installationAddressDetails: fakePrimaryAddress,
+          enforcementZoneDetails,
+          files: undefined,
+        })
+        orderSummaryPage.submitOrderButton.click()
 
-        const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-        aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-        aboutDeviceWearerPage.form.saveAndContinueButton.click()
+        let submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage.backToYourApplications.click()
 
-        const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
-        responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
-        responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-        identityNumbersPage.form.fillInWith(deviceWearerDetails)
-        identityNumbersPage.form.saveAndContinueButton.click()
-
-        const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
-        deviceWearerCheckYourAnswersPage.continueButton().click()
-
-        const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-        contactDetailsPage.form.fillInWith(deviceWearerDetails)
-        contactDetailsPage.form.saveAndContinueButton.click()
-
-        const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-        noFixedAbode.form.fillInWith(deviceWearerDetails)
-        noFixedAbode.form.saveAndContinueButton.click()
-
-        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-        primaryAddressPage.form.fillInWith(primaryAddressDetails)
-        primaryAddressPage.form.saveAndContinueButton.click()
-
-        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-        interestedPartiesPage.form.fillInWith(interestedParties)
-        interestedPartiesPage.form.saveAndContinueButton.click()
-
-        const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-        contactInformationCheckYourAnswersPage.continueButton().click()
-
-        const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-        installationAndRiskPage.saveAndContinueButton().click()
-
-        const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-        monitoringConditionsPage.form.fillInWith(monitoringConditions)
-        monitoringConditionsPage.form.saveAndContinueButton.click()
-
-        const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-        installationAddress.form.fillInWith(installationAddressDetails)
-        installationAddress.form.saveAndContinueButton.click()
-
-        const enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-        enforcementZonePage.form.fillInWith(enforcementZoneDetails)
-        enforcementZonePage.form.saveAndContinueButton.click()
-
-        const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-        monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-        const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-        attachmentPage.backToSummaryButton.click()
+        indexPage = Page.verifyOnPage(IndexPage)
+        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.newVariationFormButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        cacheOrderId()
+        orderSummaryPage = orderSummaryPage.fillInEnforcementZoneVariationWith({
+          variationDetails,
+          deviceWearerDetails,
+          responsibleAdultDetails: undefined,
+          primaryAddressDetails: fakePrimaryAddress,
+          secondaryAddressDetails: fakeVariationSecondaryAddress,
+          interestedParties,
+          monitoringConditions,
+          installationAddressDetails: fakeVariationSecondaryAddress,
+          enforcementZoneDetails,
+          files: undefined,
+        })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+          responseRecordFilename: 'CEMO022',
+          index: 1,
           httpStatus: 200,
           body: {
             title: '',
@@ -203,7 +168,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-            adult_child: 'child',
+            adult_child: 'adult',
             sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
@@ -211,16 +176,16 @@ context('Scenarios', () => {
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],
-            address_1: primaryAddressDetails.line1,
-            address_2: primaryAddressDetails.line2,
-            address_3: primaryAddressDetails.line3,
+            address_1: fakePrimaryAddress.line1,
+            address_2: fakePrimaryAddress.line2,
+            address_3: fakePrimaryAddress.line3,
             address_4: 'N/A',
-            address_post_code: primaryAddressDetails.postcode,
-            secondary_address_1: '',
-            secondary_address_2: '',
-            secondary_address_3: '',
-            secondary_address_4: '',
-            secondary_address_post_code: '',
+            address_post_code: fakePrimaryAddress.postcode,
+            secondary_address_1: fakeVariationSecondaryAddress.line1,
+            secondary_address_2: fakeVariationSecondaryAddress.line2,
+            secondary_address_3: fakeVariationSecondaryAddress.line3,
+            secondary_address_4: 'N/A',
+            secondary_address_post_code: fakeVariationSecondaryAddress.postcode,
             phone_number: deviceWearerDetails.contactNumber,
             risk_serious_harm: '',
             risk_self_harm: '',
@@ -228,15 +193,15 @@ context('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'true',
-            parent: responsibleAdultDetails.fullName,
+            responsible_adult_required: 'false',
+            parent: '',
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: responsibleAdultDetails.contactNumber,
+            parent_phone_number: null,
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -250,13 +215,14 @@ context('Scenarios', () => {
 
         cy.wrap(orderId).then(() => {
           return cy
-            .task('verifyFMSCreateMonitoringOrderRequestReceived', {
+            .task('verifyFMSUpdateMonitoringOrderRequestReceived', {
+              responseRecordFilename: 'CEMO022',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Bail Order',
+                condition_type: monitoringConditions.conditionType,
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -288,15 +254,15 @@ context('Scenarios', () => {
                 offence_date: '',
                 order_end: formatAsFmsDateTime(monitoringConditions.endDate),
                 order_id: orderId,
-                order_request_type: 'New Order',
+                order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: 'Post Release',
-                order_type_description: 'DAPOL HDC',
+                order_type: monitoringConditions.orderType,
+                order_type_description: monitoringConditions.orderTypeDescription,
                 order_type_detail: '',
-                order_variation_date: '',
+                order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
                 order_variation_req_received_date: '',
-                order_variation_type: '',
+                order_variation_type: variationDetails.variationType,
                 pdu_responsible: '',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
@@ -347,11 +313,11 @@ context('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: installationAddressDetails.line1,
-                installation_address_2: installationAddressDetails.line2,
-                installation_address_3: installationAddressDetails.line3 ?? '',
-                installation_address_4: installationAddressDetails.line4 ?? '',
-                installation_address_post_code: installationAddressDetails.postcode,
+                installation_address_1: fakeVariationSecondaryAddress.line1,
+                installation_address_2: fakeVariationSecondaryAddress.line2,
+                installation_address_3: fakeVariationSecondaryAddress.line3 ?? '',
+                installation_address_4: fakeVariationSecondaryAddress.line4 ?? '',
+                installation_address_post_code: fakeVariationSecondaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 order_status: 'Not Started',
@@ -361,12 +327,15 @@ context('Scenarios', () => {
         })
 
         // Verify the attachments were sent to the FMS API
-        cy.wrap(null)
-          .then(() => getFmsAttachmentRequests())
-          .then(requests => requests.map(request => request.body))
-          .should('deep.equal', [JSON.stringify(uploadFile.contents)])
+        cy.readFile(uploadFile.contents, 'base64').then(contentAsBase64 => {
+          cy.task('verifyFMSAttachmentRequestReceived', {
+            responseRecordFilename: 'CEMO001',
+            httpStatus: 200,
+            fileContents: contentAsBase64,
+          })
+        })
 
-        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)

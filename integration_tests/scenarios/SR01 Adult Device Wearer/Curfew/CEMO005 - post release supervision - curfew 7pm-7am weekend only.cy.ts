@@ -9,17 +9,6 @@ import { formatAsFmsDateTime } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
-  const hmppsDocumentId: string = uuidv4()
-  const files = {
-    photoId: {
-      contents: 'cypress/fixtures/profile.jpeg',
-      fileName: 'profile.jpeg',
-    },
-    licence: {
-      contents: 'cypress/fixtures/test.pdf',
-      fileName: 'test.pdf',
-    },
-  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -47,70 +36,10 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.photoId.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.licence.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: files.photoId.fileName,
-        filename: files.photoId.fileName,
-        fileExtension: files.photoId.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.readFile(files.photoId.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        scenario: {
-          name: 'CEMO004',
-          requiredState: 'Started',
-          nextState: 'second',
-        },
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'image/jpeg',
-        fileBase64Body: content,
-      })
-    })
-
-    cy.readFile(files.licence.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        scenario: {
-          name: 'CEMO004',
-          requiredState: 'second',
-          nextState: 'Started',
-        },
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'application/pdf',
-        fileBase64Body: content,
-      })
-    })
   })
 
   context(
-    'Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release), Photo and Multiple Document attachments',
+    'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer(),
@@ -124,15 +53,31 @@ context('Scenarios', () => {
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
-        monitoringRequired: 'Alcohol monitoring',
+        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        monitoringRequired: 'Curfew with electronic monitoring',
       }
-      const alcoholMonitoringDetails = {
+      const curfewReleaseDetails = {
+        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+        startTime: '19:00:00',
+        endTime: '07:00:00',
+        address: 'Primary address',
+      }
+      const curfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        monitoringType: 'Alcohol abstinence',
-        installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+        addresses: ['Primary address'],
       }
+      const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
+      const curfewTimetable = [
+        ...curfewNights.flatMap((day: string) => [
+          {
+            day,
+            startTime: curfewReleaseDetails.startTime,
+            endTime: curfewReleaseDetails.endTime,
+            addresses: curfewConditionDetails.addresses,
+          },
+        ]),
+      ]
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -142,7 +87,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+        orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -150,13 +95,15 @@ context('Scenarios', () => {
           interestedParties,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          alcoholMonitoringDetails,
-          files,
+          curfewReleaseDetails,
+          curfewConditionDetails,
+          curfewTimetable,
+          files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO004',
+          responseRecordFilename: 'CEMO005',
           httpStatus: 200,
           body: {
             title: '',
@@ -213,7 +160,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO004',
+              responseRecordFilename: 'CEMO005',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -226,9 +173,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'AAMR',
-                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                    condition: 'Curfew with EM',
+                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                    end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -287,18 +234,40 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: '',
+                conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
                 curfew_description: '',
-                curfew_start: '',
-                curfew_end: '',
-                curfew_duration: [],
+                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                curfew_duration: [
+                  {
+                    location: 'primary',
+                    allday: '',
+                    schedule: [
+                      {
+                        day: 'Fr',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                    ],
+                  },
+                ],
                 trail_monitoring: '',
                 exclusion_zones: [],
                 inclusion_zones: [],
-                abstinence: 'Yes',
+                abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
@@ -314,26 +283,6 @@ context('Scenarios', () => {
               },
             })
             .should('be.true')
-        })
-
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 0,
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
-        })
-
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 1,
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
         })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

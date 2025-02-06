@@ -31,7 +31,7 @@
       errorList: [
         {
           text: error
-         
+
         }
       ]
     }) }}
@@ -55,10 +55,10 @@
         <dd class="govuk-summary-list__value">
           <a href="/order/{{order.id}}/attachments/licence/{{licenceFileName}}" class="govuk-link">{{licenceFileName}}</a>
         </dd>
-        <dd class="govuk-summary-list__actions">        
+        <dd class="govuk-summary-list__actions">
         {% if isOrderEditable %}
-          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> license</span></a>
-          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence/delete">Delete<span class="govuk-visually-hidden"> license</span></a>
+          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> licence</span></a>
+          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence/delete">Delete<span class="govuk-visually-hidden"> licence</span></a>
         {% endif %}
       </dd>
       {% else %}
@@ -66,7 +66,7 @@
           No licence document uploaded
         </dd>
         <dd class="govuk-summary-list__actions">
-        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Add<span class="govuk-visually-hidden"> license</span></a>       
+        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Add<span class="govuk-visually-hidden"> licence</span></a>
       </dd>
       {% endif %}
     </div>
@@ -79,12 +79,12 @@
         <dd class="govuk-summary-list__value">
           <a href="/order/{{order.id}}/attachments/photo_Id/{{photoFileName}}" class="govuk-link">{{photoFileName}}</a>
         </dd>
-        <dd class="govuk-summary-list__actions">          
+        <dd class="govuk-summary-list__actions">
             {% if isOrderEditable %}
               <a class="govuk-link" href="/order/{{order.id}}/attachments/photo_Id">Change<span class="govuk-visually-hidden"> photo ID</span></a>
               <a class="govuk-link"  href="/order/{{order.id}}/attachments/photo_Id/delete">Delete<span class="govuk-visually-hidden"> photo ID</span></a>
             {% endif %}
-          
+
         </dd>
       {% else %}
         <dd class="govuk-summary-list__value">
@@ -94,9 +94,9 @@
           <a class="govuk-link" href="/order/{{order.id}}/attachments/photo_Id">Add<span class="govuk-visually-hidden"> photo ID</span></a>
         </dd>
       {% endif %}
-     
+
     </div>
-  </dl> 
+  </dl>
   <div class="govuk-button-group">
     {% if isOrderEditable %}
       {{ govukButton({

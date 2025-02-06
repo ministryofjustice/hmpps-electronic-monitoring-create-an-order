@@ -34,11 +34,11 @@ context('Attachments', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         // Licence Task
-        page.licenseTask.status.should('contain', 'No licence document uploaded')
-        page.licenseTask.addAction.should('exist')
-        page.licenseTask.changeAction.should('not.exist')
-        page.licenseTask.deleteAction.should('not.exist')
-        page.licenseTask.downloadAction.should('not.exist')
+        page.licenceTask.status.should('contain', 'No licence document uploaded')
+        page.licenceTask.addAction.should('exist')
+        page.licenceTask.changeAction.should('not.exist')
+        page.licenceTask.deleteAction.should('not.exist')
+        page.licenceTask.downloadAction.should('not.exist')
 
         // Photo ID Task
         page.photoIdTask.status.should('contain', 'No photo ID document uploaded')
@@ -59,15 +59,15 @@ context('Attachments', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         // Licence Task
-        page.licenseTask.status.should('contain', 'Licence.jpeg')
-        page.licenseTask.addAction.should('not.exist')
-        page.licenseTask.changeAction
+        page.licenceTask.status.should('contain', 'Licence.jpeg')
+        page.licenceTask.addAction.should('not.exist')
+        page.licenceTask.changeAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence`)
-        page.licenseTask.deleteAction
+        page.licenceTask.deleteAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence/delete`)
-        page.licenseTask.downloadAction
+        page.licenceTask.downloadAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence/Licence.jpeg`)
 

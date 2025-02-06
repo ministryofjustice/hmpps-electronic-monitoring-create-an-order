@@ -10,15 +10,9 @@ import { formatAsFmsDateTime } from '../../utils'
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
-  const files = {
-    photoId: {
-      contents: 'cypress/fixtures/profile.jpeg',
-      fileName: 'profile.jpeg',
-    },
-    licence: {
-      contents: 'cypress/fixtures/test.pdf',
-      fileName: 'test.pdf',
-    },
+  const uploadFile = {
+    contents: 'cypress/fixtures/test.pdf',
+    fileName: 'test.pdf',
   }
   let orderId: string
 
@@ -48,19 +42,14 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFmsUploadAttachment', {
+    cy.task('stubFMSUpdateMonitoringOrder', {
       httpStatus: 200,
-      fileName: files.photoId.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
+      response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.licence.fileName,
+      fileName: uploadFile.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -73,34 +62,15 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: files.photoId.fileName,
-        filename: files.photoId.fileName,
-        fileExtension: files.photoId.fileName.split('.')[1],
+        documentFilename: uploadFile.fileName,
+        filename: uploadFile.fileName,
+        fileExtension: uploadFile.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
-    cy.readFile(files.photoId.contents, 'base64').then(content => {
+    cy.readFile(uploadFile.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
-        scenario: {
-          name: 'CEMO004',
-          requiredState: 'Started',
-          nextState: 'second',
-        },
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'image/jpeg',
-        fileBase64Body: content,
-      })
-    })
-
-    cy.readFile(files.licence.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        scenario: {
-          name: 'CEMO004',
-          requiredState: 'second',
-          nextState: 'Started',
-        },
         id: '(.*)',
         httpStatus: 200,
         contextType: 'application/pdf',
@@ -110,7 +80,7 @@ context('Scenarios', () => {
   })
 
   context(
-    'Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release), Photo and Multiple Document attachments',
+    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - Variation of home address',
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer(),
@@ -120,19 +90,28 @@ context('Scenarios', () => {
       const fakePrimaryAddress = createFakeAddress()
       const interestedParties = createFakeInterestedParties()
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Bail Order',
-        monitoringRequired: 'Alcohol monitoring',
+        conditionType: 'License Condition of a Custodial Order',
+        monitoringRequired: 'Exclusion and inclusion zone monitoring',
       }
-      const alcoholMonitoringDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        monitoringType: 'Alcohol abstinence',
-        installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+      const enforcementZoneDetails = {
+        zoneType: 'Exclusion zone',
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
+        uploadFile,
+        description: 'Excluded from Football Grounds',
+        duration: '90 days',
+        anotherZone: 'No',
       }
+
+      const variationDetails = {
+        variationType: 'Change of address',
+        variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+      }
+      const fakeVariationPrimaryAddress = createFakeAddress()
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -140,9 +119,9 @@ context('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+        orderSummaryPage.fillInNewEnforcementZoneOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -150,13 +129,37 @@ context('Scenarios', () => {
           interestedParties,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          alcoholMonitoringDetails,
-          files,
+          enforcementZoneDetails,
+          files: undefined,
+        })
+        orderSummaryPage.submitOrderButton.click()
+
+        let submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage.backToYourApplications.click()
+
+        indexPage = Page.verifyOnPage(IndexPage)
+        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.newVariationFormButton.click()
+
+        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        cacheOrderId()
+        orderSummaryPage = orderSummaryPage.fillInEnforcementZoneVariationWith({
+          variationDetails,
+          deviceWearerDetails,
+          responsibleAdultDetails: undefined,
+          primaryAddressDetails: fakeVariationPrimaryAddress,
+          secondaryAddressDetails: undefined,
+          interestedParties,
+          monitoringConditions,
+          installationAddressDetails: fakeVariationPrimaryAddress,
+          enforcementZoneDetails,
+          files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO004',
+          responseRecordFilename: 'CEMO019',
+          index: 1,
           httpStatus: 200,
           body: {
             title: '',
@@ -173,11 +176,11 @@ context('Scenarios', () => {
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],
-            address_1: fakePrimaryAddress.line1,
-            address_2: fakePrimaryAddress.line2,
-            address_3: fakePrimaryAddress.line3,
+            address_1: fakeVariationPrimaryAddress.line1,
+            address_2: fakeVariationPrimaryAddress.line2,
+            address_3: fakeVariationPrimaryAddress.line3,
             address_4: 'N/A',
-            address_post_code: fakePrimaryAddress.postcode,
+            address_post_code: fakeVariationPrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -212,8 +215,8 @@ context('Scenarios', () => {
 
         cy.wrap(orderId).then(() => {
           return cy
-            .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO004',
+            .task('verifyFMSUpdateMonitoringOrderRequestReceived', {
+              responseRecordFilename: 'CEMO019',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -226,9 +229,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'AAMR',
-                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                    condition: 'EM Exclusion / Inclusion Zone',
+                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -251,15 +254,15 @@ context('Scenarios', () => {
                 offence_date: '',
                 order_end: formatAsFmsDateTime(monitoringConditions.endDate),
                 order_id: orderId,
-                order_request_type: 'New Order',
+                order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
                 order_type_description: monitoringConditions.orderTypeDescription,
                 order_type_detail: '',
-                order_variation_date: '',
+                order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
                 order_variation_req_received_date: '',
-                order_variation_type: '',
+                order_variation_type: variationDetails.variationType,
                 pdu_responsible: '',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
@@ -295,19 +298,26 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: '',
-                exclusion_zones: [],
+                trail_monitoring: 'No',
+                exclusion_zones: [
+                  {
+                    description: enforcementZoneDetails.description,
+                    duration: enforcementZoneDetails.duration,
+                    start: enforcementZoneDetails.startDate.toISOString().split('T')[0],
+                    end: enforcementZoneDetails.endDate.toISOString().split('T')[0],
+                  },
+                ],
                 inclusion_zones: [],
-                abstinence: 'Yes',
+                abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: fakePrimaryAddress.line1,
-                installation_address_2: fakePrimaryAddress.line2,
-                installation_address_3: fakePrimaryAddress.line3 ?? '',
-                installation_address_4: fakePrimaryAddress.line4 ?? '',
-                installation_address_post_code: fakePrimaryAddress.postcode,
+                installation_address_1: fakeVariationPrimaryAddress.line1,
+                installation_address_2: fakeVariationPrimaryAddress.line2,
+                installation_address_3: fakeVariationPrimaryAddress.line3 ?? '',
+                installation_address_4: fakeVariationPrimaryAddress.line4 ?? '',
+                installation_address_post_code: fakeVariationPrimaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 order_status: 'Not Started',
@@ -317,26 +327,15 @@ context('Scenarios', () => {
         })
 
         // Verify the attachments were sent to the FMS API
-        cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
+        cy.readFile(uploadFile.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 0,
             responseRecordFilename: 'CEMO001',
             httpStatus: 200,
             fileContents: contentAsBase64,
           })
         })
 
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 1,
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
-        })
-
-        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)

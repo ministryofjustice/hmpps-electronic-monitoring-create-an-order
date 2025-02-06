@@ -10,7 +10,7 @@ export default class AttachmentSummaryPage extends AppPage {
     super('Attach a document', paths.ATTACHMENT.ATTACHMENTS)
   }
 
-  get licenseTask(): AttachmentTask {
+  get licenceTask(): AttachmentTask {
     return new AttachmentTask('Licence')
   }
 

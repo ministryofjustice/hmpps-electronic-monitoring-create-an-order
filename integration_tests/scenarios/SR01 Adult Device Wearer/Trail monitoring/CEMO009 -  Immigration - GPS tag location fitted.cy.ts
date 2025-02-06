@@ -4,24 +4,16 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import ResponsibleAdultDetailsPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import {
-  createFakeYouthDeviceWearer,
-  createFakeInterestedParties,
-  createFakeResponsibleAdult,
-  createFakeAddress,
-} from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
+import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
-import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
-import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
+import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
@@ -60,68 +52,26 @@ context('Scenarios', () => {
     })
   })
 
-  context('Suspended Sentence Orders (Community) with Radio Frequency (RF) (HMU + PID) Weekend Only 7pm-7am.', () => {
+  context('Immigration with GPS Tag (Location - Fitted)', () => {
     const deviceWearerDetails = {
-      ...createFakeYouthDeviceWearer(),
+      ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
-    const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createFakeAddress()
-    const primaryAddressDetails = {
-      ...fakePrimaryAddress,
-      hasAnotherAddress: 'No',
-    }
-    const installationAddressDetails = fakePrimaryAddress
     const interestedParties = createFakeInterestedParties()
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Community',
-      orderTypeDescription: 'DAPOL HDC',
-      conditionType: 'Bail Order',
-      monitoringRequired: 'Curfew with electronic monitoring',
+      orderType: 'Immigration',
+      orderTypeDescription: 'DAPOL',
+      conditionType: 'License Condition of a Custodial Order',
+      monitoringRequired: 'Trail monitoring',
     }
-    const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-      startTime: '19:00:00',
-      endTime: '07:00:00',
-      address: 'Primary address',
-    }
-    const curfewConditionDetails = {
+    const trailMonitoringOrder = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      addresses: ['Primary address'],
     }
-    const curfewNights = ['SATURDAY', 'SUNDAY']
-    const curfewTimetable = [
-      {
-        day: 'FRIDAY',
-        startTime: curfewReleaseDetails.startTime,
-        endTime: '11:59:00',
-        addresses: curfewConditionDetails.addresses,
-      },
-      ...curfewNights.flatMap((day: string) => [
-        {
-          day,
-          startTime: '00:00:00',
-          endTime: curfewReleaseDetails.endTime,
-          addresses: curfewConditionDetails.addresses,
-        },
-        {
-          day,
-          startTime: curfewReleaseDetails.startTime,
-          endTime: '11:59:00',
-          addresses: curfewConditionDetails.addresses,
-        },
-      ]),
-      {
-        day: 'MONDAY',
-        startTime: '00:00:00',
-        endTime: curfewReleaseDetails.endTime,
-        addresses: curfewConditionDetails.addresses,
-      },
-    ]
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -136,10 +86,6 @@ context('Scenarios', () => {
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
-      responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
-      responsibleAdultDetailsPage.form.saveAndContinueButton.click()
 
       const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
@@ -157,7 +103,10 @@ context('Scenarios', () => {
       noFixedAbode.form.saveAndContinueButton.click()
 
       const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith(primaryAddressDetails)
+      primaryAddressPage.form.fillInWith({
+        ...fakePrimaryAddress,
+        hasAnotherAddress: 'No',
+      })
       primaryAddressPage.form.saveAndContinueButton.click()
 
       const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
@@ -175,20 +124,12 @@ context('Scenarios', () => {
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
       const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(installationAddressDetails)
+      installationAddress.form.fillInWith(fakePrimaryAddress)
       installationAddress.form.saveAndContinueButton.click()
 
-      const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-
-      const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      curfewConditionsPage.form.saveAndContinueButton.click()
-
-      const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-      curfewTimetablePage.form.fillInWith(curfewTimetable)
-      curfewTimetablePage.form.saveAndContinueButton.click()
+      const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
+      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+      trailMonitoringPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
@@ -200,6 +141,7 @@ context('Scenarios', () => {
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+        responseRecordFilename: 'CEMO009',
         httpStatus: 200,
         body: {
           title: '',
@@ -208,7 +150,7 @@ context('Scenarios', () => {
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-          adult_child: 'child',
+          adult_child: 'adult',
           sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
@@ -216,11 +158,11 @@ context('Scenarios', () => {
             .replace('self identify', 'self-identify')
             .replace('non binary', 'non-binary'),
           disability: [],
-          address_1: primaryAddressDetails.line1,
-          address_2: primaryAddressDetails.line2,
-          address_3: primaryAddressDetails.line3,
+          address_1: fakePrimaryAddress.line1,
+          address_2: fakePrimaryAddress.line2,
+          address_3: fakePrimaryAddress.line3,
           address_4: 'N/A',
-          address_post_code: primaryAddressDetails.postcode,
+          address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
@@ -233,15 +175,15 @@ context('Scenarios', () => {
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],
-          responsible_adult_required: 'true',
-          parent: responsibleAdultDetails.fullName,
+          responsible_adult_required: 'false',
+          parent: '',
           guardian: '',
           parent_address_1: '',
           parent_address_2: '',
           parent_address_3: '',
           parent_address_4: '',
           parent_address_post_code: '',
-          parent_phone_number: responsibleAdultDetails.contactNumber,
+          parent_phone_number: null,
           parent_dob: '',
           pnc_id: deviceWearerDetails.pncId,
           nomis_id: deviceWearerDetails.nomisId,
@@ -256,22 +198,22 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
+            responseRecordFilename: 'CEMO009',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'Bail Order',
+              condition_type: monitoringConditions.conditionType,
               court: '',
               court_order_email: '',
-
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'Curfew with EM',
-                  start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
-                  end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                  condition: 'Location Monitoring (Fitted Device)',
+                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate),
+                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -296,8 +238,8 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: 'Community',
-              order_type_description: 'DAPOL HDC',
+              order_type: monitoringConditions.orderType,
+              order_type_description: monitoringConditions.orderTypeDescription,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -330,52 +272,15 @@ context('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
+              conditional_release_date: '',
               reason_for_order_ending_early: '',
               business_unit: '',
               service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
               curfew_description: '',
-              curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
-              curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
-              curfew_duration: [
-                {
-                  location: 'primary',
-                  allday: '',
-                  schedule: [
-                    {
-                      day: 'Mo',
-                      start: '00:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Fr',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Sa',
-                      start: '00:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Sa',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                    {
-                      day: 'Su',
-                      start: '00:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Su',
-                      start: '19:00:00',
-                      end: '11:59:00',
-                    },
-                  ],
-                },
-              ],
-              trail_monitoring: '',
+              curfew_start: '',
+              curfew_end: '',
+              curfew_duration: [],
+              trail_monitoring: 'Yes',
               exclusion_zones: [],
               inclusion_zones: [],
               abstinence: '',
@@ -383,11 +288,11 @@ context('Scenarios', () => {
               checkin_schedule: [],
               revocation_date: '',
               revocation_type: '',
-              installation_address_1: installationAddressDetails.line1,
-              installation_address_2: installationAddressDetails.line2,
-              installation_address_3: installationAddressDetails.line3 ?? '',
-              installation_address_4: installationAddressDetails.line4 ?? '',
-              installation_address_post_code: installationAddressDetails.postcode,
+              installation_address_1: fakePrimaryAddress.line1,
+              installation_address_2: fakePrimaryAddress.line2,
+              installation_address_3: fakePrimaryAddress.line3 ?? '',
+              installation_address_4: fakePrimaryAddress.line4 ?? '',
+              installation_address_post_code: fakePrimaryAddress.postcode,
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               order_status: 'Not Started',

@@ -122,7 +122,7 @@ context('Monitoring conditions main section', () => {
       page.form.startDateField.shouldHaveValidationMessage('Order start date and time are required')
     })
 
-    it('after frontend validation passses, should show errors from API response', () => {
+    it('after frontend validation passes, should show errors from API response', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 400,
         id: mockOrderId,
