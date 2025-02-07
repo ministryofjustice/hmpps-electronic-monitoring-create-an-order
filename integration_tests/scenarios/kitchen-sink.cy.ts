@@ -267,7 +267,7 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage', { overwrite: true })
-      installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
 
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()

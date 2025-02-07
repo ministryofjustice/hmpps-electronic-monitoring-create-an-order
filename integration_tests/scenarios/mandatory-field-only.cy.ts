@@ -206,7 +206,7 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
-      installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
 
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()
@@ -455,7 +455,7 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
-      installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
 
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()

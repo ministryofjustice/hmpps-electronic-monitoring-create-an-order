@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -79,11 +79,18 @@ context('Scenarios', () => {
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
-      interpreterRequired: false,
+      interpreterRequired: true,
+      language: 'French',
       hasFixedAddress: 'Yes',
     }
-    const fakePrimaryAddress = createFakeAddress()
+    const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties()
+    const installationAndRisk = {
+      offence: 'Robbery',
+      riskCategory: 'Postcode Risk',
+      mappaLevel: 'MAPPA 1',
+      mappaCaseType: 'Serious Organised Crime',
+    }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -127,6 +134,7 @@ context('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: undefined,
         interestedParties,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
         curfewReleaseDetails,
@@ -156,8 +164,8 @@ context('Scenarios', () => {
           disability: [],
           address_1: fakePrimaryAddress.line1,
           address_2: fakePrimaryAddress.line2,
-          address_3: fakePrimaryAddress.line3,
-          address_4: 'N/A',
+          address_3: 'N/A',
+          address_4: fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
@@ -168,8 +176,8 @@ context('Scenarios', () => {
           risk_serious_harm: '',
           risk_self_harm: '',
           risk_details: '',
-          mappa: null,
-          mappa_case_type: null,
+          mappa: 'MAPPA1',
+          mappa_case_type: 'SOC',
           risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
@@ -186,8 +194,8 @@ context('Scenarios', () => {
           delius_id: deviceWearerDetails.deliusId,
           prison_number: deviceWearerDetails.prisonNumber,
           home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
-          interpreter_required: 'false',
-          language: '',
+          interpreter_required: 'true',
+          language: 'French',
         },
       }).should('be.true')
 
@@ -228,7 +236,7 @@ context('Scenarios', () => {
               no_email: '',
               no_name: '',
               no_phone_number: '',
-              offence: '',
+              offence: installationAndRisk.offence,
               offence_date: '',
               order_end: formatAsFmsDateTime(monitoringConditions.endDate),
               order_id: orderId,

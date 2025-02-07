@@ -173,7 +173,7 @@ context('Scenarios', () => {
         contactInformationCheckYourAnswersPage.continueButton().click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-        installationAndRiskPage.saveAndContinueButton().click()
+        installationAndRiskPage.form.saveAndContinueButton.click()
 
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
