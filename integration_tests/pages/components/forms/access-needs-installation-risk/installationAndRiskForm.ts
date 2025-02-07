@@ -79,7 +79,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
 
   // FORM HELPERS
 
-  fillInWith(profile: InstallationAndRiskFormData): void {
+  fillInWith(profile: InstallationAndRiskFormData = {}): void {
     if (profile.offence) {
       this.offenceField.set(profile.offence)
     }
