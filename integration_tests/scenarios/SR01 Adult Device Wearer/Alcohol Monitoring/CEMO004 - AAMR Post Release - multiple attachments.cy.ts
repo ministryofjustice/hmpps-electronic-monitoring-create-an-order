@@ -321,7 +321,7 @@ context('Scenarios', () => {
         cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
             index: 0,
-            responseRecordFilename: 'CEMO001',
+            responseRecordFilename: 'CEMO004',
             httpStatus: 200,
             fileContents: contentAsBase64,
           })
@@ -331,7 +331,7 @@ context('Scenarios', () => {
         cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
             index: 1,
-            responseRecordFilename: 'CEMO001',
+            responseRecordFilename: 'CEMO004',
             httpStatus: 200,
             fileContents: contentAsBase64,
           })
