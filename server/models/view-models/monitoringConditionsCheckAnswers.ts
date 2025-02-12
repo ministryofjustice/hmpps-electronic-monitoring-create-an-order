@@ -184,10 +184,11 @@ const createAttendanceAnswers = (order: Order) => {
     return []
   }
 
-  const uri = paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id)
-
   return order.mandatoryAttendanceConditions.sort().map(attendance => {
-    const uri = paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(`:conditionId`, attendance.id!!)
+    const uri = paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
+      `:conditionId`,
+      attendance.id!,
+    )
     return [
       createDateAnswer('Date when mandatory attendance monitoring starts', attendance.startDate, uri),
       createDateAnswer('Date when mandatory attendance monitoring ends', attendance.endDate, uri),
