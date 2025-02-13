@@ -10,4 +10,5 @@ function get<T>(name: string, fallback: T): T | string {
 
 export default {
   screenshots_enabled: get('SCREENSHOTS_ENABLED', true),
+  verify_fms_requests: get('VERIFY_FMS_REQUESTS', 'true') === 'true',
 }

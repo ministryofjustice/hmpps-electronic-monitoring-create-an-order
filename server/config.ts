@@ -93,10 +93,10 @@ export default {
     cemoApi: {
       url: get('CEMO_API_URL', 'http://localhost:8080', requiredInProduction),
       timeout: {
-        response: Number(get('CEMO_API_TIMEOUT_RESPONSE', 10000)),
-        deadline: Number(get('CEMO_VERIFICATION_API_TIMEOUT_DEADLINE', 10000)),
+        response: Number(get('CEMO_API_TIMEOUT_RESPONSE', 20000)),
+        deadline: Number(get('CEMO_VERIFICATION_API_TIMEOUT_DEADLINE', 20000)),
       },
-      agent: new AgentConfig(Number(get('CEMO_API_TIMEOUT_RESPONSE', 10000))),
+      agent: new AgentConfig(Number(get('CEMO_API_TIMEOUT_RESPONSE', 20000))),
     },
   },
   sqs: {

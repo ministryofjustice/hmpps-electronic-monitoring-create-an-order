@@ -9,7 +9,7 @@ const mockOrderId = uuidv4()
 const mockConditionId = uuidv4()
 
 const monitoringConditions = {
-  orderType: 'immigration',
+  orderType: 'IMMIGRATION',
   acquisitiveCrime: true,
   dapol: true,
   curfew: false,

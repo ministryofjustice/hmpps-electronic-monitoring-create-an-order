@@ -276,7 +276,7 @@ const deleteAttachment = (options: UploadAttachmentStubOptions = defaultUploadAt
   })
 
 type ValidationErrors = Array<{
-  erorr: string
+  error: string
   field: string
 }>
 
@@ -475,7 +475,7 @@ const stubCemoVerifyRequestReceived = (options: VerifyStubbedRequestParams) =>
       throw new Error(`More than 1 stub request was received for the url <${options.uri}>`)
     }
 
-    const expected = options.body || options.fileContents
+    const expected = options.body === undefined ? options.fileContents : options.body
     const diffResult = jsonDiff.diff(expected, requests[0], { sort: true })
 
     const message = `

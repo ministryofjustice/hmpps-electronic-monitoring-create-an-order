@@ -10,34 +10,19 @@ export default class AttachmentsController {
     private readonly attachmentService: AttachmentService,
   ) {}
 
-  licence: RequestHandler = async (req: Request, res: Response) => {
-    await this.uploadView(req, res, 'licence')
-  }
-
-  async uploadView(req: Request, res: Response, fileType: string) {
-    const order = req.order!
-    if (order.status === 'SUBMITTED') {
-      res.redirect(`/order/${order.id}/attachments`)
-    } else {
-      res.render(`pages/order/attachments/edit`, { orderId: order.id, fileType })
-    }
-  }
-
-  async upload(req: Request, res: Response, fileType: AttachmentType) {
-    const { orderId } = req.params
-
+  uploadFile: RequestHandler = async (req: Request, res: Response) => {
+    const { orderId, fileType } = req.params
     const attachment = req.file as Express.Multer.File
     const error = await this.attachmentService.uploadAttachment({
       accessToken: res.locals.user.token,
       orderId,
-      fileType,
+      fileType: fileType.toUpperCase(),
       file: attachment,
     })
-
     if (error.userMessage != null) {
       res.render(`pages/order/attachments/edit`, {
         orderId,
-        fileType: fileType.toLocaleLowerCase(),
+        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
         error: { text: error.userMessage },
       })
     } else {
@@ -50,10 +35,23 @@ export default class AttachmentsController {
     }
   }
 
-  async download(req: Request, res: Response, fileType: AttachmentType) {
-    const { orderId, filename } = req.params
+  uploadFileView: RequestHandler = async (req: Request, res: Response) => {
+    const { fileType } = req.params
+    const order = req.order!
+    if (order.status === 'SUBMITTED') {
+      res.redirect(`/order/${order.id}/attachments`)
+    } else {
+      res.render(`pages/order/attachments/edit`, {
+        orderId: order.id,
+        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
+      })
+    }
+  }
+
+  downloadFile: RequestHandler = async (req: Request, res: Response) => {
+    const { orderId, fileType, filename } = req.params
     await this.attachmentService
-      .downloadAttachment({ accessToken: res.locals.user.token, orderId, fileType })
+      .downloadAttachment({ accessToken: res.locals.user.token, orderId, fileType: fileType.toUpperCase() })
       .then(data => {
         res.attachment(filename)
         data.pipe(res)
@@ -65,13 +63,18 @@ export default class AttachmentsController {
     })
   }
 
-  async confirmDeleteView(req: Request, res: Response, fileType: string) {
+  confirmDeleteView: RequestHandler = async (req: Request, res: Response) => {
+    const { fileType } = req.params
     const order = req.order!
 
-    res.render('pages/order/attachments/delete-confirm', { orderId: order.id, fileType })
+    res.render('pages/order/attachments/delete-confirm', {
+      orderId: order.id,
+      fileType: fileType.toLocaleLowerCase().replace('_', ' '),
+    })
   }
 
-  async delete(req: Request, res: Response, fileType: AttachmentType) {
+  deleteFile: RequestHandler = async (req: Request, res: Response) => {
+    const { fileType } = req.params
     const order = req.order!
     const { action } = req.body
 
@@ -79,7 +82,7 @@ export default class AttachmentsController {
       const result = await this.attachmentService.deleteAttachment({
         orderId: order.id,
         accessToken: res.locals.user.token,
-        fileType,
+        fileType: fileType.toUpperCase(),
       })
 
       if (result.ok) {
@@ -93,42 +96,6 @@ export default class AttachmentsController {
       }
     }
     res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
-  }
-
-  deleteLicence: RequestHandler = async (req: Request, res: Response) => {
-    await this.delete(req, res, AttachmentType.LICENCE)
-  }
-
-  deletePhotoId: RequestHandler = async (req: Request, res: Response) => {
-    await this.delete(req, res, AttachmentType.PHOTO_ID)
-  }
-
-  confirmDeleteLicence: RequestHandler = async (req: Request, res: Response) => {
-    await this.confirmDeleteView(req, res, 'licence')
-  }
-
-  confirmDeletePhotoId: RequestHandler = async (req: Request, res: Response) => {
-    await this.confirmDeleteView(req, res, 'photo id')
-  }
-
-  downloadLicence: RequestHandler = async (req: Request, res: Response) => {
-    await this.download(req, res, AttachmentType.LICENCE)
-  }
-
-  uploadLicence: RequestHandler = async (req: Request, res: Response) => {
-    await this.upload(req, res, AttachmentType.LICENCE)
-  }
-
-  photo: RequestHandler = async (req: Request, res: Response) => {
-    await this.uploadView(req, res, 'photo id')
-  }
-
-  uploadPhoto: RequestHandler = async (req: Request, res: Response) => {
-    await this.upload(req, res, AttachmentType.PHOTO_ID)
-  }
-
-  downloadPhoto: RequestHandler = async (req: Request, res: Response) => {
-    await this.download(req, res, AttachmentType.PHOTO_ID)
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {

@@ -128,6 +128,10 @@ export const createFakeAddress = (): Address => {
   )
 }
 
+export const createKnownAddress = (): Address => {
+  return faker.helpers.arrayElement<Address>([new Address('10 downing street', 'London', '', 'ENGLAND', 'SW1A 2AA')])
+}
+
 export const createFakeInterestedParties = (): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`

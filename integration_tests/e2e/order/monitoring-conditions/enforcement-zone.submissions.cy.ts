@@ -25,7 +25,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
         status: 'IN_PROGRESS',
         order: {
           monitoringConditions: {
-            orderType: 'immigration',
+            orderType: 'IMMIGRATION',
             orderTypeDescription: null,
             conditionType: null,
             acquisitiveCrime: false,
@@ -140,7 +140,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
         status: 'IN_PROGRESS',
         order: {
           monitoringConditions: {
-            orderType: 'immigration',
+            orderType: 'IMMIGRATION',
             orderTypeDescription: null,
             conditionType: null,
             acquisitiveCrime: false,
@@ -277,7 +277,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
         status: 'IN_PROGRESS',
         order: {
           monitoringConditions: {
-            orderType: 'immigration',
+            orderType: 'IMMIGRATION',
             orderTypeDescription: null,
             conditionType: null,
             acquisitiveCrime: false,

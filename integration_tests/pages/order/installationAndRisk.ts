@@ -1,24 +1,13 @@
-import AppPage from '../appPage'
-import { PageElement } from '../page'
+import AppFormPage from '../appFormPage'
 
-export default class InstallationAndRiskPage extends AppPage {
+import paths from '../../../server/constants/paths'
+
+import InstallationAndRiskFormComponent from '../components/forms/access-needs-installation-risk/installationAndRiskForm'
+
+export default class InstallationAndRiskPage extends AppFormPage {
+  public form = new InstallationAndRiskFormComponent()
+
   constructor() {
-    super('Installation and risk information')
-  }
-
-  form = (): PageElement => cy.get('form')
-
-  saveAndContinueButton = (): PageElement => cy.get('form button[type=submit][value="continue"]')
-
-  saveAndReturnButton = (): PageElement => cy.get('form button[type=submit][value="back"]')
-
-  fillInForm = () => {
-    cy.get('select[name="offence"]').select('Robbery')
-    cy.get('input[name="riskCategory[]"][value="VIOLENCE"]').click()
-    cy.get('input[name="riskCategory[]"][value="GENDER"]').click()
-    cy.get('input[name="riskCategory[]"][value="SUBSTANCE_ABUSE"]').click()
-    cy.get('textarea[name="riskDetails"]').type('Details about the risk')
-    cy.get('input[name="mappaLevel"][value="MAPPA2"]').click()
-    cy.get('input[name="mappaCaseType"][value="SPECIAL_IMMIGRATION_APPEALS"]').click()
+    super('Installation and risk information', paths.INSTALLATION_AND_RISK)
   }
 }

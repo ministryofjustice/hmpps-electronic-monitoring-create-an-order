@@ -312,7 +312,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           endDate: '2024-11-11T01:01:00Z',
           exclusionZone: true,
           mandatoryAttendance: true,
-          orderType: 'pre_trial',
+          orderType: 'PRE_TRIAL',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
           startDate: '2024-11-11T01:01:00Z',
           trail: true,
@@ -471,7 +471,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Start time',
             },
             value: {
-              text: '1:01:00 AM',
+              text: '01:01:00',
             },
             actions: {
               items: [
@@ -505,7 +505,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'End time',
             },
             value: {
-              text: '1:01:00 AM',
+              text: '01:01:00',
             },
             actions: {
               items: [

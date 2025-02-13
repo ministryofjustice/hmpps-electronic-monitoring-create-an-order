@@ -123,13 +123,15 @@ describe('AttachmentController', () => {
   describe('view upload file page', () => {
     it('order is submitted, redirect to summary page', async () => {
       req.order!.status = OrderStatusEnum.Enum.SUBMITTED
-      await controller.uploadView(req, res, 'licence')
+      req.params.fileType = 'licence'
+      await controller.uploadFileView(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments`)
     })
 
     it('order is not submitted, render to upload page page', async () => {
-      await controller.uploadView(req, res, 'licence')
+      req.params.fileType = 'licence'
+      await controller.uploadFileView(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/attachments/edit',
@@ -158,7 +160,8 @@ describe('AttachmentController', () => {
         .fn()
         .mockReturnValueOnce({ status: null, userMessage: 'Mock Error', developerMessage: null })
 
-      await controller.upload(req, res, AttachmentType.LICENCE)
+      req.params.fileType = 'licence'
+      await controller.uploadFile(req, res, next)
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/attachments/edit',
         expect.objectContaining({
@@ -185,7 +188,8 @@ describe('AttachmentController', () => {
         .fn()
         .mockReturnValueOnce({ status: null, userMessage: null, developerMessage: null })
 
-      await controller.upload(req, res, AttachmentType.LICENCE)
+      req.params.fileType = 'licence'
+      await controller.uploadFile(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments`)
       expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
         who: 'fakeUserName',
@@ -200,7 +204,8 @@ describe('AttachmentController', () => {
       req.params.filename = 'licence.jpeg'
       mockAttachmentService.downloadAttachment.mockResolvedValue(Readable.from('image'))
 
-      await controller.download(req, res, AttachmentType.LICENCE)
+      req.params.fileType = 'licence'
+      await controller.downloadFile(req, res, next)
 
       expect(res.attachment).toHaveBeenCalledWith('licence.jpeg')
       expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
@@ -214,7 +219,8 @@ describe('AttachmentController', () => {
   describe('deletion process', () => {
     describe('confirmDeleteLicence', () => {
       it('renders a confirmation page where the user is asked to confirm the request for deletion of their licence', async () => {
-        controller.confirmDeleteLicence(req, res, next)
+        req.params.fileType = 'licence'
+        controller.confirmDeleteView(req, res, next)
 
         expect(res.render).toHaveBeenCalledWith(
           'pages/order/attachments/delete-confirm',
@@ -230,8 +236,8 @@ describe('AttachmentController', () => {
         const mockOrder = getMockOrder()
         req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
         mockAttachmentService.deleteAttachment.mockResolvedValue({ ok: true })
-
-        await controller.deleteLicence(req, res, next)
+        req.params.fileType = 'licence'
+        await controller.deleteFile(req, res, next)
 
         expect(mockAttachmentService.deleteAttachment).toHaveBeenCalledWith({
           accessToken: 'fakeUserToken',
@@ -241,7 +247,7 @@ describe('AttachmentController', () => {
         expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
           who: 'fakeUserName',
           correlationId: req.order?.id,
-          what: 'Delete attachment : LICENCE',
+          what: 'Delete attachment : licence',
         })
         expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
       })
@@ -250,8 +256,8 @@ describe('AttachmentController', () => {
     it('should redirect to the attachments page if the user does not confirm the delete', async () => {
       const mockOrder = getMockOrder()
       req = createMockRequest({ body: { action: 'back' }, order: mockOrder, flash: jest.fn() })
-
-      await controller.deleteLicence(req, res, next)
+      req.params.fileType = 'licence'
+      await controller.deleteFile(req, res, next)
 
       expect(mockAttachmentService.deleteAttachment).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/attachments`)
@@ -261,8 +267,8 @@ describe('AttachmentController', () => {
       const mockOrder = getMockOrder()
       req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
       mockAttachmentService.deleteAttachment.mockResolvedValue({ ok: false, error: 'mock error message' })
-
-      await controller.deleteLicence(req, res, next)
+      req.params.fileType = 'licence'
+      await controller.deleteFile(req, res, next)
 
       expect(mockAttachmentService.deleteAttachment).toHaveBeenCalledWith({
         accessToken: 'fakeUserToken',

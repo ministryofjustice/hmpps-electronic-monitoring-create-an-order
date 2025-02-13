@@ -12,7 +12,7 @@ const mockEmptyTrailMonitoring = {
     endDate: null,
   },
   monitoringConditions: {
-    orderType: 'immigration',
+    orderType: 'IMMIGRATION',
     orderTypeDescription: null,
     conditionType: null,
     acquisitiveCrime: true,
@@ -33,7 +33,7 @@ const mockSubmittedTrailMonitoring = {
     endDate: '2025-04-28T00:00:00.000Z',
   },
   monitoringConditions: {
-    orderType: 'immigration',
+    orderType: 'IMMIGRATION',
     orderTypeDescription: null,
     conditionType: null,
     acquisitiveCrime: true,

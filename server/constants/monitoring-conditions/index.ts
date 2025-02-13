@@ -7,12 +7,12 @@ const conditionTypeMap: Record<string, string> = {
 }
 
 const orderTypeMap: Record<string, string> = {
-  civil: 'Civil',
-  community: 'Community',
-  immigration: 'Immigration',
-  post_release: 'Post Release',
-  pre_trial: 'Pre-Trial',
-  special: 'Special',
+  CIVIL: 'Civil',
+  COMMUNITY: 'Community',
+  IMMIGRATION: 'Immigration',
+  POST_RELEASE: 'Post Release',
+  PRE_TRIAL: 'Pre-Trial',
+  SPECIAL: 'Special',
 }
 
 const orderTypeDescriptionMap: Record<string, string> = {
