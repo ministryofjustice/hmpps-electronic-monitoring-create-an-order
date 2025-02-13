@@ -6,6 +6,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -24,8 +25,37 @@
           </p>
         {% endset %}
 
-        {{ govukNotificationBanner({
-          html: html
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
+  {% endif %}
+
+  {% if errorSummary %}
+    {{ govukErrorSummary(errorSummary) }}
+  {% endif %}
+
+  {{ mojPageHeaderActions({
+    heading: {
+      text: section
+    }
+  }) }}
+
+  {% if subsection %}
+    <h2 class="govuk-heading-m">{{ subsection }}</h2>
+  {% endif %}
+
+  <form action="" method="post" {{ formEncoding }}>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    {% block formInputs %}
+    {% endblock %}
+
+    <div class="govuk-button-group">
+      {% if isOrderEditable %}
+        {{ govukButton({
+            text: "Save and continue",
+            name: "action",
+            value: "continue"
         }) }}
       {% endif %}
 

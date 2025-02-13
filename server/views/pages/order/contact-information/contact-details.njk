@@ -15,22 +15,9 @@
       isPageHeading: false
     }
   }) %}
-    {{ govukInput({
-      label: {
-        text: "Enter a telephone number we can use to contact the device wearer (optional)."
-      },
-      hint: {
-        text: "Provide either a landline or mobile number"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "contact-number",
-      name: "contactNumber",
-      type: "tel",
-      autocomplete: "tel tel-national",
-      value: contactNumber.value,
-      errorMessage: contactNumber.error,
-      disabled: not isOrderEditable
-    }) }}
+
+    {{ govukInput(fields.contactNumber.args) }}
+    
   {% endcall %}
 
 {% endblock %}

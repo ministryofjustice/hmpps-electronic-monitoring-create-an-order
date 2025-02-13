@@ -22,7 +22,7 @@ export default class DeviceWearerController {
     res.render(
       'pages/order/about-the-device-wearer/device-wearer',
       createViewModel(
-        order.deviceWearer,
+        order,
         formData.length > 0 ? (formData[0] as never) : ({} as never),
         errors as never,
       ),
@@ -57,17 +57,14 @@ export default class DeviceWearerController {
   }
 
   viewIdentityNumbers: RequestHandler = async (req, res) => {
-    const { deviceWearer } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
     res.render(
       'pages/order/about-the-device-wearer/identity-numbers',
       createViewModel(
-        {
-          ...deviceWearer,
-          ...(formData.length > 0 ? (formData[0] as never) : {}),
-        },
+        order,
         {} as never,
         errors as never,
       ),

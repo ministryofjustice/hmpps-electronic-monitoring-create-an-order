@@ -1,9 +1,11 @@
-import { deserialiseDate, getError } from '../../utils/utils'
+import { govukErrorSummary } from '../../utils/errors'
+import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
+import { deserialiseDate, getError, getErrorsViewModel } from '../../utils/utils'
 import { Address, AddressTypeEnum } from '../Address'
 import { AlcoholMonitoring } from '../AlcoholMonitoring'
 import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField } from './utils'
+import { DateField, ErrorsViewModel, TextField } from './utils'
 
 type AlcoholMonitoringViewModel = {
   monitoringType: TextField
@@ -16,6 +18,8 @@ type AlcoholMonitoringViewModel = {
   secondaryAddressView: TextField
   tertiaryAddressView: TextField
   installationAddressView: TextField
+  errors: ErrorsViewModel
+  errorSummary: ErrorSummary | null
 }
 
 type AddressViews = {
@@ -43,6 +47,8 @@ const createViewModelFromAlcoholMonitoring = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
+    errors: {},
+    errorSummary: null,
   }
 }
 
@@ -78,6 +84,8 @@ const createViewModelFromFormData = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
+    errors: getErrorsViewModel(validationErrors),
+    errorSummary: govukErrorSummary(validationErrors),
   }
 }
 

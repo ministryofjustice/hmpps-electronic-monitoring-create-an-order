@@ -1,45 +1,42 @@
+import { govukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { ContactDetails } from '../ContactDetails'
 import { ContactDetailsFormData } from '../form-data/contactDetails'
+import { Order } from '../Order'
 import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
-
-type ContactDetailsViewModel = ViewModel<NonNullable<ContactDetails>>
-
-const constructFromFormData = (formData: ContactDetailsFormData, validationErrors: ValidationResult) => {
-  return {
-    contactNumber: {
-      value: formData.contactNumber || '',
-      error: getError(validationErrors, 'contactNumber'),
-    },
-  }
-}
-
-const constructFromEntity = (contactDetails: ContactDetails) => {
-  if (contactDetails) {
-    return {
-      contactNumber: {
-        value: contactDetails.contactNumber ?? '',
-      },
-    }
-  }
-  return {
-    contactNumber: {
-      value: '',
-    },
-  }
-}
+import { AppFormPage } from './utils'
 
 const construct = (
-  contactDetails: ContactDetails,
+  order: Order,
   formData: ContactDetailsFormData,
   validationErrors: ValidationResult,
-): ContactDetailsViewModel => {
-  if (validationErrors.length > 0) {
-    return constructFromFormData(formData, validationErrors)
-  }
+): AppFormPage<ContactDetails> => {
+  const contactNumber =
+    validationErrors.length > 0 ? formData.contactNumber || '' : (order.contactDetails?.contactNumber ?? '')
 
-  return constructFromEntity(contactDetails)
+  return {
+    errorSummary: govukErrorSummary(validationErrors),
+    fields: {
+      contactNumber: {
+        component: 'govukInput',
+        args: {
+          label: {
+            text: 'Enter a telephone number we can use to contact the device wearer (optional).',
+          },
+          hint: {
+            text: 'Provide either a landline or mobile number',
+          },
+          classes: 'govuk-!-width-two-thirds',
+          id: 'contactNumber',
+          name: 'contactNumber',
+          type: 'tel',
+          value: contactNumber,
+          errorMessage: getError(validationErrors, 'contactNumber'),
+          disabled: order.status === 'SUBMITTED',
+        },
+      },
+    },
+  }
 }
 
 export default {

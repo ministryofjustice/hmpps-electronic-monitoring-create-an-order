@@ -1,0 +1,40 @@
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% macro renderField(field) %}
+
+  {% if field.component === "govukRadios" %}
+
+    {{ govukRadios(field.args) }}
+
+  {% elif field.component === "govukCheckboxes" %}
+
+    {{ govukCheckboxes(field.args) }}
+
+  {% elif field.component === "govukSelect" %}
+
+    {{ govukSelect(field.args) }}
+
+  {% elif field.component === "govukDateInput" %}
+
+    {{ govukDateInput(field.args) }}
+
+  {% elif field.component === "govukTextarea" %}
+
+    {{ govukTextarea(field.args) }}
+
+  {% elif field.component === "govukInput" %}
+
+    {{ govukInput(field.args) }}
+
+  {% else %}
+
+    "Field {{ field.fieldName }} uses unknown component"
+
+  {% endif %}
+
+{% endmacro %}

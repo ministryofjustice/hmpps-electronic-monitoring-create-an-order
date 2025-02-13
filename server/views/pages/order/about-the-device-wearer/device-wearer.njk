@@ -10,7 +10,15 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
+{% from "macros/renderField.njk" import renderField %}
+
 {% block formInputs %}
+
+  {% for field in fields %}
+    {{ renderField(field) }}
+  {% endfor %}
+
+  <hr>
 
   {% call govukFieldset({
     legend: {
@@ -24,7 +32,7 @@
         text: "First names"
       },
       classes: "govuk-input--width-10",
-      id: "first-name",
+      id: "firstName",
       name: "firstName",
       value: firstName,
       errorMessage: errors.firstName,
@@ -36,7 +44,7 @@
         text: "Last name"
       },
       classes: "govuk-input--width-10",
-      id: "last-name",
+      id: "lastName",
       name: "lastName",
       value: lastName,
       errorMessage: errors.lastName,

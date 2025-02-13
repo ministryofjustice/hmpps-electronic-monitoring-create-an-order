@@ -1,3 +1,7 @@
+import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
+import { Input } from '../../utils/govukFrontEndTypes/input'
+import { Radios } from '../../utils/govukFrontEndTypes/radios'
+
 export type ErrorMessage = {
   text: string
 }
@@ -62,4 +66,23 @@ export type ViewModel<T> = {
 
 export type ErrorsViewModel = {
   [field: string]: ErrorMessage
+}
+
+type InputField = {
+  component: 'govukInput'
+  args: Input
+}
+
+type RadioField = {
+  component: 'govukRadios'
+  args: Radios
+}
+
+type Field = InputField | RadioField
+
+export type AppFormPage<T> = {
+  errorSummary: ErrorSummary | null
+  fields: {
+    [K in keyof T]: Field
+  }
 }
