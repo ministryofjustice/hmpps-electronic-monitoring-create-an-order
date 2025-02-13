@@ -892,7 +892,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 text: 'Date when mandatory attendance monitoring starts',
               },
               value: {
-                text: '1/1/2025',
+                text: '01/01/2025',
               },
               actions: {
                 items: [
@@ -912,7 +912,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 text: 'Date when mandatory attendance monitoring ends',
               },
               value: {
-                text: '1/11/2025',
+                text: '11/01/2025',
               },
               actions: {
                 items: [
