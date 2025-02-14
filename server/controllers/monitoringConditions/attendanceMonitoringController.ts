@@ -4,7 +4,6 @@ import paths from '../../constants/paths'
 import { AttendanceMonitoring } from '../../models/AttendanceMonitoring'
 import { isValidationResult, ValidationResult } from '../../models/Validation'
 import { AddressField, FormField, TextField, TimeField } from '../../models/view-models/utils'
-import { AuditService } from '../../services'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
 import { deserialiseDate, deserialiseTime, getError, serialiseDate, serialiseTime } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
@@ -51,7 +50,6 @@ type AttendanceMonitoringViewModel = {
 
 export default class AttendanceMonitoringController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly attendanceMonitoringService: AttendanceMonitoringService,
     private readonly taskListService: TaskListService,
   ) {}

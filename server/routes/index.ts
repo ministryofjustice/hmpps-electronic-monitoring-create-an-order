@@ -62,7 +62,6 @@ export default function routes({
   )
   const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
   const attendanceMonitoringController = new AttendanceMonitoringController(
-    auditService,
     attendanceMonitoringService,
     taskListService,
   )

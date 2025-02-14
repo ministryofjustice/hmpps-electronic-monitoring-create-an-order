@@ -2,9 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import AttendanceMonitoringController from './attendanceMonitoringController'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
 import TaskListService from '../../services/taskListService'
 
@@ -18,32 +16,22 @@ jest.mock('../../data/restClient')
 
 describe('attendanceMonitoringController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockAttendanceMonitoringService: jest.Mocked<AttendanceMonitoringService>
   let attendanceMonitoringController: AttendanceMonitoringController
   const taskListService = new TaskListService()
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
 
     mockAttendanceMonitoringService = new AttendanceMonitoringService(
       mockRestClient,
     ) as jest.Mocked<AttendanceMonitoringService>
 
     attendanceMonitoringController = new AttendanceMonitoringController(
-      mockAuditService,
       mockAttendanceMonitoringService,
       taskListService,
     )
