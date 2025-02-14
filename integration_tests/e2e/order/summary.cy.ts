@@ -341,7 +341,7 @@ context('Order Summary', () => {
             startDate: null,
           },
           isValid: false,
-          monitoringConditionsAttendance: [
+          mandatoryAttendanceConditions: [
             {
               addressLine1: null,
               addressLine2: null,

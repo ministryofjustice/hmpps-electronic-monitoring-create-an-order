@@ -297,7 +297,7 @@ export default class TaskListService {
         'NOT_REQUIRED',
       ),
       completed:
-        isNotNullOrUndefined(order.monitoringConditionsAttendance) && order.monitoringConditionsAttendance.length > 0,
+        isNotNullOrUndefined(order.mandatoryAttendanceConditions) && order.mandatoryAttendanceConditions.length > 0,
     })
 
     tasks.push({

@@ -21,7 +21,7 @@ const monitoringConditions = {
 
 const mockEmptyAttendanceMonitoring = {
   ...mockApiOrder('IN_PROGRESS'),
-  monitoringConditionsAttendance: [
+  mandatoryAttendanceConditions: [
     {
       id: mockConditionId,
       startDate: null,
@@ -43,7 +43,7 @@ const mockEmptyAttendanceMonitoring = {
 
 const mockSubmittedAttendanceMonitoring = {
   ...mockApiOrder('SUBMITTED'),
-  monitoringConditionsAttendance: [
+  mandatoryAttendanceConditions: [
     {
       id: mockConditionId,
       startDate: '2024-03-27T00:00:00.000Z',
@@ -201,7 +201,7 @@ context('Attendance monitoring', () => {
         httpStatus: 200,
         id: mockOrderId,
         subPath: '/monitoring-conditions-attendance',
-        response: mockEmptyAttendanceMonitoring.monitoringConditionsAttendance[0],
+        response: mockEmptyAttendanceMonitoring.mandatoryAttendanceConditions[0],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
@@ -232,7 +232,7 @@ context('Attendance monitoring', () => {
         httpStatus: 200,
         id: mockOrderId,
         subPath: '/monitoring-conditions-attendance',
-        response: mockEmptyAttendanceMonitoring.monitoringConditionsAttendance[0],
+        response: mockEmptyAttendanceMonitoring.mandatoryAttendanceConditions[0],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)

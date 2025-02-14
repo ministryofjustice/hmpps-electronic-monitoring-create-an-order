@@ -4,7 +4,6 @@ import paths from '../../constants/paths'
 import { AttendanceMonitoring } from '../../models/AttendanceMonitoring'
 import { isValidationResult, ValidationResult } from '../../models/Validation'
 import { AddressField, FormField, TextField, TimeField } from '../../models/view-models/utils'
-import { AuditService } from '../../services'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
 import { deserialiseDate, deserialiseTime, getError, serialiseDate, serialiseTime } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
@@ -51,7 +50,6 @@ type AttendanceMonitoringViewModel = {
 
 export default class AttendanceMonitoringController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly attendanceMonitoringService: AttendanceMonitoringService,
     private readonly taskListService: TaskListService,
   ) {}
@@ -155,7 +153,7 @@ export default class AttendanceMonitoringController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { conditionId } = req.params
-    const { monitoringConditionsAttendance } = req.order!
+    const { mandatoryAttendanceConditions: monitoringConditionsAttendance } = req.order!
     const condition = monitoringConditionsAttendance?.find(c => c.id === conditionId)
     if (!condition) {
       res.send(404)
@@ -166,14 +164,15 @@ export default class AttendanceMonitoringController {
     res.render('pages/order/monitoring-conditions/attendance-monitoring', viewModel)
   }
 
-  create: RequestHandler = async (req: Request, res: Response) => {
+  update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = attendanceMonitoringFormDataModel.parse(req.body)
 
+    const record = this.createApiModelFromFormData(formData)
     const updateResult = await this.attendanceMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
-      data: this.createApiModelFromFormData(formData),
+      ...record,
     })
 
     if (isValidationResult(updateResult)) {
@@ -190,11 +189,5 @@ export default class AttendanceMonitoringController {
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
-  }
-
-  update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
-
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 }
