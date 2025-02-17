@@ -37,6 +37,8 @@ services:
 
       - CEMO_FMS_INTEGRATION_ENABLED=true
 
+      - HMPPS_S3_BUCKETNAME=test_bucket
+
   cemo-db:
     container_name: cemo-db
     image: postgres:14
