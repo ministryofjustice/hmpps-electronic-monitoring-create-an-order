@@ -51,6 +51,7 @@ executors:
           SERCO_PASSWORD: serco
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
+          HMPPS_S3_BUCKETNAME: test_bucket
 
 jobs:
   build:
