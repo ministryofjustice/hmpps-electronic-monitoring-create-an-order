@@ -179,6 +179,31 @@ const createTrailAnswers = (order: Order) => {
   ]
 }
 
+const createAttendanceAnswers = (order: Order) => {
+  if (!order.mandatoryAttendanceConditions) {
+    return []
+  }
+
+  return order.mandatoryAttendanceConditions.sort().map(attendance => {
+    const uri = paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
+      `:conditionId`,
+      attendance.id!,
+    )
+    return [
+      createDateAnswer('Date when mandatory attendance monitoring starts', attendance.startDate, uri),
+      createDateAnswer('Date when mandatory attendance monitoring ends', attendance.endDate, uri),
+      createTextAnswer('What is the appointment for?', attendance.purpose, uri),
+      createTextAnswer('What day or days is the appointment?', attendance.appointmentDay, uri),
+      createTimeRangeAnswer('Time of the appointment', attendance.startTime, attendance.endTime, uri),
+      createTextAnswer('Address where the appointment will take place', attendance.addressLine1, uri),
+      createTextAnswer('Address line 2', attendance.addressLine2, uri),
+      createTextAnswer('Town or City', attendance.addressLine3, uri),
+      createTextAnswer('County', attendance.addressLine4, uri),
+      createTextAnswer('Postcode', attendance.postcode, uri),
+    ]
+  })
+}
+
 const createAlcoholAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
@@ -217,7 +242,7 @@ const createViewModel = (order: Order) => {
     curfewTimetable: createCurfewTimetableAnswers(order),
     exclusionZone: createExclusionZoneAnswers(order),
     trail: createTrailAnswers(order),
-    attendance: [],
+    attendance: createAttendanceAnswers(order),
     alcohol: createAlcoholAnswers(order),
   }
 }
