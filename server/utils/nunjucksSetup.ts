@@ -7,6 +7,8 @@ import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './u
 import config from '../config'
 import logger from '../../logger'
 import { variationTypeMap } from '../constants/variation'
+import prisons from '../reference/prisons'
+import probationRegions from '../reference/probation-regions'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -52,6 +54,19 @@ export default function nunjucksSetup(app: express.Express): void {
     }))
   })
 
+  const toOptions = (values: Record<string, string>, disabled: boolean) => {
+    return [
+      { value: '', text: '' },
+      ...Object.keys(values).map(key => ({
+        value: key,
+        text: values[key],
+        disabled,
+      })),
+    ]
+  }
+
   // Add data to global nunjucks env
   njkEnv.addGlobal('variationTypes', variationTypeMap)
+  njkEnv.addGlobal('prisons', toOptions(prisons, false))
+  njkEnv.addGlobal('probationRegions', toOptions(probationRegions, false))
 }

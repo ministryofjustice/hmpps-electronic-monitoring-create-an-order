@@ -3,11 +3,14 @@ import { Organisations } from '../InterestedParties'
 
 const InterestedPartiesFormDataModel = z.object({
   action: z.string().default('continue'),
+  notifyingOrganisation: z.string().nullable().default(null),
+  notifyingOrganisationName: z.string().default(''),
   notifyingOrganisationEmail: z.string(),
   responsibleOfficerName: z.string(),
   responsibleOfficerPhoneNumber: z.string().transform(val => (val === '' ? null : val)),
   responsibleOrganisation: z.enum(Organisations).nullable().default(null),
-  responsibleOrganisationRegion: z.string(),
+  probationRegion: z.string(),
+  yjsRegion: z.string(),
   responsibleOrganisationAddressLine1: z.string(),
   responsibleOrganisationAddressLine2: z.string(),
   responsibleOrganisationAddressLine3: z.string(),
@@ -17,4 +20,8 @@ const InterestedPartiesFormDataModel = z.object({
   responsibleOrganisationEmail: z.string(),
 })
 
+type InterestedPartiesFormData = Omit<z.infer<typeof InterestedPartiesFormDataModel>, 'action'>
+
 export default InterestedPartiesFormDataModel
+
+export { InterestedPartiesFormData }

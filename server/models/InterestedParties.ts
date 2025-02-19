@@ -5,6 +5,8 @@ const Organisations = ['YJS', 'YCS', 'PROBATION', 'FIELD_MONITORING_SERVICE', 'H
 
 const InterestedPartiesModel = z
   .object({
+    notifyingOrganisation: z.string(),
+    notifyingOrganisationName: z.string(),
     notifyingOrganisationEmail: z.string(),
     responsibleOfficerName: z.string(),
     responsibleOfficerPhoneNumber: z.string().nullable(),

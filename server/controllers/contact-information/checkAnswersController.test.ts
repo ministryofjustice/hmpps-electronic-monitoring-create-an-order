@@ -226,6 +226,8 @@ describe('ContactDetailsCheckAnswersController', () => {
       deviceWearer: createDeviceWearer({ noFixedAbode: true }),
       contactDetails: { contactNumber: '01234567890' },
       interestedParties: {
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'CARDIFF_PRISON',
         notifyingOrganisationEmail: 'test@test',
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
@@ -442,6 +444,8 @@ describe('ContactDetailsCheckAnswersController', () => {
       deviceWearer: createDeviceWearer({ noFixedAbode: false }),
       contactDetails: { contactNumber: '01234567890' },
       interestedParties: {
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'CARDIFF_PRISON',
         notifyingOrganisationEmail: 'test@test',
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
