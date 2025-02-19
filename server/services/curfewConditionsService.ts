@@ -44,7 +44,7 @@ export default class CurfewConditionsService {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-conditions`,
-        data: this.createApiModelFromFormData(input.data, input.orderId),
+        data: this.createApiModelFromFormData(input.data),
         token: input.accessToken,
       })
       return CurfewConditionsModel.parse(result)
@@ -59,7 +59,7 @@ export default class CurfewConditionsService {
     }
   }
 
-  private createApiModelFromFormData(formData: CurfewConditionsFormData, orderId: string): CurfewConditions {
+  private createApiModelFromFormData(formData: CurfewConditionsFormData): CurfewConditions {
     let addresses: string[] = []
     if (Array.isArray(formData.addresses)) {
       addresses = formData.addresses
@@ -68,7 +68,6 @@ export default class CurfewConditionsService {
     }
 
     return {
-      orderId,
       startDate: serialiseDate(formData['startDate-year'], formData['startDate-month'], formData['startDate-day']),
       endDate: serialiseDate(formData['endDate-year'], formData['endDate-month'], formData['endDate-day']),
       curfewAddress: addresses?.join(',') ?? '',

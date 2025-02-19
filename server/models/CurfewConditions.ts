@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 const CurfewConditionsModel = z.object({
-  orderId: z.string().nullable(),
   startDate: z.string().nullable(),
   endDate: z.string().nullable(),
   curfewAddress: z.string().nullable(),
