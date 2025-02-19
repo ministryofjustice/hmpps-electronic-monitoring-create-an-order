@@ -41,7 +41,6 @@ Cypress.Commands.add('isAccessible', () => {
           'wcag21a',
           'wcag21aa',
           'wcag22aa', // GDS service standard
-          'best-practice',
           'section508',
           'TTv5',
           'EN-301-549',

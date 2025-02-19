@@ -5,6 +5,7 @@ import CheckAnswersController from './checkAnswersController'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
+import questions from '../../constants/questions'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -82,7 +83,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       interestedParties: [
         {
           key: {
-            text: 'What is the email address for your team?',
+            text: questions.interestedParties.notifyingOrganisation,
           },
           value: {
             text: '',
@@ -92,14 +93,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what is the email address for your team?',
+                visuallyHiddenText: questions.interestedParties.notifyingOrganisation.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Full name of responsible officer',
+            text: questions.interestedParties.notifyingOrganisationEmail,
           },
           value: {
             text: '',
@@ -109,14 +110,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'full name of responsible officer',
+                visuallyHiddenText: questions.interestedParties.notifyingOrganisationEmail.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Telephone number for responsible officer',
+            text: questions.interestedParties.responsibleOfficerName,
           },
           value: {
             text: '',
@@ -126,14 +127,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'telephone number for responsible officer',
+                visuallyHiddenText: questions.interestedParties.responsibleOfficerName.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What organisation is the responsible officer part of?',
+            text: questions.interestedParties.responsibleOfficerPhoneNumber,
           },
           value: {
             text: '',
@@ -143,14 +144,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what organisation is the responsible officer part of?',
+                visuallyHiddenText: questions.interestedParties.responsibleOfficerPhoneNumber.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What region is the responsible organisation in? (optional)',
+            text: questions.interestedParties.responsibleOrganisation,
           },
           value: {
             text: '',
@@ -160,14 +161,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what region is the responsible organisation in? (optional)',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisation.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What is the address of the responsible organisation?',
+            text: questions.interestedParties.responsibleOrganisationAddress,
           },
           value: {
             html: '',
@@ -177,14 +178,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what is the address of the responsible organisation?',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationAddress.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Telephone number for responsible organisation',
+            text: questions.interestedParties.responsibleOrganisationPhoneNumber,
           },
           value: {
             text: '',
@@ -194,14 +195,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'telephone number for responsible organisation',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationPhoneNumber.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Email address for responsible organisation',
+            text: questions.interestedParties.responsibleOrganisationEmail,
           },
           value: {
             text: '',
@@ -211,7 +212,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'email address for responsible organisation',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationEmail.toLowerCase(),
               },
             ],
           },
@@ -226,8 +227,8 @@ describe('ContactDetailsCheckAnswersController', () => {
       deviceWearer: createDeviceWearer({ noFixedAbode: true }),
       contactDetails: { contactNumber: '01234567890' },
       interestedParties: {
-        notifyingOrganisation: 'PRISON',
-        notifyingOrganisationName: 'CARDIFF_PRISON',
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
         notifyingOrganisationEmail: 'test@test',
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
@@ -239,7 +240,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOrganisationAddressPostcode: 'Postcode',
         responsibleOrganisationEmail: 'test@test.com',
         responsibleOrganisationPhoneNumber: '01234567891',
-        responsibleOrganisationRegion: 'East',
+        responsibleOrganisationRegion: '',
       },
       addresses: [
         createAddress({
@@ -300,58 +301,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       interestedParties: [
         {
           key: {
-            text: 'What is the email address for your team?',
-          },
-          value: {
-            text: 'test@test',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'what is the email address for your team?',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Full name of responsible officer',
-          },
-          value: {
-            text: 'John Smith',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'full name of responsible officer',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Telephone number for responsible officer',
-          },
-          value: {
-            text: '01234567890',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'telephone number for responsible officer',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'What organisation is the responsible officer part of?',
+            text: questions.interestedParties.notifyingOrganisation,
           },
           value: {
             text: 'Home Office',
@@ -361,31 +311,82 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what organisation is the responsible officer part of?',
+                visuallyHiddenText: questions.interestedParties.notifyingOrganisation.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What region is the responsible organisation in? (optional)',
+            text: questions.interestedParties.notifyingOrganisationEmail,
           },
           value: {
-            text: 'East',
+            text: 'test@test',
           },
           actions: {
             items: [
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what region is the responsible organisation in? (optional)',
+                visuallyHiddenText: questions.interestedParties.notifyingOrganisationEmail.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What is the address of the responsible organisation?',
+            text: questions.interestedParties.responsibleOfficerName,
+          },
+          value: {
+            text: 'John Smith',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.interestedParties.responsibleOfficerName.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.interestedParties.responsibleOfficerPhoneNumber,
+          },
+          value: {
+            text: '01234567890',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.interestedParties.responsibleOfficerPhoneNumber.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.interestedParties.responsibleOrganisation,
+          },
+          value: {
+            text: 'Home Office',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisation.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.interestedParties.responsibleOrganisationAddress,
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -395,14 +396,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what is the address of the responsible organisation?',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationAddress.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Telephone number for responsible organisation',
+            text: questions.interestedParties.responsibleOrganisationPhoneNumber,
           },
           value: {
             text: '01234567891',
@@ -412,14 +413,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'telephone number for responsible organisation',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationPhoneNumber.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Email address for responsible organisation',
+            text: questions.interestedParties.responsibleOrganisationEmail,
           },
           value: {
             text: 'test@test.com',
@@ -429,7 +430,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'email address for responsible organisation',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationEmail.toLowerCase(),
               },
             ],
           },
@@ -449,7 +450,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         notifyingOrganisationEmail: 'test@test',
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
-        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOrganisation: 'PROBATION',
         responsibleOrganisationAddressLine1: 'Line 1',
         responsibleOrganisationAddressLine2: 'Line 2',
         responsibleOrganisationAddressLine3: 'Line 3',
@@ -457,7 +458,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOrganisationAddressPostcode: 'Postcode',
         responsibleOrganisationEmail: 'test@test.com',
         responsibleOrganisationPhoneNumber: '01234567891',
-        responsibleOrganisationRegion: 'East',
+        responsibleOrganisationRegion: 'NORTH_EAST',
       },
       addresses: [
         createAddress({
@@ -595,7 +596,41 @@ describe('ContactDetailsCheckAnswersController', () => {
       interestedParties: [
         {
           key: {
-            text: 'What is the email address for your team?',
+            text: questions.interestedParties.notifyingOrganisation,
+          },
+          value: {
+            text: 'Prison',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.interestedParties.notifyingOrganisation.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.interestedParties.prison,
+          },
+          value: {
+            text: 'Cardiff Prison',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.interestedParties.prison.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.interestedParties.notifyingOrganisationEmail,
           },
           value: {
             text: 'test@test',
@@ -605,14 +640,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what is the email address for your team?',
+                visuallyHiddenText: questions.interestedParties.notifyingOrganisationEmail.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Full name of responsible officer',
+            text: questions.interestedParties.responsibleOfficerName,
           },
           value: {
             text: 'John Smith',
@@ -622,14 +657,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'full name of responsible officer',
+                visuallyHiddenText: questions.interestedParties.responsibleOfficerName.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Telephone number for responsible officer',
+            text: questions.interestedParties.responsibleOfficerPhoneNumber,
           },
           value: {
             text: '01234567890',
@@ -639,48 +674,48 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'telephone number for responsible officer',
+                visuallyHiddenText: questions.interestedParties.responsibleOfficerPhoneNumber.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What organisation is the responsible officer part of?',
+            text: questions.interestedParties.responsibleOrganisation,
           },
           value: {
-            text: 'Home Office',
+            text: 'Probation',
           },
           actions: {
             items: [
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what organisation is the responsible officer part of?',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisation.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What region is the responsible organisation in? (optional)',
+            text: questions.interestedParties.probationRegion,
           },
           value: {
-            text: 'East',
+            text: 'North East',
           },
           actions: {
             items: [
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what region is the responsible organisation in? (optional)',
+                visuallyHiddenText: questions.interestedParties.probationRegion.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'What is the address of the responsible organisation?',
+            text: questions.interestedParties.responsibleOrganisationAddress,
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -690,14 +725,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what is the address of the responsible organisation?',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationAddress.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Telephone number for responsible organisation',
+            text: questions.interestedParties.responsibleOrganisationPhoneNumber,
           },
           value: {
             text: '01234567891',
@@ -707,14 +742,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'telephone number for responsible organisation',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationPhoneNumber.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: 'Email address for responsible organisation',
+            text: questions.interestedParties.responsibleOrganisationEmail,
           },
           value: {
             text: 'test@test.com',
@@ -724,7 +759,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'email address for responsible organisation',
+                visuallyHiddenText: questions.interestedParties.responsibleOrganisationEmail.toLowerCase(),
               },
             ],
           },

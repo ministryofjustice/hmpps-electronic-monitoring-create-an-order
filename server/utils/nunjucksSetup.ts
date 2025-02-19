@@ -9,6 +9,10 @@ import logger from '../../logger'
 import { variationTypeMap } from '../constants/variation'
 import prisons from '../reference/prisons'
 import probationRegions from '../reference/probation-regions'
+import youthJusticeServiceRegions from '../reference/youth-justice-service-regions'
+import crownCourts from '../reference/crown-courts'
+import magistratesCourts from '../reference/magistrates-courts'
+import questions from '../constants/questions'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -54,7 +58,7 @@ export default function nunjucksSetup(app: express.Express): void {
     }))
   })
 
-  const toOptions = (values: Record<string, string>, disabled: boolean) => {
+  const toOptions = (values: Record<string, string>, disabled: boolean = false) => {
     return [
       { value: '', text: '' },
       ...Object.keys(values).map(key => ({
@@ -66,7 +70,11 @@ export default function nunjucksSetup(app: express.Express): void {
   }
 
   // Add data to global nunjucks env
+  njkEnv.addGlobal('questions', questions)
   njkEnv.addGlobal('variationTypes', variationTypeMap)
-  njkEnv.addGlobal('prisons', toOptions(prisons, false))
-  njkEnv.addGlobal('probationRegions', toOptions(probationRegions, false))
+  njkEnv.addGlobal('prisons', toOptions(prisons))
+  njkEnv.addGlobal('probationRegions', toOptions(probationRegions))
+  njkEnv.addGlobal('yjsRegions', toOptions(youthJusticeServiceRegions))
+  njkEnv.addGlobal('crownCourts', toOptions(crownCourts))
+  njkEnv.addGlobal('magistratesCourts', toOptions(magistratesCourts))
 }

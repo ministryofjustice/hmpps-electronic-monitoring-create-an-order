@@ -12,10 +12,10 @@
 {% set crownCourtHtml %}
 
   {{ accessibleAutocomplete({
-    id: 'crownCourtName',
-    name: 'notifyingOrganisationName',
-    label: 'Select the name of the Crown Court',
-    options: [],
+    id: 'crownCourt',
+    name: 'crownCourt',
+    label: questions.interestedParties.crownCourt,
+    options: crownCourts,
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
@@ -26,10 +26,10 @@
 {% set magistrateCourtHtml %}
 
   {{ accessibleAutocomplete({
-    id: 'magistrateCourtName',
-    name: 'notifyingOrganisationName',
-    label: 'Select the name of the Court',
-    options: [],
+    id: 'magistratesCourt',
+    name: 'magistratesCourt',
+    label: questions.interestedParties.magistratesCourt,
+    options: magistratesCourts,
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
@@ -40,9 +40,9 @@
 {% set prisonHtml %}
 
   {{ accessibleAutocomplete({
-    id: 'prisonName',
-    name: 'notifyingOrganisationName',
-    label: 'Select the name of the Prison',
+    id: 'prison',
+    name: 'prison',
+    label: questions.interestedParties.prison,
     options: prisons,
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
@@ -57,7 +57,7 @@
     id: "probationRegion",
     name: "probationRegion",
     label: {
-      text: "Select the region"
+      text: questions.interestedParties.probationRegion
     },
     items: probationRegions,
     value: responsibleOrganisationRegion.value,
@@ -73,46 +73,9 @@
     id: "yjsRegion",
     name: "yjsRegion",
     label: {
-      text: "Select the region"
+      text: questions.interestedParties.yjsRegion
     },
-    items: [
-      {
-        value: "",
-        text: "Select region"
-      },
-      {
-        value: "EAST_AND_SOUTH_EAST",
-        text: "East and South East"
-      },
-      {
-        value: "LONDON",
-        text: "London"
-      },
-      {
-        value: "MIDLANDS",
-        text: "Midlands"
-      },
-      {
-        value: "NORTH_EAST_AND_CUMBRIA",
-        text: "North East and Cumbria"
-      },
-      {
-        value: "NORTH_WEST",
-        text: "North West"
-      },
-      {
-        value: "SOUTH_WEST_AND_SOUTH_CENTRAL",
-        text: "South West and South Central"
-      },
-      {
-        value: "WALES",
-        text: "Wales"
-      },
-      {
-        value: "YORKSHIRE_AND_HUMBERSIDE",
-        text: "Yorkshire and Humberside"
-      }
-    ],
+    items: yjsRegions,
     value: responsibleOrganisationRegion.value,
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
@@ -124,7 +87,7 @@
 
   {% call govukFieldset({
     legend: {
-      text: " Notifying organisation",
+      text: "Notifying organisation",
       classes: "govuk-fieldset__legend--m",
       isPageHeading: false
     }
@@ -134,7 +97,7 @@
       name: "notifyingOrganisation",
       fieldset: {
         legend: {
-          text: "What organisation or related organisation are you part of?",
+          text: questions.interestedParties.notifyingOrganisation,
           isPageHeading: true,
           classes: "govuk-fieldset__legend--s"
         }
@@ -195,7 +158,7 @@
 
     {{ govukInput({
       label: {
-        text: "What is the email address for your team?",
+        text: questions.interestedParties.notifyingOrganisationEmail,
         classes: "govuk-label--s"
       },
       hint: {
@@ -219,7 +182,7 @@
   }) %}
     {{ govukInput({
       label: {
-        text: "Full name of responsible officer",
+        text: questions.interestedParties.responsibleOfficerName,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -232,14 +195,13 @@
 
     {{ govukInput({
       label: {
-        text: "Telephone number for responsible officer",
+        text: questions.interestedParties.responsibleOfficerPhoneNumber,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
       id: "responsibleOfficerPhoneNumber",
       name: "responsibleOfficerPhoneNumber",
       type: "tel",
-      autocomplete: "tel tel-national",
       value: responsibleOfficerPhoneNumber.value,
       errorMessage: responsibleOfficerPhoneNumber.error,
       disabled: not isOrderEditable
@@ -257,7 +219,7 @@
       name: "responsibleOrganisation",
       fieldset: {
         legend: {
-          text: "What organisation is the responsible officer part of?",
+          text: questions.interestedParties.responsibleOrganisation,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -310,7 +272,7 @@
 
     {% call govukFieldset({
       legend: {
-        text: "What is the address of the responsible organisation?",
+        text: questions.interestedParties.responsibleOrganisationAddress,
         classes: "govuk-fieldset__legend--s",
         isPageHeading: false
       }
@@ -379,14 +341,13 @@
 
     {{ govukInput({
       label: {
-        text: "Telephone number for responsible organisation",
+        text: questions.interestedParties.responsibleOrganisationPhoneNumber,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
       id: "responsibleOrganisationPhoneNumber",
       name: "responsibleOrganisationPhoneNumber",
       type: "tel",
-      autocomplete: "tel tel-national",
       value: responsibleOrganisationPhoneNumber.values,
       errorMessage: responsibleOrganisationPhoneNumber.error,
       disabled: not isOrderEditable
@@ -394,7 +355,7 @@
 
     {{ govukInput({
       label: {
-        text: "Email address for responsible organisation",
+        text: questions.interestedParties.responsibleOrganisationEmail,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",

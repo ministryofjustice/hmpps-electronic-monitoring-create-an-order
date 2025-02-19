@@ -18,6 +18,22 @@ const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) =
   return ''
 }
 
+const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
+  if (formData.notifyingOrganisation === 'PRISON') {
+    return formData.prison
+  }
+
+  if (formData.notifyingOrganisation === 'CROWN_COURT') {
+    return formData.crownCourt
+  }
+
+  if (formData.notifyingOrganisation === 'MAGISTRATES_COURT') {
+    return formData.magistratesCourt
+  }
+
+  return ''
+}
+
 const constructFromFormData = (formData: InterestedPartiesFormData, validationErrors: ValidationResult) => {
   return {
     notifyingOrganisation: {
@@ -25,7 +41,7 @@ const constructFromFormData = (formData: InterestedPartiesFormData, validationEr
       error: getError(validationErrors, 'notifyingOrganisation'),
     },
     notifyingOrganisationName: {
-      value: formData.notifyingOrganisationName,
+      value: getNotifyingOrganisationName(formData),
       error: getError(validationErrors, 'notifyingOrganisationName'),
     },
     notifyingOrganisationEmail: {

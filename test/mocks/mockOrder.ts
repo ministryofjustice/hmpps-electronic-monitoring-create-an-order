@@ -59,7 +59,7 @@ export const createInstallationAndRisk = (overrideProperties?: Partial<Installat
 })
 
 export const createInterestedParties = (overrideProperties?: Partial<InterestedParties>): InterestedParties => ({
-  notifyingOrganisation: '',
+  notifyingOrganisation: 'HOME_OFFICE',
   notifyingOrganisationName: '',
   notifyingOrganisationEmail: '',
   responsibleOfficerName: '',
