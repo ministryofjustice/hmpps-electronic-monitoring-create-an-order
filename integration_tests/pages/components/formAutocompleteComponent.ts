@@ -10,7 +10,11 @@ export default class FormAutocompleteComponent {
     private readonly label: string,
     private readonly options: string[],
   ) {
-    this.parent.getByLabel(this.label, { log: false }).as(`${this.elementCacheId}-element`)
+    this.parent
+      .contains('label', this.label)
+      .invoke('attr', 'for')
+      .then(id => cy.get(`#${id}-select`))
+      .as(`${this.elementCacheId}-element`)
     this.element.should('exist')
 
     this.options.forEach(option => this.shouldHaveOption(option))
@@ -21,7 +25,7 @@ export default class FormAutocompleteComponent {
   }
 
   set(value?: string | number | boolean) {
-    this.element.select(value as string)
+    this.element.select(value as string, { force: true })
   }
 
   shouldHaveValue(value?: string | number | boolean) {

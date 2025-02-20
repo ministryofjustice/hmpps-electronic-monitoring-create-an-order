@@ -1,17 +1,19 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
+import prisons from '../../server/reference/prisons'
+import crownCourts from '../../server/reference/crown-courts'
+import magistratesCourts from '../../server/reference/magistrates-courts'
+import probationRegions from '../../server/reference/probation-regions'
+import yjsRegions from '../../server/reference/youth-justice-service-regions'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', "Don't know"]
 
 const genderOptions = ['Male', 'Female', 'Non binary', "Don't know", 'Self identify']
 
-const organisationTypes = [
-  'Youth Justice Service (YJS)',
-  'Youth Custody Service (YCS)',
-  'Probation',
-  'Field monitoring service',
-  'Home Office',
-  'Police',
-]
+const prisonTypes = Object.values(prisons)
+const crownCourtTypes = Object.values(crownCourts)
+const magistratesCourtTypes = Object.values(magistratesCourts)
+const probationRegionTypes = Object.values(probationRegions)
+const yjsRegionTypes = Object.values(yjsRegions)
 
 // https://www.ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama
 const validUkPhoneNumbers = [
@@ -48,12 +50,19 @@ export class Address {
 }
 
 export type InterestedParties = {
+  notifyingOrganisation?: string
+  notifyingOrganisationName?: string
+  prison?: string
+  crownCourt?: string
+  magistratesCourt?: string
   notifyingOrganisationEmailAddress?: string
 
-  responsibleOrganisationName?: string
+  responsibleOrganisation?: string
+  responsibleOrganisationRegion?: string
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
-  responsibleOrganisationRegion?: string
+  probationRegion?: string
+  yjsRegion?: string
   responsibleOrganisationAddress?: Partial<Address>
 
   responsibleOfficerName?: string
@@ -132,22 +141,63 @@ export const createKnownAddress = (): Address => {
   return faker.helpers.arrayElement<Address>([new Address('10 downing street', 'London', '', 'ENGLAND', 'SW1A 2AA')])
 }
 
-export const createFakeInterestedParties = (): Partial<InterestedParties> => {
+export const createFakeInterestedParties = (
+  notifyingOrganisation: string,
+  responsibleOrganisation: string,
+): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
   const officerContactNumber = createFakeUkPhoneNumber()
-  const organisation = faker.helpers.arrayElement(organisationTypes)
   const orgContactNumber = createFakeUkPhoneNumber()
-  const orgEmailAddress = `${organisation.toLowerCase().replace(/\s/g, '-')}@example.com`
+  const orgEmailAddress = `${responsibleOrganisation.toLowerCase().replace(/\s/g, '-')}@example.com`
   const address = createFakeAddress()
+  let notifyingOrganisationName = ''
+  let responsibleOrganisationRegion = ''
+  let prison = ''
+  let crownCourt = ''
+  let magistratesCourt = ''
+  let probationRegion = ''
+  let yjsRegion = ''
+
+  if (notifyingOrganisation === 'Prison') {
+    prison = faker.helpers.arrayElement(prisonTypes)
+    notifyingOrganisationName = prison
+  }
+
+  if (notifyingOrganisation === 'Magistrates Court') {
+    magistratesCourt = faker.helpers.arrayElement(magistratesCourtTypes)
+    notifyingOrganisationName = magistratesCourt
+  }
+
+  if (notifyingOrganisation === 'Crown Court') {
+    crownCourt = faker.helpers.arrayElement(crownCourtTypes)
+    notifyingOrganisationName = crownCourt
+  }
+
+  if (responsibleOrganisation === 'Probation') {
+    probationRegion = faker.helpers.arrayElement(probationRegionTypes)
+    responsibleOrganisationRegion = probationRegion
+  }
+
+  if (responsibleOrganisation === 'YJS') {
+    yjsRegion = faker.helpers.arrayElement(yjsRegionTypes)
+    responsibleOrganisationRegion = yjsRegion
+  }
 
   return {
+    notifyingOrganisation,
+    notifyingOrganisationName,
+    prison,
+    magistratesCourt,
+    crownCourt,
     responsibleOfficerName: officerName,
     responsibleOfficerContactNumber: officerContactNumber,
-    responsibleOrganisationName: organisation,
+    responsibleOrganisation,
+    responsibleOrganisationRegion,
     responsibleOrganisationContactNumber: orgContactNumber,
     responsibleOrganisationEmailAddress: orgEmailAddress,
-    responsibleOrganisationRegion: undefined,
+    probationRegion,
+    yjsRegion,
     responsibleOrganisationAddress: address,
   }
 }
