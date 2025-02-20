@@ -3,9 +3,9 @@ import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import { AuditService } from '../../services'
 import InterestedPartiesService from '../../services/interestedPartiesService'
-import { getErrorsViewModel } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
 import InterestedPartiesFormDataModel from '../../models/form-data/interestedParties'
+import interestedPartiesViewModel from '../../models/view-models/interestedParties'
 
 export default class InterestedPartiesController {
   constructor(
@@ -18,12 +18,9 @@ export default class InterestedPartiesController {
     const { interestedParties } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const viewModel = interestedPartiesViewModel.construct(interestedParties, formData[0] as never, errors as never)
 
-    res.render('pages/order/contact-information/interested-parties', {
-      ...interestedParties,
-      ...(formData.length > 0 ? (formData[0] as never) : {}),
-      errors: getErrorsViewModel(errors as never),
-    })
+    res.render('pages/order/contact-information/interested-parties', viewModel)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

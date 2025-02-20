@@ -35,8 +35,7 @@ context('Contact information', () => {
         page.backToSummaryButton.should('exist')
       })
 
-      // TODO: FAIL issue determining if autocomplete is valid
-      it.skip('Should be accessible', () => {
+      it('Should be accessible', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
         page.checkIsAccessible()
       })

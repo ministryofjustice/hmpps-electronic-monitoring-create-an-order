@@ -1,14 +1,16 @@
 import { z } from 'zod'
 import AddressModel from './Address'
-
-const Organisations = ['YJS', 'YCS', 'PROBATION', 'FIELD_MONITORING_SERVICE', 'HOME_OFFICE', 'POLICE'] as const
+import { ResponsibleOrganisationEnum } from './ResponsibleOrganisation'
+import { NotifyingOrganisationEnum } from './NotifyingOrganisation'
 
 const InterestedPartiesModel = z
   .object({
+    notifyingOrganisation: NotifyingOrganisationEnum,
+    notifyingOrganisationName: z.string(),
     notifyingOrganisationEmail: z.string(),
     responsibleOfficerName: z.string(),
     responsibleOfficerPhoneNumber: z.string().nullable(),
-    responsibleOrganisation: z.enum(Organisations).nullable(),
+    responsibleOrganisation: ResponsibleOrganisationEnum,
     responsibleOrganisationRegion: z.string(),
     responsibleOrganisationAddress: AddressModel,
     responsibleOrganisationPhoneNumber: z.string().nullable(),
@@ -24,8 +26,6 @@ const InterestedPartiesModel = z
       responsibleOrganisationAddressPostcode: responsibleOrganisationAddress.postcode,
     }
   })
-
-export { Organisations }
 
 export type InterestedParties = z.infer<typeof InterestedPartiesModel>
 

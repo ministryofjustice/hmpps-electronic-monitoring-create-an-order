@@ -59,6 +59,8 @@ export const createInstallationAndRisk = (overrideProperties?: Partial<Installat
 })
 
 export const createInterestedParties = (overrideProperties?: Partial<InterestedParties>): InterestedParties => ({
+  notifyingOrganisation: 'HOME_OFFICE',
+  notifyingOrganisationName: '',
   notifyingOrganisationEmail: '',
   responsibleOfficerName: '',
   responsibleOfficerPhoneNumber: '',
@@ -153,7 +155,6 @@ export const createCurfewReleaseDateConditions = (
 ): CurfewReleaseDate => ({
   curfewAddress: null,
   endTime: null,
-  orderId: null,
   releaseDate: null,
   startTime: null,
   ...overrideProperties,
@@ -162,7 +163,6 @@ export const createCurfewReleaseDateConditions = (
 export const createCurfewConditions = (overrideProperties?: Partial<CurfewConditions>): CurfewConditions => ({
   curfewAddress: null,
   endDate: null,
-  orderId: null,
   startDate: null,
   ...overrideProperties,
 })
@@ -172,7 +172,6 @@ export const createCurfewTimeTable = (overrideProperties?: Partial<CurfewTimetab
     curfewAddress: '',
     dayOfWeek: '',
     endTime: '',
-    orderId: '',
     startTime: '',
     ...overrideProperties,
   },

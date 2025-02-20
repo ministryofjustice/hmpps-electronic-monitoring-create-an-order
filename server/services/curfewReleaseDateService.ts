@@ -29,7 +29,7 @@ export default class CurfewReleaseDateService {
     try {
       await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-release-date`,
-        data: this.createApiModelFromFormData(input.data, input.orderId),
+        data: this.createApiModelFromFormData(input.data),
         token: input.accessToken,
       })
       return undefined
@@ -44,10 +44,9 @@ export default class CurfewReleaseDateService {
     }
   }
 
-  private createApiModelFromFormData(formData: CurfewReleaseDateFormData, orderId: string): CurfewReleaseDate {
+  private createApiModelFromFormData(formData: CurfewReleaseDateFormData): CurfewReleaseDate {
     return {
       releaseDate: serialiseDate(formData.releaseDateYear, formData.releaseDateMonth, formData.releaseDateDay),
-      orderId,
       startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
       endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
       curfewAddress: formData.address ?? null,

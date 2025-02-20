@@ -255,6 +255,8 @@ context('Order Summary', () => {
             offence: null,
           },
           interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
             notifyingOrganisationEmail: '',
             responsibleOfficerName: '',
             responsibleOfficerPhoneNumber: '',
