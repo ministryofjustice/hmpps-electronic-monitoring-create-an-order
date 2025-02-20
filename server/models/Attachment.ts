@@ -3,7 +3,6 @@ import AttachmentType from './AttachmentType'
 
 const AttachmentModel = z.object({
   id: z.string().uuid(),
-  orderId: z.string().uuid(),
   fileType: z.nativeEnum(AttachmentType),
   fileName: z.string(),
 })

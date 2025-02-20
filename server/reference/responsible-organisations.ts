@@ -1,4 +1,4 @@
-const responsibleOrganisationMap: Record<string, string> = {
+const responsibleOrganisations: Record<string, string> = {
   YJS: 'Youth Justice Service (YJS)',
   YCS: 'Youth Custody Service (YCS)',
   PROBATION: 'Probation',
@@ -7,5 +7,4 @@ const responsibleOrganisationMap: Record<string, string> = {
   POLICE: 'Police',
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export { responsibleOrganisationMap }
+export default responsibleOrganisations

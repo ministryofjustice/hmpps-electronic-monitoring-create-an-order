@@ -52,7 +52,7 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties()
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -222,14 +222,14 @@ context('Scenarios', () => {
                 new_order_received: '',
                 notifying_officer_email: '',
                 notifying_officer_name: '',
-                notifying_organization: 'N/A',
+                notifying_organization: interestedParties.notifyingOrganisation,
                 no_post_code: '',
                 no_address_1: '',
                 no_address_2: '',
                 no_address_3: '',
                 no_address_4: '',
                 no_email: '',
-                no_name: '',
+                no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: '',
                 offence_date: '',
@@ -251,11 +251,7 @@ context('Scenarios', () => {
                 responsible_officer_email: '',
                 responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
                 responsible_officer_name: interestedParties.responsibleOfficerName,
-                responsible_organization: interestedParties.responsibleOrganisationName
-                  .toUpperCase()
-                  .replace(/\s/g, '_')
-                  .replace('YOUTH_CUSTODY_SERVICE_(YCS)', 'YCS')
-                  .replace('YOUTH_JUSTICE_SERVICE_(YJS)', 'YJS'),
+                responsible_organization: interestedParties.responsibleOrganisation,
                 ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
                 ro_address_1: interestedParties.responsibleOrganisationAddress.line1,
                 ro_address_2: interestedParties.responsibleOrganisationAddress.line2,
@@ -263,7 +259,7 @@ context('Scenarios', () => {
                 ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
                 ro_email: interestedParties.responsibleOrganisationEmailAddress,
                 ro_phone: interestedParties.responsibleOrganisationContactNumber,
-                ro_region: '',
+                ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
                 tag_at_source: '',

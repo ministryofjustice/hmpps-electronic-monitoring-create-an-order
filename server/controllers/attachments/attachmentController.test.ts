@@ -98,13 +98,11 @@ describe('AttachmentController', () => {
     it('should render a view with file names', async () => {
       req.order?.additionalDocuments.push({
         id: '',
-        orderId: '',
         fileName: 'mockLicenceFile.jpeg',
         fileType: AttachmentType.LICENCE,
       })
       req.order?.additionalDocuments.push({
         id: '',
-        orderId: '',
         fileName: 'mockPhotoFile.jpeg',
         fileType: AttachmentType.PHOTO_ID,
       })

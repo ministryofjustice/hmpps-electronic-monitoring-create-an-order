@@ -107,7 +107,7 @@ context('The kitchen sink', () => {
     }
     const tertiaryAddressDetails = createFakeAddress()
     const installationAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties()
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
