@@ -83,6 +83,65 @@
 
 {% endset %}
 
+{% set notifyingOrgOptions = [] %}
+{% for org in notifyingOrganisations | toOptions(not isOrderEditable) %}
+  {% if org.value == 'PRISON' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: prisonHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+  {% elif org.value == 'CROWN_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: crownCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+  {% elif org.value == 'MAGISTRATES_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: magistrateCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+  {% else %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push(org), notifyingOrgOptions) %}
+  {% endif %}
+{% endfor %}
+
+{% set responsibleOrgOptions = [] %}
+{% for org in responsibleOrganisations | toOptions(not isOrderEditable) %}
+  {% if org.value == 'PROBATION' %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: probationRegionHtml
+      },
+      disabled: org.disabled
+    }), responsibleOrgOptions) %}
+  {% elif org.value == 'YJS' %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: yjsRegionHtml
+      },
+      disabled: org.disabled
+    }), responsibleOrgOptions) %}
+  {% else %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push(org), responsibleOrgOptions) %}
+  {% endif %}
+{% endfor %}
+
 {% block formInputs %}
 
   {% call govukFieldset({
@@ -105,52 +164,7 @@
       hint: {
         text: "Select one option"
       },
-      items: [
-        {
-          value: "CROWN_COURT",
-          text: "Crown Court",
-          conditional: {
-            html: crownCourtHtml
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "FAMILY_COURT",
-          text: "Family Court",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "MAGISTRATES_COURT",
-          text: "Magistrates Court",
-          conditional: {
-            html: magistrateCourtHtml
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "SCOTTISH_COURT",
-          text: "Scottish Court",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "HOME_OFFICE",
-          text: "Home Office",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "PRISON",
-          text: "Prisons",
-          conditional: {
-            html: prisonHtml
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "PROBATION",
-          text: "Probation",
-          disabled: not isOrderEditable
-        }
-      ],
+      items: notifyingOrgOptions,
       value: notifyingOrganisation.value,
       errorMessage: notifyingOrganisation.error,
       disabled: not isOrderEditable
@@ -229,46 +243,8 @@
       },
       value: responsibleOrganisation.value,
       errorMessage: responsibleOrganisation.error,
-      items: [
-        {
-          value: "YJS",
-          text: "Youth Justice Service (YJS)",
-          conditional: {
-            html: yjsRegionHtml
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "YCS",
-          text: "Youth Custody Service (YCS)",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "PROBATION",
-          text: "Probation",
-          conditional: {
-            html: probationRegionHtml
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "FIELD_MONITORING_SERVICE",
-          text: "Field monitoring service",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "HOME_OFFICE",
-          text: "Home Office",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "POLICE",
-          text: "Police",
-          disabled: not isOrderEditable
-        }
-      ]
+      items: responsibleOrgOptions
     }) }}
-
 
     {% call govukFieldset({
       legend: {

@@ -1,4 +1,3 @@
-import { responsibleOrganisationMap } from '../../constants/contact-information/interested-parties'
 import paths from '../../constants/paths'
 import questions from '../../constants/questions'
 import crownCourts from '../../reference/crown-courts'
@@ -7,6 +6,7 @@ import notifyingOrganisations from '../../reference/notifying-organisations'
 import prisons from '../../reference/prisons'
 import probationRegions from '../../reference/probation-regions'
 import youthJusticeServiceRegions from '../../reference/youth-justice-service-regions'
+import responsibleOrganisations from '../../reference/responsible-organisations'
 import { createAddressAnswer, createBooleanAnswer, createTextAnswer } from '../../utils/checkYourAnswers'
 import { lookup } from '../../utils/utils'
 import { Order } from '../Order'
@@ -139,7 +139,7 @@ const createInterestedPartiesAnswers = (order: Order) => {
     ),
     createTextAnswer(
       questions.interestedParties.responsibleOrganisation,
-      lookup(responsibleOrganisationMap, order.interestedParties?.responsibleOrganisation),
+      lookup(responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
       uri,
     ),
     ...getResponsibleOrganisationRegionAnswer(order, uri),
