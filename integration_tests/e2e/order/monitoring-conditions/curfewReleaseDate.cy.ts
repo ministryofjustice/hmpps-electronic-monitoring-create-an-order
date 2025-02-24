@@ -193,7 +193,6 @@ context('Curfew monitoring - release date', () => {
           expect(requests[0]).to.deep.equal({
             releaseDate: '2024-03-27T00:00:00.000Z',
             startTime: '18:15:00',
-            orderId: mockOrderId,
             endTime: '19:30:00',
             curfewAddress: 'SECONDARY',
           })
