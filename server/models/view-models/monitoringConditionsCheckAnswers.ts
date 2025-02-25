@@ -21,6 +21,9 @@ import {
   createTextAnswer,
   createTimeRangeAnswer,
 } from '../../utils/checkYourAnswers'
+import questions from '../../constants/questions'
+import sentenceTypes from '../../reference/sentence-types'
+import yesNoUnknown from '../../reference/yes-no-unknown'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -37,6 +40,11 @@ const createMonitoringConditionsAnswers = (order: Order) => {
   const conditionType = lookup(conditionTypeMap, order.monitoringConditions.conditionType)
   const orderType = lookup(orderTypeMap, order.monitoringConditions.orderType)
   const orderTypeDescription = lookup(orderTypeDescriptionMap, order.monitoringConditions.orderTypeDescription)
+  const sentenceType = lookup(sentenceTypes, order.monitoringConditions.sentenceType)
+  const issp = lookup(yesNoUnknown, order.monitoringConditions.issp)
+  const hdc = lookup(yesNoUnknown, order.monitoringConditions.hdc)
+  const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
+
   return [
     createDateAnswer('Start date', order.monitoringConditions.startDate, uri),
     createTimeAnswer('Start time', order.monitoringConditions.startDate, uri),
@@ -45,6 +53,10 @@ const createMonitoringConditionsAnswers = (order: Order) => {
     createTextAnswer('Order type', orderType, uri),
     createTextAnswer('Order type description', orderTypeDescription, uri),
     createTextAnswer('Condition type', conditionType, uri),
+    createTextAnswer(questions.monitoringConditions.sentenceType, sentenceType, uri),
+    createTextAnswer(questions.monitoringConditions.issp, issp, uri),
+    createTextAnswer(questions.monitoringConditions.hdc, hdc, uri),
+    createTextAnswer(questions.monitoringConditions.prarr, prarr, uri),
     createMultipleChoiceAnswer('What monitoring does the device wearer need?', getSelectedMonitoringTypes(order), uri),
   ]
 }

@@ -19,7 +19,7 @@ const mockSubmittedMonitoringRequirements = {
     sentenceType: 'EPP',
     issp: 'YES',
     hdc: 'NO',
-    prarr: 'UNKNOWN'
+    prarr: 'UNKNOWN',
   },
 }
 
@@ -38,7 +38,7 @@ const mockEmptyMonitoringConditions = {
     sentenceType: null,
     issp: null,
     hdc: null,
-    prarr: null
+    prarr: null,
   },
 }
 
@@ -58,7 +58,7 @@ const validFormData = {
   sentenceType: 'Extended Determinate Sentence',
   issp: 'No',
   hdc: 'Yes',
-  prarr: 'Unknown'
+  prarr: 'Not able to provide this information',
 }
 
 context('Monitoring conditions main section', () => {
@@ -101,9 +101,9 @@ context('Monitoring conditions main section', () => {
       page.form.orderTypeField.shouldHaveValue('IMMIGRATION')
       page.form.orderTypeField.shouldBeDisabled()
       page.form.sentenceTypeField.shouldHaveValue('EPP')
-      page.form.isspField.shouldHaveValue('YES')
-      page.form.hdcField.shouldHaveValue('NO')
-      page.form.prarrField.shouldHaveValue('UNKNOWN')
+      page.form.isspField.shouldHaveValue('Yes')
+      page.form.hdcField.shouldHaveValue('No')
+      page.form.prarrField.shouldHaveValue('Not able to provide this information')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
@@ -191,7 +191,7 @@ context('Monitoring conditions main section', () => {
           sentenceType: 'EXTENDED_DETERMINATE_SENTENCE',
           issp: 'NO',
           hdc: 'YES',
-          prarr: 'UNKNOWN'
+          prarr: 'UNKNOWN',
         })
       })
     })
@@ -229,10 +229,10 @@ context('Monitoring conditions main section', () => {
           alcohol: true,
           startDate: '2024-03-27T01:02:00.000Z',
           endDate: null,
-          sentenceType: null,
+          sentenceType: '',
           issp: null,
           hdc: null,
-          prarr: null
+          prarr: null,
         })
       })
       Page.verifyOnPage(InstallationAddressPage)

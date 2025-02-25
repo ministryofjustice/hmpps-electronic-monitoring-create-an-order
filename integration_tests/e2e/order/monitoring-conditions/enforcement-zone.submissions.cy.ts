@@ -37,6 +37,10 @@ context('Monitoring conditions - Enforcement Zone', () => {
             alcohol: false,
             startDate: null,
             endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
           },
         },
       })
@@ -152,6 +156,10 @@ context('Monitoring conditions - Enforcement Zone', () => {
             alcohol: false,
             startDate: null,
             endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
           },
         },
       })
@@ -289,6 +297,10 @@ context('Monitoring conditions - Enforcement Zone', () => {
             alcohol: false,
             startDate: null,
             endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
           },
         },
       })
