@@ -23,10 +23,26 @@ const MonitoringConditionsFormDataParser = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  sentenceType: z.string().nullable().default(null),
-  issp: z.string().nullable().default(null),
-  hdc: z.string().nullable().default(null),
-  prarr: z.string().nullable().default(null),
+  sentenceType: z
+    .string()
+    .nullable()
+    .default(null)
+    .transform(val => (val === '' ? null : val)),
+  issp: z
+    .string()
+    .nullable()
+    .default(null)
+    .transform(val => (val === null ? 'UNKNOWN' : val)),
+  hdc: z
+    .string()
+    .nullable()
+    .default(null)
+    .transform(val => (val === null ? 'UNKNOWN' : val)),
+  prarr: z
+    .string()
+    .nullable()
+    .default(null)
+    .transform(val => (val === null ? 'UNKNOWN' : val)),
 })
 
 type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsFormDataParser>, 'action'>
@@ -40,9 +56,9 @@ const MonitoringConditionsFormDataValidator = z
     startDate: DateTimeInputModel.pipe(z.string({ message: 'Order start date and time are required' }).datetime()),
     endDate: DateTimeInputModel,
     sentenceType: z.string().nullable(),
-    issp: z.string().nullable(),
-    hdc: z.string().nullable(),
-    prarr: z.string().nullable(),
+    issp: z.string(),
+    hdc: z.string(),
+    prarr: z.string(),
   })
   .transform(({ monitoringRequired, orderType, orderTypeDescription, conditionType, ...formData }) => ({
     orderType: orderType === '' ? null : orderType,

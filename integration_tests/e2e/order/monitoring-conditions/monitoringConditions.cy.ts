@@ -229,10 +229,10 @@ context('Monitoring conditions main section', () => {
           alcohol: true,
           startDate: '2024-03-27T01:02:00.000Z',
           endDate: null,
-          sentenceType: '',
-          issp: null,
-          hdc: null,
-          prarr: null,
+          sentenceType: null,
+          issp: 'UNKNOWN',
+          hdc: 'UNKNOWN',
+          prarr: 'UNKNOWN',
         })
       })
       Page.verifyOnPage(InstallationAddressPage)

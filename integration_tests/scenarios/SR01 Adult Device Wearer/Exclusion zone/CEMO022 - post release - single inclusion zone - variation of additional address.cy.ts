@@ -283,6 +283,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
+                sentence_type: '',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
@@ -318,6 +319,8 @@ context('Scenarios', () => {
                 installation_address_post_code: fakeVariationSecondaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
+                issp: 'No',
+                hdc: 'No',
                 order_status: 'Not Started',
               },
             })
