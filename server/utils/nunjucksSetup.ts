@@ -7,6 +7,28 @@ import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './u
 import config from '../config'
 import logger from '../../logger'
 import { variationTypeMap } from '../constants/variation'
+import prisons from '../reference/prisons'
+import probationRegions from '../reference/probation-regions'
+import youthJusticeServiceRegions from '../reference/youth-justice-service-regions'
+import crownCourts from '../reference/crown-courts'
+import magistratesCourts from '../reference/magistrates-courts'
+import questions from '../constants/questions'
+import responsibleOrganisations from '../reference/responsible-organisations'
+import notifyingOrganisations from '../reference/notifying-organisations'
+
+const toOptions = (values: Record<string, string>, disabled: boolean = false, includeEmptyOption: boolean = false) => {
+  const options = Object.keys(values).map(key => ({
+    value: key,
+    text: values[key],
+    disabled,
+  }))
+
+  if (includeEmptyOption) {
+    options.unshift({ value: '', text: '', disabled })
+  }
+
+  return options
+}
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -44,14 +66,16 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('checkType', checkType)
   njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
-  njkEnv.addFilter('toOptions', (values: Record<string, string>, disabled: boolean) => {
-    return Object.keys(values).map(key => ({
-      value: key,
-      text: values[key],
-      disabled,
-    }))
-  })
+  njkEnv.addFilter('toOptions', toOptions)
 
   // Add data to global nunjucks env
+  njkEnv.addGlobal('questions', questions)
   njkEnv.addGlobal('variationTypes', variationTypeMap)
+  njkEnv.addGlobal('prisons', toOptions(prisons, false, true))
+  njkEnv.addGlobal('probationRegions', toOptions(probationRegions, false, true))
+  njkEnv.addGlobal('yjsRegions', toOptions(youthJusticeServiceRegions, false, true))
+  njkEnv.addGlobal('crownCourts', toOptions(crownCourts, false, true))
+  njkEnv.addGlobal('magistratesCourts', toOptions(magistratesCourts, false, true))
+  njkEnv.addGlobal('responsibleOrganisations', responsibleOrganisations)
+  njkEnv.addGlobal('notifyingOrganisations', notifyingOrganisations)
 }

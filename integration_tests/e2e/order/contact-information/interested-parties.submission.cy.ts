@@ -7,11 +7,11 @@ import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact
 const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
 const sampleFormData = {
+  notifyingOrganisation: 'Home Office',
   notifyingOrganisationEmailAddress: 'notifying@organisation',
-  responsibleOrganisationName: 'Police',
+  responsibleOrganisation: 'Police',
   responsibleOrganisationContactNumber: '01234567890',
   responsibleOrganisationEmailAddress: 'responsible@organisation',
-  responsibleOrganisationRegion: 'region',
   responsibleOrganisationAddress: {
     line1: 'line1',
     line2: 'line2',
@@ -36,11 +36,13 @@ context('Contact information', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: 'region',
+            responsibleOrganisationRegion: '',
             responsibleOrganisationAddress: {
               addressType: 'RESPONSIBLE_ORGANISATION',
               addressLine1: 'line1',
@@ -66,11 +68,13 @@ context('Contact information', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: 'region',
+            responsibleOrganisationRegion: '',
             responsibleOrganisationAddressLine1: 'line1',
             responsibleOrganisationAddressLine2: 'line2',
             responsibleOrganisationAddressLine3: 'line3',
@@ -98,74 +102,6 @@ context('Contact information', () => {
         page.form.saveAndReturnButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
-      })
-    })
-
-    context('Submitting partial data', () => {
-      beforeEach(() => {
-        cy.task('reset')
-        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 200,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: {
-            notifyingOrganisationEmail: '',
-            responsibleOrganisation: null,
-            responsibleOrganisationPhoneNumber: null,
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationRegion: '',
-            responsibleOrganisationAddress: {
-              addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: 'line1',
-              addressLine2: 'line2',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: 'postcode',
-            },
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: null,
-          },
-        })
-
-        cy.signIn()
-      })
-
-      it('should submit an interested parties submission with some fields not completed', () => {
-        const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
-
-        page.form.fillInWith({
-          responsibleOrganisationAddress: {
-            line1: 'line1',
-            line2: 'line2',
-            line3: '',
-            line4: '',
-            postcode: 'postcode',
-          },
-        })
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}${apiPath}`,
-          body: {
-            notifyingOrganisationEmail: '',
-            responsibleOrganisation: null,
-            responsibleOrganisationPhoneNumber: null,
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationRegion: '',
-            responsibleOrganisationAddressLine1: 'line1',
-            responsibleOrganisationAddressLine2: 'line2',
-            responsibleOrganisationAddressLine3: '',
-            responsibleOrganisationAddressLine4: '',
-            responsibleOrganisationAddressPostcode: 'postcode',
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: null,
-          },
-        }).should('be.true')
       })
     })
   })

@@ -1,0 +1,39 @@
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+
+<div class="govuk-form-group{{ " govuk-form-group--error" if params.error }}">
+  <label for="{{ params.id }}" class="govuk-label govuk-!-margin-top-4">{{ params.label }}</label>
+  {% if params.hint %}
+    <p class="govuk-hint govuk-!-margin-top-2 govuk-!-margin-bottom-3">{{ params.hint }}</p>
+  {% endif %}
+  {% if params.errorMessage %}
+    {% set errorId = id + '-error' %}
+    {% set describedBy = describedBy + ' ' + errorId if describedBy else errorId %}
+    {{ govukErrorMessage({
+      id: errorId,
+      classes: params.errorMessage.classes,
+      attributes: params.errorMessage.attributes,
+      html: params.errorMessage.html,
+      text: params.errorMessage.text,
+      visuallyHiddenText: params.errorMessage.visuallyHiddenText
+    }) | trim | indent(2) }}
+  {% endif %}
+  <select id="{{ params.id }}" name="{{ params.name if params.name else params.id }}">
+    {% if params.instruction %}
+      <option value="">{{ params.instruction }}</option>
+    {% endif %}
+    {% for option in params.options %}
+      <option value="{{ option.value }}" {{-" selected" if option.value == params.value -}}>{{ option.text }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% block js %}
+  <script src="/assets/accessible-autocomplete.min.js"></script>
+  <script nonce="{{ params.nonce }}">
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: "",
+      selectElement: document.querySelector('#{{ params.id }}'),
+      inputClasses: 'govuk-input{{" govuk-input--error" if params.error}}',
+      id: '{{ params.id }}'
+    })
+  </script>
+{% endblock %}

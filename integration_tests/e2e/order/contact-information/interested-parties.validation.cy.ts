@@ -6,9 +6,8 @@ const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
 
 const expectedValidationErrors = {
-  reponsibleOrganisationAddressLine1: 'Address line 1 is required',
-  reponsibleOrganisationAddressLine2: 'Address line 2 is required',
-  reponsibleOrganisationPostcode: 'Postcode is required',
+  notifyingOrganisationName: 'Notifying Organisation Name is required',
+  responsibleOrganisation: 'Responsible Organistion is required',
 }
 
 context('Contact information', () => {
@@ -25,16 +24,12 @@ context('Contact information', () => {
           subPath: apiPath,
           response: [
             {
-              field: 'responsibleOrganisationAddressLine1',
-              error: expectedValidationErrors.reponsibleOrganisationAddressLine1,
+              field: 'notifyingOrganisationName',
+              error: expectedValidationErrors.notifyingOrganisationName,
             },
             {
-              field: 'responsibleOrganisationAddressLine2',
-              error: expectedValidationErrors.reponsibleOrganisationAddressLine2,
-            },
-            {
-              field: 'responsibleOrganisationAddressPostcode',
-              error: expectedValidationErrors.reponsibleOrganisationPostcode,
+              field: 'responsibleOrganisation',
+              error: expectedValidationErrors.responsibleOrganisation,
             },
           ],
         })
@@ -45,18 +40,17 @@ context('Contact information', () => {
       it('Should display validation error messages', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
+        page.form.fillInWith({
+          notifyingOrganisation: 'Prison',
+        })
+
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(InterestedPartiesPage)
 
-        page.form.responsibleOrganisationAddressField.line1Field.shouldHaveValidationMessage(
-          expectedValidationErrors.reponsibleOrganisationAddressLine1,
-        )
-        page.form.responsibleOrganisationAddressField.line2Field.shouldHaveValidationMessage(
-          expectedValidationErrors.reponsibleOrganisationAddressLine2,
-        )
-        page.form.responsibleOrganisationAddressField.postcodeField.shouldHaveValidationMessage(
-          expectedValidationErrors.reponsibleOrganisationPostcode,
+        page.form.prisonField.shouldHaveValidationMessage(expectedValidationErrors.notifyingOrganisationName)
+        page.form.responsibleOrganisationField.shouldHaveValidationMessage(
+          expectedValidationErrors.responsibleOrganisation,
         )
       })
     })

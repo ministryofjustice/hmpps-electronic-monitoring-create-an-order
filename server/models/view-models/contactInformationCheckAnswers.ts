@@ -1,5 +1,12 @@
-import { responsibleOrganisationMap } from '../../constants/contact-information/interested-parties'
 import paths from '../../constants/paths'
+import questions from '../../constants/questions'
+import crownCourts from '../../reference/crown-courts'
+import magistratesCourts from '../../reference/magistrates-courts'
+import notifyingOrganisations from '../../reference/notifying-organisations'
+import prisons from '../../reference/prisons'
+import probationRegions from '../../reference/probation-regions'
+import youthJusticeServiceRegions from '../../reference/youth-justice-service-regions'
+import responsibleOrganisations from '../../reference/responsible-organisations'
 import { createAddressAnswer, createBooleanAnswer, createTextAnswer } from '../../utils/checkYourAnswers'
 import { lookup } from '../../utils/utils'
 import { Order } from '../Order'
@@ -41,6 +48,68 @@ const createAddressAnswers = (order: Order) => {
   return answers
 }
 
+const getNotifyingOrganisationNameAnswer = (order: Order, uri: string) => {
+  const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
+
+  if (notifyingOrganisation === 'PRISON') {
+    return [
+      createTextAnswer(
+        questions.interestedParties.prison,
+        lookup(prisons, order.interestedParties?.notifyingOrganisationName),
+        uri,
+      ),
+    ]
+  }
+
+  if (notifyingOrganisation === 'CROWN_COURT') {
+    return [
+      createTextAnswer(
+        questions.interestedParties.crownCourt,
+        lookup(crownCourts, order.interestedParties?.notifyingOrganisationName),
+        uri,
+      ),
+    ]
+  }
+
+  if (notifyingOrganisation === 'MAGISTRATES_COURT') {
+    return [
+      createTextAnswer(
+        questions.interestedParties.magistratesCourt,
+        lookup(magistratesCourts, order.interestedParties?.notifyingOrganisationName),
+        uri,
+      ),
+    ]
+  }
+
+  return []
+}
+
+const getResponsibleOrganisationRegionAnswer = (order: Order, uri: string) => {
+  const responsibleOrganisation = order.interestedParties?.responsibleOrganisation
+
+  if (responsibleOrganisation === 'PROBATION') {
+    return [
+      createTextAnswer(
+        questions.interestedParties.probationRegion,
+        lookup(probationRegions, order.interestedParties?.responsibleOrganisationRegion),
+        uri,
+      ),
+    ]
+  }
+
+  if (responsibleOrganisation === 'YJS') {
+    return [
+      createTextAnswer(
+        questions.interestedParties.yjsRegion,
+        lookup(youthJusticeServiceRegions, order.interestedParties?.responsibleOrganisationRegion),
+        uri,
+      ),
+    ]
+  }
+
+  return []
+}
+
 const createInterestedPartiesAnswers = (order: Order) => {
   const uri = paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
   const responsibleOrganisationAddress = order.addresses.find(
@@ -48,34 +117,44 @@ const createInterestedPartiesAnswers = (order: Order) => {
   )
   return [
     createTextAnswer(
-      'What is the email address for your team?',
+      questions.interestedParties.notifyingOrganisation,
+      lookup(notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
+      uri,
+    ),
+    ...getNotifyingOrganisationNameAnswer(order, uri),
+    createTextAnswer(
+      questions.interestedParties.notifyingOrganisationEmail,
       order.interestedParties?.notifyingOrganisationEmail,
       uri,
     ),
-    createTextAnswer('Full name of responsible officer', order.interestedParties?.responsibleOfficerName, uri),
     createTextAnswer(
-      'Telephone number for responsible officer',
+      questions.interestedParties.responsibleOfficerName,
+      order.interestedParties?.responsibleOfficerName,
+      uri,
+    ),
+    createTextAnswer(
+      questions.interestedParties.responsibleOfficerPhoneNumber,
       order.interestedParties?.responsibleOfficerPhoneNumber,
       uri,
     ),
     createTextAnswer(
-      'What organisation is the responsible officer part of?',
-      lookup(responsibleOrganisationMap, order.interestedParties?.responsibleOrganisation),
+      questions.interestedParties.responsibleOrganisation,
+      lookup(responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
+      uri,
+    ),
+    ...getResponsibleOrganisationRegionAnswer(order, uri),
+    createAddressAnswer(
+      questions.interestedParties.responsibleOrganisationAddress,
+      responsibleOrganisationAddress,
       uri,
     ),
     createTextAnswer(
-      'What region is the responsible organisation in? (optional)',
-      order.interestedParties?.responsibleOrganisationRegion,
-      uri,
-    ),
-    createAddressAnswer('What is the address of the responsible organisation?', responsibleOrganisationAddress, uri),
-    createTextAnswer(
-      'Telephone number for responsible organisation',
+      questions.interestedParties.responsibleOrganisationPhoneNumber,
       order.interestedParties?.responsibleOrganisationPhoneNumber,
       uri,
     ),
     createTextAnswer(
-      'Email address for responsible organisation',
+      questions.interestedParties.responsibleOrganisationEmail,
       order.interestedParties?.responsibleOrganisationEmail,
       uri,
     ),

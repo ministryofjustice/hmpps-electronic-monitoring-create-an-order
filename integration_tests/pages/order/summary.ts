@@ -24,6 +24,7 @@ import VariationDetailsPage from './variation/variationDetails'
 import EnforcementZonePage from './monitoring-conditions/enforcement-zone'
 import AlcoholMonitoringPage from './monitoring-conditions/alcohol-monitoring'
 import UploadLicencePage from './attachments/uploadLicence'
+import TrailMonitoringPage from './monitoring-conditions/trail-monitoring'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -357,6 +358,42 @@ export default class OrderTasksPage extends AppPage {
     return Page.verifyOnPage(OrderTasksPage)
   }
 
+  fillInNewTrailMonitoringOrderWith({
+    deviceWearerDetails,
+    responsibleAdultDetails,
+    primaryAddressDetails,
+    secondaryAddressDetails,
+    interestedParties,
+    installationAndRisk,
+    monitoringConditions,
+    installationAddressDetails,
+    trailMonitoringDetails,
+    files,
+  }): OrderTasksPage {
+    this.deviceWearerTask.click()
+
+    this.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      responsibleAdultDetails,
+      primaryAddressDetails,
+      secondaryAddressDetails,
+      interestedParties,
+      installationAndRisk,
+      monitoringConditions,
+      installationAddressDetails,
+    })
+
+    this.fillInTrailMonitoringOrderDetailsWith({
+      trailMonitoringDetails,
+    })
+
+    this.fillInAttachmentDetailsWith({
+      files,
+    })
+
+    return Page.verifyOnPage(OrderTasksPage)
+  }
+
   fillInGeneralOrderDetailsWith({
     deviceWearerDetails,
     responsibleAdultDetails,
@@ -457,6 +494,15 @@ export default class OrderTasksPage extends AppPage {
     const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
     alcoholMonitoringPage.form.fillInWith(alcoholMonitoringDetails)
     alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+  }
+
+  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }): void {
+    const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
+    trailMonitoringPage.form.fillInWith(trailMonitoringDetails)
+    trailMonitoringPage.form.saveAndContinueButton.click()
 
     const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
     monitoringConditionsCheckYourAnswersPage.continueButton().click()

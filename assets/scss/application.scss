@@ -6,6 +6,7 @@ $govuk-page-width: $moj-page-width;
 
 @import "govuk-frontend/dist/govuk/all";
 @import "@ministryofjustice/frontend/moj/all";
+@import "accessible-autocomplete/src/autocomplete";
 
 @import './components/header-bar';
 @import './components/panel';
