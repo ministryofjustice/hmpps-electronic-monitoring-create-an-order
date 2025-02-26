@@ -137,7 +137,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'Order type description',
+              text: questions.monitoringConditions.orderTypeDescription,
             },
             value: {
               text: '',
@@ -147,7 +147,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'order type description',
+                  visuallyHiddenText: questions.monitoringConditions.orderTypeDescription.toLowerCase(),
                 },
               ],
             },
@@ -601,7 +601,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'Order type description',
+              text: questions.monitoringConditions.orderTypeDescription,
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -611,7 +611,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'order type description',
+                  visuallyHiddenText: questions.monitoringConditions.orderTypeDescription.toLowerCase(),
                 },
               ],
             },

@@ -32,7 +32,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get orderTypeDescriptionField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select order type description (optional)', [
+    return new FormSelectComponent(this.form, 'Select pilot device wearer is part of (optional)', [
       'DAPO',
       'DAPOL',
       'DAPOL HDC',

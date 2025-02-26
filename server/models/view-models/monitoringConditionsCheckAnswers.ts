@@ -51,7 +51,7 @@ const createMonitoringConditionsAnswers = (order: Order) => {
     createDateAnswer('End date', order.monitoringConditions.endDate, uri),
     createTimeAnswer('End time', order.monitoringConditions.endDate, uri),
     createTextAnswer('Order type', orderType, uri),
-    createTextAnswer('Order type description', orderTypeDescription, uri),
+    createTextAnswer(questions.monitoringConditions.orderTypeDescription, orderTypeDescription, uri),
     createTextAnswer('Condition type', conditionType, uri),
     createTextAnswer(questions.monitoringConditions.sentenceType, sentenceType, uri),
     createTextAnswer(questions.monitoringConditions.issp, issp, uri),
