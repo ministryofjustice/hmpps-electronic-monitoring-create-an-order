@@ -24,6 +24,10 @@ const mockEmptyTrailMonitoring = {
     alcohol: true,
     startDate: null,
     endDate: null,
+    sentenceType: null,
+    issp: null,
+    hdc: null,
+    prarr: null,
   },
 }
 
@@ -45,6 +49,10 @@ const mockSubmittedTrailMonitoring = {
     alcohol: true,
     startDate: null,
     endDate: null,
+    sentenceType: null,
+    issp: null,
+    hdc: null,
+    prarr: null,
   },
 }
 

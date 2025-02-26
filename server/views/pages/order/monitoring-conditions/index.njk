@@ -86,7 +86,7 @@
       id: "orderTypeDescription",
       name: "orderTypeDescription",
       label: {
-        text: "Select order type description (optional)"
+        text: questions.monitoringConditions.orderTypeDescription
       },
       items: [
         { text: 'Select', value: '' },
@@ -118,6 +118,124 @@
       errorMessage: errors.conditionType,
       disabled: not isOrderEditable
     }) }}
+
+    {{ govukSelect({
+      id: "sentenceType",
+      name: "sentenceType",
+      label: {
+        text: questions.monitoringConditions.sentenceType
+      },
+      items: sentenceTypes | toOptions(false, true),
+      value: sentenceType,
+      errorMessage: errors.sentenceType,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "issp",
+      fieldset: {
+        legend: {
+          text: questions.monitoringConditions.issp,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: "This program is only applicable to young offenders between 10-17 years old."
+      },
+      items: [
+        {
+          value: "YES",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "NO",
+          text: "No",
+          disabled: not isOrderEditable
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "UNKNOWN",
+          text: "Not able to provide this information",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: issp,
+      errorMessage: error.issp
+    }) }}
+
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "hdc",
+      fieldset: {
+        legend: {
+          text: questions.monitoringConditions.hdc,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "YES",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "NO",
+          text: "No",
+          disabled: not isOrderEditable
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "UNKNOWN",
+          text: "Not able to provide this information",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: hdc,
+      errorMessage: errors.hdc
+    }) }}
+
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "prarr",
+      fieldset: {
+        legend: {
+          text: questions.monitoringConditions.prarr,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "YES",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "NO",
+          text: "No",
+          disabled: not isOrderEditable
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "UNKNOWN",
+          text: "Not able to provide this information",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: prarr,
+      errorMessage: errors.prarr
+    }) }}
+
   {% endcall %}
 
   {% call govukFieldset({

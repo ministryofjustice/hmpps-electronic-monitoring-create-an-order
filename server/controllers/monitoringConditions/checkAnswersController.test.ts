@@ -7,6 +7,7 @@ import {
   getMockOrder,
 } from '../../../test/mocks/mockOrder'
 import paths from '../../constants/paths'
+import questions from '../../constants/questions'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import AuditService from '../../services/auditService'
@@ -136,7 +137,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'Order type description',
+              text: questions.monitoringConditions.orderTypeDescription,
             },
             value: {
               text: '',
@@ -146,7 +147,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'order type description',
+                  visuallyHiddenText: questions.monitoringConditions.orderTypeDescription.toLowerCase(),
                 },
               ],
             },
@@ -164,6 +165,74 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'condition type',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.sentenceType,
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.sentenceType.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.issp,
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.issp.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.hdc,
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.hdc.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.prarr,
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.prarr.toLowerCase(),
                 },
               ],
             },
@@ -316,6 +385,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
           startDate: '2024-11-11T01:01:00Z',
           trail: true,
+          sentenceType: 'EPP',
+          issp: 'NO',
+          hdc: 'YES',
+          prarr: 'UNKNOWN',
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
@@ -528,7 +601,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'Order type description',
+              text: questions.monitoringConditions.orderTypeDescription,
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -538,7 +611,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'order type description',
+                  visuallyHiddenText: questions.monitoringConditions.orderTypeDescription.toLowerCase(),
                 },
               ],
             },
@@ -556,6 +629,74 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'condition type',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.sentenceType,
+            },
+            value: {
+              text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.sentenceType.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.issp,
+            },
+            value: {
+              text: 'No',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.issp.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.hdc,
+            },
+            value: {
+              text: 'Yes',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.hdc.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: questions.monitoringConditions.prarr,
+            },
+            value: {
+              text: 'Not able to provide this information',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: questions.monitoringConditions.prarr.toLowerCase(),
                 },
               ],
             },

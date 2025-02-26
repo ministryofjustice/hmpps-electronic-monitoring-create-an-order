@@ -2,6 +2,7 @@ import FormCheckboxesComponent from '../formCheckboxesComponent'
 import FormComponent from '../formComponent'
 import FormSelectComponent from '../formSelectComponent'
 import FormDateTimeComponent from '../formDateTimeComponent'
+import FormRadiosComponent from '../formRadiosComponent'
 
 export type MonitoringConditionsFormData = {
   orderType?: string
@@ -10,6 +11,10 @@ export type MonitoringConditionsFormData = {
   conditionType?: string
   startDate?: Date
   endDate?: Date
+  sentenceType?: string
+  issp?: string
+  hdc?: string
+  prarr?: string
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -27,7 +32,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get orderTypeDescriptionField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select order type description (optional)', [
+    return new FormSelectComponent(this.form, 'Select pilot device wearer is part of (optional)', [
       'DAPO',
       'DAPOL',
       'DAPOL HDC',
@@ -63,6 +68,42 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     return new FormDateTimeComponent(this.form, 'endDate')
   }
 
+  get sentenceTypeField(): FormSelectComponent {
+    return new FormSelectComponent(this.form, 'Select type of sentence (optional)', [
+      'Extended Determinate Sentence',
+      'Imprisonment for Public Protection (IPP)',
+      'Life Sentence',
+      'Section 236A Special Custodial Sentences for Offenders of Particular Concern (SOPC)',
+      'Section 227/228 Extended Sentence for Public Protection (EPP)',
+      'Section 85 Extended Sentences',
+      'Standard Determinate Sentence',
+    ])
+  }
+
+  get isspField(): FormRadiosComponent {
+    return new FormRadiosComponent(
+      this.form,
+      'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
+      ['Yes', 'No', 'Not able to provide this information'],
+    )
+  }
+
+  get hdcField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'Is the device wearer being released on a Home Detention Curfew (HDC)?', [
+      'Yes',
+      'No',
+      'Not able to provide this information',
+    ])
+  }
+
+  get prarrField(): FormRadiosComponent {
+    return new FormRadiosComponent(
+      this.form,
+      'Is the device wearer being released under a Presumptive Risk Assessed Release Review P-RARR?',
+      ['Yes', 'No', 'Not able to provide this information'],
+    )
+  }
+
   // FORM HELPERS
 
   fillInWith(data: MonitoringConditionsFormData): void {
@@ -89,6 +130,22 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     if (data.endDate) {
       this.endDateField.set(data.endDate)
     }
+
+    if (data.sentenceType) {
+      this.sentenceTypeField.set(data.sentenceType)
+    }
+
+    if (data.issp) {
+      this.isspField.set(data.issp)
+    }
+
+    if (data.hdc) {
+      this.hdcField.set(data.hdc)
+    }
+
+    if (data.prarr) {
+      this.prarrField.set(data.prarr)
+    }
   }
 
   shouldBeValid(): void {
@@ -98,6 +155,10 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.conditionTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
+    this.sentenceTypeField.shouldNotHaveValidationMessage()
+    this.isspField.shouldNotHaveValidationMessage()
+    this.hdcField.shouldNotHaveValidationMessage()
+    this.prarrField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
@@ -107,5 +168,9 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.conditionTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
+    this.sentenceTypeField.shouldBeDisabled()
+    this.isspField.shouldBeDisabled()
+    this.hdcField.shouldBeDisabled()
+    this.prarrField.shouldBeDisabled()
   }
 }

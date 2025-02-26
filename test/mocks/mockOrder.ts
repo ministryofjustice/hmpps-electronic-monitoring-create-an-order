@@ -111,6 +111,10 @@ export const createMonitoringConditions = (
   conditionType: null,
   startDate: null,
   endDate: null,
+  sentenceType: null,
+  issp: null,
+  hdc: null,
+  prarr: null,
   isValid: false,
   ...overrideProperties,
 })
