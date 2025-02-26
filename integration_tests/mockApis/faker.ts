@@ -130,15 +130,15 @@ export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
 export const createFakeAddress = (): Address => {
   return new Address(
     faker.location.streetAddress(),
+    '',
     faker.location.city(),
     faker.location.state(),
-    '',
     faker.location.zipCode(),
   )
 }
 
 export const createKnownAddress = (): Address => {
-  return faker.helpers.arrayElement<Address>([new Address('10 downing street', 'London', '', 'ENGLAND', 'SW1A 2AA')])
+  return faker.helpers.arrayElement<Address>([new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA')])
 }
 
 export const createFakeInterestedParties = (

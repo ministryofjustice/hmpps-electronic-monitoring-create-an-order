@@ -81,7 +81,7 @@ context('Mandatory fields only', () => {
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
       ...fakeAddress,
-      line3: undefined,
+      line2: undefined,
       line4: undefined,
       hasAnotherAddress: 'No',
     }
@@ -322,7 +322,7 @@ context('Mandatory fields only', () => {
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
       ...fakeAddress,
-      line3: undefined,
+      line2: undefined,
       line4: undefined,
       hasAnotherAddress: 'No',
     }
