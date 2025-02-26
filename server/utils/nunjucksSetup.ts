@@ -15,6 +15,7 @@ import magistratesCourts from '../reference/magistrates-courts'
 import questions from '../constants/questions'
 import responsibleOrganisations from '../reference/responsible-organisations'
 import notifyingOrganisations from '../reference/notifying-organisations'
+import sentenceTypes from '../reference/sentence-types'
 
 const toOptions = (values: Record<string, string>, disabled: boolean = false, includeEmptyOption: boolean = false) => {
   const options = Object.keys(values).map(key => ({
@@ -24,7 +25,7 @@ const toOptions = (values: Record<string, string>, disabled: boolean = false, in
   }))
 
   if (includeEmptyOption) {
-    options.unshift({ value: '', text: '', disabled })
+    options.unshift({ value: '', text: 'Select', disabled })
   }
 
   return options
@@ -78,4 +79,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addGlobal('magistratesCourts', toOptions(magistratesCourts, false, true))
   njkEnv.addGlobal('responsibleOrganisations', responsibleOrganisations)
   njkEnv.addGlobal('notifyingOrganisations', notifyingOrganisations)
+  njkEnv.addGlobal('sentenceTypes', sentenceTypes)
 }

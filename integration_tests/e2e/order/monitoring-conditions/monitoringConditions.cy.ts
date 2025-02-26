@@ -16,6 +16,10 @@ const mockSubmittedMonitoringRequirements = {
     alcohol: true,
     startDate: '2024-10-10T11:00:00.000Z',
     endDate: '2024-10-11T11:00:00.000Z',
+    sentenceType: 'EPP',
+    issp: 'YES',
+    hdc: 'NO',
+    prarr: 'UNKNOWN',
   },
 }
 
@@ -31,6 +35,10 @@ const mockEmptyMonitoringConditions = {
     alcohol: null,
     startDate: null,
     endDate: null,
+    sentenceType: null,
+    issp: null,
+    hdc: null,
+    prarr: null,
   },
 }
 
@@ -47,6 +55,10 @@ const validFormData = {
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
+  sentenceType: 'Extended Determinate Sentence',
+  issp: 'No',
+  hdc: 'Yes',
+  prarr: 'Not able to provide this information',
 }
 
 context('Monitoring conditions main section', () => {
@@ -88,6 +100,10 @@ context('Monitoring conditions main section', () => {
       page.form.monitoringRequiredField.shouldBeDisabled()
       page.form.orderTypeField.shouldHaveValue('IMMIGRATION')
       page.form.orderTypeField.shouldBeDisabled()
+      page.form.sentenceTypeField.shouldHaveValue('EPP')
+      page.form.isspField.shouldHaveValue('Yes')
+      page.form.hdcField.shouldHaveValue('No')
+      page.form.prarrField.shouldHaveValue('Not able to provide this information')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
@@ -172,6 +188,10 @@ context('Monitoring conditions main section', () => {
           alcohol: true,
           startDate: '2024-02-27T11:02:00.000Z',
           endDate: '2025-03-08T04:40:00.000Z',
+          sentenceType: 'EXTENDED_DETERMINATE_SENTENCE',
+          issp: 'NO',
+          hdc: 'YES',
+          prarr: 'UNKNOWN',
         })
       })
     })
@@ -209,6 +229,10 @@ context('Monitoring conditions main section', () => {
           alcohol: true,
           startDate: '2024-03-27T01:02:00.000Z',
           endDate: null,
+          sentenceType: null,
+          issp: 'UNKNOWN',
+          hdc: 'UNKNOWN',
+          prarr: 'UNKNOWN',
         })
       })
       Page.verifyOnPage(InstallationAddressPage)

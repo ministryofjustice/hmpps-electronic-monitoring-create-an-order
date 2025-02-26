@@ -24,17 +24,17 @@ export default class AddressFormComponent extends FormComponent {
   }
 
   get addressLine2Field(): FormInputComponent {
-    const label = 'Address line 2'
+    const label = 'Address line 2 (optional)'
     return new FormInputComponent(this.form, label)
   }
 
   get addressLine3Field(): FormInputComponent {
-    const label = 'Address line 3'
+    const label = 'Town or city'
     return new FormInputComponent(this.form, label)
   }
 
   get addressLine4Field(): FormInputComponent {
-    const label = 'Address line 4'
+    const label = 'County (optional)'
     return new FormInputComponent(this.form, label)
   }
 
