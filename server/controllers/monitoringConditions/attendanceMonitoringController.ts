@@ -165,10 +165,12 @@ export default class AttendanceMonitoringController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const { orderId, conditionId } = req.params
     const formData = attendanceMonitoringFormDataModel.parse(req.body)
 
     const record = this.createApiModelFromFormData(formData)
+    record.id = conditionId
+
     const updateResult = await this.attendanceMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
