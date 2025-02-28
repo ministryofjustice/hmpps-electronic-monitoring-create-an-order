@@ -29,7 +29,7 @@ describe('Attachment service', () => {
       expect(mockRestClient.post).not.toHaveBeenCalled()
       expect(response).toEqual({
         status: 400,
-        userMessage: 'No file uploaded.',
+        userMessage: 'Select the licence document',
         developerMessage: 'User did not upload a file.',
       })
     })

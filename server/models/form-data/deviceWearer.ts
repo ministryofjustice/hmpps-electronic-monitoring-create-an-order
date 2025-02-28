@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { BooleanInputModel, DateInputModel, FormDataModel, MultipleChoiceInputModel } from './formData'
 import { DisabilityEnum } from '../DeviceWearer'
+import validationErrors from '../../constants/validationErrors'
 
 // Parse html form data to ensure basic type safety at runtime
 const DeviceWearerFormDataParser = FormDataModel.extend({
@@ -26,21 +27,21 @@ type DeviceWearerFormData = Omit<z.infer<typeof DeviceWearerFormDataParser>, 'ac
 
 // Validate form data on the client to ensure creation of successful api requests
 const DeviceWearerFormDataValidator = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  firstName: z.string().min(1, validationErrors.deviceWearer.firstNameRequired),
+  lastName: z.string().min(1, validationErrors.deviceWearer.lastNameRequired),
   alias: z.string(),
-  dateOfBirth: DateInputModel.pipe(z.string({ message: 'Date of birth is required' }).datetime()),
+  dateOfBirth: DateInputModel.pipe(z.string({ message: validationErrors.deviceWearer.dobRequired }).datetime()),
   language: z.string(),
   interpreterRequired: BooleanInputModel.pipe(
     z.boolean({
-      message: 'You must indicate whether the device wearer will require an interpreter on the day of installation',
+      message: validationErrors.deviceWearer.interpreterRequired,
     }),
   ),
   adultAtTimeOfInstallation: BooleanInputModel.pipe(
-    z.boolean({ message: 'You must indicate whether the device wearer will be an adult at installation' }),
+    z.boolean({ message: validationErrors.deviceWearer.responsibleAdultRequired }),
   ),
-  sex: z.string().min(1, 'Sex is required'),
-  gender: z.string().min(1, 'Gender is required'),
+  sex: z.string().min(1, validationErrors.deviceWearer.sexRequired),
+  gender: z.string().min(1, validationErrors.deviceWearer.genderRequired),
   otherGender: z.string().optional(),
   disabilities: MultipleChoiceInputModel.pipe(z.array(DisabilityEnum)).transform(val => val.join(',')),
   otherDisability: z.string().optional(),

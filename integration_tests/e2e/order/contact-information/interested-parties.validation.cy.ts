@@ -6,8 +6,8 @@ const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
 
 const expectedValidationErrors = {
-  notifyingOrganisationName: 'Notifying Organisation Name is required',
-  responsibleOrganisation: 'Responsible Organistion is required',
+  notifyingOrganisationName: 'Select the organisation you are part of',
+  responsibleOrganisation: "Select the responsible officer's organisation",
 }
 
 context('Contact information', () => {

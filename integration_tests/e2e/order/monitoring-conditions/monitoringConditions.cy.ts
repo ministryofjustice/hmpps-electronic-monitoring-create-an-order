@@ -61,6 +61,18 @@ const validFormData = {
   prarr: 'Not able to provide this information',
 }
 
+const errorMessages = {
+  conditionTypeRequired: 'Select order type condition',
+  monitoringTypeRequired: 'Select monitoring required',
+  orderTypeRequired: 'Select order type',
+  startDateMustBeReal: 'Start date for monitoring must be a real date',
+  startDateMustIncludeDay: 'Start date for monitoring must include a day',
+  startDateMustIncludeMonth: 'Start date for monitoring must include a month',
+  startDateMustIncludeYear: 'Start date for monitoring must include a year',
+  startDateRequired: 'Enter start date for monitoring',
+  yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+}
+
 context('Monitoring conditions main section', () => {
   let mockOrderId: string
 
@@ -132,10 +144,10 @@ context('Monitoring conditions main section', () => {
       cy.get('input[type="checkbox"]').should('not.be.checked')
       cy.get('select[name="orderType"]').invoke('val').should('deep.equal', '')
       page.form.saveAndContinueButton.click()
-      page.form.orderTypeField.shouldHaveValidationMessage('Order type is required')
-      page.form.conditionTypeField.shouldHaveValidationMessage('Condition type is required')
-      page.form.monitoringRequiredField.shouldHaveValidationMessage('At least one monitoring type must be selected')
-      page.form.startDateField.shouldHaveValidationMessage('Order start date and time are required')
+      page.form.orderTypeField.shouldHaveValidationMessage(errorMessages.orderTypeRequired)
+      page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
+      page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
+      page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
     })
 
     it('after frontend validation passes, should show errors from API response', () => {

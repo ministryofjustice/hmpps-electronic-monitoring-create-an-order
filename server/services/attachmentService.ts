@@ -4,6 +4,7 @@ import { AuthenticatedRequestInput } from '../interfaces/request'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import Result from '../interfaces/result'
+import validationErrors from '../constants/validationErrors'
 
 type AttachmentRequestInpput = AuthenticatedRequestInput & {
   orderId: string
@@ -20,7 +21,7 @@ export default class AttachmentService {
     if (input.file === undefined) {
       return {
         status: 400,
-        userMessage: 'No file uploaded.',
+        userMessage: validationErrors.attachments.licenceRequired,
         developerMessage: 'User did not upload a file.',
       }
     }
