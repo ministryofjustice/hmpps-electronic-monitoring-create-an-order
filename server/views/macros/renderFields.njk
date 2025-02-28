@@ -1,0 +1,9 @@
+{% from "macros/renderField.njk" import renderField %}
+
+{% macro renderFields(fields) %}
+
+  {% for field in fields %}
+    {{ renderField(field.type, field.args) }}
+  {% endfor %}
+
+{% endmacro %}

@@ -6,8 +6,12 @@ import createViewModel from '../../models/view-models/deviceWearer'
 import AuditService from '../../services/auditService'
 import DeviceWearerService from '../../services/deviceWearerService'
 import TaskListService from '../../services/taskListService'
+import DeviceWearerPage from '../../form/pages/device-wearer'
+import PageRenderer from '../../form/renderers/page'
 
 export default class DeviceWearerController {
+  private renderer = new PageRenderer()
+
   constructor(
     private readonly auditService: AuditService,
     private readonly deviceWearerService: DeviceWearerService,
@@ -16,17 +20,12 @@ export default class DeviceWearerController {
 
   viewDeviceWearer: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const data = req.flash('formData')[0]
+    const formData = data ? DeviceWearerFormDataParser.parse(data) : undefined
+    const page = new DeviceWearerPage(order, formData)
     const errors = req.flash('validationErrors')
-    const formData = req.flash('formData')
 
-    res.render(
-      'pages/order/about-the-device-wearer/device-wearer',
-      createViewModel(
-        order.deviceWearer,
-        formData.length > 0 ? (formData[0] as never) : ({} as never),
-        errors as never,
-      ),
-    )
+    res.render('pages/order/about-the-device-wearer/device-wearer', this.renderer.render(page))
   }
 
   updateDeviceWearer: RequestHandler = async (req: Request, res: Response) => {

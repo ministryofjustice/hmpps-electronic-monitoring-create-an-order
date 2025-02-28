@@ -1,0 +1,44 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% macro renderField(type, args) %}
+
+  {% if type === "govukRadios" %}
+
+    {{ govukRadios(args) }}
+  
+  {% elif type === "govukCheckboxes" %}
+
+    {{ govukCheckboxes(args) }}
+
+  {% elif type === "govukSelect" %}
+
+    {{ govukSelect(args) }}
+
+  {% elif type === "govukTextarea" %}
+
+    {{ govukTextArea(args) }}
+
+  {% elif type === "hidden" %}
+
+    <input type="hidden" name="{{ args.id }}" value="{{ args.value | default("") }}" />
+
+  {% elif type === "govukInput" %}
+
+    {{ govukInput(args) }}
+
+  {% elif type === "govukDateInput" %}
+
+    {{ govukDateInput(args) }}
+
+  {% else %}
+
+    <h1>Field {{ args.id }} uses unknown component: {{ type }}</h1>
+
+  {% endif %}
+
+{% endmacro %}

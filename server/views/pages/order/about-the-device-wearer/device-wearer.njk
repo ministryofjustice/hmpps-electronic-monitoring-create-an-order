@@ -9,8 +9,11 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "macros/renderFields.njk" import renderFields %}
 
 {% block formInputs %}
+
+  {{ renderFields(fields) }}
 
   {% call govukFieldset({
     legend: {
