@@ -245,6 +245,17 @@ describe('authorised user', () => {
         .expect('Location', `/order/${mockSubmittedOrder.id}/summary`)
     })
   })
+
+  describe('GET /cookies', () => {
+    it('should render a successful cookies page', () => {
+      return request(app)
+        .get('/ocookies')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Cookies')
+        })
+    })
+  })
 })
 
 describe('Order Not Found', () => {
