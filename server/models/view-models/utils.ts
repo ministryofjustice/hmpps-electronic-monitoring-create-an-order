@@ -1,4 +1,4 @@
-import { ErrorSummary } from "../../utils/govukFrontEndTypes/errorSummary"
+import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
 
 export type ErrorMessage = {
   text: string

@@ -37,6 +37,7 @@ context('Contact information', () => {
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
         page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+        page.errorSummary.shouldNotExist()
         page.form.shouldBeDisabled()
       })
     })

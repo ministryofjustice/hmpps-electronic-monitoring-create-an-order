@@ -7,13 +7,16 @@ import { ViewModel } from './utils'
 
 type ContactDetailsViewModel = ViewModel<NonNullable<ContactDetails>>
 
-const constructFromFormData = (formData: ContactDetailsFormData, validationErrors: ValidationResult): ContactDetailsViewModel => {
+const constructFromFormData = (
+  formData: ContactDetailsFormData,
+  validationErrors: ValidationResult,
+): ContactDetailsViewModel => {
   return {
     contactNumber: {
       value: formData.contactNumber || '',
       error: getError(validationErrors, 'contactNumber'),
     },
-    errorSummary: createGovukErrorSummary(validationErrors)
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
@@ -23,14 +26,14 @@ const constructFromEntity = (contactDetails: ContactDetails): ContactDetailsView
       contactNumber: {
         value: contactDetails.contactNumber ?? '',
       },
-      errorSummary: null
+      errorSummary: null,
     }
   }
   return {
     contactNumber: {
       value: '',
     },
-    errorSummary: null
+    errorSummary: null,
   }
 }
 

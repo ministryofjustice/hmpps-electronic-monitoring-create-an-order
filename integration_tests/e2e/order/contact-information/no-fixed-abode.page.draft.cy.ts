@@ -32,6 +32,7 @@ context('Contact information', () => {
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
+        page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('exist')
       })
 
