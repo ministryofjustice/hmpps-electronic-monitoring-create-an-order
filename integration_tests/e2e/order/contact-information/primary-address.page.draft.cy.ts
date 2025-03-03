@@ -48,6 +48,7 @@ context('Contact information', () => {
         page.form.addressLine3Field.shouldHaveValue('')
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
+        page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
       })
 
@@ -119,6 +120,7 @@ context('Contact information', () => {
         page.form.addressLine3Field.shouldHaveValue('primary line 3')
         page.form.addressLine4Field.shouldHaveValue('primary line 4')
         page.form.postcodeField.shouldHaveValue('primary postcode')
+        page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
       })
 
@@ -198,6 +200,7 @@ context('Contact information', () => {
         page.form.addressLine3Field.shouldHaveValue('primary line 3')
         page.form.addressLine4Field.shouldHaveValue('primary line 4')
         page.form.postcodeField.shouldHaveValue('primary postcode')
+        page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
       })
 

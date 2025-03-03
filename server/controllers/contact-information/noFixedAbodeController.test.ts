@@ -77,7 +77,7 @@ describe('NoFixedAbodeController', () => {
         errorSummary: null,
         noFixedAbode: {
           value: 'null',
-        }
+        },
       })
     })
 
@@ -98,7 +98,7 @@ describe('NoFixedAbodeController', () => {
         errorSummary: null,
         noFixedAbode: {
           value: 'true',
-        }
+        },
       })
     })
 
@@ -119,7 +119,7 @@ describe('NoFixedAbodeController', () => {
         errorSummary: null,
         noFixedAbode: {
           value: 'false',
-        }
+        },
       })
     })
 
@@ -147,20 +147,20 @@ describe('NoFixedAbodeController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
         errorSummary: {
-          titleText: "There is a problem",
+          titleText: 'There is a problem',
           errorList: [
             {
-              href: "#noFixedAbode",
-              text: "You must indicate whether the device wearer has a fixed abode",
-            }
-          ]
+              href: '#noFixedAbode',
+              text: 'You must indicate whether the device wearer has a fixed abode',
+            },
+          ],
         },
         noFixedAbode: {
           error: {
             text: 'You must indicate whether the device wearer has a fixed abode',
           },
           value: 'null',
-        }
+        },
       })
     })
   })
