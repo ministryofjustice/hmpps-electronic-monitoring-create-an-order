@@ -4,13 +4,13 @@ import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/
 
 const mockOrderId = uuidv4()
 const expectedValidationErrors = {
-  firstName: 'Select the organisation you are part of',
-  lastName: "Select the responsible officer's organisation",
-  dob: '',
-  is18: '',
-  sex: '',
-  gender: '',
-  interpreter: '',
+  firstName: "Enter device wearer's first name",
+  lastName: "Enter device wearer's last name",
+  dob: 'Enter date of birth',
+  is18: 'Select yes if a responsible adult is required',
+  sex: "Select the device wearer's sex, or select 'Not able to provide this information'",
+  gender: "Select the device wearer's gender, or select 'Not able to provide this information'",
+  interpreter: 'Select yes if the device wearer requires an interpreter',
 }
 
 context('About the device wearer', () => {

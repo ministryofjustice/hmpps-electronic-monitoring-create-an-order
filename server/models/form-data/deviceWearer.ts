@@ -58,10 +58,13 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
   homeOfficeReferenceNumber: z.string(),
 })
 
+type IdentityNumbersFormData = z.infer<typeof IdentityNumbersFormDataModel>
+
 export {
   DeviceWearerFormData,
   DeviceWearerFormDataParser,
   DeviceWearerApiRequestBody,
   DeviceWearerFormDataValidator,
+  IdentityNumbersFormData,
   IdentityNumbersFormDataModel,
 }

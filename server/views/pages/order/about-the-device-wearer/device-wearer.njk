@@ -26,8 +26,8 @@
       classes: "govuk-input--width-10",
       id: "first-name",
       name: "firstName",
-      value: firstName,
-      errorMessage: errors.firstName,
+      value: firstName.value,
+      errorMessage: firstName.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -38,8 +38,8 @@
       classes: "govuk-input--width-10",
       id: "last-name",
       name: "lastName",
-      value: lastName,
-      errorMessage: errors.lastName,
+      value: lastName.value,
+      errorMessage: lastName.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -53,8 +53,8 @@
       classes: "govuk-input--width-10",
       id: "alias",
       name: "alias",
-      value: alias,
-      errorMessage: errors.alias,
+      value: alias.value,
+      errorMessage: alias.error,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
@@ -79,7 +79,7 @@
         name: "dateOfBirth[day]",
         label: "Day",
         classes: "govuk-input--width-2",
-        value: dateOfBirth.day,
+        value: dateOfBirth.value.day,
         attributes: isDisabled
       },
       {
@@ -87,7 +87,7 @@
         name: "dateOfBirth[month]",
         label: "Month",
         classes: "govuk-input--width-2",
-        value: dateOfBirth.month,
+        value: dateOfBirth.value.month,
         attributes: isDisabled
       },
       {
@@ -95,11 +95,11 @@
         name: "dateOfBirth[year]",
         label: "Year",
         classes: "govuk-input--width-4",
-        value: dateOfBirth.year,
+        value: dateOfBirth.value.year,
         attributes: isDisabled
       }
     ],
-    errorMessage: errors.dateOfBirth
+    errorMessage: dateOfBirth.error
   }) }}
 
   {{ govukRadios({
@@ -123,8 +123,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: adultAtTimeOfInstallation,
-    errorMessage: errors.adultAtTimeOfInstallation,
+    value: adultAtTimeOfInstallation.value,
+    errorMessage: adultAtTimeOfInstallation.error,
     disabled: not isOrderEditable
   }) }}
 
@@ -162,8 +162,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: sex,
-    errorMessage: errors.sex,
+    value: sex.value,
+    errorMessage: sex.error,
     disabled: not isOrderEditable
   }) }}
 
@@ -176,9 +176,9 @@
       id: "other-gender",
       name: "otherGender",
       classes: "govuk-!-width-one-third",
-      errorMessage: errors.otherGender,
+      errorMessage: otherGender.error,
       disabled: not isOrderEditable,
-      value: otherGender
+      value: otherGender.value
       })
     }}
   {% endset %}
@@ -225,8 +225,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: gender,
-    errorMessage: errors.gender,
+    value: gender.value,
+    errorMessage: gender.error,
     disabled: not isOrderEditable
   }) }}
 
@@ -239,9 +239,9 @@
       id: "disabilities-detail",
       name: "otherDisability",
       classes: "govuk-!-width-one-third",
-      errorMessage: errors.otherDisability,
+      errorMessage: otherDisability.error,
       disabled: not isOrderEditable,
-      value: otherDisability
+      value: otherDisability.value
       })
     }}
   {% endset %}
@@ -312,8 +312,8 @@
         text: "Prefer Not to Say"
       }
     ],
-    values: disabilities,
-    errorMessage: errors.disabilities,
+    values: disabilities.values,
+    errorMessage: disabilities.error,
     disabled: not isOrderEditable
   }) }}
 
@@ -442,8 +442,8 @@
         { text: "Yoruba", value: "Yoruba" },
         { text: "Zaghawa", value: "Zaghawa" }
       ],
-      value: language,
-      errorMessage: errors.language,
+      value: language.value,
+      errorMessage: language.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -467,8 +467,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: interpreterRequired,
-      errorMessage: errors.interpreterRequired,
+      value: interpreterRequired.value,
+      errorMessage: interpreterRequired.error,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}

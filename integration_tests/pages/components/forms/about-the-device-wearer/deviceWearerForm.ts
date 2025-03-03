@@ -96,7 +96,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // Interpreter
 
   get interpreterRequiredField(): FormRadiosComponent {
-    const label = 'Language'
+    const label = 'Is an interpreter needed?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
@@ -252,5 +252,41 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     if (profile.language) {
       this.languageField.set(profile.language)
     }
+  }
+
+  shouldBeValid(): void {
+    this.firstNamesField.shouldNotHaveValidationMessage()
+    this.lastNameField.shouldNotHaveValidationMessage()
+    this.aliasField.shouldNotHaveValidationMessage()
+    this.dateOfBirthField.shouldNotHaveValidationMessage()
+    this.is18Field.shouldNotHaveValidationMessage()
+    this.sexField.shouldNotHaveValidationMessage()
+    this.genderIdentityField.shouldNotHaveValidationMessage()
+    this.interpreterRequiredField.shouldNotHaveValidationMessage()
+    this.languageField.shouldNotHaveValidationMessage()
+  }
+
+  shouldBeDisabled(): void {
+    this.firstNamesField.shouldBeDisabled()
+    this.lastNameField.shouldBeDisabled()
+    this.aliasField.shouldBeDisabled()
+    this.dateOfBirthField.shouldBeDisabled()
+    this.is18Field.shouldBeDisabled()
+    this.sexField.shouldBeDisabled()
+    this.genderIdentityField.shouldBeDisabled()
+    this.interpreterRequiredField.shouldBeDisabled()
+    this.languageField.shouldBeDisabled()
+  }
+
+  shouldNotBeDisabled(): void {
+    this.firstNamesField.shouldNotBeDisabled()
+    this.lastNameField.shouldNotBeDisabled()
+    this.aliasField.shouldNotBeDisabled()
+    this.dateOfBirthField.shouldNotBeDisabled()
+    this.is18Field.shouldNotBeDisabled()
+    this.sexField.shouldNotBeDisabled()
+    this.genderIdentityField.shouldNotBeDisabled()
+    this.interpreterRequiredField.shouldNotBeDisabled()
+    this.languageField.shouldNotBeDisabled()
   }
 }
