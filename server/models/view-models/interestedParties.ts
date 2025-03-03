@@ -1,3 +1,4 @@
+import { createGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
 import { InterestedParties } from '../InterestedParties'
@@ -34,7 +35,10 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
   return ''
 }
 
-const constructFromFormData = (formData: InterestedPartiesFormData, validationErrors: ValidationResult) => {
+const constructFromFormData = (
+  formData: InterestedPartiesFormData,
+  validationErrors: ValidationResult,
+): InterestedPartiesViewModel => {
   return {
     notifyingOrganisation: {
       value: formData.notifyingOrganisation || '',
@@ -92,10 +96,11 @@ const constructFromFormData = (formData: InterestedPartiesFormData, validationEr
       value: formData.responsibleOrganisationEmail,
       error: getError(validationErrors, 'responsibleOrganisationEmail'),
     },
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
-const constructFromEntity = (interestedParties: InterestedParties | null) => {
+const constructFromEntity = (interestedParties: InterestedParties | null): InterestedPartiesViewModel => {
   return {
     notifyingOrganisation: {
       value: interestedParties?.notifyingOrganisation ?? '',
@@ -139,6 +144,7 @@ const constructFromEntity = (interestedParties: InterestedParties | null) => {
     responsibleOrganisationEmail: {
       value: interestedParties?.responsibleOrganisationEmail ?? '',
     },
+    errorSummary: null,
   }
 }
 

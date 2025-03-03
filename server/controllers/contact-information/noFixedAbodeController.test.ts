@@ -74,8 +74,10 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
-        noFixedAbode: 'null',
-        errors: {},
+        errorSummary: null,
+        noFixedAbode: {
+          value: 'null',
+        },
       })
     })
 
@@ -93,8 +95,10 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
-        noFixedAbode: 'true',
-        errors: {},
+        errorSummary: null,
+        noFixedAbode: {
+          value: 'true',
+        },
       })
     })
 
@@ -112,8 +116,10 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
-        noFixedAbode: 'false',
-        errors: {},
+        errorSummary: null,
+        noFixedAbode: {
+          value: 'false',
+        },
       })
     })
 
@@ -124,7 +130,7 @@ describe('NoFixedAbodeController', () => {
         flash: jest
           .fn()
           .mockReturnValueOnce([
-            { error: 'You must indicate whether the device wearer has a fixed abode', field: 'fixedAbode' },
+            { error: 'You must indicate whether the device wearer has a fixed abode', field: 'noFixedAbode' },
           ])
           .mockReturnValue([
             {
@@ -140,11 +146,20 @@ describe('NoFixedAbodeController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/no-fixed-abode', {
-        noFixedAbode: 'null',
-        errors: {
-          fixedAbode: {
+        errorSummary: {
+          titleText: 'There is a problem',
+          errorList: [
+            {
+              href: '#noFixedAbode',
+              text: 'You must indicate whether the device wearer has a fixed abode',
+            },
+          ],
+        },
+        noFixedAbode: {
+          error: {
             text: 'You must indicate whether the device wearer has a fixed abode',
           },
+          value: 'null',
         },
       })
     })

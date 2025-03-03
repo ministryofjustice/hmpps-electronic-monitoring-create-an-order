@@ -49,6 +49,7 @@ context('Contact information', () => {
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
         page.backToSummaryButton.should('not.exist')
+        page.errorSummary.shouldNotExist()
       })
 
       // TODO: FAIL issue determining if autocomplete is valid
@@ -128,6 +129,7 @@ context('Contact information', () => {
         page.form.addressLine4Field.shouldHaveValue('secondary line 4')
         page.form.postcodeField.shouldHaveValue('secondary postcode')
         page.backToSummaryButton.should('not.exist')
+        page.errorSummary.shouldNotExist()
       })
 
       // TODO: FAIL issue determining if autocomplete is valid
@@ -215,6 +217,7 @@ context('Contact information', () => {
         page.form.addressLine4Field.shouldHaveValue('secondary line 4')
         page.form.postcodeField.shouldHaveValue('secondary postcode')
         page.backToSummaryButton.should('not.exist')
+        page.errorSummary.shouldNotExist()
       })
 
       // TODO: FAIL issue determining if autocomplete is valid

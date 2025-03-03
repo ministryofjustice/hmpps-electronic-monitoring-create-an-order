@@ -52,6 +52,9 @@ context('Contact information', () => {
         page.form.responsibleOrganisationField.shouldHaveValidationMessage(
           expectedValidationErrors.responsibleOrganisation,
         )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrors.responsibleOrganisation)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.notifyingOrganisationName)
       })
     })
   })

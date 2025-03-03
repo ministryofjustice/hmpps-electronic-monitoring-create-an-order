@@ -1,34 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
-import { z } from 'zod'
 import paths from '../../constants/paths'
 import { AuditService } from '../../services'
 import AddressService from '../../services/addressService'
-import { AddressType, AddressTypeEnum } from '../../models/Address'
-import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService, { Page } from '../../services/taskListService'
-
-const FormDataModel = z.object({
-  action: z.string().default('continue'),
-  addressLine1: z.string(),
-  addressLine2: z.string(),
-  addressLine3: z.string(),
-  addressLine4: z.string(),
-  postcode: z.string(),
-  hasAnotherAddress: z.string().default('false'),
-})
-
-const getNextAddressType = (addressType: AddressType) => {
-  if (addressType === 'PRIMARY') {
-    return AddressTypeEnum.Enum.SECONDARY
-  }
-
-  if (addressType === 'SECONDARY') {
-    return AddressTypeEnum.Enum.TERTIARY
-  }
-
-  return undefined
-}
+import AddressFormDataModel from '../../models/form-data/address'
+import addressViewModel from '../../models/view-models/address'
 
 export default class AddressController {
   constructor(
@@ -64,24 +41,16 @@ export default class AddressController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const { addressType } = req.params
     const { addresses } = req.order!
-    const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
-    const nextAddressType = getNextAddressType(AddressTypeEnum.parse(addressType.toUpperCase()))
-    const hasAnotherAddress = addresses.some(address => address.addressType === nextAddressType)
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const viewModel = addressViewModel.construct(addressType, addresses, formData[0] as never, errors as never)
 
-    res.render('pages/order/contact-information/address', {
-      addressType,
-      ...currentAddress,
-      hasAnotherAddress: addresses.length === 0 ? '' : String(hasAnotherAddress),
-      ...(formData.length > 0 ? (formData[0] as never) : {}),
-      errors: getErrorsViewModel(errors as never),
-    })
+    res.render('pages/order/contact-information/address', viewModel)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, addressType } = req.params
-    const { action, hasAnotherAddress, ...formData } = FormDataModel.parse(req.body)
+    const { action, hasAnotherAddress, ...formData } = AddressFormDataModel.parse(req.body)
 
     const result = await this.addressService.updateAddress({
       accessToken: res.locals.user.token,

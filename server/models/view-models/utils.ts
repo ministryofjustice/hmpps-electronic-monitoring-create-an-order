@@ -1,3 +1,5 @@
+import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
+
 export type ErrorMessage = {
   text: string
 }
@@ -57,6 +59,8 @@ export type MultipleChoiceField = FormField & {
 }
 
 export type ViewModel<T> = {
+  errorSummary: ErrorSummary | null
+} & {
   [K in keyof T]: T[K] extends Date ? DateField : T[K] extends string[] ? MultipleChoiceField : TextField
 }
 

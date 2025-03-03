@@ -32,6 +32,8 @@ context('Contact information', () => {
         Page.verifyOnPage(NoFixedAbodePage)
 
         page.form.hasFixedAddressField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
   })
