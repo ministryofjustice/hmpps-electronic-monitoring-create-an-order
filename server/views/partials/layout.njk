@@ -17,3 +17,15 @@
 {% block bodyEnd %}
   <script type="module" src="{{ '/assets/js/app.js' | assetMap }}"></script>
 {% endblock %}
+{% block footer %}
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          href: "/cookies",
+          text: "Cookies"
+        }
+      ]
+    }
+  }) }}
+{% endblock %}
