@@ -93,8 +93,6 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     return new FormInputComponent(this.form, label)
   }
 
-  disabilities
-
   // Interpreter
 
   get interpreterRequiredField(): FormRadiosComponent {
