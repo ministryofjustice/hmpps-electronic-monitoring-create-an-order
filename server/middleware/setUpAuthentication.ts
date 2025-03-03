@@ -45,7 +45,7 @@ export default function setUpAuth(): Router {
   router.use('/account-details', (req, res) => {
     res.redirect(`${authUrl}/account-details?${authParameters}`)
   })
-  
+
   router.use((req, res, next) => {
     res.locals.user = req.user as HmppsUser
     next()
