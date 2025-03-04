@@ -124,6 +124,19 @@ describe('CurfewConditionsController', () => {
           },
           error: undefined,
         },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#curfewAddress',
+              text: 'mockError',
+            },
+            {
+              href: '#startDate',
+              text: 'mock start date Error',
+            },
+          ],
+          titleText: 'There is a problem',
+        },
       })
     })
 
@@ -155,6 +168,7 @@ describe('CurfewConditionsController', () => {
             day: '15',
           },
         },
+        errorSummary: null,
       })
     })
   })
