@@ -1,33 +1,14 @@
 import { Request, RequestHandler, Response } from 'express'
-import { z } from 'zod'
 import paths from '../../constants/paths'
 import { InstallationAndRisk } from '../../models/InstallationAndRisk'
-import { isValidationResult, ValidationResult } from '../../models/Validation'
-import { MultipleChoiceField, TextField } from '../../models/view-models/utils'
+import { isValidationResult } from '../../models/Validation'
 import { AuditService } from '../../services'
 import InstallationAndRiskService from '../../services/installationAndRiskService'
-import { getError } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
-
-const installationAndRiskFormDataModel = z.object({
-  action: z.string().default('continue'),
-  offence: z.string().optional(),
-  riskCategory: z.array(z.string()).optional(),
-  riskDetails: z.string(),
-  mappaLevel: z.string().optional(),
-  mappaCaseType: z.string().optional(),
-})
-
-type InstallationAndRiskFormData = z.infer<typeof installationAndRiskFormDataModel>
-
-type InstallationAndRiskViewModel = {
-  offence: TextField
-
-  riskCategory: MultipleChoiceField
-  riskDetails: TextField
-  mappaLevel: TextField
-  mappaCaseType: TextField
-}
+import InstallationAndRiskFormDataModel, {
+  InstallationAndRiskFormData,
+} from '../../models/form-data/installationAndRisk'
+import installationAndRiskViewModel from '../../models/view-models/installationAndRisk'
 
 export default class InstallationAndRiskController {
   constructor(
@@ -35,43 +16,6 @@ export default class InstallationAndRiskController {
     private readonly installationAndRiskService: InstallationAndRiskService,
     private readonly taskListService: TaskListService,
   ) {}
-
-  private constructViewModel(
-    installationAndRisk: InstallationAndRisk | null,
-    validationErrors: ValidationResult,
-    formData: [InstallationAndRiskFormData],
-  ): InstallationAndRiskViewModel {
-    if (validationErrors.length > 0 && formData.length > 0) {
-      return this.createViewModelFromFormData(formData[0], validationErrors)
-    }
-
-    return this.createViewModelFromInstallationAndRisk(installationAndRisk)
-  }
-
-  private createViewModelFromInstallationAndRisk(
-    installationAndRisk: InstallationAndRisk | null,
-  ): InstallationAndRiskViewModel {
-    return {
-      offence: { value: installationAndRisk?.offence ?? '' },
-      riskCategory: { values: installationAndRisk?.riskCategory ?? [] },
-      riskDetails: { value: installationAndRisk?.riskDetails ?? '' },
-      mappaLevel: { value: installationAndRisk?.mappaLevel ?? '' },
-      mappaCaseType: { value: installationAndRisk?.mappaCaseType ?? '' },
-    }
-  }
-
-  private createViewModelFromFormData(
-    formData: InstallationAndRiskFormData,
-    errors: ValidationResult,
-  ): InstallationAndRiskViewModel {
-    return {
-      offence: { value: formData.offence ?? '', error: getError(errors, 'offence') },
-      riskCategory: { values: formData.riskCategory ?? [], error: getError(errors, 'riskCategory') },
-      riskDetails: { value: formData.riskDetails ?? '', error: getError(errors, 'riskDetails') },
-      mappaLevel: { value: formData.mappaLevel ?? '', error: getError(errors, 'mappaLevel') },
-      mappaCaseType: { value: formData.mappaCaseType ?? '', error: getError(errors, 'mappaCaseType') },
-    }
-  }
 
   private createApiModelFromFormData(formData: InstallationAndRiskFormData): InstallationAndRisk {
     return {
@@ -87,14 +31,14 @@ export default class InstallationAndRiskController {
     const { installationAndRisk } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = this.constructViewModel(installationAndRisk, errors as never, formData as never)
+    const viewModel = installationAndRiskViewModel.construct(installationAndRisk, errors as never, formData as never)
 
     res.render(`pages/order/installation-and-risk/index`, viewModel)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const formData = installationAndRiskFormDataModel.parse(req.body)
+    const formData = InstallationAndRiskFormDataModel.parse(req.body)
 
     const updateResult = await this.installationAndRiskService.update({
       accessToken: res.locals.user.token,
