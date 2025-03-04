@@ -76,27 +76,41 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
-          nomisId: null,
-          pncId: null,
-          deliusId: null,
-          prisonNumber: null,
-          homeOfficeReferenceNumber: null,
-          firstName: 'tester',
-          lastName: 'testington',
-          alias: 'test',
-          dateOfBirth: {
-            day: '1',
-            month: '1',
-            year: '1980',
+          firstName: {
+            value: 'tester',
           },
-          adultAtTimeOfInstallation: 'false',
-          sex: 'male',
-          gender: 'male',
-          disabilities: ['VISION', 'MOBILITY'],
-          interpreterRequired: 'true',
-          language: 'British Sign',
-          noFixedAbode: null,
-          errors: {},
+          lastName: {
+            value: 'testington',
+          },
+          alias: {
+            value: 'test',
+          },
+          dateOfBirth: {
+            value: {
+              day: '1',
+              month: '1',
+              year: '1980',
+            },
+          },
+          adultAtTimeOfInstallation: {
+            value: 'false',
+          },
+          sex: {
+            value: 'male',
+          },
+          gender: {
+            value: 'male',
+          },
+          disabilities: {
+            values: ['VISION', 'MOBILITY'],
+          },
+          interpreterRequired: {
+            value: 'true',
+          },
+          language: {
+            value: 'British Sign',
+          },
+          errorSummary: null,
         }),
       )
     })
@@ -137,24 +151,60 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/device-wearer',
         expect.objectContaining({
-          firstName: 'new',
-          lastName: 'name',
-          alias: 'new',
-          dateOfBirth: {
-            day: '02',
-            month: '03',
-            year: '1990',
+          firstName: {
+            value: 'new',
+            error: undefined,
           },
-          adultAtTimeOfInstallation: 'true',
-          sex: 'female',
-          gender: 'female',
-          disabilities: ['VISION', 'MOBILITY'],
-          interpreterRequired: 'true',
-          language: 'British Sign',
-          errors: {
-            dateOfBirth: {
+          lastName: {
+            value: 'name',
+            error: undefined,
+          },
+          alias: {
+            value: 'new',
+            error: undefined,
+          },
+          dateOfBirth: {
+            value: {
+              day: '02',
+              month: '03',
+              year: '1990',
+            },
+            error: {
               text: 'Date of birth must be in the past',
             },
+          },
+          adultAtTimeOfInstallation: {
+            value: 'true',
+            error: undefined,
+          },
+          sex: {
+            value: 'female',
+            error: undefined,
+          },
+          gender: {
+            value: 'female',
+            error: undefined,
+          },
+          disabilities: {
+            values: ['VISION', 'MOBILITY'],
+            error: undefined,
+          },
+          interpreterRequired: {
+            value: 'true',
+            error: undefined,
+          },
+          language: {
+            value: 'British Sign',
+            error: undefined,
+          },
+          errorSummary: {
+            titleText: 'There is a problem',
+            errorList: [
+              {
+                href: '#dateOfBirth',
+                text: 'Date of birth must be in the past',
+              },
+            ],
           },
         }),
       )
@@ -417,27 +467,22 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/identity-numbers',
         expect.objectContaining({
-          nomisId: null,
-          pncId: null,
-          deliusId: null,
-          prisonNumber: null,
-          homeOfficeReferenceNumber: null,
-          firstName: 'tester',
-          lastName: 'testington',
-          alias: 'test',
-          dateOfBirth: {
-            day: '1',
-            month: '1',
-            year: '1980',
+          nomisId: {
+            value: '',
           },
-          adultAtTimeOfInstallation: 'false',
-          sex: 'male',
-          gender: 'male',
-          disabilities: ['VISION', 'MOBILITY'],
-          interpreterRequired: 'true',
-          language: 'British Sign',
-          noFixedAbode: null,
-          errors: {},
+          pncId: {
+            value: '',
+          },
+          deliusId: {
+            value: '',
+          },
+          prisonNumber: {
+            value: '',
+          },
+          homeOfficeReferenceNumber: {
+            value: '',
+          },
+          errorSummary: null,
         }),
       )
     })

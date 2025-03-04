@@ -30,10 +30,10 @@ context('About the device wearer - Responsible Adult', () => {
     it('Should render the save and continue/return buttons', () => {
       const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
 
-      // page.form.hasAction(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton.should('exist')
+      page.errorSummary.shouldNotExist()
     })
 
     // TODO: FAIL there are two form input related issues
@@ -122,6 +122,9 @@ context('About the device wearer - Responsible Adult', () => {
         })
         cy.get('#relationship-error').should('contain', 'Relationship is required')
         cy.get('#full-name-error').should('contain', 'Full name is required')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Relationship is required')
+        page.errorSummary.shouldHaveError('Full name is required')
       })
     })
 
@@ -154,6 +157,9 @@ context('About the device wearer - Responsible Adult', () => {
         })
         cy.get('#contact-number-error').should('contain', 'Phone number is in an incorrect format')
         cy.get('#full-name-error').should('contain', 'Full name is required')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Phone number is in an incorrect format')
+        page.errorSummary.shouldHaveError('Full name is required')
       })
     })
 
@@ -186,6 +192,9 @@ context('About the device wearer - Responsible Adult', () => {
         })
         cy.get('#relationship-error').should('contain', 'Relationship is required')
         cy.get('#contact-number-error').should('contain', 'Phone number is in an incorrect format')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Phone number is in an incorrect format')
+        page.errorSummary.shouldHaveError('Relationship is required')
       })
     })
 
@@ -218,6 +227,9 @@ context('About the device wearer - Responsible Adult', () => {
         })
         cy.get('#relationship-error').should('contain', 'Relationship is required')
         cy.get('#full-name-error').should('contain', 'Full name is required')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Full name is required')
+        page.errorSummary.shouldHaveError('Relationship is required')
       })
     })
   })

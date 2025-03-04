@@ -2,7 +2,8 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import { DeviceWearerFormDataParser, IdentityNumbersFormDataModel } from '../../models/form-data/deviceWearer'
-import createViewModel from '../../models/view-models/deviceWearer'
+import deviceWearerViewModel from '../../models/view-models/deviceWearer'
+import identityNumbersViewModel from '../../models/view-models/identityNumbers'
 import AuditService from '../../services/auditService'
 import DeviceWearerService from '../../services/deviceWearerService'
 import TaskListService from '../../services/taskListService'
@@ -21,7 +22,7 @@ export default class DeviceWearerController {
 
     res.render(
       'pages/order/about-the-device-wearer/device-wearer',
-      createViewModel(
+      deviceWearerViewModel.construct(
         order.deviceWearer,
         formData.length > 0 ? (formData[0] as never) : ({} as never),
         errors as never,
@@ -63,14 +64,7 @@ export default class DeviceWearerController {
 
     res.render(
       'pages/order/about-the-device-wearer/identity-numbers',
-      createViewModel(
-        {
-          ...deviceWearer,
-          ...(formData.length > 0 ? (formData[0] as never) : {}),
-        },
-        {} as never,
-        errors as never,
-      ),
+      identityNumbersViewModel.construct(deviceWearer, formData[0] as never, errors as never),
     )
   }
 

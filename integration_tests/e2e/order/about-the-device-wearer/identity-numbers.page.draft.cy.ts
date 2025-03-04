@@ -33,6 +33,7 @@ context('About the device wearer', () => {
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.backToSummaryButton.should('exist')
+        page.errorSummary.shouldNotExist()
       })
 
       it('Should be accessible', () => {
