@@ -171,7 +171,7 @@ context('Curfew monitoring - release date', () => {
         cy.get('#address-error').should('contain', 'You must enter a valid address')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('You must enter a valid date')
-        page.errorSummary.shouldHaveError('You must enter a valid start time, You must enter a valid end time')
+        page.errorSummary.shouldHaveError('You must enter a valid end time')
         page.errorSummary.shouldHaveError('You must enter a valid address')
       })
 

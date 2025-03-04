@@ -1,11 +1,11 @@
+import { createGovukErrorSummary } from '../../utils/errors'
 import { deserialiseDate, deserialiseTime, getError, getErrors } from '../../utils/utils'
 import { CurfewReleaseDate } from '../CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../form-data/curfewReleaseDate'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField, TimeSpanField } from './utils'
+import { DateField, TimeSpanField, ViewModel } from './utils'
 
-type CurfewReleaseDateViewModel = {
-  address: TextField
+type CurfewReleaseDateViewModel = ViewModel<Pick<CurfewReleaseDate, 'curfewAddress'>> & {
   releaseDate: DateField
   curfewTimes: TimeSpanField
 }
@@ -19,9 +19,10 @@ const createViewModelFromCurfewReleaseDate = (
   const [endHours, endMinutes] = deserialiseTime(curfewReleaseDate?.endTime)
 
   return {
-    address: { value: curfewReleaseDate?.curfewAddress ?? '' },
+    curfewAddress: { value: curfewReleaseDate?.curfewAddress ?? '' },
     releaseDate: { value: { year: releaseDateYear, month: releaseDateMonth, day: releaseDateDay } },
     curfewTimes: { value: { startHours, startMinutes, endHours, endMinutes } },
+    errorSummary: null,
   }
 }
 
@@ -30,7 +31,7 @@ const createViewModelFromFormData = (
   validationErrors: ValidationResult,
 ): CurfewReleaseDateViewModel => {
   return {
-    address: { value: formData?.address ?? '', error: getError(validationErrors, 'curfewAddress') },
+    curfewAddress: { value: formData?.address ?? '', error: getError(validationErrors, 'curfewAddress') },
     releaseDate: {
       value: {
         year: formData.releaseDateYear,
@@ -48,6 +49,7 @@ const createViewModelFromFormData = (
       },
       error: getErrors(validationErrors, ['startTime', 'endTime']),
     },
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
