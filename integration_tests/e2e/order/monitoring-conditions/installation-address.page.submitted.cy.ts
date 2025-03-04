@@ -50,6 +50,7 @@ context('Monitoring conditions', () => {
         page.form.saveAndReturnButton.should('not.exist')
         page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
         page.form.shouldBeDisabled()
+        page.errorSummary.shouldNotExist()
       })
     })
   })

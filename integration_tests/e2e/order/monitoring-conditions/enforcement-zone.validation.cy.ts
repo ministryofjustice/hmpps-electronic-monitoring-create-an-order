@@ -50,6 +50,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -84,6 +86,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -118,6 +122,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -152,6 +158,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -169,6 +177,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
           Page.verifyOnPage(EnforcementZonePage)
 
           page.form.startDateField.shouldHaveValidationMessage(dateFormatValidationMessage)
+          page.errorSummary.shouldExist()
+          page.errorSummary.shouldHaveError(dateFormatValidationMessage)
         })
       })
 
@@ -185,6 +195,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
           Page.verifyOnPage(EnforcementZonePage)
 
           page.form.endDateField.shouldHaveValidationMessage(dateFormatValidationMessage)
+          page.errorSummary.shouldExist()
+          page.errorSummary.shouldHaveError(dateFormatValidationMessage)
         })
       })
     })
@@ -220,6 +232,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -254,6 +268,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldNotHaveValidationMessage()
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -288,6 +304,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldNotHaveValidationMessage()
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
 
@@ -322,6 +340,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldNotHaveValidationMessage()
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
   })

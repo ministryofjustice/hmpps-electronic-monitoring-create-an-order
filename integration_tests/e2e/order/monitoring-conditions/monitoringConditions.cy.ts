@@ -92,6 +92,7 @@ context('Monitoring conditions main section', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
       const page = Page.verifyOnPage(MonitoringConditionsPage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -119,6 +120,7 @@ context('Monitoring conditions main section', () => {
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -148,6 +150,11 @@ context('Monitoring conditions main section', () => {
       page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
       page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
       page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
+      page.errorSummary.shouldExist()
+      page.errorSummary.shouldHaveError(errorMessages.orderTypeRequired)
+      page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
+      page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
+      page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
     })
 
     it('after frontend validation passes, should show errors from API response', () => {
@@ -173,6 +180,12 @@ context('Monitoring conditions main section', () => {
       page.form.monitoringRequiredField.shouldHaveValidationMessage('Test error - monitoring required')
       page.form.startDateField.shouldHaveValidationMessage('Test error - start date')
       page.form.endDateField.shouldHaveValidationMessage('Test error - end date')
+      page.errorSummary.shouldExist()
+      page.errorSummary.shouldHaveError('Test error - order type')
+      page.errorSummary.shouldHaveError('Test error - condition type')
+      page.errorSummary.shouldHaveError('Test error - monitoring required')
+      page.errorSummary.shouldHaveError('Test error - start date')
+      page.errorSummary.shouldHaveError('Test error - end date')
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {

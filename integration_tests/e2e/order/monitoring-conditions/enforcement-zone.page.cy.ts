@@ -33,6 +33,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton.should('exist')
+      page.errorSummary.shouldNotExist()
     })
 
     // TODO: FAIL there is one form input related issues
@@ -62,6 +63,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()
+      page.errorSummary.shouldNotExist()
     })
   })
 
