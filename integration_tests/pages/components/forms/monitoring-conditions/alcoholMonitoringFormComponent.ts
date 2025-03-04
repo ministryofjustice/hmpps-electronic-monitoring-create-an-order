@@ -17,33 +17,6 @@ export type AlcoholMonitoringFormData = {
 export default class AlcoholMonitoringFormComponent extends FormComponent {
   // FIELDS
 
-  get isPartOfACPField(): FormRadiosComponent {
-    return new FormRadiosComponent(
-      this.form,
-      'Is the device wearer part of the Acquisitive Crime project ? (optional)',
-      ['Yes', 'No'],
-    )
-  }
-
-  get isPartOfDAPOLField(): FormRadiosComponent {
-    return new FormRadiosComponent(
-      this.form,
-      'Is the device wearer part of the Domestic Abuse Perpetrators on Licence(DAPOL) project ? (optional)',
-      ['Yes', 'No'],
-    )
-  }
-
-  get orderTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select order type', [
-      'Civil',
-      'Community',
-      'Immigration',
-      'Post Release',
-      'Pre-Trial',
-      'Special',
-    ])
-  }
-
   get monitoringTypeField(): FormRadiosComponent {
     return new FormRadiosComponent(this.form, 'What type of alcohol monitoring is needed?', [
       'Alcohol level',
@@ -81,18 +54,6 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   // FORM HELPERS
 
   fillInWith(data: AlcoholMonitoringFormData): void {
-    if (data.isPartOfACP) {
-      this.isPartOfACPField.set(data.isPartOfACP)
-    }
-
-    if (data.isPartOfDAPOL) {
-      this.isPartOfDAPOLField.set(data.isPartOfDAPOL)
-    }
-
-    if (data.orderType) {
-      this.orderTypeField.set(data.orderType)
-    }
-
     if (data.monitoringType) {
       this.monitoringTypeField.set(data.monitoringType)
     }
@@ -117,9 +78,6 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   }
 
   shouldBeValid(): void {
-    this.isPartOfACPField.shouldNotHaveValidationMessage()
-    this.isPartOfDAPOLField.shouldNotHaveValidationMessage()
-    this.orderTypeField.shouldNotHaveValidationMessage()
     this.monitoringTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
@@ -127,9 +85,6 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   }
 
   shouldBeDisabled(): void {
-    this.isPartOfACPField.shouldBeDisabled()
-    this.isPartOfDAPOLField.shouldBeDisabled()
-    this.orderTypeField.shouldBeDisabled()
     this.monitoringTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
@@ -137,9 +92,6 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   }
 
   shouldNotBeDisabled(): void {
-    this.isPartOfACPField.shouldNotBeDisabled()
-    this.isPartOfDAPOLField.shouldNotBeDisabled()
-    this.orderTypeField.shouldNotBeDisabled()
     this.monitoringTypeField.shouldNotBeDisabled()
     this.startDateField.shouldNotBeDisabled()
     this.endDateField.shouldNotBeDisabled()
