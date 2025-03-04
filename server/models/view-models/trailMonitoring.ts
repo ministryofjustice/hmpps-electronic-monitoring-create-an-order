@@ -5,7 +5,7 @@ import { deserialiseDate, getError } from '../../utils/utils'
 import { TrailMonitoringFormData } from '../form-data/trailMonitoring'
 import { createGovukErrorSummary } from '../../utils/errors'
 
-type TrailMonitoringViewModel = ViewModel<{}> & {
+type TrailMonitoringViewModel = ViewModel<unknown> & {
   startDate?: FormField
   startDateDay: TextField
   startDateMonth: TextField
@@ -29,7 +29,7 @@ const createViewModelFromFormData = (
     endDateDay: { value: formData['endDate-day'] ?? '' },
     endDateMonth: { value: formData['endDate-month'] ?? '' },
     endDateYear: { value: formData['endDate-year'] ?? '' },
-    errorSummary: createGovukErrorSummary(validationErrors)
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
@@ -44,7 +44,7 @@ const createViewModelFromTrailMonitoring = (trailMonitoring: TrailMonitoring): T
     endDateDay: { value: endDateDay },
     endDateMonth: { value: endDateMonth },
     endDateYear: { value: endDateYear },
-    errorSummary: null
+    errorSummary: null,
   }
 }
 

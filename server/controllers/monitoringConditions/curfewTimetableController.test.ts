@@ -225,6 +225,39 @@ describe('CurfewTimetableController', () => {
             },
           ],
         },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+            {
+              href: '#curfewAddress',
+              text: ['mockError'],
+            },
+          ],
+          titleText: 'There is a problem',
+        },
       })
     })
 
@@ -340,6 +373,7 @@ describe('CurfewTimetableController', () => {
             },
           ],
         },
+        errorSummary: null,
       })
     })
 
@@ -465,6 +499,7 @@ describe('CurfewTimetableController', () => {
             },
           ],
         },
+        errorSummary: null,
       })
     })
 
@@ -483,6 +518,7 @@ describe('CurfewTimetableController', () => {
           saturday: [],
           sunday: [],
         },
+        errorSummary: null,
       })
     })
   })

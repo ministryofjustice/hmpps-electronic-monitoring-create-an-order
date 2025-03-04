@@ -58,6 +58,8 @@ context('Monitoring conditions - Curfew timetable', () => {
           `${expectedValidationErrorMessage}, ${expectedValidationErrorMessage}`,
         )
         page.form.shouldHaveValidationMessage('Friday', expectedValidationErrorMessage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })
     })
   })

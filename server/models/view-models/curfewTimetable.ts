@@ -1,19 +1,20 @@
 import { z } from 'zod'
 
 import { deserialiseTime, getErrors, getError } from '../../utils/utils'
-import { MultipleChoiceField, TimeSpanField } from './utils'
+import { MultipleChoiceField, TimeSpanField, ViewModel } from './utils'
 
 import { CurfewTimetable } from '../CurfewTimetable'
 import { CurfewTimetableFormData, curfewTimetableFormDataItem } from '../form-data/curfewTimetable'
 
-import { ValidationErrorModel } from '../Validation'
+import { ValidationErrorModel, ValidationResult } from '../Validation'
+import { createGovukErrorSummary } from '../../utils/errors'
 
 export type Timetable = {
   timeSpan: TimeSpanField
   addresses: MultipleChoiceField
 }
 
-export type CurfewTimetableViewModel = {
+export type CurfewTimetableViewModel = ViewModel<unknown> & {
   curfewTimetable: {
     monday: Timetable[]
     tuesday: Timetable[]
@@ -51,6 +52,8 @@ const createViewModelFromApiDto = (validationErrors: CurfewTimetableApiDto[]): C
         }
       }) ?? []
 
+  const allErrors = validationErrors.reduce((acc, t) => [...acc, ...t.errors], [] as ValidationResult)
+
   return {
     curfewTimetable: {
       monday: getTimetablesForDay('MONDAY', validationErrors),
@@ -61,6 +64,7 @@ const createViewModelFromApiDto = (validationErrors: CurfewTimetableApiDto[]): C
       saturday: getTimetablesForDay('SATURDAY', validationErrors),
       sunday: getTimetablesForDay('SUNDAY', validationErrors),
     },
+    errorSummary: createGovukErrorSummary(allErrors),
   }
 }
 
@@ -90,6 +94,7 @@ const createViewModelFromFormData = (formData: CurfewTimetableFormData): CurfewT
       saturday: getTimetablesForDay('saturday', formData.curfewTimetable.saturday),
       sunday: getTimetablesForDay('sunday', formData.curfewTimetable.sunday),
     },
+    errorSummary: null,
   }
 }
 
