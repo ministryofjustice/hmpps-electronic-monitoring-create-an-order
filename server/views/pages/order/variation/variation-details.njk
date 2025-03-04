@@ -37,7 +37,7 @@
           name: "variationDate[day]",
           label: "Day",
           classes: "govuk-input--width-2",
-          value: variationDate.day,
+          value: variationDate.value.day,
           attributes: isDisabled
         },
         {
@@ -45,7 +45,7 @@
           name: "variationDate[month]",
           label: "Month",
           classes: "govuk-input--width-2",
-          value: variationDate.month,
+          value: variationDate.value.month,
           attributes: isDisabled
         },
         {
@@ -53,11 +53,11 @@
           name: "variationDate[year]",
           label: "Year",
           classes: "govuk-input--width-4",
-          value: variationDate.year,
+          value: variationDate.value.year,
           attributes: isDisabled
         }
       ],
-      errorMessage: errors.variationDate
+      errorMessage: variationDate.error
     }) }}
 
     {{ govukRadios({
@@ -69,8 +69,8 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
-      value: variationType,
-      errorMessage: errors.variationType,
+      value: variationType.value,
+      errorMessage: variationType.error,
       items: variationTypes | toOptions(not isOrderEditable)
     }) }}
 
