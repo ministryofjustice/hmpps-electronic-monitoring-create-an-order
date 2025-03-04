@@ -24,15 +24,15 @@
     {{dateTimeInput({
       id: "startDate",
       name: "startDate",
-      date: startDate,
+      date: startDate.value,
       dateLabel: "Enter the date for when monitoring starts",
       dateHint: "For example, 21 05 2032",
       timeLabel: "Enter the time for when monitoring starts",
       timeHint: "For example, 14 : 30",
       errorMessages: {
-        field: errors.startDate,
-        date: errors.startDate_date,
-        time: errors.startDate_time
+        field: startDate.error,
+        date: errors.dateError,
+        time: errors.timeError
       },
       disabled: not isOrderEditable
     })}}
@@ -40,15 +40,15 @@
     {{dateTimeInput({
       id: "endDate",
       name: "endDate",
-      date: endDate,
+      date: endDate.value,
       dateLabel: "Enter the date for when monitoring ends (optional)",
       dateHint: "For example, 21 05 2032",
       timeLabel: "Enter the time for when monitoring ends (optional)",
       timeHint: "For example, 14 : 30",
       errorMessages: {
-        field: errors.endDate,
-        date: errors.endDate_date,
-        time: errors.endDate_time
+        field: endDate.error,
+        date: errors.dateError,
+        time: errors.timeError
       },
       disabled: not isOrderEditable
     })}}
@@ -77,8 +77,8 @@
         { text: 'Pre-Trial', value: 'PRE_TRIAL' },
         { text: 'Special', value: 'SPECIAL' }
       ],
-      value: orderType,
-      errorMessage: errors.orderType,
+      value: orderType.value,
+      errorMessage: orderType.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -96,8 +96,8 @@
         { text: 'GPS Acquisitive Crime HDC', value: 'GPS_ACQUISITIVE_CRIME_HDC' },
         { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' }
       ],
-      value: orderTypeDescription,
-      errorMessage: errors.orderTypeDescription,
+      value: orderTypeDescription.value,
+      errorMessage: orderTypeDescription.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -114,8 +114,8 @@
         { text: 'Post-Sentence Supervision Requirement following on from an Adult Custody order', value: 'POST_SENTENCE_SUPERVISION_REQUIREMENT' },
         { text: 'Bail Order', value: 'BAIL_ORDER' }
       ],
-      value: conditionType,
-      errorMessage: errors.conditionType,
+      value: conditionType.value,
+      errorMessage: conditionType.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -126,8 +126,8 @@
         text: questions.monitoringConditions.sentenceType
       },
       items: sentenceTypes | toOptions(false, true),
-      value: sentenceType,
-      errorMessage: errors.sentenceType,
+      value: sentenceType.value,
+      errorMessage: sentenceType.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -164,8 +164,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: issp,
-      errorMessage: error.issp
+      value: issp.value,
+      errorMessage: issp.error
     }) }}
 
     {{ govukRadios({
@@ -198,8 +198,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: hdc,
-      errorMessage: errors.hdc
+      value: hdc.value,
+      errorMessage: hdc.error
     }) }}
 
     {{ govukRadios({
@@ -232,8 +232,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: prarr,
-      errorMessage: errors.prarr
+      value: prarr.value,
+      errorMessage: prarr.error
     }) }}
 
   {% endcall %}
@@ -302,7 +302,7 @@
           disabled: not isOrderEditable
         }
       ],
-      errorMessage: errors.monitoringRequired,
+      errorMessage: monitoringRequired.error,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
