@@ -21,7 +21,7 @@ import {
   createTextAnswer,
   createTimeRangeAnswer,
 } from '../../utils/checkYourAnswers'
-import questions from '../../constants/questions'
+import questions from '../../i18n/en/questions'
 import sentenceTypes from '../../reference/sentence-types'
 import yesNoUnknown from '../../reference/yes-no-unknown'
 

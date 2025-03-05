@@ -1,4 +1,6 @@
-const questions = {
+import Questions from "../../types/content/questions"
+
+const questions: Questions = {
   interestedParties: {
     notifyingOrganisation: 'What organisation or related organisation are you part of?',
     prison: 'Select the name of the Prison',

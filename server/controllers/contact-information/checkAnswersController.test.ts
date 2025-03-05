@@ -5,7 +5,7 @@ import CheckAnswersController from './checkAnswersController'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import questions from '../../constants/questions'
+import questions from '../../i18n/en/questions'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')

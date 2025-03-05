@@ -7,7 +7,7 @@ import {
   getMockOrder,
 } from '../../../test/mocks/mockOrder'
 import paths from '../../constants/paths'
-import questions from '../../constants/questions'
+import questions from '../../i18n/en/questions'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import AuditService from '../../services/auditService'
