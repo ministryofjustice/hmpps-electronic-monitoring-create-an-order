@@ -6,7 +6,9 @@ import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
 import { DateField, TextField, ViewModel } from './utils'
 
-type AlcoholMonitoringViewModel = ViewModel<Pick<AlcoholMonitoring, 'installationLocation' | 'monitoringType' | 'prisonName' | 'probationOfficeName'>> & {
+type AlcoholMonitoringViewModel = ViewModel<
+  Pick<AlcoholMonitoring, 'installationLocation' | 'monitoringType' | 'prisonName' | 'probationOfficeName'>
+> & {
   startDate: DateField
   endDate: DateField
   primaryAddressView: TextField
@@ -40,7 +42,7 @@ const createViewModelFromAlcoholMonitoring = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
-    errorSummary: null
+    errorSummary: null,
   }
 }
 
@@ -76,7 +78,7 @@ const createViewModelFromFormData = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
-    errorSummary: createGovukErrorSummary(validationErrors)
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 

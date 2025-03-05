@@ -124,11 +124,11 @@ context('Attendance monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      page.form.startDateField.shouldHaveValue(new Date(2024, 3, 27))
-      page.form.endDateField.shouldHaveValue(new Date(2025, 4, 28))
+      page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
+      page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
       page.form.purposeField.shouldHaveValue('To attend')
       page.form.appointmentDayField.shouldHaveValue('Monday')
-      page.form.startTimeField.shouldHaveValue({ hours: '18', minutes: '00' })
+      page.form.startTimeField.shouldHaveValue({ hours: '10', minutes: '00' })
       page.form.endTimeField.shouldHaveValue({ hours: '11', minutes: '00' })
       page.form.addressField.shouldHaveValue({
         line1: '19 Strawberry Fields',
@@ -159,11 +159,11 @@ context('Attendance monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       cy.root().should('not.contain', 'You are viewing a submitted order.')
-      page.form.startDateField.shouldHaveValue(new Date(2024, 3, 27))
-      page.form.endDateField.shouldHaveValue(new Date(2025, 4, 28))
+      page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
+      page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
       page.form.purposeField.shouldHaveValue('To attend')
       page.form.appointmentDayField.shouldHaveValue('Monday')
-      page.form.startTimeField.shouldHaveValue({ hours: '18', minutes: '00' })
+      page.form.startTimeField.shouldHaveValue({ hours: '10', minutes: '00' })
       page.form.endTimeField.shouldHaveValue({ hours: '11', minutes: '00' })
       page.form.addressField.shouldHaveValue({
         line1: '19 Strawberry Fields',

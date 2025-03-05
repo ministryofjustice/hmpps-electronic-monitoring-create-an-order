@@ -39,12 +39,12 @@ export default class FormAddressComponent {
   }
 
   get cityField(): FormInputComponent {
-    const label = 'Address line 3'
+    const label = 'Town or city'
     return new FormInputComponent(this.element, label)
   }
 
   get countyField(): FormInputComponent {
-    const label = 'Address line 4'
+    const label = 'County (optional)'
     return new FormInputComponent(this.element, label)
   }
 
