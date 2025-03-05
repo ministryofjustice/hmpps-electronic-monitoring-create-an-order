@@ -44,8 +44,8 @@
       {
         name: "releaseDateYear",
         classes: "govuk-input--width-4",
-          label: "Year",
-          id:"releaseDateYear",
+        label: "Year",
+        id:"releaseDateYear",
         value: releaseDate.value.year,
         attributes: disabled
       }
@@ -68,34 +68,34 @@
   {{ govukRadios({
       name: "address",
       fieldset: {
-          legend: {
+        legend: {
           text: "Curfew address on the day of release",
           isPageHeading: true,
           classes: "govuk-fieldset__legend--s"
-          }
+        }
       },
       hint: {
-          text: "What address will the device wearer be at during curfew hours on their day of release? Select one option"
+        text: "What address will the device wearer be at during curfew hours on their day of release? Select one option"
       },
       items: [
-          {
+        {
           value: "PRIMARY",
           text: "Primary address",
           disabled: not isOrderEditable
-          },
-          {
+        },
+        {
           value: "SECONDARY",
           text: "Secondary address",
           disabled: not isOrderEditable
-          },
-          {
+        },
+        {
           value: "TERTIARY",
           text: "Tertiary address",
           disabled: not isOrderEditable
-          }
+        }
       ],
       value: curfewAddress.value,
       errorMessage: curfewAddress.error
-      }) }}
+    }) }}
 
 {% endblock %}
