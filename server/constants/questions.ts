@@ -1,4 +1,4 @@
-import Questions from "../../types/content/questions"
+import Questions from '../../types/i18n/questions'
 
 const questions: Questions = {
   interestedParties: {

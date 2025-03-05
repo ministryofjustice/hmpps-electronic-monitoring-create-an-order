@@ -1,5 +1,5 @@
 import paths from '../../constants/paths'
-import questions from '../../i18n/en/questions'
+import questions from '../../constants/questions'
 import crownCourts from '../../reference/crown-courts'
 import magistratesCourts from '../../reference/magistrates-courts'
 import notifyingOrganisations from '../../reference/notifying-organisations'
