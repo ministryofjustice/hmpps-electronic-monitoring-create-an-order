@@ -36,10 +36,10 @@ const mockEmptyCurfewConditions = {
 
 const checkFormFields = () => {
   cy.get('#startDate-day').should('have.value', '27')
-  cy.get('#startDate-month').should('have.value', '3')
+  cy.get('#startDate-month').should('have.value', '03')
   cy.get('#startDate-year').should('have.value', '2025')
   cy.get('#endDate-day').should('have.value', '28')
-  cy.get('#endDate-month').should('have.value', '4')
+  cy.get('#endDate-month').should('have.value', '04')
   cy.get('#endDate-year').should('have.value', '2026')
   cy.get('input[type="checkbox"][value="SECONDARY"]').should('be.checked')
   cy.get('input[type="checkbox"][value="TERTIARY"]').should('be.checked')

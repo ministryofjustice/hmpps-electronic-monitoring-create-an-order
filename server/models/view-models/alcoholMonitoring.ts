@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { deserialiseDate, getError } from '../../utils/utils'
+import { deserialiseDateTime, getError } from '../../utils/utils'
 import { Address, AddressTypeEnum } from '../Address'
 import { AlcoholMonitoring } from '../AlcoholMonitoring'
 import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
@@ -28,13 +28,13 @@ const createViewModelFromAlcoholMonitoring = (
   monitoringConditionsAlcohol: AlcoholMonitoring,
   addressViews: AddressViews,
 ): AlcoholMonitoringViewModel => {
-  const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditionsAlcohol?.startDate)
-  const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditionsAlcohol?.endDate)
+  const startDate = deserialiseDateTime(monitoringConditionsAlcohol?.startDate)
+  const endDate = deserialiseDateTime(monitoringConditionsAlcohol?.endDate)
 
   return {
     monitoringType: { value: monitoringConditionsAlcohol?.monitoringType ?? '' },
-    startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
-    endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
+    startDate: { value: startDate },
+    endDate: { value: endDate },
     installationLocation: { value: monitoringConditionsAlcohol?.installationLocation ?? '' },
     probationOfficeName: { value: monitoringConditionsAlcohol?.probationOfficeName ?? '' },
     prisonName: { value: monitoringConditionsAlcohol?.prisonName ?? '' },

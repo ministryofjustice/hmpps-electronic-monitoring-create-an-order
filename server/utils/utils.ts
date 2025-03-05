@@ -39,14 +39,26 @@ export const serialiseDate = (year: string, month: string, day: string) => {
   return new Date(Date.UTC(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))).toISOString()
 }
 
-export const deserialiseDate = (dateString?: string | null): [year: string, month: string, day: string] => {
-  if (!dateString || isBlank(dateString)) {
-    return ['', '', '']
+export const deserialiseDateTime = (dateString: string | null | undefined) => {
+  if (dateString === null || dateString === undefined || dateString === '') {
+    return {
+      hours: '',
+      minutes: '',
+      day: '',
+      month: '',
+      year: '',
+    }
   }
 
   const date = new Date(dateString)
 
-  return [date.getFullYear().toString(), (date.getMonth() + 1).toString(), date.getDate().toString()]
+  return {
+    minutes: date.getMinutes().toString().padStart(2, '0'),
+    hours: date.getHours().toString().padStart(2, '0'),
+    day: date.getDate().toString().padStart(2, '0'),
+    month: (date.getMonth() + 1).toString().padStart(2, '0'),
+    year: date.getFullYear().toString(),
+  }
 }
 
 export const serialiseTime = (hour: string, minute: string): string | null => {

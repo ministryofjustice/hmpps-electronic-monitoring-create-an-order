@@ -57,7 +57,7 @@ const mockEmptyCurfewReleaseDate = {
 
 const checkFormFields = () => {
   cy.get('#releaseDateDay').should('have.value', '27')
-  cy.get('#releaseDateMonth').should('have.value', '3')
+  cy.get('#releaseDateMonth').should('have.value', '03')
   cy.get('#releaseDateYear').should('have.value', '2026')
   cy.get('#curfewTimes-start-hours').should('have.value', '09')
   cy.get('#curfewTimes-start-minutes').should('have.value', '15')

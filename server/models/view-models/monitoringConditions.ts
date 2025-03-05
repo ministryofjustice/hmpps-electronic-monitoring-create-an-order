@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
+import { deserialiseDateTime, getError } from '../../utils/utils'
 import { MonitoringConditionsFormData } from '../form-data/monitoringConditions'
 import { MonitoringConditions } from '../MonitoringConditions'
 import { ValidationResult } from '../Validation'
@@ -14,28 +14,6 @@ type MonitoringConditionsViewModel = ViewModel<
   startDate: DateTimeField
   endDate: DateTimeField
   monitoringRequired: MultipleChoiceField
-}
-
-const deserialiseDateTime = (dateString: string | null) => {
-  if (dateString === null || dateString === '') {
-    return {
-      hours: '',
-      minutes: '',
-      day: '',
-      month: '',
-      year: '',
-    }
-  }
-
-  const date = new Date(dateString)
-
-  return {
-    minutes: date.getMinutes().toString(),
-    hours: date.getHours().toString(),
-    day: date.getDate().toString(),
-    month: (date.getMonth() + 1).toString(),
-    year: date.getFullYear().toString(),
-  }
 }
 
 const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): string[] => {
