@@ -2,7 +2,7 @@ import { Request, RequestHandler, Response } from 'express'
 
 import paths from '../../constants/paths'
 import { AttendanceMonitoring } from '../../models/AttendanceMonitoring'
-import { isValidationResult, ValidationResult } from '../../models/Validation'
+import { isValidationResult } from '../../models/Validation'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
 import { serialiseDate, serialiseTime } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'

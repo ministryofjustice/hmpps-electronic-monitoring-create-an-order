@@ -83,8 +83,6 @@ const createFromEntity = (attendanceMonitoring?: AttendanceMonitoring): Attendan
   const [startTimeHours, startTimeMinutes] = deserialiseTime(attendanceMonitoring?.startTime)
   const [endTimeHours, endTimeMinutes] = deserialiseTime(attendanceMonitoring?.endTime)
 
-  console.log(deserialiseDate(attendanceMonitoring?.endDate ?? null))
-
   return {
     address: {
       value: {
@@ -120,13 +118,10 @@ const construct = (
   formData: AttendanceMonitoringFormData | undefined,
   errors: ValidationResult,
 ): AttendanceMonitoringViewModel => {
-  console.log('view model')
   if (errors.length > 0 && formData !== undefined) {
-    console.log('here')
     return constructFromFormData(formData, errors)
   }
 
-  console.log('here entity')
   return createFromEntity(attendanceMonitoring)
 }
 

@@ -35,8 +35,8 @@
         disabled: not isOrderEditable
       }
     ],
-    value: zone.zoneType,
-    errorMessage:error.zoneType
+    value: zoneType.value,
+    errorMessage: zoneType.error
   }) }}
 
   {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
@@ -59,25 +59,25 @@
         name: "startDay",
         classes: "govuk-input--width-2",
         label: "Day",
-        value: zone.startDay,
+        value: startDate.value.day,
         attributes: attributes
       },
       {
         name: "startMonth",
         classes: "govuk-input--width-2",
         label: "Month",
-        value: zone.startMonth,
+        value: startDate.value.month,
         attributes: attributes
       },
       {
         name: "startYear",
         classes: "govuk-input--width-4",
         label: "Year",
-        value: zone.startYear,
+        value: startDate.value.year,
         attributes: attributes
       }
     ],
-    errorMessage: error.startDate
+    errorMessage: startDate.error
   }) }}
 
   {{ govukDateInput({
@@ -97,25 +97,25 @@
         name: "endDay",
         label: "Day",
         classes: "govuk-input--width-2",
-        value: zone.endDay,
+        value: endDate.value.day,
         attributes: attributes
       },
       {
         name: "endMonth",
         label: "Month",
         classes: "govuk-input--width-2",
-        value: zone.endMonth,
+        value: endDate.value.month,
         attributes: attributes
       },
       {
         name: "endYear",
         label: "Year",
         classes: "govuk-input--width-4",
-        value: zone.endYear,
+        value: endDate.value.year,
         attributes: attributes
       }
     ],
-    errorMessage: error.endDate
+    errorMessage: endDate.error
   }) }}
 
   {% call govukFieldset({
@@ -148,7 +148,7 @@
       hint: {
         html: fileHintHTML
       },
-      errorMessage:error.file,
+      errorMessage: file.error,
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
@@ -166,8 +166,8 @@
   {{ govukTextarea({
     name: "description",
     id: "description",
-    value: zone.description,
-    errorMessage: error.description,
+    value: description.value,
+    errorMessage: description.error,
     disabled: not isOrderEditable,
     label: {
       text: "Monitoring zone description",
@@ -181,8 +181,8 @@
   {{ govukTextarea({
     name: "duration",
     id: "duration",
-    value: zone.duration,
-    errorMessage: error.duration,
+    value: duration.value,
+    errorMessage: duration.error,
     disabled: not isOrderEditable,
     label: {
       text: "Monitoring zone duration",
@@ -220,7 +220,7 @@
         }
       ],
       value: anotherZone.value,
-      errorMessage: error.anotherZone
+      errorMessage: anotherZone.error
     }) }}
   {% endif %}
 

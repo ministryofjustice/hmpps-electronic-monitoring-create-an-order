@@ -2,7 +2,6 @@ import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
 import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
-import FormSelectComponent from '../../formSelectComponent'
 
 export type AlcoholMonitoringFormData = {
   isPartOfACP?: string
