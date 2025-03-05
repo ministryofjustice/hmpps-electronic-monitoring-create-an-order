@@ -142,30 +142,36 @@ describe('attendanceMonitoringController', () => {
       await attendanceMonitoringController.view(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/attendance-monitoring',
-        expect.objectContaining({
-          address: {
-            value: {
-              line1: 'add 1',
-              line2: 'add 2',
-              line3: 'add 3',
-              line4: '',
-              postcode: 'PC13DE',
-            },
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/attendance-monitoring', {
+        address: {
+          value: {
+            line1: 'add 1',
+            line2: 'add 2',
+            line3: 'add 3',
+            line4: '',
+            postcode: 'PC13DE',
           },
-          appointmentDay: { value: 'test day' },
-          endDateDay: { value: '11' },
-          endDateMonth: { value: '1' },
-          endDateYear: { value: '2025' },
-          endTime: { value: { hours: '11', minutes: '11' } },
-          purpose: { value: 'test purpose' },
-          startDateDay: { value: '1' },
-          startDateMonth: { value: '1' },
-          startDateYear: { value: '2025' },
-          startTime: { value: { hours: '01', minutes: '11' } },
-        }),
-      )
+        },
+        appointmentDay: { value: 'test day' },
+        endDate: {
+          value: {
+            day: '11',
+            month: '01',
+            year: '2025',
+          },
+        },
+        endTime: { value: { hours: '11', minutes: '11' } },
+        purpose: { value: 'test purpose' },
+        startDate: {
+          value: {
+            day: '01',
+            month: '01',
+            year: '2025',
+          },
+        },
+        startTime: { value: { hours: '01', minutes: '11' } },
+        errorSummary: null,
+      })
     })
 
     it('should render the form using submitted data when there are validation errors', async () => {
@@ -183,7 +189,23 @@ describe('attendanceMonitoringController', () => {
           ])
           .mockReturnValueOnce([
             {
-              startDate: '',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              addressPostcode: '',
+              appointmentDay: '',
+              'endDate-day': '',
+              'endDate-month': '',
+              'endDate-year': '',
+              endTimeHours: '',
+              endTimeMinutes: '',
+              purpose: '',
+              'startDate-day': '',
+              'startDate-month': '',
+              'startDate-year': '',
+              startTimeHours: '',
+              startTimeMinutes: '',
             },
           ]),
       })
@@ -194,16 +216,67 @@ describe('attendanceMonitoringController', () => {
       await attendanceMonitoringController.new(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/attendance-monitoring',
-        expect.objectContaining({
-          startDate: {
-            error: {
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/attendance-monitoring', {
+        address: {
+          error: undefined,
+          value: {
+            line1: '',
+            line2: '',
+            line3: '',
+            line4: '',
+            postcode: '',
+          },
+        },
+        appointmentDay: {
+          error: undefined,
+          value: '',
+        },
+        endDate: {
+          error: undefined,
+          value: {
+            day: '',
+            month: '',
+            year: '',
+          },
+        },
+        endTime: {
+          error: undefined,
+          value: {
+            hours: '',
+            minutes: '',
+          },
+        },
+        purpose: {
+          error: undefined,
+          value: '',
+        },
+        startDate: {
+          value: {
+            day: '',
+            month: '',
+            year: '',
+          },
+          error: {
+            text: 'Please enter a mandatory attendance monitoring start date date to continue to the next page',
+          },
+        },
+        startTime: {
+          error: undefined,
+          value: {
+            hours: '',
+            minutes: '',
+          },
+        },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#startDate',
               text: 'Please enter a mandatory attendance monitoring start date date to continue to the next page',
             },
-          },
-        }),
-      )
+          ],
+          titleText: 'There is a problem',
+        },
+      })
     })
   })
 

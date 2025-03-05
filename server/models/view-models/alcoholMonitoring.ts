@@ -1,17 +1,16 @@
+import { createGovukErrorSummary } from '../../utils/errors'
 import { deserialiseDate, getError } from '../../utils/utils'
 import { Address, AddressTypeEnum } from '../Address'
 import { AlcoholMonitoring } from '../AlcoholMonitoring'
 import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField } from './utils'
+import { DateField, TextField, ViewModel } from './utils'
 
-type AlcoholMonitoringViewModel = {
-  monitoringType: TextField
+type AlcoholMonitoringViewModel = ViewModel<
+  Pick<AlcoholMonitoring, 'installationLocation' | 'monitoringType' | 'prisonName' | 'probationOfficeName'>
+> & {
   startDate: DateField
   endDate: DateField
-  installationLocation: TextField
-  prisonName: TextField
-  probationOfficeName: TextField
   primaryAddressView: TextField
   secondaryAddressView: TextField
   tertiaryAddressView: TextField
@@ -43,6 +42,7 @@ const createViewModelFromAlcoholMonitoring = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
+    errorSummary: null,
   }
 }
 
@@ -78,6 +78,7 @@ const createViewModelFromFormData = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 

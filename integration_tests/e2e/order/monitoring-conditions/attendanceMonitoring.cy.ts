@@ -67,24 +67,27 @@ const mockInProgressAttendanceMonitoring = {
   status: 'IN_PROGRESS',
 }
 
-const checkFormFields = () => {
-  cy.get('input[name="startDate-day"]').should('have.value', '27')
-  cy.get('input[name="startDate-month"]').should('have.value', '3')
-  cy.get('input[name="startDate-year"]').should('have.value', '2024')
-  cy.get('input[name="endDate-day"]').should('have.value', '28')
-  cy.get('input[name="endDate-month"]').should('have.value', '4')
-  cy.get('input[name="endDate-year"]').should('have.value', '2025')
-  cy.get('input[name="purpose"]').should('have.value', 'To attend')
-  cy.get('input[name="appointmentDay"]').should('have.value', 'Monday')
-  cy.get('input[name="startTimeHours"]').should('have.value', '10')
-  cy.get('input[name="startTimeMinutes"]').should('have.value', '00')
-  cy.get('input[name="endTimeHours"]').should('have.value', '11')
-  cy.get('input[name="endTimeMinutes"]').should('have.value', '00')
-  cy.get('input[name="addressLine1"]').should('have.value', '19 Strawberry Fields')
-  cy.get('input[name="addressLine2"]').should('have.value', 'Liverpool')
-  cy.get('input[name="addressLine3"]').should('have.value', 'Line 3')
-  cy.get('input[name="addressLine4"]').should('have.value', 'Line 4')
-  cy.get('input[name="addressPostcode"]').should('have.value', 'LV3 4DG')
+const validFormData = {
+  tartDate: new Date(2024, 3, 27),
+  endDate: new Date(2024, 4, 28),
+  purpose: 'The purpose',
+  appointmentDay: 'Monday',
+  startTime: {
+    hours: '18',
+    minutes: '15',
+  },
+  endTime: {
+    hours: '19',
+    minutes: '30',
+  },
+  address: {
+    line1: 'Address line 1',
+    line2: 'Address line 2',
+    line3: 'Address line 3',
+    line4: 'Address line 4',
+    postcode: 'Postcode',
+  },
+  addAnother: 'false',
 }
 
 context('Attendance monitoring', () => {
@@ -103,6 +106,7 @@ context('Attendance monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -120,15 +124,23 @@ context('Attendance monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('be.disabled')
+      page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
+      page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
+      page.form.purposeField.shouldHaveValue('To attend')
+      page.form.appointmentDayField.shouldHaveValue('Monday')
+      page.form.startTimeField.shouldHaveValue({ hours: '10', minutes: '00' })
+      page.form.endTimeField.shouldHaveValue({ hours: '11', minutes: '00' })
+      page.form.addressField.shouldHaveValue({
+        line1: '19 Strawberry Fields',
+        line2: 'Liverpool',
+        line3: 'Line 3',
+        line4: 'Line 4',
+        postcode: 'LV3 4DG',
       })
-      cy.get('input[type="number"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
-      checkFormFields()
-      page.saveAndContinueButton().should('not.exist')
-      page.saveAndReturnButton().should('not.exist')
+      page.form.shouldBeDisabled()
+      page.form.saveAndContinueButton.should('not.exist')
+      page.form.saveAndReturnButton.should('not.exist')
+      page.errorSummary.shouldNotExist()
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
     })
   })
@@ -147,15 +159,23 @@ context('Attendance monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       cy.root().should('not.contain', 'You are viewing a submitted order.')
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('not.be.disabled')
+      page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
+      page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
+      page.form.purposeField.shouldHaveValue('To attend')
+      page.form.appointmentDayField.shouldHaveValue('Monday')
+      page.form.startTimeField.shouldHaveValue({ hours: '10', minutes: '00' })
+      page.form.endTimeField.shouldHaveValue({ hours: '11', minutes: '00' })
+      page.form.addressField.shouldHaveValue({
+        line1: '19 Strawberry Fields',
+        line2: 'Liverpool',
+        line3: 'Line 3',
+        line4: 'Line 4',
+        postcode: 'LV3 4DG',
       })
-      cy.get('input[type="number"]').each($el => {
-        cy.wrap($el).should('not.be.disabled')
-      })
-      checkFormFields()
-      page.saveAndContinueButton().should('exist')
-      page.saveAndReturnButton().should('exist')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAndReturnButton.should('exist')
+      page.form.shouldNotBeDisabled()
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -181,19 +201,17 @@ context('Attendance monitoring', () => {
           { field: 'appointmentDay', error: 'You must enter a valid appointment day' },
           { field: 'startTime', error: 'You must enter a valid time' },
           { field: 'endTime', error: 'You must enter a valid time' },
-          { field: 'address', error: 'You must enter a valid address' },
         ],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
-      page.saveAndContinueButton().click()
-      cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#endDate-error').should('contain', 'You must enter a valid date')
-      cy.get('#purpose-error').should('contain', 'You must enter a valid purpose')
-      cy.get('#appointmentDay-error').should('contain', 'You must enter a valid appointment day')
-      cy.get('#startTime-error').should('contain', 'You must enter a valid time')
-      cy.get('#endTime-error').should('contain', 'You must enter a valid time')
-      cy.get('#address-error').should('contain', 'You must enter a valid address')
+      page.form.saveAndContinueButton.click()
+      page.form.startDateField.shouldHaveValidationMessage('You must enter a valid date')
+      page.form.endDateField.shouldHaveValidationMessage('You must enter a valid date')
+      page.form.purposeField.shouldHaveValidationMessage('You must enter a valid purpose')
+      page.form.appointmentDayField.shouldHaveValidationMessage('You must enter a valid appointment day')
+      page.form.startTimeField.shouldHaveValidationMessage('You must enter a valid time')
+      page.form.endTimeField.shouldHaveValidationMessage('You must enter a valid time')
     })
 
     it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
@@ -204,10 +222,11 @@ context('Attendance monitoring', () => {
         response: mockEmptyAttendanceMonitoring.mandatoryAttendanceConditions[0],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
+
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
-      page.fillInForm()
-      cy.get('input[type="radio"][value="false"]').check()
-      page.saveAndContinueButton().click()
+      page.form.fillInWith(validFormData)
+      page.form.saveAndContinueButton.click()
+
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-attendance`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
@@ -224,6 +243,7 @@ context('Attendance monitoring', () => {
           postcode: 'Postcode',
         })
       })
+
       Page.verifyOnPage(AlcoholMonitoringPage)
     })
 
@@ -235,14 +255,15 @@ context('Attendance monitoring', () => {
         response: mockEmptyAttendanceMonitoring.mandatoryAttendanceConditions[0],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`)
+
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
-      page.fillInForm()
-      cy.get('input[type="radio"][value="true"]').check()
-      page.saveAndContinueButton().click()
+      page.form.fillInWith({ ...validFormData, addAnother: 'true' })
+      page.form.saveAndContinueButton.click()
+
       const secondPage = Page.verifyOnPage(AttendanceMonitoringPage)
-      secondPage.fillInForm()
-      cy.get('input[type="radio"][value="false"]').check()
-      secondPage.saveAndContinueButton().click()
+      secondPage.form.fillInWith(validFormData)
+      secondPage.form.saveAndContinueButton.click()
+
       Page.verifyOnPage(AlcoholMonitoringPage)
     })
   })

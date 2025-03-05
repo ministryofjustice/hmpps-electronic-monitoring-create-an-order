@@ -49,6 +49,7 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -78,14 +79,10 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      cy.get('input[type="radio"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
-      cy.get('input[type="radio"][value="PROBATION_OFFICE"]').should('be.checked')
-      cy.get('input[name="probationOfficeName"]').should('have.value', 'Probation Office')
+      page.form.shouldBeDisabled()
+      page.errorSummary.shouldNotExist()
+      page.form.installLocationField.shouldHaveValue('at the probation office')
+      page.form.probationNameField.shouldHaveValue('Probation Office')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndContinueButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
@@ -107,14 +104,10 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      cy.get('input[type="radio"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
-      cy.get('input[type="radio"][value="PRISON"]').should('be.checked')
-      cy.get('input[name="prisonName"]').should('have.value', 'Prison Name')
+      page.form.shouldBeDisabled()
+      page.errorSummary.shouldNotExist()
+      page.form.installLocationField.shouldHaveValue('at prison')
+      page.form.prisonNameField.shouldHaveValue('Prison Name')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndContinueButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
@@ -138,11 +131,9 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       cy.root().should('not.contain', 'You are viewing a submitted order.')
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('not.be.disabled')
-      })
-      cy.get('input[type="radio"][value="PROBATION_OFFICE"]').should('be.checked')
-      cy.get('input[name="probationOfficeName"]').should('have.value', 'Probation Office')
+      page.errorSummary.shouldNotExist()
+      page.form.installLocationField.shouldHaveValue('at the probation office')
+      page.form.probationNameField.shouldHaveValue('Probation Office')
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndContinueButton.should('exist')
     })
@@ -163,11 +154,9 @@ context('Alcohol monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       cy.root().should('not.contain', 'You are viewing a submitted order.')
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('not.be.disabled')
-      })
-      cy.get('input[type="radio"][value="PRISON"]').should('be.checked')
-      cy.get('input[name="prisonName"]').should('have.value', 'Prison Name')
+      page.errorSummary.shouldNotExist()
+      page.form.installLocationField.shouldHaveValue('at prison')
+      page.form.prisonNameField.shouldHaveValue('Prison Name')
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndContinueButton.should('exist')
     })
@@ -204,12 +193,19 @@ context('Alcohol monitoring', () => {
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
         cy.get('input[type="radio"][value="PROBATION_OFFICE"]').check()
         page.form.saveAndContinueButton.click()
-        cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
-        cy.get('#startDate-error').should('contain', 'Start date is required')
-        cy.get('#endDate-error').should('contain', 'End date is required')
-        cy.get('#installationLocation-error').should('contain', 'Installation location is required')
-        cy.get('#probationOfficeName-error').should(
-          'contain',
+        page.form.monitoringTypeField.shouldHaveValidationMessage('Monitoring type is required')
+        page.form.startDateField.shouldHaveValidationMessage('Start date is required')
+        page.form.endDateField.shouldHaveValidationMessage('End date is required')
+        page.form.installLocationField.shouldHaveValidationMessage('Installation location is required')
+        page.form.probationNameField.shouldHaveValidationMessage(
+          'You must enter a probation office name if the installation location is a probation office',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Monitoring type is required')
+        page.errorSummary.shouldHaveError('Start date is required')
+        page.errorSummary.shouldHaveError('End date is required')
+        page.errorSummary.shouldHaveError('Installation location is required')
+        page.errorSummary.shouldHaveError(
           'You must enter a probation office name if the installation location is a probation office',
         )
       })
@@ -231,14 +227,20 @@ context('Alcohol monitoring', () => {
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
         cy.get('input[type="radio"][value="PRISON"]').check()
         page.form.saveAndContinueButton.click()
-        cy.get('#monitoringType-error').should('contain', 'Monitoring type is required')
-        cy.get('#startDate-error').should('contain', 'Start date is required')
-        cy.get('#endDate-error').should('contain', 'End date is required')
-        cy.get('#installationLocation-error').should('contain', 'Installation location is required')
-        cy.get('#prisonName-error').should(
-          'contain',
+        page.form.saveAndContinueButton.click()
+        page.form.monitoringTypeField.shouldHaveValidationMessage('Monitoring type is required')
+        page.form.startDateField.shouldHaveValidationMessage('Start date is required')
+        page.form.endDateField.shouldHaveValidationMessage('End date is required')
+        page.form.installLocationField.shouldHaveValidationMessage('Installation location is required')
+        page.form.prisonNameField.shouldHaveValidationMessage(
           'You must enter a prison name if the installation location is a prison',
         )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Monitoring type is required')
+        page.errorSummary.shouldHaveError('Start date is required')
+        page.errorSummary.shouldHaveError('End date is required')
+        page.errorSummary.shouldHaveError('Installation location is required')
+        page.errorSummary.shouldHaveError('You must enter a prison name if the installation location is a prison')
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
@@ -246,8 +248,11 @@ context('Alcohol monitoring', () => {
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
         cy.get('#startDate-day').type('text')
         page.form.saveAndContinueButton.click()
-        cy.get('#startDate-error').should(
-          'contain',
+        page.form.startDateField.shouldHaveValidationMessage(
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })
@@ -257,8 +262,11 @@ context('Alcohol monitoring', () => {
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
         cy.get('#endDate-year').type('text')
         page.form.saveAndContinueButton.click()
-        cy.get('#endDate-error').should(
-          'contain',
+        page.form.endDateField.shouldHaveValidationMessage(
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })

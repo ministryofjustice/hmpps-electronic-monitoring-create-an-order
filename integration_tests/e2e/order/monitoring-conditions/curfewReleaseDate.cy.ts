@@ -82,6 +82,7 @@ context('Curfew monitoring - release date', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -105,6 +106,7 @@ context('Curfew monitoring - release date', () => {
       checkFormFields()
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -131,6 +133,7 @@ context('Curfew monitoring - release date', () => {
       checkFormFields()
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -166,6 +169,10 @@ context('Curfew monitoring - release date', () => {
           'You must enter a valid start time, You must enter a valid end time',
         )
         cy.get('#address-error').should('contain', 'You must enter a valid address')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('You must enter a valid date')
+        page.errorSummary.shouldHaveError('You must enter a valid end time')
+        page.errorSummary.shouldHaveError('You must enter a valid address')
       })
 
       it('should show an error when releaseDate is provided in the wrong format', () => {
@@ -175,6 +182,10 @@ context('Curfew monitoring - release date', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#releaseDate-error').should(
           'contain',
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })

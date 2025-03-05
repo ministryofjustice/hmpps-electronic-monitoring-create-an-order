@@ -101,7 +101,7 @@ describe('CurfewReleaseDateController', () => {
 
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-release-date', {
-        address: {
+        curfewAddress: {
           value: 'PRIMARY',
           error: {
             text: 'mockError',
@@ -125,6 +125,19 @@ describe('CurfewReleaseDateController', () => {
             text: 'mock start time Error',
           },
         },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#curfewAddress',
+              text: 'mockError',
+            },
+            {
+              href: '#startTime',
+              text: 'mock start time Error',
+            },
+          ],
+          titleText: 'There is a problem',
+        },
       })
     })
 
@@ -140,7 +153,7 @@ describe('CurfewReleaseDateController', () => {
       req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-release-date', {
-        address: {
+        curfewAddress: {
           value: 'SECONDARY',
         },
         releaseDate: {
@@ -158,6 +171,7 @@ describe('CurfewReleaseDateController', () => {
             endMinutes: '00',
           },
         },
+        errorSummary: null,
       })
     })
   })

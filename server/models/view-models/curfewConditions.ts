@@ -1,10 +1,11 @@
 import { deserialiseDate, getError } from '../../utils/utils'
 import { CurfewConditions } from '../CurfewConditions'
 import { ValidationResult } from '../Validation'
-import { DateField, MultipleChoiceField } from './utils'
+import { DateField, MultipleChoiceField, ViewModel } from './utils'
 import { CurfewConditionsFormData } from '../form-data/curfewConditions'
+import { createGovukErrorSummary } from '../../utils/errors'
 
-type CurfewConditionsViewModel = {
+type CurfewConditionsViewModel = ViewModel<Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate'>> & {
   addresses: MultipleChoiceField
   startDate: DateField
   endDate: DateField
@@ -31,6 +32,7 @@ const createViewModelFromFormData = (
       value: { day: formData['endDate-day'], month: formData['endDate-month'], year: formData['endDate-year'] },
       error: getError(validationErrors, 'endDate'),
     },
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
@@ -44,6 +46,7 @@ const createViewModelFromCurfewConditions = (
     addresses: { values: curfewConditions?.curfewAddress?.split(',') ?? [] },
     startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
     endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
+    errorSummary: null,
   }
 }
 

@@ -54,6 +54,12 @@ export type DateField = FormField & {
   value: Date
 }
 
+export type DateTimeField = FormField & {
+  value: Date & Time
+  dateError?: ErrorMessage
+  timeError?: ErrorMessage
+}
+
 export type MultipleChoiceField = FormField & {
   values: Array<string>
 }

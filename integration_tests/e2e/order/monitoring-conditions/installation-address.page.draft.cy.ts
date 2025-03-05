@@ -53,6 +53,7 @@ context('Monitoring conditions', () => {
         page.form.addressLine3Field.shouldHaveValue('')
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
+        page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
       })
 
@@ -129,6 +130,7 @@ context('Monitoring conditions', () => {
         page.form.addressLine3Field.shouldHaveValue('installation line 3')
         page.form.addressLine4Field.shouldHaveValue('installation line 4')
         page.form.postcodeField.shouldHaveValue('installation postcode')
+        page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
       })
 

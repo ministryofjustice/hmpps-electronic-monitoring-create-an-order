@@ -76,6 +76,7 @@ context('Trail monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -104,6 +105,7 @@ context('Trail monitoring', () => {
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -133,6 +135,9 @@ context('Trail monitoring', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#startDate-error').should('contain', 'You must enter a valid date')
         cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('You must enter a valid date')
+        page.errorSummary.shouldHaveError('You must enter a valid date')
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
@@ -144,6 +149,10 @@ context('Trail monitoring', () => {
           'contain',
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
       })
 
       it('should show an error when endDate is provided in the wrong format', () => {
@@ -153,6 +162,10 @@ context('Trail monitoring', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#endDate-error').should(
           'contain',
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })
