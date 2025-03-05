@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { deserialiseDate, deserialiseTime, getError, getErrors } from '../../utils/utils'
+import { deserialiseDateTime, deserialiseTime, getError, getErrors } from '../../utils/utils'
 import { CurfewReleaseDate } from '../CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../form-data/curfewReleaseDate'
 import { ValidationResult } from '../Validation'
@@ -13,14 +13,13 @@ type CurfewReleaseDateViewModel = ViewModel<Pick<CurfewReleaseDate, 'curfewAddre
 const createViewModelFromCurfewReleaseDate = (
   curfewReleaseDate?: CurfewReleaseDate | null,
 ): CurfewReleaseDateViewModel => {
-  const [releaseDateYear, releaseDateMonth, releaseDateDay] = deserialiseDate(curfewReleaseDate?.releaseDate)
-
+  const releaseDate = deserialiseDateTime(curfewReleaseDate?.releaseDate)
   const [startHours, startMinutes] = deserialiseTime(curfewReleaseDate?.startTime)
   const [endHours, endMinutes] = deserialiseTime(curfewReleaseDate?.endTime)
 
   return {
     curfewAddress: { value: curfewReleaseDate?.curfewAddress ?? '' },
-    releaseDate: { value: { year: releaseDateYear, month: releaseDateMonth, day: releaseDateDay } },
+    releaseDate: { value: releaseDate },
     curfewTimes: { value: { startHours, startMinutes, endHours, endMinutes } },
     errorSummary: null,
   }

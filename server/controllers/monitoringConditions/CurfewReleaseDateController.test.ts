@@ -158,8 +158,10 @@ describe('CurfewReleaseDateController', () => {
         },
         releaseDate: {
           value: {
+            hours: '00',
+            minutes: '00',
             year: '2025',
-            month: '2',
+            month: '02',
             day: '15',
           },
         },

@@ -156,15 +156,19 @@ describe('CurfewConditionsController', () => {
         },
         startDate: {
           value: {
+            hours: '00',
+            minutes: '00',
             year: '2025',
-            month: '2',
+            month: '02',
             day: '15',
           },
         },
         endDate: {
           value: {
+            hours: '00',
+            minutes: '00',
             year: '2026',
-            month: '2',
+            month: '02',
             day: '15',
           },
         },

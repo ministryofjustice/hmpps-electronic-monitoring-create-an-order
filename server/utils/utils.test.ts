@@ -7,7 +7,7 @@ import {
   convertBooleanToEnum,
   convertToTitleCase,
   createAddressPreview,
-  deserialiseDate,
+  deserialiseDateTime,
   deserialiseTime,
   getError,
   initialiseName,
@@ -61,14 +61,22 @@ describe('serialiseDate', () => {
   })
 })
 
-describe('deserialiseDate', () => {
+describe('deserialiseDateTime', () => {
   it.each([
-    ['Empty date', '', ['', '', '']],
-    ['Undefined', undefined, ['', '', '']],
-    ['Valid date', '2000-02-01T00:00:00.000Z', ['2000', '2', '1']],
-  ])('%s deserialiseDate(%s, %s)', (_: string, input: string | undefined, expected: Array<string>) => {
-    expect(deserialiseDate(input)).toEqual(expected)
-  })
+    ['Empty date', '', { hours: '', minutes: '', day: '', month: '', year: '' }],
+    ['Null', null, { hours: '', minutes: '', day: '', month: '', year: '' }],
+    ['Undefined', undefined, { hours: '', minutes: '', day: '', month: '', year: '' }],
+    ['Valid date', '2000-02-01T00:00:00.000Z', { hours: '00', minutes: '00', day: '01', month: '02', year: '2000' }],
+  ])(
+    '%s deserialiseDateTime(%s, %s)',
+    (
+      _: string,
+      input: string | null | undefined,
+      expected: { hours: string; minutes: string; day: string; month: string; year: string },
+    ) => {
+      expect(deserialiseDateTime(input)).toEqual(expected)
+    },
+  )
 })
 
 describe('serialiseTime', () => {

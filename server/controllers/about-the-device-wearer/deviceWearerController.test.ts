@@ -87,8 +87,10 @@ describe('DeviceWearerController', () => {
           },
           dateOfBirth: {
             value: {
-              day: '1',
-              month: '1',
+              hours: '00',
+              minutes: '00',
+              day: '01',
+              month: '01',
               year: '1980',
             },
           },

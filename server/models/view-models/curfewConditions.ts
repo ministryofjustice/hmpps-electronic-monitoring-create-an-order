@@ -1,4 +1,4 @@
-import { deserialiseDate, getError } from '../../utils/utils'
+import { deserialiseDateTime, getError } from '../../utils/utils'
 import { CurfewConditions } from '../CurfewConditions'
 import { ValidationResult } from '../Validation'
 import { DateField, MultipleChoiceField, ViewModel } from './utils'
@@ -39,13 +39,13 @@ const createViewModelFromFormData = (
 const createViewModelFromCurfewConditions = (
   curfewConditions: CurfewConditions | undefined | null,
 ): CurfewConditionsViewModel => {
-  const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(curfewConditions?.startDate)
-  const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(curfewConditions?.endDate)
+  const startDate = deserialiseDateTime(curfewConditions?.startDate)
+  const endDate = deserialiseDateTime(curfewConditions?.endDate)
 
   return {
     addresses: { values: curfewConditions?.curfewAddress?.split(',') ?? [] },
-    startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
-    endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
+    startDate: { value: startDate },
+    endDate: { value: endDate },
     errorSummary: null,
   }
 }

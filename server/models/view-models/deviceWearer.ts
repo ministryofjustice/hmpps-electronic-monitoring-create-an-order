@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { convertBooleanToEnum, getError } from '../../utils/utils'
+import { convertBooleanToEnum, deserialiseDateTime, getError } from '../../utils/utils'
 import { DeviceWearer } from '../DeviceWearer'
 import { DeviceWearerFormData } from '../form-data/deviceWearer'
 import { ValidationResult } from '../Validation'
@@ -24,24 +24,6 @@ type DeviceWearerViewModel = ViewModel<
   >
 > & {
   dateOfBirth: DateField
-}
-
-const deserialiseDate = (dateString: string | null) => {
-  if (dateString === null || dateString === '') {
-    return {
-      day: '',
-      month: '',
-      year: '',
-    }
-  }
-
-  const date = new Date(dateString)
-
-  return {
-    day: date.getDate().toString(),
-    month: (date.getMonth() + 1).toString(),
-    year: date.getFullYear().toString(),
-  }
 }
 
 const constructFromFormData = (
@@ -113,7 +95,7 @@ const createFromEntity = (deviceWearer: DeviceWearer): DeviceWearerViewModel => 
       value: deviceWearer.alias || '',
     },
     dateOfBirth: {
-      value: deserialiseDate(deviceWearer.dateOfBirth),
+      value: deserialiseDateTime(deviceWearer.dateOfBirth),
     },
     adultAtTimeOfInstallation: {
       value: convertBooleanToEnum(deviceWearer.adultAtTimeOfInstallation, '', 'true', 'false'),
