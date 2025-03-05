@@ -1,6 +1,4 @@
-import Questions from '../../types/i18n/questions'
-
-const questions: Questions = {
+const questions = {
   interestedParties: {
     notifyingOrganisation: 'What organisation or related organisation are you part of?',
     prison: 'Select the name of the Prison',
