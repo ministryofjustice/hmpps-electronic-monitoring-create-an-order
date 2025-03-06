@@ -334,7 +334,7 @@ context('Alcohol monitoring', () => {
     it('Should indicate to the user that there was an error', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`, { failOnStatusCode: false })
 
-      Page.verifyOnPage(ErrorPage, 'Not Found')
+      Page.verifyOnPage(ErrorPage, 'Page not found')
     })
   })
 })

@@ -276,7 +276,7 @@ context('Attendance monitoring', () => {
     it('Should indicate to the user that there was an error', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/attendance`, { failOnStatusCode: false })
 
-      Page.verifyOnPage(ErrorPage, 'Not Found')
+      Page.verifyOnPage(ErrorPage, 'Page not found')
     })
   })
 })

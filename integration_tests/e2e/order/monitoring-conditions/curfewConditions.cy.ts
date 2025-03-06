@@ -213,7 +213,7 @@ context('Curfew conditions', () => {
         failOnStatusCode: false,
       })
 
-      Page.verifyOnPage(ErrorPage, 'Not Found')
+      Page.verifyOnPage(ErrorPage, 'Page not found')
     })
   })
 })
