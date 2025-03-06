@@ -1,7 +1,8 @@
 import AddressPageContent from '../../../types/i18n/pages/address'
 
 const primaryAddressPageContent: AddressPageContent = {
-  helpText: 'If the device wearer has more than one address, enter the address they are legally registered at. If they divide their time across properties, enter the address they spend the most time or consider their home address.',
+  helpText:
+    'If the device wearer has more than one address, enter the address they are legally registered at. If they divide their time across properties, enter the address they spend the most time or consider their home address.',
   legend: "What is the device wearer's main address?",
   questions: {
     hasAnotherAddress: {

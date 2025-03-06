@@ -1,5 +1,5 @@
 import PageContent from './page'
 
-type ResponsibleAdultPageContent = PageContent<'contactNumber' | 'fullName' | 'otherRelationShip' | 'relationship'>
+type ResponsibleAdultPageContent = PageContent<'contactNumber' | 'fullName' | 'otherRelationship' | 'relationship'>
 
 export default ResponsibleAdultPageContent
