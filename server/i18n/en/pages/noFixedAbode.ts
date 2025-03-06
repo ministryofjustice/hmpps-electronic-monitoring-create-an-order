@@ -2,6 +2,7 @@ import NoFixedAbodePageContent from '../../../types/i18n/pages/noFixedAbode'
 
 const noFixedAbodePageContent: NoFixedAbodePageContent = {
   helpText: '',
+  legend: '',
   questions: {
     noFixedAbode: {
       text: 'Does the device wearer have a fixed address?',

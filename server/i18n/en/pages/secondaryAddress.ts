@@ -1,6 +1,8 @@
 import AddressPageContent from '../../../types/i18n/pages/address'
 
-const addressPageContent: AddressPageContent = {
+const secondaryAddressPageContent: AddressPageContent = {
+  helpText: '',
+  legend: "What is the device wearer's second address?",
   questions: {
     hasAnotherAddress: {
       text: 'Does the device wearer have another address they will be monitored at?',
@@ -23,7 +25,7 @@ const addressPageContent: AddressPageContent = {
     },
   },
   section: 'Contact information',
-  title: "What is the device wearer's primary address?",
+  title: "Device wearer's second address",
 }
 
-export default addressPageContent
+export default secondaryAddressPageContent
