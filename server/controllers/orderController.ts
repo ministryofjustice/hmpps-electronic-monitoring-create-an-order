@@ -83,6 +83,8 @@ export default class OrderController {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     } else if (result.type === 'errorStatus') {
       res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
+    } else if (result.type === 'partialSuccess') {
+      res.redirect(paths.ORDER.SUBMIT_PATIAL_SUCCESS.replace(':orderId', order.id))
     } else {
       req.flash('submissionError', 'Something unexpected happened. Please try again in a few minutes.')
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
@@ -93,6 +95,11 @@ export default class OrderController {
     const errors = req.flash('validationErrors')
 
     res.render('pages/order/submit-failed', { errors })
+  }
+
+  submitPartialSuccess: RequestHandler = async (req: Request, res: Response) => {
+    const errors = req.flash('validationErrors')
+    res.render('pages/order/submit-partial-success', { errors })
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {

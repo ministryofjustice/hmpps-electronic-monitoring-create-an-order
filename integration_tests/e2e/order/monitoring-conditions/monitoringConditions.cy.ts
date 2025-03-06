@@ -272,7 +272,7 @@ context('Monitoring conditions main section', () => {
     it('Should indicate to the user that there was an error', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`, { failOnStatusCode: false })
 
-      Page.verifyOnPage(ErrorPage, 'Not Found')
+      Page.verifyOnPage(ErrorPage, 'Page not found')
     })
   })
 })
