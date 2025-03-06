@@ -10,15 +10,13 @@ export default function createErrorHandler(production: boolean) {
       logger.info('Logging user out')
       return res.redirect('/sign-out')
     }
-
-    res.locals.message = production
-      ? 'Something went wrong. The error has been logged. Please try again'
-      : error.message
-    res.locals.status = error.status
-    res.locals.stack = production ? null : error.stack
+    else if (error.status === 404){
+      res.statusCode=404
+      return res.render('pages/error-pages/404')
+    }  
 
     res.status(error.status || 500)
 
-    return res.render('pages/error')
+    return res.render('pages/error-pages/500')
   }
 }

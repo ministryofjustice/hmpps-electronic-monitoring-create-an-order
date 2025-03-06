@@ -297,7 +297,7 @@ describe('Order Not Found', () => {
         [method](path)
         .expect(404)
         .expect(res => {
-          expect(res.text).toContain('Not Found')
+          expect(res.text).toContain('Page not found')
         })
     })
   })
