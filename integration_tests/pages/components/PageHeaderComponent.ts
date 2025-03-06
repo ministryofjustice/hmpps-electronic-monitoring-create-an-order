@@ -15,7 +15,7 @@ export default class PageHeaderComponent {
   }
 
   checkHasHeader(): void {
-    this.element.contains('Electronic monitoring', { log: false })
+    this.element.contains('Apply, change or end an Electronic Monitoring Order (EMO)', { log: false })
   }
 
   signOut = (): PageElement => this.element.get('[data-qa=signOut]')
