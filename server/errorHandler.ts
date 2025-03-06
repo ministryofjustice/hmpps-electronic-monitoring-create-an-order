@@ -10,10 +10,10 @@ export default function createErrorHandler(production: boolean) {
       logger.info('Logging user out')
       return res.redirect('/sign-out')
     }
-    else if (error.status === 404){
-      res.statusCode=404
+    if (error.status === 404) {
+      res.statusCode = 404
       return res.render('pages/error-pages/404')
-    }  
+    }
 
     res.status(error.status || 500)
 

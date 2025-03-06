@@ -285,7 +285,7 @@ describe('OrderController', () => {
       // When
       await orderController.submit(req, res, next)
 
-      // Then    
+      // Then
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/partial-success`)
     })
   })
