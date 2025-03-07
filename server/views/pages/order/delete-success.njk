@@ -13,13 +13,14 @@
   }) }}
 
   {{ govukPanel({
-    titleText: "The application form has been successfully deleted"
+    titleText: "Application form successfully deleted"
   }) }}
 
   <div class="govuk-button-group">
     {{ govukButton({
-      text: "Back to your applications",
-      href: "/"
+      text: "Back to start",
+      href: "/",
+      id: "back-button"
     }) }}
   </div>
 {% endblock %}

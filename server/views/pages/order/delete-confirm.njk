@@ -20,19 +20,22 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     <div class="govuk-button-group">
-      {{ govukButton({
-        text: "Back",
-        classes: "govuk-button--secondary",
-        name: "action",
-        value: "back"
-      })}}
-
-      {{ govukButton({
-        text: "Delete",
+       {{ govukButton({
+        text: "Yes, delete form",
         classes: "govuk-button--warning",
         name: "action",
-        value: "continue"
+        value: "continue",
+        id: "confirm-delete-button"
       })}}
+      {{ govukButton({
+        text: "Cancel and return to form",
+        classes: "govuk-button--secondary",
+        name: "action",
+        value: "back",
+        id: "back-button"
+      })}}
+
+     
     </div>
   </form>
 {% endblock %}
