@@ -138,7 +138,7 @@ describe('authorised user', () => {
         .get('/order/delete/success')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('The application form has been successfully deleted')
+          expect(res.text).toContain('Application form successfully deleted')
         })
     })
   })
