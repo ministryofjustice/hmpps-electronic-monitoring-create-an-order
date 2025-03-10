@@ -26,9 +26,13 @@ export default function setUpStaticResources(): Router {
 
   // Don't cache dynamic resources
   router.use(noCache())
-  // Setup cookies page route
+  // Setup static page route
   router.use('/cookies', (req, res) => {
     res.render(`cookies`)
+  })
+
+  router.get('/start', (req, res) => {
+    res.render('start')
   })
   return router
 }
