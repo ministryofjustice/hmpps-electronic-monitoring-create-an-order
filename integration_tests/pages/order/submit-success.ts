@@ -11,6 +11,6 @@ export default class SubmitSuccessPage extends AppPage {
   receiptButton = (): PageElement => cy.get('#receipt-button')
 
   get backToYourApplications(): PageElement {
-    return cy.contains('Back to your applications')
+    return cy.contains('Back to start')
   }
 }
