@@ -142,5 +142,9 @@
 
 .govuk-phase-banner {
   @include govuk-width-container;
+ 
+}
+.govuk-phase-banner-no-border {
+  @include govuk-width-container;
   border: none;
 }
