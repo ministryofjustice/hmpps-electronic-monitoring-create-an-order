@@ -2,6 +2,7 @@ import IndexPage from '../../pages/index'
 import AuthSignInPage from '../../pages/auth/signIn'
 import Page from '../../pages/page'
 import AuthManageDetailsPage from '../../pages/auth/manageDetails'
+import StartPage from '../../pages/order/start'
 
 context('Authentication', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ context('Authentication', () => {
     it('is asked to authenticate when navigating to service root', () => {
       cy.visit('/')
 
-      Page.verifyOnPage(AuthSignInPage)
+      Page.verifyOnPage(StartPage)
     })
 
     it('is asked to authenticate when navigating to sign in', () => {
@@ -26,7 +27,7 @@ context('Authentication', () => {
     it('is asked to authenticate when navigating to unknown page', () => {
       cy.visit('/path-not-handled-by-router')
 
-      Page.verifyOnPage(AuthSignInPage)
+      Page.verifyOnPage(StartPage)
     })
 
     it('is directed to the index page on successfully completing authentication', () => {
@@ -73,14 +74,14 @@ context('Authentication', () => {
       // can't do a visit here as cypress requires only one domain
       cy.request('/')
 
-      Page.verifyOnPage(AuthSignInPage)
+      Page.verifyOnPage(StartPage)
     })
 
     it('clears user session', () => {
       // can't do a visit here as cypress requires only one domain
       cy.request('/')
 
-      Page.verifyOnPage(AuthSignInPage)
+      Page.verifyOnPage(StartPage)
 
       cy.task('stubSignIn', { name: 'bobby brown', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
