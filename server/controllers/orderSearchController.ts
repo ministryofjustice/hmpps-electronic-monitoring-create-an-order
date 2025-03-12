@@ -48,6 +48,7 @@ export default class OrderSearchController {
   }
 
   search: RequestHandler = async (req: Request, res: Response) => {
+
     await this.auditService.logPageView(Page.ORDER_SEARCH_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,

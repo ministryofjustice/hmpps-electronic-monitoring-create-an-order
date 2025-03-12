@@ -31,7 +31,10 @@ export default function setUpStaticResources(): Router {
     res.render(`cookies`)
   })
 
-  router.get('/start', (req, res) => {
+  router.use('/', (req, res, next) => {
+    if (req.user?.token){
+      return next()
+    }
     res.render('start')
   })
   return router
