@@ -32,10 +32,11 @@ export default function setUpStaticResources(): Router {
   })
 
   router.use('/', (req, res, next) => {
-    if (req.user?.token){
+    if (req.user?.token) {
       return next()
     }
-    res.render('start')
+    return res.render('start')
   })
+
   return router
 }
