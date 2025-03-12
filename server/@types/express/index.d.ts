@@ -1,5 +1,6 @@
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import { Order } from '../../models/Order'
+import I18n from '../../types/i18n'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -29,6 +30,7 @@ export declare global {
       user: HmppsUser
       isOrderEditable?: boolean
       orderId?: string
+      content?: I18n
     }
   }
 }
