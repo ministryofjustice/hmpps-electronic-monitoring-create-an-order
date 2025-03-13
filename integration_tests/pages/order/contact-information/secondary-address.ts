@@ -4,6 +4,6 @@ import paths from '../../../../server/constants/paths'
 
 export default class SecondaryAddressPage extends AddressPage {
   constructor() {
-    super('Contact information', paths.CONTACT_INFORMATION.ADDRESSES, 'Secondary address')
+    super("Device wearer's second address", paths.CONTACT_INFORMATION.ADDRESSES, 'Contact information')
   }
 }

@@ -12,6 +12,7 @@ import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import authorisationMiddleware, { cemoAuthorisedRoles } from '../../middleware/authorisationMiddleware'
+import populateContent from '../../middleware/populateContent'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -71,6 +72,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => H
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(authorisationMiddleware(cemoAuthorisedRoles()))
+  app.use(populateContent)
   app.use(routes(services))
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))

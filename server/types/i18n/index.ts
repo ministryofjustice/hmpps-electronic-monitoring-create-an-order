@@ -8,6 +8,7 @@ import CurfewTimeTablePageContent from './pages/curfewTimeTable'
 import DeviceWearerPageContent from './pages/deviceWearer'
 import ExclusionZonePageContent from './pages/exclusionZone'
 import IdentityNumbersPageContent from './pages/identityNumbers'
+import InstallationAndRiskPageContent from './pages/installationAndRisk'
 import InterestedPartiesPageContent from './pages/interestedParties'
 import MonitoringConditionsPageContent from './pages/monitoringConditions'
 import NoFixedAbodePageContent from './pages/noFixedAbode'
@@ -27,6 +28,7 @@ type I18n = {
     exclusionZone: ExclusionZonePageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
+    installationAndRisk: InstallationAndRiskPageContent
     interestedParties: InterestedPartiesPageContent
     monitoringConditions: MonitoringConditionsPageContent
     noFixedAbode: NoFixedAbodePageContent

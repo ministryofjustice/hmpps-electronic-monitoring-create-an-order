@@ -6,6 +6,6 @@ export default class AttendanceMonitoringPage extends AppFormPage {
   public form = new AttendanceMonitoringFormComponent()
 
   constructor() {
-    super('Monitoring conditions', paths.MONITORING_CONDITIONS.ATTENDANCE, 'Attendance monitoring')
+    super('Mandatory attendance monitoring', paths.MONITORING_CONDITIONS.ATTENDANCE, 'Electronic monitoring required')
   }
 }

@@ -15,7 +15,31 @@ context('Contact information', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            deviceWearer: {
+              nomisId: null,
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              firstName: null,
+              lastName: null,
+              alias: null,
+              dateOfBirth: null,
+              adultAtTimeOfInstallation: false,
+              sex: null,
+              gender: null,
+              disabilities: '',
+              noFixedAbode: false,
+              interpreterRequired: null,
+            },
+          },
+        })
+
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,

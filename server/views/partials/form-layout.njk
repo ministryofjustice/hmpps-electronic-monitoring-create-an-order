@@ -8,6 +8,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+{% set mainClasses = "app-container govuk-body" %}
+{% set pageTitle = heading + " - " + section + " - " + applicationName %}
+
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
@@ -34,16 +37,21 @@
         {{ govukErrorSummary(errorSummary) }}
       {% endif %}
 
-      {{ mojPageHeaderActions({
-        heading: {
-          text: section,
-          classes: "govuk-heading-l"
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ section }}</span>
+        {{ heading }}
+      </h1>
+
+      {{ govukFieldset({
+        legend: {
+          text: legend,
+          classes: "govuk-fieldset__legend--s"
         }
       }) }}
 
-      {% if subsection %}
-        <h2 class="govuk-heading-m">{{ subsection }}</h2>
-      {% endif %}
+      <p>
+        {{ helpText }}
+      </p>
 
       <form action="" method="post" {{ formEncoding }}>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">

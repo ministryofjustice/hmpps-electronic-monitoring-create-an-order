@@ -1,14 +1,15 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Monitoring conditions - Attendance monitoring - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Monitoring conditions" %}
-{% set subsection = "Attendance monitoring" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "../../../partials/timeInput.njk" import timeInput %}
 {% from "../../../partials/addressInput.njk" import addressInput %}
+
+{% set section = content.pages.attendance.section %}
+{% set heading = content.pages.attendance.title %}
+{% set legend = content.pages.attendance.legend %}
+{% set helpText = content.pages.attendance.helpText %}
 
 {% block formInputs %}
 

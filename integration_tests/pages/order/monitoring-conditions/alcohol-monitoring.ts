@@ -8,7 +8,7 @@ export default class AlcoholMonitoringPage extends AppFormPage {
   public form = new AlcoholMonitoringFormComponent()
 
   constructor() {
-    super('Monitoring conditions', paths.MONITORING_CONDITIONS.ALCOHOL, 'Alcohol monitoring')
+    super('Alcohol monitoring', paths.MONITORING_CONDITIONS.ALCOHOL, 'Electronic monitoring required')
   }
 
   fillInForm = (installLocation: string): void => {

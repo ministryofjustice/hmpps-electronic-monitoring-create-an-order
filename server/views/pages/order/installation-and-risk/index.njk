@@ -1,8 +1,5 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Installation and risk - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Installation and risk information" %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
@@ -12,6 +9,11 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set section = content.pages.installationAndRisk.section %}
+{% set heading = content.pages.installationAndRisk.title %}
+{% set legend = content.pages.installationAndRisk.legend %}
+{% set helpText = content.pages.installationAndRisk.helpText %}
 
 {% block formInputs %}
   <p class="govuk-body">Provide risk information to help plan installation.</p>
