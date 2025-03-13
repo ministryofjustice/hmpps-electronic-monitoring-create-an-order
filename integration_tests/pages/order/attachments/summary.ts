@@ -32,6 +32,6 @@ export default class AttachmentSummaryPage extends AppPage {
 
   // ACTIONS
   get saveAndReturnButton(): PageElement {
-    return cy.contains('Save and return back to form section menu')
+    return cy.contains('Save and return to main form menu')
   }
 }
