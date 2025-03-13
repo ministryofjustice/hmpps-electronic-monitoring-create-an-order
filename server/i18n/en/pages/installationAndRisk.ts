@@ -23,8 +23,8 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
       hint: "Provide additional risk information about the device wearer's behaviour or the installation address.",
     },
   },
-  section: 'Details for installation',
-  title: 'Risk information',
+  section: 'Risk information',
+  title: 'Details for installation',
 }
 
 export default installationAndRiskPageContent
