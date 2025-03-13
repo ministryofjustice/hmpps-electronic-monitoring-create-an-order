@@ -16,7 +16,7 @@
   {{ accessibleAutocomplete({
     id: 'crownCourt',
     name: 'crownCourt',
-    label: questions.interestedParties.crownCourt,
+    label: content.pages.interestedParties.questions.crownCourt.text,
     options: crownCourts,
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
@@ -30,7 +30,7 @@
   {{ accessibleAutocomplete({
     id: 'magistratesCourt',
     name: 'magistratesCourt',
-    label: questions.interestedParties.magistratesCourt,
+    label: content.pages.interestedParties.questions.magistratesCourt.text,
     options: magistratesCourts,
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
@@ -44,7 +44,7 @@
   {{ accessibleAutocomplete({
     id: 'prison',
     name: 'prison',
-    label: questions.interestedParties.prison,
+    label: content.pages.interestedParties.questions.prison.text,
     options: prisons,
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
@@ -59,7 +59,7 @@
     id: "probationRegion",
     name: "probationRegion",
     label: {
-      text: questions.interestedParties.probationRegion
+      text: content.pages.interestedParties.questions.probationRegion.text
     },
     items: probationRegions,
     value: responsibleOrganisationRegion.value,
@@ -75,7 +75,7 @@
     id: "yjsRegion",
     name: "yjsRegion",
     label: {
-      text: questions.interestedParties.yjsRegion
+      text: content.pages.interestedParties.questions.yjsRegion.text
     },
     items: yjsRegions,
     value: responsibleOrganisationRegion.value,
@@ -158,13 +158,10 @@
       name: "notifyingOrganisation",
       fieldset: {
         legend: {
-          text: questions.interestedParties.notifyingOrganisation,
+          text: content.pages.interestedParties.questions.notifyingOrganisation.text,
           isPageHeading: true,
           classes: "govuk-fieldset__legend--s"
         }
-      },
-      hint: {
-        text: "Select one option"
       },
       items: notifyingOrgOptions,
       value: notifyingOrganisation.value,
@@ -174,11 +171,11 @@
 
     {{ govukInput({
       label: {
-        text: questions.interestedParties.notifyingOrganisationEmail,
+        text: content.pages.interestedParties.questions.notifyingOrganisationEmail.text,
         classes: "govuk-label--s"
       },
       hint: {
-        html: "For example, provide an email address for a shared mailbox that your team has access to. Do not provide a personal email address."
+        html: content.pages.interestedParties.questions.notifyingOrganisationEmail.hint
       },
       classes: "govuk-!-width-one-half",
       id: "notifyingOrganisationEmail",
@@ -196,9 +193,12 @@
       isPageHeading: false
     }
   }) %}
+    <p>
+      The Responsible Officer checks the device wearer follows the electronic monitoring order. For example, a Responsible Officer is the device wearer's probation officer.
+    </p>
     {{ govukInput({
       label: {
-        text: questions.interestedParties.responsibleOfficerName,
+        text: content.pages.interestedParties.questions.responsibleOfficerName.text,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -211,7 +211,7 @@
 
     {{ govukInput({
       label: {
-        text: questions.interestedParties.responsibleOfficerPhoneNumber,
+        text: content.pages.interestedParties.questions.responsibleOfficerPhoneNumber.text,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -231,17 +231,17 @@
       isPageHeading: false
     }
   }) %}
+    <p>
+      The Responsible Organisation is the service the Responsible Officer is part of. For example, the Responsible Organisation for a probation officer is the Probation Service.
+    </p>
     {{ govukRadios({
       name: "responsibleOrganisation",
       fieldset: {
         legend: {
-          text: questions.interestedParties.responsibleOrganisation,
+          text: content.pages.interestedParties.questions.responsibleOrganisation.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
-      },
-      hint: {
-        text: "Select one option"
       },
       value: responsibleOrganisation.value,
       errorMessage: responsibleOrganisation.error,
@@ -250,7 +250,7 @@
 
     {% call govukFieldset({
       legend: {
-        text: questions.interestedParties.responsibleOrganisationAddress,
+        text: content.pages.interestedParties.questions.responsibleOrganisationAddress.text,
         classes: "govuk-fieldset__legend--s",
         isPageHeading: false
       }
@@ -269,7 +269,7 @@
 
       {{ govukInput({
         label: {
-          text: "Address line 2"
+          text: "Address line 2 (optional)"
         },
         classes: "govuk-!-width-two-thirds",
         id: "responsibleOrganisationAddressLine2",
@@ -319,7 +319,7 @@
 
     {{ govukInput({
       label: {
-        text: questions.interestedParties.responsibleOrganisationPhoneNumber,
+        text: content.pages.interestedParties.questions.responsibleOrganisationPhoneNumber.text,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -333,7 +333,7 @@
 
     {{ govukInput({
       label: {
-        text: questions.interestedParties.responsibleOrganisationEmail,
+        text: content.pages.interestedParties.questions.responsibleOrganisationEmail.text,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",

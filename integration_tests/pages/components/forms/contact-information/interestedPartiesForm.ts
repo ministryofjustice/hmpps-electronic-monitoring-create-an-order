@@ -55,22 +55,22 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   }
 
   get notifyOrganisationEmailAddressField(): FormInputComponent {
-    const label = 'What is the email address for your team?'
+    const label = "What is your team's contact email address?"
     return new FormInputComponent(this.form, label)
   }
 
   get responsibleOfficerNameField(): FormInputComponent {
-    const label = 'Full name of responsible officer'
+    const label = "What is the Responsible Officer's full name?"
     return new FormInputComponent(this.form, label)
   }
 
   get responsibleOfficerContactNumberField(): FormInputComponent {
-    const label = 'Telephone number for responsible officer'
+    const label = "What is the Responsible Officer's telephone number?"
     return new FormInputComponent(this.form, label)
   }
 
   get responsibleOrganisationField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What organisation is the responsible officer part of?', [
+    return new FormRadiosComponent(this.form, "What is the Responsible Officer's organisation?", [
       'Youth Justice Service (YJS)',
       'Youth Custody Service (YCS)',
       'Probation',
@@ -113,17 +113,17 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   }
 
   get responsibleOrganisationAddressField(): FormAddressComponent {
-    const label = 'What is the address of the responsible organisation?'
+    const label = "What is the Responsible Organisation's address?"
     return new FormAddressComponent(this.form, label)
   }
 
   get responsibleOrganisationContactNumberField(): FormInputComponent {
-    const label = 'Telephone number for responsible organisation'
+    const label = "What is the Responsible Organisation's telephone number?"
     return new FormInputComponent(this.form, label)
   }
 
   get responsibleOrganisationEmailAddressField(): FormInputComponent {
-    const label = 'Email address for responsible organisation'
+    const label = "What is the Responsible Organisation's email address?"
     return new FormInputComponent(this.form, label)
   }
 
