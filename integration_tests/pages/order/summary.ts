@@ -25,6 +25,7 @@ import EnforcementZonePage from './monitoring-conditions/enforcement-zone'
 import AlcoholMonitoringPage from './monitoring-conditions/alcohol-monitoring'
 import UploadLicencePage from './attachments/uploadLicence'
 import TrailMonitoringPage from './monitoring-conditions/trail-monitoring'
+import SecondaryAddressPage from './contact-information/secondary-address'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -436,7 +437,7 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressPage.form.saveAndContinueButton.click()
 
     if (secondaryAddressDetails !== undefined) {
-      const secondaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+      const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage)
       secondaryAddressPage.form.fillInWith({
         ...secondaryAddressDetails,
         hasAnotherAddress: 'No',
