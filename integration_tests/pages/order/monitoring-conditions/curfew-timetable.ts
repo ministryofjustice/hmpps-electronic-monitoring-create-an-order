@@ -8,10 +8,6 @@ export default class CurfewTimetablePage extends AppFormPage {
   public form = new CurfewTimetableFormComponent()
 
   constructor() {
-    super(
-      'Monitoring conditions',
-      paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
-      'Timetable for curfew with electronic monitoring',
-    )
+    super('Curfew timetable', paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, 'Electronic monitoring details')
   }
 }

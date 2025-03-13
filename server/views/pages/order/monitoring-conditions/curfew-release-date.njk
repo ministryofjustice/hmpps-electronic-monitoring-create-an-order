@@ -1,12 +1,13 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Monitoring conditions - Curfew release date - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Monitoring conditions" %}
-{% set subsection = "Curfew for day of release" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "../../../partials/timeSpanInput.njk" import timeSpanInput %}
+
+{% set section = content.pages.curfewReleaseDate.section %}
+{% set heading = content.pages.curfewReleaseDate.title %}
+{% set legend = content.pages.curfewReleaseDate.legend %}
+{% set helpText = content.pages.curfewReleaseDate.helpText %}
 
 {% block formInputs %}
 

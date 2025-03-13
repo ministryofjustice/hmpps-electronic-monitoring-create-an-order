@@ -14,7 +14,7 @@ const trailMonitoringPageContent: TrailMonitoringPageContent = {
     },
   },
   section: 'Electronic monitoring required',
-  title: 'Trail monitoring ',
+  title: 'Trail monitoring',
 }
 
 export default trailMonitoringPageContent

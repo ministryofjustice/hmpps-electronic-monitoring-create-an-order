@@ -1,10 +1,12 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Contact information - Fixed address - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Contact information" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.noFixedAbode.section %}
+{% set heading = content.pages.noFixedAbode.title %}
+{% set legend = content.pages.noFixedAbode.legend %}
+{% set helpText = content.pages.noFixedAbode.helpText %}
 
 {% block formInputs %}
 

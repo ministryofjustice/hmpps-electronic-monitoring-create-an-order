@@ -1,8 +1,5 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Monitoring conditions - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Monitoring conditions" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
@@ -10,6 +7,11 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../../../partials/timeInput.njk" import timeInput %}
 {% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+
+{% set section = content.pages.monitoringConditions.section %}
+{% set heading = content.pages.monitoringConditions.title %}
+{% set legend = content.pages.monitoringConditions.legend %}
+{% set helpText = content.pages.monitoringConditions.helpText %}
 
 {% block formInputs %}
 

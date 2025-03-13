@@ -8,6 +8,6 @@ export default class ResponsibleAdultPage extends AppFormPage {
   form = new ResponsibleAdultFormComponent()
 
   constructor() {
-    super('About the device wearer', paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, 'Responsible Adult')
+    super('Responsible adult details', paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, 'About the device wearer')
   }
 }

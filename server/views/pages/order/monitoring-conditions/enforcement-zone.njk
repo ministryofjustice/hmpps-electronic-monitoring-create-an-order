@@ -1,15 +1,16 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Monitoring conditions - Enforcement zone - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Monitoring conditions" %}
-{% set subsection = "Exclusion and inclusion zones" %}
 {% set formEncoding = 'encType=multipart/form-data' %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set section = content.pages.exclusionZone.section %}
+{% set heading = content.pages.exclusionZone.title %}
+{% set legend = content.pages.exclusionZone.legend %}
+{% set helpText = content.pages.exclusionZone.helpText %}
 
 {% block formInputs %}
 

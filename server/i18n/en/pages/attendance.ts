@@ -33,7 +33,7 @@ const attendancePageContent: AttendancePageContent = {
     },
   },
   section: 'Electronic monitoring required',
-  title: 'Mandatory attendance monitoring ',
+  title: 'Mandatory attendance monitoring',
 }
 
 export default attendancePageContent

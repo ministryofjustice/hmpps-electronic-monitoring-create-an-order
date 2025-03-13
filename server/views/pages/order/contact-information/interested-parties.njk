@@ -1,13 +1,15 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Contact information - Notifying organisation - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Contact information" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
+
+{% set section = content.pages.interestedParties.section %}
+{% set heading = content.pages.interestedParties.title %}
+{% set legend = content.pages.interestedParties.legend %}
+{% set helpText = content.pages.interestedParties.helpText %}
 
 {% set crownCourtHtml %}
 

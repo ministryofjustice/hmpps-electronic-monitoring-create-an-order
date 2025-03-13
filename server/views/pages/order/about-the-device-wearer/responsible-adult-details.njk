@@ -1,11 +1,13 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Device wearer details - Responsible adult - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "About the device wearer" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.responsibleAdult.section %}
+{% set heading = content.pages.responsibleAdult.title %}
+{% set legend = content.pages.responsibleAdult.legend %}
+{% set helpText = content.pages.responsibleAdult.helpText %}
 
 {% block formInputs %}
 

@@ -1,9 +1,11 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Device wearer details - Identity numbers - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Identity numbers" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set section = content.pages.identityNumbers.section %}
+{% set heading = content.pages.identityNumbers.title %}
+{% set legend = content.pages.identityNumbers.legend %}
+{% set helpText = content.pages.identityNumbers.helpText %}
 
 {% block formInputs %}
 

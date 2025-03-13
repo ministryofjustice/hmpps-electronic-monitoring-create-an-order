@@ -9,6 +9,7 @@ import deviceWearerPageContent from './pages/deviceWearer'
 import exclusionZonePageContent from './pages/exclusionZone'
 import identityNumbersPageContent from './pages/identityNumbers'
 import installationAddressPageContent from './pages/installationAddress'
+import installationAndRiskPageContent from './pages/installationAndRisk'
 import interestedPartiesPageContent from './pages/interestedParties'
 import monitoringConditionsPageContent from './pages/monitoringConditions'
 import noFixedAbodePageContent from './pages/noFixedAbode'
@@ -32,6 +33,7 @@ const en: I18n = {
     exclusionZone: exclusionZonePageContent,
     identityNumbers: identityNumbersPageContent,
     installationAddress: installationAddressPageContent,
+    installationAndRisk: installationAndRiskPageContent,
     interestedParties: interestedPartiesPageContent,
     monitoringConditions: monitoringConditionsPageContent,
     noFixedAbode: noFixedAbodePageContent,

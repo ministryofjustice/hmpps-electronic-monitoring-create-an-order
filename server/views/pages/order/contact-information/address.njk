@@ -1,12 +1,31 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set section = "Monitoring conditions" if (addressType.value | lower) == "installation" else "Contact information" %}
-{% set pageTitle = section + " - " + (addressType.value | capitalize) + " address - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set subsection = addressType.value | capitalize + " address" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% if (addressType.value | lower) == "primary" %}
+
+  {% set pageContent = content.pages.primaryAddress %}
+
+{% elif (addressType.value | lower) == "secondary" %}
+
+  {% set pageContent = content.pages.secondaryAddress %}
+
+{% elif (addressType.value | lower) == "tertiary" %}
+
+  {% set pageContent = content.pages.tertiaryAddress %}
+
+{% elif (addressType.value | lower) == "installation" %}
+
+  {% set pageContent = content.pages.installationAddress %}
+
+{% endif %}
+
+{% set section = pageContent.section %}
+{% set heading = pageContent.title %}
+{% set legend = pageContent.legend %}
+{% set helpText = pageContent.helpText %}
 
 {% block formInputs %}
 

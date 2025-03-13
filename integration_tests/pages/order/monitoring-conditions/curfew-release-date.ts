@@ -8,7 +8,7 @@ export default class CurfewReleaseDatePage extends AppFormPage {
   public form = new CurfewReleaseDateFormComponent()
 
   constructor() {
-    super('Monitoring conditions', paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, 'Curfew for day of release')
+    super('Curfew on release day', paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, 'Electronic monitoring required')
   }
 
   fillInForm = (): void => {

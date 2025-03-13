@@ -8,6 +8,6 @@ export default class TrailMonitoringPage extends AppFormPage {
   public form = new TrailMonitoringFormComponent()
 
   constructor() {
-    super('Monitoring conditions', paths.MONITORING_CONDITIONS.TRAIL, 'Trail monitoring')
+    super('Trail monitoring', paths.MONITORING_CONDITIONS.TRAIL, 'Electronic monitoring required')
   }
 }

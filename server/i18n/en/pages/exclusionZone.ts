@@ -32,7 +32,7 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
     },
   },
   section: 'Electronic monitoring required',
-  title: 'Exclusion zone monitoring ',
+  title: 'Exclusion zone monitoring',
 }
 
 export default exclusionZonePageContent
