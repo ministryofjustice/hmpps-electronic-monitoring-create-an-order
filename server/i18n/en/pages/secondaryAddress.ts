@@ -5,8 +5,8 @@ const secondaryAddressPageContent: AddressPageContent = {
   legend: "What is the device wearer's second address?",
   questions: {
     hasAnotherAddress: {
-      text: 'Does the device wearer have another address they will be monitored at?',
-      hint: 'For example, the device wearer will spend curfew hours at another address. Examples of additional addresses include living part time in another address due to separated parents or living on-site at a school or university during term time.',
+      text: 'Are electronic monitoring devices required at another address?',
+      hint: "Examples include education, work, or living part-time at a relative, parent or partner's address.",
     },
     line1: {
       text: 'Address line 1',
