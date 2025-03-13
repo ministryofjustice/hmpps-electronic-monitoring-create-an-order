@@ -29,100 +29,85 @@
 
 {% block formInputs %}
 
-  {% call govukFieldset({
-    legend: {
-      text: "What is the device wearer's " + (addressType.value | lower) + " address?",
-      classes: "govuk-fieldset__legend--s",
-      isPageHeading: false
-    }
-  }) %}
-    {% if (addressType.value | lower) == "primary" %}
-      <p class="govuk-body">
-        If the device wearer has multiple addresses, enter the address where they spend
-        most of their time or have registered as their home residence
-      </p>
-    {% endif %}
+  {{ govukInput({
+    label: { text: pageContent.questions.line1.text },
+    id: "addressLine1",
+    name: "addressLine1",
+    value: addressLine1.value,
+    errorMessage: addressLine1.error,
+    disabled: not isOrderEditable
+  }) }}
 
-    {{ govukInput({
-      label: { text: "Address line 1" },
-      id: "addressLine1",
-      name: "addressLine1",
-      value: addressLine1.value,
-      errorMessage: addressLine1.error,
-      disabled: not isOrderEditable
-    }) }}
+  {{ govukInput({
+    label: { text: pageContent.questions.line2.text },
+    id: "addressLine2",
+    name: "addressLine2",
+    value: addressLine2.value,
+    errorMessage: addressLine2.error,
+    disabled: not isOrderEditable
+  }) }}
 
-    {{ govukInput({
-      label: { text: "Address line 2 (optional)" },
-      id: "addressLine2",
-      name: "addressLine2",
-      value: addressLine2.value,
-      errorMessage: addressLine2.error,
-      disabled: not isOrderEditable
-    }) }}
+  {{ govukInput({
+    label: { text: pageContent.questions.line3.text },
+    classes: "govuk-!-width-two-thirds",
+    id: "addressLine3",
+    name: "addressLine3",
+    value: addressLine3.value,
+    errorMessage: addressLine3.error,
+    disabled: not isOrderEditable
+  }) }}
 
-    {{ govukInput({
-      label: { text: "Town or city" },
-      classes: "govuk-!-width-two-thirds",
-      id: "addressLine3",
-      name: "addressLine3",
-      value: addressLine3.value,
-      errorMessage: addressLine3.error,
-      disabled: not isOrderEditable
-    }) }}
+  {{ govukInput({
+    label: { text: pageContent.questions.line4.text },
+    classes: "govuk-!-width-two-thirds",
+    id: "addressLine4",
+    name: "addressLine4",
+    value: addressLine4.value,
+    errorMessage: addressLine4.error,
+    disabled: not isOrderEditable
+  }) }}
 
-    {{ govukInput({
-      label: { text: "County (optional)" },
-      classes: "govuk-!-width-two-thirds",
-      id: "addressLine4",
-      name: "addressLine4",
-      value: addressLine4.value,
-      errorMessage: addressLine4.error,
-      disabled: not isOrderEditable
-    }) }}
+  {{ govukInput({
+    label: { text: pageContent.questions.postcode.text },
+    classes: "govuk-input--width-10",
+    id: "postcode",
+    name: "postcode",
+    value: postcode.value,
+    errorMessage: postcode.error,
+    disabled: not isOrderEditable
+  }) }}
 
-    {{ govukInput({
-      label: { text: "Postcode" },
-      classes: "govuk-input--width-10",
-      id: "postcode",
-      name: "postcode",
-      value: postcode.value,
-      errorMessage: postcode.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {% if (addressType.value | lower == "primary") or (addressType.value | lower == 'secondary') %}
-      {{ govukRadios({
-        name: "hasAnotherAddress",
-        classes: "govuk-radios--inline",
-        fieldset: {
-          legend: {
-            text: "Does the device wearer have another address they will be monitored at?",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
+  {% if (addressType.value | lower == "primary") or (addressType.value | lower == 'secondary') %}
+    {{ govukRadios({
+      name: "hasAnotherAddress",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: pageContent.questions.hasAnotherAddress.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: pageContent.questions.hasAnotherAddress.hint,
+        classes: "govuk-!-width-two-thirds"
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
         },
-        hint: {
-          text: "For example, the device wearer will spend curfew hours at another address. Examples of additional addresses include living part time in another address due to separated parents or living on-site at a school or university during term time.",
-          classes: "govuk-!-width-two-thirds"
-        },
-        items: [
-          {
-            value: "true",
-            text: "Yes",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "false",
-            text: "No",
-            disabled: not isOrderEditable
-          }
-        ],
-        value: hasAnotherAddress.value,
-        errorMessage: hasAnotherAddress.error,
-        disabled: not isOrderEditable
-      }) }}
-    {% endif %}
-  {% endcall %}
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: hasAnotherAddress.value,
+      errorMessage: hasAnotherAddress.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endif %}
 
 {% endblock %}
