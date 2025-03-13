@@ -44,7 +44,7 @@ export default class FormAddressComponent {
   }
 
   get countyField(): FormInputComponent {
-    const label = 'County (optional)'
+    const label = 'County'
     return new FormInputComponent(this.element, label)
   }
 
