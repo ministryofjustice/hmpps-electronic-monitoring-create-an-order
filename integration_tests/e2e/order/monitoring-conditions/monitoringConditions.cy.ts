@@ -73,18 +73,6 @@ const errorMessages = {
   yearMustIncludeFourNumbers: 'Year must include 4 numbers',
 }
 
-const errorMessages = {
-  conditionTypeRequired: 'Select order type condition',
-  monitoringTypeRequired: 'Select monitoring required',
-  orderTypeRequired: 'Select order type',
-  startDateMustBeReal: 'Start date for monitoring must be a real date',
-  startDateMustIncludeDay: 'Start date for monitoring must include a day',
-  startDateMustIncludeMonth: 'Start date for monitoring must include a month',
-  startDateMustIncludeYear: 'Start date for monitoring must include a year',
-  startDateRequired: 'Enter start date for monitoring',
-  yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-}
-
 context('Monitoring conditions main section', () => {
   let mockOrderId: string
 

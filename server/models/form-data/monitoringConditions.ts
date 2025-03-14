@@ -52,8 +52,6 @@ const MonitoringConditionsFormDataValidator = z
   .object({
     orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
     monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
-    orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
-    monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
     orderTypeDescription: z.string(),
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).pipe(
