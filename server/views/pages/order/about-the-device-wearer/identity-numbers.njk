@@ -11,7 +11,9 @@
 
   {{ govukInput({
     label: {
-    text: "National Offender Management Information System (NOMIS) ID (optional)"
+      text: content.pages.identityNumbers.questions.nomisId.text,
+      classes: "govuk-fieldset__legend--s"
+
     },
     classes: "govuk-input--width-10",
     id: "nomisId",
@@ -23,7 +25,8 @@
 
   {{ govukInput({
     label: {
-    text: "Police National Computer (PNC) ID (optional)"
+      text: content.pages.identityNumbers.questions.pncId.text,
+      classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
     id: "pncId",
@@ -35,7 +38,8 @@
 
   {{ govukInput({
     label: {
-    text: "Delius ID (optional)"
+      text: content.pages.identityNumbers.questions.deliusId.text,
+      classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
     id: "deliusId",
@@ -47,7 +51,8 @@
 
   {{ govukInput({
     label: {
-    text: "Prison Number (Optional)"
+      text: content.pages.identityNumbers.questions.prisonNumber.text,
+      classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
     id: "prisonNumber",
@@ -59,7 +64,8 @@
 
   {{ govukInput({
     label: {
-    text: "Home Office Reference Number (Optional)"
+      text: content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
+      classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
     id: "homeOfficeReferenceNumber",
