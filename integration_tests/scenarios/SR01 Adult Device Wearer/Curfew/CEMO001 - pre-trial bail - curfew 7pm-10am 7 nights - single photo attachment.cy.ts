@@ -87,7 +87,7 @@ context('Scenarios', () => {
     const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Postcode Risk',
+      riskCategory: 'Sex offender',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }

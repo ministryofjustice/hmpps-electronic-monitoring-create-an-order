@@ -16,22 +16,17 @@
 {% set helpText = content.pages.installationAndRisk.helpText %}
 
 {% block formInputs %}
-  <p class="govuk-body">Provide risk information to help plan installation.</p>
 
-  <p class="govuk-body">Answer questions based on what you know about the device wearer's previous behaviour and offence.</p>
-
-
- 
   {{ govukSelect({
     id: "offence",
     name: "offence", 
      label: {
-        text: "Select the offence committed by the device wearer(optional)",
+        text: content.pages.installationAndRisk.questions.offence.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }, 
     hint: {
-      text: "Select one"
+      text: content.pages.installationAndRisk.questions.offence.hint
     },
     items: [
       { text: 'Select', value: '' },
@@ -59,51 +54,51 @@
     name: "riskCategory[]",
     fieldset: {
       legend: {
-        text: "Select the risks that apply to the device wearer",
+        text: content.pages.installationAndRisk.questions.riskCategory.text,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "Select one or more from the list."
+      text: content.pages.installationAndRisk.questions.riskCategory.hint
     },
     items: [
       {
-        text: 'Threats of Violence',
+        text: 'Violent behaviour or threats of violence',
         value: 'VIOLENCE',
         disabled: not isOrderEditable
       },
       {
-        text: 'Sexual Offences',
+        text: 'Sex offender',
         value: 'SEXUAL_OFFENCES',
         disabled: not isOrderEditable
       },
       {
-        text: 'Risk to Specific Gender',
+        text: 'Offensive towards someone because of their sex or gender',
         value: 'GENDER',
         disabled: not isOrderEditable
       },
       {
-        text: 'Racial Abuse or Threats',
+        text: 'Offensive towards someone because of their race, nationality, ethnicity or national origin',
         value: 'RACIAL',
         disabled: not isOrderEditable
       },
       {
-        text: 'History of Substance Abuse',
+        text: 'Offensive towards someone because of their sexual orientation',
+        value: 'SEXUAL_ORIENTATION',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'History of substance abuse',
         value: 'SUBSTANCE_ABUSE',
         disabled: not isOrderEditable
       },
       {
-        text: 'Diversity Concerns (mental health issues, learning difficulties etc.)',
+        text: 'Diversity concerns (mental health issues, learning difficulties etc)',
         value: 'DIVERSITY',
         disabled: not isOrderEditable
       },
       {
-        text: 'Dangerous Dogs/Pets at Premises',
-        value: 'ANIMALS',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Is the Subject managed through IOM?',
+        text: 'Managed through IOM',
         value: 'IOM',
         disabled: not isOrderEditable
       },
@@ -113,33 +108,23 @@
         disabled: not isOrderEditable
       },
       {
-        text: 'Other occupants who pose a risk to staff',
-        value: 'OTHER_OCCUPANTS',
+        text: 'Another person or people living at the property who are threatening or violent',
+        value: 'VIOLENT_OTHER',
         disabled: not isOrderEditable
       },
       {
-        text: 'Other known Risks',
-        value: 'OTHER_RISKS',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Is there evidence known to the subject having homophobic views?',
-        value: 'HOMOPHOBIC',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Offence Risk',
-        value: 'OFFENCE_RISK',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Postcode Risk',
-        value: 'POSTCODE_RISK',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Under 18 living at property',
+        text: 'Children under the age of 18 are living at the property',
         value: 'UNDER_18',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Animals at the property, for example dogs',
+        value: 'ANIMALS',
+        disabled: not isOrderEditable
+      },
+      {
+        text: 'Other known risks',
+        value: 'OTHER_RISKS',
         disabled: not isOrderEditable
       }
     ],
@@ -154,11 +139,11 @@
     errorMessage: riskDetails.error,
     disabled: not isOrderEditable,
     label: {
-      text: "Provide details that will help lower risk of violence or threatening behaviour at installation.",
+      text: content.pages.installationAndRisk.questions.riskDetails.text,
       classes: "govuk-label--s"
     },
     hint: {
-      text: "Include details about the device wearer's behaviour and if there are risks at the installation property we should know of."
+      text: content.pages.installationAndRisk.questions.riskDetails.hint
     }
   }) }}
 
@@ -175,7 +160,7 @@
       name: "mappaLevel",
       fieldset: {
         legend: {
-          text: "Which level of MAPPA applies? (optional)",
+          text: content.pages.installationAndRisk.questions.mappaLevel.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -184,16 +169,25 @@
         {
           text: "MAPPA 1",
           value: "MAPPA1",
+          hint: {
+            text: "Ordinary agency management, where the offender can be managed by the lead agency in consultation with other agencies involved."
+          },
           disabled: not isOrderEditable
         },
         {
           text: "MAPPA 2",
           value: "MAPPA2",
+          hint: {
+            text: "For cases where active interagency management is required in order to manage the risk of serious harm posed."
+          },
           disabled: not isOrderEditable
         },
         {
           text: "MAPPA 3",
           value: "MAPPA3",
+          hint: {
+            text: "For the most complex cases which require active interagency management by Senior Managers from the agencies involved."
+          },
           disabled: not isOrderEditable
         }
       ],
@@ -206,7 +200,7 @@
       name: "mappaCaseType",
       fieldset: {
         legend: {
-          text: "What is the MAPPA case type? (optional)",
+          text: content.pages.installationAndRisk.questions.mappaCaseType.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }

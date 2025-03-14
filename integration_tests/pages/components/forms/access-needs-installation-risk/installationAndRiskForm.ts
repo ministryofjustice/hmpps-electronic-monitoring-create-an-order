@@ -16,7 +16,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   // FIELDS
 
   get offenceField(): FormSelectComponent {
-    const label = 'Select the offence committed by the device wearer(optional)'
+    const label = 'What type of offence did the device wearer commit?'
     return new FormSelectComponent(this.form, label, [
       'Violence against the person',
       'Sexual offences',
@@ -35,28 +35,26 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   }
 
   get riskCategoryField(): FormCheckboxesComponent {
-    const label = 'Select the risks that apply to the device wearer'
+    const label = 'At installation what are the possible risks?'
     return new FormCheckboxesComponent(this.form, label, [
-      'Threats of Violence',
-      'Sexual Offences',
-      'Risk to Specific Gender',
-      'Racial Abuse or Threats',
-      'History of Substance Abuse',
-      'Diversity Concerns (mental health issues, learning difficulties etc.)',
-      'Dangerous Dogs/Pets at Premises',
-      'Is the Subject managed through IOM?',
+      'Violent behaviour or threats of violence',
+      'Sex offender',
+      'Offensive towards someone because of their sex or gender',
+      'Offensive towards someone because of their race, nationality, ethnicity or national origin',
+      'Offensive towards someone because of their sexual orientation',
+      'History of substance abuse',
+      'Diversity concerns (mental health issues, learning difficulties etc)',
+      'Managed through IOM',
       'Safeguarding Issues',
-      'Other occupants who pose a risk to staff',
-      'Other known Risks',
-      'Is there evidence known to the subject having homophobic views?',
-      'Offence Risk',
-      'Postcode Risk',
-      'Under 18 living at property',
+      'Another person or people living at the property who are threatening or violent',
+      'Children under the age of 18 are living at the property',
+      'Animals at the property, for example dogs',
+      'Other known risks',
     ])
   }
 
   get riskDetailsField(): FormTextareaComponent {
-    const label = 'Provide details that will help lower risk of violence or threatening behaviour at installation.'
+    const label = 'Any other risks to be aware of?'
     return new FormTextareaComponent(this.form, label)
   }
 
