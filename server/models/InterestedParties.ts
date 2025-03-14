@@ -8,7 +8,7 @@ const InterestedPartiesModel = z
     notifyingOrganisation: NotifyingOrganisationEnum,
     notifyingOrganisationName: z.string(),
     notifyingOrganisationEmail: z.string(),
-    responsibleOfficerName: z.string(),
+    responsibleOfficerName: z.string().nullable(),
     responsibleOfficerPhoneNumber: z.string().nullable(),
     responsibleOrganisation: ResponsibleOrganisationEnum,
     responsibleOrganisationRegion: z.string(),

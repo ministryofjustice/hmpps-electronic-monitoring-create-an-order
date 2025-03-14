@@ -59,12 +59,28 @@ export default class InterestedPartiesService {
     return ''
   }
 
+  private getResponsibleOfficerName(data: InterestedPartiesFormData) {
+    if (data.responsibleOfficerName === '') {
+      return null
+    }
+
+    return data.responsibleOfficerName
+  }
+
+  private getResponsibleOrganisationEmail(data: InterestedPartiesFormData) {
+    if (data.responsibleOrganisationEmail === '') {
+      return null
+    }
+
+    return data.responsibleOrganisationEmail
+  }
+
   private getRequestBody(data: InterestedPartiesFormData) {
     return {
       notifyingOrganisation: data.notifyingOrganisation,
       notifyingOrganisationName: this.getNotifyingOrganisationName(data),
       notifyingOrganisationEmail: data.notifyingOrganisationEmail,
-      responsibleOfficerName: data.responsibleOfficerName,
+      responsibleOfficerName: this.getResponsibleOfficerName(data),
       responsibleOfficerPhoneNumber: this.getResponsibleOfficerPhoneNumber(data),
       responsibleOrganisation: data.responsibleOrganisation,
       responsibleOrganisationRegion: this.getResponsibleOrgansiationRegion(data),
@@ -74,7 +90,7 @@ export default class InterestedPartiesService {
       responsibleOrganisationAddressLine4: data.responsibleOrganisationAddressLine4,
       responsibleOrganisationAddressPostcode: data.responsibleOrganisationAddressPostcode,
       responsibleOrganisationPhoneNumber: this.getResponsibleOrganisationPhoneNumber(data),
-      responsibleOrganisationEmail: data.responsibleOrganisationEmail,
+      responsibleOrganisationEmail: this.getResponsibleOrganisationEmail(data),
     }
   }
 

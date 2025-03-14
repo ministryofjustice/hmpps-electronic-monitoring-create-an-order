@@ -246,6 +246,15 @@
       items: responsibleOrgOptions
     }) }}
 
+    {{ addressInput({
+      label: questions.interestedParties.responsibleOrganisationAddress,
+      id: "address",
+      name: "address",
+      value: address.value,
+      errorMessage: address.error,
+      disabled: not isOrderEditable
+    }) }}
+
     {% call govukFieldset({
       legend: {
         text: questions.interestedParties.responsibleOrganisationAddress,

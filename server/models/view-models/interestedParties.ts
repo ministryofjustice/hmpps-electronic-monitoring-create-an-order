@@ -49,7 +49,7 @@ const constructFromFormData = (formData: InterestedPartiesFormData, validationEr
       error: getError(validationErrors, 'notifyingOrganisationEmail'),
     },
     responsibleOfficerName: {
-      value: formData.responsibleOfficerName,
+      value: formData.responsibleOfficerName || '',
       error: getError(validationErrors, 'responsibleOfficerName'),
     },
     responsibleOfficerPhoneNumber: {

@@ -253,9 +253,7 @@ context('About the device wearer', () => {
       const page = Page.verifyOnPage(AboutDeviceWearerPage)
       page.form.dateOfBirthField.setDay('text')
       page.form.saveAndContinueButton.click()
-      page.form.dateOfBirthField.shouldHaveValidationMessage(
-        'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-      )
+      page.form.dateOfBirthField.shouldHaveValidationMessage('Date of birth must include a month')
     })
   })
 
