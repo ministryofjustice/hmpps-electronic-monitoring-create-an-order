@@ -28,12 +28,12 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   get prisonNumberField(): FormInputComponent {
-    const label = 'Prison Number (Optional)'
+    const label = 'Prison number (optional)'
     return new FormInputComponent(this.form, label)
   }
 
   get homeOfficeReferenceNumberField(): FormInputComponent {
-    const label = 'Home Office Reference Number (Optional)'
+    const label = 'Home Office Reference Number (optional)'
     return new FormInputComponent(this.form, label)
   }
 

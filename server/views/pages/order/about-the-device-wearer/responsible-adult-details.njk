@@ -11,30 +11,13 @@
 
 {% block formInputs %}
 
-  {% call govukFieldset({
-    legend: {
-      text: "Responsible Adult",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <p class="govuk-body">
-          A device wearer who is under 18 requires a responsible adult. This is
-          someone who will attend installation.
-        </p>
-        <p class="govuk-body">
-          Provide details of the device wearer's responsible adult.
-        </p>
-      </div>
-    </div>
+ 
 
     {% set otherRelationshipDetailsHtml %}
       {{
         govukInput({
           label: {
-            text: "Relationship to device wearer"
+            text: content.pages.responsibleAdult.questions.otherRelationship.text
           },
           id: "otherRelationshipDetails",
           name: "otherRelationshipDetails",
@@ -50,7 +33,8 @@
       name: "relationship",
       fieldset: {
         legend: {
-          text: "What is the relationship to the device wearer?"
+          text: content.pages.responsibleAdult.questions.relationship.text,
+          classes: "govuk-fieldset__legend--s"
         }
       },
       items: [
@@ -80,12 +64,9 @@
 
     {{ govukInput({
       label: {
-        text: "Full name of responsible adult",
-        classes: "govuk-label--s"
-      },
-      hint: {
-        text: "Provide first name and last name"
-      },
+        text: content.pages.responsibleAdult.questions.fullName.text,
+          classes: "govuk-fieldset__legend--s"
+      },     
       classes: "govuk-input--width-20",
       id: "fullName",
       name: "fullName",
@@ -97,12 +78,9 @@
 
     {{ govukInput({
       label: {
-        text: "Telephone number for responsible adult (optional)",
+        text: content.pages.responsibleAdult.questions.contactNumber.text,
         classes: "govuk-label--s"
-      },
-      hint: {
-        text: "Provide either a landline or mobile number"
-      },
+      },     
       classes: "govuk-input--width-10",
       id: "contactNumber",
       name: "contactNumber",
@@ -112,6 +90,6 @@
       errorMessage: contactNumber.error,
       disabled: not isOrderEditable
     }) }}
-  {% endcall %}
+
 
 {% endblock %}

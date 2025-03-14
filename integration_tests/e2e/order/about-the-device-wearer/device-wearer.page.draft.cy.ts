@@ -82,7 +82,7 @@ context('About the device wearer', () => {
 
         page.form.genderIdentityField.shouldHaveValue('Self identify')
         page.form.otherGenderField.shouldHaveValue('Furby')
-        page.form.disabilityField.shouldHaveValue('Other')
+        page.form.disabilityField.shouldHaveValue('The device wearer has a disability or health condition not listed')
         page.form.otherDisabilityField.shouldHaveValue('Broken arm')
       })
     })

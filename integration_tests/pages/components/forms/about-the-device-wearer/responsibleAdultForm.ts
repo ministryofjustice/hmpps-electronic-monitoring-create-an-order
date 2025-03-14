@@ -13,7 +13,7 @@ export default class ResponsibleAdultFormComponent extends FormComponent {
   // FIELDS
 
   get relationshipField(): FormRadiosComponent {
-    const label = 'What is the relationship to the device wearer?'
+    const label = "What is the responsible adult's relationship to the device wearer?"
     return new FormRadiosComponent(this.form, label, ['Parent', 'Guardian', 'Other'])
   }
 
@@ -25,12 +25,12 @@ export default class ResponsibleAdultFormComponent extends FormComponent {
   // CONTACT DETAILS
 
   get fullNameField(): FormInputComponent {
-    const label = 'Full name'
+    const label = "What is the responsible adult's full name?"
     return new FormInputComponent(this.form, label)
   }
 
   get contactNumberField(): FormInputComponent {
-    const label = 'Telephone number for responsible adult (optional)'
+    const label = "What is the responsible adult's telephone number? (optional)"
     return new FormInputComponent(this.form, label)
   }
 

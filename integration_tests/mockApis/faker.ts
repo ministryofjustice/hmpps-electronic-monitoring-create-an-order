@@ -5,9 +5,9 @@ import magistratesCourts from '../../server/reference/magistrates-courts'
 import probationRegions from '../../server/reference/probation-regions'
 import yjsRegions from '../../server/reference/youth-justice-service-regions'
 
-const sexOptions = ['Male', 'Female', 'Prefer not to say', "Don't know"]
+const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
 
-const genderOptions = ['Male', 'Female', 'Non binary', "Don't know", 'Self identify']
+const genderOptions = ['Male', 'Female', 'Non binary', 'Not able to provide this information', 'Self identify']
 
 const prisonTypes = Object.values(prisons)
 const crownCourtTypes = Object.values(crownCourts)
