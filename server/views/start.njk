@@ -1,0 +1,47 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% extends "./partials/layout.njk" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO) </h1>
+
+    <form class="form" method="post">
+
+     <p>Sign in to:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>submit an EMO application form</li>
+        <li>make changes to an EMO form submitted by you or someone else</li>
+        <li>view and download submitted application forms</li>
+        <li>end all monitoring early</li>
+      </ul>  
+
+      <h2 class="govuk-heading-s">How to sign in</h2>
+
+      <p>Use the log in details you set up when your account was created.</p>
+
+      <h2 class="govuk-heading-s">Getting an account</h2>
+
+      <p>If you don't have an account:</p>
+
+       <ul class="govuk-list govuk-list--bullet">
+        <li><a class="govuk-link" target="_blank" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/get-started.html#get-started">view the timetable</a> to see if your team uses this service to submit applications. Your team may not be using the online service yet</li>
+        <li>if your team is using this service, follow the instructions to create a new account</li>
+       </ul> 
+
+      <p>You can get help with logging in if you don't have your log in details.</p>
+
+     {{ govukButton({
+        text: "Sign in",
+        href: "/sign-in",
+        id: "sign-in-button",
+        isStartButton: true
+      }) }}
+
+    
+  </div>
+</div>
+{% endblock %}

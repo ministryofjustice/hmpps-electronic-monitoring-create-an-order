@@ -8,7 +8,7 @@ export default class InterestedPartiesPage extends AppFormPage {
   public form = new InterestedPartiesFormComponent()
 
   constructor() {
-    super('Contact information', paths.CONTACT_INFORMATION.INTERESTED_PARTIES, 'Notifying organisation')
+    super('Organisation details', paths.CONTACT_INFORMATION.INTERESTED_PARTIES, 'Contact information')
   }
 
   checkOnPage(): void {

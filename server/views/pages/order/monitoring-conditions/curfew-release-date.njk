@@ -1,12 +1,13 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Monitoring conditions - Curfew release date - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Monitoring conditions" %}
-{% set subsection = "Curfew for day of release" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "../../../partials/timeSpanInput.njk" import timeSpanInput %}
+
+{% set section = content.pages.curfewReleaseDate.section %}
+{% set heading = content.pages.curfewReleaseDate.title %}
+{% set legend = content.pages.curfewReleaseDate.legend %}
+{% set helpText = content.pages.curfewReleaseDate.helpText %}
 
 {% block formInputs %}
 
@@ -44,8 +45,8 @@
       {
         name: "releaseDateYear",
         classes: "govuk-input--width-4",
-          label: "Year",
-          id:"releaseDateYear",
+        label: "Year",
+        id:"releaseDateYear",
         value: releaseDate.value.year,
         attributes: disabled
       }
@@ -68,34 +69,34 @@
   {{ govukRadios({
       name: "address",
       fieldset: {
-          legend: {
+        legend: {
           text: "Curfew address on the day of release",
           isPageHeading: true,
           classes: "govuk-fieldset__legend--s"
-          }
+        }
       },
       hint: {
-          text: "What address will the device wearer be at during curfew hours on their day of release? Select one option"
+        text: "What address will the device wearer be at during curfew hours on their day of release? Select one option"
       },
       items: [
-          {
+        {
           value: "PRIMARY",
           text: "Primary address",
           disabled: not isOrderEditable
-          },
-          {
+        },
+        {
           value: "SECONDARY",
           text: "Secondary address",
           disabled: not isOrderEditable
-          },
-          {
+        },
+        {
           value: "TERTIARY",
           text: "Tertiary address",
           disabled: not isOrderEditable
-          }
+        }
       ],
-      value: address.value,
-      errorMessage: address.error
-      }) }}
+      value: curfewAddress.value,
+      errorMessage: curfewAddress.error
+    }) }}
 
 {% endblock %}

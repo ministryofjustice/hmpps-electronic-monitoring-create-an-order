@@ -1,11 +1,12 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Monitoring conditions - Curfew timetable - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Monitoring conditions" %}
-{% set subsection = "Timetable for curfew with electronic monitoring" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "../../../partials/timeTable.njk" import timeTable %}
+
+{% set section = content.pages.curfewTimetable.section %}
+{% set heading = content.pages.curfewTimetable.title %}
+{% set legend = content.pages.curfewTimetable.legend %}
+{% set helpText = content.pages.curfewTimetable.helpText %}
 
 {% block formInputs %}
   {% call govukFieldset({

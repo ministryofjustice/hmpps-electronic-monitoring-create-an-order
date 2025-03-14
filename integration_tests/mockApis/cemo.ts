@@ -242,6 +242,28 @@ const submitOrder = (options: SubmitOrderStubOptions) =>
     },
   })
 
+type DeleteOrderStubOptions = {
+  httpStatus: number
+  id: string
+  error: string
+}
+
+const deleteOrder = (options: DeleteOrderStubOptions) =>
+  stubFor({
+    request: {
+      method: 'DELETE',
+      urlPattern: `/cemo/api/orders/${options.id}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {}
+          : { status: options.httpStatus, userMessage: options.error, developerMessage: '' },
+    },
+  })
+
 type UploadAttachmentStubOptions = {
   httpStatus: number
   id?: string
@@ -575,6 +597,6 @@ export default {
   stubDeleteAttachment: deleteAttachment,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
-
+  stubDeleteOrder: deleteOrder,
   resetDB,
 }

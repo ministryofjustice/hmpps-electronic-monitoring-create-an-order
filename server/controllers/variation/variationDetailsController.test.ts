@@ -82,8 +82,10 @@ describe('VariationDetailsController', () => {
         variationType: 'CURFEW_HOURS',
         variationDate: {
           year: '2024',
-          month: '1',
-          day: '1',
+          month: '01',
+          day: '01',
+          minutes: '00',
+          hours: '00',
         },
         errors: {},
       })

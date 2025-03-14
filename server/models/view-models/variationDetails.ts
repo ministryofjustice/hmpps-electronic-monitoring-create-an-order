@@ -1,25 +1,7 @@
-import { getErrorsViewModel, isNullOrUndefined } from '../../utils/utils'
+import { deserialiseDateTime, getErrorsViewModel, isNullOrUndefined } from '../../utils/utils'
 import { VariationDetails } from '../VariationDetails'
 import { VariationDetailsFormData } from '../form-data/variationDetails'
 import { ValidationResult } from '../Validation'
-
-const deserialiseDate = (dateString: string | null) => {
-  if (dateString === null || dateString === '') {
-    return {
-      day: '',
-      month: '',
-      year: '',
-    }
-  }
-
-  const date = new Date(dateString)
-
-  return {
-    day: date.getDate().toString(),
-    month: (date.getMonth() + 1).toString(),
-    year: date.getFullYear().toString(),
-  }
-}
 
 const createViewModelFromVariationDetails = (variationDetails: VariationDetails | null) => {
   if (isNullOrUndefined(variationDetails)) {
@@ -30,7 +12,7 @@ const createViewModelFromVariationDetails = (variationDetails: VariationDetails 
 
   return {
     ...variationDetails,
-    variationDate: deserialiseDate(variationDetails.variationDate),
+    variationDate: deserialiseDateTime(variationDetails.variationDate),
     errors: {},
   }
 }

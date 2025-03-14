@@ -1,36 +1,29 @@
 {% extends "../../../partials/form-layout.njk" %}
-
-{% set pageTitle = "Contact information - Contact details - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Contact information" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
+{% set section = content.pages.contactDetails.section %}
+{% set heading = content.pages.contactDetails.title %}
+{% set legend = content.pages.contactDetails.legend %}
+{% set helpText = content.pages.contactDetails.helpText %}
+
 {% block formInputs %}
 
-  {% call govukFieldset({
-    legend: {
-      text: "Contact details",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    {{ govukInput({
-      label: {
-        text: "Enter a telephone number we can use to contact the device wearer (optional)."
-      },
-      hint: {
-        text: "Provide either a landline or mobile number"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "contact-number",
-      name: "contactNumber",
-      type: "tel",
-      autocomplete: "tel tel-national",
-      value: contactNumber.value,
-      errorMessage: contactNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endcall %}
+  {{ govukInput({
+    label: {
+      classes: "govuk-label--s",
+      text: content.pages.contactDetails.questions.contactNumber.text
+    },
+    hint: {
+      text: content.pages.contactDetails.questions.contactNumber.hint
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "contactNumber",
+    name: "contactNumber",
+    type: "tel",
+    value: contactNumber.value,
+    errorMessage: contactNumber.error,
+    disabled: not isOrderEditable
+  }) }}
 
 {% endblock %}

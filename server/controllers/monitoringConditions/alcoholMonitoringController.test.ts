@@ -82,8 +82,8 @@ describe('AlcoholMonitoringController', () => {
         'pages/order/monitoring-conditions/alcohol-monitoring',
         expect.objectContaining({
           monitoringType: { value: 'ALCOHOL_ABSTINENCE' },
-          startDate: { value: { day: '15', month: '2', year: '2026' } },
-          endDate: { value: { day: '15', month: '2', year: '2027' } },
+          startDate: { value: { day: '15', month: '02', year: '2026', hours: '00', minutes: '00' } },
+          endDate: { value: { day: '15', month: '02', year: '2027', hours: '00', minutes: '00' } },
           prisonName: { value: '' },
           probationOfficeName: { value: '' },
           installationLocation: { value: 'PRIMARY' },

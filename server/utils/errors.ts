@@ -1,7 +1,7 @@
 import { ZodError } from 'zod'
 import { ValidationResult } from '../models/Validation'
+import { ErrorSummary } from './govukFrontEndTypes/errorSummary'
 
-// eslint-disable-next-line  import/prefer-default-export
 export const convertZodErrorToValidationError = (error: ZodError): ValidationResult => {
   return error.issues.reduce((acc, issue) => {
     acc.push({
@@ -10,4 +10,20 @@ export const convertZodErrorToValidationError = (error: ZodError): ValidationRes
     })
     return acc
   }, [] as ValidationResult)
+}
+
+export const createGovukErrorSummary = (validationErrors: ValidationResult): ErrorSummary | null => {
+  if (validationErrors.length === 0) {
+    return null
+  }
+
+  return {
+    titleText: 'There is a problem',
+    errorList: validationErrors.map(error => {
+      return {
+        href: `#${error.field}`,
+        text: error.error,
+      }
+    }),
+  }
 }

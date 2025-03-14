@@ -76,6 +76,7 @@ context('Trail monitoring', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
       const page = Page.verifyOnPage(TrailMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -96,14 +97,15 @@ context('Trail monitoring', () => {
       cy.get('input[type="text"]').should('be.disabled')
       cy.get('input[type="text"]').should('be.disabled')
       cy.get('#startDate-day').invoke('val').should('equal', '27')
-      cy.get('#startDate-month').invoke('val').should('equal', '3')
+      cy.get('#startDate-month').invoke('val').should('equal', '03')
       cy.get('#startDate-year').invoke('val').should('equal', '2024')
       cy.get('#endDate-day').invoke('val').should('equal', '28')
-      cy.get('#endDate-month').invoke('val').should('equal', '4')
+      cy.get('#endDate-month').invoke('val').should('equal', '04')
       cy.get('#endDate-year').invoke('val').should('equal', '2025')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.errorSummary.shouldNotExist()
     })
   })
 
@@ -133,6 +135,9 @@ context('Trail monitoring', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#startDate-error').should('contain', 'You must enter a valid date')
         cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('You must enter a valid date')
+        page.errorSummary.shouldHaveError('You must enter a valid date')
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
@@ -144,6 +149,10 @@ context('Trail monitoring', () => {
           'contain',
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
       })
 
       it('should show an error when endDate is provided in the wrong format', () => {
@@ -153,6 +162,10 @@ context('Trail monitoring', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#endDate-error').should(
           'contain',
+          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
           'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
         )
       })

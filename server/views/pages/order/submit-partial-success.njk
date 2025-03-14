@@ -1,0 +1,56 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = "Application submission failed - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block content %}
+
+  {{ govukBackLink({
+  text: "Back",
+  href: "/"
+  }) }}
+
+  {{ govukPanel({
+  titleText: "Failed to submit attachments",
+  classes: "govuk-panel--error"
+  }) }}
+
+  <br>
+
+  {{ govukWarningText({
+  text: "You need to apply a different way"
+  }) }}
+
+  <p class="govuk-body">Your attachments failed to submit with your application form due to a technical problem.</p>
+
+  <p class="govuk-body">Download and submit your application form and attachments by email to:</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li><a href="mailto:hoieorders@ems.co.uk">hoieorders@ems.co.uk</a> if you work at the Home Office </li>
+    <li><a href="mailto:EMNotifications@ems.co.uk">EMNotifications@ems.co.uk</a> if you work in any other service or department</li>
+  </ul>
+
+ 
+
+  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+
+  {{ govukButton({
+          text: "View and download completed application form",
+          href: "/order/" + orderId + "/receipt",
+          classes: "govuk-button--secondary",
+          id: "receipt-button"
+      }) }}
+  <br><br>
+
+    {{ govukButton({
+      text: "Back to start",
+      href: "/",
+      id: "back-to-applications-button"
+    }) }}
+<p  class="govuk-body"><a href="https://forms.office.com/Pages/ResponsePage.aspx?id=KEeHxuZx_kGp4S6MNndq2MKbViRqOcdKh99RkWhlTDVUNDNXR05JQUE3U0cwOEJUSTg4M1REUkg5SS4u">What did you think of this service? (takes 30 seconds)</a></p>
+{% endblock %}

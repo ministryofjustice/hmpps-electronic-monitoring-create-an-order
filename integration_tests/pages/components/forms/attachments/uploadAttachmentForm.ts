@@ -39,4 +39,8 @@ export default class UploadAttachmentFormComponent extends FormComponent {
   shouldNotBeDisabled(): void {
     this.uploadField.shouldNotBeDisabled()
   }
+
+  get saveAndReturnButton(): PageElement {
+    return this.form.contains('Save and return to main form menu')
+  }
 }

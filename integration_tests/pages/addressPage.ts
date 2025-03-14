@@ -12,7 +12,7 @@ export default class AddressPage extends AppFormPage {
     private readonly subheading: string,
     private readonly canCreateAnotherAddress: boolean = true,
   ) {
-    super(title, uri)
+    super(title, uri, subheading)
   }
 
   checkOnPage(): void {

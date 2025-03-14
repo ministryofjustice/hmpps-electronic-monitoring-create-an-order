@@ -1,3 +1,4 @@
+import { createGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { ContactDetails } from '../ContactDetails'
 import { ContactDetailsFormData } from '../form-data/contactDetails'
@@ -6,27 +7,33 @@ import { ViewModel } from './utils'
 
 type ContactDetailsViewModel = ViewModel<NonNullable<ContactDetails>>
 
-const constructFromFormData = (formData: ContactDetailsFormData, validationErrors: ValidationResult) => {
+const constructFromFormData = (
+  formData: ContactDetailsFormData,
+  validationErrors: ValidationResult,
+): ContactDetailsViewModel => {
   return {
     contactNumber: {
       value: formData.contactNumber || '',
       error: getError(validationErrors, 'contactNumber'),
     },
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
-const constructFromEntity = (contactDetails: ContactDetails) => {
+const constructFromEntity = (contactDetails: ContactDetails): ContactDetailsViewModel => {
   if (contactDetails) {
     return {
       contactNumber: {
         value: contactDetails.contactNumber ?? '',
       },
+      errorSummary: null,
     }
   }
   return {
     contactNumber: {
       value: '',
     },
+    errorSummary: null,
   }
 }
 

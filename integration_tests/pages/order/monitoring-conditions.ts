@@ -8,6 +8,6 @@ export default class MonitoringConditionsPage extends AppFormPage {
   public form = new MonitoringConditionsFormComponent()
 
   constructor() {
-    super('Monitoring conditions', paths.MONITORING_CONDITIONS.BASE_URL, 'When should the monitoring take place')
+    super('Monitoring details', paths.MONITORING_CONDITIONS.BASE_URL, 'Electronic monitoring required')
   }
 }

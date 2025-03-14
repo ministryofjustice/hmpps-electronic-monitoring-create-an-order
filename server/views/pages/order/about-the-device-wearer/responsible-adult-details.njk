@@ -1,11 +1,13 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Device wearer details - Responsible adult - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "About the device wearer" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.responsibleAdult.section %}
+{% set heading = content.pages.responsibleAdult.title %}
+{% set legend = content.pages.responsibleAdult.legend %}
+{% set helpText = content.pages.responsibleAdult.helpText %}
 
 {% block formInputs %}
 
@@ -34,7 +36,7 @@
           label: {
             text: "Relationship to device wearer"
           },
-          id: "relationship-detail",
+          id: "otherRelationshipDetails",
           name: "otherRelationshipDetails",
           classes: "govuk-!-width-one-third",
           errorMessage: otherRelationshipDetails.error,
@@ -85,7 +87,7 @@
         text: "Provide first name and last name"
       },
       classes: "govuk-input--width-20",
-      id: "full-name",
+      id: "fullName",
       name: "fullName",
       autocomplete: "name",
       value: fullName.value,
@@ -102,7 +104,7 @@
         text: "Provide either a landline or mobile number"
       },
       classes: "govuk-input--width-10",
-      id: "contact-number",
+      id: "contactNumber",
       name: "contactNumber",
       type: "tel",
       autocomplete: "tel tel-national",

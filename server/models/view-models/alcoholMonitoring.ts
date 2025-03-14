@@ -1,17 +1,16 @@
-import { deserialiseDate, getError } from '../../utils/utils'
+import { createGovukErrorSummary } from '../../utils/errors'
+import { deserialiseDateTime, getError } from '../../utils/utils'
 import { Address, AddressTypeEnum } from '../Address'
 import { AlcoholMonitoring } from '../AlcoholMonitoring'
 import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField } from './utils'
+import { DateField, TextField, ViewModel } from './utils'
 
-type AlcoholMonitoringViewModel = {
-  monitoringType: TextField
+type AlcoholMonitoringViewModel = ViewModel<
+  Pick<AlcoholMonitoring, 'installationLocation' | 'monitoringType' | 'prisonName' | 'probationOfficeName'>
+> & {
   startDate: DateField
   endDate: DateField
-  installationLocation: TextField
-  prisonName: TextField
-  probationOfficeName: TextField
   primaryAddressView: TextField
   secondaryAddressView: TextField
   tertiaryAddressView: TextField
@@ -29,13 +28,13 @@ const createViewModelFromAlcoholMonitoring = (
   monitoringConditionsAlcohol: AlcoholMonitoring,
   addressViews: AddressViews,
 ): AlcoholMonitoringViewModel => {
-  const [startDateYear, startDateMonth, startDateDay] = deserialiseDate(monitoringConditionsAlcohol?.startDate)
-  const [endDateYear, endDateMonth, endDateDay] = deserialiseDate(monitoringConditionsAlcohol?.endDate)
+  const startDate = deserialiseDateTime(monitoringConditionsAlcohol?.startDate)
+  const endDate = deserialiseDateTime(monitoringConditionsAlcohol?.endDate)
 
   return {
     monitoringType: { value: monitoringConditionsAlcohol?.monitoringType ?? '' },
-    startDate: { value: { day: startDateDay, month: startDateMonth, year: startDateYear } },
-    endDate: { value: { day: endDateDay, month: endDateMonth, year: endDateYear } },
+    startDate: { value: startDate },
+    endDate: { value: endDate },
     installationLocation: { value: monitoringConditionsAlcohol?.installationLocation ?? '' },
     probationOfficeName: { value: monitoringConditionsAlcohol?.probationOfficeName ?? '' },
     prisonName: { value: monitoringConditionsAlcohol?.prisonName ?? '' },
@@ -43,6 +42,7 @@ const createViewModelFromAlcoholMonitoring = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
+    errorSummary: null,
   }
 }
 
@@ -78,6 +78,7 @@ const createViewModelFromFormData = (
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     installationAddressView: { value: addressViews.installationAddressView },
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 

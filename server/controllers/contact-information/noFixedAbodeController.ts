@@ -1,17 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
-import z from 'zod'
 import paths from '../../constants/paths'
 import { AuditService } from '../../services'
 import DeviceWearerService from '../../services/deviceWearerService'
-import { getErrorsViewModel } from '../../utils/utils'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
-import { BooleanInputModel } from '../../models/form-data/formData'
-
-const FormDataModel = z.object({
-  action: z.string().default('continue'),
-  noFixedAbode: BooleanInputModel,
-})
+import NoFixedAbodeFormDataModel from '../../models/form-data/noFixedAbode'
+import noFixedAbodeViewModel from '../../models/view-models/noFixedAbode'
 
 export default class NoFixedAbodeController {
   constructor(
@@ -21,22 +15,17 @@ export default class NoFixedAbodeController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const {
-      deviceWearer: { noFixedAbode },
-    } = req.order!
+    const { deviceWearer } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const viewModel = noFixedAbodeViewModel.construct(deviceWearer, formData[0] as never, errors as never)
 
-    res.render('pages/order/contact-information/no-fixed-abode', {
-      noFixedAbode: String(noFixedAbode),
-      ...(formData.length > 0 ? (formData[0] as never) : {}),
-      errors: getErrorsViewModel(errors as never),
-    })
+    res.render('pages/order/contact-information/no-fixed-abode', viewModel)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const { action, ...formData } = FormDataModel.parse(req.body)
+    const { action, ...formData } = NoFixedAbodeFormDataModel.parse(req.body)
 
     const result = await this.deviceWearerService.updateNoFixedAbode({
       accessToken: res.locals.user.token,

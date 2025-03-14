@@ -21,7 +21,7 @@ type OrderSubmissionSuccess = {
 
 type OrderSubmissionFailure = {
   submitted: false
-  type: 'incomplete' | 'errorStatus' | 'alreadySubmitted'
+  type: 'incomplete' | 'errorStatus' | 'alreadySubmitted' | 'partialSuccess'
   error: string
 }
 
@@ -102,6 +102,14 @@ export default class OrderService {
           return {
             submitted: false,
             type: 'errorStatus',
+            error: apiError.userMessage || '',
+          }
+        }
+
+        if (apiError.developerMessage === 'Error submit attachments to Serco') {
+          return {
+            submitted: false,
+            type: 'partialSuccess',
             error: apiError.userMessage || '',
           }
         }

@@ -18,6 +18,7 @@ import setUpWebSession from './middleware/setUpWebSession'
 
 import routes from './routes'
 import type { Services } from './services'
+import populateContent from './middleware/populateContent'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -31,13 +32,14 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
-  app.use(setUpStaticResources())
   nunjucksSetup(app)
   app.use(setUpAuthentication())
+  app.use(setUpStaticResources())
   app.use(authorisationMiddleware(cemoAuthorisedRoles()))
   app.use(multer().single('file'))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(populateContent)
   app.use(routes(services))
 
   app.use((req, res, next) => next(createError(404, 'Not Found')))

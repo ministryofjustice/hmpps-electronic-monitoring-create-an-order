@@ -16,21 +16,31 @@
   }) }}
 
   {{ govukPanel({
-  titleText: "Application submission failed",
+  titleText: "Failed to submit application",
   classes: "govuk-panel--error"
   }) }}
 
   <br>
 
   {{ govukWarningText({
-  text: "As your tag request submission has failed, you may want to download a PDF copy of your tag request form and send this directly to the supplier.",
-  iconFallbackText: "Warning"
+  text: "You need to apply a different way"
   }) }}
+
+  <p class="govuk-body">Your application form and attachments failed to submit due to a technical problem.</p>
+
+  <p class="govuk-body">Download and submit your application form by email to:</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li><a href="mailto:hoieorders@ems.co.uk">hoieorders@ems.co.uk</a> if you work at the Home Office </li>
+    <li><a href="mailto:EMNotifications@ems.co.uk">EMNotifications@ems.co.uk</a> if you work in any other service or department</li>
+  </ul>
+
+  <p class="govuk-body">If required, send a copy of the licence and photo identification with your application form.</p>
 
   <img src="{{ formDownloadIcon }}" alt="Icon of a form">
 
   {{ govukButton({
-          text: "Get tag request form summary for download",
+          text: "View and download completed application form",
           href: "/order/" + orderId + "/receipt",
           classes: "govuk-button--secondary",
           id: "receipt-button"
@@ -38,9 +48,10 @@
   <br><br>
 
     {{ govukButton({
-      text: "Back to your applications",
+      text: "Back to start",
       href: "/",
       id: "back-to-applications-button"
     }) }}
+<p  class="govuk-body"><a href="https://forms.office.com/Pages/ResponsePage.aspx?id=KEeHxuZx_kGp4S6MNndq2MKbViRqOcdKh99RkWhlTDVUNDNXR05JQUE3U0cwOEJUSTg4M1REUkg5SS4u">What did you think of this service? (takes 30 seconds)</a></p>
 
 {% endblock %}

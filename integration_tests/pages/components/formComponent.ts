@@ -32,6 +32,6 @@ export default abstract class FormComponent {
   }
 
   get saveAndReturnButton(): PageElement {
-    return this.form.contains('Save and return back to form section menu')
+    return this.form.contains('Save as draft')
   }
 }

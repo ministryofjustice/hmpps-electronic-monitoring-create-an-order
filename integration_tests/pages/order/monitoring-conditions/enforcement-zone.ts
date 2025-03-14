@@ -8,6 +8,6 @@ export default class EnforcementZonePage extends AppFormPage {
   public form = new EnforcementZoneFormComponent()
 
   constructor() {
-    super('Monitoring conditions', paths.MONITORING_CONDITIONS.ZONE, 'Exclusion and inclusion zones')
+    super('Exclusion zone monitoring ', paths.MONITORING_CONDITIONS.ZONE, 'Electronic monitoring required')
   }
 }

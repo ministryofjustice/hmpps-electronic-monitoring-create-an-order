@@ -44,7 +44,7 @@ export default class AddressFormComponent extends FormComponent {
   }
 
   get hasAnotherAddressField(): FormRadiosComponent {
-    const label = 'Does the device wearer have another address they will be monitored at?'
+    const label = 'Are electronic monitoring devices required at another address?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 

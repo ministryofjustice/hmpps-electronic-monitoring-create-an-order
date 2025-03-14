@@ -82,13 +82,13 @@ describe('AddressController', () => {
 
   describe('getAddress', () => {
     it.each([
-      ['Primary', 'primary', primaryAddress, true],
-      ['Secondary', 'secondary', secondaryAddress, true],
-      ['Tertiary', 'tertiary', tertiaryAddress, false],
-      ['Installation', 'installation', installationAddress, false],
+      ['Primary', 'primary', true],
+      ['Secondary', 'secondary', true],
+      ['Tertiary', 'tertiary', false],
+      ['Installation', 'installation', false],
     ])(
       'it should render the %s address form with the correct address',
-      async (_: string, param: string, expected, hasAnotherAddress: boolean) => {
+      async (_: string, param: string, hasAnotherAddress: boolean) => {
         // Given
         const req = createMockRequest({
           order: mockOrder,
@@ -106,9 +106,28 @@ describe('AddressController', () => {
 
         // Then
         expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
-          ...expected,
-          hasAnotherAddress: String(hasAnotherAddress),
-          errors: {},
+          addressLine1: {
+            value: '',
+          },
+          addressLine2: {
+            value: '',
+          },
+          addressLine3: {
+            value: '',
+          },
+          addressLine4: {
+            value: '',
+          },
+          addressType: {
+            value: param,
+          },
+          errorSummary: null,
+          hasAnotherAddress: {
+            value: hasAnotherAddress.toString(),
+          },
+          postcode: {
+            value: '',
+          },
         })
       },
     )
@@ -135,6 +154,7 @@ describe('AddressController', () => {
               addressLine3: '',
               addressLine4: '',
               postcode: '',
+              hasAnotherAddress: 'true',
             },
           ]),
       })
@@ -146,21 +166,53 @@ describe('AddressController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/contact-information/address', {
-        addressType: 'PRIMARY',
-        addressLine1: '',
-        addressLine2: '',
-        addressLine3: '',
-        addressLine4: '',
-        postcode: '',
-        hasAnotherAddress: 'true',
-        errors: {
-          addressLine1: {
+        addressType: {
+          value: 'primary',
+        },
+        addressLine1: {
+          value: '',
+          error: {
             text: 'Address line 1 is required',
           },
-          addressLine2: {
+        },
+        addressLine2: {
+          value: '',
+          error: {
             text: 'Address line 2 is required',
           },
-          postcode: {
+        },
+        addressLine3: {
+          value: '',
+          error: undefined,
+        },
+        addressLine4: {
+          value: '',
+          error: undefined,
+        },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#addressLine1',
+              text: 'Address line 1 is required',
+            },
+            {
+              href: '#addressLine2',
+              text: 'Address line 2 is required',
+            },
+            {
+              href: '#postcode',
+              text: 'Postcode is required',
+            },
+          ],
+          titleText: 'There is a problem',
+        },
+
+        hasAnotherAddress: {
+          value: 'true',
+        },
+        postcode: {
+          value: '',
+          error: {
             text: 'Postcode is required',
           },
         },

@@ -100,19 +100,38 @@ describe('EnforcementZoneController', () => {
       req.params.zoneId = '0'
       await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/enforcement-zone',
-        expect.objectContaining({
-          zone: {
-            ...createMockRenderZone(),
-            startDate: '2025-02-15',
-            endDate: '2026-02-15',
-            zoneId: 0,
-            fileId: '',
-            fileName: '',
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/enforcement-zone', {
+        anotherZone: {
+          value: 'false',
+        },
+        description: {
+          value: 'MockDescription',
+        },
+        duration: {
+          value: 'MockDuration',
+        },
+        endDate: {
+          value: {
+            day: '15',
+            month: '2',
+            year: '2026',
           },
-        }),
-      )
+        },
+        file: {
+          value: '',
+        },
+        errorSummary: null,
+        startDate: {
+          value: {
+            day: '15',
+            month: '2',
+            year: '2025',
+          },
+        },
+        zoneType: {
+          value: 'EXCLUSION',
+        },
+      })
     })
   })
 
@@ -120,18 +139,60 @@ describe('EnforcementZoneController', () => {
     it('Should render current page with error when service return error when updating enforcement zone', async () => {
       req.params.zoneId = '0'
       req.body = createMockBody()
-      mockEnforcementZoneService.updateZone = jest.fn().mockReturnValueOnce([{ field: 'mock', error: 'mockerror' }])
+      mockEnforcementZoneService.updateZone = jest
+        .fn()
+        .mockReturnValueOnce([{ field: 'duration', error: 'Mock Error' }])
       await controller.update(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/enforcement-zone',
-        expect.objectContaining({
-          zone: createMockRenderZoneWithAnotherZone(),
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/enforcement-zone', {
+        anotherZone: {
+          error: undefined,
+          value: 'false',
+        },
+        description: {
+          error: undefined,
+          value: 'MockDescription',
+        },
+        duration: {
           error: {
-            mock: { text: 'mockerror' },
+            text: 'Mock Error',
           },
-        }),
-      )
+          value: 'MockDuration',
+        },
+        endDate: {
+          error: undefined,
+          value: {
+            day: '15',
+            month: '2',
+            year: '2026',
+          },
+        },
+        file: {
+          error: undefined,
+          value: '',
+        },
+        startDate: {
+          error: undefined,
+          value: {
+            day: '15',
+            month: '2',
+            year: '2025',
+          },
+        },
+        zoneType: {
+          error: undefined,
+          value: 'EXCLUSION',
+        },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#duration',
+              text: 'Mock Error',
+            },
+          ],
+          titleText: 'There is a problem',
+        },
+      })
     })
 
     it('Should render current page with error when service return error when upload file', async () => {
@@ -154,15 +215,55 @@ describe('EnforcementZoneController', () => {
         .mockReturnValueOnce({ status: null, userMessage: 'Mock Error', developerMessage: null })
       await controller.update(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/enforcement-zone',
-        expect.objectContaining({
-          zone: createMockRenderZoneWithAnotherZone(),
-          error: {
-            file: { text: 'Mock Error' },
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/enforcement-zone', {
+        anotherZone: {
+          error: undefined,
+          value: 'false',
+        },
+        description: {
+          error: undefined,
+          value: 'MockDescription',
+        },
+        duration: {
+          error: undefined,
+          value: 'MockDuration',
+        },
+        endDate: {
+          error: undefined,
+          value: {
+            day: '15',
+            month: '2',
+            year: '2026',
           },
-        }),
-      )
+        },
+        file: {
+          error: {
+            text: 'Mock Error',
+          },
+          value: '',
+        },
+        startDate: {
+          error: undefined,
+          value: {
+            day: '15',
+            month: '2',
+            year: '2025',
+          },
+        },
+        zoneType: {
+          error: undefined,
+          value: 'EXCLUSION',
+        },
+        errorSummary: {
+          errorList: [
+            {
+              href: '#file',
+              text: 'Mock Error',
+            },
+          ],
+          titleText: 'There is a problem',
+        },
+      })
     })
 
     it('Should render new zone page if anotherZone is true', async () => {
@@ -248,39 +349,6 @@ const createMockEnforcementZone = (zoneId: number = 0): EnforcementZone => {
     fileId: '',
     fileName: '',
   }
-}
-
-const createMockRenderZone = (): RenderZone => {
-  return {
-    startYear: '2025',
-    startMonth: '2',
-    startDay: '15',
-    endYear: '2026',
-    endMonth: '2',
-    endDay: '15',
-    zoneType: EnforcementZoneTypes.EXCLUSION,
-    duration: 'MockDuration',
-    description: 'MockDescription',
-  }
-}
-const createMockRenderZoneWithAnotherZone = (): RenderZone => {
-  return {
-    ...createMockRenderZone(),
-    anotherZone: 'false',
-  }
-}
-
-type RenderZone = {
-  startYear: string
-  startMonth: string
-  startDay: string
-  endYear: string
-  endMonth: string
-  endDay: string
-  zoneType: EnforcementZoneTypes
-  duration: string
-  description: string
-  anotherZone?: string
 }
 
 type ZoneFormDataModel = {

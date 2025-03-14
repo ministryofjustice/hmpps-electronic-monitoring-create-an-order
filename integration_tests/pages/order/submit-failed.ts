@@ -5,7 +5,7 @@ import { PageElement } from '../page'
 
 export default class SubmitFailedsPage extends AppPage {
   constructor() {
-    super('Application submission failed', paths.ORDER.SUBMIT_FAILED)
+    super('Failed to submit application', paths.ORDER.SUBMIT_FAILED)
   }
 
   warningText = (): PageElement => cy.get('.govuk-warning-text')

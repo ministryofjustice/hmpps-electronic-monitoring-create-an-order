@@ -1,24 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
-import z from 'zod'
 import { AuditService, EnforcementZoneService } from '../../services'
-import { deserialiseDate, getErrorsViewModel } from '../../utils/utils'
+import { getErrorsViewModel } from '../../utils/utils'
 import paths from '../../constants/paths'
 import { ErrorsViewModel } from '../../models/view-models/utils'
 import TaskListService from '../../services/taskListService'
-
-const ZoneFormDataModel = z.object({
-  action: z.string(),
-  description: z.string().default(''),
-  duration: z.string().default(''),
-  endDay: z.string().default(''),
-  endMonth: z.string().default(''),
-  endYear: z.string().default(''),
-  startDay: z.string().default(''),
-  startMonth: z.string().default(''),
-  startYear: z.string().default(''),
-  zoneType: z.string().nullable().default(null),
-  anotherZone: z.string().default(''),
-})
+import EnforcementZoneFormDataModel from '../../models/form-data/enforcementZone'
+import enforcementZoneViewModel from '../../models/view-models/enforcementZone'
+import { ValidationResult } from '../../models/Validation'
 
 export default class EnforcementZoneController {
   constructor(
@@ -29,10 +17,11 @@ export default class EnforcementZoneController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, zoneId } = req.params
-    const { action, ...formData } = ZoneFormDataModel.parse(req.body)
+    const { action, ...formData } = EnforcementZoneFormDataModel.parse(req.body)
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
 
+    const errors: ValidationResult = []
     let errorViewModel: ErrorsViewModel = {}
     // Update/Create zone details
     const result = await this.zoneService.updateZone({
@@ -41,7 +30,10 @@ export default class EnforcementZoneController {
       zoneId: zoneIdInt,
       ...formData,
     })
-    if (result !== null) errorViewModel = getErrorsViewModel(result)
+    if (result !== null) {
+      errorViewModel = getErrorsViewModel(result)
+      errors.push(...result)
+    }
 
     // Upload file if exist
     if (file !== null && file !== undefined) {
@@ -51,11 +43,18 @@ export default class EnforcementZoneController {
         zoneId: zoneIdInt,
         file,
       })
-      if (uploadResult.userMessage != null) errorViewModel.file = { text: uploadResult.userMessage }
+      if (uploadResult.userMessage != null) {
+        errorViewModel.file = { text: uploadResult.userMessage }
+        errors.push({
+          field: 'file',
+          error: uploadResult.userMessage,
+        })
+      }
     }
-    if (Object.keys(errorViewModel).length !== 0)
-      res.render(`pages/order/monitoring-conditions/enforcement-zone`, { zone: formData, error: errorViewModel })
-    else {
+    if (Object.keys(errorViewModel).length !== 0) {
+      const viewModel = enforcementZoneViewModel.construct(parseInt(zoneId, 10), [], formData, errors)
+      res.render(`pages/order/monitoring-conditions/enforcement-zone`, viewModel)
+    } else {
       this.auditService.logAuditEvent({
         who: res.locals.user.username,
         correlationId: orderId,
@@ -84,21 +83,13 @@ export default class EnforcementZoneController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const { zoneId } = req.params
     const order = req.order!
+    const viewModel = enforcementZoneViewModel.construct(
+      parseInt(zoneId, 10),
+      order.enforcementZoneConditions,
+      {} as never,
+      [],
+    )
 
-    const enforcementZone = order.enforcementZoneConditions.find(zone => zone.zoneId === Number.parseInt(zoneId, 10))
-    const [startYear, startMonth, startDay] = deserialiseDate(enforcementZone?.startDate || '')
-    const [endYear, endMonth, endDay] = deserialiseDate(enforcementZone?.endDate || '')
-
-    res.render(`pages/order/monitoring-conditions/enforcement-zone`, {
-      zone: {
-        startYear,
-        startMonth,
-        startDay,
-        endYear,
-        endMonth,
-        endDay,
-        ...enforcementZone,
-      },
-    })
+    res.render(`pages/order/monitoring-conditions/enforcement-zone`, viewModel)
   }
 }

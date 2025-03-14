@@ -269,6 +269,25 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
       expect(req.flash).toHaveBeenCalledWith('submissionError', 'This order has already been submitted')
     })
+
+    it('should submit the order and redirect to a partial success page for a order failed submit attachments', async () => {
+      // Given
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.ERROR })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: false,
+        error: 'Error submit attachments to Serco',
+        type: 'partialSuccess',
+      })
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/partial-success`)
+    })
   })
 
   describe('submitFailed', () => {
@@ -299,6 +318,21 @@ describe('OrderController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', { orderId: '123456789' })
+    })
+  })
+
+  describe('submitPartialSuccess', () => {
+    it('should render the success view', async () => {
+      // Given
+      const req = createMockRequest()
+      const res = createMockResponse()
+      const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
+      // When
+      await orderController.submitPartialSuccess(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-partial-success', { errors: [] })
     })
   })
 })

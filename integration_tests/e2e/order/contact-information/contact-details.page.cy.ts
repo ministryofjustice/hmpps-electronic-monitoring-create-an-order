@@ -33,6 +33,7 @@ context('Contact details - Contact information', () => {
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
       page.backToSummaryButton.should('exist')
+      page.errorSummary.shouldNotExist()
     })
 
     // TODO: FAIL issue determining if autocomplete is valid
@@ -58,6 +59,7 @@ context('Contact details - Contact information', () => {
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
+      page.errorSummary.shouldNotExist()
       page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
 
       // Verify all form elements are disabled

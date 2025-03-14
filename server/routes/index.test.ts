@@ -138,7 +138,7 @@ describe('authorised user', () => {
         .get('/order/delete/success')
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('The application form has been successfully deleted')
+          expect(res.text).toContain('Application form successfully deleted')
         })
     })
   })
@@ -245,6 +245,17 @@ describe('authorised user', () => {
         .expect('Location', `/order/${mockSubmittedOrder.id}/summary`)
     })
   })
+
+  describe('GET /cookies', () => {
+    it('should render a successful cookies page', () => {
+      return request(app)
+        .get('/ocookies')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Cookies')
+        })
+    })
+  })
 })
 
 describe('Order Not Found', () => {
@@ -286,7 +297,7 @@ describe('Order Not Found', () => {
         [method](path)
         .expect(404)
         .expect(res => {
-          expect(res.text).toContain('Not Found')
+          expect(res.text).toContain('Page not found')
         })
     })
   })

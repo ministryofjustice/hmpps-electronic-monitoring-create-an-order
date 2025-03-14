@@ -47,9 +47,11 @@ describe('Device wearer service', () => {
           lastName: 'Surname',
           alias: '',
           dateOfBirth: {
-            day: '1',
+            day: '01',
             month: '4',
             year: '1996',
+            minutes: '00',
+            hours: '00',
           },
           language: '',
           interpreterRequired: 'false',

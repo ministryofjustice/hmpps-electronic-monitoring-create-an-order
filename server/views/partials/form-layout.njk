@@ -6,6 +6,10 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% set pageTitle = heading + " - " + section + " - " + applicationName %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -29,16 +33,25 @@
         }) }}
       {% endif %}
 
-      {{ mojPageHeaderActions({
-        heading: {
-          text: section,
-          classes: "govuk-heading-l"
+      {% if errorSummary %}
+        {{ govukErrorSummary(errorSummary) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ section }}</span>
+        {{ heading }}
+      </h1>
+
+      {{ govukFieldset({
+        legend: {
+          text: legend,
+          classes: "govuk-fieldset__legend--s"
         }
       }) }}
 
-      {% if subsection %}
-        <h2 class="govuk-heading-m">{{ subsection }}</h2>
-      {% endif %}
+      <p>
+        {{ helpText }}
+      </p>
 
       <form action="" method="post" {{ formEncoding }}>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -55,7 +68,7 @@
             }) }}
 
             {{ govukButton({
-                text: "Save and return back to form section menu",
+                text: "Save as draft",
                 classes: "govuk-button--secondary",
                 name: "action",
                 value: "back"

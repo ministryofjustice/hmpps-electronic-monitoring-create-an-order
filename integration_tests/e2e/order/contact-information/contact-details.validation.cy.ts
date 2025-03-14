@@ -35,6 +35,8 @@ context('Contact details - Contact information', () => {
 
         Page.verifyOnPage(ContactDetailsPage)
 
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
         page.form.contactNumberField.shouldHaveValidationMessage(expectedValidationErrorMessage)
       })
     })
