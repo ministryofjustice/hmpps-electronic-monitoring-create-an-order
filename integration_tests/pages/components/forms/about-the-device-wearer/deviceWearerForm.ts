@@ -22,74 +22,85 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // NAMES
 
   get firstNamesField(): FormInputComponent {
-    const label = 'First name'
+    const label = "What is the device wearer's first name?"
     return new FormInputComponent(this.form, label)
   }
 
   get lastNameField(): FormInputComponent {
-    const label = 'Last name'
+    const label = "What is the device wearer's last name?"
     return new FormInputComponent(this.form, label)
   }
 
   get aliasField(): FormInputComponent {
-    const label = 'Preferred name or alias (optional)'
+    const label = "What is the device wearer's preferred name or names? (optional)"
     return new FormInputComponent(this.form, label)
   }
 
   // DATE OF BIRTH
 
   get dateOfBirthField(): FormDateComponent {
-    const label = 'Date of birth'
+    const label = "What is the device wearer's date of birth?"
     return new FormDateComponent(this.form, label)
   }
 
   // IS 18
 
   get is18Field(): FormRadiosComponent {
-    const label = 'Will the device wearer be 18 years old when the device is installed?'
+    const label = 'Is a responsible adult required?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
   // SEX
 
   get sexField(): FormRadiosComponent {
-    const label = 'Sex'
-    return new FormRadiosComponent(this.form, label, ['Male', 'Female', 'Prefer not to say', "Don't know"])
+    const label = 'What is the sex of the device wearer?'
+    return new FormRadiosComponent(this.form, label, [
+      'Male',
+      'Female',
+      'Prefer not to say',
+      'Not able to provide this information',
+    ])
   }
 
   // GENDER IDENTITY
 
   get genderIdentityField(): FormRadiosComponent {
-    const label = 'Gender identity'
-    return new FormRadiosComponent(this.form, label, ['Male', 'Female', 'Non binary', "Don't know", 'Self identify'])
+    const label = "What is the device wearer's gender?"
+    return new FormRadiosComponent(this.form, label, [
+      'Male',
+      'Female',
+      'Non binary',
+      'Not able to provide this information',
+      'Self identify',
+    ])
   }
 
   get otherGenderField(): FormInputComponent {
-    const label = 'Other gender'
+    const label = "What is the device wearer's chosen identity?"
     return new FormInputComponent(this.form, label)
   }
 
   // Disabilities
 
   get disabilityField(): FormRadiosComponent {
-    const label = 'Disability (optional)'
+    const label = 'Does the device wearer have any of the disabilities or health conditions listed? (optional)'
     return new FormRadiosComponent(this.form, label, [
-      'Vision',
-      'Hearing',
-      'Mobility',
-      'Dexterity',
-      'Learning or understanding or concentrating',
-      'Memory',
-      'Mental health',
-      'Stamina or breathing or fatigue',
-      'Other',
-      'None of the above',
-      'Prefer Not to Say',
+      'Visual impairment or blindness not corrected by wearing glasses',
+      'Deafness or serious hearing impairment',
+      'Physical disability or mobility issue',
+      'Fine motor or dexterity impairment',
+      'Neurodiversity including conditions affecting learning, understanding or concentration',
+      'Condition affecting the memory or retaining information',
+      'Mental health condition',
+      'Health condition affecting stamina, breathing or causing fatigue',
+      'Conditions affecting social skills and behaviour',
+      'The device wearer has a disability or health condition not listed',
+      'Not able to provide this information',
     ])
   }
 
   get otherDisabilityField(): FormInputComponent {
-    const label = 'Other disability'
+    const label = "What is the device wearer's disability or health condition? (optional)"
     return new FormInputComponent(this.form, label)
   }
 
@@ -101,7 +112,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get languageField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, "What is the device wearer's main language?", [
+    return new FormSelectComponent(this.form, 'What language does the interpreter need to use? (optional)', [
       'British Sign',
       'Lipspeak (English)',
       'Palantypists',
