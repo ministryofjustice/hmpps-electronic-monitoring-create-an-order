@@ -131,7 +131,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         monitoringType: 'Alcohol abstinence',
-        installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+        installLocation: `at installation address: ${fakePrimaryAddress}`,
       }
 
       it('Should successfully submit the order to the FMS API', () => {

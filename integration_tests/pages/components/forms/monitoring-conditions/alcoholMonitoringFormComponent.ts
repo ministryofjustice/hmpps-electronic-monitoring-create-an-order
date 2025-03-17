@@ -34,9 +34,9 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   get installLocationField(): FormRadiosComponent {
     return new FormRadiosComponent(this.form, 'What is the address of the base station?', [
       /at installation address/,
-      /at primary address/,
-      /at secondary address/,
-      /at tertiary address/,
+      /at main address/,
+      /at second address/,
+      /at third address/,
       'at the probation office',
       'at prison',
     ])

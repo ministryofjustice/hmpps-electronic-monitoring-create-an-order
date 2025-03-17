@@ -129,7 +129,7 @@ context('Mandatory fields only', () => {
     const alcoholMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       monitoringType: 'Alcohol abstinence',
-      installLocation: `at Installation Address: ${installationAddressDetails}`,
+      installLocation: `at installation address: ${installationAddressDetails}`,
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
@@ -370,7 +370,7 @@ context('Mandatory fields only', () => {
     const alcoholMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       monitoringType: 'Alcohol abstinence',
-      installLocation: `at Installation Address: ${installationAddressDetails}`,
+      installLocation: `at installation address: ${installationAddressDetails}`,
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
