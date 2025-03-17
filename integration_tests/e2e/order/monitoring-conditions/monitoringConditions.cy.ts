@@ -46,8 +46,8 @@ const validFormData = {
   orderType: 'IMMIGRATION',
   orderTypeDescription: 'GPS Acquisitive Crime HDC',
   monitoringRequired: [
-    'Curfew with electronic monitoring',
-    'Exclusion and inclusion zone monitoring',
+    'Curfew',
+    'Exclusion zone monitoring',
     'Trail monitoring',
     'Mandatory attendance monitoring',
     'Alcohol monitoring',

@@ -90,7 +90,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-        monitoringRequired: 'Exclusion and inclusion zone monitoring',
+        monitoringRequired: 'Exclusion zone monitoring',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
