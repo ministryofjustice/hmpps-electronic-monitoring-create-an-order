@@ -17,26 +17,26 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
   // FIELDS
 
   get monitoringTypeField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What type of alcohol monitoring is needed?', [
+    return new FormRadiosComponent(this.form, 'What alcohol monitoring does the device wearer need?', [
       'Alcohol level',
       'Alcohol abstinence',
     ])
   }
 
   get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
+    return new FormDateComponent(this.form, 'What date does alcohol monitoring start?')
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends')
+    return new FormDateComponent(this.form, 'What date does alcohol monitoring end?')
   }
 
   get installLocationField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Where will alcohol monitoring equipment installation take place?', [
-      /at Installation Address/,
-      /at Primary Address/,
-      /at Secondary Address/,
-      /at Tertiary Address/,
+    return new FormRadiosComponent(this.form, 'What is the address of the base station?', [
+      /at installation address/,
+      /at main address/,
+      /at second address/,
+      /at third address/,
       'at the probation office',
       'at prison',
     ])
