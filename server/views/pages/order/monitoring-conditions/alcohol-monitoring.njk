@@ -155,22 +155,22 @@
     items: [
       {
         value: "INSTALLATION",
-        text: "at installation address (not provided)" if not installationAddressView.value else "at Installation Address: "+installationAddressView.value,
+        text: "at installation address (not provided)" if not installationAddressView.value else "at installation address: "+installationAddressView.value,
         disabled: not isOrderEditable or not installationAddressView.value
       },
       {
         value: "PRIMARY",
-        text: "at main address (not provided)" if not primaryAddressView.value else "at Primary Address: "+primaryAddressView.value,
+        text: "at main address (not provided)" if not primaryAddressView.value else "at main address: "+primaryAddressView.value,
         disabled: not isOrderEditable or not primaryAddressView.value
       },
       {
         value: "SECONDARY",
-        text: "at second address (not provided)" if not secondaryAddressView.value else "at Secondary Address: "+secondaryAddressView.value,
+        text: "at second address (not provided)" if not secondaryAddressView.value else "at second address: "+secondaryAddressView.value,
         disabled: not isOrderEditable or not secondaryAddressView.value
       },
       {
         value: "TERTIARY",
-        text: "at third address (not provided)" if not tertiaryAddressView.value else "at Tertiary Address: "+tertiaryAddressView.value,
+        text: "at third address (not provided)" if not tertiaryAddressView.value else "at third address: "+tertiaryAddressView.value,
         disabled: not isOrderEditable or not tertiaryAddressView.value
       },
       {
