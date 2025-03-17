@@ -15,7 +15,7 @@ export default class AttachmentSummaryPage extends AppPage {
   }
 
   get photoIdTask(): AttachmentTask {
-    return new AttachmentTask('Photo ID')
+    return new AttachmentTask('Photo identification')
   }
 
   get errorSummary(): PageElement {

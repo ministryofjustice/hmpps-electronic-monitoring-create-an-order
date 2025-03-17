@@ -13,7 +13,8 @@
   }) }}
 
   <h1 class="govuk-heading-l">
-    Are you sure you want to delete this {{ fileType }}?
+    <span class="govuk-caption-l">Additional documents</span>
+    Are you sure that you want to delete this document?
   </h1>
 
   <form method="post">
@@ -21,17 +22,17 @@
 
     <div class="govuk-button-group">
       {{ govukButton({
-        text: "Back",
-        classes: "govuk-button--secondary",
-        name: "action",
-        value: "back"
-      })}}
-
-      {{ govukButton({
-        text: "Delete",
+        text: "Yes, delete",
         classes: "govuk-button--warning",
         name: "action",
         value: "continue"
+      })}}
+
+      {{ govukButton({
+        text: "Cancel and return to check answers",
+        classes: "govuk-button--secondary",
+        name: "action",
+        value: "back"
       })}}
     </div>
   </form>
