@@ -10,43 +10,34 @@
 
 {% block formInputs %}
 
-  {% call govukFieldset({
-    legend: {
-      text: "Primary address",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    {{ govukRadios({
-      name: "noFixedAbode",
-      classes: "govuk-radios--inline",
-      fieldset: {
-        legend: {
-          text: "Does the device wearer have a fixed address?",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
+ {{ govukRadios({
+    name: "noFixedAbode",
+    classes: "govuk-radios--inline",
+    fieldset: {
+      legend: {
+        text: content.pages.noFixedAbode.questions.noFixedAbode.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+        text: content.pages.noFixedAbode.questions.noFixedAbode.hint
+    },
+    items: [
+      {
+        value: "false",
+        text: "Yes",
+        disabled: not isOrderEditable
       },
-      hint: {
-          text: "For example, the device wearer has a tenancy or permanent address they are registered at.",
-          classes: "govuk-!-width-two-thirds"
-      },
-      items: [
-        {
-          value: "false",
-          text: "Yes, they have a fixed address",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "true",
-          text: "No, they have no fixed address",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: noFixedAbode.value,
-      errorMessage: noFixedAbode.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endcall %}
+      {
+        value: "true",
+        text: "No",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: noFixedAbode.value,
+    errorMessage: noFixedAbode.error,
+    disabled: not isOrderEditable
+  }) }}
 
 {% endblock %}

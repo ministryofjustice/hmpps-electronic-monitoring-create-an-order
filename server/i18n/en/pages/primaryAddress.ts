@@ -26,7 +26,7 @@ const primaryAddressPageContent: AddressPageContent = {
     },
   },
   section: 'Contact information',
-  title: 'Fixed address',
+  title: 'Main address',
 }
 
 export default primaryAddressPageContent

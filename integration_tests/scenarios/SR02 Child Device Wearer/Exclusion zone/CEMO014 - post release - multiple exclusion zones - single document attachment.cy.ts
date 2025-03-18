@@ -116,7 +116,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         orderTypeDescription: 'DAPO',
         conditionType: 'License Condition of a Custodial Order',
-        monitoringRequired: 'Exclusion and inclusion zone monitoring',
+        monitoringRequired: 'Exclusion zone monitoring',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',

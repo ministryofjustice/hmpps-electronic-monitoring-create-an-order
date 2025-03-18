@@ -8,7 +8,7 @@
 {% set heading = content.pages.curfewConditions.title %}
 {% set legend = content.pages.curfewConditions.legend %}
 {% set helpText = content.pages.curfewConditions.helpText %}
-
+{% set questions = content.pages.curfewConditions.questions %}
 {% block formInputs %}
 
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
@@ -18,13 +18,13 @@
     namePrefix: "startDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring starts",
+        text: questions.startDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: questions.startDate.hint
     },
     items: [
       {
@@ -54,13 +54,13 @@
     namePrefix: "endDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring ends. (optional)",
+        text: questions.endDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: questions.endDate.hint
     },
     items: [
       {
@@ -96,16 +96,16 @@
       name: "addresses",
       fieldset: {
         legend: {
-          text: "What address or addresses will the device wearer use during curfew hours?",
+          text: questions.addresses.text,
           classes: "govuk-fieldset__legend--s"
         }
       },
       hint: {
-        text: "Select all that apply."
+        text: questions.addresses.hint
       },
       items: [
         {
-          text: 'Primary address',
+          text: 'Main address',
           value: 'PRIMARY',
           disabled: not isOrderEditable
         },
@@ -115,7 +115,7 @@
           disabled: not isOrderEditable
         },
         {
-          text: 'Tertiary address',
+          text: 'Third address',
           value: 'TERTIARY',
           disabled: not isOrderEditable
         }

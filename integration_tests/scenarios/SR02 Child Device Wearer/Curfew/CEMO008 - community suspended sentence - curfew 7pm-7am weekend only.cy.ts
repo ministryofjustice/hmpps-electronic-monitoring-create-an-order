@@ -58,7 +58,7 @@ context('Scenarios', () => {
       orderType: 'Community',
       orderTypeDescription: 'GPS Acquisitive Crime Parole',
       conditionType: 'Requirement of a Community Order',
-      monitoringRequired: 'Curfew with electronic monitoring',
+      monitoringRequired: 'Curfew',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

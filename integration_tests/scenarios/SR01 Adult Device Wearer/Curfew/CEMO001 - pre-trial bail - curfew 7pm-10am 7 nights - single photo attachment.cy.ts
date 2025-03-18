@@ -87,7 +87,7 @@ context('Scenarios', () => {
     const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Postcode Risk',
+      riskCategory: 'Sex offender',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -97,7 +97,7 @@ context('Scenarios', () => {
       orderType: 'Pre-Trial',
       orderTypeDescription: 'DAPO',
       conditionType: 'Bail Order',
-      monitoringRequired: 'Curfew with electronic monitoring',
+      monitoringRequired: 'Curfew',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

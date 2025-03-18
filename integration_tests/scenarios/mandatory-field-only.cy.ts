@@ -93,8 +93,8 @@ context('Mandatory fields only', () => {
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
       monitoringRequired: [
-        'Curfew with electronic monitoring',
-        'Exclusion and inclusion zone monitoring',
+        'Curfew',
+        'Exclusion zone monitoring',
         'Trail monitoring',
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',
@@ -334,8 +334,8 @@ context('Mandatory fields only', () => {
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
       monitoringRequired: [
-        'Curfew with electronic monitoring',
-        'Exclusion and inclusion zone monitoring',
+        'Curfew',
+        'Exclusion zone monitoring',
         'Trail monitoring',
         // 'Mandatory attendance monitoring',
         'Alcohol monitoring',

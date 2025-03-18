@@ -10,9 +10,11 @@ const curfewConditionsPageContent: CurfewConditionsPageContent = {
     },
     endDate: {
       text: 'What date does the curfew end? (optional)',
+      hint: "For example, 21 05 2011"
     },
     startDate: {
       text: 'What date does the curfew start?',
+      hint: "For example, 21 05 2011"
     },
   },
   section: 'Electronic monitoring required',

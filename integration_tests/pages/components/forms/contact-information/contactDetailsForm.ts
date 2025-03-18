@@ -9,7 +9,7 @@ export default class ContactDetailsFormComponent extends FormComponent {
   // FIELDS
 
   get contactNumberField(): FormInputComponent {
-    const label = 'Enter a telephone number we can use to contact the device wearer (optional)'
+    const label = "What is the device wearer's telephone number?"
     return new FormInputComponent(this.form, label)
   }
 

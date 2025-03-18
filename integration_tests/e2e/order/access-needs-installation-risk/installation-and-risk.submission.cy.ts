@@ -36,7 +36,7 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sexual Offences',
+          riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
@@ -62,7 +62,7 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sexual Offences',
+          riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
@@ -79,7 +79,7 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sexual Offences',
+          riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
