@@ -280,11 +280,6 @@ describe('DateTimeInputModel', () => {
     },
   )
 
-  // TODO validate these with the new messages
-  // ['1', '1', '2024', '1', ''],
-  // ['1', '1', '2024', '', '0'],
-  // ['1', '1', '2024', '', ''],
-
   it.each([['q', '1', '1965', '12', '60']])(
     'Should not parse an invalid datetime: day = %s, month = %s, year = %s, hours = %s, minutes = %s',
     (day: string, month: string, year: string, hours: string, minutes: string) => {
