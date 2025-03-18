@@ -13,9 +13,7 @@ const VariationDetailsFormDataParser = FormDataModel.extend({
 
 const VariationDetailsFormDataValidator = z.object({
   // This might need error messages passing
-  variationDate: DateInputModel(validationErrors.variationDetails.variationDate).pipe(
-    z.string({ message: validationErrors.variationDetails.variationDate.required }).datetime(),
-  ),
+  variationDate: DateInputModel(validationErrors.variationDetails.variationDate),
   variationType: z.string().min(1, validationErrors.variationDetails.variationTypeRequired),
 })
 

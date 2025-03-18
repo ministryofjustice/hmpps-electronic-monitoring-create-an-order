@@ -220,7 +220,7 @@ describe('VariationDetailsController', () => {
         },
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
-        { error: 'Variation date must be a real date', field: 'variationDate' },
+        { error: 'Enter Variation date', field: 'variationDate' },
         { error: 'Variation type is required', field: 'variationType' },
       ])
       expect(taskListService.getNextPage).not.toHaveBeenCalled()

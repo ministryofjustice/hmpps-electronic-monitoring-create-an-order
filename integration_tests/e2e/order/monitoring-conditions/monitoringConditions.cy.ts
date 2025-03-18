@@ -154,7 +154,6 @@ context('Monitoring conditions main section', () => {
       page.errorSummary.shouldHaveError(errorMessages.orderTypeRequired)
       page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
       page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
-      page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
     })
 
     it('after frontend validation passes, should show errors from API response', () => {

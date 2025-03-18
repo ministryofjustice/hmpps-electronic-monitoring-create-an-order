@@ -30,9 +30,7 @@ const DeviceWearerFormDataValidator = z.object({
   firstName: z.string().min(1, validationErrors.deviceWearer.firstNameRequired),
   lastName: z.string().min(1, validationErrors.deviceWearer.lastNameRequired),
   alias: z.string(),
-  dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth).pipe(
-    z.string({ message: validationErrors.deviceWearer.dateOfBirth.required }).datetime(),
-  ),
+  dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth),
   language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO this needs changing to be conditional on interpreter needed
   interpreterRequired: BooleanInputModel.pipe(
     z.boolean({

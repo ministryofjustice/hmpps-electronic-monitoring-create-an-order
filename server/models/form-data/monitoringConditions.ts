@@ -54,10 +54,8 @@ const MonitoringConditionsFormDataValidator = z
     monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
     orderTypeDescription: z.string(),
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
-    startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).pipe(
-      z.string({ message: validationErrors.monitoringConditions.startDateTime.date.required }).datetime(),
-    ),
-    endDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
+    startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
+    endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
     sentenceType: z.string().nullable(),
     issp: z.string(),
     hdc: z.string(),

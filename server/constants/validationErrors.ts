@@ -18,6 +18,7 @@ interface ValidationErrors {
     monitoringTypeRequired: string
     orderTypeRequired: string
     startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
   }
   notifyingOrganisation: {
     notifyingOrganisationName: string
@@ -30,12 +31,12 @@ interface ValidationErrors {
 }
 
 export interface DateErrorMessages {
-  mustBeInPast: string
+  mustBeInPast?: string
   mustBeReal: string
   mustIncludeDay: string
   mustIncludeMonth: string
   mustIncludeYear: string
-  required: string
+  required?: string
   yearMustIncludeFourNumbers: string
 }
 
@@ -81,7 +82,6 @@ const validationErrors: ValidationErrors = {
     orderTypeRequired: 'Select order type',
     startDateTime: {
       date: {
-        mustBeInPast: 'Start date must be in the past',
         mustBeReal: 'Start date for monitoring must be a real date',
         mustIncludeDay: 'Start date for monitoring must include a day',
         mustIncludeMonth: 'Start date for monitoring must include a month',
@@ -94,6 +94,21 @@ const validationErrors: ValidationErrors = {
         mustIncludeHour: 'Start time for monitoring must include an hour',
         mustIncludeMinute: 'Start time for monitoring must include a minute',
         required: 'Enter start time for monitoring',
+      },
+    },
+    endDateTime: {
+      date: {
+        mustBeReal: 'End date for monitoring must be a real date',
+        mustIncludeDay: 'End date for monitoring must include a day',
+        mustIncludeMonth: 'End date for monitoring must include a month',
+        mustIncludeYear: 'End date for monitoring must include a year',
+        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      },
+      time: {
+        mustBeReal: 'End time for monitoring must be a real time',
+        mustIncludeHour: 'End time for monitoring must include an hour',
+        mustIncludeMinute: 'End time for monitoring must include a minute',
+        required: 'Enter end time for monitoring',
       },
     },
   },

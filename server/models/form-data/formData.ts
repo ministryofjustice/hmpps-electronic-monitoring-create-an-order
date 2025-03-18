@@ -13,6 +13,16 @@ const DateInputModel = (messages: DateErrorMessages) => {
       year: z.string(),
     })
     .superRefine((val, ctx) => {
+      if (messages.required && val.day === '' && val.month === '' && val.year === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: messages.required,
+          fatal: true,
+        })
+
+        return z.NEVER
+      }
+
       if ((val.year !== '' && val.year.length !== 4) || Number.isNaN(Number(val.year))) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -72,7 +82,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
       }
 
       const inputDate = new Date(Number(val.year), Number(val.month), Number(val.day))
-      if (inputDate > new Date()) {
+      if (messages.mustBeInPast && inputDate > new Date()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: messages.mustBeInPast,
@@ -111,73 +121,85 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
       minutes: z.string(),
     })
     .superRefine((val, ctx) => {
-      if ((val.year !== '' && val.year.length !== 4) || Number.isNaN(Number(val.year))) {
+      if (messages.date.required && val.day === '' && val.month === '' && val.year === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: messages.date.yearMustIncludeFourNumbers,
+          message: messages.date.required,
           fatal: true,
         })
 
         return z.NEVER
       }
 
-      if (val.day === '' && (val.month !== '' || val.year !== '')) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: messages.date.mustIncludeDay,
-          fatal: true,
-        })
-
-        return z.NEVER
-      }
-
-      if (val.month === '' && (val.day !== '' || val.year !== '')) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: messages.date.mustIncludeMonth,
-          fatal: true,
-        })
-
-        return z.NEVER
-      }
-
-      if (val.year === '' && (val.month !== '' || val.day !== '')) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: messages.date.mustIncludeYear,
-          fatal: true,
-        })
-
-        return z.NEVER
-      }
-
-      if (
-        z
-          .object({
-            day: z.coerce.number().int().min(1).max(31),
-            month: z.coerce.number().int().min(1).max(12),
-            year: z.coerce.number().int().min(1900).max(2200),
+      if (val.day || val.month || val.year) {
+        if ((val.year !== '' && val.year.length !== 4) || Number.isNaN(Number(val.year))) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.date.yearMustIncludeFourNumbers,
+            fatal: true,
           })
-          .safeParse(val).error
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: messages.date.mustBeReal,
-          fatal: true,
-        })
 
-        return z.NEVER
-      }
+          return z.NEVER
+        }
 
-      const inputDate = new Date(Number(val.year), Number(val.month), Number(val.day))
-      if (inputDate > new Date()) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: messages.date.mustBeInPast,
-          fatal: true,
-        })
+        if (val.day === '' && (val.month !== '' || val.year !== '')) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.date.mustIncludeDay,
+            fatal: true,
+          })
 
-        return z.NEVER
+          return z.NEVER
+        }
+
+        if (val.month === '' && (val.day !== '' || val.year !== '')) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.date.mustIncludeMonth,
+            fatal: true,
+          })
+
+          return z.NEVER
+        }
+
+        if (val.year === '' && (val.month !== '' || val.day !== '')) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.date.mustIncludeYear,
+            fatal: true,
+          })
+
+          return z.NEVER
+        }
+
+        const inputDate = new Date(Number(val.year), Number(val.month), Number(val.day))
+        if (messages.date.mustBeInPast && inputDate > new Date()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.date.mustBeInPast,
+            fatal: true,
+          })
+
+          return z.NEVER
+        }
+
+        if (
+          z
+            .object({
+              day: z.coerce.number().int().min(1).max(31),
+              month: z.coerce.number().int().min(1).max(12),
+              year: z.coerce.number().int().min(1900).max(2200),
+            })
+            .safeParse(val).error
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.date.mustBeReal,
+            fatal: true,
+          })
+
+          return z.NEVER
+        }
       }
 
       if (val.hours === '' && val.minutes !== '') {
