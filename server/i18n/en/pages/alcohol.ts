@@ -17,10 +17,10 @@ const alcoholPageContent: AlcoholPageContent = {
       hint: 'Select one option',
     },
     prisonName: {
-      text: 'Enter probation office name',
+      text: 'Enter prison name',
     },
     probationOfficeName: {
-      text: 'Enter prison name',
+      text: 'Enter probation office name',
     },
     startDate: {
       text: 'What date does alcohol monitoring start?',

@@ -172,7 +172,7 @@ context('The kitchen sink', () => {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       monitoringType: 'Alcohol abstinence',
-      installLocation: `at Installation Address: ${installationAddressDetails}`,
+      installLocation: `at installation address: ${installationAddressDetails}`,
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days

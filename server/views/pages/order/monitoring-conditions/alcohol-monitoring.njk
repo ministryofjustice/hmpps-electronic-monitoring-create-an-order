@@ -15,13 +15,13 @@
     name: "monitoringType",
     fieldset: {
         legend: {
-        text: "What type of alcohol monitoring is needed?",
+        text: content.pages.alcohol.questions.monitoringType.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
         }
     },
     hint: {
-        text: "Select one option"
+        text: content.pages.alcohol.questions.monitoringType.hint
     },
     items: [
       {
@@ -46,13 +46,13 @@
     namePrefix: "startDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring starts.",
+        text: content.pages.alcohol.questions.startDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: content.pages.alcohol.questions.startDate.hint
     },
     items: [
       {
@@ -82,13 +82,13 @@
     namePrefix: "endDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring ends.",
+        text: content.pages.alcohol.questions.endDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: content.pages.alcohol.questions.endDate.hint
     },
     items: [
       {
@@ -120,7 +120,7 @@
       type: "text",
       classes: "govuk-!-width-one-third",
       label: {
-        text: "Enter probation office name"
+        text: content.pages.alcohol.questions.probationOfficeName.text
       },
       disabled: not isOrderEditable,
       value: probationOfficeName.value,
@@ -135,7 +135,7 @@
       type: "text",
       classes: "govuk-!-width-one-third",
       label: {
-        text: "Enter prison name"
+        text: content.pages.alcohol.questions.prisonName.text
       },
       disabled: not isOrderEditable,
       value: prisonName.value,
@@ -147,30 +147,33 @@
     name: "installationLocation",
     fieldset: {
       legend: {
-        text: "Where will alcohol monitoring equipment installation take place?",
+        text: content.pages.alcohol.questions.installationLocation.text,
         isPageHeading: true,
         classes: "govuk-fieldset__legend--s"
       }
     },
+    hint: {
+      text: content.pages.alcohol.questions.installationLocation.hint
+    },
     items: [
       {
         value: "INSTALLATION",
-        text: "at Installation Address (not provided)" if not installationAddressView.value else "at Installation Address: "+installationAddressView.value,
+        text: "at installation address (not provided)" if not installationAddressView.value else "at installation address: "+installationAddressView.value,
         disabled: not isOrderEditable or not installationAddressView.value
       },
       {
         value: "PRIMARY",
-        text: "at Primary Address (not provided)" if not primaryAddressView.value else "at Primary Address: "+primaryAddressView.value,
+        text: "at main address (not provided)" if not primaryAddressView.value else "at main address: "+primaryAddressView.value,
         disabled: not isOrderEditable or not primaryAddressView.value
       },
       {
         value: "SECONDARY",
-        text: "at Secondary Address (not provided)" if not secondaryAddressView.value else "at Secondary Address: "+secondaryAddressView.value,
+        text: "at second address (not provided)" if not secondaryAddressView.value else "at second address: "+secondaryAddressView.value,
         disabled: not isOrderEditable or not secondaryAddressView.value
       },
       {
         value: "TERTIARY",
-        text: "at Tertiary Address (not provided)" if not tertiaryAddressView.value else "at Tertiary Address: "+tertiaryAddressView.value,
+        text: "at third address (not provided)" if not tertiaryAddressView.value else "at third address: "+tertiaryAddressView.value,
         disabled: not isOrderEditable or not tertiaryAddressView.value
       },
       {
