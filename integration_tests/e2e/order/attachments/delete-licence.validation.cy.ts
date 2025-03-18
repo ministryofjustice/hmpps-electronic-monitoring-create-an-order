@@ -25,8 +25,8 @@ context('Attachments', () => {
 
         const summaryPage = Page.verifyOnPage(AttachmentSummaryPage)
 
-        summaryPage.errorSummaryTitle.should('contain', 'Error deleting attachment')
-        summaryPage.errorList.should('contain', 'Mock Error')
+        summaryPage.errorSummary.shouldHaveTitle('Error deleting attachment')
+        summaryPage.errorSummary.shouldHaveError('Mock Error')
       })
     })
   })
