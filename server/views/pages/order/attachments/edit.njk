@@ -1,4 +1,4 @@
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
 
 {% set pageTitle = applicationName + " - Form Details" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -7,50 +7,34 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
-{% block content %}
-  {{ govukBackLink({
-    text: "Back",
-    href: "/order/" + orderId + "/attachments"
+{% if (fileType) == "licence" %}
+
+  {% set pageContent = content.pages.uploadLicense %}
+
+{% else %}
+
+  {% set pageContent = content.pages.uploadPhotoId %}
+
+{% endif %}
+
+{% set section = pageContent.section %}
+{% set heading = pageContent.title %}
+{% set legend = pageContent.legend %}
+{% set helpText = pageContent.helpText %}
+{% set formEncoding = 'encType=multipart/form-data' %}
+
+{% block formInputs %}
+
+  {{ govukFileUpload({
+    id: "file-to-upload",
+    name: "file",
+    label: {
+      text: pageContent.questions.file.text
+    },
+    hint: {
+      text: pageContent.questions.file.hint
+    },
+    errorMessage:error
   }) }}
 
-  {{ mojPageHeaderActions({
-    heading: {
-        text: "Additional documents"
-    }
-  }) }}
-
-  <form method="post" encType="multipart/form-data">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-    {{ govukFileUpload({
-      id: "file-to-upload",
-      name: "file",
-      label: {
-        text: "Upload the " + fileType
-      },
-      hint: {
-        text: "Upload a copy of the " + fileType
-      },
-      errorMessage:error
-    }) }}
-
-    <div class="govuk-button-group">
-      {% if isOrderEditable %}
-        {{ govukButton({
-            text: "Save and continue",
-            name: "action",
-            value: "continue"
-        }) }}
-
-        {{ govukButton({
-            text: "Save and return to main form menu",
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-        }) }}
-      {% else %}
-        <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-      {% endif %}
-    </div>
-  </form>
 {% endblock %}

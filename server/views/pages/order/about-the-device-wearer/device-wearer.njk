@@ -13,17 +13,10 @@
 {% set helpText = content.pages.deviceWearer.helpText %}
 
 {% block formInputs %}
-
-  {% call govukFieldset({
-    legend: {
-      text: "Name of the device wearer",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
     {{ govukInput({
       label: {
-        text: "First names"
+        text: content.pages.deviceWearer.questions.firstName.text,
+        classes: "govuk-fieldset__legend--s"
       },
       classes: "govuk-input--width-10",
       id: "firstName",
@@ -35,7 +28,8 @@
 
     {{ govukInput({
       label: {
-        text: "Last name"
+        text: content.pages.deviceWearer.questions.lastName.text,
+        classes: "govuk-fieldset__legend--s"
       },
       classes: "govuk-input--width-10",
       id: "lastName",
@@ -47,10 +41,11 @@
 
     {{ govukInput({
       label: {
-        text: "Preferred name or alias (optional)"
+        text: content.pages.deviceWearer.questions.alias.text,
+        classes: "govuk-fieldset__legend--s"
       },
       hint: {
-          text: "For example a nickname or alias the device wearer is also known as"
+          text: content.pages.deviceWearer.questions.alias.hint
       },
       classes: "govuk-input--width-10",
       id: "alias",
@@ -59,7 +54,6 @@
       errorMessage: alias.error,
       disabled: not isOrderEditable
     }) }}
-  {% endcall %}
 
   {% set isDisabled = {} if isOrderEditable else { disabled: true } %}
 
@@ -67,9 +61,9 @@
     id: "dateOfBirth",
     fieldset: {
       legend: {
-        text: "Date of birth",
+        text: content.pages.deviceWearer.questions.dateOfBirth.text,
         isPageHeading: false,
-        classes: "govuk-fieldset__legend--m"
+        classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
@@ -109,9 +103,13 @@
     classes: "govuk-radios--inline",
     fieldset: {
       legend: {
-        text: "Will the device wearer be 18 years old when the device is installed?",
-        isPageHeading: false
+        text: content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--s"
       }
+    },
+    hint:{
+      text: content.pages.deviceWearer.questions.adultAtTimeOfInstallation.hint
     },
     items: [
       {
@@ -134,13 +132,13 @@
     name: "sex",
     fieldset: {
       legend: {
-        text: "Sex",
+        text: content.pages.deviceWearer.questions.sex.text,
         isPageHeading: false,
-        classes: "govuk-fieldset__legend--m"
+        classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "What sex was the devise wearer assigned at birth?"
+      text: content.pages.deviceWearer.questions.sex.hint
     },
     items: [
       {
@@ -160,7 +158,7 @@
       },
       {
         value: "unknown",
-        text: "Don't know",
+        text: "Not able to provide this information",
         disabled: not isOrderEditable
       }
     ],
@@ -173,7 +171,7 @@
     {{
       govukInput({
       label: {
-        text: "Other gender"
+        text: "What is the device wearer's chosen identity?"
       },
       id: "otherGender",
       name: "otherGender",
@@ -189,13 +187,13 @@
     name: "gender",
     fieldset: {
       legend: {
-        text: "Gender identity",
+        text: content.pages.deviceWearer.questions.gender.text,
         isPageHeading: false,
-        classes: "govuk-fieldset__legend--m"
+        classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "How does the device wearer describe themselves?"
+      text: content.pages.deviceWearer.questions.gender.hint
     },
     items: [
       {
@@ -212,12 +210,7 @@
         value: "non-binary",
         text: "Non binary",
         disabled: not isOrderEditable
-      },
-      {
-        value: "unknown",
-        text: "Don't know",
-        disabled: not isOrderEditable
-      },
+      },     
       {
         value: "self-identify",
         text: "Self identify",
@@ -225,6 +218,14 @@
           html: otherGenderHtml
         },
         disabled: not isOrderEditable
+      },
+      {
+        divider: "or"
+      },
+      {
+          value: "unknown",
+          text: "Not able to provide this information",
+          disabled: not isOrderEditable
       }
     ],
     value: gender.value,
@@ -236,7 +237,7 @@
     {{
       govukInput({
       label: {
-        text: "Other disability"
+        text: "What is the device wearer's disability or health condition? (optional)"
       },
       id: "otherDisability",
       name: "otherDisability",
@@ -253,65 +254,67 @@
     classes: "govuk-checkboxes--small",
     fieldset: {
       legend: {
-        text: "Disability (optional)",
+        text: content.pages.deviceWearer.questions.disabilities.text,
         isPageHeading: true,
-        classes: "govuk-fieldset__legend--m"
+        classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "Does the device wearer have any disabilities or accessibility needs?"
+      text: content.pages.deviceWearer.questions.disabilities.hint
     },
     items: [
       {
         value: "VISION",
-        text: "Vision"
+        text: "Visual impairment or blindness not corrected by wearing glasses"
       },
       {
         value: "HEARING",
-        text: "Hearing"
+        text: "Deafness or serious hearing impairment"
       },
       {
         value: "MOBILITY",
-        text: "Mobility"
+        text: "Physical disability or mobility issue"
       },
       {
         value: "DEXTERITY",
-        text: "Dexterity"
+        text: "Fine motor or dexterity impairment"
       },
       {
         value: "LEARNING_UNDERSTANDING_CONCENTRATING",
-        text: "Learning or understanding or concentrating"
+        text: "Neurodiversity including conditions affecting learning, understanding or concentration"
       },
       {
         value: "MEMORY",
-        text: "Memory"
+        text: "Condition affecting the memory or retaining information"
       },
       {
         value: "MENTAL_HEALTH",
-        text: "Mental health"
+        text: "Mental health condition"
       },
       {
         value: "STAMINA_BREATHING_FATIGUE",
-        text: "Stamina or breathing or fatigue"
+        text: "Health condition affecting stamina, breathing or causing fatigue"
       },
       {
         value: "SOCIAL_BEHAVIOURAL",
-        text: "Socially or behaviorally"
+        text: "Conditions affecting social skills and behaviour"
+      },
+      {
+        divider: "Or"
       },
       {
         value: "OTHER",
-        text: "Other",
+        text: "The device wearer has a disability or health condition not listed",
         conditional: {
           html: otherDisabilityHtml
         }
       },
       {
-        value: "NONE",
-        text: "None of the above"
+        divider: "Or"
       },
       {
-        value: "PREFER_NOT_TO_SAY",
-        text: "Prefer Not to Say"
+        value: "NONE",
+        text: "Not able to provide this information"
       }
     ],
     values: disabilities.values,
@@ -326,11 +329,43 @@
       isPageHeading: false
     }
   }) %}
+   {{ govukRadios({
+      name: "interpreterRequired",
+      classes: "govuk-radios--inline",
+      fieldset:{
+        legend: {
+          text: content.pages.deviceWearer.questions.interpreterRequired.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint:{
+        text: content.pages.deviceWearer.questions.interpreterRequired.hint
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: interpreterRequired.value,
+      errorMessage: interpreterRequired.error,
+      disabled: not isOrderEditable
+    }) }}
     {{ govukSelect({
       id: "language",
       name: "language",
       label: {
-        text: "What is the device wearer's main language?"
+        text: content.pages.deviceWearer.questions.language.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      hint:{
+        text: content.pages.deviceWearer.questions.language.hint
       },
       items: [
         { text: 'Select', value: '' },
@@ -449,30 +484,7 @@
       disabled: not isOrderEditable
     }) }}
 
-    {{ govukRadios({
-      name: "interpreterRequired",
-      classes: "govuk-radios--inline",
-      fieldset:{
-        legend: {
-          text: "Is an interpreter needed?"
-        }
-      },
-      items: [
-        {
-          value: "true",
-          text: "Yes",
-          disabled: not isOrderEditable
-        },
-        {
-          value: "false",
-          text: "No",
-          disabled: not isOrderEditable
-        }
-      ],
-      value: interpreterRequired.value,
-      errorMessage: interpreterRequired.error,
-      disabled: not isOrderEditable
-    }) }}
+   
   {% endcall %}
 
 {% endblock %}

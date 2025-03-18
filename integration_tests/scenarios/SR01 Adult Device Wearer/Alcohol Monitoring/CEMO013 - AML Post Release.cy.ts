@@ -58,7 +58,7 @@ context('Scenarios', () => {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       monitoringType: 'Alcohol level',
-      installLocation: `at Installation Address: ${fakePrimaryAddress}`,
+      installLocation: `at installation address: ${fakePrimaryAddress}`,
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -94,10 +94,10 @@ context('Scenarios', () => {
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
           adult_child: 'adult',
-          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
+          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
-            .replace("don't know", 'unknown')
+            .replace('not able to provide this information', 'unknown')
             .replace('self identify', 'self-identify')
             .replace('non binary', 'non-binary'),
           disability: [],

@@ -28,8 +28,8 @@ context('Attachments', () => {
           },
         })
         page.form.saveAndContinueButton.click()
-        page.form.uploadField.shouldHaveLabel('Upload the photo id')
-        page.form.uploadField.shouldHaveHint('Upload a copy of the photo id')
+        page.form.uploadField.shouldHaveLabel('Upload a copy of photo identification')
+        page.form.uploadField.shouldHaveHint('Upload a scanned copy or photo of the original photo identification.')
         page.form.uploadField.shouldHaveValidationMessage('Mock Error')
       })
     })

@@ -12,25 +12,17 @@
 {% set heading = content.pages.monitoringConditions.title %}
 {% set legend = content.pages.monitoringConditions.legend %}
 {% set helpText = content.pages.monitoringConditions.helpText %}
-
+{% set questions = content.pages.monitoringConditions.questions %}
 {% block formInputs %}
-
-  {% call govukFieldset({
-    legend: {
-      text: "When should the monitoring take place",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
 
     {{dateTimeInput({
       id: "startDate",
       name: "startDate",
       date: startDate.value,
-      dateLabel: "Enter the date for when monitoring starts",
-      dateHint: "For example, 21 05 2032",
-      timeLabel: "Enter the time for when monitoring starts",
-      timeHint: "For example, 14 : 30",
+      dateLabel:  questions.startDate.text,
+      dateHint: questions.startDate.hint,
+      timeLabel: questions.startTime.text,
+      timeHint: questions.startTime.hint,
       errorMessages: {
         field: startDate.error,
         date: errors.dateError,
@@ -43,10 +35,10 @@
       id: "endDate",
       name: "endDate",
       date: endDate.value,
-      dateLabel: "Enter the date for when monitoring ends (optional)",
-      dateHint: "For example, 21 05 2032",
-      timeLabel: "Enter the time for when monitoring ends (optional)",
-      timeHint: "For example, 14 : 30",
+      dateLabel:  questions.endDate.text,
+      dateHint: questions.endDate.hint,
+      timeLabel: questions.endTime.text,
+      timeHint: questions.endTime.hint,
       errorMessages: {
         field: endDate.error,
         date: errors.dateError,
@@ -54,8 +46,6 @@
       },
       disabled: not isOrderEditable
     })}}
-
-  {% endcall %}
 
   {% call govukFieldset({
     legend: {
@@ -68,7 +58,8 @@
       id: "orderType",
       name: "orderType",
       label: {
-        text: "Select order type"
+        text: questions.orderType.text,
+        classes: "govuk-fieldset__legend--s"
       },
       items: [
         { text: 'Select', value: '' },
@@ -88,7 +79,8 @@
       id: "orderTypeDescription",
       name: "orderTypeDescription",
       label: {
-        text: questions.monitoringConditions.orderTypeDescription
+        text: questions.orderTypeDescription.text,
+        classes: "govuk-fieldset__legend--s"
       },
       items: [
         { text: 'Select', value: '' },
@@ -107,7 +99,8 @@
       id: "conditionType",
       name: "conditionType",
       label: {
-        text: "Select condition type"
+       text: questions.conditionType.text,
+       classes: "govuk-fieldset__legend--s"
       },
       items: [
         { text: 'Select', value: '' },
@@ -125,7 +118,8 @@
       id: "sentenceType",
       name: "sentenceType",
       label: {
-        text: questions.monitoringConditions.sentenceType
+        text: questions.sentenceType.text,
+        classes: "govuk-fieldset__legend--s"
       },
       items: sentenceTypes | toOptions(false, true),
       value: sentenceType.value,
@@ -138,13 +132,13 @@
       name: "issp",
       fieldset: {
         legend: {
-          text: questions.monitoringConditions.issp,
+          text: questions.issp.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
       },
       hint: {
-        text: "This program is only applicable to young offenders between 10-17 years old."
+        text: questions.issp.hint
       },
       items: [
         {
@@ -175,7 +169,7 @@
       name: "hdc",
       fieldset: {
         legend: {
-          text: questions.monitoringConditions.hdc,
+          text: questions.hdc.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -209,7 +203,7 @@
       name: "prarr",
       fieldset: {
         legend: {
-          text: questions.monitoringConditions.prarr,
+          text: questions.prarr.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
@@ -251,27 +245,28 @@
       name: "monitoringRequired",
       fieldset: {
         legend: {
-          text: "What monitoring does the device wearer need?"
+          text: questions.monitoringRequired.text,
+          classes: "govuk-fieldset__legend--s"
         }
       },
       hint: {
-        text: "Select all that apply."
+        text: questions.monitoringRequired.hint
       },
       items: [
         {
           value: "curfew",
-          text: "Curfew with electronic monitoring",
+          text: "Curfew",
           hint: {
-            text: "The device wearer must stay inside an address at specific times during the day and night."
+            text: "Monitoring the device wearer adheres to set times and days that they must remain at a location."
           },
           checked: monitoringRequired | select("equalto", "curfew") | length,
           disabled: not isOrderEditable
         },
         {
           value: "exclusionZone",
-          text: "Exclusion and inclusion zone monitoring",
+          text: "Exclusion zone monitoring",
           hint: {
-            text: "The device wearer must not enter identified areas or can only enter identified areas at specified times."
+            text: "Prevents the device wearer entering areas or visiting locations at set times."
           },
           checked: monitoringRequired | select("equalto", "exclusionZone") | length,
           disabled: not isOrderEditable
@@ -280,7 +275,7 @@
           value: "trail",
           text: "Trail monitoring",
           hint: {
-            text: "GPS tracking will record the movements of the device wearer throughout the day. Must be monitored if the device wearer is part of the Acquisitive Crime Project."
+            text: "Recording and gathering data on movements of the device wearer throughout the day. Trail monitoring must be selected if the device wearer is part of the Acquisitive Crime Project."
           },
           checked: monitoringRequired | select("equalto", "trail") | length,
           disabled: not isOrderEditable
@@ -289,7 +284,7 @@
           value: "mandatoryAttendance",
           text: "Mandatory attendance monitoring",
           hint: {
-            text: "Attendance of the device wearer at appointments is monitored."
+            text: "Recording the device wearer's attendance at arranged meetings or places."
           },
           checked: monitoringRequired | select("equalto", "mandatoryAttendance") | length,
           disabled: not isOrderEditable
@@ -298,7 +293,7 @@
           value: "alcohol",
           text: "Alcohol monitoring",
           hint: {
-            text: "The device wearer's levels of alcohol or abstinence from alcohol is monitored."
+            text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
           },
           checked: monitoringRequired | select("equalto", "alcohol") | length,
           disabled: not isOrderEditable

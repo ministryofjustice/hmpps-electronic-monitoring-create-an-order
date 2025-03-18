@@ -21,7 +21,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   // FIELDS
 
   get orderTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select order type', [
+    return new FormSelectComponent(this.form, 'What is the order type?', [
       'Civil',
       'Community',
       'Immigration',
@@ -32,7 +32,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get orderTypeDescriptionField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select pilot device wearer is part of (optional)', [
+    return new FormSelectComponent(this.form, 'What pilot project is the device wearer part of? (optional)', [
       'DAPO',
       'DAPOL',
       'DAPOL HDC',
@@ -42,7 +42,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get conditionTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select condition type', [
+    return new FormSelectComponent(this.form, 'What are the order type conditions?', [
       'Requirement of a Community Order',
       'License Condition of a Custodial Order',
       'Post-Sentence Supervision Requirement following on from an Adult Custody order',
@@ -51,9 +51,9 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get monitoringRequiredField(): FormCheckboxesComponent {
-    return new FormCheckboxesComponent(this.form, 'Monitoring required', [
-      'Curfew with electronic monitoring',
-      'Exclusion and inclusion zone monitoring',
+    return new FormCheckboxesComponent(this.form, 'What monitoring does the device wearer need?', [
+      'Curfew',
+      'Exclusion zone monitoring',
       'Trail monitoring',
       'Mandatory attendance monitoring',
       'Alcohol monitoring',
@@ -69,7 +69,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get sentenceTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'Select type of sentence (optional)', [
+    return new FormSelectComponent(this.form, 'What type of sentence has the device wearer been given? (optional)', [
       'Extended Determinate Sentence',
       'Imprisonment for Public Protection (IPP)',
       'Life Sentence',
@@ -89,7 +89,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get hdcField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Is the device wearer being released on a Home Detention Curfew (HDC)?', [
+    return new FormRadiosComponent(this.form, 'Is the device wearer on a Home Detention Curfew (HDC)?', [
       'Yes',
       'No',
       'Not able to provide this information',
@@ -99,7 +99,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   get prarrField(): FormRadiosComponent {
     return new FormRadiosComponent(
       this.form,
-      'Is the device wearer being released under a Presumptive Risk Assessed Release Review P-RARR?',
+      'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
       ['Yes', 'No', 'Not able to provide this information'],
     )
   }

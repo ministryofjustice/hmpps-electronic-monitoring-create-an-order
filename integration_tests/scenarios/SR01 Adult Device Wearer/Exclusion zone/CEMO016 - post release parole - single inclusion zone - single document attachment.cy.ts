@@ -90,7 +90,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL HDC',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-        monitoringRequired: 'Exclusion and inclusion zone monitoring',
+        monitoringRequired: 'Exclusion zone monitoring',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
@@ -135,10 +135,10 @@ context('Scenarios', () => {
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'adult',
-            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
+            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
-              .replace("don't know", 'unknown')
+              .replace('not able to provide this information', 'unknown')
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],

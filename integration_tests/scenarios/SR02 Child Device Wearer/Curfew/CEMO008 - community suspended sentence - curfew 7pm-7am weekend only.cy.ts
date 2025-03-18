@@ -58,7 +58,7 @@ context('Scenarios', () => {
       orderType: 'Community',
       orderTypeDescription: 'GPS Acquisitive Crime Parole',
       conditionType: 'Requirement of a Community Order',
-      monitoringRequired: 'Curfew with electronic monitoring',
+      monitoringRequired: 'Curfew',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -116,10 +116,10 @@ context('Scenarios', () => {
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
           adult_child: 'child',
-          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
+          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
-            .replace("don't know", 'unknown')
+            .replace('not able to provide this information', 'unknown')
             .replace('self identify', 'self-identify')
             .replace('non binary', 'non-binary'),
           disability: [],

@@ -87,7 +87,7 @@ context('Scenarios', () => {
     const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Postcode Risk',
+      riskCategory: 'Sex offender',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -97,7 +97,7 @@ context('Scenarios', () => {
       orderType: 'Pre-Trial',
       orderTypeDescription: 'DAPO',
       conditionType: 'Bail Order',
-      monitoringRequired: 'Curfew with electronic monitoring',
+      monitoringRequired: 'Curfew',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -155,10 +155,10 @@ context('Scenarios', () => {
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
           adult_child: 'adult',
-          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace("don't know", 'unknown'),
+          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
-            .replace("don't know", 'unknown')
+            .replace('not able to provide this information', 'unknown')
             .replace('self identify', 'self-identify')
             .replace('non binary', 'non-binary'),
           disability: [],
