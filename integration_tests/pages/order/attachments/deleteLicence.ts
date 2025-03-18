@@ -8,8 +8,9 @@ export default class DeletePhotoIdPageDeleteLicencePage extends AppFormPage {
 
   constructor() {
     super(
-      'Are you sure you want to delete this licence?',
+      'Are you sure that you want to delete this document?',
       paths.ATTACHMENT.DELETE_FILE.replace(':fileType(photo_Id|licence)', 'licence'),
+      'Additional documents',
     )
   }
 }

@@ -7,7 +7,7 @@ export default class DeleteAttachmentFormComponent extends FormComponent {
   // FORM HELPERS
 
   get backButton(): PageElement {
-    return this.form.contains('button', 'Cancel adn return to check answers')
+    return this.form.contains('button', 'Cancel and return to check answers')
   }
 
   get deleteButton(): PageElement {

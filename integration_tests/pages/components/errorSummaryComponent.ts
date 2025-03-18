@@ -5,6 +5,14 @@ export default class ErrorSummaryComponent {
     return cy.get('.govuk-error-summary', { log: false })
   }
 
+  protected get title(): PageElement {
+    return this.element.get('.govuk-error-summary__title')
+  }
+
+  protected get errorList(): PageElement {
+    return this.element.get('.govuk-error-summary__list')
+  }
+
   shouldExist() {
     return this.element.should('exist')
   }
@@ -14,6 +22,10 @@ export default class ErrorSummaryComponent {
   }
 
   shouldHaveError(error: string) {
-    return this.element.contains(error)
+    return this.errorList.contains(error)
+  }
+
+  shouldHaveTitle(title: string) {
+    return this.title.contains(title)
   }
 }

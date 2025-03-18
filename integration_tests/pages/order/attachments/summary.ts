@@ -1,13 +1,13 @@
-import AppPage from '../../appPage'
+import AppFormPage from '../../appFormPage'
 
 import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
 import AttachmentTask from '../../components/attachmentsTask'
 
-export default class AttachmentSummaryPage extends AppPage {
+export default class AttachmentSummaryPage extends AppFormPage {
   constructor() {
-    super('Attach a document', paths.ATTACHMENT.ATTACHMENTS)
+    super('Check your answers', paths.ATTACHMENT.ATTACHMENTS, 'Additional documents')
   }
 
   get licenceTask(): AttachmentTask {
@@ -16,18 +16,6 @@ export default class AttachmentSummaryPage extends AppPage {
 
   get photoIdTask(): AttachmentTask {
     return new AttachmentTask('Photo identification')
-  }
-
-  get errorSummary(): PageElement {
-    return cy.get('.govuk-error-summary')
-  }
-
-  get errorSummaryTitle(): PageElement {
-    return this.errorSummary.find('.govuk-error-summary__title')
-  }
-
-  get errorList(): PageElement {
-    return this.errorSummary.find('.govuk-error-summary__list')
   }
 
   // ACTIONS
