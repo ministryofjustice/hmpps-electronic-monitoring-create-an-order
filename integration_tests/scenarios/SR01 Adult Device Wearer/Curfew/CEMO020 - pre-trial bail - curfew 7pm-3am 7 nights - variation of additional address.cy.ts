@@ -95,8 +95,8 @@ context('Scenarios', () => {
       const variationCurfewTimetable = curfewNights.flatMap((day: string) => [
         {
           day,
-          startTime: curfewReleaseDetails.startTime,
-          endTime: curfewReleaseDetails.endTime,
+          startTime: '19:00:00',
+          endTime: '10:00:00',
           addresses: variationCurfewConditionDetails.addresses,
         },
       ])
