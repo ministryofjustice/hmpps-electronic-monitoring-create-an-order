@@ -92,7 +92,12 @@ export default class CurfewTimetableController {
     const { curfewTimeTable, addresses } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = curfewTimetableViewModel.construct(curfewTimeTable ?? [],addresses, errors as never, formData as never)
+    const viewModel = curfewTimetableViewModel.construct(
+      curfewTimeTable ?? [],
+      addresses,
+      errors as never,
+      formData as never,
+    )
 
     res.render(`pages/order/monitoring-conditions/curfew-timetable`, viewModel)
   }
