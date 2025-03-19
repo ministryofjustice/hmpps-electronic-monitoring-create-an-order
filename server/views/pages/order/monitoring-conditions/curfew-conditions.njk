@@ -105,19 +105,19 @@
       },
       items: [
         {
-          text: 'Main address',
-          value: 'PRIMARY',
-          disabled: not isOrderEditable
+          value: "PRIMARY",
+          text: "Main address (not provided)" if not primaryAddressView.value else "Main address - "+primaryAddressView.value,
+          disabled: not isOrderEditable or not primaryAddressView.value
         },
         {
-          text: 'Secondary address',
-          value: 'SECONDARY',
-          disabled: not isOrderEditable
+          value: "SECONDARY",
+          text: "Second address (not provided)" if not secondaryAddressView.value else "Second address - "+secondaryAddressView.value,
+          disabled: not isOrderEditable or not secondaryAddressView.value
         },
         {
-          text: 'Third address',
-          value: 'TERTIARY',
-          disabled: not isOrderEditable
+          value: "TERTIARY",
+          text: "Third address (not provided)" if not tertiaryAddressView.value else "Third address - "+tertiaryAddressView.value,
+          disabled: not isOrderEditable or not tertiaryAddressView.value
         }
       ],
       errorMessage: addresses.error,
