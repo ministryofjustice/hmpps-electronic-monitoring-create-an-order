@@ -61,73 +61,7 @@
     hint: {
       text: content.pages.installationAndRisk.questions.riskCategory.hint
     },
-    items: [
-      {
-        text: 'Violent behaviour or threats of violence',
-        value: 'VIOLENCE',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Sex offender',
-        value: 'SEXUAL_OFFENCES',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Offensive towards someone because of their sex or gender',
-        value: 'GENDER',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Offensive towards someone because of their race, nationality, ethnicity or national origin',
-        value: 'RACIAL',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Offensive towards someone because of their sexual orientation',
-        value: 'SEXUAL_ORIENTATION',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'History of substance abuse',
-        value: 'SUBSTANCE_ABUSE',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Diversity concerns (mental health issues, learning difficulties etc)',
-        value: 'DIVERSITY',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Managed through IOM',
-        value: 'IOM',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Safeguarding Issues',
-        value: 'SAFEGUARDING',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Another person or people living at the property who are threatening or violent',
-        value: 'VIOLENT_OTHER',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Children under the age of 18 are living at the property',
-        value: 'UNDER_18',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Animals at the property, for example dogs',
-        value: 'ANIMALS',
-        disabled: not isOrderEditable
-      },
-      {
-        text: 'Other known risks',
-        value: 'OTHER_RISKS',
-        disabled: not isOrderEditable
-      }
-    ],
+    items: content.reference.riskCategories | toOptions(not isOrderEditable),
     errorMessage: riskCategory.error,
     values: riskCategory.values
   }) }}
