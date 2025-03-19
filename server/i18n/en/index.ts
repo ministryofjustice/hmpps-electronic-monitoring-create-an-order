@@ -20,6 +20,7 @@ import tertiaryAddressPageContent from './pages/tertiaryAddress'
 import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
+import riskCategories from './reference/riskCategories'
 
 const en: I18n = {
   pages: {
@@ -44,6 +45,9 @@ const en: I18n = {
     trailMonitoring: trailMonitoringPageContent,
     uploadLicense: uploadLicencePageContent,
     uploadPhotoId: uploadPhotoIdPageContent,
+  },
+  reference: {
+    riskCategories,
   },
 }
 
