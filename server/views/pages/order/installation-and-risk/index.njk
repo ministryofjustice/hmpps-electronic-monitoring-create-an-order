@@ -61,7 +61,7 @@
     hint: {
       text: content.pages.installationAndRisk.questions.riskCategory.hint
     },
-    items: content.reference.riskCategories | toOptions(false),
+    items: content.reference.riskCategories | toOptions(not isOrderEditable),
     errorMessage: riskCategory.error,
     values: riskCategory.values
   }) }}
