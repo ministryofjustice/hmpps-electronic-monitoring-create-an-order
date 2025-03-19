@@ -20,14 +20,9 @@ export default class FormCheckboxesComponent {
   }
 
   set(values: string | string[] | RegExp[]): void {
-    const valuesArr = Array.isArray(values) ? values : [values]
-
-    this.options.forEach(value => {
-      if (valuesArr.indexOf(value) > -1) {
-        this.element.getByLabel(value).check()
-      } else {
-        this.element.getByLabel(value).uncheck()
-      }
+    const valuesArr = Array.isArray(values) ? values : [values]   
+    valuesArr.forEach(value=>{
+      this.element.getByLabel(value).check()
     })
   }
 

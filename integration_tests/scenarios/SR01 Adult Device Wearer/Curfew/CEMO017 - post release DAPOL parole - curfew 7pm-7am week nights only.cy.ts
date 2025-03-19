@@ -58,8 +58,8 @@ context('Scenarios', () => {
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-        startTime: '19:00:00',
-        endTime: '07:00:00',
+        startTime: { hours: '19', minutes: '00' },
+      endTime: { hours: '07', minutes: '00' },
         address: /Main address/,
       }
       const curfewConditionDetails = {
@@ -72,8 +72,8 @@ context('Scenarios', () => {
         ...curfewNights.flatMap((day: string) => [
           {
             day,
-            startTime: curfewReleaseDetails.startTime,
-            endTime: curfewReleaseDetails.endTime,
+            startTime: '19:00:00',
+            endTime: '07:00:00',
             addresses: curfewConditionDetails.addresses,
           },
         ]),
