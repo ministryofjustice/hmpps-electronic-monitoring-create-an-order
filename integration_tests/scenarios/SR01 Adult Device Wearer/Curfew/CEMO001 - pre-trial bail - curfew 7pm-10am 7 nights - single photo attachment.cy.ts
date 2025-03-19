@@ -103,12 +103,12 @@ context('Scenarios', () => {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: '19:00:00',
       endTime: '10:00:00',
-      address: 'Primary address',
+      address: /Main address/,
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      addresses: ['Primary address'],
+      addresses: [/Main address/],
     }
     const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [

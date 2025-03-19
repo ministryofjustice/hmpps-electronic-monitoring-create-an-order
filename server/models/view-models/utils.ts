@@ -1,6 +1,17 @@
 import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
 import { Address, AddressTypeEnum } from '../Address'
 
+export type AddressType = {
+  line1: string
+  line2: string
+  line3: string
+  line4: string
+  postcode: string
+}
+
+export type AddressField = FormField & {
+  value: AddressType
+}
 export type ErrorMessage = {
   text: string
 }

@@ -19,7 +19,7 @@ export default class FormCheckboxesComponent {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
-  set(values: string | string[]): void {
+  set(values: string | string[] | RegExp[]): void {
     const valuesArr = Array.isArray(values) ? values : [values]
 
     this.options.forEach(value => {

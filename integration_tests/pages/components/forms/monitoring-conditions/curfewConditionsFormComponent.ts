@@ -5,7 +5,7 @@ import FormCheckboxesComponent from '../../formCheckboxesComponent'
 export type CurfewConditionsFormData = {
   startDate?: Date
   endDate?: Date
-  addresses?: string | string[]
+  addresses?: string | string[] | RegExp[]
 }
 
 export default class CurfewConditionsFormComponent extends FormComponent {
