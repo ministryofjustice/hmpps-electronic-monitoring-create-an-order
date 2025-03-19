@@ -118,7 +118,6 @@ const validationErrors: ValidationErrors = {
   },
   variationDetails: {
     variationDate: {
-      mustBeInPast: 'Variation date must be in the past',
       mustBeReal: 'Variation date must be a real date',
       mustIncludeDay: 'Variation date must include a day',
       mustIncludeMonth: 'Variation date must include a month',
