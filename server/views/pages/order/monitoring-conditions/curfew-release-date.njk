@@ -3,6 +3,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "../../../partials/timeSpanInput.njk" import timeSpanInput %}
+{% from "../../../partials/timeInput.njk" import timeInput %}
 
 {% set section = content.pages.curfewReleaseDate.section %}
 {% set heading = content.pages.curfewReleaseDate.title %}
@@ -54,15 +55,23 @@
     errorMessage: releaseDate.error
   }) }}
 
-
-
-  {{ timeSpanInput({
+{{ timeInput({
       label: questions.startTime.text,
       hint: questions.startTime.hint,
-      id: "curfewTimes",
-      namePrefix: "curfewTimes",
-      value: curfewTimes.value,
-      errorMessage: curfewTimes.error,
+      id: "curfewTimes-start",
+      name: "curfewTimesStart",
+      value: curfewStartTime.value,
+      errorMessage: curfewStartTime.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {{ timeInput({
+      label: questions.endTime.text,
+      hint: questions.endTime.hint,
+      id: "curfewTimes-end",
+      name: "curfewTimesEnd",
+      value: curfewEndTime.value,
+      errorMessage: curfewEndTime.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -81,18 +90,18 @@
       items: [
         {
           value: "PRIMARY",
-          text: "Primary address",
-          disabled: not isOrderEditable
+          text: "Main address (not provided)" if not primaryAddressView.value else "Main address - "+primaryAddressView.value,
+          disabled: not isOrderEditable or not primaryAddressView.value
         },
         {
           value: "SECONDARY",
-          text: "Secondary address",
-          disabled: not isOrderEditable
+          text: "Second address (not provided)" if not secondaryAddressView.value else "Second address - "+secondaryAddressView.value,
+          disabled: not isOrderEditable or not secondaryAddressView.value
         },
         {
           value: "TERTIARY",
-          text: "Tertiary address",
-          disabled: not isOrderEditable
+          text: "Third address (not provided)" if not tertiaryAddressView.value else "Third address - "+tertiaryAddressView.value,
+          disabled: not isOrderEditable or not tertiaryAddressView.value
         }
       ],
       value: curfewAddress.value,

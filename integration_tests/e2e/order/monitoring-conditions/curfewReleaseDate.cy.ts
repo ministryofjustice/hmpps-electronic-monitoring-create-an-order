@@ -16,6 +16,32 @@ const mockSubmittedCurfewReleaseDate = {
     startTime: '09:15:00',
     endTime: '17:30:00',
   },
+  addresses: [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'SECONDARY',
+      addressLine1: '11 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'TERTIARY',
+      addressLine1: '12 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ],
   id: mockOrderId,
 }
 
@@ -53,6 +79,36 @@ const mockEmptyCurfewReleaseDate = {
   },
   status: 'IN_PROGRESS',
   id: mockOrderId,
+}
+
+const mockEmptyCurfewReleaseDateWithAddresses = {
+  ...mockEmptyCurfewReleaseDate,
+  addresses: [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'SECONDARY',
+      addressLine1: '11 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'TERTIARY',
+      addressLine1: '12 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ],
 }
 
 const checkFormFields = () => {
@@ -143,7 +199,7 @@ context('Curfew monitoring - release date', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: mockEmptyCurfewReleaseDate,
+        order: mockEmptyCurfewReleaseDateWithAddresses,
       })
     })
 
@@ -164,10 +220,8 @@ context('Curfew monitoring - release date', () => {
         const page = Page.verifyOnPage(CurfewReleaseDatePage)
         page.form.saveAndContinueButton.click()
         cy.get('#releaseDate-error').should('contain', 'You must enter a valid date')
-        cy.get('#curfewTimes-error').should(
-          'contain',
-          'You must enter a valid start time, You must enter a valid end time',
-        )
+        cy.get('#curfewTimes-start-error').should('contain', 'You must enter a valid start time')
+        cy.get('#curfewTimes-end-error').should('contain', 'You must enter a valid end time')
         cy.get('#address-error').should('contain', 'You must enter a valid address')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('You must enter a valid date')

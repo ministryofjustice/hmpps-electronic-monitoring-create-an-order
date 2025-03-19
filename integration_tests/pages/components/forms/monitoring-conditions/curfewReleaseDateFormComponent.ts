@@ -1,31 +1,35 @@
 import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
-import FormTimespanComponent from '../../formTimespanComponent'
+import FormTimeComponent, { FormTimeData } from '../../formTimeComponent'
 
 export type CurfewReleaseDateFormData = {
   releaseDate?: Date
-  startTime?: string
-  endTime?: string
-  address?: string
+  startTime?: FormTimeData
+  endTime?: FormTimeData
+  address?: string | RegExp
 }
 
 export default class CurfewReleaseDateFormComponent extends FormComponent {
   // FIELDS
 
   get releaseDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Release date')
+    return new FormDateComponent(this.form, 'What date is the device wearer released from custody?')
   }
 
-  get timespanField(): FormTimespanComponent {
-    return new FormTimespanComponent(this.form, 'Curfew hours on the day of release')
+  get startTimeField(): FormTimeComponent {
+    return new FormTimeComponent(this.form, 'On the day of release, what time does the curfew start?')
+  }
+
+  get endTimeField(): FormTimeComponent {
+    return new FormTimeComponent(this.form, 'On the day of release, what time does the curfew end?')
   }
 
   get addressField(): FormRadiosComponent {
     return new FormRadiosComponent(this.form, 'Curfew address on the day of release', [
-      'Primary address',
-      'Secondary address',
-      'Tertiary address',
+      /Main address/,
+      /Second address/,
+      /Third address/,
     ])
   }
 
@@ -36,8 +40,12 @@ export default class CurfewReleaseDateFormComponent extends FormComponent {
       this.releaseDateField.set(data.releaseDate)
     }
 
-    if (data.startTime || data.endTime) {
-      this.timespanField.set(data.startTime, data.endTime)
+    if (data.startTime) {
+      this.startTimeField.set(data.startTime)
+    }
+
+    if (data.endTime) {
+      this.endTimeField.set(data.endTime)
     }
 
     if (data.address) {
@@ -47,13 +55,15 @@ export default class CurfewReleaseDateFormComponent extends FormComponent {
 
   shouldBeValid(): void {
     this.releaseDateField.shouldNotHaveValidationMessage()
-    this.timespanField.shouldNotHaveValidationMessage()
+    this.startTimeField.shouldNotHaveValidationMessage()
+    this.endTimeField.shouldNotHaveValidationMessage()
     this.addressField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.releaseDateField.shouldBeDisabled()
-    this.timespanField.shouldBeDisabled()
+    this.startTimeField.shouldBeDisabled()
+    this.endTimeField.shouldBeDisabled()
     this.addressField.shouldNotHaveValidationMessage()
   }
 }
