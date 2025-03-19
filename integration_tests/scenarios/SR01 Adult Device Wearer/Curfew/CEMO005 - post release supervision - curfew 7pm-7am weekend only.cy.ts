@@ -73,7 +73,7 @@ context('Scenarios', () => {
           {
             day,
             startTime: '19:00:00',
-        endTime: '07:00:00',
+            endTime: '07:00:00',
             addresses: curfewConditionDetails.addresses,
           },
         ]),
