@@ -4,11 +4,10 @@ import { Address } from '../Address'
 import { CurfewReleaseDate } from '../CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../form-data/curfewReleaseDate'
 import { ValidationResult } from '../Validation'
-import { DateField, TimeSpanField, TimeField, AddressViewsViewModel, getAddressViews, AddressViews } from './utils'
+import { DateField, TimeField, AddressViewsViewModel, getAddressViews, AddressViews } from './utils'
 
 type CurfewReleaseDateViewModel = AddressViewsViewModel<Pick<CurfewReleaseDate, 'curfewAddress'>> & {
   releaseDate: DateField
-  curfewTimes: TimeSpanField
   curfewStartTime: TimeField
   curfewEndTime: TimeField
 }
@@ -24,7 +23,6 @@ const createViewModelFromCurfewReleaseDate = (
   return {
     curfewAddress: { value: curfewReleaseDate?.curfewAddress ?? '' },
     releaseDate: { value: releaseDate },
-    curfewTimes: { value: { startHours, startMinutes, endHours, endMinutes } },
     curfewStartTime: { value: { hours: startHours, minutes: startMinutes } },
     curfewEndTime: { value: { hours: endHours, minutes: endMinutes } },
     primaryAddressView: { value: addressViews.primaryAddressView },
@@ -48,15 +46,6 @@ const createViewModelFromFormData = (
         day: formData.releaseDateDay,
       },
       error: getError(validationErrors, 'releaseDate'),
-    },
-    curfewTimes: {
-      value: {
-        startHours: formData.curfewTimesStartHours,
-        startMinutes: formData.curfewTimesStartMinutes,
-        endHours: formData.curfewTimesEndHours,
-        endMinutes: formData.curfewTimesEndMinutes,
-      },
-      error: getErrors(validationErrors, ['startTime', 'endTime']),
     },
     curfewStartTime: {
       value: {
