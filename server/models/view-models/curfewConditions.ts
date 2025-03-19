@@ -6,7 +6,9 @@ import { CurfewConditionsFormData } from '../form-data/curfewConditions'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { Address } from '../Address'
 
-type CurfewConditionsViewModel = AddressViewsViewModel<Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate'>> & {
+type CurfewConditionsViewModel = AddressViewsViewModel<
+  Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate'>
+> & {
   addresses: MultipleChoiceField
   startDate: DateField
   endDate: DateField
@@ -67,10 +69,10 @@ const construct = (
 ): CurfewConditionsViewModel => {
   const addressViews = getAddressViews(addresses)
   if (validationErrors.length > 0 && formData.length > 0) {
-    return createViewModelFromFormData(addressViews,formData[0], validationErrors)
+    return createViewModelFromFormData(addressViews, formData[0], validationErrors)
   }
 
-  return createViewModelFromCurfewConditions(addressViews,curfewConditions)
+  return createViewModelFromCurfewConditions(addressViews, curfewConditions)
 }
 
 export default {

@@ -47,7 +47,7 @@ const mockInProgressCurfewConditions = {
       addressLine4: '',
       postcode: '',
     },
-  ]
+  ],
 }
 
 const mockEmptyCurfewConditions = {
@@ -170,7 +170,7 @@ context('Curfew conditions', () => {
   })
 
   context('Submitting the form', () => {
-    mockEmptyCurfewConditions.monitoringConditions.curfew=true
+    mockEmptyCurfewConditions.monitoringConditions.curfew = true
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -248,7 +248,7 @@ context('Curfew conditions', () => {
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-conditions`).then(requests => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
-          curfewAddress: 'SECONDARY,TERTIARY',         
+          curfewAddress: 'SECONDARY,TERTIARY',
           startDate: '2025-03-27T00:00:00.000Z',
           endDate: '2026-04-28T00:00:00.000Z',
         })

@@ -8,7 +8,7 @@ export default class FormCheckboxesComponent {
   constructor(
     private readonly parent: PageElement,
     private readonly label: string,
-    private readonly options: string[]| RegExp[],
+    private readonly options: string[] | RegExp[],
   ) {
     this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
 
@@ -31,11 +31,11 @@ export default class FormCheckboxesComponent {
     })
   }
 
-  shouldHaveValue(value: string| RegExp): void {
+  shouldHaveValue(value: string | RegExp): void {
     this.element.getByLabel(value).should('be.checked')
   }
 
-  shouldHaveOption(value: string| RegExp): void {
+  shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
   }
 
