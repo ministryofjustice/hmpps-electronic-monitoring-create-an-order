@@ -1,19 +1,16 @@
 import { createGovukErrorSummary } from '../../utils/errors'
 import { deserialiseDateTime, deserialiseTime, getError, getErrors } from '../../utils/utils'
-import { Address, AddressTypeEnum } from '../Address'
+import { Address } from '../Address'
 import { CurfewReleaseDate } from '../CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../form-data/curfewReleaseDate'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField, TimeSpanField, TimeField, ViewModel } from './utils'
+import { DateField, TimeSpanField, TimeField, AddressViewsViewModel, getAddressViews, AddressViews } from './utils'
 
-type CurfewReleaseDateViewModel = ViewModel<Pick<CurfewReleaseDate, 'curfewAddress'>> & {
+type CurfewReleaseDateViewModel = AddressViewsViewModel<Pick<CurfewReleaseDate, 'curfewAddress'>> & {
   releaseDate: DateField
   curfewTimes: TimeSpanField
   curfewStartTime: TimeField
   curfewEndTime: TimeField
-  primaryAddressView: TextField
-  secondaryAddressView: TextField
-  tertiaryAddressView: TextField
 }
 
 const createViewModelFromCurfewReleaseDate = (
@@ -80,24 +77,6 @@ const createViewModelFromFormData = (
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
-}
-type AddressViews = {
-  primaryAddressView: string
-  secondaryAddressView: string
-  tertiaryAddressView: string
-}
-const getAddressViews = (addresses: Address[]): AddressViews => {
-  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
-  const secondaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.SECONDARY)
-  const tertiaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.TERTIARY)
-
-  const addressViews = {
-    primaryAddressView: primaryAddress ? primaryAddress.addressLine1 : '',
-    secondaryAddressView: secondaryAddress ? secondaryAddress.addressLine1 : '',
-    tertiaryAddressView: tertiaryAddress ? tertiaryAddress.addressLine1 : '',
-  }
-
-  return addressViews
 }
 
 const construct = (
