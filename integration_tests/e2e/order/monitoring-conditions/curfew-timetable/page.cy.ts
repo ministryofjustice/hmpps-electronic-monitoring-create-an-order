@@ -76,7 +76,6 @@ context('Monitoring conditions - Curfew timetable', () => {
               startTime: '19:00:00',
               endTime: '23:59:00',
               curfewAddress: 'PRIMARY_ADDRESS,SECONDARY_ADDRESS',
-              // errors: [],
             },
             {
               orderId: '0',
@@ -84,7 +83,6 @@ context('Monitoring conditions - Curfew timetable', () => {
               startTime: '00:00:00',
               endTime: '07:00:00',
               curfewAddress: 'TERTIARY_ADDRESS',
-              // errors: [],
             },
           ],
         },
@@ -114,13 +112,13 @@ context('Monitoring conditions - Curfew timetable', () => {
           day: 'Wednesday',
           startTime: '19:00:00',
           endTime: '23:59:00',
-          addresses: ['Primary address', 'Secondary address'],
+          addresses: [/Main address/, /Second address/],
         },
         {
           day: 'Friday',
           startTime: '00:00:00',
           endTime: '07:00:00',
-          addresses: ['Tertiary address'],
+          addresses: [/Third address/],
         },
       ])
 
@@ -149,16 +147,14 @@ context('Monitoring conditions - Curfew timetable', () => {
               dayOfWeek: 'MONDAY',
               startTime: '19:00:00',
               endTime: '23:59:00',
-              curfewAddress: 'TERTIARY_ADDRESS',
-              // errors: [],
+              curfewAddress: 'TERTIARY_ADDRESS',              
             },
             {
               orderId: '0',
               dayOfWeek: 'TUESDAY',
               startTime: '00:00:00',
               endTime: '07:00:00',
-              curfewAddress: 'PRIMARY_ADDRESS,SECONDARY_ADDRESS',
-              // errors: [],
+              curfewAddress: 'PRIMARY_ADDRESS,SECONDARY_ADDRESS',              
             },
           ],
         },
@@ -181,13 +177,13 @@ context('Monitoring conditions - Curfew timetable', () => {
           day: 'MONDAY',
           startTime: '19:00:00',
           endTime: '23:59:00',
-          addresses: ['Tertiary address'],
+          addresses: [/Third address/],
         },
         {
           day: 'TUESDAY',
           startTime: '00:00:00',
           endTime: '07:00:00',
-          addresses: ['Primary address', 'Secondary address'],
+          addresses: [/Main address/, /Second address/],
         },
       ])
     })
