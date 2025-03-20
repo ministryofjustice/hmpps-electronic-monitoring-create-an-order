@@ -46,7 +46,7 @@ const en: I18n = {
     uploadLicense: uploadLicencePageContent,
     uploadPhotoId: uploadPhotoIdPageContent,
   },
-  reference
+  reference,
 }
 
 export default en
