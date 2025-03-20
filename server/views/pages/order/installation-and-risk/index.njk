@@ -28,22 +28,7 @@
     hint: {
       text: content.pages.installationAndRisk.questions.offence.hint
     },
-    items: [
-      { text: 'Select', value: '' },
-      { text: "Violence against the person", value: "Violence against the person" },
-      { text: "Sexual offences", value: "Sexual offences" },
-      { text: "Robbery", value: "Robbery" },
-      { text: "Theft Offences", value: "Theft Offences" },
-      { text: "Criminal damage and arson", value: "Criminal damage and arson" },
-      { text: "Drug offences", value: "Drug offences" },
-      { text: "Possession of weapons", value: "Possession of weapons" },
-      { text: "Public order offences", value: "Public order offences" },
-      { text: "Miscellaneous crimes against society", value: "Miscellaneous crimes against society" },
-      { text: "Fraud Offences", value: "Fraud Offences" },
-      { text: "Summary Non-Motoring", value: "Summary Non-Motoring" },
-      { text: "Summary motoring", value: "Summary motoring" },
-      { text: "Offence not recorded", value: "Offence not recorded" }     
-    ],
+    items: content.reference.offences | toOptions(false, true),
     value: offence.value,
     errorMessage: offence.error,
     disabled: not isOrderEditable
