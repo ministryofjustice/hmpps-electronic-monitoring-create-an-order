@@ -6,8 +6,9 @@
 
 {% set days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] %}
 
-{% macro timeTableDay(day, index, data, disabled, removable) %}
+{% macro timeTableDay(day, index, data, disabled, removable,addressViews) %}
   <div class="schedule">
+    
     {{ timeSpanInput({
       id: "curfewTimetable-" + day + "-" + index + "-time",
       namePrefix: "curfewTimetable[" + day + "][" + index + "][time",
@@ -19,26 +20,26 @@
       day: day,
       index: index
     }) }}
-
+   
     {{ govukCheckboxes({
       idPrefix: "curfewTimetable-" + day + "-" + index + "-addresses",
       name: "curfewTimetable[" + day + "][" + index + "][addresses][]",
       values: data.addresses.values,
       items: [
-        {
-          text: 'Primary address',
-          value: 'PRIMARY_ADDRESS',
-          disabled: disabled
+       {
+          value: "PRIMARY_ADDRESS",
+          text: "Main address (not provided)" if not addressViews.primaryAddressView else "Main address - "+addressViews.primaryAddressView,
+          disabled:  disabled or not addressViews.primaryAddressView
         },
         {
-          text: 'Secondary address',
-          value: 'SECONDARY_ADDRESS',
-          disabled: disabled
+          value: "SECONDARY_ADDRESS",
+          text: "Second address (not provided)" if not addressViews.secondaryAddressView else "Second address - "+addressViews.secondaryAddressView,
+          disabled:  disabled or not addressViews.secondaryAddressView
         },
         {
-          text: 'Tertiary address',
-          value: 'TERTIARY_ADDRESS',
-          disabled: disabled
+          value: "TERTIARY_ADDRESS",
+          text: "Third address (not provided)" if not addressViews.tertiaryAddressView else "Third address - "+addressViews.tertiaryAddressView,
+          disabled:  disabled or not addressViews.tertiaryAddressView
         }
       ],
       errorMessage: data.addresses.error
@@ -46,7 +47,7 @@
   </div>
 {% endmacro %}
 
-{% macro timeTable(data, disabled) %}
+{% macro timeTable(data,addressViews, disabled) %}
   {% for day in days %}
     {% set dayData = data[day] %}
     {% call govukFieldset({
@@ -56,11 +57,12 @@
         isPageHeading: true
       }
     }) %}
+     
       {% if dayData | length === 0 %}
-        {{ timeTableDay(day, 0, {}, disabled) }}
+        {{ timeTableDay(day, 0, {}, disabled,false, addressViews) }}
       {% else %}
         {% for timetable in dayData %}
-          {{ timeTableDay(day, loop.index0, timetable, disabled, dayData.length !== 1 ) }}
+          {{ timeTableDay(day, loop.index0, timetable, disabled, dayData.length !== 1,addressViews ) }}
         {% endfor %}
       {% endif %}
 

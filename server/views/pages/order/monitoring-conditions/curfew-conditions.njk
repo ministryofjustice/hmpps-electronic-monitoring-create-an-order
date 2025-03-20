@@ -8,7 +8,7 @@
 {% set heading = content.pages.curfewConditions.title %}
 {% set legend = content.pages.curfewConditions.legend %}
 {% set helpText = content.pages.curfewConditions.helpText %}
-
+{% set questions = content.pages.curfewConditions.questions %}
 {% block formInputs %}
 
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
@@ -18,13 +18,13 @@
     namePrefix: "startDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring starts",
+        text: questions.startDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: questions.startDate.hint
     },
     items: [
       {
@@ -54,13 +54,13 @@
     namePrefix: "endDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring ends. (optional)",
+        text: questions.endDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: questions.endDate.hint
     },
     items: [
       {
@@ -96,28 +96,28 @@
       name: "addresses",
       fieldset: {
         legend: {
-          text: "What address or addresses will the device wearer use during curfew hours?",
+          text: questions.addresses.text,
           classes: "govuk-fieldset__legend--s"
         }
       },
       hint: {
-        text: "Select all that apply."
+        text: questions.addresses.hint
       },
       items: [
         {
-          text: 'Primary address',
-          value: 'PRIMARY',
-          disabled: not isOrderEditable
+          value: "PRIMARY",
+          text: "Main address (not provided)" if not primaryAddressView.value else "Main address - "+primaryAddressView.value,
+          disabled: not isOrderEditable or not primaryAddressView.value
         },
         {
-          text: 'Secondary address',
-          value: 'SECONDARY',
-          disabled: not isOrderEditable
+          value: "SECONDARY",
+          text: "Second address (not provided)" if not secondaryAddressView.value else "Second address - "+secondaryAddressView.value,
+          disabled: not isOrderEditable or not secondaryAddressView.value
         },
         {
-          text: 'Tertiary address',
-          value: 'TERTIARY',
-          disabled: not isOrderEditable
+          value: "TERTIARY",
+          text: "Third address (not provided)" if not tertiaryAddressView.value else "Third address - "+tertiaryAddressView.value,
+          disabled: not isOrderEditable or not tertiaryAddressView.value
         }
       ],
       errorMessage: addresses.error,

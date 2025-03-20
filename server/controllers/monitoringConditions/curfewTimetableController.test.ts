@@ -225,6 +225,11 @@ describe('CurfewTimetableController', () => {
             },
           ],
         },
+        addressViews: {
+          primaryAddressView: '',
+          secondaryAddressView: '',
+          tertiaryAddressView: '',
+        },
         errorSummary: {
           errorList: [
             {
@@ -373,6 +378,11 @@ describe('CurfewTimetableController', () => {
             },
           ],
         },
+        addressViews: {
+          primaryAddressView: '',
+          secondaryAddressView: '',
+          tertiaryAddressView: '',
+        },
         errorSummary: null,
       })
     })
@@ -499,6 +509,11 @@ describe('CurfewTimetableController', () => {
             },
           ],
         },
+        addressViews: {
+          primaryAddressView: '',
+          secondaryAddressView: '',
+          tertiaryAddressView: '',
+        },
         errorSummary: null,
       })
     })
@@ -517,6 +532,11 @@ describe('CurfewTimetableController', () => {
           friday: [],
           saturday: [],
           sunday: [],
+        },
+        addressViews: {
+          primaryAddressView: '',
+          secondaryAddressView: '',
+          tertiaryAddressView: '',
         },
         errorSummary: null,
       })

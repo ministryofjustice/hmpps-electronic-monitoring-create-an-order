@@ -114,12 +114,16 @@ describe('CurfewReleaseDateController', () => {
             day: '11',
           },
         },
-        curfewTimes: {
+        curfewEndTime: {
           value: {
-            startHours: '',
-            startMinutes: '',
-            endHours: '23',
-            endMinutes: '59',
+            hours: '23',
+            minutes: '59',
+          },
+        },
+        curfewStartTime: {
+          value: {
+            hours: '',
+            minutes: '',
           },
           error: {
             text: 'mock start time Error',
@@ -138,6 +142,9 @@ describe('CurfewReleaseDateController', () => {
           ],
           titleText: 'There is a problem',
         },
+        primaryAddressView: { value: '' },
+        secondaryAddressView: { value: '' },
+        tertiaryAddressView: { value: '' },
       })
     })
 
@@ -149,7 +156,36 @@ describe('CurfewReleaseDateController', () => {
         startTime: '19:00:00',
         endTime: '22:00:00',
       }
-      req.order = getMockOrder({ id: mockId, curfewReleaseDateConditions: mockReleaseDateCondition })
+      req.order = getMockOrder({
+        id: mockId,
+        curfewReleaseDateConditions: mockReleaseDateCondition,
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '10 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          {
+            addressType: 'SECONDARY',
+            addressLine1: '11 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          {
+            addressType: 'TERTIARY',
+            addressLine1: '12 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+        ],
+      })
       req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-release-date', {
@@ -165,14 +201,21 @@ describe('CurfewReleaseDateController', () => {
             day: '15',
           },
         },
-        curfewTimes: {
+        curfewEndTime: {
           value: {
-            startHours: '19',
-            startMinutes: '00',
-            endHours: '22',
-            endMinutes: '00',
+            hours: '22',
+            minutes: '00',
           },
         },
+        curfewStartTime: {
+          value: {
+            hours: '19',
+            minutes: '00',
+          },
+        },
+        primaryAddressView: { value: '10 Downing Street' },
+        secondaryAddressView: { value: '11 Downing Street' },
+        tertiaryAddressView: { value: '12 Downing Street' },
         errorSummary: null,
       })
     })

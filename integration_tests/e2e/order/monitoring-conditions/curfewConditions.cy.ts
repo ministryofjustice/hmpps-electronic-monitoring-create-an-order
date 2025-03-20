@@ -9,6 +9,7 @@ const mockOrderId = uuidv4()
 
 const mockSubmittedCurfewConditions = {
   ...mockApiOrder('SUBMITTED'),
+
   curfewConditions: {
     curfewAddress: 'SECONDARY,TERTIARY',
     startDate: '2025-03-27T00:00:00.000Z',
@@ -21,6 +22,32 @@ const mockSubmittedCurfewConditions = {
 const mockInProgressCurfewConditions = {
   ...mockSubmittedCurfewConditions,
   status: 'IN_PROGRESS',
+  addresses: [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'SECONDARY',
+      addressLine1: '11 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'TERTIARY',
+      addressLine1: '12 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ],
 }
 
 const mockEmptyCurfewConditions = {
@@ -31,6 +58,33 @@ const mockEmptyCurfewConditions = {
     startDate: null,
     endDate: null,
   },
+  addresses: [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'SECONDARY',
+      addressLine1: '11 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'TERTIARY',
+      addressLine1: '12 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ],
+  id: mockOrderId,
   status: 'IN_PROGRESS',
 }
 
@@ -115,7 +169,8 @@ context('Curfew conditions', () => {
     })
   })
 
-  context.skip('Submitting the form', () => {
+  context('Submitting the form', () => {
+    mockEmptyCurfewConditions.monitoringConditions.curfew = true
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -194,7 +249,6 @@ context('Curfew conditions', () => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           curfewAddress: 'SECONDARY,TERTIARY',
-          orderId: mockOrderId,
           startDate: '2025-03-27T00:00:00.000Z',
           endDate: '2026-04-28T00:00:00.000Z',
         })

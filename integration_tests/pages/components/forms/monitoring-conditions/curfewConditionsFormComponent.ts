@@ -5,25 +5,25 @@ import FormCheckboxesComponent from '../../formCheckboxesComponent'
 export type CurfewConditionsFormData = {
   startDate?: Date
   endDate?: Date
-  addresses?: string | string[]
+  addresses?: string | string[] | RegExp[]
 }
 
 export default class CurfewConditionsFormComponent extends FormComponent {
   // FIELDS
 
   get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts')
+    return new FormDateComponent(this.form, 'What date does the curfew start?')
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends. (optional)')
+    return new FormDateComponent(this.form, 'What date does the curfew end? (optional)')
   }
 
   get addressesField(): FormCheckboxesComponent {
-    return new FormCheckboxesComponent(this.form, 'Curfew addresses', [
-      'Primary address',
-      'Secondary address',
-      'Tertiary address',
+    return new FormCheckboxesComponent(this.form, 'Where will the device wearer be during curfew hours?', [
+      /Main address/,
+      /Second address/,
+      /Third address/,
     ])
   }
 

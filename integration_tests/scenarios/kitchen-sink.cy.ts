@@ -126,26 +126,26 @@ context('The kitchen sink', () => {
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-      startTime: '19:00:00',
-      endTime: '07:00:00',
-      address: 'Primary address',
+      startTime: { hours: '19', minutes: '00' },
+      endTime: { hours: '07', minutes: '00' },
+      address: /Main address/,
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 35), // 35 days
-      addresses: ['Primary address', 'Secondary address', 'Tertiary address'],
+      addresses: [/Main address/, /Second address/, /Third address/],
     }
     const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
       {
         day,
         startTime: '00:00:00',
-        endTime: curfewReleaseDetails.endTime,
+        endTime: '07:00:00',
         addresses: curfewConditionDetails.addresses,
       },
       {
         day,
-        startTime: curfewReleaseDetails.startTime,
+        startTime: '19:00:00',
         endTime: '11:59:00',
         addresses: curfewConditionDetails.addresses,
       },

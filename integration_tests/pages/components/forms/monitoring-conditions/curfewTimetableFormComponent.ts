@@ -8,7 +8,7 @@ export type CurfewTimetableFormData = {
   day?: string
   startTime?: string
   endTime?: string
-  addresses?: string[]
+  addresses?: string[] | RegExp[]
 }
 
 const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -56,7 +56,7 @@ export default class CurfewTimetableFormComponent extends FormComponent {
         cy.get(`@${cacheId}`).getByLabel('End Hour').type(endHours)
         cy.get(`@${cacheId}`).getByLabel('End Minutes').type(endMinutes)
 
-        entry.addresses?.forEach((address: string) => {
+        entry.addresses?.forEach(address => {
           cy.get(`@${cacheId}`).getByLabel(address).check()
         })
 
@@ -107,9 +107,15 @@ export default class CurfewTimetableFormComponent extends FormComponent {
       this.day(day).getByLabel('End Hour').should('exist')
       this.day(day).getByLabel('End Minutes').should('exist')
 
-      this.day(day).getByLabel('Primary address').should('exist')
-      this.day(day).getByLabel('Secondary address').should('exist')
-      this.day(day).getByLabel('Tertiary address').should('exist')
+      this.day(day)
+        .getByLabel(/Main address/)
+        .should('exist')
+      this.day(day)
+        .getByLabel(/Second address/)
+        .should('exist')
+      this.day(day)
+        .getByLabel(/Third address/)
+        .should('exist')
 
       this.day(day).contains('Add another time').should('exist')
       if (index === 0) {
@@ -129,9 +135,15 @@ export default class CurfewTimetableFormComponent extends FormComponent {
       this.day(day).getByLabel('End Hour').should('be.disabled')
       this.day(day).getByLabel('End Minutes').should('be.disabled')
 
-      this.day(day).getByLabel('Primary address').should('be.disabled')
-      this.day(day).getByLabel('Secondary address').should('be.disabled')
-      this.day(day).getByLabel('Tertiary address').should('be.disabled')
+      this.day(day)
+        .getByLabel(/Main address/)
+        .should('be.disabled')
+      this.day(day)
+        .getByLabel(/Second address/)
+        .should('be.disabled')
+      this.day(day)
+        .getByLabel(/Third address/)
+        .should('be.disabled')
 
       this.day(day).contains('Add another time').should('not.exist')
       if (index === 0) {
@@ -151,9 +163,15 @@ export default class CurfewTimetableFormComponent extends FormComponent {
       this.day(day).getByLabel('End Hour').should('be.empty')
       this.day(day).getByLabel('End Minutes').should('be.empty')
 
-      this.day(day).getByLabel('Primary address').should('be.empty')
-      this.day(day).getByLabel('Secondary address').should('be.empty')
-      this.day(day).getByLabel('Tertiary address').should('be.empty')
+      this.day(day)
+        .getByLabel(/Main address/)
+        .should('be.empty')
+      this.day(day)
+        .getByLabel(/Second address/)
+        .should('be.empty')
+      this.day(day)
+        .getByLabel(/Third address/)
+        .should('be.empty')
     })
   }
 
@@ -169,7 +187,7 @@ export default class CurfewTimetableFormComponent extends FormComponent {
       this.day(day).getByLabel('End Hour').should('have.value', endHours)
       this.day(day).getByLabel('End Minutes').should('have.value', endMinutes)
 
-      entry.addresses?.forEach((address: string) => {
+      entry.addresses?.forEach(address => {
         this.day(day).getByLabel(address).should('be.checked')
       })
     })
