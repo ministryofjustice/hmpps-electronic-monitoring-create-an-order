@@ -15,7 +15,7 @@ import NoFixedAbodePageContent from './pages/noFixedAbode'
 import ResponsibleAdultPageContent from './pages/responsibleAdult'
 import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
-import RiskCategories from './reference/riskCategories'
+import ReferenceContent from './reference'
 
 type I18n = {
   pages: {
@@ -41,9 +41,7 @@ type I18n = {
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
   }
-  reference: {
-    riskCategories: RiskCategories
-  }
+  reference: ReferenceContent
 }
 
 export default I18n
