@@ -5,7 +5,6 @@ import FormRadiosComponent from '../../formRadiosComponent'
 import FormFileUploadComponent from '../../formFileUploadComponent'
 
 export type EnforcementZoneFormData = {
-  zoneType?: string
   startDate?: Date
   endDate?: Date
   uploadFile?: {
@@ -20,19 +19,12 @@ export type EnforcementZoneFormData = {
 export default class EnforcementZoneFormComponent extends FormComponent {
   // FIELDS
 
-  get zoneTypeField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Is monitoring for an exclusion or inclusion zone?', [
-      'Exclusion zone',
-      'Inclusion zone',
-    ])
-  }
-
   get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring starts.')
+    return new FormDateComponent(this.form, 'What date does exclusion zone monitoring start?')
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'Enter the date for when monitoring ends. (optional)')
+    return new FormDateComponent(this.form, 'What date does exclusion zone monitoring end? (optional)')
   }
 
   get uploadField(): FormFileUploadComponent {
@@ -40,24 +32,20 @@ export default class EnforcementZoneFormComponent extends FormComponent {
   }
 
   get descriptionField(): FormTextareaComponent {
-    return new FormTextareaComponent(this.form, 'Monitoring zone description')
+    return new FormTextareaComponent(this.form, 'Where is the exclusion zone?')
   }
 
   get durationField(): FormTextareaComponent {
-    return new FormTextareaComponent(this.form, 'Monitoring zone duration')
+    return new FormTextareaComponent(this.form, 'When must the exclusion zone be followed?')
   }
 
   get anotherZoneField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Add another exclusion or inclusion zone?', ['Yes', 'No'])
+    return new FormRadiosComponent(this.form, 'Do you need to add another exclusion zone?', ['Yes', 'No'])
   }
 
   // FORM HELPERS
 
   fillInWith(data: EnforcementZoneFormData): void {
-    if (data.zoneType) {
-      this.zoneTypeField.set(data.zoneType)
-    }
-
     if (data.startDate) {
       this.startDateField.set(data.startDate)
     }
@@ -84,7 +72,6 @@ export default class EnforcementZoneFormComponent extends FormComponent {
   }
 
   shouldBeValid(): void {
-    this.zoneTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
     this.uploadField.shouldNotHaveValidationMessage()
@@ -94,7 +81,6 @@ export default class EnforcementZoneFormComponent extends FormComponent {
   }
 
   shouldBeDisabled(): void {
-    this.zoneTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
     this.uploadField.shouldBeDisabled()

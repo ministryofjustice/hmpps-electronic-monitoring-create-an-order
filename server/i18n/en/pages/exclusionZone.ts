@@ -4,9 +4,6 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
   helpText: '',
   legend: '',
   questions: {
-    address: {
-      text: 'At what address will the appointment take place?',
-    },
     anotherZone: {
       text: 'Do you need to add another exclusion zone?',
       hint: 'For example another zone the device wearer is restricted from entering.',

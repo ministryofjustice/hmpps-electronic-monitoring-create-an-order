@@ -128,9 +128,6 @@ describe('EnforcementZoneController', () => {
             year: '2025',
           },
         },
-        zoneType: {
-          value: 'EXCLUSION',
-        },
       })
     })
   })
@@ -178,10 +175,6 @@ describe('EnforcementZoneController', () => {
             month: '2',
             year: '2025',
           },
-        },
-        zoneType: {
-          error: undefined,
-          value: 'EXCLUSION',
         },
         errorSummary: {
           errorList: [
@@ -249,10 +242,6 @@ describe('EnforcementZoneController', () => {
             month: '2',
             year: '2025',
           },
-        },
-        zoneType: {
-          error: undefined,
-          value: 'EXCLUSION',
         },
         errorSummary: {
           errorList: [

@@ -5,7 +5,7 @@ import { EnforcementZoneFormData } from '../form-data/enforcementZone'
 import { ValidationResult } from '../Validation'
 import { DateField, TextField, ViewModel } from './utils'
 
-type EnforcementZoneViewModel = ViewModel<Pick<EnforcementZone, 'description' | 'duration' | 'zoneType'>> & {
+type EnforcementZoneViewModel = ViewModel<Pick<EnforcementZone, 'description' | 'duration'>> & {
   endDate: DateField
   startDate: DateField
   anotherZone: TextField
@@ -67,10 +67,6 @@ const constructFromFormData = (
       },
       error: getError(validationErrors, 'startDate'),
     },
-    zoneType: {
-      value: formData.zoneType || '',
-      error: getError(validationErrors, 'zoneType'),
-    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -97,9 +93,6 @@ const createFromEntity = (zoneId: number, enforcementZones: Array<EnforcementZon
     },
     startDate: {
       value: deserialiseDate(currentZone?.startDate || ''),
-    },
-    zoneType: {
-      value: currentZone?.zoneType || '',
     },
     errorSummary: null,
   }
