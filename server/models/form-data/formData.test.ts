@@ -20,6 +20,20 @@ describe('DateInputModel', () => {
     },
   )
 
+  it.each([['24', '10', '2030', '2030-10-24T00:00:00.000Z']])(
+    'Should parse a valid future date when permitted: day = %s, month = %s, year = %s',
+    (day: string, month: string, year: string, expected: string) => {
+      const validationResult = DateInputModel(validationErrors.monitoringConditions.endDateTime.date).safeParse({
+        day,
+        month,
+        year,
+      })
+
+      expect(validationResult.success).toBe(true)
+      expect(validationResult.data).toBe(expected)
+    },
+  )
+
   it('Should not allow empty inputs for all date fields', () => {
     const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
       day: '',
@@ -31,10 +45,22 @@ describe('DateInputModel', () => {
     expect(validationResult.data).toBe(undefined)
   })
 
+  it('Should not allow non-alphanumeric inputs for all date fields', () => {
+    const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
+      day: 'q',
+      month: 'q',
+      year: 'q',
+    })
+
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.data).toBe(undefined)
+  })
+
   it.each([
     ['32', '10', '2024'],
     ['1', '13', '1965'],
     ['01', '7', '1000'],
+    ['q', 'q', '2000'],
   ])(
     'Should not parse an invalid date: day = %s, month = %s, year = %s',
     (day: string, month: string, year: string) => {

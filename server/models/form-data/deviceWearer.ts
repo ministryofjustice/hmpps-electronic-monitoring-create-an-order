@@ -31,7 +31,7 @@ const DeviceWearerFormDataValidator = z.object({
   lastName: z.string().min(1, validationErrors.deviceWearer.lastNameRequired),
   alias: z.string(),
   dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth),
-  language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO this needs changing to be conditional on interpreter needed
+  language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO ELM-3376 this needs changing to be conditional on interpreter needed
   interpreterRequired: BooleanInputModel.pipe(
     z.boolean({
       message: validationErrors.deviceWearer.interpreterRequired,
