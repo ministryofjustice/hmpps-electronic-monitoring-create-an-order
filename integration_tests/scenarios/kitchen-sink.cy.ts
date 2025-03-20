@@ -160,7 +160,7 @@ context('The kitchen sink', () => {
       anotherZone: 'Yes',
     }
     const secondEnforcementZoneDetails = {
-      zoneType: 'Inclusion zone',
+      zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 200), // 200 days
       uploadFile: files.map,

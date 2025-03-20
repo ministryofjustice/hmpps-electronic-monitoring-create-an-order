@@ -17,7 +17,6 @@ type UpdateZoneRequestInpput = AuthenticatedRequestInput & {
   startDay: string
   startMonth: string
   startYear: string
-  zoneType: string | null
 }
 
 type UploadZoneAttachmentRequestInpput = AuthenticatedRequestInput & {
@@ -56,7 +55,7 @@ export default class EnforcementZoneService {
         data: {
           description: input.description,
           duration: input.duration,
-          zoneType: input.zoneType,
+          zoneType: 'EXCLUSION',
           zoneId: input.zoneId,
           orderId: input.orderId,
           startDate: serialiseDate(input.startYear, input.startMonth, input.startDay),

@@ -11,34 +11,9 @@
 {% set heading = content.pages.exclusionZone.title %}
 {% set legend = content.pages.exclusionZone.legend %}
 {% set helpText = content.pages.exclusionZone.helpText %}
-
+{% set questions = content.pages.exclusionZone.questions %}
 {% block formInputs %}
 
-  {{ govukRadios({
-    classes: "govuk-radios--inline",
-    name: "zoneType",
-    fieldset: {
-      legend: {
-        text: "Is monitoring for an exclusion or inclusion zone?",
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    items: [
-      {
-        value: "EXCLUSION",
-        text: "Exclusion zone",
-        disabled: not isOrderEditable
-      },
-      {
-        value: "INCLUSION",
-        text: "Inclusion zone",
-        disabled: not isOrderEditable
-      }
-    ],
-    value: zoneType.value,
-    errorMessage: zoneType.error
-  }) }}
 
   {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
 
@@ -46,13 +21,13 @@
     id: "startDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring starts.",
+        text: questions.startDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2032"
+      text: questions.startDate.hint
     },
     items: [
       {
@@ -84,13 +59,13 @@
     id: "endDate",
     fieldset: {
       legend: {
-        text: "Enter the date for when monitoring ends. (optional)",
+        text: questions.endDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2032"
+      text: questions.endDate.hint
     },
     items: [
       {
@@ -127,7 +102,7 @@
   }) %}
     {% set fileHintHTML %}
       <p class="govuk-hint">
-        Upload a map to show us where the exclusion or inclusion zone is.
+        Upload a map to show us where the exclusion zone is.
       </p>
 
       <p class="govuk-hint">
@@ -143,7 +118,7 @@
       id: "file",
       name: "file",
       label: {
-        text: "Upload map"
+        text: questions.file.text
       },
       hint: {
         html: fileHintHTML
@@ -153,15 +128,7 @@
     }) }}
   {% endcall %}
 
-  {% set descriptionHintHTML %}
-    <p class="govuk-hint">
-      Write a description of the exclusion or inclusion zone including additional information that will help us understand the exclusion zone restrictions.
-    </p>
-
-    <p class="govuk-hint">
-      For example include door numbers, building names or landmarks that pinpoint where the zone starts and ends
-    </p>
-  {% endset %}
+  
 
   {{ govukTextarea({
     name: "description",
@@ -170,11 +137,11 @@
     errorMessage: description.error,
     disabled: not isOrderEditable,
     label: {
-      text: "Monitoring zone description",
+      text: questions.description.text,
       classes: "govuk-label--s"
     },
     hint: {
-      html: descriptionHintHTML
+      html: questions.description.hint
     }
   }) }}
 
@@ -185,11 +152,11 @@
     errorMessage: duration.error,
     disabled: not isOrderEditable,
     label: {
-      text: "Monitoring zone duration",
+      text: questions.duration.text,
       classes: "govuk-label--s"
     },
     hint: {
-      text: "Enter days and times the exclusion or inclusion zone must be followed"
+      text: questions.duration.hint
     }
   }) }}
 
@@ -199,13 +166,13 @@
       name: "anotherZone",
       fieldset: {
         legend: {
-          text: "Add another exclusion or inclusion zone?",
+          text: questions.anotherZone.text,
           isPageHeading: true,
           classes: "govuk-fieldset__legend--s"
         }
       },
       hint: {
-        text: "For example another zone the device wearer is restricted from entering."
+        text: questions.anotherZone.hint
       },
       items: [
         {
