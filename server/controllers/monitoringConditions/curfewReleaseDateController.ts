@@ -15,10 +15,10 @@ export default class CurfewReleaseDateController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { curfewReleaseDateConditions: model } = req.order!
+    const { curfewReleaseDateConditions: model, addresses } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = curfewReleaseDateViewModel.construct(model, errors as never, formData as never)
+    const viewModel = curfewReleaseDateViewModel.construct(model, addresses, errors as never, formData as never)
 
     res.render(`pages/order/monitoring-conditions/curfew-release-date`, viewModel)
   }

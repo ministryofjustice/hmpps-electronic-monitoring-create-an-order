@@ -1,17 +1,53 @@
 import { v4 as uuidv4 } from 'uuid'
+import { mockApiOrder } from '../../../../mockApis/cemo'
 import CurfewTimetablePage from '../../../../pages/order/monitoring-conditions/curfew-timetable'
 import Page from '../../../../pages/page'
 import expectations from './expectations'
 
 const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions-curfew-timetable'
-
+const mockInProgressCurfew = {
+  ...mockApiOrder('IN_PROGRESS'),
+  status: 'IN_PROGRESS',
+  addresses: [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'SECONDARY',
+      addressLine1: '11 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+    {
+      addressType: 'TERTIARY',
+      addressLine1: '12 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ],
+  id: mockOrderId,
+}
 context('Monitoring conditions - Curfew timetable', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-    cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: mockInProgressCurfew,
+    })
 
     cy.task('stubCemoSubmitOrder', {
       httpStatus: 200,
@@ -35,7 +71,7 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -58,19 +94,19 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -99,43 +135,43 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Saturday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Sunday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -158,13 +194,13 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Saturday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Sunday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -187,31 +223,31 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '07:00:00',
             endTime: '19:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -236,13 +272,13 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Wednesday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -265,37 +301,37 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Saturday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -324,85 +360,85 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Monday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Saturday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Saturday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Sunday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Sunday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -425,25 +461,25 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Saturday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Sunday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Sunday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Monday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -466,61 +502,61 @@ context('Monitoring conditions - Curfew timetable', () => {
             day: 'Monday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Tuesday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Wednesday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Thursday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Friday',
             startTime: '19:00:00',
             endTime: '23:59:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
           {
             day: 'Saturday',
             startTime: '00:00:00',
             endTime: '07:00:00',
-            addresses: ['Primary address'],
+            addresses: [/Main address/],
           },
         ]
 
@@ -544,7 +580,7 @@ context('Monitoring conditions - Curfew timetable', () => {
           day: 'Monday',
           startTime: '19:00:00',
           endTime: '10:00:00',
-          addresses: ['Primary address'],
+          addresses: [/Main address/],
         },
       ])
 
@@ -565,19 +601,19 @@ context('Monitoring conditions - Curfew timetable', () => {
           day: 'Monday',
           startTime: '19:00:00',
           endTime: '07:00:00',
-          addresses: ['Primary address'],
+          addresses: [/Main address/],
         },
         {
           day: 'Wednesday',
           startTime: '07:00:00',
           endTime: '10:00:00',
-          addresses: ['Secondary address'],
+          addresses: [/Second address/],
         },
         {
           day: 'Friday',
           startTime: '21:00:00',
           endTime: '07:00:00',
-          addresses: ['Primary address', 'Secondary address'],
+          addresses: [/Main address/, /Second address/],
         },
       ])
 
@@ -598,31 +634,31 @@ context('Monitoring conditions - Curfew timetable', () => {
           day: 'Monday',
           startTime: '16:00:00',
           endTime: '04:00:00',
-          addresses: ['Primary address'],
+          addresses: [/Main address/],
         },
         {
           day: 'Tuesday',
           startTime: '22:00:00',
           endTime: '23:59:00',
-          addresses: ['Secondary address'],
+          addresses: [/Second address/],
         },
         {
           day: 'Tuesday',
           startTime: '00:00:00',
           endTime: '10:00:00',
-          addresses: ['Secondary address'],
+          addresses: [/Second address/],
         },
         {
           day: 'Thursday',
           startTime: '19:00:00',
           endTime: '23:59:00',
-          addresses: ['Primary address', 'Secondary address'],
+          addresses: [/Main address/, /Second address/],
         },
         {
           day: 'Thursday',
           startTime: '00:00:00',
           endTime: '07:00:00',
-          addresses: ['Primary address', 'Secondary address'],
+          addresses: [/Main address/, /Second address/],
         },
       ])
 
@@ -635,12 +671,4 @@ context('Monitoring conditions - Curfew timetable', () => {
       }).should('be.true')
     })
   })
-
-  // context('when other orders indicated', () => {})
-  //   it('should return to the summary page', () => {})
-
-  //   it('should continue to the next monitoring condition', () => {})
-
-  // context('when no other orders required', () => {})
-  //   it('should continue to summary page', () => {})
 })

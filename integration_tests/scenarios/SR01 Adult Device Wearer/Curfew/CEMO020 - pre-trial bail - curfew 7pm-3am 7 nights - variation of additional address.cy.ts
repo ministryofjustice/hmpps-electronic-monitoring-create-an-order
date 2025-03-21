@@ -63,21 +63,21 @@ context('Scenarios', () => {
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
-        startTime: '19:00:00',
-        endTime: '10:00:00',
-        address: 'Primary address',
+        startTime: { hours: '19', minutes: '00' },
+        endTime: { hours: '10', minutes: '00' },
+        address: /Main address/,
       }
       const curfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        addresses: ['Primary address'],
+        addresses: [/Main address/],
       }
       const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       const curfewTimetable = curfewNights.flatMap((day: string) => [
         {
           day,
-          startTime: curfewReleaseDetails.startTime,
-          endTime: curfewReleaseDetails.endTime,
+          startTime: '19:00:00',
+          endTime: '10:00:00',
           addresses: curfewConditionDetails.addresses,
         },
       ])
@@ -90,13 +90,13 @@ context('Scenarios', () => {
       const variationCurfewConditionDetails = {
         startDate: variationDetails.variationDate,
         endDate: curfewConditionDetails.endDate,
-        addresses: ['Primary address', 'Secondary address'],
+        addresses: [/Main address/, /Second address/],
       }
       const variationCurfewTimetable = curfewNights.flatMap((day: string) => [
         {
           day,
-          startTime: curfewReleaseDetails.startTime,
-          endTime: curfewReleaseDetails.endTime,
+          startTime: '19:00:00',
+          endTime: '10:00:00',
           addresses: variationCurfewConditionDetails.addresses,
         },
       ])

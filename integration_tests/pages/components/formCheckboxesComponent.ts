@@ -8,7 +8,7 @@ export default class FormCheckboxesComponent {
   constructor(
     private readonly parent: PageElement,
     private readonly label: string,
-    private readonly options: string[],
+    private readonly options: string[] | RegExp[],
   ) {
     this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
 
@@ -19,23 +19,18 @@ export default class FormCheckboxesComponent {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
-  set(values: string | string[]): void {
+  set(values: string | string[] | RegExp[]): void {
     const valuesArr = Array.isArray(values) ? values : [values]
-
-    this.options.forEach(value => {
-      if (valuesArr.indexOf(value) > -1) {
-        this.element.getByLabel(value).check()
-      } else {
-        this.element.getByLabel(value).uncheck()
-      }
+    valuesArr.forEach(value => {
+      this.element.getByLabel(value).check()
     })
   }
 
-  shouldHaveValue(value: string): void {
+  shouldHaveValue(value: string | RegExp): void {
     this.element.getByLabel(value).should('be.checked')
   }
 
-  shouldHaveOption(value: string): void {
+  shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
   }
 

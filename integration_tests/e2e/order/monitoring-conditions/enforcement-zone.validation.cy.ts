@@ -25,7 +25,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'startDate', error: expectedValidationErrorMessage },
             { field: 'endDate', error: expectedValidationErrorMessage },
             { field: 'file', error: expectedValidationErrorMessage },
@@ -42,8 +41,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -79,7 +76,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldNotHaveValidationMessage()
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -98,7 +94,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'endDate', error: expectedValidationErrorMessage },
             { field: 'file', error: expectedValidationErrorMessage },
             { field: 'description', error: expectedValidationErrorMessage },
@@ -115,7 +110,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldNotHaveValidationMessage()
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -134,7 +128,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'startDate', error: expectedValidationErrorMessage },
             { field: 'file', error: expectedValidationErrorMessage },
             { field: 'description', error: expectedValidationErrorMessage },
@@ -151,7 +144,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldNotHaveValidationMessage()
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -208,7 +200,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'startDate', error: expectedValidationErrorMessage },
             { field: 'endDate', error: expectedValidationErrorMessage },
             { field: 'description', error: expectedValidationErrorMessage },
@@ -225,7 +216,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldNotHaveValidationMessage()
@@ -244,7 +234,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'startDate', error: expectedValidationErrorMessage },
             { field: 'endDate', error: expectedValidationErrorMessage },
             { field: 'file', error: expectedValidationErrorMessage },
@@ -261,7 +250,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -280,7 +268,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'startDate', error: expectedValidationErrorMessage },
             { field: 'endDate', error: expectedValidationErrorMessage },
             { field: 'file', error: expectedValidationErrorMessage },
@@ -297,7 +284,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -316,7 +302,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'zoneType', error: expectedValidationErrorMessage },
             { field: 'startDate', error: expectedValidationErrorMessage },
             { field: 'endDate', error: expectedValidationErrorMessage },
             { field: 'file', error: expectedValidationErrorMessage },
@@ -333,7 +318,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZonePage)
 
-        page.form.zoneTypeField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)

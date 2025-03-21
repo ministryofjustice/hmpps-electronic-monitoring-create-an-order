@@ -1,13 +1,14 @@
 import { z } from 'zod'
 
 import { deserialiseTime, getErrors, getError } from '../../utils/utils'
-import { MultipleChoiceField, TimeSpanField, ViewModel } from './utils'
+import { MultipleChoiceField, TimeSpanField, ViewModel, AddressViews, getAddressViews } from './utils'
 
 import { CurfewTimetable } from '../CurfewTimetable'
 import { CurfewTimetableFormData, curfewTimetableFormDataItem } from '../form-data/curfewTimetable'
 
 import { ValidationErrorModel, ValidationResult } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
+import { Address } from '../Address'
 
 export type Timetable = {
   timeSpan: TimeSpanField
@@ -24,6 +25,7 @@ export type CurfewTimetableViewModel = ViewModel<unknown> & {
     saturday: Timetable[]
     sunday: Timetable[]
   }
+  addressViews: AddressViews
 }
 
 const curfewTimetableApiDto = z.object({
@@ -36,7 +38,10 @@ const curfewTimetableApiDto = z.object({
 
 type CurfewTimetableApiDto = z.infer<typeof curfewTimetableApiDto>
 
-const createViewModelFromApiDto = (validationErrors: CurfewTimetableApiDto[]): CurfewTimetableViewModel => {
+const createViewModelFromApiDto = (
+  validationErrors: CurfewTimetableApiDto[],
+  addressViews: AddressViews,
+): CurfewTimetableViewModel => {
   const getTimetablesForDay = (day: string, timetables?: CurfewTimetableApiDto[]): Timetable[] =>
     timetables
       ?.filter(t => t.dayOfWeek === day)
@@ -64,11 +69,15 @@ const createViewModelFromApiDto = (validationErrors: CurfewTimetableApiDto[]): C
       saturday: getTimetablesForDay('SATURDAY', validationErrors),
       sunday: getTimetablesForDay('SUNDAY', validationErrors),
     },
+    addressViews,
     errorSummary: createGovukErrorSummary(allErrors),
   }
 }
 
-const createViewModelFromFormData = (formData: CurfewTimetableFormData): CurfewTimetableViewModel => {
+const createViewModelFromFormData = (
+  formData: CurfewTimetableFormData,
+  addressViews: AddressViews,
+): CurfewTimetableViewModel => {
   const getTimetablesForDay = (day: string, timetables: curfewTimetableFormDataItem[]): Timetable[] =>
     timetables.map(t => {
       return {
@@ -94,18 +103,21 @@ const createViewModelFromFormData = (formData: CurfewTimetableFormData): CurfewT
       saturday: getTimetablesForDay('saturday', formData.curfewTimetable.saturday),
       sunday: getTimetablesForDay('sunday', formData.curfewTimetable.sunday),
     },
+    addressViews,
     errorSummary: null,
   }
 }
 
 const construct = (
   curfewTimetable: CurfewTimetable | undefined,
+  addresses: Address[],
   apiDto: CurfewTimetableApiDto[],
   formData: [CurfewTimetableFormData],
 ): CurfewTimetableViewModel => {
+  const addressViews = getAddressViews(addresses)
   if (!apiDto || apiDto.length === 0) {
     if (formData?.length > 0) {
-      return createViewModelFromFormData(formData[0])
+      return createViewModelFromFormData(formData[0], addressViews)
     }
 
     const curfewTimetableAsApiDto =
@@ -115,10 +127,10 @@ const construct = (
           errors: [],
         }
       }) ?? []
-    return createViewModelFromApiDto(curfewTimetableAsApiDto)
+    return createViewModelFromApiDto(curfewTimetableAsApiDto, addressViews)
   }
 
-  return createViewModelFromApiDto(apiDto)
+  return createViewModelFromApiDto(apiDto, addressViews)
 }
 
 export default {

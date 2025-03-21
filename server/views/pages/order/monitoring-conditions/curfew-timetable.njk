@@ -11,14 +11,13 @@
 {% block formInputs %}
   {% call govukFieldset({
     legend: {
-      text: 'Enter curfew hours and addresses for each day.',
-      classes: "govuk-fieldset__legend--m",
+      text: content.pages.curfewTimetable.questions.timetable.text,
+      classes: "govuk-fieldset__legend--s",
       isPageHeading: false
     }
   }) %}
-    <span class="govuk-hint">For example entering a curfew 19:00 to 07:00 on Monday
-      for a curfew spanning Monday 19:00 to Tuesday 07:00</span>
+    <span class="govuk-hint"> {{ content.pages.curfewTimetable.questions.timetable.hint }}</span>
 
-    {{ timeTable(curfewTimetable, not isOrderEditable) }}
+    {{ timeTable(curfewTimetable,addressViews, not isOrderEditable) }}
   {% endcall %}
 {% endblock %}

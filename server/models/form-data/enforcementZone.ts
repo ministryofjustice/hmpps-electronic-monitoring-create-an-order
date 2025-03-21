@@ -10,7 +10,6 @@ const EnforcementZoneFormDataModel = z.object({
   startDay: z.string().default(''),
   startMonth: z.string().default(''),
   startYear: z.string().default(''),
-  zoneType: z.string().nullable().default(null),
   anotherZone: z.string().default(''),
 })
 

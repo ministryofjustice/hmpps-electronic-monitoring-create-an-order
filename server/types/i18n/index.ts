@@ -15,6 +15,7 @@ import NoFixedAbodePageContent from './pages/noFixedAbode'
 import ResponsibleAdultPageContent from './pages/responsibleAdult'
 import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
+import ReferenceData from './reference'
 
 type I18n = {
   pages: {
@@ -40,6 +41,7 @@ type I18n = {
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
   }
+  reference: ReferenceData
 }
 
 export default I18n

@@ -137,6 +137,9 @@ describe('CurfewConditionsController', () => {
           ],
           titleText: 'There is a problem',
         },
+        primaryAddressView: { value: '' },
+        secondaryAddressView: { value: '' },
+        tertiaryAddressView: { value: '' },
       })
     })
 
@@ -147,7 +150,36 @@ describe('CurfewConditionsController', () => {
         startDate: '2025-02-15',
         endDate: '2026-02-15',
       }
-      req.order = getMockOrder({ id: mockId, curfewConditions: mockReleaseDateCondition })
+      req.order = getMockOrder({
+        id: mockId,
+        curfewConditions: mockReleaseDateCondition,
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '10 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          {
+            addressType: 'SECONDARY',
+            addressLine1: '11 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          {
+            addressType: 'TERTIARY',
+            addressLine1: '12 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+        ],
+      })
       req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-conditions', {
@@ -172,6 +204,9 @@ describe('CurfewConditionsController', () => {
             day: '15',
           },
         },
+        primaryAddressView: { value: '10 Downing Street' },
+        secondaryAddressView: { value: '11 Downing Street' },
+        tertiaryAddressView: { value: '12 Downing Street' },
         errorSummary: null,
       })
     })

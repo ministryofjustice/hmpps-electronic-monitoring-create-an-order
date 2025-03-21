@@ -3,12 +3,13 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "../../../partials/timeSpanInput.njk" import timeSpanInput %}
+{% from "../../../partials/timeInput.njk" import timeInput %}
 
 {% set section = content.pages.curfewReleaseDate.section %}
 {% set heading = content.pages.curfewReleaseDate.title %}
 {% set legend = content.pages.curfewReleaseDate.legend %}
 {% set helpText = content.pages.curfewReleaseDate.helpText %}
-
+{% set questions = content.pages.curfewReleaseDate.questions %}
 {% block formInputs %}
 
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
@@ -17,13 +18,13 @@
     id: "releaseDate",
     fieldset: {
       legend: {
-        text: "Release date",
+        text: questions.releaseDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "Provide the date the device wearer will be released from custody. For example, 21 05 2011"
+      text: questions.releaseDate.hint
     },
     items: [
       {
@@ -54,15 +55,23 @@
     errorMessage: releaseDate.error
   }) }}
 
+{{ timeInput({
+      label: questions.startTime.text,
+      hint: questions.startTime.hint,
+      id: "curfewTimes-start",
+      name: "curfewTimesStart",
+      value: curfewStartTime.value,
+      errorMessage: curfewStartTime.error,
+      disabled: not isOrderEditable
+    }) }}
 
-
-  {{ timeSpanInput({
-      label: "Curfew hours on the day of release",
-      hint: "Enter the start and end times of the curfew. For example 09:45 - 15:30 (24 hours)",
-      id: "curfewTimes",
-      namePrefix: "curfewTimes",
-      value: curfewTimes.value,
-      errorMessage: curfewTimes.error,
+  {{ timeInput({
+      label: questions.endTime.text,
+      hint: questions.endTime.hint,
+      id: "curfewTimes-end",
+      name: "curfewTimesEnd",
+      value: curfewEndTime.value,
+      errorMessage: curfewEndTime.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -81,18 +90,18 @@
       items: [
         {
           value: "PRIMARY",
-          text: "Primary address",
-          disabled: not isOrderEditable
+          text: "Main address (not provided)" if not primaryAddressView.value else "Main address - "+primaryAddressView.value,
+          disabled: not isOrderEditable or not primaryAddressView.value
         },
         {
           value: "SECONDARY",
-          text: "Secondary address",
-          disabled: not isOrderEditable
+          text: "Second address (not provided)" if not secondaryAddressView.value else "Second address - "+secondaryAddressView.value,
+          disabled: not isOrderEditable or not secondaryAddressView.value
         },
         {
           value: "TERTIARY",
-          text: "Tertiary address",
-          disabled: not isOrderEditable
+          text: "Third address (not provided)" if not tertiaryAddressView.value else "Third address - "+tertiaryAddressView.value,
+          disabled: not isOrderEditable or not tertiaryAddressView.value
         }
       ],
       value: curfewAddress.value,
