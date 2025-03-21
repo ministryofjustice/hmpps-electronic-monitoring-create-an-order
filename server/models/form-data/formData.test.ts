@@ -1,3 +1,4 @@
+import { validationErrors } from '../../constants/validationErrors'
 import { BooleanInputModel, DateInputModel, DateTimeInputModel, MultipleChoiceInputModel } from './formData'
 
 describe('DateInputModel', () => {
@@ -5,11 +6,10 @@ describe('DateInputModel', () => {
     ['24', '10', '2024', '2024-10-24T00:00:00.000Z'],
     ['1', '1', '1965', '1965-01-01T00:00:00.000Z'],
     ['01', '01', '1965', '1965-01-01T00:00:00.000Z'],
-    ['31', '7', '2030', '2030-07-31T00:00:00.000Z'],
   ])(
     'Should parse a valid date: day = %s, month = %s, year = %s',
     (day: string, month: string, year: string, expected: string) => {
-      const validationResult = DateInputModel.safeParse({
+      const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
         day,
         month,
         year,
@@ -20,28 +20,51 @@ describe('DateInputModel', () => {
     },
   )
 
-  it('Should allow empty inputs for all date fields', () => {
-    const validationResult = DateInputModel.safeParse({
+  it.each([['24', '10', '2030', '2030-10-24T00:00:00.000Z']])(
+    'Should parse a valid future date when permitted: day = %s, month = %s, year = %s',
+    (day: string, month: string, year: string, expected: string) => {
+      const validationResult = DateInputModel(validationErrors.monitoringConditions.endDateTime.date).safeParse({
+        day,
+        month,
+        year,
+      })
+
+      expect(validationResult.success).toBe(true)
+      expect(validationResult.data).toBe(expected)
+    },
+  )
+
+  it('Should not allow empty inputs for all date fields', () => {
+    const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
       day: '',
       month: '',
       year: '',
     })
 
-    expect(validationResult.success).toBe(true)
-    expect(validationResult.data).toBe(null)
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.data).toBe(undefined)
+  })
+
+  it('Should not allow non-alphanumeric inputs for all date fields', () => {
+    const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
+      day: 'q',
+      month: 'q',
+      year: 'q',
+    })
+
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.data).toBe(undefined)
   })
 
   it.each([
     ['32', '10', '2024'],
     ['1', '13', '1965'],
     ['01', '7', '1000'],
-    ['q', 'q', 'q'],
-    ['1', '', ''],
-    ['q', '', ''],
+    ['q', 'q', '2000'],
   ])(
     'Should not parse an invalid date: day = %s, month = %s, year = %s',
     (day: string, month: string, year: string) => {
-      const validationResult = DateInputModel.safeParse({
+      const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
         day,
         month,
         year,
@@ -51,13 +74,74 @@ describe('DateInputModel', () => {
       expect(validationResult.error!.issues).toEqual([
         {
           code: 'custom',
-          message:
-            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+          fatal: true,
+          message: 'Start date for monitoring must be a real date',
           path: [],
         },
       ])
     },
   )
+
+  it.each([
+    ['', '1', ''],
+    ['', '', '2024'],
+    ['', '1', '2024'],
+  ])('Should not allow a date without a day', (day: string, month: string, year: string) => {
+    const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
+      day,
+      month,
+      year,
+    })
+
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.error!.issues).toEqual([
+      {
+        code: 'custom',
+        fatal: true,
+        message: 'Start date for monitoring must include a day',
+        path: [],
+      },
+    ])
+  })
+
+  it.each([
+    ['1', '', ''],
+    ['1', '', '2024'],
+  ])('Should not allow a date without a month', (day: string, month: string, year: string) => {
+    const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
+      day,
+      month,
+      year,
+    })
+
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.error!.issues).toEqual([
+      {
+        code: 'custom',
+        fatal: true,
+        message: 'Start date for monitoring must include a month',
+        path: [],
+      },
+    ])
+  })
+
+  it.each([['1', '1', '']])('Should not allow a date without a year', (day: string, month: string, year: string) => {
+    const validationResult = DateInputModel(validationErrors.monitoringConditions.startDateTime.date).safeParse({
+      day,
+      month,
+      year,
+    })
+
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.error!.issues).toEqual([
+      {
+        code: 'custom',
+        fatal: true,
+        message: 'Start date for monitoring must include a year',
+        path: [],
+      },
+    ])
+  })
 })
 
 describe('DateTimeInputModel', () => {
@@ -68,7 +152,7 @@ describe('DateTimeInputModel', () => {
   ])(
     'Should parse a valid datetime: day = %s, month = %s, year = %s, hours = %s, minutes = %s',
     (day: string, month: string, year: string, hours: string, minutes: string, expected: string) => {
-      const validationResult = DateTimeInputModel.safeParse({
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
         day,
         month,
         year,
@@ -81,8 +165,8 @@ describe('DateTimeInputModel', () => {
     },
   )
 
-  it('Should allow empty inputs for all datetime fields', () => {
-    const validationResult = DateTimeInputModel.safeParse({
+  it('Should not allow empty inputs for all datetime fields', () => {
+    const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
       day: '',
       month: '',
       year: '',
@@ -90,21 +174,18 @@ describe('DateTimeInputModel', () => {
       minutes: '',
     })
 
-    expect(validationResult.success).toBe(true)
-    expect(validationResult.data).toBe(null)
+    expect(validationResult.success).toBe(false)
+    expect(validationResult.data).toBe(undefined)
   })
 
   it.each([
     ['32', '10', '2024', '0', '0'],
     ['1', '13', '1965', '0', '0'],
     ['01', '7', '1000', '0', '0'],
-    ['q', 'q', 'q', '0', '0'],
-    ['1', '', '', '0', '0'],
-    ['q', '', '', '0', '0'],
   ])(
     'Should not parse an invalid date: day = %s, month = %s, year = %s, hours = %s, minutes = %s',
     (day: string, month: string, year: string, hours: string, minutes: string) => {
-      const validationResult = DateTimeInputModel.safeParse({
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
         day,
         month,
         year,
@@ -116,9 +197,85 @@ describe('DateTimeInputModel', () => {
       expect(validationResult.error!.issues).toEqual([
         {
           code: 'custom',
-          message:
-            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-          path: ['date'],
+          fatal: true,
+          message: 'Start date for monitoring must be a real date',
+          path: [],
+        },
+      ])
+    },
+  )
+
+  it.each([
+    ['', '1', '', '0', '0'],
+    ['', '', '2024', '0', '0'],
+    ['', '1', '', '0', '0'],
+  ])(
+    'Should not allow a date with no day',
+    (day: string, month: string, year: string, hours: string, minutes: string) => {
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
+        day,
+        month,
+        year,
+        hours,
+        minutes,
+      })
+
+      expect(validationResult.success).toBe(false)
+      expect(validationResult.error!.issues).toEqual([
+        {
+          code: 'custom',
+          fatal: true,
+          message: 'Start date for monitoring must include a day',
+          path: [],
+        },
+      ])
+    },
+  )
+
+  it.each([
+    ['1', '', '', '0', '0'],
+    ['1', '', '2024', '0', '0'],
+  ])(
+    'Should not allow a date with no month',
+    (day: string, month: string, year: string, hours: string, minutes: string) => {
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
+        day,
+        month,
+        year,
+        hours,
+        minutes,
+      })
+
+      expect(validationResult.success).toBe(false)
+      expect(validationResult.error!.issues).toEqual([
+        {
+          code: 'custom',
+          fatal: true,
+          message: 'Start date for monitoring must include a month',
+          path: [],
+        },
+      ])
+    },
+  )
+
+  it.each([['1', '1', '', '0', '0']])(
+    'Should not allow a date with no year',
+    (day: string, month: string, year: string, hours: string, minutes: string) => {
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
+        day,
+        month,
+        year,
+        hours,
+        minutes,
+      })
+
+      expect(validationResult.success).toBe(false)
+      expect(validationResult.error!.issues).toEqual([
+        {
+          code: 'custom',
+          fatal: true,
+          message: 'Start date for monitoring must include a year',
+          path: [],
         },
       ])
     },
@@ -127,13 +284,10 @@ describe('DateTimeInputModel', () => {
   it.each([
     ['24', '10', '2024', '24', '00'],
     ['1', '1', '1965', '12', '60'],
-    ['1', '1', '2024', '1', ''],
-    ['1', '1', '2024', '', '0'],
-    ['1', '1', '2024', '', ''],
   ])(
-    'Should not parse an invalid time: day = %s, month = %s, year = %s, hours = %s, minutes = %s',
+    'Start time for monitoring must be a real time',
     (day: string, month: string, year: string, hours: string, minutes: string) => {
-      const validationResult = DateTimeInputModel.safeParse({
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
         day,
         month,
         year,
@@ -145,9 +299,8 @@ describe('DateTimeInputModel', () => {
       expect(validationResult.error!.issues).toEqual([
         {
           code: 'custom',
-          message:
-            'Time is in an incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
-          path: ['time'],
+          message: 'Start time for monitoring must be a real time',
+          path: [],
         },
       ])
     },
@@ -156,7 +309,7 @@ describe('DateTimeInputModel', () => {
   it.each([['q', '1', '1965', '12', '60']])(
     'Should not parse an invalid datetime: day = %s, month = %s, year = %s, hours = %s, minutes = %s',
     (day: string, month: string, year: string, hours: string, minutes: string) => {
-      const validationResult = DateTimeInputModel.safeParse({
+      const validationResult = DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).safeParse({
         day,
         month,
         year,
@@ -168,15 +321,9 @@ describe('DateTimeInputModel', () => {
       expect(validationResult.error!.issues).toEqual([
         {
           code: 'custom',
-          message:
-            'Time is in an incorrect format. Enter the time in the format hh:mm (Hour:Minute). For example, 11:59.',
-          path: ['time'],
-        },
-        {
-          code: 'custom',
-          message:
-            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-          path: ['date'],
+          fatal: true,
+          message: 'Start date for monitoring must be a real date',
+          path: [],
         },
       ])
     },

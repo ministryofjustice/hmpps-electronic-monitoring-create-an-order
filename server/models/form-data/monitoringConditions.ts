@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { DateTimeInputModel } from './formData'
-import validationErrors from '../../constants/validationErrors'
+import { validationErrors } from '../../constants/validationErrors'
 
 const MonitoringConditionsFormDataParser = z.object({
   action: z.string().default('continue'),
@@ -54,10 +54,8 @@ const MonitoringConditionsFormDataValidator = z
     monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
     orderTypeDescription: z.string(),
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
-    startDate: DateTimeInputModel.pipe(
-      z.string({ message: validationErrors.monitoringConditions.startDateRequired }).datetime(),
-    ),
-    endDate: DateTimeInputModel,
+    startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
+    endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
     sentenceType: z.string().nullable(),
     issp: z.string(),
     hdc: z.string(),
