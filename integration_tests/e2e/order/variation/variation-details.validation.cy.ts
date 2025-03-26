@@ -9,7 +9,8 @@ const expectedValidationErrors = {
     required: 'Variation type is required',
   },
   variationDate: {
-    required: 'Variation date is required',
+    required: 'Enter Variation date',
+    mustBeRealDate: 'Variation date must be a real date',
     malformed:
       'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
   },
@@ -48,7 +49,7 @@ context('Variation', () => {
 
         Page.verifyOnPage(VariationDetailsPage)
 
-        page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.malformed)
+        page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.mustBeRealDate)
       })
     })
   })

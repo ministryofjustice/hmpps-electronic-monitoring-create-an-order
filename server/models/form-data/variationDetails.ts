@@ -1,5 +1,6 @@
 import z from 'zod'
 import { DateInputModel, FormDataModel } from './formData'
+import { validationErrors } from '../../constants/validationErrors'
 
 const VariationDetailsFormDataParser = FormDataModel.extend({
   variationDate: z.object({
@@ -11,8 +12,9 @@ const VariationDetailsFormDataParser = FormDataModel.extend({
 })
 
 const VariationDetailsFormDataValidator = z.object({
-  variationDate: DateInputModel.pipe(z.string({ message: 'Variation date is required' }).datetime()),
-  variationType: z.string().min(1, 'Variation type is required'),
+  // This might need error messages passing
+  variationDate: DateInputModel(validationErrors.variationDetails.variationDate),
+  variationType: z.string().min(1, validationErrors.variationDetails.variationTypeRequired),
 })
 
 type VariationDetailsFormData = Omit<z.infer<typeof VariationDetailsFormDataParser>, 'action'>

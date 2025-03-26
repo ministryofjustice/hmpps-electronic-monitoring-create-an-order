@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { BooleanInputModel, DateInputModel, FormDataModel, MultipleChoiceInputModel } from './formData'
 import { DisabilityEnum } from '../DeviceWearer'
-import validationErrors from '../../constants/validationErrors'
+import { validationErrors } from '../../constants/validationErrors'
 
 // Parse html form data to ensure basic type safety at runtime
 const DeviceWearerFormDataParser = FormDataModel.extend({
@@ -30,8 +30,8 @@ const DeviceWearerFormDataValidator = z.object({
   firstName: z.string().min(1, validationErrors.deviceWearer.firstNameRequired),
   lastName: z.string().min(1, validationErrors.deviceWearer.lastNameRequired),
   alias: z.string(),
-  dateOfBirth: DateInputModel.pipe(z.string({ message: validationErrors.deviceWearer.dobRequired }).datetime()),
-  language: z.string(),
+  dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth),
+  language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO ELM-3376 this needs changing to be conditional on interpreter needed
   interpreterRequired: BooleanInputModel.pipe(
     z.boolean({
       message: validationErrors.deviceWearer.interpreterRequired,
