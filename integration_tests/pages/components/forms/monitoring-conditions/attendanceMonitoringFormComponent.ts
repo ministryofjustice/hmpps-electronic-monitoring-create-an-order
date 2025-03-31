@@ -20,11 +20,11 @@ export default class AttendanceMonitoringFormComponent extends FormComponent {
   // FIELDS
 
   get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'What is the date the mandatory attendance monitoring starts?')
+    return new FormDateComponent(this.form, 'What date does mandatory attendance monitoring start?')
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'What is the date the mandatory attendance monitoring ends?')
+    return new FormDateComponent(this.form, 'What date does mandatory attendance monitoring end? (optional)')
   }
 
   get purposeField(): FormInputComponent {
@@ -32,7 +32,10 @@ export default class AttendanceMonitoringFormComponent extends FormComponent {
   }
 
   get appointmentDayField(): FormInputComponent {
-    return new FormInputComponent(this.form, 'On what day or days is the appointment?')
+    return new FormInputComponent(
+      this.form,
+      'On what day is the appointment and how frequently does the appointment take place?',
+    )
   }
 
   get startTimeField(): FormTimeComponent {
@@ -44,14 +47,11 @@ export default class AttendanceMonitoringFormComponent extends FormComponent {
   }
 
   get addressField(): FormAddressComponent {
-    return new FormAddressComponent(this.form, 'What is the address where the appointment will take place?')
+    return new FormAddressComponent(this.form, 'At what address will the appointment take place?')
   }
 
   get addAnotherField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Are there any other appointments the device wearer needs to attend?', [
-      'Yes',
-      'No',
-    ])
+    return new FormRadiosComponent(this.form, 'Do you need to add another appointment?', ['Yes', 'No'])
   }
 
   // FORM HELPERS
