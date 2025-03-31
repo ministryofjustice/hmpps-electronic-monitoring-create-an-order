@@ -1,39 +1,32 @@
 {% extends "../../../partials/check-your-answers-layout.njk" %}
 
-{% set section = "About the device wearer" %}
-{% set pageTitle = "Device wearer details - Check your answers - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set section = "About the device wearer" %}
 
 {% block answers %}
 
+  <h2 class="govuk-heading-m">Personal details</h2>
+
   {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Device wearer"
-      }
-    },
+    classes: "govuk-!-margin-bottom-9",
     rows: deviceWearer
   }) }}
 
+  <h2 class="govuk-heading-m">Identity numbers</h2>
+
+
   {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Person identifiers"
-      }
-    },
+    classes: "govuk-!-margin-bottom-9",
     rows: personIdentifiers
   }) }}
 
   {% if responsibleAdult | length > 0 %}
 
+   <h2 class="govuk-heading-m">Responsible adult details</h2>
+
     {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Responsible adult"
-        }
-      },
+      classes: "govuk-!-margin-bottom-9",
       rows: responsibleAdult
     }) }}
 

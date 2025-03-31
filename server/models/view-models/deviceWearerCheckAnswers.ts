@@ -27,8 +27,8 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
     createTextAnswer(content.pages.deviceWearer.questions.sex.text, lookup(sexMap, order.deviceWearer.sex), uri),
     createTextAnswer(content.pages.deviceWearer.questions.gender.text, lookup(genderMap, order.deviceWearer.gender), uri),
     createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri),
-    createTextAnswer(content.pages.deviceWearer.questions.disabilities.text, order.deviceWearer.otherDisability, uri),
-    createTextAnswer(content.pages.deviceWearer.questions.otherDisability.text, order.deviceWearer.language, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.otherDisability.text, order.deviceWearer.otherDisability, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri),
     createBooleanAnswer(content.pages.deviceWearer.questions.interpreterRequired.text, order.deviceWearer.interpreterRequired, uri),
   ]
 }

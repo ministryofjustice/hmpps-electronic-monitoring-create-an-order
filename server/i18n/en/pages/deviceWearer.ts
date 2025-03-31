@@ -38,7 +38,7 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
       text: "What is the device wearer's last name?",
     },
     otherDisability: {
-      text: '',
+      text: "What is the device wearer's disability or health condition? (optional)",
     },
     sex: {
       text: 'What is the sex of the device wearer?',
