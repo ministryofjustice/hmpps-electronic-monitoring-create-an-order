@@ -25,11 +25,23 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
       uri,
     ),
     createTextAnswer(content.pages.deviceWearer.questions.sex.text, lookup(sexMap, order.deviceWearer.sex), uri),
-    createTextAnswer(content.pages.deviceWearer.questions.gender.text, lookup(genderMap, order.deviceWearer.gender), uri),
+    createTextAnswer(
+      content.pages.deviceWearer.questions.gender.text,
+      lookup(genderMap, order.deviceWearer.gender),
+      uri,
+    ),
     createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri),
-    createTextAnswer(content.pages.deviceWearer.questions.otherDisability.text, order.deviceWearer.otherDisability, uri),
+    createTextAnswer(
+      content.pages.deviceWearer.questions.otherDisability.text,
+      order.deviceWearer.otherDisability,
+      uri,
+    ),
     createTextAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri),
-    createBooleanAnswer(content.pages.deviceWearer.questions.interpreterRequired.text, order.deviceWearer.interpreterRequired, uri),
+    createBooleanAnswer(
+      content.pages.deviceWearer.questions.interpreterRequired.text,
+      order.deviceWearer.interpreterRequired,
+      uri,
+    ),
   ]
 }
 
@@ -40,7 +52,11 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
     createTextAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri),
     createTextAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri),
     createTextAnswer(content.pages.identityNumbers.questions.prisonNumber.text, order.deviceWearer.prisonNumber, uri),
-    createTextAnswer(content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text, order.deviceWearer.homeOfficeReferenceNumber, uri),
+    createTextAnswer(
+      content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
+      order.deviceWearer.homeOfficeReferenceNumber,
+      uri,
+    ),
   ]
 }
 
@@ -56,14 +72,26 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
   }
 
   return [
-    createTextAnswer(content.pages.responsibleAdult.questions.relationship.text, lookup(relationshipMap, order.deviceWearerResponsibleAdult?.relationship), uri),
+    createTextAnswer(
+      content.pages.responsibleAdult.questions.relationship.text,
+      lookup(relationshipMap, order.deviceWearerResponsibleAdult?.relationship),
+      uri,
+    ),
     createTextAnswer(
       content.pages.responsibleAdult.questions.otherRelationship.text,
       order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
       uri,
     ),
-    createTextAnswer(content.pages.responsibleAdult.questions.fullName.text, order.deviceWearerResponsibleAdult?.fullName, uri),
-    createTextAnswer(content.pages.responsibleAdult.questions.contactNumber.text, order.deviceWearerResponsibleAdult?.contactNumber, uri),
+    createTextAnswer(
+      content.pages.responsibleAdult.questions.fullName.text,
+      order.deviceWearerResponsibleAdult?.fullName,
+      uri,
+    ),
+    createTextAnswer(
+      content.pages.responsibleAdult.questions.contactNumber.text,
+      order.deviceWearerResponsibleAdult?.contactNumber,
+      uri,
+    ),
   ]
 }
 

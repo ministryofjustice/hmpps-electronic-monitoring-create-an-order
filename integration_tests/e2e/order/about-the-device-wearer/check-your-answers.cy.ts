@@ -79,7 +79,9 @@ context('Device wearer - check your answers', () => {
     it('should not show responsible adult section', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
 
-      page.responsibleAdultSection().should('not.exist')
+      page.personDetailsSection.shouldExist()
+      page.identityNumbersSection.shouldExist()
+      page.responsibleAdultSection.shouldNotExist()
     })
   })
 
@@ -127,7 +129,9 @@ context('Device wearer - check your answers', () => {
     it('should not show responsible adult section', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
 
-      page.responsibleAdultSection().should('exist')
+      page.personDetailsSection.shouldExist()
+      page.identityNumbersSection.shouldExist()
+      page.responsibleAdultSection.shouldExist()
     })
   })
 
