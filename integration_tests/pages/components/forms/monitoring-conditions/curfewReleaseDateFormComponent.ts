@@ -26,7 +26,7 @@ export default class CurfewReleaseDateFormComponent extends FormComponent {
   }
 
   get addressField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Curfew address on the day of release', [
+    return new FormRadiosComponent(this.form, 'On the day of release, where will the device wearer be during curfew hours?', [
       /Main address/,
       /Second address/,
       /Third address/,
