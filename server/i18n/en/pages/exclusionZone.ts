@@ -18,14 +18,14 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
     },
     endDate: {
       text: 'What date does exclusion zone monitoring end? (optional)',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
     file: {
       text: 'Upload map',
     },
     startDate: {
       text: 'What date does exclusion zone monitoring start?',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
   },
   section: 'Electronic monitoring required',

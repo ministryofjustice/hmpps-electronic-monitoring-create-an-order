@@ -14,7 +14,7 @@ const curfewReleaseDatePageContent: CurfewReleaseDatePageContent = {
     },
     releaseDate: {
       text: 'What date is the device wearer released from custody?',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
     startTime: {
       text: 'On the day of release, what time does the curfew start?',
