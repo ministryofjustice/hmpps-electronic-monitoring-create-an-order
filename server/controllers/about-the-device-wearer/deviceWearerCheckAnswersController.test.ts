@@ -209,23 +209,6 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: "What is the device wearer's disability or health condition? (optional)",
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: "what is the device wearer's disability or health condition? (optional)",
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: 'What language does the interpreter need to use? (optional)',
           },
           value: {
@@ -496,23 +479,6 @@ describe('DeviceWearerCheckAnswersController', () => {
                 text: 'Change',
                 visuallyHiddenText:
                   'does the device wearer have any of the disabilities or health conditions listed? (optional)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: "What is the device wearer's disability or health condition? (optional)",
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: "what is the device wearer's disability or health condition? (optional)",
               },
             ],
           },
@@ -795,23 +761,6 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: "What is the device wearer's disability or health condition? (optional)",
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: "what is the device wearer's disability or health condition? (optional)",
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: 'What language does the interpreter need to use? (optional)',
           },
           value: {
@@ -946,23 +895,6 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the responsible adult's relationship to the device wearer?",
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Relationship to device wearer',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'relationship to device wearer',
               },
             ],
           },

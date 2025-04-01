@@ -11,6 +11,10 @@ export default class SummaryListComponent {
     return cy.contains('h2', this.label)
   }
 
+  get list(): PageElement {
+    return this.element.siblings('.govuk-summary-list')
+  }
+
   // Helpers
 
   shouldExist() {
@@ -19,5 +23,24 @@ export default class SummaryListComponent {
 
   shouldNotExist() {
     this.element.should('not.exist')
+  }
+
+  shouldHaveItem(key: string, value: string) {
+    return this.list
+      .contains('.govuk-summary-list__key', key)
+      .siblings('.govuk-summary-list__value')
+      .should('contain.text', value)
+  }
+
+  shouldHaveItems(items: Array<{ key: string; value: string }>) {
+    return items.map(({ key, value }) => this.shouldHaveItem(key, value))
+  }
+
+  shouldNotHaveItem(key: string) {
+    return this.list.should('not.contain.text', key)
+  }
+
+  shouldNotHaveItems(keys: Array<string>) {
+    return keys.map(key => this.shouldNotHaveItem(key))
   }
 }

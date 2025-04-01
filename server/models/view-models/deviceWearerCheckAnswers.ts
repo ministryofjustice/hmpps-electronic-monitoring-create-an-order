@@ -11,6 +11,30 @@ import {
 import { lookup } from '../../utils/utils'
 import { Order } from '../Order'
 
+const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) => {
+  if (order.deviceWearer.disabilities.includes('OTHER')) {
+    return [
+      createTextAnswer(
+        content.pages.deviceWearer.questions.otherDisability.text,
+        order.deviceWearer.otherDisability,
+        uri,
+      ),
+    ]
+  }
+
+  return []
+}
+
+const createOtherGenderAnswer = (order: Order, content: I18n, uri: string) => {
+  if (order.deviceWearer.gender === 'self-identify') {
+    return [
+      createTextAnswer(content.pages.deviceWearer.questions.otherGender.text, order.deviceWearer.otherGender, uri),
+    ]
+  }
+
+  return []
+}
+
 const createDeviceWearerAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability => lookup(disabilitiesMap, disability))
@@ -30,12 +54,9 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
       lookup(genderMap, order.deviceWearer.gender),
       uri,
     ),
+    ...createOtherGenderAnswer(order, content, uri),
     createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri),
-    createTextAnswer(
-      content.pages.deviceWearer.questions.otherDisability.text,
-      order.deviceWearer.otherDisability,
-      uri,
-    ),
+    ...createOtherDisabilityAnswer(order, content, uri),
     createTextAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.interpreterRequired.text,
@@ -60,6 +81,20 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
   ]
 }
 
+const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string) => {
+  if (order.deviceWearerResponsibleAdult?.relationship === 'other') {
+    return [
+      createTextAnswer(
+        content.pages.responsibleAdult.questions.otherRelationship.text,
+        order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
+        uri,
+      ),
+    ]
+  }
+
+  return []
+}
+
 const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id)
 
@@ -77,11 +112,7 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
       lookup(relationshipMap, order.deviceWearerResponsibleAdult?.relationship),
       uri,
     ),
-    createTextAnswer(
-      content.pages.responsibleAdult.questions.otherRelationship.text,
-      order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
-      uri,
-    ),
+    ...createOtherRelationshipAnswer(order, content, uri),
     createTextAnswer(
       content.pages.responsibleAdult.questions.fullName.text,
       order.deviceWearerResponsibleAdult?.fullName,
