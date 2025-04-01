@@ -1,17 +1,26 @@
-import AppPage from '../../appPage'
 import paths from '../../../../server/constants/paths'
-import { PageElement } from '../../page'
+import SummaryListComponent from '../../components/summaryListComponent'
+import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
-export default class DeviceWearerCheckYourAnswersPage extends AppPage {
+export default class DeviceWearerCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
     super('Check your answers', paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS)
   }
 
-  phaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
+  // SECTIONS
 
-  continueButton = (): PageElement => cy.contains('Continue')
+  get personDetailsSection(): SummaryListComponent {
+    const label = 'Personal details'
+    return new SummaryListComponent(label)
+  }
 
-  returnButton = (): PageElement => cy.contains('Return back to form section menu')
+  get identityNumbersSection(): SummaryListComponent {
+    const label = 'Identity numbers'
+    return new SummaryListComponent(label)
+  }
 
-  responsibleAdultSection = (): PageElement => cy.contains('Responsible adult')
+  get responsibleAdultSection(): SummaryListComponent {
+    const label = 'Responsible adult details'
+    return new SummaryListComponent(label)
+  }
 }

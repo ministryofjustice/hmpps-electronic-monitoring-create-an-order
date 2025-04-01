@@ -72,7 +72,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       deviceWearer: [
         {
           key: {
-            text: 'First names',
+            text: "What is the device wearer's first name?",
           },
           value: {
             text: '',
@@ -82,14 +82,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'first names',
+                visuallyHiddenText: "what is the device wearer's first name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Last name',
+            text: "What is the device wearer's last name?",
           },
           value: {
             text: '',
@@ -99,14 +99,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'last name',
+                visuallyHiddenText: "what is the device wearer's last name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Preferred name or alias (optional)',
+            text: "What is the device wearer's preferred name or names? (optional)",
           },
           value: {
             text: '',
@@ -116,14 +116,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'preferred name or alias (optional)',
+                visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Date of birth',
+            text: "What is the device wearer's date of birth?",
           },
           value: {
             text: '',
@@ -133,14 +133,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'date of birth',
+                visuallyHiddenText: "what is the device wearer's date of birth?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Will the device wearer be 18 years old when the device is installed?',
+            text: 'Is a responsible adult required?',
           },
           value: {
             text: '',
@@ -150,14 +150,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'will the device wearer be 18 years old when the device is installed?',
+                visuallyHiddenText: 'is a responsible adult required?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Sex',
+            text: 'What is the sex of the device wearer?',
           },
           value: {
             text: '',
@@ -167,14 +167,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'sex',
+                visuallyHiddenText: 'what is the sex of the device wearer?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Gender',
+            text: "What is the device wearer's gender?",
           },
           value: {
             text: '',
@@ -184,14 +184,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'gender',
+                visuallyHiddenText: "what is the device wearer's gender?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Disabilities (optional)',
+            text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           },
           value: {
             html: '',
@@ -201,14 +201,15 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'disabilities (optional)',
+                visuallyHiddenText:
+                  'does the device wearer have any of the disabilities or health conditions listed? (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Disability, if other (optional)',
+            text: 'What language does the interpreter need to use? (optional)',
           },
           value: {
             text: '',
@@ -218,14 +219,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'disability, if other (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Main language',
+            text: 'Is an interpreter needed?',
           },
           value: {
             text: '',
@@ -235,24 +236,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'main language',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Is an interpreter required?',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'is an interpreter required?',
+                visuallyHiddenText: 'is an interpreter needed?',
               },
             ],
           },
@@ -261,7 +245,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       personIdentifiers: [
         {
           key: {
-            text: 'NOMIS ID (optional)',
+            text: 'National Offender Management Information System (NOMIS) ID (optional)',
           },
           value: {
             text: '',
@@ -271,14 +255,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'nomis id (optional)',
+                visuallyHiddenText: 'national offender management information system (nomis) id (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'PNC ID (optional)',
+            text: 'Police National Computer (PNC) ID (optional)',
           },
           value: {
             text: '',
@@ -288,14 +272,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'pnc id (optional)',
+                visuallyHiddenText: 'police national computer (pnc) id (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'DELIUS ID (optional)',
+            text: 'Delius ID (optional)',
           },
           value: {
             text: '',
@@ -329,7 +313,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Home Office reference number (optional)',
+            text: 'Home Office Reference Number (optional)',
           },
           value: {
             text: '',
@@ -364,7 +348,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       deviceWearer: [
         {
           key: {
-            text: 'First names',
+            text: "What is the device wearer's first name?",
           },
           value: {
             text: 'tester',
@@ -374,14 +358,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'first names',
+                visuallyHiddenText: "what is the device wearer's first name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Last name',
+            text: "What is the device wearer's last name?",
           },
           value: {
             text: 'testington',
@@ -391,14 +375,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'last name',
+                visuallyHiddenText: "what is the device wearer's last name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Preferred name or alias (optional)',
+            text: "What is the device wearer's preferred name or names? (optional)",
           },
           value: {
             text: 'test',
@@ -408,14 +392,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'preferred name or alias (optional)',
+                visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Date of birth',
+            text: "What is the device wearer's date of birth?",
           },
           value: {
             text: '10/10/1980',
@@ -425,14 +409,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'date of birth',
+                visuallyHiddenText: "what is the device wearer's date of birth?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Will the device wearer be 18 years old when the device is installed?',
+            text: 'Is a responsible adult required?',
           },
           value: {
             text: 'Yes',
@@ -442,14 +426,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'will the device wearer be 18 years old when the device is installed?',
+                visuallyHiddenText: 'is a responsible adult required?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Sex',
+            text: 'What is the sex of the device wearer?',
           },
           value: {
             text: 'Male',
@@ -459,14 +443,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'sex',
+                visuallyHiddenText: 'what is the sex of the device wearer?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Gender',
+            text: "What is the device wearer's gender?",
           },
           value: {
             text: 'Male',
@@ -476,14 +460,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'gender',
+                visuallyHiddenText: "what is the device wearer's gender?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Disabilities (optional)',
+            text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           },
           value: {
             html: 'Vision<br/>Mobility',
@@ -493,14 +477,15 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'disabilities (optional)',
+                visuallyHiddenText:
+                  'does the device wearer have any of the disabilities or health conditions listed? (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Disability, if other (optional)',
+            text: 'What language does the interpreter need to use? (optional)',
           },
           value: {
             text: '',
@@ -510,31 +495,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'disability, if other (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Main language',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'main language',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Is an interpreter required?',
+            text: 'Is an interpreter needed?',
           },
           value: {
             text: 'No',
@@ -544,7 +512,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'is an interpreter required?',
+                visuallyHiddenText: 'is an interpreter needed?',
               },
             ],
           },
@@ -553,7 +521,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       personIdentifiers: [
         {
           key: {
-            text: 'NOMIS ID (optional)',
+            text: 'National Offender Management Information System (NOMIS) ID (optional)',
           },
           value: {
             text: 'nomis',
@@ -563,14 +531,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'nomis id (optional)',
+                visuallyHiddenText: 'national offender management information system (nomis) id (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'PNC ID (optional)',
+            text: 'Police National Computer (PNC) ID (optional)',
           },
           value: {
             text: 'pnc',
@@ -580,14 +548,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'pnc id (optional)',
+                visuallyHiddenText: 'police national computer (pnc) id (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'DELIUS ID (optional)',
+            text: 'Delius ID (optional)',
           },
           value: {
             text: 'delius',
@@ -621,7 +589,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Home Office reference number (optional)',
+            text: 'Home Office Reference Number (optional)',
           },
           value: {
             text: 'home office',
@@ -656,7 +624,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       deviceWearer: [
         {
           key: {
-            text: 'First names',
+            text: "What is the device wearer's first name?",
           },
           value: {
             text: 'tester',
@@ -666,14 +634,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'first names',
+                visuallyHiddenText: "what is the device wearer's first name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Last name',
+            text: "What is the device wearer's last name?",
           },
           value: {
             text: 'testington',
@@ -683,14 +651,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'last name',
+                visuallyHiddenText: "what is the device wearer's last name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Preferred name or alias (optional)',
+            text: "What is the device wearer's preferred name or names? (optional)",
           },
           value: {
             text: 'test',
@@ -700,14 +668,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'preferred name or alias (optional)',
+                visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Date of birth',
+            text: "What is the device wearer's date of birth?",
           },
           value: {
             text: '10/10/1980',
@@ -717,14 +685,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'date of birth',
+                visuallyHiddenText: "what is the device wearer's date of birth?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Will the device wearer be 18 years old when the device is installed?',
+            text: 'Is a responsible adult required?',
           },
           value: {
             text: 'No',
@@ -734,14 +702,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'will the device wearer be 18 years old when the device is installed?',
+                visuallyHiddenText: 'is a responsible adult required?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Sex',
+            text: 'What is the sex of the device wearer?',
           },
           value: {
             text: 'Male',
@@ -751,14 +719,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'sex',
+                visuallyHiddenText: 'what is the sex of the device wearer?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Gender',
+            text: "What is the device wearer's gender?",
           },
           value: {
             text: 'Male',
@@ -768,14 +736,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'gender',
+                visuallyHiddenText: "what is the device wearer's gender?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Disabilities (optional)',
+            text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           },
           value: {
             html: 'Vision<br/>Mobility',
@@ -785,14 +753,15 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'disabilities (optional)',
+                visuallyHiddenText:
+                  'does the device wearer have any of the disabilities or health conditions listed? (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Disability, if other (optional)',
+            text: 'What language does the interpreter need to use? (optional)',
           },
           value: {
             text: '',
@@ -802,31 +771,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'disability, if other (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'Main language',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'main language',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Is an interpreter required?',
+            text: 'Is an interpreter needed?',
           },
           value: {
             text: 'No',
@@ -836,7 +788,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'is an interpreter required?',
+                visuallyHiddenText: 'is an interpreter needed?',
               },
             ],
           },
@@ -845,7 +797,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       personIdentifiers: [
         {
           key: {
-            text: 'NOMIS ID (optional)',
+            text: 'National Offender Management Information System (NOMIS) ID (optional)',
           },
           value: {
             text: 'nomis',
@@ -855,14 +807,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'nomis id (optional)',
+                visuallyHiddenText: 'national offender management information system (nomis) id (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'PNC ID (optional)',
+            text: 'Police National Computer (PNC) ID (optional)',
           },
           value: {
             text: 'pnc',
@@ -872,14 +824,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'pnc id (optional)',
+                visuallyHiddenText: 'police national computer (pnc) id (optional)',
               },
             ],
           },
         },
         {
           key: {
-            text: 'DELIUS ID (optional)',
+            text: 'Delius ID (optional)',
           },
           value: {
             text: 'delius',
@@ -913,7 +865,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Home Office reference number (optional)',
+            text: 'Home Office Reference Number (optional)',
           },
           value: {
             text: 'home office',
@@ -932,7 +884,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       responsibleAdult: [
         {
           key: {
-            text: 'Relationship',
+            text: "What is the responsible adult's relationship to the device wearer?",
           },
           value: {
             text: 'Parent',
@@ -942,31 +894,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'relationship',
+                visuallyHiddenText: "what is the responsible adult's relationship to the device wearer?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Relationship details, if other (optional)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'relationship details, if other (optional)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Full name',
+            text: "What is the responsible adult's full name?",
           },
           value: {
             text: 'Firstname Lastname',
@@ -976,14 +911,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'full name',
+                visuallyHiddenText: "what is the responsible adult's full name?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Contact number',
+            text: "What is the responsible adult's telephone number? (optional)",
           },
           value: {
             text: '07999999999',
@@ -993,7 +928,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'contact number',
+                visuallyHiddenText: "what is the responsible adult's telephone number? (optional)",
               },
             ],
           },

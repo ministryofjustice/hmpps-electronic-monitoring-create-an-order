@@ -51,23 +51,23 @@ context('Device wearer - check your answers', () => {
         status: 'IN_PROGRESS',
         order: {
           deviceWearer: {
-            nomisId: null,
-            pncId: null,
-            deliusId: null,
-            prisonNumber: null,
-            homeOfficeReferenceNumber: null,
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
             firstName: 'test',
             lastName: 'tester',
-            alias: null,
-            dateOfBirth: null,
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
             adultAtTimeOfInstallation: true,
-            sex: null,
-            gender: 'self-identify',
-            otherGender: 'Furby',
-            disabilities: 'OTHER',
-            otherDisability: 'Broken arm',
+            sex: 'male',
+            gender: 'male',
+            otherGender: null,
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
             noFixedAbode: null,
-            interpreterRequired: null,
+            interpreterRequired: false,
           },
           DeviceWearerResponsibleAdult: null,
         },
@@ -79,7 +79,104 @@ context('Device wearer - check your answers', () => {
     it('should not show responsible adult section', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
 
-      page.responsibleAdultSection().should('not.exist')
+      page.personDetailsSection.shouldExist()
+      page.personDetailsSection.shouldHaveItems([
+        { key: "What is the device wearer's first name?", value: 'test' },
+        { key: "What is the device wearer's last name?", value: 'tester' },
+        { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
+        { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
+        { key: 'Is a responsible adult required?', value: 'Yes' },
+        { key: 'What is the sex of the device wearer?', value: 'Male' },
+        { key: "What is the device wearer's gender?", value: 'Male' },
+        {
+          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          value: 'Mental health',
+        },
+        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'Is an interpreter needed?', value: 'No' },
+      ])
+      page.personDetailsSection.shouldNotHaveItems([
+        "What is the device wearer's disability or health condition? (optional)",
+        "What is the device wearer's chosen identity?",
+      ])
+      page.identityNumbersSection.shouldExist()
+      page.identityNumbersSection.shouldHaveItems([
+        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
+        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
+        { key: 'Delius ID (optional)', value: 'delius' },
+        { key: 'Prison number (optional)', value: 'prison' },
+        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+      ])
+      page.responsibleAdultSection.shouldNotExist()
+    })
+  })
+
+  context('Device wearer has an unlisted disability and gender', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'male',
+            gender: 'self-identify',
+            otherGender: 'Furby',
+            disabilities: 'OTHER',
+            otherDisability: 'Broken arm',
+            noFixedAbode: null,
+            interpreterRequired: false,
+          },
+          DeviceWearerResponsibleAdult: null,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    it('should show otherDisability and otherGender questions and answers', () => {
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+
+      page.personDetailsSection.shouldExist()
+      page.personDetailsSection.shouldHaveItems([
+        { key: "What is the device wearer's first name?", value: 'test' },
+        { key: "What is the device wearer's last name?", value: 'tester' },
+        { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
+        { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
+        { key: 'Is a responsible adult required?', value: 'Yes' },
+        { key: 'What is the sex of the device wearer?', value: 'Male' },
+        { key: "What is the device wearer's gender?", value: 'Self identify' },
+        { key: "What is the device wearer's chosen identity?", value: 'Furby' },
+        {
+          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          value: 'Other',
+        },
+        { key: "What is the device wearer's disability or health condition? (optional)", value: 'Broken arm' },
+        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'Is an interpreter needed?', value: 'No' },
+      ])
+      page.identityNumbersSection.shouldExist()
+      page.identityNumbersSection.shouldHaveItems([
+        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
+        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
+        { key: 'Delius ID (optional)', value: 'delius' },
+        { key: 'Prison number (optional)', value: 'prison' },
+        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+      ])
+      page.responsibleAdultSection.shouldNotExist()
     })
   })
 
@@ -94,27 +191,27 @@ context('Device wearer - check your answers', () => {
         status: 'IN_PROGRESS',
         order: {
           deviceWearer: {
-            nomisId: null,
-            pncId: null,
-            deliusId: null,
-            prisonNumber: null,
-            homeOfficeReferenceNumber: null,
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
             firstName: 'test',
             lastName: 'tester',
-            alias: null,
-            dateOfBirth: null,
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
             adultAtTimeOfInstallation: false,
-            sex: null,
-            gender: 'self-identify',
-            otherGender: 'Furby',
-            disabilities: 'OTHER',
-            otherDisability: 'Broken arm',
+            sex: 'male',
+            gender: 'male',
+            otherGender: null,
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
             noFixedAbode: null,
-            interpreterRequired: null,
+            interpreterRequired: false,
           },
           deviceWearerResponsibleAdult: {
-            relationship: 'Other',
-            otherRelationshipDetails: 'Partner',
+            relationship: 'parent',
+            otherRelationshipDetails: '',
             fullName: 'Audrey Taylor',
             contactNumber: '07101 123 456',
           },
@@ -124,10 +221,118 @@ context('Device wearer - check your answers', () => {
       cy.signIn()
     })
 
-    it('should not show responsible adult section', () => {
+    it('should show responsible adult section', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
 
-      page.responsibleAdultSection().should('exist')
+      page.personDetailsSection.shouldExist()
+      page.personDetailsSection.shouldHaveItems([
+        { key: "What is the device wearer's first name?", value: 'test' },
+        { key: "What is the device wearer's last name?", value: 'tester' },
+        { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
+        { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
+        { key: 'Is a responsible adult required?', value: 'No' },
+        { key: 'What is the sex of the device wearer?', value: 'Male' },
+        { key: "What is the device wearer's gender?", value: 'Male' },
+        {
+          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          value: 'Mental health',
+        },
+        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'Is an interpreter needed?', value: 'No' },
+      ])
+      page.identityNumbersSection.shouldExist()
+      page.identityNumbersSection.shouldHaveItems([
+        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
+        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
+        { key: 'Delius ID (optional)', value: 'delius' },
+        { key: 'Prison number (optional)', value: 'prison' },
+        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+      ])
+      page.responsibleAdultSection.shouldExist()
+      page.responsibleAdultSection.shouldHaveItems([
+        { key: "What is the responsible adult's relationship to the device wearer?", value: 'Parent' },
+        { key: "What is the responsible adult's full name?", value: 'Audrey Taylor' },
+        { key: "What is the responsible adult's telephone number? (optional)", value: '07101 123 456' },
+      ])
+      page.responsibleAdultSection.shouldNotHaveItems(['Relationship to device wearer'])
+    })
+  })
+
+  context('Device Wearer is under 18 and the responsible adult has an unlisted relationship', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: false,
+            sex: 'male',
+            gender: 'male',
+            otherGender: null,
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
+            noFixedAbode: null,
+            interpreterRequired: false,
+          },
+          deviceWearerResponsibleAdult: {
+            relationship: 'other',
+            otherRelationshipDetails: 'Sibling',
+            fullName: 'Audrey Taylor',
+            contactNumber: '07101 123 456',
+          },
+        },
+      })
+
+      cy.signIn()
+    })
+
+    it('should show responsible adult section and otherRelationshipDeatils question and answer', () => {
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+
+      page.personDetailsSection.shouldExist()
+      page.personDetailsSection.shouldHaveItems([
+        { key: "What is the device wearer's first name?", value: 'test' },
+        { key: "What is the device wearer's last name?", value: 'tester' },
+        { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
+        { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
+        { key: 'Is a responsible adult required?', value: 'No' },
+        { key: 'What is the sex of the device wearer?', value: 'Male' },
+        { key: "What is the device wearer's gender?", value: 'Male' },
+        {
+          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          value: 'Mental health',
+        },
+        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'Is an interpreter needed?', value: 'No' },
+      ])
+      page.identityNumbersSection.shouldExist()
+      page.identityNumbersSection.shouldHaveItems([
+        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
+        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
+        { key: 'Delius ID (optional)', value: 'delius' },
+        { key: 'Prison number (optional)', value: 'prison' },
+        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+      ])
+      page.responsibleAdultSection.shouldExist()
+      page.responsibleAdultSection.shouldHaveItems([
+        { key: "What is the responsible adult's relationship to the device wearer?", value: 'Other' },
+        { key: 'Relationship to device wearer', value: 'Sibling' },
+        { key: "What is the responsible adult's full name?", value: 'Audrey Taylor' },
+        { key: "What is the responsible adult's telephone number? (optional)", value: '07101 123 456' },
+      ])
     })
   })
 
