@@ -3,10 +3,9 @@
 {% set pageTitle = applicationName + " - Form Details" %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
 
 {% block content %}
 
@@ -15,26 +14,26 @@
     href: "/"
   }) }}
 
-  <div id="receipt-download-banner">
-    {{ govukNotificationBanner({
-      text: "This tag request form summary page is designed to be downloaded as a PDF for your records."
-    }) }}
-
-    {{ govukButton({
-      text: "Download tag request form as PDF",
-      id: "download-pdf"
-    }) }}
+  <div id="receipt-download-banner">    
+    <h1 class="govuk-heading-l">
+        Electronic Monitoring Order Form Summary
+        </h1>
+      {{ govukButton({
+        text: "Download a copy of your answers",
+        id: "download-pdf"
+      }) }}
   </div>
 
   <br><br><br>
 
   <div id="form-summary">
-    <h1 class="govuk-heading-xl">Submitted electronic monitoring order details</h1>
+   <h2 class="govuk-heading-,=">Form details</h2>
 
+    
     {% for orderKey, orderValue in order %}
       {% if not orderValue | isEmpty %}
         <h2 class="govuk-heading-l=">{{ orderKey | camelCaseToSentenceCase }}</h2>
-
+        
         {# String format #}
         {% if orderValue | checkType == 'string' %}
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
