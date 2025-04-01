@@ -45,7 +45,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   // IS 18
 
-  get is18Field(): FormRadiosComponent {
+  get responsibleAdultRequiredField(): FormRadiosComponent {
     const label = 'Is a responsible adult required?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
@@ -245,7 +245,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     }
 
     if (profile.is18 !== undefined) {
-      this.is18Field.set(profile.is18 ? 'Yes' : 'No')
+      this.responsibleAdultRequiredField.set(profile.is18 ? 'No' : 'Yes')
     }
 
     if (profile.sex) {
@@ -270,7 +270,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     this.lastNameField.shouldNotHaveValidationMessage()
     this.aliasField.shouldNotHaveValidationMessage()
     this.dateOfBirthField.shouldNotHaveValidationMessage()
-    this.is18Field.shouldNotHaveValidationMessage()
+    this.responsibleAdultRequiredField.shouldNotHaveValidationMessage()
     this.sexField.shouldNotHaveValidationMessage()
     this.genderIdentityField.shouldNotHaveValidationMessage()
     this.interpreterRequiredField.shouldNotHaveValidationMessage()
@@ -282,7 +282,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     this.lastNameField.shouldBeDisabled()
     this.aliasField.shouldBeDisabled()
     this.dateOfBirthField.shouldBeDisabled()
-    this.is18Field.shouldBeDisabled()
+    this.responsibleAdultRequiredField.shouldBeDisabled()
     this.sexField.shouldBeDisabled()
     this.genderIdentityField.shouldBeDisabled()
     this.interpreterRequiredField.shouldBeDisabled()
@@ -294,7 +294,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     this.lastNameField.shouldNotBeDisabled()
     this.aliasField.shouldNotBeDisabled()
     this.dateOfBirthField.shouldNotBeDisabled()
-    this.is18Field.shouldNotBeDisabled()
+    this.responsibleAdultRequiredField.shouldNotBeDisabled()
     this.sexField.shouldNotBeDisabled()
     this.genderIdentityField.shouldNotBeDisabled()
     this.interpreterRequiredField.shouldNotBeDisabled()
