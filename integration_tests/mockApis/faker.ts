@@ -101,7 +101,7 @@ export const createFakeUkPhoneNumber = (): string => {
 
 export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial<PersonOfInterest> => {
   const sexType = faker.person.sexType()
-  const firstName = faker.person.firstName(sexType)
+  const firstName = firstNameOverride ?? faker.person.firstName(sexType)
   const middleName = faker.person.middleName(sexType)
   const lastName = faker.person.lastName()
   const alias = faker.animal.bird()
@@ -148,6 +148,8 @@ export const createKnownAddress = (): Address => {
 export const createFakeInterestedParties = (
   notifyingOrganisation: string,
   responsibleOrganisation: string,
+  notifyingOrganisationNameOveride?: string,
+  responsibleOrganisationRegionOveride?: string,
 ): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
@@ -164,27 +166,27 @@ export const createFakeInterestedParties = (
   let yjsRegion = ''
 
   if (notifyingOrganisation === 'Prison') {
-    prison = faker.helpers.arrayElement(prisonTypes)
+    prison = notifyingOrganisationNameOveride ?? faker.helpers.arrayElement(prisonTypes)
     notifyingOrganisationName = prison
   }
 
   if (notifyingOrganisation === 'Magistrates Court') {
-    magistratesCourt = faker.helpers.arrayElement(magistratesCourtTypes)
+    magistratesCourt = notifyingOrganisationNameOveride ?? faker.helpers.arrayElement(magistratesCourtTypes)
     notifyingOrganisationName = magistratesCourt
   }
 
   if (notifyingOrganisation === 'Crown Court') {
-    crownCourt = faker.helpers.arrayElement(crownCourtTypes)
+    crownCourt = notifyingOrganisationNameOveride ?? faker.helpers.arrayElement(crownCourtTypes)
     notifyingOrganisationName = crownCourt
   }
 
   if (responsibleOrganisation === 'Probation') {
-    probationRegion = faker.helpers.arrayElement(probationRegionTypes)
+    probationRegion = responsibleOrganisationRegionOveride ?? faker.helpers.arrayElement(probationRegionTypes)
     responsibleOrganisationRegion = probationRegion
   }
 
   if (responsibleOrganisation === 'YJS') {
-    yjsRegion = faker.helpers.arrayElement(yjsRegionTypes)
+    yjsRegion = responsibleOrganisationRegionOveride ?? faker.helpers.arrayElement(yjsRegionTypes)
     responsibleOrganisationRegion = yjsRegion
   }
 
