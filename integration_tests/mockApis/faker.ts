@@ -112,7 +112,7 @@ export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial
   const emailAddress = faker.internet.email({ firstName, lastName })
 
   return {
-    firstName:  firstName,
+    firstName,
     firstNames: [firstName, middleName].join(' '),
     lastName,
     fullName: [firstName, middleName, lastName].join(' '),
