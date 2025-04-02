@@ -148,8 +148,8 @@ export const createKnownAddress = (): Address => {
 export const createFakeInterestedParties = (
   notifyingOrganisation: string,
   responsibleOrganisation: string,
-  notifyingOrganisationNameOveride?: string,
-  responsibleOrganisationRegionOveride?: string,
+  notifyingOrganisationNameOverride?: string,
+  responsibleOrganisationRegionOverride?: string,
 ): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
@@ -166,27 +166,27 @@ export const createFakeInterestedParties = (
   let yjsRegion = ''
 
   if (notifyingOrganisation === 'Prison') {
-    prison = notifyingOrganisationNameOveride ?? faker.helpers.arrayElement(prisonTypes)
+    prison = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(prisonTypes)
     notifyingOrganisationName = prison
   }
 
   if (notifyingOrganisation === 'Magistrates Court') {
-    magistratesCourt = notifyingOrganisationNameOveride ?? faker.helpers.arrayElement(magistratesCourtTypes)
+    magistratesCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(magistratesCourtTypes)
     notifyingOrganisationName = magistratesCourt
   }
 
   if (notifyingOrganisation === 'Crown Court') {
-    crownCourt = notifyingOrganisationNameOveride ?? faker.helpers.arrayElement(crownCourtTypes)
+    crownCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(crownCourtTypes)
     notifyingOrganisationName = crownCourt
   }
 
   if (responsibleOrganisation === 'Probation') {
-    probationRegion = responsibleOrganisationRegionOveride ?? faker.helpers.arrayElement(probationRegionTypes)
+    probationRegion = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(probationRegionTypes)
     responsibleOrganisationRegion = probationRegion
   }
 
   if (responsibleOrganisation === 'YJS') {
-    yjsRegion = responsibleOrganisationRegionOveride ?? faker.helpers.arrayElement(yjsRegionTypes)
+    yjsRegion = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(yjsRegionTypes)
     responsibleOrganisationRegion = yjsRegion
   }
 
