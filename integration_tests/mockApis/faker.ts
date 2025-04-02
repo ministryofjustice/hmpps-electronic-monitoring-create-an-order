@@ -138,7 +138,11 @@ export const createFakeAddress = (): Address => {
 }
 
 export const createKnownAddress = (): Address => {
-  return faker.helpers.arrayElement<Address>([new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA')])
+  return faker.helpers.arrayElement<Address>([
+    new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA'),
+    new Address('3 Kelvin Close', 'Birchwood', 'Warrington', '', 'WA3 7PB'),
+    new Address('2 Dunlin Close', 'Bolton', 'Greater Manchester', '', 'BL2 1EW'),
+  ])
 }
 
 export const createFakeInterestedParties = (
