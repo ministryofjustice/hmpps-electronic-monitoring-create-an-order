@@ -99,8 +99,9 @@ export const createFakeUkPhoneNumber = (): string => {
   return format[1] + `00${faker.number.int({ min: format[2] as number, max: format[3] as number })}`.slice(-3)
 }
 
-export const createFakePerson = (dob: Date, firstName?: string): Partial<PersonOfInterest> => {
+export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial<PersonOfInterest> => {
   const sexType = faker.person.sexType()
+  const firstName = faker.person.firstName(sexType)
   const middleName = faker.person.middleName(sexType)
   const lastName = faker.person.lastName()
   const alias = faker.animal.bird()
@@ -110,12 +111,8 @@ export const createFakePerson = (dob: Date, firstName?: string): Partial<PersonO
   const contactNumber = createFakeUkPhoneNumber()
   const emailAddress = faker.internet.email({ firstName, lastName })
 
-  if (firstName === null) {
-    firstName = faker.person.firstName(sexType)
-  }
-
   return {
-    firstName,
+    firstName: firstNameOverride ?? firstName,
     firstNames: [firstName, middleName].join(' '),
     lastName,
     fullName: [firstName, middleName, lastName].join(' '),
@@ -213,7 +210,7 @@ export const createFakeYouth = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 13, max: 17 })
 
   return {
-    ...createFakePerson(dob,firstName),
+    ...createFakePerson(dob, firstName),
     is18: false,
   } as PersonOfInterest
 }
