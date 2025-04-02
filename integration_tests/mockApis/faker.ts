@@ -99,7 +99,7 @@ export const createFakeUkPhoneNumber = (): string => {
   return format[1] + `00${faker.number.int({ min: format[2] as number, max: format[3] as number })}`.slice(-3)
 }
 
-export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
+export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial<PersonOfInterest> => {
   const sexType = faker.person.sexType()
   const firstName = faker.person.firstName(sexType)
   const middleName = faker.person.middleName(sexType)
@@ -112,7 +112,7 @@ export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
   const emailAddress = faker.internet.email({ firstName, lastName })
 
   return {
-    firstName,
+    firstName: firstNameOverride ?? firstName,
     firstNames: [firstName, middleName].join(' '),
     lastName,
     fullName: [firstName, middleName, lastName].join(' '),
@@ -206,26 +206,26 @@ export const createFakeInterestedParties = (
   }
 }
 
-export const createFakeYouth = (): PersonOfInterest => {
+export const createFakeYouth = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 13, max: 17 })
 
   return {
-    ...createFakePerson(dob),
+    ...createFakePerson(dob, firstName),
     is18: false,
   } as PersonOfInterest
 }
 
-export const createFakeAdult = (): PersonOfInterest => {
+export const createFakeAdult = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apprently considered "older"
 
   return {
-    ...createFakePerson(dob),
+    ...createFakePerson(dob, firstName),
     is18: true,
   } as PersonOfInterest
 }
 
-export const createFakeAdultDeviceWearer = (): PersonOfInterest => {
-  const fakeAdult = createFakeAdult()
+export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInterest => {
+  const fakeAdult = createFakeAdult(firstName)
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
@@ -242,8 +242,8 @@ export const createFakeAdultDeviceWearer = (): PersonOfInterest => {
   } as PersonOfInterest
 }
 
-export const createFakeYouthDeviceWearer = (): PersonOfInterest => {
-  const fakeYouth = createFakeYouth()
+export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInterest => {
+  const fakeYouth = createFakeYouth(firstName)
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
