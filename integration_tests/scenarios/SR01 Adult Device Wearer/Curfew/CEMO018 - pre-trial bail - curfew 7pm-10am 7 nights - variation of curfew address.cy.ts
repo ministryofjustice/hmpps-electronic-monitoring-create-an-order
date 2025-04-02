@@ -37,6 +37,11 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFMSUpdateDeviceWearer', {
+      httpStatus: 200,
+      response: { result: [{ id: fmsCaseId, message: '' }] },
+    })
+
     cy.task('stubFMSUpdateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
@@ -140,7 +145,6 @@ context('Scenarios', () => {
 
         cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
           responseRecordFilename: 'CEMO018',
-          index: 1,
           httpStatus: 200,
           body: {
             title: '',
