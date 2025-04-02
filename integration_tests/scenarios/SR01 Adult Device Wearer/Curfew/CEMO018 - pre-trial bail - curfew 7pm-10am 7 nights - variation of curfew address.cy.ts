@@ -138,7 +138,7 @@ context('Scenarios', () => {
         })
         orderSummaryPage.submitOrderButton.click()
 
-        cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+        cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
           responseRecordFilename: 'CEMO018',
           index: 1,
           httpStatus: 200,

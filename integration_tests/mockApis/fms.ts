@@ -174,6 +174,13 @@ const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMS
     uri: '/fms/x_seem_cemo/monitoring_order/createMO',
   })
 
+const verifyFMSUpdateDeviceWearerRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
+  stubFMSVerifyRequestReceived({
+    index: 0,
+    ...options,
+    uri: '/fms/x_seem_cemo/device_wearer/updateDW',
+  })
+
 const verifyFMSUpdateMonitoringOrderRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
   stubFMSVerifyRequestReceived({
     index: 0,
@@ -195,6 +202,7 @@ export default {
   stubFmsUploadAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,
   verifyFMSCreateMonitoringOrderRequestReceived,
+  verifyFMSUpdateDeviceWearerRequestReceived,
   verifyFMSUpdateMonitoringOrderRequestReceived,
   verifyFMSAttachmentRequestReceived,
 }
