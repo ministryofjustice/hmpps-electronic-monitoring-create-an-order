@@ -7,7 +7,6 @@ import {
   getMockOrder,
 } from '../../../test/mocks/mockOrder'
 import paths from '../../constants/paths'
-import questions from '../../constants/questions'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import AuditService from '../../services/auditService'
@@ -52,7 +51,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
-              text: 'Start date',
+              text: 'What is the date for the first day of all monitoring?',
             },
             value: {
               text: '',
@@ -62,14 +61,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'start date',
+                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Start time',
+              text: 'What is the start time on the first day of monitoring?',
             },
             value: {
               text: '',
@@ -79,14 +78,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'start time',
+                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'End date',
+              text: 'What is the date when all monitoring ends? (optional)',
             },
             value: {
               text: '',
@@ -96,14 +95,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'end date',
+                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'End time',
+              text: 'What is the end time on the last day of monitoring? (optional)',
             },
             value: {
               text: '',
@@ -113,14 +112,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'end time',
+                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Order type',
+              text: 'What is the order type?',
             },
             value: {
               text: '',
@@ -130,14 +129,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'order type',
+                  visuallyHiddenText: 'what is the order type?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.orderTypeDescription,
+              text: 'What pilot project is the device wearer part of? (optional)',
             },
             value: {
               text: '',
@@ -147,14 +146,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.orderTypeDescription.toLowerCase(),
+                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Condition type',
+              text: 'What are the order type conditions?',
             },
             value: {
               text: '',
@@ -164,14 +163,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'condition type',
+                  visuallyHiddenText: 'what are the order type conditions?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.sentenceType,
+              text: 'What type of sentence has the device wearer been given? (optional)',
             },
             value: {
               text: '',
@@ -181,14 +180,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.sentenceType.toLowerCase(),
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.issp,
+              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
             },
             value: {
               text: '',
@@ -198,14 +197,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.issp.toLowerCase(),
+                  visuallyHiddenText:
+                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.hdc,
+              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
             },
             value: {
               text: '',
@@ -215,14 +215,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.hdc.toLowerCase(),
+                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.prarr,
+              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
             },
             value: {
               text: '',
@@ -232,7 +232,8 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.prarr.toLowerCase(),
+                  visuallyHiddenText:
+                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
                 },
               ],
             },
@@ -516,7 +517,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
-              text: 'Start date',
+              text: 'What is the date for the first day of all monitoring?',
             },
             value: {
               text: '11/11/2024',
@@ -526,14 +527,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'start date',
+                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Start time',
+              text: 'What is the start time on the first day of monitoring?',
             },
             value: {
               text: '01:01:00',
@@ -543,14 +544,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'start time',
+                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'End date',
+              text: 'What is the date when all monitoring ends? (optional)',
             },
             value: {
               text: '11/11/2024',
@@ -560,14 +561,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'end date',
+                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'End time',
+              text: 'What is the end time on the last day of monitoring? (optional)',
             },
             value: {
               text: '01:01:00',
@@ -577,14 +578,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'end time',
+                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Order type',
+              text: 'What is the order type?',
             },
             value: {
               text: 'Pre-Trial',
@@ -594,14 +595,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'order type',
+                  visuallyHiddenText: 'what is the order type?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.orderTypeDescription,
+              text: 'What pilot project is the device wearer part of? (optional)',
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -611,14 +612,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.orderTypeDescription.toLowerCase(),
+                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Condition type',
+              text: 'What are the order type conditions?',
             },
             value: {
               text: 'Requirement of a Community Order',
@@ -628,14 +629,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'condition type',
+                  visuallyHiddenText: 'what are the order type conditions?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.sentenceType,
+              text: 'What type of sentence has the device wearer been given? (optional)',
             },
             value: {
               text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
@@ -645,14 +646,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.sentenceType.toLowerCase(),
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.issp,
+              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
             },
             value: {
               text: 'No',
@@ -662,14 +663,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.issp.toLowerCase(),
+                  visuallyHiddenText:
+                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.hdc,
+              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
             },
             value: {
               text: 'Yes',
@@ -679,14 +681,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.hdc.toLowerCase(),
+                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
                 },
               ],
             },
           },
           {
             key: {
-              text: questions.monitoringConditions.prarr,
+              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
             },
             value: {
               text: 'Not able to provide this information',
@@ -696,7 +698,8 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: questions.monitoringConditions.prarr.toLowerCase(),
+                  visuallyHiddenText:
+                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
                 },
               ],
             },
@@ -947,45 +950,185 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
         ],
         exclusionZone: [
-          {
-            key: {
-              text: 'Exclusion zone 1',
+          [
+            {
+              key: {
+                text: 'What date does exclusion zone monitoring start?',
+              },
+              value: {
+                text: '11/11/2024',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                  },
+                ],
+              },
             },
-            value: {
-              html: 'zone.png<br/><br/>Description here<br/><br/>Duration here',
+            {
+              key: {
+                text: 'What date does exclusion zone monitoring end? (optional)',
+              },
+              value: {
+                text: '11/12/2024',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                  },
+                ],
+              },
             },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'exclusion zone 1',
-                },
-              ],
+            {
+              key: {
+                text: 'Where is the exclusion zone?',
+              },
+              value: {
+                text: 'Description here',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'where is the exclusion zone?',
+                  },
+                ],
+              },
             },
-          },
-          {
-            key: {
-              text: 'Inclusion zone 2',
+            {
+              key: {
+                text: 'When must the exclusion zone be followed?',
+              },
+              value: {
+                text: 'Duration here',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'when must the exclusion zone be followed?',
+                  },
+                ],
+              },
             },
-            value: {
-              html: 'No file selected<br/><br/>Description here<br/><br/>Duration here',
+            {
+              key: {
+                text: 'Monitoring zone map (optional)',
+              },
+              value: {
+                text: 'zone.png',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'monitoring zone map (optional)',
+                  },
+                ],
+              },
             },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'inclusion zone 2',
-                },
-              ],
+          ],
+          [
+            {
+              key: {
+                text: 'What date does exclusion zone monitoring start?',
+              },
+              value: {
+                text: '11/11/2024',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                  },
+                ],
+              },
             },
-          },
+            {
+              key: {
+                text: 'What date does exclusion zone monitoring end? (optional)',
+              },
+              value: {
+                text: '11/12/2024',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Where is the exclusion zone?',
+              },
+              value: {
+                text: 'Description here',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'where is the exclusion zone?',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'When must the exclusion zone be followed?',
+              },
+              value: {
+                text: 'Duration here',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'when must the exclusion zone be followed?',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'Monitoring zone map (optional)',
+              },
+              value: {
+                text: 'No file selected',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'monitoring zone map (optional)',
+                  },
+                ],
+              },
+            },
+          ],
         ],
         trail: [
           {
             key: {
-              text: 'Date when monitoring starts',
+              text: 'What date does trail monitoring start?',
             },
             value: {
               text: '11/11/2024',
@@ -995,14 +1138,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'date when monitoring starts',
+                  visuallyHiddenText: 'what date does trail monitoring start?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Date when monitoring ends',
+              text: 'What date does trail monitoring end? (optional)',
             },
             value: {
               text: '11/11/2024',
@@ -1012,7 +1155,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'date when monitoring ends',
+                  visuallyHiddenText: 'what date does trail monitoring end? (optional)',
                 },
               ],
             },
@@ -1022,7 +1165,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           [
             {
               key: {
-                text: 'Date when mandatory attendance monitoring starts',
+                text: 'What date does mandatory attendance monitoring start?',
               },
               value: {
                 text: '01/01/2025',
@@ -1035,14 +1178,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'date when mandatory attendance monitoring starts',
+                    visuallyHiddenText: 'what date does mandatory attendance monitoring start?',
                   },
                 ],
               },
             },
             {
               key: {
-                text: 'Date when mandatory attendance monitoring ends',
+                text: 'What date does mandatory attendance monitoring end? (optional)',
               },
               value: {
                 text: '11/01/2025',
@@ -1055,7 +1198,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'date when mandatory attendance monitoring ends',
+                    visuallyHiddenText: 'what date does mandatory attendance monitoring end? (optional)',
                   },
                 ],
               },
@@ -1082,7 +1225,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What day or days is the appointment?',
+                text: 'On what day is the appointment and how frequently does the appointment take place?',
               },
               value: {
                 text: 'test day',
@@ -1095,17 +1238,18 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'what day or days is the appointment?',
+                    visuallyHiddenText:
+                      'on what day is the appointment and how frequently does the appointment take place?',
                   },
                 ],
               },
             },
             {
               key: {
-                text: 'Time of the appointment',
+                text: 'What time does the appointment start?',
               },
               value: {
-                text: '01:11:00 - 11:11:00',
+                text: '01:11:00',
               },
               actions: {
                 items: [
@@ -1115,14 +1259,34 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'time of the appointment',
+                    visuallyHiddenText: 'what time does the appointment start?',
                   },
                 ],
               },
             },
             {
               key: {
-                text: 'Address where the appointment will take place',
+                text: 'What time does the appointment end?',
+              },
+              value: {
+                text: '11:11:00',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
+                      `:conditionId`,
+                      conditionId,
+                    ),
+                    text: 'Change',
+                    visuallyHiddenText: 'what time does the appointment end?',
+                  },
+                ],
+              },
+            },
+            {
+              key: {
+                text: 'At what address will the appointment take place?',
               },
               value: {
                 text: 'add 1',
@@ -1135,7 +1299,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'address where the appointment will take place',
+                    visuallyHiddenText: 'at what address will the appointment take place?',
                   },
                 ],
               },
@@ -1225,7 +1389,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         alcohol: [
           {
             key: {
-              text: 'What type of alcohol monitoring is needed?',
+              text: 'What alcohol monitoring does the device wearer need?',
             },
             value: {
               text: 'Alcohol level',
@@ -1235,14 +1399,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of alcohol monitoring is needed?',
+                  visuallyHiddenText: 'what alcohol monitoring does the device wearer need?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Date when monitoring starts',
+              text: 'What date does alcohol monitoring start?',
             },
             value: {
               text: '11/11/2024',
@@ -1252,14 +1416,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'date when monitoring starts',
+                  visuallyHiddenText: 'what date does alcohol monitoring start?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Date when monitoring ends',
+              text: 'What date does alcohol monitoring end?',
             },
             value: {
               text: '11/11/2024',
@@ -1269,14 +1433,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'date when monitoring ends',
+                  visuallyHiddenText: 'what date does alcohol monitoring end?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Where will alcohol monitoring equipment installation take place?',
+              text: 'What is the address of the base station?',
             },
             value: {
               html: 'Line 1, Line 2, Postcode',
@@ -1286,7 +1450,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'where will alcohol monitoring equipment installation take place?',
+                  visuallyHiddenText: 'what is the address of the base station?',
                 },
               ],
             },

@@ -15,15 +15,18 @@ import {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
-  createHtmlAnswer,
   createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
   createTextAnswer,
   createTimeRangeAnswer,
 } from '../../utils/checkYourAnswers'
-import questions from '../../constants/questions'
 import sentenceTypes from '../../reference/sentence-types'
 import yesNoUnknown from '../../reference/yes-no-unknown'
+import monitoringConditionsPageContent from '../../i18n/en/pages/monitoringConditions'
+import trailMonitoringPageContent from '../../i18n/en/pages/trailMonitoring'
+import alcoholPageContent from '../../i18n/en/pages/alcohol'
+import attendancePageContent from '../../i18n/en/pages/attendance'
+import exclusionZonePageContent from '../../i18n/en/pages/exclusionZone'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -44,20 +47,21 @@ const createMonitoringConditionsAnswers = (order: Order) => {
   const issp = lookup(yesNoUnknown, order.monitoringConditions.issp)
   const hdc = lookup(yesNoUnknown, order.monitoringConditions.hdc)
   const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
+  const { questions } = monitoringConditionsPageContent
 
   return [
-    createDateAnswer('Start date', order.monitoringConditions.startDate, uri),
-    createTimeAnswer('Start time', order.monitoringConditions.startDate, uri),
-    createDateAnswer('End date', order.monitoringConditions.endDate, uri),
-    createTimeAnswer('End time', order.monitoringConditions.endDate, uri),
-    createTextAnswer('Order type', orderType, uri),
-    createTextAnswer(questions.monitoringConditions.orderTypeDescription, orderTypeDescription, uri),
-    createTextAnswer('Condition type', conditionType, uri),
-    createTextAnswer(questions.monitoringConditions.sentenceType, sentenceType, uri),
-    createTextAnswer(questions.monitoringConditions.issp, issp, uri),
-    createTextAnswer(questions.monitoringConditions.hdc, hdc, uri),
-    createTextAnswer(questions.monitoringConditions.prarr, prarr, uri),
-    createMultipleChoiceAnswer('What monitoring does the device wearer need?', getSelectedMonitoringTypes(order), uri),
+    createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri),
+    createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri),
+    createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri),
+    createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri),
+    createTextAnswer(questions.orderType.text, orderType, uri),
+    createTextAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri),
+    createTextAnswer(questions.conditionType.text, conditionType, uri),
+    createTextAnswer(questions.sentenceType.text, sentenceType, uri),
+    createTextAnswer(questions.issp.text, issp, uri),
+    createTextAnswer(questions.hdc.text, hdc, uri),
+    createTextAnswer(questions.prarr.text, prarr, uri),
+    createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri),
   ]
 }
 
@@ -159,6 +163,7 @@ const createCurfewAnswers = (order: Order) => {
 
 const createExclusionZoneAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
+  const { questions } = exclusionZonePageContent
 
   if (!order.monitoringConditions.exclusionZone) {
     return []
@@ -167,27 +172,31 @@ const createExclusionZoneAnswers = (order: Order) => {
   return order.enforcementZoneConditions
     .sort((a, b) => ((a.zoneId || 0) > (b.zoneId || 0) ? 1 : -1))
     .map(enforcementZone => {
-      const zoneType = enforcementZone.zoneType || ''
-      const zoneId = enforcementZone.zoneId || 0
       const fileName = enforcementZone.fileName || 'No file selected'
-      return createHtmlAnswer(
-        `${convertToTitleCase(zoneType)} zone ${zoneId + 1}`,
-        `${fileName}<br/><br/>${enforcementZone.description}<br/><br/>${enforcementZone.duration}`,
-        uri.replace(':zoneId', zoneId.toString()),
-      )
+      const zoneId = enforcementZone.zoneId || 0
+      const zoneUri = uri.replace(':zoneId', zoneId.toString())
+
+      return [
+        createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri),
+        createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri),
+        createTextAnswer(questions.description.text, enforcementZone.description, zoneUri),
+        createTextAnswer(questions.duration.text, enforcementZone.duration, zoneUri),
+        createTextAnswer(questions.file.text, fileName, zoneUri),
+      ]
     })
 }
 
 const createTrailAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
+  const { questions } = trailMonitoringPageContent
 
   if (!order.monitoringConditions.trail) {
     return []
   }
 
   return [
-    createDateAnswer('Date when monitoring starts', order.monitoringConditionsTrail?.startDate, uri),
-    createDateAnswer('Date when monitoring ends', order.monitoringConditionsTrail?.endDate, uri),
+    createDateAnswer(questions.startDate.text, order.monitoringConditionsTrail?.startDate, uri),
+    createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri),
   ]
 }
 
@@ -201,13 +210,16 @@ const createAttendanceAnswers = (order: Order) => {
       `:conditionId`,
       attendance.id!,
     )
+    const { questions } = attendancePageContent
+
     return [
-      createDateAnswer('Date when mandatory attendance monitoring starts', attendance.startDate, uri),
-      createDateAnswer('Date when mandatory attendance monitoring ends', attendance.endDate, uri),
-      createTextAnswer('What is the appointment for?', attendance.purpose, uri),
-      createTextAnswer('What day or days is the appointment?', attendance.appointmentDay, uri),
-      createTimeRangeAnswer('Time of the appointment', attendance.startTime, attendance.endTime, uri),
-      createTextAnswer('Address where the appointment will take place', attendance.addressLine1, uri),
+      createDateAnswer(questions.startDate.text, attendance.startDate, uri),
+      createDateAnswer(questions.endDate.text, attendance.endDate, uri),
+      createTextAnswer(questions.purpose.text, attendance.purpose, uri),
+      createTextAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri),
+      createTextAnswer(questions.startTime.text, attendance.startTime, uri),
+      createTextAnswer(questions.endTime.text, attendance.endTime, uri),
+      createTextAnswer(questions.address.text, attendance.addressLine1, uri), // TODO collapse address into one field
       createTextAnswer('Address line 2', attendance.addressLine2, uri),
       createTextAnswer('Town or City', attendance.addressLine3, uri),
       createTextAnswer('County', attendance.addressLine4, uri),
@@ -219,27 +231,28 @@ const createAttendanceAnswers = (order: Order) => {
 const createAlcoholAnswers = (order: Order) => {
   const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
+  const { questions } = alcoholPageContent
 
   if (!order.monitoringConditions.alcohol) {
     return []
   }
 
   return [
-    createTextAnswer('What type of alcohol monitoring is needed?', monitoringType, uri),
-    createDateAnswer('Date when monitoring starts', order.monitoringConditionsAlcohol?.startDate, uri),
-    createDateAnswer('Date when monitoring ends', order.monitoringConditionsAlcohol?.endDate, uri),
+    createTextAnswer(questions.monitoringType.text, monitoringType, uri),
+    createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri),
+    createDateAnswer(questions.endDate.text, order.monitoringConditionsAlcohol?.endDate, uri),
     ['PRIMARY', 'SECONDARY', 'TERTIARY', 'INSTALLATION'].includes(
       order.monitoringConditionsAlcohol?.installationLocation || '',
     )
       ? createAddressAnswer(
-          'Where will alcohol monitoring equipment installation take place?',
+          questions.installationLocation.text,
           order.addresses.find(
             ({ addressType }) => addressType === order.monitoringConditionsAlcohol?.installationLocation,
           ),
           uri,
         )
       : createTextAnswer(
-          'Where will alcohol monitoring equipment installation take place?',
+          questions.installationLocation.text,
           order.monitoringConditionsAlcohol?.prisonName || order.monitoringConditionsAlcohol?.probationOfficeName,
           uri,
         ),
