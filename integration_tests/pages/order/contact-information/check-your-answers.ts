@@ -1,15 +1,26 @@
 import paths from '../../../../server/constants/paths'
-import { PageElement } from '../../page'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
+import SummaryListComponent from '../../components/summaryListComponent'
 
 export default class ContactInformationCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
     super('Check your answers', paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS)
   }
 
-  contactDetailsSections = (): PageElement => cy.contains('Contact details')
+  // SECTIONS
 
-  addressesSection = (): PageElement => cy.contains('Addresses')
+  get contactDetailsSection(): SummaryListComponent {
+    const label = 'Telephone number'
+    return new SummaryListComponent(label)
+  }
 
-  interestedPartiesSection = (): PageElement => cy.contains('Interested parties')
+  get deviceWearerAddressesSection(): SummaryListComponent {
+    const label = "Device wearer's addresses"
+    return new SummaryListComponent(label)
+  }
+
+  get organisationDetailsSection(): SummaryListComponent {
+    const label = 'Organisations details'
+    return new SummaryListComponent(label)
+  }
 }
