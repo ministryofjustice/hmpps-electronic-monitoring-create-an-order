@@ -42,7 +42,7 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer("CEMO017"),
+        ...createFakeAdultDeviceWearer('CEMO017'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -53,7 +53,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
         orderTypeDescription: 'DAPOL',
-        sentenceType:"Standard Determinate Sentence",
+        sentenceType: 'Standard Determinate Sentence',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
         monitoringRequired: 'Curfew',
       }

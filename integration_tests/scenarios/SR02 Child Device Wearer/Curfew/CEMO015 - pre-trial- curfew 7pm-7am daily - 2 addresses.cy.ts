@@ -47,14 +47,14 @@ context('Scenarios', () => {
     'DAPO (Pre Trial) with Radio Frequency (RF) (HMU + PID) Monday - Friday 7pm-7am. 2 address locations - one Requirement for each parent',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer("CEMO015"),
+        ...createFakeYouthDeviceWearer('CEMO015'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createFakeAddress()
       const fakeSecondaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', "Bolton Crown Court")
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days

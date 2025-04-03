@@ -60,7 +60,7 @@ context('Scenarios', () => {
         orderTypeDescription: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
-        sentenceType:"Standard Determinate Sentence",
+        sentenceType: 'Standard Determinate Sentence',
       }
       const trailMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
