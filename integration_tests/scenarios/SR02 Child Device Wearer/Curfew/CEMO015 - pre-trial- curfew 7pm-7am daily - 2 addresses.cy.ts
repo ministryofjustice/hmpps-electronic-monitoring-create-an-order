@@ -7,7 +7,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createFakeAddress,
+  createKnownAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
@@ -52,8 +52,8 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
-      const fakePrimaryAddress = createFakeAddress()
-      const fakeSecondaryAddress = createFakeAddress()
+      const fakePrimaryAddress = createKnownAddress()
+      const fakeSecondaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days

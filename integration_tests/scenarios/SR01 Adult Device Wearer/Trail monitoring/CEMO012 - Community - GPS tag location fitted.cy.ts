@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { createKnownAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -46,7 +46,7 @@ context('Scenarios', () => {
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
+      const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties(
         'Prison',
         'Probation',

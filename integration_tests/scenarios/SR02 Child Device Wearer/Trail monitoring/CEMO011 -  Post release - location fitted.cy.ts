@@ -8,7 +8,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeResponsibleAdult,
   createFakeInterestedParties,
-  createFakeAddress,
+  createKnownAddress,
 } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
@@ -65,7 +65,7 @@ context('Scenarios', () => {
       hasFixedAddress: 'Yes',
     }
     const responsibleAdultDetails = createFakeResponsibleAdult()
-    const fakePrimaryAddress = createFakeAddress()
+    const fakePrimaryAddress = createKnownAddress()
     const interestedParties = {
       ...createFakeInterestedParties('Prison', 'Probation', 'Feltham Young Offender Institution', 'London'),
     }
