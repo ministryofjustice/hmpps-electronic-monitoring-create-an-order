@@ -5,7 +5,7 @@ import CheckAnswersController from './checkAnswersController'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import questions from '../../constants/questions'
+import interestedPartiesPageContent from '../../i18n/en/pages/interestedParties'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -18,7 +18,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-
+  const { questions } = interestedPartiesPageContent
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -45,7 +45,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       contactDetails: [
         {
           key: {
-            text: 'Contact number',
+            text: "What is the device wearer's telephone number? (optional)",
           },
           value: {
             text: '',
@@ -55,7 +55,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'contact number',
+                visuallyHiddenText: "what is the device wearer's telephone number? (optional)",
               },
             ],
           },
@@ -83,7 +83,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       interestedParties: [
         {
           key: {
-            text: questions.interestedParties.notifyingOrganisation,
+            text: questions.notifyingOrganisation.text,
           },
           value: {
             text: '',
@@ -93,14 +93,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.notifyingOrganisation.toLowerCase(),
+                visuallyHiddenText: questions.notifyingOrganisation.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.notifyingOrganisationEmail,
+            text: questions.notifyingOrganisationEmail.text,
           },
           value: {
             text: '',
@@ -110,14 +110,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.notifyingOrganisationEmail.toLowerCase(),
+                visuallyHiddenText: questions.notifyingOrganisationEmail.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOfficerName,
+            text: questions.responsibleOfficerName.text,
           },
           value: {
             text: '',
@@ -127,14 +127,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOfficerName.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOfficerName.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOfficerPhoneNumber,
+            text: questions.responsibleOfficerPhoneNumber.text,
           },
           value: {
             text: '',
@@ -144,14 +144,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOfficerPhoneNumber.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOfficerPhoneNumber.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisation,
+            text: questions.responsibleOrganisation.text,
           },
           value: {
             text: '',
@@ -161,14 +161,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisation.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisation.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationAddress,
+            text: questions.responsibleOrganisationAddress.text,
           },
           value: {
             html: '',
@@ -178,14 +178,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationAddress.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationPhoneNumber,
+            text: questions.responsibleOrganisationPhoneNumber.text,
           },
           value: {
             text: '',
@@ -195,14 +195,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationPhoneNumber.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationPhoneNumber.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationEmail,
+            text: questions.responsibleOrganisationEmail.text,
           },
           value: {
             text: '',
@@ -212,7 +212,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationEmail.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationEmail.text.toLowerCase(),
               },
             ],
           },
@@ -263,7 +263,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       contactDetails: [
         {
           key: {
-            text: 'Contact number',
+            text: "What is the device wearer's telephone number? (optional)",
           },
           value: {
             text: '01234567890',
@@ -273,7 +273,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'contact number',
+                visuallyHiddenText: "what is the device wearer's telephone number? (optional)",
               },
             ],
           },
@@ -301,7 +301,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       interestedParties: [
         {
           key: {
-            text: questions.interestedParties.notifyingOrganisation,
+            text: questions.notifyingOrganisation.text,
           },
           value: {
             text: 'Home Office',
@@ -311,14 +311,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.notifyingOrganisation.toLowerCase(),
+                visuallyHiddenText: questions.notifyingOrganisation.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.notifyingOrganisationEmail,
+            text: questions.notifyingOrganisationEmail.text,
           },
           value: {
             text: 'test@test',
@@ -328,14 +328,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.notifyingOrganisationEmail.toLowerCase(),
+                visuallyHiddenText: questions.notifyingOrganisationEmail.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOfficerName,
+            text: questions.responsibleOfficerName.text,
           },
           value: {
             text: 'John Smith',
@@ -345,14 +345,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOfficerName.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOfficerName.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOfficerPhoneNumber,
+            text: questions.responsibleOfficerPhoneNumber.text,
           },
           value: {
             text: '01234567890',
@@ -362,14 +362,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOfficerPhoneNumber.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOfficerPhoneNumber.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisation,
+            text: questions.responsibleOrganisation.text,
           },
           value: {
             text: 'Home Office',
@@ -379,14 +379,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisation.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisation.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationAddress,
+            text: questions.responsibleOrganisationAddress.text,
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -396,14 +396,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationAddress.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationPhoneNumber,
+            text: questions.responsibleOrganisationPhoneNumber.text,
           },
           value: {
             text: '01234567891',
@@ -413,14 +413,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationPhoneNumber.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationPhoneNumber.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationEmail,
+            text: questions.responsibleOrganisationEmail.text,
           },
           value: {
             text: 'test@test.com',
@@ -430,7 +430,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationEmail.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationEmail.text.toLocaleLowerCase(),
               },
             ],
           },
@@ -498,7 +498,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       contactDetails: [
         {
           key: {
-            text: 'Contact number',
+            text: "What is the device wearer's telephone number? (optional)",
           },
           value: {
             text: '01234567890',
@@ -508,7 +508,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'contact number',
+                visuallyHiddenText: "what is the device wearer's telephone number? (optional)",
               },
             ],
           },
@@ -534,7 +534,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Primary address',
+            text: "What is the device wearer's main address?",
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -547,14 +547,14 @@ describe('ContactDetailsCheckAnswersController', () => {
                   'primary',
                 ).replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'primary address',
+                visuallyHiddenText: "what is the device wearer's main address?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Secondary address',
+            text: "What is the device wearer's second address?",
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -567,14 +567,14 @@ describe('ContactDetailsCheckAnswersController', () => {
                   'secondary',
                 ).replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'secondary address',
+                visuallyHiddenText: "what is the device wearer's second address?",
               },
             ],
           },
         },
         {
           key: {
-            text: 'Tertiary address',
+            text: "What is the device wearer's third address?",
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -587,7 +587,7 @@ describe('ContactDetailsCheckAnswersController', () => {
                   'tertiary',
                 ).replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'tertiary address',
+                visuallyHiddenText: "what is the device wearer's third address?",
               },
             ],
           },
@@ -596,7 +596,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       interestedParties: [
         {
           key: {
-            text: questions.interestedParties.notifyingOrganisation,
+            text: questions.notifyingOrganisation.text,
           },
           value: {
             text: 'Prison',
@@ -606,14 +606,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.notifyingOrganisation.toLowerCase(),
+                visuallyHiddenText: questions.notifyingOrganisation.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.prison,
+            text: questions.prison.text,
           },
           value: {
             text: 'Cardiff Prison',
@@ -623,14 +623,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.prison.toLowerCase(),
+                visuallyHiddenText: questions.prison.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.notifyingOrganisationEmail,
+            text: questions.notifyingOrganisationEmail.text,
           },
           value: {
             text: 'test@test',
@@ -640,14 +640,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.notifyingOrganisationEmail.toLowerCase(),
+                visuallyHiddenText: questions.notifyingOrganisationEmail.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOfficerName,
+            text: questions.responsibleOfficerName.text,
           },
           value: {
             text: 'John Smith',
@@ -657,14 +657,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOfficerName.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOfficerName.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOfficerPhoneNumber,
+            text: questions.responsibleOfficerPhoneNumber.text,
           },
           value: {
             text: '01234567890',
@@ -674,14 +674,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOfficerPhoneNumber.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOfficerPhoneNumber.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisation,
+            text: questions.responsibleOrganisation.text,
           },
           value: {
             text: 'Probation',
@@ -691,14 +691,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisation.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisation.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.probationRegion,
+            text: questions.probationRegion.text,
           },
           value: {
             text: 'North East',
@@ -708,14 +708,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.probationRegion.toLowerCase(),
+                visuallyHiddenText: questions.probationRegion.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationAddress,
+            text: questions.responsibleOrganisationAddress.text,
           },
           value: {
             html: 'Line 1, Line 2, Postcode',
@@ -725,14 +725,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationAddress.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationPhoneNumber,
+            text: questions.responsibleOrganisationPhoneNumber.text,
           },
           value: {
             text: '01234567891',
@@ -742,14 +742,14 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationPhoneNumber.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationPhoneNumber.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.interestedParties.responsibleOrganisationEmail,
+            text: questions.responsibleOrganisationEmail.text,
           },
           value: {
             text: 'test@test.com',
@@ -759,7 +759,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.interestedParties.responsibleOrganisationEmail.toLowerCase(),
+                visuallyHiddenText: questions.responsibleOrganisationEmail.text.toLowerCase(),
               },
             ],
           },
