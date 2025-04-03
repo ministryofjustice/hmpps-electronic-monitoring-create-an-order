@@ -42,17 +42,18 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer("CEMO017"),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
+        orderTypeDescription: 'DAPOL',
+        sentenceType:"Standard Determinate Sentence",
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
         monitoringRequired: 'Curfew',
       }
@@ -226,7 +227,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

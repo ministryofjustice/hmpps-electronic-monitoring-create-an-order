@@ -47,19 +47,18 @@ context('Scenarios', () => {
     'DAPO (Pre Trial) with Radio Frequency (RF) (HMU + PID) Monday - Friday 7pm-7am. 2 address locations - one Requirement for each parent',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer(),
+        ...createFakeYouthDeviceWearer("CEMO015"),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createFakeAddress()
       const fakeSecondaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', "Bolton Crown Court")
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        orderTypeDescription: 'DAPO',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Curfew',
       }
@@ -74,7 +73,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/, /Second address/],
       }
-      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       const curfewTimetable = curfewNights.flatMap((day: string) => [
         {
           day,
@@ -207,7 +206,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
@@ -274,6 +273,16 @@ context('Scenarios', () => {
                         start: '19:00:00',
                         end: '07:00:00',
                       },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
                     ],
                   },
                   {
@@ -302,6 +311,16 @@ context('Scenarios', () => {
                       },
                       {
                         day: 'Fr',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Su',
                         start: '19:00:00',
                         end: '07:00:00',
                       },

@@ -75,32 +75,29 @@ context('Scenarios', () => {
   })
 
   context(
-    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - single document attachment',
+    'Location Monitoring(Post Release) with GPS Tag (Location - Fitted) ',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer("CEMO016"),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation',"Elmley Prison","Kent, Surrey & Sussex")
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
+        orderTypeDescription: 'DAPOL',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-        monitoringRequired: 'Exclusion zone monitoring',
+        monitoringRequired: 'Trail monitoring',
+        sentenceType:"Standard Determinate Sentence"
       }
-      const enforcementZoneDetails = {
-        zoneType: 'Exclusion zone',
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-        uploadFile,
-        description: 'Excluded from Football Grounds',
-        duration: '90 days',
-        anotherZone: 'No',
+      const trailMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       }
+  
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -110,7 +107,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewEnforcementZoneOrderWith({
+        orderSummaryPage.fillInNewTrailMonitoringOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -119,7 +116,7 @@ context('Scenarios', () => {
           installationAndRisk: undefined,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          enforcementZoneDetails,
+          trailMonitoringDetails,
           files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -195,9 +192,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                    condition: 'Location Monitoring (Fitted Device)',
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -247,7 +244,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
@@ -261,15 +258,8 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: 'No',
-                exclusion_zones: [
-                  {
-                    description: enforcementZoneDetails.description,
-                    duration: enforcementZoneDetails.duration,
-                    start: enforcementZoneDetails.startDate.toISOString().split('T')[0],
-                    end: enforcementZoneDetails.endDate.toISOString().split('T')[0],
-                  },
-                ],
+                trail_monitoring: 'Yes',
+                exclusion_zones: [],
                 inclusion_zones: [],
                 abstinence: '',
                 schedule: '',
@@ -290,16 +280,7 @@ context('Scenarios', () => {
             })
             .should('be.true')
         })
-
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(uploadFile.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
-        })
-
+  
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
 

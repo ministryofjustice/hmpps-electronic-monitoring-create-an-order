@@ -42,19 +42,25 @@ context('Scenarios', () => {
     'Location Monitoring (Acquisitive Crime) (Community) with GPS Tag (Trail Monitoring) (Location - Fitted)',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer('CEMO012'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Probation', 'Probation')
+      const interestedParties = createFakeInterestedParties(
+        'Prison',
+        'Probation',
+        'Elmley Prison',
+        'Kent, Surrey & Sussex',
+      )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Community',
+        orderType: 'Post Release',
         orderTypeDescription: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
+        sentenceType:"Standard Determinate Sentence",
       }
       const trailMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -206,7 +212,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
