@@ -76,21 +76,21 @@ context('Scenarios', () => {
     })
   })
 
-  context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus document attachment', () => {
+  context('DAPO Bail (Pre-Trial) with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-3am, plus document attachment', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeAdultDeviceWearer('CEMO002'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Magistrates Court', 'Probation')
+    const interestedParties = createFakeInterestedParties('Magistrates Court', 'Police', 'Lincoln Magistrates Court')
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Pre-Trial',
-      orderTypeDescription: 'DAPO',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
+      // sentenceType: 'DAPO'
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -108,7 +108,7 @@ context('Scenarios', () => {
       {
         day,
         startTime: '19:00:00',
-        endTime: '10:00:00',
+        endTime: '03:00:00',
         addresses: curfewConditionDetails.addresses,
       },
     ])
@@ -236,7 +236,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -261,6 +261,7 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: '',
+              // sentence_type: 'DAPO',
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',
@@ -281,37 +282,37 @@ context('Scenarios', () => {
                     {
                       day: 'Mo',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                     {
                       day: 'Tu',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                     {
                       day: 'Wed',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                     {
                       day: 'Th',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                     {
                       day: 'Fr',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                     {
                       day: 'Sa',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                     {
                       day: 'Su',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '03:00:00',
                     },
                   ],
                 },
