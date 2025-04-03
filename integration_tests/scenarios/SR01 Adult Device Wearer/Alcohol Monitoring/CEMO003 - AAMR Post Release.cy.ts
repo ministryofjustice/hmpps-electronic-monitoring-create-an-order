@@ -40,7 +40,7 @@ context('Scenarios', () => {
 
   context('Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release)', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeAdultDeviceWearer('CEMO003'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
