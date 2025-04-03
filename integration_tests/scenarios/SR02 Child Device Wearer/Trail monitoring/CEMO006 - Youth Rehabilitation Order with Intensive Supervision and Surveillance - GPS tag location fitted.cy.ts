@@ -228,7 +228,6 @@ context('Scenarios', () => {
                 condition_type: 'Requirement of a Community Order',
                 court: '',
                 court_order_email: '',
-
                 device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
@@ -286,6 +285,7 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: '',
+                // sentence_type: 'Community YRO',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

@@ -236,6 +236,7 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: '',
+                // sentence_type: 'Detention & Training Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

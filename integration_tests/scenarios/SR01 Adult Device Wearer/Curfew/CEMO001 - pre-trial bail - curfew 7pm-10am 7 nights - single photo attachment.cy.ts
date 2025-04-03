@@ -234,7 +234,7 @@ context('Scenarios', () => {
               no_address_3: '',
               no_address_4: '',
               no_email: '',
-              no_name: interestedParties.crownCourt,
+              no_name: interestedParties.notifyingOrganisationName,
               no_phone_number: '',
               offence: installationAndRisk.offence,
               offence_date: '',
