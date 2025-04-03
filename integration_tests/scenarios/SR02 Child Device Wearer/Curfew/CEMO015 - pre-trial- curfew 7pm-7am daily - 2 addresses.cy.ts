@@ -3,17 +3,17 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import {
+  createFakeYouthDeviceWearer,
+  createFakeInterestedParties,
+  createFakeResponsibleAdult,
+  createKnownAddress,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
-  const hmppsDocumentId: string = uuidv4()
-  const uploadFile = {
-    contents: 'cypress/fixtures/test.pdf',
-    fileName: 'test.pdf',
-  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -41,66 +41,47 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: uploadFile.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: uploadFile.fileName,
-        filename: uploadFile.fileName,
-        fileExtension: uploadFile.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.readFile(uploadFile.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'application/pdf',
-        fileBase64Body: content,
-      })
-    })
   })
 
   context(
-    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - single document attachment',
+    'DAPO (Pre Trial) with Radio Frequency (RF) (HMU + PID) Monday - Friday 7pm-7am. 2 address locations - one Requirement for each parent',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeYouthDeviceWearer('CEMO015'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+      const responsibleAdultDetails = createFakeResponsibleAdult()
+      const fakePrimaryAddress = createKnownAddress()
+      const fakeSecondaryAddress = createKnownAddress()
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
-        orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
-        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-        monitoringRequired: 'Exclusion zone monitoring',
-      }
-      const enforcementZoneDetails = {
-        zoneType: 'Exclusion zone',
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-        uploadFile,
-        description: 'Excluded from Football Grounds',
-        duration: '90 days',
-        anotherZone: 'No',
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+        orderType: 'Pre-Trial',
+        conditionType: 'Requirement of a Community Order',
+        monitoringRequired: 'Curfew',
       }
+      const curfewReleaseDetails = {
+        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+        startTime: { hours: '19', minutes: '00' },
+        endTime: { hours: '07', minutes: '00' },
+        address: /Main address/,
+      }
+      const curfewConditionDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        addresses: [/Main address/, /Second address/],
+      }
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+      const curfewTimetable = curfewNights.flatMap((day: string) => [
+        {
+          day,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+          addresses: curfewConditionDetails.addresses,
+        },
+      ])
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -110,22 +91,24 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewEnforcementZoneOrderWith({
+        orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
-          responsibleAdultDetails: undefined,
+          responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
-          secondaryAddressDetails: undefined,
+          secondaryAddressDetails: fakeSecondaryAddress,
           interestedParties,
           installationAndRisk: undefined,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          enforcementZoneDetails,
+          curfewReleaseDetails,
+          curfewConditionDetails,
+          curfewTimetable,
           files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO016',
+          responseRecordFilename: 'CEMO015',
           httpStatus: 200,
           body: {
             title: '',
@@ -134,7 +117,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-            adult_child: 'adult',
+            adult_child: 'child',
             sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
@@ -143,15 +126,15 @@ context('Scenarios', () => {
               .replace('non binary', 'non-binary'),
             disability: [],
             address_1: fakePrimaryAddress.line1,
-            address_2: 'N/A',
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
             address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
             address_post_code: fakePrimaryAddress.postcode,
-            secondary_address_1: '',
-            secondary_address_2: '',
-            secondary_address_3: '',
-            secondary_address_4: '',
-            secondary_address_post_code: '',
+            secondary_address_1: fakeSecondaryAddress.line1,
+            secondary_address_2: fakeSecondaryAddress.line2 === '' ? 'N/A' : fakeSecondaryAddress.line2,
+            secondary_address_3: fakeSecondaryAddress.line3,
+            secondary_address_4: fakeSecondaryAddress.line4 === '' ? 'N/A' : fakeSecondaryAddress.line4,
+            secondary_address_post_code: fakeSecondaryAddress.postcode,
             phone_number: deviceWearerDetails.contactNumber,
             risk_serious_harm: '',
             risk_self_harm: '',
@@ -159,15 +142,15 @@ context('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: '',
+            responsible_adult_required: 'true',
+            parent: responsibleAdultDetails.fullName,
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: null,
+            parent_phone_number: responsibleAdultDetails.contactNumber,
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -182,7 +165,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO016',
+              responseRecordFilename: 'CEMO015',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -195,9 +178,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                    condition: 'Curfew with EM',
+                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                    end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -223,7 +206,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
@@ -253,23 +236,99 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: '',
+                conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
                 curfew_description: '',
-                curfew_start: '',
-                curfew_end: '',
-                curfew_duration: [],
-                trail_monitoring: 'No',
-                exclusion_zones: [
+                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                curfew_duration: [
                   {
-                    description: enforcementZoneDetails.description,
-                    duration: enforcementZoneDetails.duration,
-                    start: enforcementZoneDetails.startDate.toISOString().split('T')[0],
-                    end: enforcementZoneDetails.endDate.toISOString().split('T')[0],
+                    location: 'primary',
+                    allday: '',
+                    schedule: [
+                      {
+                        day: 'Mo',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Tu',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Wed',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Th',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Fr',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                    ],
+                  },
+                  {
+                    location: 'secondary',
+                    allday: '',
+                    schedule: [
+                      {
+                        day: 'Mo',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Tu',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Wed',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Th',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Fr',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                    ],
                   },
                 ],
+                trail_monitoring: '',
+                exclusion_zones: [],
                 inclusion_zones: [],
                 abstinence: '',
                 schedule: '',
@@ -289,15 +348,6 @@ context('Scenarios', () => {
               },
             })
             .should('be.true')
-        })
-
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(uploadFile.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
         })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

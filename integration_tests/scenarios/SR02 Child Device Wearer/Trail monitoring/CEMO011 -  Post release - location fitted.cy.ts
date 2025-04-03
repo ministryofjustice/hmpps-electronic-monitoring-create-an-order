@@ -4,7 +4,12 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import {
+  createFakeYouthDeviceWearer,
+  createFakeResponsibleAdult,
+  createFakeInterestedParties,
+  createKnownAddress,
+} from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
@@ -20,8 +25,9 @@ import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-dev
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -52,19 +58,21 @@ context.skip('Scenarios', () => {
     })
   })
 
-  context('Immigration with Location - NFD (Non Fitted Device) Pebble (NFD).', () => {
+  context('Post release with Location -  Fitted Device Pebble.', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeYouthDeviceWearer('CEMO011'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
+    const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    const interestedParties = {
+      ...createFakeInterestedParties('Prison', 'Probation', 'Feltham Young Offender Institution', 'London'),
+    }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Immigration',
-      orderTypeDescription: 'DAPOL',
+      orderType: 'Post Release',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
     }
@@ -86,6 +94,10 @@ context.skip('Scenarios', () => {
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+      const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
+      responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
+      responsibleAdultDetailsPage.form.saveAndContinueButton.click()
 
       const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
@@ -141,7 +153,7 @@ context.skip('Scenarios', () => {
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO010',
+        responseRecordFilename: 'CEMO011',
         httpStatus: 200,
         body: {
           title: '',
@@ -150,7 +162,7 @@ context.skip('Scenarios', () => {
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-          adult_child: 'adult',
+          adult_child: 'child',
           sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
@@ -159,9 +171,9 @@ context.skip('Scenarios', () => {
             .replace('non binary', 'non-binary'),
           disability: [],
           address_1: fakePrimaryAddress.line1,
-          address_2: 'N/A',
+          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
           address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4,
+          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
@@ -175,15 +187,15 @@ context.skip('Scenarios', () => {
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],
-          responsible_adult_required: 'false',
-          parent: '',
+          responsible_adult_required: 'true',
+          parent: responsibleAdultDetails.fullName,
           guardian: '',
           parent_address_1: '',
           parent_address_2: '',
           parent_address_3: '',
           parent_address_4: '',
           parent_address_post_code: '',
-          parent_phone_number: null,
+          parent_phone_number: responsibleAdultDetails.contactNumber,
           parent_dob: '',
           pnc_id: deviceWearerDetails.pncId,
           nomis_id: deviceWearerDetails.nomisId,
@@ -198,7 +210,7 @@ context.skip('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO010',
+            responseRecordFilename: 'CEMO011',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -240,7 +252,7 @@ context.skip('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
