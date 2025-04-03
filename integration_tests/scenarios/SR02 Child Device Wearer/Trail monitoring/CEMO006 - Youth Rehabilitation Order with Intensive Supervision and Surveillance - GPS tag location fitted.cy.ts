@@ -75,9 +75,9 @@ context('Scenarios', () => {
       const installationAddressDetails = fakePrimaryAddress
       const interestedParties = createFakeInterestedParties(
         'Magistrates Court',
-        'Probation',
+        'YJS',
         'Coventry Magistrates Court',
-        'West Midlands',
+        'Midlands',
       )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days

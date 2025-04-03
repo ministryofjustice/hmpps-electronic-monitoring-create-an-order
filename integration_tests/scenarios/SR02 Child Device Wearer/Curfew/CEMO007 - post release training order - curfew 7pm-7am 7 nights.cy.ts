@@ -55,7 +55,7 @@ context('Scenarios', () => {
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties(
         'Prison',
-        'Probation',
+        'YJS',
         'Feltham Young Offender Institution',
         'London',
       )
