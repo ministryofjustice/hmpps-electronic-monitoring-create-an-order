@@ -7,7 +7,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createFakeAddress,
+  createKnownAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
@@ -43,22 +43,22 @@ context('Scenarios', () => {
     })
   })
 
-  context('Suspended Sentence Orders (Community) with Radio Frequency (RF) (HMU + PID) Weekend Only 7pm-7am.', () => {
+  context('Youth Rehabilitation Order (Community) with Radio Frequency (RF) (HMU + PID) Weekend Only 7pm-7am.', () => {
     const deviceWearerDetails = {
-      ...createFakeYouthDeviceWearer(),
+      ...createFakeYouthDeviceWearer('CEMO008'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const responsibleAdultDetails = createFakeResponsibleAdult()
-    const fakePrimaryAddress = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Probation', 'Probation')
+    const fakePrimaryAddress = createKnownAddress()
+    const interestedParties = createFakeInterestedParties('Crown Court', 'Probation', 'Cardiff Crown Court', 'Wales')
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Community',
-      orderTypeDescription: 'GPS Acquisitive Crime Parole',
       conditionType: 'Requirement of a Community Order',
       monitoringRequired: 'Curfew',
+      // sentenceType: 'Community YRO'
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -71,7 +71,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       addresses: [/Main address/],
     }
-    const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
       {
         day,
@@ -124,9 +124,9 @@ context('Scenarios', () => {
             .replace('non binary', 'non-binary'),
           disability: [],
           address_1: fakePrimaryAddress.line1,
-          address_2: 'N/A',
+          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
           address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4,
+          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
@@ -204,7 +204,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -229,6 +229,7 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: '',
+              // sentence_type: 'Community YRO',
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',
@@ -246,6 +247,26 @@ context('Scenarios', () => {
                   location: 'primary',
                   allday: '',
                   schedule: [
+                    {
+                      day: 'Mo',
+                      start: '19:00:00',
+                      end: '07:00:00',
+                    },
+                    {
+                      day: 'Tu',
+                      start: '19:00:00',
+                      end: '07:00:00',
+                    },
+                    {
+                      day: 'Wed',
+                      start: '19:00:00',
+                      end: '07:00:00',
+                    },
+                    {
+                      day: 'Th',
+                      start: '19:00:00',
+                      end: '07:00:00',
+                    },
                     {
                       day: 'Fr',
                       start: '19:00:00',

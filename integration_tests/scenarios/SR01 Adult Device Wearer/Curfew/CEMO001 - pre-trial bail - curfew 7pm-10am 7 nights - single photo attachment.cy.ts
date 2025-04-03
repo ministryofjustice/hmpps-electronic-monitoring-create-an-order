@@ -78,13 +78,13 @@ context('Scenarios', () => {
 
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeAdultDeviceWearer('CEMO001'),
       interpreterRequired: true,
       language: 'French',
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
+    const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
     const installationAndRisk = {
       offence: 'Robbery',
       riskCategory: 'Sex offender',
@@ -95,9 +95,9 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Pre-Trial',
-      orderTypeDescription: 'DAPO',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
+      // sentenceType: 'Bail'
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -116,7 +116,6 @@ context('Scenarios', () => {
         day,
         startTime: '19:00:00',
         endTime: '10:00:00',
-
         addresses: curfewConditionDetails.addresses,
       },
     ])
@@ -244,7 +243,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -269,6 +268,7 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: '',
+              // sentence_type: monitoringConditions.sentenceType,
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',
