@@ -55,7 +55,7 @@ context('Scenarios', () => {
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
         monitoringRequired: 'Curfew',
         // sentenceType: 'HDC',
-        hdc: 'Yes'
+        hdc: 'Yes',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
