@@ -62,7 +62,7 @@ context('Scenarios', () => {
     'Youth Rehabilitation Order with Intensive Supervision and Surveillance (Community) with GPS Tag (Location - Fitted).',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer(),
+        ...createFakeYouthDeviceWearer('CEMO006'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -73,14 +73,15 @@ context('Scenarios', () => {
         hasAnotherAddress: 'No',
       }
       const installationAddressDetails = fakePrimaryAddress
-      const interestedParties = createFakeInterestedParties('Probation', 'YJS')
+      const interestedParties = createFakeInterestedParties('Magistrates Court', 'Probation', 'Coventry Magistrates Court', 'West Midlands')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        orderTypeDescription: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
+        // sentenceType: 'Community YRO',
+        issp: 'Yes'
       }
       const trailMonitoringOrder = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -255,7 +256,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: 'Community',
-                order_type_description: 'GPS Acquisitive Crime Parole',
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
@@ -308,7 +309,7 @@ context('Scenarios', () => {
                 installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
-                issp: 'No',
+                issp: 'Yes',
                 hdc: 'No',
                 order_status: 'Not Started',
               },
