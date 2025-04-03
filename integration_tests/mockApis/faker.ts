@@ -99,9 +99,9 @@ export const createFakeUkPhoneNumber = (): string => {
   return format[1] + `00${faker.number.int({ min: format[2] as number, max: format[3] as number })}`.slice(-3)
 }
 
-export const createFakePerson = (dob: Date): Partial<PersonOfInterest> => {
+export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial<PersonOfInterest> => {
   const sexType = faker.person.sexType()
-  const firstName = faker.person.firstName(sexType)
+  const firstName = firstNameOverride ?? faker.person.firstName(sexType)
   const middleName = faker.person.middleName(sexType)
   const lastName = faker.person.lastName()
   const alias = faker.animal.bird()
@@ -138,12 +138,18 @@ export const createFakeAddress = (): Address => {
 }
 
 export const createKnownAddress = (): Address => {
-  return faker.helpers.arrayElement<Address>([new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA')])
+  return faker.helpers.arrayElement<Address>([
+    new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA'),
+    new Address('3 Kelvin Close', 'Birchwood', 'Warrington', '', 'WA3 7PB'),
+    new Address('2 Dunlin Close', 'Bolton', 'Greater Manchester', '', 'BL2 1EW'),
+  ])
 }
 
 export const createFakeInterestedParties = (
   notifyingOrganisation: string,
   responsibleOrganisation: string,
+  notifyingOrganisationNameOverride?: string,
+  responsibleOrganisationRegionOverride?: string,
 ): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
@@ -160,27 +166,27 @@ export const createFakeInterestedParties = (
   let yjsRegion = ''
 
   if (notifyingOrganisation === 'Prison') {
-    prison = faker.helpers.arrayElement(prisonTypes)
+    prison = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(prisonTypes)
     notifyingOrganisationName = prison
   }
 
   if (notifyingOrganisation === 'Magistrates Court') {
-    magistratesCourt = faker.helpers.arrayElement(magistratesCourtTypes)
+    magistratesCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(magistratesCourtTypes)
     notifyingOrganisationName = magistratesCourt
   }
 
   if (notifyingOrganisation === 'Crown Court') {
-    crownCourt = faker.helpers.arrayElement(crownCourtTypes)
+    crownCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(crownCourtTypes)
     notifyingOrganisationName = crownCourt
   }
 
   if (responsibleOrganisation === 'Probation') {
-    probationRegion = faker.helpers.arrayElement(probationRegionTypes)
+    probationRegion = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(probationRegionTypes)
     responsibleOrganisationRegion = probationRegion
   }
 
   if (responsibleOrganisation === 'YJS') {
-    yjsRegion = faker.helpers.arrayElement(yjsRegionTypes)
+    yjsRegion = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(yjsRegionTypes)
     responsibleOrganisationRegion = yjsRegion
   }
 
@@ -202,26 +208,26 @@ export const createFakeInterestedParties = (
   }
 }
 
-export const createFakeYouth = (): PersonOfInterest => {
+export const createFakeYouth = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 13, max: 17 })
 
   return {
-    ...createFakePerson(dob),
+    ...createFakePerson(dob, firstName),
     is18: false,
   } as PersonOfInterest
 }
 
-export const createFakeAdult = (): PersonOfInterest => {
+export const createFakeAdult = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apprently considered "older"
 
   return {
-    ...createFakePerson(dob),
+    ...createFakePerson(dob, firstName),
     is18: true,
   } as PersonOfInterest
 }
 
-export const createFakeAdultDeviceWearer = (): PersonOfInterest => {
-  const fakeAdult = createFakeAdult()
+export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInterest => {
+  const fakeAdult = createFakeAdult(firstName)
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
@@ -238,8 +244,8 @@ export const createFakeAdultDeviceWearer = (): PersonOfInterest => {
   } as PersonOfInterest
 }
 
-export const createFakeYouthDeviceWearer = (): PersonOfInterest => {
-  const fakeYouth = createFakeYouth()
+export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInterest => {
+  const fakeYouth = createFakeYouth(firstName)
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')

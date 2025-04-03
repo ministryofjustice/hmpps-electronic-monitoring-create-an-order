@@ -5,53 +5,58 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% block content %}
+{% set mainClasses = "app-container govuk-body" %}
+{% set pageTitle = section + " - Check your answers - " + applicationName %}
 
+{% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
     href: orderSummaryUri
   }) }}
+{% endblock %}
 
-  {% if not isOrderEditable %}
-      {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-      {% endset %}
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if not isOrderEditable %}
+        {% set html %}
+          <p class="govuk-notification-banner__heading">
+            You are viewing a submitted order.
+          </p>
+        {% endset %}
 
-      {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
+        {{ govukNotificationBanner({
+          html: html
+        }) }}
+      {% endif %}
 
-  {{ mojPageHeaderActions({
-    heading: {
-        text: "Check your answers"
-    }
-  }) }}
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ section }}</span>
+        Check your answers
+      </h1>
 
-  <h2 class="govuk-heading-l">{{ section }}</h2>
+      {% block answers %}
+      {% endblock %}
 
-  {% block answers %}
-  {% endblock %}
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-  <form method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Save and go to next section",
+            name: "action",
+            value: "continue"
+          })}}
 
-    <div class="govuk-button-group">
-      {{ govukButton({
-        text: "Continue",
-        name: "action",
-        value: "continue"
-      })}}
-
-      {{ govukButton({
-        text: "Return back to form section menu",
-        classes: "govuk-button--secondary",
-        name: "action",
-        value: "back"
-      }) }}
+          {{ govukButton({
+            text: "Save as draft",
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "back"
+          }) }}
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 
 {% endblock %}

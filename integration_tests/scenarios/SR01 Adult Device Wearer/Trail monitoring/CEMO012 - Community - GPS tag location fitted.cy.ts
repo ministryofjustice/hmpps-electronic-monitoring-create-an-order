@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { createKnownAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -42,19 +42,25 @@ context('Scenarios', () => {
     'Location Monitoring (Acquisitive Crime) (Community) with GPS Tag (Trail Monitoring) (Location - Fitted)',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer('CEMO012'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Probation', 'Probation')
+      const fakePrimaryAddress = createKnownAddress()
+      const interestedParties = createFakeInterestedParties(
+        'Prison',
+        'Probation',
+        'Elmley Prison',
+        'Kent, Surrey & Sussex',
+      )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Community',
+        orderType: 'Post Release',
         orderTypeDescription: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
+        sentenceType: 'Standard Determinate Sentence',
       }
       const trailMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -102,9 +108,9 @@ context('Scenarios', () => {
               .replace('non binary', 'non-binary'),
             disability: [],
             address_1: fakePrimaryAddress.line1,
-            address_2: 'N/A',
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
             address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
             address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
@@ -206,7 +212,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

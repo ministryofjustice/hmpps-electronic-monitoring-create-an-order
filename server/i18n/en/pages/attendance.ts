@@ -16,7 +16,7 @@ const attendancePageContent: AttendancePageContent = {
     },
     endDate: {
       text: 'What date does mandatory attendance monitoring end? (optional)',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
     endTime: {
       text: 'What time does the appointment end?',
@@ -28,7 +28,7 @@ const attendancePageContent: AttendancePageContent = {
     },
     startDate: {
       text: 'What date does mandatory attendance monitoring start?',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
     startTime: {
       text: 'What time does the appointment start?',

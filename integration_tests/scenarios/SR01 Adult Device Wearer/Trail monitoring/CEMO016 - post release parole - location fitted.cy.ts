@@ -3,26 +3,17 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const uploadFile = {
+    contents: 'cypress/fixtures/test.pdf',
+    fileName: 'test.pdf',
+  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -50,25 +41,62 @@ context.skip('Scenarios', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: uploadFile.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: uploadFile.fileName,
+        filename: uploadFile.fileName,
+        fileExtension: uploadFile.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.readFile(uploadFile.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'application/pdf',
+        fileBase64Body: content,
+      })
+    })
   })
 
-  context('Immigration with Location - NFD (Non Fitted Device) Pebble (NFD).', () => {
+  context('Location Monitoring(Post Release) with GPS Tag (Location - Fitted) ', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeAdultDeviceWearer('CEMO016'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    const interestedParties = createFakeInterestedParties(
+      'Prison',
+      'Probation',
+      'Elmley Prison',
+      'Kent, Surrey & Sussex',
+    )
     const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Immigration',
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
+      orderType: 'Post Release',
       orderTypeDescription: 'DAPOL',
-      conditionType: 'License Condition of a Custodial Order',
+      conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
       monitoringRequired: 'Trail monitoring',
+      sentenceType: 'Standard Determinate Sentence',
     }
-    const trailMonitoringOrder = {
+    const trailMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
     }
@@ -79,69 +107,24 @@ context.skip('Scenarios', () => {
       let indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
 
-      let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+      const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.deviceWearerTask.click()
-
-      const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      identityNumbersPage.form.saveAndContinueButton.click()
-
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
-      deviceWearerCheckYourAnswersPage.continueButton().click()
-
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith(deviceWearerDetails)
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith({
-        ...fakePrimaryAddress,
-        hasAnotherAddress: 'No',
+      orderSummaryPage.fillInNewTrailMonitoringOrderWith({
+        deviceWearerDetails,
+        responsibleAdultDetails: undefined,
+        primaryAddressDetails: fakePrimaryAddress,
+        secondaryAddressDetails: undefined,
+        interestedParties,
+        installationAndRisk: undefined,
+        monitoringConditions,
+        installationAddressDetails: fakePrimaryAddress,
+        trailMonitoringDetails,
+        files: undefined,
       })
-      primaryAddressPage.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
-
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
-      contactInformationCheckYourAnswersPage.continueButton().click()
-
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.form.saveAndContinueButton.click()
-
-      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(fakePrimaryAddress)
-      installationAddress.form.saveAndContinueButton.click()
-
-      const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      trailMonitoringPage.form.saveAndContinueButton.click()
-
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-      const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      attachmentPage.backToSummaryButton.click()
-
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO010',
+        responseRecordFilename: 'CEMO016',
         httpStatus: 200,
         body: {
           title: '',
@@ -159,9 +142,9 @@ context.skip('Scenarios', () => {
             .replace('non binary', 'non-binary'),
           disability: [],
           address_1: fakePrimaryAddress.line1,
-          address_2: 'N/A',
+          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
           address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4,
+          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
@@ -198,7 +181,7 @@ context.skip('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO010',
+            responseRecordFilename: 'CEMO016',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -207,14 +190,13 @@ context.skip('Scenarios', () => {
               condition_type: monitoringConditions.conditionType,
               court: '',
               court_order_email: '',
-
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
                   condition: 'Location Monitoring (Fitted Device)',
-                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate),
-                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate),
+                  start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
+                  end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -264,7 +246,7 @@ context.skip('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: '',
+              sentence_type: 'Standard Determinate Sentence',
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',

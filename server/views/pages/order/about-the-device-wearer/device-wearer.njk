@@ -67,7 +67,7 @@
       }
     },
     hint: {
-      text: "For example, 21 05 2011"
+      text: "For example, 21 05 2005"
     },
     items: [
       {
@@ -113,12 +113,12 @@
     },
     items: [
       {
-        value: "true",
+        value: "false",
         text: "Yes",
         disabled: not isOrderEditable
       },
       {
-        value: "false",
+        value: "true",
         text: "No",
         disabled: not isOrderEditable
       }
@@ -171,7 +171,7 @@
     {{
       govukInput({
       label: {
-        text: "What is the device wearer's chosen identity?"
+        text: content.pages.deviceWearer.questions.otherGender.text
       },
       id: "otherGender",
       name: "otherGender",
@@ -237,7 +237,7 @@
     {{
       govukInput({
       label: {
-        text: "What is the device wearer's disability or health condition? (optional)"
+        text: content.pages.deviceWearer.questions.otherDisability.text
       },
       id: "otherDisability",
       name: "otherDisability",

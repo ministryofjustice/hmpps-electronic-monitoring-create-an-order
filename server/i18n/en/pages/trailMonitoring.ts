@@ -6,11 +6,11 @@ const trailMonitoringPageContent: TrailMonitoringPageContent = {
   questions: {
     endDate: {
       text: 'What date does trail monitoring end? (optional)',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
     startDate: {
       text: 'What date does trail monitoring start?',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
   },
   section: 'Electronic monitoring required',

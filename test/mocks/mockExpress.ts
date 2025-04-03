@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import i18n from '../../server/i18n'
 
 export const createMockRequest = (
   overrideProperties: Partial<Request> = { params: { orderId: '123456789' } },
@@ -21,6 +22,7 @@ export const createMockResponse = (): Response => {
   // @ts-expect-error stubbing res.render
   return {
     locals: {
+      content: i18n.en,
       user: {
         username: 'fakeUserName',
         token: 'fakeUserToken',

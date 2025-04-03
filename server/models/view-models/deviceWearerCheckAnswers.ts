@@ -1,6 +1,7 @@
 import { disabilitiesMap, genderMap, sexMap } from '../../constants/about-the-device-wearer'
 import { relationshipMap } from '../../constants/about-the-device-wearer/responsibleAdult'
 import paths from '../../constants/paths'
+import I18n from '../../types/i18n'
 import {
   createBooleanAnswer,
   createDateAnswer,
@@ -10,40 +11,91 @@ import {
 import { lookup } from '../../utils/utils'
 import { Order } from '../Order'
 
-const createDeviceWearerAnswers = (order: Order) => {
+const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) => {
+  if (order.deviceWearer.disabilities.includes('OTHER')) {
+    return [
+      createTextAnswer(
+        content.pages.deviceWearer.questions.otherDisability.text,
+        order.deviceWearer.otherDisability,
+        uri,
+      ),
+    ]
+  }
+
+  return []
+}
+
+const createOtherGenderAnswer = (order: Order, content: I18n, uri: string) => {
+  if (order.deviceWearer.gender === 'self-identify') {
+    return [
+      createTextAnswer(content.pages.deviceWearer.questions.otherGender.text, order.deviceWearer.otherGender, uri),
+    ]
+  }
+
+  return []
+}
+
+const createDeviceWearerAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability => lookup(disabilitiesMap, disability))
   return [
-    createTextAnswer('First names', order.deviceWearer.firstName, uri),
-    createTextAnswer('Last name', order.deviceWearer.lastName, uri),
-    createTextAnswer('Preferred name or alias (optional)', order.deviceWearer.alias, uri),
-    createDateAnswer('Date of birth', order.deviceWearer.dateOfBirth, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.alias.text, order.deviceWearer.alias, uri),
+    createDateAnswer(content.pages.deviceWearer.questions.dateOfBirth.text, order.deviceWearer.dateOfBirth, uri),
     createBooleanAnswer(
-      'Will the device wearer be 18 years old when the device is installed?',
+      content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
       order.deviceWearer.adultAtTimeOfInstallation,
       uri,
     ),
-    createTextAnswer('Sex', lookup(sexMap, order.deviceWearer.sex), uri),
-    createTextAnswer('Gender', lookup(genderMap, order.deviceWearer.gender), uri),
-    createMultipleChoiceAnswer('Disabilities (optional)', disabilities, uri),
-    createTextAnswer('Disability, if other (optional)', order.deviceWearer.otherDisability, uri),
-    createTextAnswer('Main language', order.deviceWearer.language, uri),
-    createBooleanAnswer('Is an interpreter required?', order.deviceWearer.interpreterRequired, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.sex.text, lookup(sexMap, order.deviceWearer.sex), uri),
+    createTextAnswer(
+      content.pages.deviceWearer.questions.gender.text,
+      lookup(genderMap, order.deviceWearer.gender),
+      uri,
+    ),
+    ...createOtherGenderAnswer(order, content, uri),
+    createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri),
+    ...createOtherDisabilityAnswer(order, content, uri),
+    createTextAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri),
+    createBooleanAnswer(
+      content.pages.deviceWearer.questions.interpreterRequired.text,
+      order.deviceWearer.interpreterRequired,
+      uri,
+    ),
   ]
 }
 
-const createPersonIdentifierAnswers = (order: Order) => {
+const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
   return [
-    createTextAnswer('NOMIS ID (optional)', order.deviceWearer.nomisId, uri),
-    createTextAnswer('PNC ID (optional)', order.deviceWearer.pncId, uri),
-    createTextAnswer('DELIUS ID (optional)', order.deviceWearer.deliusId, uri),
-    createTextAnswer('Prison number (optional)', order.deviceWearer.prisonNumber, uri),
-    createTextAnswer('Home Office reference number (optional)', order.deviceWearer.homeOfficeReferenceNumber, uri),
+    createTextAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri),
+    createTextAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri),
+    createTextAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri),
+    createTextAnswer(content.pages.identityNumbers.questions.prisonNumber.text, order.deviceWearer.prisonNumber, uri),
+    createTextAnswer(
+      content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
+      order.deviceWearer.homeOfficeReferenceNumber,
+      uri,
+    ),
   ]
 }
 
-const createResponsibeAdultAnswers = (order: Order) => {
+const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string) => {
+  if (order.deviceWearerResponsibleAdult?.relationship === 'other') {
+    return [
+      createTextAnswer(
+        content.pages.responsibleAdult.questions.otherRelationship.text,
+        order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
+        uri,
+      ),
+    ]
+  }
+
+  return []
+}
+
+const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id)
 
   if (order.deviceWearer.adultAtTimeOfInstallation === null) {
@@ -55,21 +107,29 @@ const createResponsibeAdultAnswers = (order: Order) => {
   }
 
   return [
-    createTextAnswer('Relationship', lookup(relationshipMap, order.deviceWearerResponsibleAdult?.relationship), uri),
     createTextAnswer(
-      'Relationship details, if other (optional)',
-      order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
+      content.pages.responsibleAdult.questions.relationship.text,
+      lookup(relationshipMap, order.deviceWearerResponsibleAdult?.relationship),
       uri,
     ),
-    createTextAnswer('Full name', order.deviceWearerResponsibleAdult?.fullName, uri),
-    createTextAnswer('Contact number', order.deviceWearerResponsibleAdult?.contactNumber, uri),
+    ...createOtherRelationshipAnswer(order, content, uri),
+    createTextAnswer(
+      content.pages.responsibleAdult.questions.fullName.text,
+      order.deviceWearerResponsibleAdult?.fullName,
+      uri,
+    ),
+    createTextAnswer(
+      content.pages.responsibleAdult.questions.contactNumber.text,
+      order.deviceWearerResponsibleAdult?.contactNumber,
+      uri,
+    ),
   ]
 }
 
-const createViewModel = (order: Order) => ({
-  deviceWearer: createDeviceWearerAnswers(order),
-  personIdentifiers: createPersonIdentifierAnswers(order),
-  responsibleAdult: createResponsibeAdultAnswers(order),
+const createViewModel = (order: Order, content: I18n) => ({
+  deviceWearer: createDeviceWearerAnswers(order, content),
+  personIdentifiers: createPersonIdentifierAnswers(order, content),
+  responsibleAdult: createResponsibeAdultAnswers(order, content),
 })
 
 export default createViewModel

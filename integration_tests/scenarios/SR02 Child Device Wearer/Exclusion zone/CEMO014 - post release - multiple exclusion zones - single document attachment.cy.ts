@@ -9,7 +9,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createFakeAddress,
+  createKnownAddress,
 } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
@@ -103,18 +103,22 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
-      const fakePrimaryAddress = createFakeAddress()
+      const fakePrimaryAddress = createKnownAddress()
       const primaryAddressDetails = {
         ...fakePrimaryAddress,
         hasAnotherAddress: 'No',
       }
       const installationAddressDetails = fakePrimaryAddress
-      const interestedParties = createFakeInterestedParties('Prison', 'YJS')
+      const interestedParties = createFakeInterestedParties(
+        'Prison',
+        'YJS',
+        'Feltham Young Offender Institution',
+        'London',
+      )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPO',
         conditionType: 'License Condition of a Custodial Order',
         monitoringRequired: 'Exclusion zone monitoring',
       }
@@ -214,10 +218,10 @@ context('Scenarios', () => {
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],
-            address_1: primaryAddressDetails.line1,
-            address_2: 'N/A',
-            address_3: primaryAddressDetails.line3,
-            address_4: primaryAddressDetails.line4,
+            address_1: fakePrimaryAddress.line1,
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
+            address_3: fakePrimaryAddress.line3,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
             address_post_code: primaryAddressDetails.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
@@ -295,7 +299,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',

@@ -6,7 +6,7 @@ const alcoholPageContent: AlcoholPageContent = {
   questions: {
     endDate: {
       text: 'What date does alcohol monitoring end?',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
     installationLocation: {
       text: 'What is the address of the base station?',
@@ -24,7 +24,7 @@ const alcoholPageContent: AlcoholPageContent = {
     },
     startDate: {
       text: 'What date does alcohol monitoring start?',
-      hint: 'For example, 21 05 2011',
+      hint: 'For example, 21 05 2025',
     },
   },
   section: 'Electronic monitoring required',

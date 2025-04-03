@@ -1,17 +1,11 @@
-import AppPage from '../../appPage'
 import paths from '../../../../server/constants/paths'
 import { PageElement } from '../../page'
+import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
-export default class MonitoringConditionsCheckYourAnswersPage extends AppPage {
+export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
     super('Check your answers', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
   }
-
-  phaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
-
-  continueButton = (): PageElement => cy.contains('Continue')
-
-  returnButton = (): PageElement => cy.contains('Return back to form section menu')
 
   monitoringConditionsSection = (): PageElement => cy.contains('Monitoring conditions')
 

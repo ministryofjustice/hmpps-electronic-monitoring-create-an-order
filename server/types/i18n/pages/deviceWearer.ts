@@ -11,6 +11,7 @@ type DeviceWearerPageContent = PageContent<
   | 'language'
   | 'lastName'
   | 'otherDisability'
+  | 'otherGender'
   | 'sex'
 >
 

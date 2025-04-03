@@ -43,7 +43,7 @@ context('About the device wearer', () => {
         page.form.firstNamesField.shouldHaveValidationMessage(expectedValidationErrors.firstName)
         page.form.lastNameField.shouldHaveValidationMessage(expectedValidationErrors.lastName)
         page.form.dateOfBirthField.shouldHaveValidationMessage(expectedValidationErrors.dob)
-        page.form.is18Field.shouldHaveValidationMessage(expectedValidationErrors.is18)
+        page.form.responsibleAdultRequiredField.shouldHaveValidationMessage(expectedValidationErrors.is18)
         page.form.sexField.shouldHaveValidationMessage(expectedValidationErrors.sex)
         page.form.genderIdentityField.shouldHaveValidationMessage(expectedValidationErrors.gender)
         page.form.interpreterRequiredField.shouldHaveValidationMessage(expectedValidationErrors.interpreter)

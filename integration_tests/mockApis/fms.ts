@@ -37,6 +37,19 @@ const stubFMSCreateMonitoringOrder = (options: CreateStubOptions) =>
     },
   })
 
+const stubFMSUpdateDeviceWearer = (options: CreateStubOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/fms/x_seem_cemo/device_wearer/updateDW',
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options?.response || '',
+    },
+  })
+
 const stubFMSUpdateMonitoringOrder = (options: CreateStubOptions) =>
   stubFor({
     request: {
@@ -174,6 +187,13 @@ const verifyFMSCreateMonitoringOrderRequestReceived = (options: VerifyStubbedFMS
     uri: '/fms/x_seem_cemo/monitoring_order/createMO',
   })
 
+const verifyFMSUpdateDeviceWearerRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
+  stubFMSVerifyRequestReceived({
+    index: 0,
+    ...options,
+    uri: '/fms/x_seem_cemo/device_wearer/updateDW',
+  })
+
 const verifyFMSUpdateMonitoringOrderRequestReceived = (options: VerifyStubbedFMSRequestParams) =>
   stubFMSVerifyRequestReceived({
     index: 0,
@@ -191,10 +211,12 @@ const verifyFMSAttachmentRequestReceived = (options: VerifyStubbedFMSRequestPara
 export default {
   stubFMSCreateDeviceWearer,
   stubFMSCreateMonitoringOrder,
+  stubFMSUpdateDeviceWearer,
   stubFMSUpdateMonitoringOrder,
   stubFmsUploadAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,
   verifyFMSCreateMonitoringOrderRequestReceived,
+  verifyFMSUpdateDeviceWearerRequestReceived,
   verifyFMSUpdateMonitoringOrderRequestReceived,
   verifyFMSAttachmentRequestReceived,
 }
