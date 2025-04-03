@@ -8,7 +8,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createFakeAddress,
+  createKnownAddress,
 } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
@@ -67,7 +67,7 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
-      const fakePrimaryAddress = createFakeAddress()
+      const fakePrimaryAddress = createKnownAddress()
       const primaryAddressDetails = {
         ...fakePrimaryAddress,
         hasAnotherAddress: 'No',
@@ -179,11 +179,11 @@ context('Scenarios', () => {
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],
-            address_1: primaryAddressDetails.line1,
-            address_2: 'N/A',
-            address_3: primaryAddressDetails.line3,
-            address_4: primaryAddressDetails.line4,
-            address_post_code: primaryAddressDetails.postcode,
+            address_1: fakePrimaryAddress.line1,
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
+            address_3: fakePrimaryAddress.line3,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+            address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
