@@ -43,22 +43,22 @@ context('Scenarios', () => {
     })
   })
 
-  context('Suspended Sentence Orders (Community) with Radio Frequency (RF) (HMU + PID) Weekend Only 7pm-7am.', () => {
+  context('Detention Training Order (DTO) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-7am.', () => {
     const deviceWearerDetails = {
-      ...createFakeYouthDeviceWearer(),
+      ...createFakeYouthDeviceWearer('CEMO007'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Probation', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Feltham Young Offender Institution', 'London')
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL HDC',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Curfew',
+      // sentenceType: 'Detention & Training Order'
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -204,7 +204,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
