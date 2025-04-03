@@ -113,7 +113,7 @@ context('Scenarios', () => {
     'Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release), Photo and Multiple Document attachments',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer('CEMO004'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
