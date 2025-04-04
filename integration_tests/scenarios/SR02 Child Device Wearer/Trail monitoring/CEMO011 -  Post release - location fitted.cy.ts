@@ -67,7 +67,7 @@ context('Scenarios', () => {
     const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = {
-      ...createFakeInterestedParties('Prison', 'Probation', 'Feltham Young Offender Institution', 'London'),
+      ...createFakeInterestedParties('Prison', 'YJS', 'Feltham Young Offender Institution', 'London'),
     }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
