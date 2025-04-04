@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeYouthDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -88,17 +88,21 @@ context('Scenarios', () => {
     'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - Variation of additional address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeYouthDeviceWearer('CEMO022'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+      const fakePrimaryAddress = createKnownAddress()
+      const interestedParties = createFakeInterestedParties(
+        'Prison',
+        'YJS',
+        'Feltham Young Offender Institution',
+        'London',
+      )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
         conditionType: 'License Condition of a Custodial Order',
         monitoringRequired: 'Exclusion zone monitoring',
       }
@@ -116,7 +120,10 @@ context('Scenarios', () => {
         variationType: 'Change of address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
-      const fakeVariationSecondaryAddress = createFakeAddress()
+      let fakeVariationSecondaryAddress = createKnownAddress()
+      while (fakeVariationSecondaryAddress.postcode === fakePrimaryAddress.postcode) {
+        fakeVariationSecondaryAddress = createKnownAddress()
+      }
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -183,14 +190,16 @@ context('Scenarios', () => {
               .replace('non binary', 'non-binary'),
             disability: [],
             address_1: fakePrimaryAddress.line1,
-            address_2: 'N/A',
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
             address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
             address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: fakeVariationSecondaryAddress.line1,
-            secondary_address_2: 'N/A',
+            secondary_address_2:
+              fakeVariationSecondaryAddress.line2 === '' ? 'N/A' : fakeVariationSecondaryAddress.line2,
             secondary_address_3: fakeVariationSecondaryAddress.line3,
-            secondary_address_4: fakeVariationSecondaryAddress.line4,
+            secondary_address_4:
+              fakeVariationSecondaryAddress.line4 === '' ? 'N/A' : fakeVariationSecondaryAddress.line4,
             secondary_address_post_code: fakeVariationSecondaryAddress.postcode,
             phone_number: deviceWearerDetails.contactNumber,
             risk_serious_harm: '',
@@ -263,7 +272,7 @@ context('Scenarios', () => {
                 order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
