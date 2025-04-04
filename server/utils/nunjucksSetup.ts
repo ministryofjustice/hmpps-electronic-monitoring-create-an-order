@@ -12,7 +12,6 @@ import probationRegions from '../reference/probation-regions'
 import youthJusticeServiceRegions from '../reference/youth-justice-service-regions'
 import crownCourts from '../reference/crown-courts'
 import magistratesCourts from '../reference/magistrates-courts'
-import questions from '../constants/questions'
 import responsibleOrganisations from '../reference/responsible-organisations'
 import notifyingOrganisations from '../reference/notifying-organisations'
 import sentenceTypes from '../reference/sentence-types'
@@ -70,7 +69,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
 
   // Add data to global nunjucks env
-  njkEnv.addGlobal('questions', questions)
   njkEnv.addGlobal('variationTypes', variationTypeMap)
   njkEnv.addGlobal('prisons', toOptions(prisons, false, true))
   njkEnv.addGlobal('probationRegions', toOptions(probationRegions, false, true))
