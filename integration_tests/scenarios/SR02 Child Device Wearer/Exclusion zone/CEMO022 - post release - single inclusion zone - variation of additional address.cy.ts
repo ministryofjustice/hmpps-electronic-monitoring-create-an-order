@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeYouthDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import {
+  createFakeYouthDeviceWearer,
+  createFakeInterestedParties,
+  createKnownAddress,
+  createFakeResponsibleAdult,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -92,6 +97,7 @@ context('Scenarios', () => {
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
+      const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties(
         'Prison',
@@ -135,7 +141,7 @@ context('Scenarios', () => {
         cacheOrderId()
         orderSummaryPage.fillInNewEnforcementZoneOrderWith({
           deviceWearerDetails,
-          responsibleAdultDetails: undefined,
+          responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
@@ -159,7 +165,7 @@ context('Scenarios', () => {
         orderSummaryPage = orderSummaryPage.fillInEnforcementZoneVariationWith({
           variationDetails,
           deviceWearerDetails,
-          responsibleAdultDetails: undefined,
+          responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: fakeVariationSecondaryAddress,
           interestedParties,
@@ -181,7 +187,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
-            adult_child: 'adult',
+            adult_child: 'child',
             sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
@@ -208,15 +214,15 @@ context('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: '',
+            responsible_adult_required: 'true',
+            parent: responsibleAdultDetails.fullName,
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: null,
+            parent_phone_number: responsibleAdultDetails.contactNumber,
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
