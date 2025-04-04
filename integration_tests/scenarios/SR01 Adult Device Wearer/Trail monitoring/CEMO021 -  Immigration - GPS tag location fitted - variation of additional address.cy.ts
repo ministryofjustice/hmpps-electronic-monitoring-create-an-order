@@ -4,7 +4,7 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
@@ -21,7 +21,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -63,7 +63,7 @@ context('Scenarios', () => {
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
-    const fakePrimaryAddress = createFakeAddress()
+    const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -52,24 +52,24 @@ context('Scenarios', () => {
     'Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-3am -  - Variation of additional address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer('CEMO020'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
+      const fakePrimaryAddress = createKnownAddress()
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        orderTypeDescription: 'DAPO',
         conditionType: 'Bail Order',
         monitoringRequired: 'Curfew',
+        hdc: 'Yes',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
         startTime: { hours: '19', minutes: '00' },
-        endTime: { hours: '10', minutes: '00' },
+        endTime: { hours: '03', minutes: '00' },
         address: /Main address/,
       }
       const curfewConditionDetails = {
@@ -82,7 +82,7 @@ context('Scenarios', () => {
         {
           day,
           startTime: '19:00:00',
-          endTime: '10:00:00',
+          endTime: '03:00:00',
           addresses: curfewConditionDetails.addresses,
         },
       ])
@@ -91,7 +91,10 @@ context('Scenarios', () => {
         variationType: 'Change of address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
-      const fakeVariationSecondaryAddress = createFakeAddress()
+      let fakeVariationSecondaryAddress = createKnownAddress()
+      while (fakeVariationSecondaryAddress.postcode === fakePrimaryAddress.postcode) {
+        fakeVariationSecondaryAddress = createKnownAddress()
+      }
       const variationCurfewConditionDetails = {
         startDate: variationDetails.variationDate,
         endDate: curfewConditionDetails.endDate,
@@ -175,14 +178,16 @@ context('Scenarios', () => {
               .replace('non binary', 'non-binary'),
             disability: [],
             address_1: fakePrimaryAddress.line1,
-            address_2: 'N/A',
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
             address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
             address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: fakeVariationSecondaryAddress.line1,
-            secondary_address_2: 'N/A',
+            secondary_address_2:
+              fakeVariationSecondaryAddress.line2 === '' ? 'N/A' : fakeVariationSecondaryAddress.line2,
             secondary_address_3: fakeVariationSecondaryAddress.line3,
-            secondary_address_4: fakeVariationSecondaryAddress.line4,
+            secondary_address_4:
+              fakeVariationSecondaryAddress.line4 === '' ? 'N/A' : fakeVariationSecondaryAddress.line4,
             secondary_address_post_code: fakeVariationSecondaryAddress.postcode,
             phone_number: deviceWearerDetails.contactNumber,
             risk_serious_harm: '',
@@ -255,7 +260,7 @@ context('Scenarios', () => {
                 order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: 'Pre-Trial',
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
@@ -392,7 +397,7 @@ context('Scenarios', () => {
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
-                hdc: 'No',
+                hdc: 'Yes',
                 order_status: 'Not Started',
               },
             })

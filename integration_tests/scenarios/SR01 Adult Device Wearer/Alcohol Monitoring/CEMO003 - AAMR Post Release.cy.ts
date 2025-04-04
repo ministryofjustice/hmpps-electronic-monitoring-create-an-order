@@ -45,12 +45,16 @@ context('Scenarios', () => {
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties(
+      'Crown Court',
+      'Probation',
+      'Birmingham Crown Court',
+      'Greater Manchester',
+    )
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL',
+      orderType: 'Community',
       conditionType: 'Bail Order',
       monitoringRequired: 'Alcohol monitoring',
     }
@@ -181,7 +185,7 @@ context('Scenarios', () => {
             order_request_type: 'New Order',
             order_start: formatAsFmsDateTime(monitoringConditions.startDate),
             order_type: monitoringConditions.orderType,
-            order_type_description: monitoringConditions.orderTypeDescription,
+            order_type_description: null,
             order_type_detail: '',
             order_variation_date: '',
             order_variation_details: '',

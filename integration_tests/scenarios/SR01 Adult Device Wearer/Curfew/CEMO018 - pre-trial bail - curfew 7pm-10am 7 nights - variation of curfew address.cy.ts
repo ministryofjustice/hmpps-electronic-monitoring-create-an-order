@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime } from '../../utils'
 
@@ -52,17 +52,16 @@ context('Scenarios', () => {
     'Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am - Variation of curfew address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer('CEMO018'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
+      const fakePrimaryAddress = createKnownAddress()
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        orderTypeDescription: 'DAPO',
         conditionType: 'Bail Order',
         monitoringRequired: 'Curfew',
       }
@@ -91,7 +90,10 @@ context('Scenarios', () => {
         variationType: 'Change of address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
-      const fakeVariationPrimaryAddress = createFakeAddress()
+      let fakeVariationPrimaryAddress = createKnownAddress()
+      while (fakeVariationPrimaryAddress.postcode === fakePrimaryAddress.postcode) {
+        fakeVariationPrimaryAddress = createKnownAddress()
+      }
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -162,9 +164,9 @@ context('Scenarios', () => {
               .replace('non binary', 'non-binary'),
             disability: [],
             address_1: fakeVariationPrimaryAddress.line1,
-            address_2: 'N/A',
+            address_2: fakeVariationPrimaryAddress.line2 === '' ? 'N/A' : fakeVariationPrimaryAddress.line2,
             address_3: fakeVariationPrimaryAddress.line3,
-            address_4: fakeVariationPrimaryAddress.line4,
+            address_4: fakeVariationPrimaryAddress.line4 === '' ? 'N/A' : fakeVariationPrimaryAddress.line4,
             address_post_code: fakeVariationPrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
@@ -242,7 +244,7 @@ context('Scenarios', () => {
                 order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: 'Pre-Trial',
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
