@@ -28,7 +28,7 @@ export default class EnforcementZoneFormComponent extends FormComponent {
   }
 
   get uploadField(): FormFileUploadComponent {
-    return new FormFileUploadComponent(this.form, 'Upload map')
+    return new FormFileUploadComponent(this.form, 'Monitoring zone map (optional)')
   }
 
   get descriptionField(): FormTextareaComponent {
