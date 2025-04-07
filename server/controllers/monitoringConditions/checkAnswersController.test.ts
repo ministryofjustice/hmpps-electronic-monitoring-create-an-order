@@ -259,90 +259,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationAddress: [
           {
             key: {
-              text: 'Address line 1',
+              text: 'Where will the installation of the electronic monitoring device take place?',
             },
             value: {
-              text: '',
+              html: '',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'address line 1',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Address line 2',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'address line 2',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Address line 3',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'address line 3',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Address line 4',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'address line 4',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Postcode',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'postcode',
+                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
                 },
               ],
             },
           },
         ],
+        curfewReleaseDate: [],
         curfew: [],
         curfewTimetable: [],
         exclusionZone: [],
@@ -725,94 +658,26 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationAddress: [
           {
             key: {
-              text: 'Address line 1',
+              text: 'Where will the installation of the electronic monitoring device take place?',
             },
             value: {
-              text: 'Line 1',
+              html: 'Line 1, Line 2, Postcode',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'address line 1',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Address line 2',
-            },
-            value: {
-              text: 'Line 2',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'address line 2',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Address line 3',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'address line 3',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Address line 4',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'address line 4',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Postcode',
-            },
-            value: {
-              text: 'Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'postcode',
+                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
                 },
               ],
             },
           },
         ],
-        curfew: [
+        curfewReleaseDate: [
           {
             key: {
-              text: 'Release date',
+              text: 'What date is the device wearer released from custody?',
             },
             value: {
               text: '11/11/2024',
@@ -822,31 +687,48 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'release date',
+                  visuallyHiddenText: 'what date is the device wearer released from custody?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Curfew hours on the day of release',
+              text: 'On the day of release, what time does the curfew start?',
             },
             value: {
-              text: '11:11:00 - 11:11:00',
+              text: 'Invalid Date',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'curfew hours on the day of release',
+                  visuallyHiddenText: 'on the day of release, what time does the curfew start?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Curfew address on the day of release',
+              text: 'On the day of release, what time does the curfew end?',
+            },
+            value: {
+              text: 'Invalid Date',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'on the day of release, what time does the curfew end?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'On the day of release, where will the device wearer be during curfew hours?',
             },
             value: {
               html: 'Line 1, Line 2, Postcode',
@@ -856,14 +738,16 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'curfew address on the day of release',
+                  visuallyHiddenText: 'on the day of release, where will the device wearer be during curfew hours?',
                 },
               ],
             },
           },
+        ],
+        curfew: [
           {
             key: {
-              text: 'Date when monitoring starts',
+              text: 'What date does the curfew start?',
             },
             value: {
               text: '11/11/2024',
@@ -873,14 +757,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'date when monitoring starts',
+                  visuallyHiddenText: 'what date does the curfew start?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Date when monitoring ends',
+              text: 'What date does the curfew end? (optional)',
             },
             value: {
               text: '11/11/2024',
@@ -890,14 +774,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'date when monitoring ends',
+                  visuallyHiddenText: 'what date does the curfew end? (optional)',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What address or addresses will the device wearer use during curfew hours?',
+              text: 'Where will the device wearer be during curfew hours?',
             },
             value: {
               html: 'Line 1, Line 2, Postcode<br/>Line 1, Line 2, Postcode',
@@ -907,7 +791,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what address or addresses will the device wearer use during curfew hours?',
+                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
                 },
               ],
             },

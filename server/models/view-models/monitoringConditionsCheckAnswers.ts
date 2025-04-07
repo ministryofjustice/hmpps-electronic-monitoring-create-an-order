@@ -18,7 +18,6 @@ import {
   createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
   createTextAnswer,
-  createTimeRangeAnswer,
 } from '../../utils/checkYourAnswers'
 import sentenceTypes from '../../reference/sentence-types'
 import yesNoUnknown from '../../reference/yes-no-unknown'
@@ -27,6 +26,9 @@ import trailMonitoringPageContent from '../../i18n/en/pages/trailMonitoring'
 import alcoholPageContent from '../../i18n/en/pages/alcohol'
 import attendancePageContent from '../../i18n/en/pages/attendance'
 import exclusionZonePageContent from '../../i18n/en/pages/exclusionZone'
+import curfewReleaseDatePageContent from '../../i18n/en/pages/curfewReleaseDate'
+import curfewConditionsPageContent from '../../i18n/en/pages/curfewConditions'
+import installationAddressPageContent from '../../i18n/en/pages/installationAddress'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -70,13 +72,8 @@ const createInstallationAddressAnswers = (order: Order) => {
   const installationAddress = order.addresses.find(
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
-  return [
-    createTextAnswer('Address line 1', installationAddress?.addressLine1, uri),
-    createTextAnswer('Address line 2', installationAddress?.addressLine2, uri),
-    createTextAnswer('Address line 3', installationAddress?.addressLine3, uri),
-    createTextAnswer('Address line 4', installationAddress?.addressLine4, uri),
-    createTextAnswer('Postcode', installationAddress?.postcode, uri),
-  ]
+
+  return [createAddressAnswer(installationAddressPageContent.legend, installationAddress, uri)]
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
@@ -130,31 +127,39 @@ const createCurfewTimetableAnswers = (order: Order) => {
     })
 }
 
-const createCurfewAnswers = (order: Order) => {
+const createCurfewReleaseDateAnswers = (order: Order) => {
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
-  const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+  const { questions } = curfewReleaseDatePageContent
 
   if (!order.monitoringConditions.curfew) {
     return []
   }
 
   return [
-    createDateAnswer('Release date', order.curfewReleaseDateConditions?.releaseDate, releaseDateUri),
-    createTimeRangeAnswer(
-      'Curfew hours on the day of release',
-      order.curfewReleaseDateConditions?.startTime,
-      order.curfewReleaseDateConditions?.endTime,
-      releaseDateUri,
-    ),
+    createDateAnswer(questions.releaseDate.text, order.curfewReleaseDateConditions?.releaseDate, releaseDateUri),
+    createTimeAnswer(questions.startTime.text, order.curfewReleaseDateConditions?.startTime, releaseDateUri),
+    createTimeAnswer(questions.endTime.text, order.curfewReleaseDateConditions?.endTime, releaseDateUri),
     createAddressAnswer(
-      'Curfew address on the day of release',
+      questions.address.text,
       order.addresses.find(({ addressType }) => addressType === order.curfewReleaseDateConditions?.curfewAddress),
       releaseDateUri,
     ),
-    createDateAnswer('Date when monitoring starts', order.curfewConditions?.startDate, conditionsUri),
-    createDateAnswer('Date when monitoring ends', order.curfewConditions?.endDate, conditionsUri),
+  ]
+}
+
+const createCurfewAnswers = (order: Order) => {
+  const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+  const { questions } = curfewConditionsPageContent
+
+  if (!order.monitoringConditions.curfew) {
+    return []
+  }
+
+  return [
+    createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri),
+    createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri),
     createMultipleAddressAnswer(
-      'What address or addresses will the device wearer use during curfew hours?',
+      questions.addresses.text,
       order.addresses.filter(({ addressType }) => (order.curfewConditions?.curfewAddress || '').includes(addressType)),
       conditionsUri,
     ),
@@ -264,6 +269,7 @@ const createViewModel = (order: Order) => {
     monitoringConditions: createMonitoringConditionsAnswers(order),
     installationAddress: createInstallationAddressAnswers(order),
     curfew: createCurfewAnswers(order),
+    curfewReleaseDate: createCurfewReleaseDateAnswers(order),
     curfewTimetable: createCurfewTimetableAnswers(order),
     exclusionZone: createExclusionZoneAnswers(order),
     trail: createTrailAnswers(order),
