@@ -98,7 +98,7 @@ context('Scenarios', () => {
     'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Grounds, document attachment',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer(),
+        ...createFakeYouthDeviceWearer('CEMO014'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
