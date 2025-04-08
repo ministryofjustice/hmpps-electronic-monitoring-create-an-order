@@ -1173,7 +1173,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 text: 'At what address will the appointment take place?',
               },
               value: {
-                text: 'add 1',
+                text: 'add 1, add 2, add 3, , PC13DE',
               },
               actions: {
                 items: [
@@ -1184,86 +1184,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                     ),
                     text: 'Change',
                     visuallyHiddenText: 'at what address will the appointment take place?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Address line 2',
-              },
-              value: {
-                text: 'add 2',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
-                      `:conditionId`,
-                      conditionId,
-                    ),
-                    text: 'Change',
-                    visuallyHiddenText: 'address line 2',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Town or City',
-              },
-              value: {
-                text: 'add 3',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
-                      `:conditionId`,
-                      conditionId,
-                    ),
-                    text: 'Change',
-                    visuallyHiddenText: 'town or city',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'County',
-              },
-              value: {
-                text: '',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
-                      `:conditionId`,
-                      conditionId,
-                    ),
-                    text: 'Change',
-                    visuallyHiddenText: 'county',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Postcode',
-              },
-              value: {
-                text: 'PC13DE',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
-                      `:conditionId`,
-                      conditionId,
-                    ),
-                    text: 'Change',
-                    visuallyHiddenText: 'postcode',
                   },
                 ],
               },

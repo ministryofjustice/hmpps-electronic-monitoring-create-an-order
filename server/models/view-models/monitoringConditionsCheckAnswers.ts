@@ -21,14 +21,7 @@ import {
 } from '../../utils/checkYourAnswers'
 import sentenceTypes from '../../reference/sentence-types'
 import yesNoUnknown from '../../reference/yes-no-unknown'
-import monitoringConditionsPageContent from '../../i18n/en/pages/monitoringConditions'
-import trailMonitoringPageContent from '../../i18n/en/pages/trailMonitoring'
-import alcoholPageContent from '../../i18n/en/pages/alcohol'
-import attendancePageContent from '../../i18n/en/pages/attendance'
-import exclusionZonePageContent from '../../i18n/en/pages/exclusionZone'
-import curfewReleaseDatePageContent from '../../i18n/en/pages/curfewReleaseDate'
-import curfewConditionsPageContent from '../../i18n/en/pages/curfewConditions'
-import installationAddressPageContent from '../../i18n/en/pages/installationAddress'
+import I18n from '../../types/i18n'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -40,7 +33,7 @@ const getSelectedMonitoringTypes = (order: Order) => {
   ].filter(val => val !== '')
 }
 
-const createMonitoringConditionsAnswers = (order: Order) => {
+const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
   const conditionType = lookup(conditionTypeMap, order.monitoringConditions.conditionType)
   const orderType = lookup(orderTypeMap, order.monitoringConditions.orderType)
@@ -49,7 +42,7 @@ const createMonitoringConditionsAnswers = (order: Order) => {
   const issp = lookup(yesNoUnknown, order.monitoringConditions.issp)
   const hdc = lookup(yesNoUnknown, order.monitoringConditions.hdc)
   const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
-  const { questions } = monitoringConditionsPageContent
+  const { questions } = content.pages.monitoringConditions
 
   return [
     createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri),
@@ -67,13 +60,13 @@ const createMonitoringConditionsAnswers = (order: Order) => {
   ]
 }
 
-const createInstallationAddressAnswers = (order: Order) => {
+const createInstallationAddressAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id)
   const installationAddress = order.addresses.find(
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
 
-  return [createAddressAnswer(installationAddressPageContent.legend, installationAddress, uri)]
+  return [createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri)]
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
@@ -127,9 +120,9 @@ const createCurfewTimetableAnswers = (order: Order) => {
     })
 }
 
-const createCurfewReleaseDateAnswers = (order: Order) => {
+const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
-  const { questions } = curfewReleaseDatePageContent
+  const { questions } = content.pages.curfewReleaseDate
 
   if (!order.monitoringConditions.curfew) {
     return []
@@ -147,9 +140,9 @@ const createCurfewReleaseDateAnswers = (order: Order) => {
   ]
 }
 
-const createCurfewAnswers = (order: Order) => {
+const createCurfewAnswers = (order: Order, content: I18n) => {
   const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
-  const { questions } = curfewConditionsPageContent
+  const { questions } = content.pages.curfewConditions
 
   if (!order.monitoringConditions.curfew) {
     return []
@@ -166,9 +159,9 @@ const createCurfewAnswers = (order: Order) => {
   ]
 }
 
-const createExclusionZoneAnswers = (order: Order) => {
+const createExclusionZoneAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
-  const { questions } = exclusionZonePageContent
+  const { questions } = content.pages.exclusionZone
 
   if (!order.monitoringConditions.exclusionZone) {
     return []
@@ -191,9 +184,9 @@ const createExclusionZoneAnswers = (order: Order) => {
     })
 }
 
-const createTrailAnswers = (order: Order) => {
+const createTrailAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
-  const { questions } = trailMonitoringPageContent
+  const { questions } = content.pages.trailMonitoring
 
   if (!order.monitoringConditions.trail) {
     return []
@@ -205,7 +198,7 @@ const createTrailAnswers = (order: Order) => {
   ]
 }
 
-const createAttendanceAnswers = (order: Order) => {
+const createAttendanceAnswers = (order: Order, content: I18n) => {
   if (!order.mandatoryAttendanceConditions) {
     return []
   }
@@ -215,7 +208,9 @@ const createAttendanceAnswers = (order: Order) => {
       `:conditionId`,
       attendance.id!,
     )
-    const { questions } = attendancePageContent
+    const { questions } = content.pages.attendance
+
+    const address = `${attendance.addressLine1}, ${attendance.addressLine2}, ${attendance.addressLine3}, ${attendance.addressLine4}, ${attendance.postcode}`
 
     return [
       createDateAnswer(questions.startDate.text, attendance.startDate, uri),
@@ -224,19 +219,15 @@ const createAttendanceAnswers = (order: Order) => {
       createTextAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri),
       createTextAnswer(questions.startTime.text, attendance.startTime, uri),
       createTextAnswer(questions.endTime.text, attendance.endTime, uri),
-      createTextAnswer(questions.address.text, attendance.addressLine1, uri), // TODO collapse address into one field
-      createTextAnswer('Address line 2', attendance.addressLine2, uri),
-      createTextAnswer('Town or City', attendance.addressLine3, uri),
-      createTextAnswer('County', attendance.addressLine4, uri),
-      createTextAnswer('Postcode', attendance.postcode, uri),
+      createTextAnswer(questions.address.text, address, uri),
     ]
   })
 }
 
-const createAlcoholAnswers = (order: Order) => {
+const createAlcoholAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
-  const { questions } = alcoholPageContent
+  const { questions } = content.pages.alcohol
 
   if (!order.monitoringConditions.alcohol) {
     return []
@@ -264,17 +255,17 @@ const createAlcoholAnswers = (order: Order) => {
   ]
 }
 
-const createViewModel = (order: Order) => {
+const createViewModel = (order: Order, content: I18n) => {
   return {
-    monitoringConditions: createMonitoringConditionsAnswers(order),
-    installationAddress: createInstallationAddressAnswers(order),
-    curfew: createCurfewAnswers(order),
-    curfewReleaseDate: createCurfewReleaseDateAnswers(order),
+    monitoringConditions: createMonitoringConditionsAnswers(order, content),
+    installationAddress: createInstallationAddressAnswers(order, content),
+    curfew: createCurfewAnswers(order, content),
+    curfewReleaseDate: createCurfewReleaseDateAnswers(order, content),
     curfewTimetable: createCurfewTimetableAnswers(order),
-    exclusionZone: createExclusionZoneAnswers(order),
-    trail: createTrailAnswers(order),
-    attendance: createAttendanceAnswers(order),
-    alcohol: createAlcoholAnswers(order),
+    exclusionZone: createExclusionZoneAnswers(order, content),
+    trail: createTrailAnswers(order, content),
+    attendance: createAttendanceAnswers(order, content),
+    alcohol: createAlcoholAnswers(order, content),
   }
 }
 
