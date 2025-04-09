@@ -1,4 +1,4 @@
-import { Address } from '../models/Address'
+import { AddressWithoutType } from '../models/Address'
 import { ValidationResult } from '../models/Validation'
 import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 
@@ -185,5 +185,5 @@ export const lookup = (map: Record<string, string>, value: string | null | undef
   return defaultValue
 }
 
-export const createAddressPreview = (address: Address | null | undefined): string =>
+export const createAddressPreview = (address: AddressWithoutType | null | undefined): string =>
   isNullOrUndefined(address) ? '' : `${address.addressLine1}, ${address.addressLine2}, ${address.postcode}`

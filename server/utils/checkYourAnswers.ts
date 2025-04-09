@@ -1,5 +1,5 @@
 import { isNullOrUndefined, convertBooleanToEnum, createAddressPreview } from './utils'
-import { Address } from '../models/Address'
+import { AddressWithoutType } from '../models/Address'
 
 type Optional<T> = T | null | undefined
 
@@ -88,8 +88,8 @@ const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
 export const createTimeRangeAnswer = (key: string, from: Optional<string>, to: Optional<string>, uri: string): Answer =>
   createTextAnswer(key, createTimeRangePreview(from, to), uri)
 
-export const createMultipleAddressAnswer = (key: string, values: Array<Address>, uri: string): Answer =>
+export const createMultipleAddressAnswer = (key: string, values: Array<AddressWithoutType>, uri: string): Answer =>
   createMultipleChoiceAnswer(key, isNullOrUndefined(values) ? [] : values.map(createAddressPreview), uri)
 
-export const createAddressAnswer = (key: string, value: Optional<Address>, uri: string): Answer =>
+export const createAddressAnswer = (key: string, value: Optional<AddressWithoutType>, uri: string): Answer =>
   createMultipleAddressAnswer(key, isNullOrUndefined(value) ? [] : [value], uri)

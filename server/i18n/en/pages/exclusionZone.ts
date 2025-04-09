@@ -21,7 +21,7 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
       hint: 'For example, 21 05 2025',
     },
     file: {
-      text: 'Upload map',
+      text: 'Monitoring zone map (optional)',
     },
     startDate: {
       text: 'What date does exclusion zone monitoring start?',
