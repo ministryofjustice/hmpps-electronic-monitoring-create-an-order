@@ -1173,7 +1173,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 text: 'At what address will the appointment take place?',
               },
               value: {
-                text: 'add 1, add 2, add 3, , PC13DE',
+                html: 'add 1, add 2, PC13DE',
               },
               actions: {
                 items: [

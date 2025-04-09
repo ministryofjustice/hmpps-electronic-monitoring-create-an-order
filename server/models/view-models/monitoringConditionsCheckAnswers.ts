@@ -210,8 +210,6 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
     )
     const { questions } = content.pages.attendance
 
-    const address = `${attendance.addressLine1}, ${attendance.addressLine2}, ${attendance.addressLine3}, ${attendance.addressLine4}, ${attendance.postcode}`
-
     return [
       createDateAnswer(questions.startDate.text, attendance.startDate, uri),
       createDateAnswer(questions.endDate.text, attendance.endDate, uri),
@@ -219,7 +217,17 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
       createTextAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri),
       createTextAnswer(questions.startTime.text, attendance.startTime, uri),
       createTextAnswer(questions.endTime.text, attendance.endTime, uri),
-      createTextAnswer(questions.address.text, address, uri),
+      createAddressAnswer(
+        questions.address.text,
+        {
+          addressLine1: attendance.addressLine1 || '',
+          addressLine2: attendance.addressLine2 || '',
+          addressLine3: attendance.addressLine3 || '',
+          addressLine4: attendance.addressLine4 || '',
+          postcode: attendance.postcode || '',
+        },
+        uri,
+      ),
     ]
   })
 }
