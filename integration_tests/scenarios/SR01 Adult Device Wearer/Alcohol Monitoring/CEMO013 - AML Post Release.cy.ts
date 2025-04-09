@@ -5,7 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -115,7 +115,7 @@ context('Scenarios', () => {
           secondary_address_3: '',
           secondary_address_4: '',
           secondary_address_post_code: '',
-          phone_number: deviceWearerDetails.contactNumber,
+          phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
           risk_details: '',
@@ -197,7 +197,7 @@ context('Scenarios', () => {
               planned_order_end_date: '',
               responsible_officer_details_received: '',
               responsible_officer_email: '',
-              responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
+              responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
               responsible_officer_name: interestedParties.responsibleOfficerName,
               responsible_organization: interestedParties.responsibleOrganisation,
               ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
@@ -206,7 +206,7 @@ context('Scenarios', () => {
               ro_address_3: interestedParties.responsibleOrganisationAddress.line3,
               ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
               ro_email: interestedParties.responsibleOrganisationEmailAddress,
-              ro_phone: interestedParties.responsibleOrganisationContactNumber,
+              ro_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOrganisationContactNumber),
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
