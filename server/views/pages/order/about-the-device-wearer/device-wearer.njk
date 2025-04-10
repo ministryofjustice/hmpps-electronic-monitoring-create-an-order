@@ -140,28 +140,7 @@
     hint: {
       text: content.pages.deviceWearer.questions.sex.hint
     },
-    items: [
-      {
-        value: "male",
-        text: "Male",
-        disabled: not isOrderEditable
-      },
-      {
-        value: "female",
-        text: "Female",
-        disabled: not isOrderEditable
-      },
-      {
-        value: "prefer not to say",
-        text: "Prefer not to say",
-        disabled: not isOrderEditable
-      },
-      {
-        value: "unknown",
-        text: "Not able to provide this information",
-        disabled: not isOrderEditable
-      }
-    ],
+    items: content.reference.sex | toOptions(not isOrderEditable),
     value: sex.value,
     errorMessage: sex.error,
     disabled: not isOrderEditable

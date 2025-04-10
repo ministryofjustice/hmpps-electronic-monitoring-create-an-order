@@ -1,4 +1,4 @@
-import { disabilitiesMap, genderMap, sexMap } from '../../constants/about-the-device-wearer'
+import { disabilitiesMap, genderMap } from '../../constants/about-the-device-wearer'
 import { relationshipMap } from '../../constants/about-the-device-wearer/responsibleAdult'
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
@@ -48,7 +48,11 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
       order.deviceWearer.adultAtTimeOfInstallation,
       uri,
     ),
-    createTextAnswer(content.pages.deviceWearer.questions.sex.text, lookup(sexMap, order.deviceWearer.sex), uri),
+    createTextAnswer(
+      content.pages.deviceWearer.questions.sex.text,
+      lookup(content.reference.sex, order.deviceWearer.sex),
+      uri,
+    ),
     createTextAnswer(
       content.pages.deviceWearer.questions.gender.text,
       lookup(genderMap, order.deviceWearer.gender),
