@@ -136,7 +136,7 @@ context('Scenarios', () => {
           adult_child: 'adult',
           sex: deviceWearerDetails.sex
             .replace('Not able to provide this information', 'Prefer Not To Say')
-            .replace('Prefer not to say', 'Prefer Not To Say'),
+            .replace('Prefer not to say', 'Prefer Not to Say'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
             .replace('not able to provide this information', 'unknown')
