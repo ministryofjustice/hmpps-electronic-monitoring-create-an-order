@@ -115,7 +115,9 @@ context('Scenarios', () => {
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'adult',
-            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+            sex: deviceWearerDetails.sex
+              .replace('Not able to provide this information', 'Prefer Not to Say')
+              .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace('not able to provide this information', 'unknown')

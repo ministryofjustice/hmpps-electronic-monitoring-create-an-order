@@ -23,7 +23,7 @@ const adultDeviceWearer = createDeviceWearer({
   alias: 'test',
   dateOfBirth: '1980-10-10T00:00:00.000Z',
   adultAtTimeOfInstallation: true,
-  sex: 'male',
+  sex: 'MALE',
   gender: 'male',
   disabilities: ['VISION', 'MOBILITY'],
   interpreterRequired: false,
