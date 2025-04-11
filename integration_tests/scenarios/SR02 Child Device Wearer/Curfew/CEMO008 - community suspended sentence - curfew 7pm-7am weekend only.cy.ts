@@ -248,7 +248,7 @@ context('Scenarios', () => {
                 {
                   location: 'primary',
                   allday: '',
-                  schedule: [                    
+                  schedule: [
                     {
                       day: 'Sa',
                       start: '19:00:00',

@@ -56,7 +56,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Community',
       conditionType: 'Bail Order',
-      monitoringRequired: 'Alcohol monitoring',      
+      monitoringRequired: 'Alcohol monitoring',
     }
     const alcoholMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days

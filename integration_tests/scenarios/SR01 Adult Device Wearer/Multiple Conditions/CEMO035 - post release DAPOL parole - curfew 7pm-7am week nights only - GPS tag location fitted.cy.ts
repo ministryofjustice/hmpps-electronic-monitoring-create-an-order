@@ -55,7 +55,7 @@ context('Scenarios', () => {
         orderTypeDescription: 'DAPOL HDC',
         sentenceType: 'Standard Determinate Sentence',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-        monitoringRequired: ['Curfew', 'Trail monitoring']
+        monitoringRequired: ['Curfew', 'Trail monitoring'],
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -102,13 +102,13 @@ context('Scenarios', () => {
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
-          enforcementZoneDetails:undefined,
-          alcoholMonitoringDetails:undefined,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
-        })      
+        })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
@@ -123,8 +123,8 @@ context('Scenarios', () => {
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'adult',
             sex: deviceWearerDetails.sex
-            .replace('Not able to provide this information', 'Prefer Not to Say')
-            .replace('Prefer not to say', 'Prefer Not to Say'),
+              .replace('Not able to provide this information', 'Prefer Not to Say')
+              .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace('not able to provide this information', 'unknown')

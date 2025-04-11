@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { kelvinCloseAddress , createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { kelvinCloseAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
@@ -47,12 +47,7 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = kelvinCloseAddress
-      const interestedParties = createFakeInterestedParties(
-        'Prison',
-        'Probation',
-        'Liverpool Prison',
-        'North West',
-      )
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
