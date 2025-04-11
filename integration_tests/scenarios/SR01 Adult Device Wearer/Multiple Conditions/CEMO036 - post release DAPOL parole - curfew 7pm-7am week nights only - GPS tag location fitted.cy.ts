@@ -42,7 +42,7 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO035'),
+        ...createFakeAdultDeviceWearer('CEMO036'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -112,7 +112,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO035',
+          responseRecordFilename: 'CEMO036',
           httpStatus: 200,
           body: {
             title: '',
@@ -171,7 +171,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO035',
+              responseRecordFilename: 'CEMO036',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
