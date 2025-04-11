@@ -104,7 +104,7 @@ context('Scenarios', () => {
         {
           day,
           startTime: '19:00:00',
-          endTime: '10:00:00',
+          endTime: '03:00:00',
           addresses: variationCurfewConditionDetails.addresses,
         },
       ])
@@ -307,37 +307,37 @@ context('Scenarios', () => {
                       {
                         day: 'Mo',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Tu',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Wed',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Th',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Fr',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Sa',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Su',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                     ],
                   },
@@ -348,37 +348,37 @@ context('Scenarios', () => {
                       {
                         day: 'Mo',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Tu',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Wed',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Th',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Fr',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Sa',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Su',
                         start: '19:00:00',
-                        end: '10:00:00',
+                        end: '03:00:00',
                       },
                     ],
                   },

@@ -160,6 +160,84 @@ export default class OrderTasksPage extends AppPage {
     return Page.verifyOnPage(OrderTasksPage)
   }
 
+  fillInNewOrderWith({
+    deviceWearerDetails,
+    responsibleAdultDetails,
+    primaryAddressDetails,
+    secondaryAddressDetails,
+    interestedParties,
+    installationAndRisk,
+    monitoringConditions,
+    installationAddressDetails,
+    curfewReleaseDetails,
+    curfewConditionDetails,
+    curfewTimetable,
+    enforcementZoneDetails,
+    alcoholMonitoringDetails,
+    trailMonitoringDetails,
+    files,
+  }): OrderTasksPage {
+    this.deviceWearerTask.click()
+
+    this.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      responsibleAdultDetails,
+      primaryAddressDetails,
+      secondaryAddressDetails,
+      interestedParties,
+      installationAndRisk,
+      monitoringConditions,
+      installationAddressDetails,
+    })
+
+    if (curfewReleaseDetails) {
+      this.fillInCurfewOrderDetailsWith(
+        {
+          curfewReleaseDetails,
+          curfewConditionDetails,
+          curfewTimetable,
+        },
+        false,
+      )
+    }
+
+    if (enforcementZoneDetails) {
+      this.fillInEnforcementZoneOrderDetailsWith(
+        {
+          enforcementZoneDetails,
+        },
+        false,
+      )
+    }
+
+    if (trailMonitoringDetails) {
+      this.fillInTrailMonitoringOrderDetailsWith(
+        {
+          trailMonitoringDetails,
+        },
+        false,
+      )
+    }
+
+    if (alcoholMonitoringDetails) {
+      this.fillInAlcoholMonitoringOrderDetailsWith(
+        {
+          alcoholMonitoringDetails,
+        },
+        false,
+      )
+    }
+
+    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+
+    this.fillInAttachmentDetailsWith({
+      files,
+    })
+
+    return Page.verifyOnPage(OrderTasksPage)
+  }
+
   fillInCurfewVariationWith({
     variationDetails,
     deviceWearerDetails,
@@ -465,7 +543,10 @@ export default class OrderTasksPage extends AppPage {
     installationAddress.form.saveAndContinueButton.click()
   }
 
-  fillInCurfewOrderDetailsWith({ curfewReleaseDetails, curfewConditionDetails, curfewTimetable }): void {
+  fillInCurfewOrderDetailsWith(
+    { curfewReleaseDetails, curfewConditionDetails, curfewTimetable },
+    checkYourAnswerPage = true,
+  ): void {
     const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
     curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
     curfewReleaseDatePage.form.saveAndContinueButton.click()
@@ -478,35 +559,43 @@ export default class OrderTasksPage extends AppPage {
     curfewTimetablePage.form.fillInWith(curfewTimetable)
     curfewTimetablePage.form.saveAndContinueButton.click()
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    if (checkYourAnswerPage) {
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    }
   }
 
-  fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }) {
+  fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
     const enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
     enforcementZonePage.form.fillInWith(enforcementZoneDetails)
     enforcementZonePage.form.saveAndContinueButton.click()
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    if (checkYourAnswerPage) {
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    }
   }
 
-  fillInAlcoholMonitoringOrderDetailsWith({ alcoholMonitoringDetails }): void {
+  fillInAlcoholMonitoringOrderDetailsWith({ alcoholMonitoringDetails }, checkYourAnswerPage = true): void {
     const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
     alcoholMonitoringPage.form.fillInWith(alcoholMonitoringDetails)
     alcoholMonitoringPage.form.saveAndContinueButton.click()
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    if (checkYourAnswerPage) {
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    }
   }
 
-  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }): void {
+  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }, checkYourAnswerPage = true): void {
     const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
     trailMonitoringPage.form.fillInWith(trailMonitoringDetails)
     trailMonitoringPage.form.saveAndContinueButton.click()
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
-    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    if (checkYourAnswerPage) {
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    }
   }
 
   fillInAttachmentDetailsWith({ files }): void {
