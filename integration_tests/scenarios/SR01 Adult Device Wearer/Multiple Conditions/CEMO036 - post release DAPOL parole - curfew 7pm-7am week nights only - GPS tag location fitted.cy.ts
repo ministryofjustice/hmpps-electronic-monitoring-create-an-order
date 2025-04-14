@@ -3,19 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
-  const hmppsDocumentId: string = uuidv4()
-  const files = {
-    photoId: {
-      contents: 'cypress/fixtures/profile.jpeg',
-      fileName: 'profile.jpeg',
-    },
-  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -43,62 +36,31 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
-
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.photoId.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: files.photoId.fileName,
-        filename: files.photoId.fileName,
-        fileExtension: files.photoId.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.readFile(files.photoId.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'image/jpeg',
-        fileBase64Body: content,
-      })
-    })
   })
 
   context(
-    'DAPO Bail (Pre-Trial) with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-3am, plus document attachment',
+    'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO002'),
+        ...createFakeAdultDeviceWearer('CEMO036'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Magistrates Court', 'Police', 'Lincoln Magistrates Court')
+      const fakePrimaryAddress = kelvinCloseAddress
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Pre-Trial',
-        conditionType: 'Bail Order',
-        monitoringRequired: 'Curfew',
-        orderTypeDescription: 'DAPO',
-        // sentenceType: 'DAPO'
+        orderType: 'Post Release',
+        orderTypeDescription: 'DAPOL HDC',
+        sentenceType: 'Standard Determinate Sentence',
+        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        monitoringRequired: ['Curfew', 'Trail monitoring'],
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
         startTime: { hours: '19', minutes: '00' },
-        endTime: { hours: '10', minutes: '00' },
+        endTime: { hours: '07', minutes: '00' },
         address: /Main address/,
       }
       const curfewConditionDetails = {
@@ -106,15 +68,21 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/],
       }
-      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
-      const curfewTimetable = curfewNights.flatMap((day: string) => [
-        {
-          day,
-          startTime: '19:00:00',
-          endTime: '03:00:00',
-          addresses: curfewConditionDetails.addresses,
-        },
-      ])
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewTimetable = [
+        ...curfewNights.flatMap((day: string) => [
+          {
+            day,
+            startTime: '19:00:00',
+            endTime: '07:00:00',
+            addresses: curfewConditionDetails.addresses,
+          },
+        ]),
+      ]
+      const trailMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+      }
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -124,7 +92,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewCurfewOrderWith({
+        orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -133,15 +101,18 @@ context('Scenarios', () => {
           installationAndRisk: undefined,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
+          trailMonitoringDetails,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
-          files,
+          files: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO002',
+          responseRecordFilename: 'CEMO036',
           httpStatus: 200,
           body: {
             title: '',
@@ -200,7 +171,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO002',
+              responseRecordFilename: 'CEMO036',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -216,6 +187,11 @@ context('Scenarios', () => {
                     condition: 'Curfew with EM',
                     start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
                     end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                  },
+                  {
+                    condition: 'Location Monitoring (Fitted Device)',
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -241,7 +217,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: 'DAPO',
+                order_type_description: monitoringConditions.orderTypeDescription,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
@@ -265,8 +241,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
-                // sentence_type: 'DAPO',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
@@ -287,42 +262,32 @@ context('Scenarios', () => {
                       {
                         day: 'Mo',
                         start: '19:00:00',
-                        end: '03:00:00',
+                        end: '07:00:00',
                       },
                       {
                         day: 'Tu',
                         start: '19:00:00',
-                        end: '03:00:00',
+                        end: '07:00:00',
                       },
                       {
                         day: 'Wed',
                         start: '19:00:00',
-                        end: '03:00:00',
+                        end: '07:00:00',
                       },
                       {
                         day: 'Th',
                         start: '19:00:00',
-                        end: '03:00:00',
+                        end: '07:00:00',
                       },
                       {
                         day: 'Fr',
                         start: '19:00:00',
-                        end: '03:00:00',
-                      },
-                      {
-                        day: 'Sa',
-                        start: '19:00:00',
-                        end: '03:00:00',
-                      },
-                      {
-                        day: 'Su',
-                        start: '19:00:00',
-                        end: '03:00:00',
+                        end: '07:00:00',
                       },
                     ],
                   },
                 ],
-                trail_monitoring: '',
+                trail_monitoring: 'Yes',
                 exclusion_zones: [],
                 inclusion_zones: [],
                 abstinence: '',
@@ -343,16 +308,6 @@ context('Scenarios', () => {
               },
             })
             .should('be.true')
-        })
-
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 0,
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
         })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

@@ -71,7 +71,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       addresses: [/Main address/],
     }
-    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewNights = ['SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
       {
         day,
@@ -249,31 +249,6 @@ context('Scenarios', () => {
                   location: 'primary',
                   allday: '',
                   schedule: [
-                    {
-                      day: 'Mo',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Tu',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Wed',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Th',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Fr',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
                     {
                       day: 'Sa',
                       start: '19:00:00',
