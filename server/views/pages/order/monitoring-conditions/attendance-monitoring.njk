@@ -13,6 +13,7 @@
 
 {% block formInputs %}
 
+  {% set questions = content.pages.attendance.questions %}
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
 
   {{ govukDateInput({
@@ -20,13 +21,13 @@
     namePrefix: "startDate",
     fieldset: {
       legend: {
-        text: "What is the date the mandatory attendance monitoring starts?",
+        text: questions.startDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2025"
+      text: questions.startDate.hint
     },
     items: [
       {
@@ -56,13 +57,13 @@
     namePrefix: "endDate",
     fieldset: {
       legend: {
-        text: "What is the date the mandatory attendance monitoring ends? (optional)",
+        text: questions.endDate.text,
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
     },
     hint: {
-      text: "For example, 21 05 2025"
+      text: questions.endDate.hint
     },
     items: [
       {
@@ -91,11 +92,11 @@
 
   {{ govukInput({
       label: {
-        text: "What is the appointment for?",
+        text: questions.purpose.text,
         classes: "govuk-label--s"
       },
       hint: {
-        text: "For example, education or medical appointment"
+        text: questions.purpose.hint
       },
       classes: "govuk-!-width-one-half",
       id: "purpose",
@@ -107,7 +108,7 @@
 
   {{ govukInput({
       label: {
-        text: "On what day or days is the appointment?",
+        text: questions.appointmentDay.text,
         classes: "govuk-label--s"
       },
       classes: "govuk-!-width-one-half",
@@ -119,8 +120,8 @@
     }) }}
 
   {{ timeInput({
-      label: "What time does the appointment start",
-      hint: "For example 09:45 or 15:30 (24 hours)",
+      label: questions.startTime.text,
+      hint: questions.startTime.hint,
       id: "startTime",
       name: "startTime",
       value: startTime.value,
@@ -129,8 +130,8 @@
     }) }}
 
   {{ timeInput({
-      label: "What time does the appointment end?",
-      hint: "For example 09:45 or 15:30 (24 hours)",
+      label: questions.endTime.text,
+      hint: questions.endTime.hint,
       id: "endTime",
       name: "endTime",
       value: endTime.value,
@@ -139,7 +140,7 @@
     }) }}
 
   {{ addressInput({
-      label: "What is the address where the appointment will take place?",
+      label: questions.address.text,
       id: "address",
       name: "address",
       value: address.value,
@@ -153,7 +154,7 @@
       classes: "govuk-radios--inline",
       fieldset: {
         legend: {
-          text: "Are there any other appointments the device wearer needs to attend?",
+          text: questions.addAnother.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }

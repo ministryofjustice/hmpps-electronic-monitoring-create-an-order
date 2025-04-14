@@ -4,7 +4,7 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
@@ -15,7 +15,7 @@ import InstallationAddressPage from '../../../pages/order/monitoring-conditions/
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
@@ -54,19 +54,19 @@ context('Scenarios', () => {
 
   context('Immigration with GPS Tag (Location - Fitted)', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeAdultDeviceWearer('CEMO009'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
-    const fakePrimaryAddress = createFakeAddress()
+    const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Immigration',
-      orderTypeDescription: 'DAPOL',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
+      // sentenceType: 'Immigration Bail'
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -151,7 +151,9 @@ context('Scenarios', () => {
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
           adult_child: 'adult',
-          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+          sex: deviceWearerDetails.sex
+            .replace('Not able to provide this information', 'Prefer Not to Say')
+            .replace('Prefer not to say', 'Prefer Not to Say'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
             .replace('not able to provide this information', 'unknown')
@@ -159,16 +161,16 @@ context('Scenarios', () => {
             .replace('non binary', 'non-binary'),
           disability: [],
           address_1: fakePrimaryAddress.line1,
-          address_2: 'N/A',
+          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
           address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4,
+          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
           secondary_address_4: '',
           secondary_address_post_code: '',
-          phone_number: deviceWearerDetails.contactNumber,
+          phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
           risk_details: '',
@@ -239,7 +241,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -250,7 +252,7 @@ context('Scenarios', () => {
               planned_order_end_date: '',
               responsible_officer_details_received: '',
               responsible_officer_email: '',
-              responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
+              responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
               responsible_officer_name: interestedParties.responsibleOfficerName,
               responsible_organization: interestedParties.responsibleOrganisation,
               ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
@@ -259,11 +261,12 @@ context('Scenarios', () => {
               ro_address_3: interestedParties.responsibleOrganisationAddress.line3,
               ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
               ro_email: interestedParties.responsibleOrganisationEmailAddress,
-              ro_phone: interestedParties.responsibleOrganisationContactNumber,
+              ro_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOrganisationContactNumber),
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: '',
+              // sentence_type: 'Immigration Bail',
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',

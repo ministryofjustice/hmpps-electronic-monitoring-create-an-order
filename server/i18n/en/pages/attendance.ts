@@ -7,6 +7,9 @@ const attendancePageContent: AttendancePageContent = {
     addAnother: {
       text: 'Do you need to add another appointment?',
     },
+    address: {
+      text: 'At what address will the appointment take place?',
+    },
     appointmentDay: {
       text: 'On what day is the appointment and how frequently does the appointment take place?',
       hint: 'For example, fortnightly on Mondays. Only include one day and frequency, if the same type of appointment occurs on another day on the same week enter this as a separate appointment.',

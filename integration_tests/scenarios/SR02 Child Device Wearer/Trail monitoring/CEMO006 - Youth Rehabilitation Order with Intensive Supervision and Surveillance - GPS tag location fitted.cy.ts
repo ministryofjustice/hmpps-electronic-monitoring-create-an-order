@@ -8,7 +8,7 @@ import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createFakeAddress,
+  createKnownAddress,
 } from '../../../mockApis/faker'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
@@ -21,7 +21,7 @@ import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
@@ -62,25 +62,31 @@ context('Scenarios', () => {
     'Youth Rehabilitation Order with Intensive Supervision and Surveillance (Community) with GPS Tag (Location - Fitted).',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer(),
+        ...createFakeYouthDeviceWearer('CEMO006'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
-      const fakePrimaryAddress = createFakeAddress()
+      const fakePrimaryAddress = createKnownAddress()
       const primaryAddressDetails = {
         ...fakePrimaryAddress,
         hasAnotherAddress: 'No',
       }
       const installationAddressDetails = fakePrimaryAddress
-      const interestedParties = createFakeInterestedParties('Probation', 'YJS')
+      const interestedParties = createFakeInterestedParties(
+        'Magistrates Court',
+        'YJS',
+        'Coventry Magistrates Court',
+        'Midlands',
+      )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        orderTypeDescription: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
+        // sentenceType: 'Community YRO',
+        issp: 'Yes',
       }
       const trailMonitoringOrder = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -166,24 +172,26 @@ context('Scenarios', () => {
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'child',
-            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+            sex: deviceWearerDetails.sex
+              .replace('Not able to provide this information', 'Prefer Not to Say')
+              .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace('not able to provide this information', 'unknown')
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],
-            address_1: primaryAddressDetails.line1,
-            address_2: 'N/A',
-            address_3: primaryAddressDetails.line3,
-            address_4: primaryAddressDetails.line4,
-            address_post_code: primaryAddressDetails.postcode,
+            address_1: fakePrimaryAddress.line1,
+            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
+            address_3: fakePrimaryAddress.line3,
+            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+            address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
             secondary_address_4: '',
             secondary_address_post_code: '',
-            phone_number: deviceWearerDetails.contactNumber,
+            phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
             risk_details: '',
@@ -198,7 +206,7 @@ context('Scenarios', () => {
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: responsibleAdultDetails.contactNumber,
+            parent_phone_number: formatAsFmsPhoneNumber(responsibleAdultDetails.contactNumber),
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -222,7 +230,6 @@ context('Scenarios', () => {
                 condition_type: 'Requirement of a Community Order',
                 court: '',
                 court_order_email: '',
-
                 device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
@@ -255,7 +262,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: 'Community',
-                order_type_description: 'GPS Acquisitive Crime Parole',
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
@@ -266,7 +273,7 @@ context('Scenarios', () => {
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
                 responsible_officer_email: '',
-                responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
+                responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
                 responsible_officer_name: interestedParties.responsibleOfficerName,
                 responsible_organization: interestedParties.responsibleOrganisation,
                 ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
@@ -275,11 +282,12 @@ context('Scenarios', () => {
                 ro_address_3: interestedParties.responsibleOrganisationAddress.line3,
                 ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
                 ro_email: interestedParties.responsibleOrganisationEmailAddress,
-                ro_phone: interestedParties.responsibleOrganisationContactNumber,
+                ro_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOrganisationContactNumber),
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: '',
+                // sentence_type: 'Community YRO',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
@@ -308,7 +316,7 @@ context('Scenarios', () => {
                 installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
-                issp: 'No',
+                issp: 'Yes',
                 hdc: 'No',
                 order_status: 'Not Started',
               },

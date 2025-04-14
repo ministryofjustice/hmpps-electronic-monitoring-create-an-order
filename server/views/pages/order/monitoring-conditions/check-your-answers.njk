@@ -1,97 +1,80 @@
 {% extends "../../../partials/check-your-answers-layout.njk" %}
 
-{% set section = "Monitoring conditions" %}
-{% set pageTitle = "Monitoring conditions - Check your answers - " + applicationName %}
+{% set section = "Electronic monitoring required" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block answers %}
 
+  <h2 class="govuk-heading-m">Monitoring details</h2>
   {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Monitoring conditions"
-      }
-    },
+    classes: "govuk-!-margin-bottom-9",
     rows: monitoringConditions
   }) }}
 
+  <h2 class="govuk-heading-m">Installation address</h2>
   {{ govukSummaryList({
-    card: {
-      title: {
-        text: "Installation address"
-      }
-    },
+    classes: "govuk-!-margin-bottom-9",
     rows: installationAddress
   }) }}
 
   {% if curfew | length > 0 %}
 
+  <h2 class="govuk-heading-m">Curfew on day of release</h2>
     {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Curfew monitoring conditions"
-        }
-      },
+      classes: "govuk-!-margin-bottom-9",
+      rows: curfewReleaseDate
+    }) }}
+
+  <h2 class="govuk-heading-m">Curfew</h2>
+    {{ govukSummaryList({
+      classes: "govuk-!-margin-bottom-9",
       rows: curfew
     }) }}
 
+    <h2 class="govuk-heading-m">Curfew Timetable</h2>
     {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Curfew timetable"
-        }
-      },
+      classes: "govuk-!-margin-bottom-9",
       rows: curfewTimetable
     }) }}
 
   {% endif %}
 
   {% if exclusionZone | length > 0 %}
+    <h2 class="govuk-heading-m">Exclusion zone monitoring</h2>
+  {% endif %}
 
+   {% for item in exclusionZone %}
     {{ govukSummaryList({
       card: {
         title: {
-          text: "Exclusion zone conditions"
+          text: "Exclusion zone monitoring"
         }
       },
-      rows: exclusionZone
+      rows: item
     }) }}
-
-  {% endif %}
+  {% endfor %}
 
   {% if trail | length > 0 %}
 
+    <h2 class="govuk-heading-m">Trail monitoring</h2>
     {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Trail monitoring conditions"
-        }
-      },
+      classes: "govuk-!-margin-bottom-9",
       rows: trail
     }) }}
 
   {% endif %}
-
-  {% if responsibleAdult | length > 0 %}
   
-    {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Attendance monitoring conditions"
-        }
-      },
-      rows: attendance
-    }) }}
-  
+  {% if attendance | length > 0 %}
+    <h2 class="govuk-heading-m">Mandatory attendance monitoring</h2>
   {% endif %}
-  
+
   {% for item in attendance %}
     {{ govukSummaryList({
       card: {
         title: {
-          text: "Attendance monitoring conditions"
+          text: "Attendance monitoring"
         }
       },
       rows: item
@@ -101,12 +84,9 @@
 
   {% if alcohol | length > 0 %}
 
+    <h2 class="govuk-heading-m">Alcohol monitoring</h2>
     {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Alcohol monitoring conditions"
-        }
-      },
+      classes: "govuk-!-margin-bottom-9",
       rows: alcohol
     }) }}
 

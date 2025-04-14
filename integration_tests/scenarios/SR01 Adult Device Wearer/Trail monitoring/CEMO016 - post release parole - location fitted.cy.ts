@@ -9,6 +9,11 @@ import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const uploadFile = {
+    contents: 'cypress/fixtures/test.pdf',
+    fileName: 'test.pdf',
+  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -36,33 +41,64 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: uploadFile.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: uploadFile.fileName,
+        filename: uploadFile.fileName,
+        fileExtension: uploadFile.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.readFile(uploadFile.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'application/pdf',
+        fileBase64Body: content,
+      })
+    })
   })
 
-  context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
+  context('Location Monitoring(Post Release) with GPS Tag (Location - Fitted) ', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer('CEMO013'),
+      ...createFakeAdultDeviceWearer('CEMO016'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties(
-      'Magistrates Court',
+      'Prison',
       'Probation',
-      'Warrington Magistrates Court',
-      'North West',
+      'Elmley Prison',
+      'Kent, Surrey & Sussex',
     )
     const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
-      conditionType: 'Bail Order',
-      monitoringRequired: 'Alcohol monitoring',
+      orderTypeDescription: 'DAPOL',
+      conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+      monitoringRequired: 'Trail monitoring',
+      sentenceType: 'Standard Determinate Sentence',
     }
-    const alcoholMonitoringDetails = {
+    const trailMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      monitoringType: 'Alcohol level',
-      installLocation: `at installation address: ${fakePrimaryAddress}`,
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -73,7 +109,7 @@ context('Scenarios', () => {
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+      orderSummaryPage.fillInNewTrailMonitoringOrderWith({
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails: fakePrimaryAddress,
@@ -82,13 +118,13 @@ context('Scenarios', () => {
         installationAndRisk: undefined,
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
-        alcoholMonitoringDetails,
+        trailMonitoringDetails,
         files: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO013',
+        responseRecordFilename: 'CEMO016',
         httpStatus: 200,
         body: {
           title: '',
@@ -147,7 +183,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO013',
+            responseRecordFilename: 'CEMO016',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -160,9 +196,9 @@ context('Scenarios', () => {
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'AML',
-                  start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                  end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                  condition: 'Location Monitoring (Fitted Device)',
+                  start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
+                  end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -188,7 +224,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: null,
+              order_type_description: monitoringConditions.orderTypeDescription,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
@@ -212,7 +248,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: '',
+              sentence_type: 'Standard Determinate Sentence',
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',
@@ -226,10 +262,10 @@ context('Scenarios', () => {
               curfew_start: '',
               curfew_end: '',
               curfew_duration: [],
-              trail_monitoring: '',
+              trail_monitoring: 'Yes',
               exclusion_zones: [],
               inclusion_zones: [],
-              abstinence: 'No',
+              abstinence: '',
               schedule: '',
               checkin_schedule: [],
               revocation_date: '',

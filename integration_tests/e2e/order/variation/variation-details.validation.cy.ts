@@ -35,6 +35,9 @@ context('Variation', () => {
 
         page.form.variationTypeField.shouldHaveValidationMessage(expectedValidationErrors.variationType.required)
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.required)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationType.required)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.required)
       })
 
       it('Should display validation error messages when the form has not been filled in incorrectly', () => {
@@ -50,6 +53,8 @@ context('Variation', () => {
         Page.verifyOnPage(VariationDetailsPage)
 
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.mustBeRealDate)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.mustBeRealDate)
       })
     })
   })

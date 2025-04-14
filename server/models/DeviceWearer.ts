@@ -15,6 +15,8 @@ export const DisabilityEnum = z.enum([
   'PREFER_NOT_TO_SAY',
 ])
 
+export const SexEnum = z.enum(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY', 'UNKNOWN'])
+
 const DeviceWearerModel = z.object({
   nomisId: z.string().nullable(),
   pncId: z.string().nullable(),
@@ -26,7 +28,7 @@ const DeviceWearerModel = z.object({
   alias: z.string().nullable(),
   dateOfBirth: z.string().datetime().nullable(),
   adultAtTimeOfInstallation: z.boolean().nullable(),
-  sex: z.string().nullable(),
+  sex: SexEnum.nullable(),
   gender: z.string().nullable(),
   otherGender: z.string().nullable().optional(),
   disabilities: z

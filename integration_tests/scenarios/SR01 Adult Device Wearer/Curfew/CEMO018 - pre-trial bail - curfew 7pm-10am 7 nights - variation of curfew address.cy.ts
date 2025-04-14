@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -37,6 +37,11 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFMSUpdateDeviceWearer', {
+      httpStatus: 200,
+      response: { result: [{ id: fmsCaseId, message: '' }] },
+    })
+
     cy.task('stubFMSUpdateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
@@ -47,17 +52,16 @@ context('Scenarios', () => {
     'Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am - Variation of curfew address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer(),
+        ...createFakeAdultDeviceWearer('CEMO018'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createFakeAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Probation')
+      const fakePrimaryAddress = createKnownAddress()
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        orderTypeDescription: 'DAPO',
         conditionType: 'Bail Order',
         monitoringRequired: 'Curfew',
       }
@@ -86,7 +90,10 @@ context('Scenarios', () => {
         variationType: 'Change of address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
-      const fakeVariationPrimaryAddress = createFakeAddress()
+      let fakeVariationPrimaryAddress = createKnownAddress()
+      while (fakeVariationPrimaryAddress.postcode === fakePrimaryAddress.postcode) {
+        fakeVariationPrimaryAddress = createKnownAddress()
+      }
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -138,9 +145,8 @@ context('Scenarios', () => {
         })
         orderSummaryPage.submitOrderButton.click()
 
-        cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+        cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
           responseRecordFilename: 'CEMO018',
-          index: 1,
           httpStatus: 200,
           body: {
             title: '',
@@ -150,7 +156,9 @@ context('Scenarios', () => {
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'adult',
-            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+            sex: deviceWearerDetails.sex
+              .replace('Not able to provide this information', 'Prefer Not to Say')
+              .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace('not able to provide this information', 'unknown')
@@ -158,16 +166,16 @@ context('Scenarios', () => {
               .replace('non binary', 'non-binary'),
             disability: [],
             address_1: fakeVariationPrimaryAddress.line1,
-            address_2: 'N/A',
+            address_2: fakeVariationPrimaryAddress.line2 === '' ? 'N/A' : fakeVariationPrimaryAddress.line2,
             address_3: fakeVariationPrimaryAddress.line3,
-            address_4: fakeVariationPrimaryAddress.line4,
+            address_4: fakeVariationPrimaryAddress.line4 === '' ? 'N/A' : fakeVariationPrimaryAddress.line4,
             address_post_code: fakeVariationPrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
             secondary_address_4: '',
             secondary_address_post_code: '',
-            phone_number: deviceWearerDetails.contactNumber,
+            phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
             risk_details: '',
@@ -238,7 +246,7 @@ context('Scenarios', () => {
                 order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: 'Pre-Trial',
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
@@ -249,7 +257,7 @@ context('Scenarios', () => {
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
                 responsible_officer_email: '',
-                responsible_officer_phone: interestedParties.responsibleOfficerContactNumber,
+                responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
                 responsible_officer_name: interestedParties.responsibleOfficerName,
                 responsible_organization: interestedParties.responsibleOrganisation,
                 ro_post_code: interestedParties.responsibleOrganisationAddress.postcode,
@@ -258,7 +266,7 @@ context('Scenarios', () => {
                 ro_address_3: interestedParties.responsibleOrganisationAddress.line3,
                 ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
                 ro_email: interestedParties.responsibleOrganisationEmailAddress,
-                ro_phone: interestedParties.responsibleOrganisationContactNumber,
+                ro_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOrganisationContactNumber),
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',

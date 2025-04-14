@@ -19,6 +19,7 @@ const AddressModel = z.object({
 })
 
 export type Address = z.infer<typeof AddressModel>
+export type AddressWithoutType = Omit<Address, 'addressType'>
 export type AddressType = z.infer<typeof AddressTypeEnum>
 
 export default AddressModel
