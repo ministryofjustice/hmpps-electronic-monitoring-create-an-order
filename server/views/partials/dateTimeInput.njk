@@ -1,9 +1,7 @@
 {% macro dateTimeInput(input) %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{{input|dump}}
 
   {% set isDisabled = { disabled: true } if input.disabled else {} %}
-  {{isDisabled|dump}}
 
   <div
     id="{{input.id}}-form"
