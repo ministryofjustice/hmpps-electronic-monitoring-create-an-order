@@ -52,9 +52,9 @@ context('Variation', () => {
 
         Page.verifyOnPage(VariationDetailsPage)
 
-        page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.malformed)
+        page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.mustBeRealDate)
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.malformed)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.mustBeRealDate)
       })
     })
   })
