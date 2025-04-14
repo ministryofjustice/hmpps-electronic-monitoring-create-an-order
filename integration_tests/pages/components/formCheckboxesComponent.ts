@@ -30,6 +30,10 @@ export default class FormCheckboxesComponent {
     this.element.getByLabel(value).should('be.checked')
   }
 
+  shouldNotHaveValue(): void {
+    this.options.forEach(option => this.element.getByLabel(option).should('not.be.checked'))
+  }
+
   shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
   }

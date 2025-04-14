@@ -1,5 +1,9 @@
 {% macro dateTimeInput(input) %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{{input|dump}}
+
+  {% set isDisabled = { disabled: true } if input.disabled else {} %}
+  {{isDisabled|dump}}
 
   <div
     id="{{input.id}}-form"
@@ -33,7 +37,7 @@
               classes: "govuk-input--width-2",
               label: "Day",
               value: input.date.day,
-              disabled: input.disabled
+              attributes: isDisabled
             },
             {
               name: input.id + "[month]",
@@ -41,7 +45,7 @@
               classes: "govuk-input--width-2",
               label: "Month",
               value: input.date.month,
-              disabled: input.disabled
+              attributes: isDisabled
             },
             {
               name: input.id + "[year]",
@@ -49,7 +53,7 @@
               classes: "govuk-input--width-4",
               label: "Year",
               value: input.date.year,
-              disabled: input.disabled
+              attributes: isDisabled
             }
           ]
         }) }}

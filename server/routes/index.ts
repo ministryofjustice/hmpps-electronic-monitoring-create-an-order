@@ -85,7 +85,6 @@ export default function routes({
     taskListService,
   )
   const monitoringConditionsController = new MonitoringConditionsController(
-    auditService,
     monitoringConditionsService,
     taskListService,
   )
