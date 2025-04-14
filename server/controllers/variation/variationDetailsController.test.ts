@@ -55,7 +55,19 @@ describe('VariationDetailsController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-        errors: {},
+        errorSummary: null,
+        variationDate: {
+          value: {
+            day: '',
+            month: '',
+            year: '',
+            minutes: '',
+            hours: '',
+          },
+        },
+        variationType: {
+          value: '',
+        },
       })
     })
 
@@ -79,15 +91,19 @@ describe('VariationDetailsController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-        variationType: 'CURFEW_HOURS',
-        variationDate: {
-          year: '2024',
-          month: '01',
-          day: '01',
-          minutes: '00',
-          hours: '00',
+        variationType: {
+          value: 'CURFEW_HOURS',
         },
-        errors: {},
+        variationDate: {
+          value: {
+            year: '2024',
+            month: '01',
+            day: '01',
+            minutes: '00',
+            hours: '00',
+          },
+        },
+        errorSummary: null,
       })
     })
 
@@ -122,19 +138,28 @@ describe('VariationDetailsController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-        variationType: '',
-        variationDate: {
-          year: '',
-          month: '',
-          day: '',
-        },
-        errors: {
-          variationType: {
+        variationType: {
+          value: '',
+          error: {
             text: 'Variation type is required',
           },
-          variationDate: {
+        },
+        variationDate: {
+          value: {
+            year: '',
+            month: '',
+            day: '',
+          },
+          error: {
             text: 'Variation date is required',
           },
+        },
+        errorSummary: {
+          titleText: 'There is a problem',
+          errorList: [
+            { href: '#variationType', text: 'Variation type is required' },
+            { href: '#variationDate', text: 'Variation date is required' },
+          ],
         },
       })
     })
