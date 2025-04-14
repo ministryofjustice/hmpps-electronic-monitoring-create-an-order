@@ -1,5 +1,4 @@
-import { deserialiseDateTime, getErrorsViewModel, isNullOrUndefined } from '../../utils/utils'
-import { getError } from '../../utils/utils'
+import { deserialiseDateTime, getError } from '../../utils/utils'
 import { VariationDetails } from '../VariationDetails'
 import { VariationDetailsFormData } from '../form-data/variationDetails'
 import { ValidationResult } from '../Validation'
