@@ -32,11 +32,7 @@ export default class Task {
     this.status.should('contain', value)
   }
 
-  shouldBeDisabled(): void {
-    this.link.should('not.exist')
-  }
-
-  shouldBeEnabled(): void {
-    this.link.should('exist')
+  shouldNotHaveStatus(): void {
+    this.status.should('not.exist')
   }
 }
