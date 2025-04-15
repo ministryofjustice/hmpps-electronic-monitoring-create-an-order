@@ -25,6 +25,7 @@ const removeAnswerActionItems = (answers: Answer[] | Answer[][]) => {
 }
 
 const removeActionItems = (answer: Answer) => {
+  // bypass no-pparam-reassign rule
   const item = answer
   item.actions.items = []
 }
