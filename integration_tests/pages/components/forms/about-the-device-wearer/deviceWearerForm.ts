@@ -102,7 +102,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get otherDisabilityField(): FormInputComponent {
-    const label = "What is the device wearer's disability or health condition? (optional)"
+    const label = "What is the device wearer's disability or health condition?"
     return new FormInputComponent(this.form, label)
   }
 
