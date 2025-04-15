@@ -91,7 +91,7 @@ context('Receipt', () => {
         },
         installationAndRisk: {
           offence: 'SEXUAL_OFFENCES',
-          riskCategory: ['RISK_TO_GENDER', 'SAFEGUARDING_ISSUE'],
+          riskCategory: ['RISK_TO_GENDER'],
           riskDetails: 'Information about potential risks',
           mappaLevel: 'MAPPA1',
           mappaCaseType: 'TERRORISM_ACT',
@@ -121,7 +121,7 @@ context('Receipt', () => {
     page.riskInformationSection.shouldExist()
     page.riskInformationSection.shouldHaveItems([
       { key: 'What type of offence did the device wearer commit? (optional)', value: 'SEXUAL_OFFENCES' },
-      { key: 'At installation what are the possible risks? (optional)', value: 'RISK_TO_GENDER,SAFEGUARDING_ISSUE' },
+      { key: 'At installation what are the possible risks? (optional)', value: 'RISK_TO_GENDER' },
       { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
       { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA1' },
       { key: 'What is the MAPPA case type? (optional)', value: 'TERRORISM_ACT' },
