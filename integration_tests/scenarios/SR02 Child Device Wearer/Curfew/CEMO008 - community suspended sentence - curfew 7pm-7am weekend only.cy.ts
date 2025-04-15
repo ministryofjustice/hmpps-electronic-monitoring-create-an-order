@@ -71,7 +71,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       addresses: [/Main address/],
     }
-    const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const curfewNights = ['SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
       {
         day,
@@ -116,7 +116,9 @@ context('Scenarios', () => {
           alias: deviceWearerDetails.alias,
           date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
           adult_child: 'child',
-          sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+          sex: deviceWearerDetails.sex
+            .replace('Not able to provide this information', 'Prefer Not to Say')
+            .replace('Prefer not to say', 'Prefer Not to Say'),
           gender_identity: deviceWearerDetails.genderIdentity
             .toLocaleLowerCase()
             .replace('not able to provide this information', 'unknown')
@@ -247,31 +249,6 @@ context('Scenarios', () => {
                   location: 'primary',
                   allday: '',
                   schedule: [
-                    {
-                      day: 'Mo',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Tu',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Wed',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Th',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
-                    {
-                      day: 'Fr',
-                      start: '19:00:00',
-                      end: '07:00:00',
-                    },
                     {
                       day: 'Sa',
                       start: '19:00:00',

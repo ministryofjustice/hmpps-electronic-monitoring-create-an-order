@@ -21,11 +21,4 @@ const genderMap: Record<string, string> = {
   'self-identify': 'Self identify',
 }
 
-const sexMap: Record<string, string> = {
-  male: 'Male',
-  female: 'Female',
-  'prefer not to say': 'Prefer not to say',
-  unknown: 'Not able to provide this information',
-}
-
-export { disabilitiesMap, genderMap, sexMap }
+export { disabilitiesMap, genderMap }

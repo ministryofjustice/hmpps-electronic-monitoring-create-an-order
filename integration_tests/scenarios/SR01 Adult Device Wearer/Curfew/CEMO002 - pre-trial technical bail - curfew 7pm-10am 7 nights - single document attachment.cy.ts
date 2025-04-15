@@ -92,6 +92,7 @@ context('Scenarios', () => {
         orderType: 'Pre-Trial',
         conditionType: 'Bail Order',
         monitoringRequired: 'Curfew',
+        orderTypeDescription: 'DAPO',
         // sentenceType: 'DAPO'
       }
       const curfewReleaseDetails = {
@@ -150,7 +151,9 @@ context('Scenarios', () => {
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'adult',
-            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+            sex: deviceWearerDetails.sex
+              .replace('Not able to provide this information', 'Prefer Not to Say')
+              .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace('not able to provide this information', 'unknown')
@@ -238,7 +241,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: null,
+                order_type_description: 'DAPO',
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',

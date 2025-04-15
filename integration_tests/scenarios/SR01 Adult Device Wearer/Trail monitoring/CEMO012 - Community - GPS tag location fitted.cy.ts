@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createKnownAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { kelvinCloseAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
@@ -46,13 +46,8 @@ context('Scenarios', () => {
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties(
-        'Prison',
-        'Probation',
-        'Elmley Prison',
-        'Kent, Surrey & Sussex',
-      )
+      const fakePrimaryAddress = kelvinCloseAddress
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -100,7 +95,9 @@ context('Scenarios', () => {
             alias: deviceWearerDetails.alias,
             date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
             adult_child: 'adult',
-            sex: deviceWearerDetails.sex.toLocaleLowerCase().replace('not able to provide this information', 'unknown'),
+            sex: deviceWearerDetails.sex
+              .replace('Not able to provide this information', 'Prefer Not to Say')
+              .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
               .replace('not able to provide this information', 'unknown')

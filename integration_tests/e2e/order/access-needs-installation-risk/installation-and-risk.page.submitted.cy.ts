@@ -11,33 +11,52 @@ context('Access needs and installation risk information', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'SUBMITTED',
+          order: {
+            installationAndRisk: {
+              offence: 'SEXUAL_OFFENCES',
+              riskCategory: ['RISK_TO_GENDER', 'SAFEGUARDING_ISSUE'],
+              riskDetails: 'Information about potential risks',
+              mappaLevel: 'MAPPA1',
+              mappaCaseType: 'TERRORISM_ACT',
+            },
+          },
+        })
 
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('should correctly display the page', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+        // Should show the header
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
 
-      it('Should display the submitted order notification', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+        // Should indicate the page is submitted
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      })
 
-      it('Should not allow the user to update the no fixed abode details', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+        // Should display the saved data
+        page.form.offenceField.shouldHaveValue('SEXUAL_OFFENCES')
+        page.form.riskCategoryField.shouldHaveValue('Offensive towards someone because of their sex or gender')
+        page.form.riskCategoryField.shouldHaveValue('Safeguarding Issues')
+        page.form.riskDetailsField.shouldHaveValue('Information about potential risks')
+        page.form.mappaLevelField.shouldHaveValue('MAPPA 1')
+        page.form.mappaCaseTypeField.shouldHaveValue('Terrorism Act, Counter Terrorism')
 
+        // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
         page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+
+        // Should not be editable
         page.form.shouldBeDisabled()
+
+        // Should not have errors
+        page.errorSummary.shouldNotExist()
       })
     })
   })
