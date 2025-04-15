@@ -5,7 +5,7 @@ import { PageElement } from '../page'
 
 export default class ReceiptPage extends AppPage {
   constructor() {
-    super('Submitted electronic monitoring order details', paths.ORDER.RECEIPT)
+    super('Electronic Monitoring Order Form Summary', paths.ORDER.RECEIPT)
   }
 
   pdfDownloadBanner = (): PageElement => cy.get('#receipt-download-banner')

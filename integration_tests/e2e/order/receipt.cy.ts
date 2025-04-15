@@ -21,6 +21,71 @@ context('Receipt', () => {
   })
 
   it('Should have a button that opens the print window to download page as PDF', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        contactDetails: {
+          contactNumber: '01234567890',
+        },
+        deviceWearer: {
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: 'ho',
+          firstName: 'test',
+          lastName: 'tester',
+          alias: 'tes',
+          dateOfBirth: '2000-01-01T00:00:00Z',
+          adultAtTimeOfInstallation: true,
+          sex: 'FEMALE',
+          gender: 'self-identify',
+          otherGender: 'Furby',
+          disabilities: 'OTHER',
+          otherDisability: 'Broken arm',
+          noFixedAbode: true,
+          interpreterRequired: false,
+        },
+        addresses: [
+          {
+            addressType: 'RESPONSIBLE_ORGANISATION',
+            addressLine1: 'line1',
+            addressLine2: 'line2',
+            addressLine3: 'line3',
+            addressLine4: 'line4',
+            postcode: 'postcode',
+          },
+        ],
+        interestedParties: {
+          notifyingOrganisation: 'HOME_OFFICE',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'notifying@organisation',
+          responsibleOrganisation: 'POLICE',
+          responsibleOrganisationPhoneNumber: '01234567890',
+          responsibleOrganisationEmail: 'responsible@organisation',
+          responsibleOrganisationRegion: '',
+          responsibleOrganisationAddress: {
+            addressType: 'RESPONSIBLE_ORGANISATION',
+            addressLine1: 'line1',
+            addressLine2: 'line2',
+            addressLine3: 'line3',
+            addressLine4: 'line4',
+            postcode: 'postcode',
+          },
+          responsibleOfficerName: 'name',
+          responsibleOfficerPhoneNumber: '01234567891',
+        },
+        installationAndRisk: {
+          offence: 'SEXUAL_OFFENCES',
+          riskCategory: ['RISK_TO_GENDER', 'SAFEGUARDING_ISSUE'],
+          riskDetails: 'Information about potential risks',
+          mappaLevel: 'MAPPA1',
+          mappaCaseType: 'TERRORISM_ACT',
+        },
+      },
+    })
     cy.visit(`/order/${mockOrderId}/receipt`)
     const page = Page.verifyOnPage(ReceiptPage)
     page.pdfDownloadButton().should('exist')
