@@ -18,7 +18,6 @@ const DeviceWearerFormDataParser = FormDataModel.extend({
   adultAtTimeOfInstallation: z.string().default(''),
   sex: z.string().default(''),
   gender: z.string().default(''),
-  otherGender: z.string().optional(),
   disabilities: MultipleChoiceInputModel.pipe(z.array(DisabilityEnum)),
   otherDisability: z.string().optional(),
 })
@@ -42,7 +41,6 @@ const DeviceWearerFormDataValidator = z.object({
   ),
   sex: z.string().min(1, validationErrors.deviceWearer.sexRequired),
   gender: z.string().min(1, validationErrors.deviceWearer.genderRequired),
-  otherGender: z.string().optional(),
   disabilities: MultipleChoiceInputModel.pipe(z.array(DisabilityEnum)).transform(val => val.join(',')),
   otherDisability: z.string().optional(),
 })

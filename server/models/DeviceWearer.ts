@@ -30,7 +30,6 @@ const DeviceWearerModel = z.object({
   adultAtTimeOfInstallation: z.boolean().nullable(),
   sex: SexEnum.nullable(),
   gender: z.string().nullable(),
-  otherGender: z.string().nullable().optional(),
   disabilities: z
     .string()
     .nullable()

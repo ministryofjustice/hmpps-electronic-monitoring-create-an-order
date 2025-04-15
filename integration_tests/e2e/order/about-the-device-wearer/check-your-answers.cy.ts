@@ -63,7 +63,6 @@ context('Device wearer - check your answers', () => {
             adultAtTimeOfInstallation: true,
             sex: 'MALE',
             gender: 'male',
-            otherGender: null,
             disabilities: 'MENTAL_HEALTH',
             otherDisability: null,
             noFixedAbode: null,
@@ -134,7 +133,6 @@ context('Device wearer - check your answers', () => {
             adultAtTimeOfInstallation: true,
             sex: 'FEMALE',
             gender: 'self-identify',
-            otherGender: 'Furby',
             disabilities: 'OTHER',
             otherDisability: 'Broken arm',
             noFixedAbode: null,
@@ -147,7 +145,7 @@ context('Device wearer - check your answers', () => {
       cy.signIn()
     })
 
-    it('should show otherDisability and otherGender questions and answers', () => {
+    it('should show otherDisability question and answer', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
 
       page.personDetailsSection.shouldExist()
@@ -159,7 +157,6 @@ context('Device wearer - check your answers', () => {
         { key: 'Is a responsible adult required?', value: 'Yes' },
         { key: 'What is the sex of the device wearer?', value: 'Female' },
         { key: "What is the device wearer's gender?", value: 'Self identify' },
-        { key: "What is the device wearer's chosen identity?", value: 'Furby' },
         {
           key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           value: 'Other',
@@ -203,7 +200,6 @@ context('Device wearer - check your answers', () => {
             adultAtTimeOfInstallation: false,
             sex: 'PREFER_NOT_TO_SAY',
             gender: 'male',
-            otherGender: null,
             disabilities: 'MENTAL_HEALTH',
             otherDisability: null,
             noFixedAbode: null,
@@ -281,7 +277,6 @@ context('Device wearer - check your answers', () => {
             adultAtTimeOfInstallation: false,
             sex: 'UNKNOWN',
             gender: 'male',
-            otherGender: null,
             disabilities: 'MENTAL_HEALTH',
             otherDisability: null,
             noFixedAbode: null,
