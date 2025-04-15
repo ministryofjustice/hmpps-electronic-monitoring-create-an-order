@@ -20,8 +20,8 @@ context('Access needs and installation risk information', () => {
               offence: 'SEXUAL_OFFENCES',
               riskCategory: ['RISK_TO_GENDER', 'SAFEGUARDING_ISSUE'],
               riskDetails: 'Information about potential risks',
-              mappaLevel: 'MAPPA1',
-              mappaCaseType: 'TERRORISM_ACT',
+              mappaLevel: 'MAPPA 1',
+              mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
             },
           },
         })

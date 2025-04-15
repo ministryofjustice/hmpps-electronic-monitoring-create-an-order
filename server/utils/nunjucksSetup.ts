@@ -15,13 +15,33 @@ import magistratesCourts from '../reference/magistrates-courts'
 import responsibleOrganisations from '../reference/responsible-organisations'
 import notifyingOrganisations from '../reference/notifying-organisations'
 import sentenceTypes from '../reference/sentence-types'
+import ReferenceData from '../types/i18n/reference/reference'
+import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
+import { RadiosItem } from './govukFrontEndTypes/radioItem'
 
-const toOptions = (values: Record<string, string>, disabled: boolean = false, includeEmptyOption: boolean = false) => {
-  const options = Object.keys(values).map(key => ({
-    value: key,
-    text: values[key],
-    disabled,
-  }))
+const toOptions = (
+  values: ReferenceData,
+  disabled: boolean = false,
+  includeEmptyOption: boolean = false,
+): Array<CheckboxItem | RadiosItem> => {
+  const options = Object.keys(values).map(key => {
+    if (typeof values[key] === 'object') {
+      return {
+        value: key,
+        text: values[key].text,
+        hint: {
+          text: values[key].description,
+        },
+        disabled,
+      }
+    }
+
+    return {
+      value: key,
+      text: values[key],
+      disabled,
+    }
+  })
 
   if (includeEmptyOption) {
     options.unshift({ value: '', text: 'Select', disabled })
