@@ -188,7 +188,7 @@ context('About the device wearer', () => {
           genderIdentity: 'Male',
           interpreterRequired: false,
           disabilities: 'The device wearer has a disability or health condition not listed',
-          otherDisability: 'Test disabilities'
+          otherDisability: 'Test disabilities',
         }
 
         page.form.fillInWith(validFormData)
