@@ -1,4 +1,6 @@
-type Offences = Record<
+import ReferenceData from './reference'
+
+type Offences = ReferenceData<
   | 'VIOLENCE_AGAINST_THE_PERSON'
   | 'SEXUAL_OFFENCES'
   | 'ROBBERY'
@@ -11,8 +13,7 @@ type Offences = Record<
   | 'FRAUD_OFFENCES'
   | 'SUMMARY_NON_MOTORING'
   | 'SUMMARY_MOTORING'
-  | 'OFFENCE_NOT_RECORDED',
-  string
+  | 'OFFENCE_NOT_RECORDED'
 >
 
 export default Offences
