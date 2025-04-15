@@ -259,7 +259,7 @@
           hint: {
             text: "Monitoring the device wearer adheres to set times and days that they must remain at a location."
           },
-          checked: monitoringRequired | select("equalto", "curfew") | length,
+          checked: monitoringRequired.values | select("equalto", "curfew") | length,
           disabled: not isOrderEditable
         },
         {
@@ -268,7 +268,7 @@
           hint: {
             text: "Prevents the device wearer entering areas or visiting locations at set times."
           },
-          checked: monitoringRequired | select("equalto", "exclusionZone") | length,
+          checked: monitoringRequired.values | select("equalto", "exclusionZone") | length,
           disabled: not isOrderEditable
         },
         {
@@ -277,7 +277,7 @@
           hint: {
             text: "Recording and gathering data on movements of the device wearer throughout the day. Trail monitoring must be selected if the device wearer is part of the Acquisitive Crime Project."
           },
-          checked: monitoringRequired | select("equalto", "trail") | length,
+          checked: monitoringRequired.values | select("equalto", "trail") | length,
           disabled: not isOrderEditable
         },
         {
@@ -286,7 +286,7 @@
           hint: {
             text: "Recording the device wearer's attendance at arranged meetings or places."
           },
-          checked: monitoringRequired | select("equalto", "mandatoryAttendance") | length,
+          checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length,
           disabled: not isOrderEditable
         },
         {
@@ -295,7 +295,7 @@
           hint: {
             text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
           },
-          checked: monitoringRequired | select("equalto", "alcohol") | length,
+          checked: monitoringRequired.values | select("equalto", "alcohol") | length,
           disabled: not isOrderEditable
         }
       ],

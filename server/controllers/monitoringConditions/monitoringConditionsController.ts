@@ -1,7 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AuditService } from '../../services'
 import MonitoringConditionsService from '../../services/monitoringConditionsService'
 import TaskListService from '../../services/taskListService'
 import { MonitoringConditionsFormDataParser } from '../../models/form-data/monitoringConditions'
@@ -9,7 +8,6 @@ import createViewModel from '../../models/view-models/monitoringConditions'
 
 export default class MonitoringConditionsController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly monitoringConditionsService: MonitoringConditionsService,
     private readonly taskListService: TaskListService,
   ) {}

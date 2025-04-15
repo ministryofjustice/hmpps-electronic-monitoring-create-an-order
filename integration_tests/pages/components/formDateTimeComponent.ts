@@ -78,12 +78,28 @@ export default class FormDateTimeComponent {
     this.minutes.should('have.value', `0${value.getMinutes()}`.slice(-2))
   }
 
+  shouldNotHaveValue(): void {
+    this.day.should('have.value', '')
+    this.month.should('have.value', '')
+    this.year.should('have.value', '')
+    this.hours.should('have.value', '')
+    this.minutes.should('have.value', '')
+  }
+
   shouldBeDisabled(): void {
     this.day.should('be.disabled')
     this.month.should('be.disabled')
     this.year.should('be.disabled')
     this.hours.should('be.disabled')
     this.minutes.should('be.disabled')
+  }
+
+  shouldNotBeDisabled(): void {
+    this.day.should('not.be.disabled')
+    this.month.should('not.be.disabled')
+    this.year.should('not.be.disabled')
+    this.hours.should('not.be.disabled')
+    this.minutes.should('not.be.disabled')
   }
 
   get validationMessage() {
