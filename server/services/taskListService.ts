@@ -3,13 +3,16 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 
-type Section =
-  | 'ABOUT_THE_DEVICE_WEARER'
-  | 'CONTACT_INFORMATION'
-  | 'INSTALLATION_AND_RISK'
-  | 'MONITORING_CONDITIONS'
-  | 'ATTACHMENTS'
-  | 'VARIATION'
+const SECTIONS = [
+  'ABOUT_THE_DEVICE_WEARER',
+  'CONTACT_INFORMATION',
+  'INSTALLATION_AND_RISK',
+  'MONITORING_CONDITIONS',
+  'ATTACHMENTS',
+  'VARIATION',
+] as const
+
+type Section = (typeof SECTIONS)[number]
 
 type Page =
   | 'DEVICE_WEARER'
@@ -45,6 +48,12 @@ type Task = {
   path: string
   state: State
   completed: boolean
+}
+
+type SectionBlock = {
+  name: Section
+  completed: boolean
+  path: string
 }
 
 type TasksBySections = {
@@ -359,6 +368,24 @@ export default class TaskListService {
 
       return acc
     }, {} as TasksBySections)
+  }
+
+  findTaskBySection(tasks: Task[], section: Section): Task[] {
+    return tasks.filter(task => task.section === section)
+  }
+
+  getSections(order: Order): SectionBlock[] {
+    const tasks = this.getTasks(order).filter(({ state }) => state !== 'DISABLED')
+
+    const sectionBlocks: SectionBlock[] = []
+
+    SECTIONS.forEach(section => {
+      const sectionsTasks = this.findTaskBySection(tasks, section)
+      const completed: boolean = sectionsTasks.filter(sectionTasks => !sectionTasks.completed).length > 0
+      sectionBlocks.push({ name: section, completed, path: 'something' })
+    })
+
+    return sectionBlocks
   }
 }
 

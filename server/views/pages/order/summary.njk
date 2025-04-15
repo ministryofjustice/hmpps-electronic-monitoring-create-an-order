@@ -41,73 +41,27 @@
     }) }}
   {% endif %}
 
-  {% for section, tasks in sections %}
-    <h3 class="govuk-heading-m">{{ section | replace("_", " ") | capitalize }}</h3>
-
-    {% set taskListItems = [] %}
-    {% for task in tasks %}
-      {% set name = task.name | replace("_", " ") | capitalize %}
-      {% set href = task.path %}
-      {% set status = 'COMPLETE' if task.completed else 
-        'INCOMPLETE' %}
-      {% set tagColour = 'govuk-tag--green' if task.completed else 'govuk-tag--grey' %}
-
-      {% if task.state == 'CANT_BE_STARTED' %}
-        {% set taskListItems = (taskListItems.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          status: {
-            text: 'Cannot start yet',
-            classes: "govuk-task-list__status--cannot-start-yet"
-            
-          }
-        }), taskListItems) %}
-      {% elif task.state == 'NOT_REQUIRED' %}
-        {% set taskListItems = (taskListItems.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          status: {
-            text: 'Not required',
-            classes: "govuk-task-list__status--cannot-start-yet"
-            
-          }
-        }), taskListItems) %}
-      {% elif task.state == 'OPTIONAL' %}
-        {% set tagHtml %}
-        <strong class="govuk-tag govuk-tag--light-blue">
-              Optional
-            </strong>
-        <strong class="govuk-tag {{ tagColour }}">
-          {{ status | capitalize }}
-        </strong>
-        {% endset %}
-        {% set taskListItems = (taskListItems.push({
-            idPrefix: "order-section",
-            title: { text: name },
-            href: href,
-            status: {
-              html: tagHtml
-            }
-          }), taskListItems) %}
-      {% elif task.state == 'HIDDEN' %}
-        {# do not display #}
-      {% else %}
-        {% set taskListItems = (taskListItems.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          href: href,
-          status: {
-            tag: {
-              text: status | capitalize,
-              classes: tagColour
-            }
-          }
-        }), taskListItems) %}
-
-      {% endif %}
-    {% endfor %}
-    {{ govukTaskList({ idPrefix: "sections", items: taskListItems }) }}
+  {% set items = [] %}
+  {% for section in sections %}
+    {% set name = section.name | replace("_", " ") | capitalize %}
+    {% set href = section.path %}
+    {% set status = 'COMPLETE' if section.completed else 
+      'INCOMPLETE' %}
+    {% set tagColour = 'govuk-tag--green' if section.completed else 'govuk-tag--grey' %}
+    {% set items = (items.push({
+      idPrefix: "order-section",
+      title: { text: name },
+      href: href,
+      status: {
+        tag: {
+          text: status | capitalize,
+          classes: tagColour
+        }
+      }
+    }), items) %}
   {% endfor %}
+
+  {{ govukTaskList({ idPrefix: "sections", items: items }) }}
 
   {% if order.status == "IN_PROGRESS" %}
     <form action="/order/{{ order.id }}/submit" method="post">
