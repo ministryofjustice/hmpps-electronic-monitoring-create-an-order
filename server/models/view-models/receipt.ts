@@ -14,7 +14,7 @@ const removeActionItems = (viewModel: CheckYourAnswerViewModel) =>
   Object.values(viewModel).forEach(answers => removeAnswerActionItems(answers))
 
 const removeAnswerActionItems = (answers: Answer[] | Answer[][]) => {
-  // using for loop here to bypass ESLint rule no-param-reassign and
+  // using for loop here to bypass ESLint rule no-param-reassign
   for (let index = 0; index < answers.length; index += 1) {
     const answer = answers[index]
     if ('actions' in answer) {
