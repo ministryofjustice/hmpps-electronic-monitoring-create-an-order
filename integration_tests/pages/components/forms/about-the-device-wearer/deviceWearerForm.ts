@@ -13,7 +13,9 @@ export type AboutDeviceWearerFormData = {
   sex?: string
   genderIdentity?: string
   interpreterRequired?: boolean
-  language?: string
+  language?: string,
+  disabilities?: string,
+  otherDisability?: string
 }
 
 export default class AboutDeviceWearerFormComponent extends FormComponent {
@@ -262,6 +264,14 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
     if (profile.language) {
       this.languageField.set(profile.language)
+    }
+
+    if(profile.disabilities){
+      this.disabilityField.set(profile.disabilities)
+    }
+
+    if(profile.otherDisability){
+      this.otherDisabilityField.set(profile.otherDisability)
     }
   }
 
