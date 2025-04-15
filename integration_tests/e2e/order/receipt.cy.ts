@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../pages/page'
 import ReceiptPage from '../../pages/order/receipt'
+import AttachmentType from '../../../server/models/AttachmentType'
 
 const mockOrderId = uuidv4()
 
@@ -21,6 +22,17 @@ context('Receipt', () => {
   })
 
   it('Should have a button that opens the print window to download page as PDF', () => {
+    cy.visit(`/order/${mockOrderId}/receipt`)
+    const page = Page.verifyOnPage(ReceiptPage)
+    page.pdfDownloadButton().should('exist')
+    cy.window().then(w => {
+      cy.stub(w, 'print').as('print')
+    })
+    page.pdfDownloadButton().click()
+    cy.get('@print').should('be.calledOnce')
+  })
+
+  it('Should should show status section', () => {
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,
@@ -84,15 +96,38 @@ context('Receipt', () => {
           mappaLevel: 'MAPPA1',
           mappaCaseType: 'TERRORISM_ACT',
         },
+        additionalDocuments: [
+          {
+            id: mockOrderId,
+            fileType: AttachmentType.LICENCE,
+            fileName: 'Mock Licence',
+          },
+        ],
       },
     })
     cy.visit(`/order/${mockOrderId}/receipt`)
     const page = Page.verifyOnPage(ReceiptPage)
-    page.pdfDownloadButton().should('exist')
-    cy.window().then(w => {
-      cy.stub(w, 'print').as('print')
-    })
-    page.pdfDownloadButton().click()
-    cy.get('@print').should('be.calledOnce')
+    page.additionalDocumentsSection.shouldExist()
+    page.additionalDocumentsSection.shouldHaveItems([
+      { key: 'Licence', value: 'Mock Licence' },
+      { key: 'Photo identification (optional)', value: 'No photo ID document uploaded' },
+    ])
+    page.orderStatusSection.shouldExist()
+    page.orderStatusSection.shouldHaveItems([
+      { key: 'Status', value: 'IN_PROGRESS' },
+      { key: 'Type', value: 'REQUEST' },
+      { key: 'Reference number', value: mockOrderId },
+    ])
+    page.riskInformationSection.shouldExist()
+    page.riskInformationSection.shouldHaveItems([
+      { key: 'What type of offence did the device wearer commit? (optional)', value: 'SEXUAL_OFFENCES' },
+      { key: 'At installation what are the possible risks? (optional)', value: 'RISK_TO_GENDER,SAFEGUARDING_ISSUE' },
+      { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
+      { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA1' },
+      { key: 'What is the MAPPA case type? (optional)', value: 'TERRORISM_ACT' },
+    ])
+    page.deviceWearerSection.shouldExist()
+    page.contactInformationSection.shouldExist()
+    page.monitoringConditionsSection.shouldExist()
   })
 })

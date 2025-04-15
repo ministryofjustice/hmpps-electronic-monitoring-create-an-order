@@ -11,17 +11,21 @@ import I18n from '../../types/i18n'
 type CheckYourAnswerViewModel = {
   [field: string]: Answer[] | Answer[][]
 }
-const removeActionItems = (viewModel: CheckYourAnswerViewModel) =>
+const removeModelActionItems = (viewModel: CheckYourAnswerViewModel) =>
   Object.values(viewModel).forEach(answers => removeAnswerActionItems(answers))
 
 const removeAnswerActionItems = (answers: Answer[] | Answer[][]) => {
   // using for loop here to bypass ESLint rule no-param-reassign
   for (let index = 0; index < answers.length; index += 1) {
     const answer = answers[index]
-    if ('actions' in answer) {
-      answer.actions.items = []
+    if (Array.isArray(answer)) {
+      Object.values(answer).forEach(entry => {
+        //  bypass ESLint rule no-param-reassign
+        const currentEntry = entry
+        currentEntry.actions.items = []
+      })
     } else {
-      removeAnswerActionItems(answer)
+      answer.actions.items = []
     }
   }
 }
@@ -42,9 +46,9 @@ const createViewModel = (order: Order, content: I18n) => {
   const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
   const riskDetails = RiskInformationCheckAnswers.default(order, content)
   const additionalDocumentDetails = AdditionalDocumentsCheckAnswers.default(order)
-  removeActionItems(contactInformation)
-  removeActionItems(devicewearer)
-  removeActionItems(monitoringConditions)
+  removeModelActionItems(contactInformation)
+  removeModelActionItems(devicewearer)
+  removeModelActionItems(monitoringConditions)
   removeAnswerActionItems(statusDetails)
   removeAnswerActionItems(riskDetails)
   removeAnswerActionItems(additionalDocumentDetails)
