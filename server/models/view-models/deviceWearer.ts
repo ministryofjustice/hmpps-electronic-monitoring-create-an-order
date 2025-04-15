@@ -18,7 +18,6 @@ type DeviceWearerViewModel = ViewModel<
       | 'disabilities'
       | 'language'
       | 'interpreterRequired'
-      | 'otherGender'
       | 'otherDisability'
     >
   >
@@ -75,10 +74,6 @@ const constructFromFormData = (
       value: formData.otherDisability || '',
       error: getError(validationErrors, 'otherDisability'),
     },
-    otherGender: {
-      value: formData.otherGender || '',
-      error: getError(validationErrors, 'otherGender'),
-    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -117,9 +112,6 @@ const createFromEntity = (deviceWearer: DeviceWearer): DeviceWearerViewModel => 
     },
     otherDisability: {
       value: deviceWearer.otherDisability || '',
-    },
-    otherGender: {
-      value: deviceWearer.otherGender || '',
     },
     errorSummary: null,
   }

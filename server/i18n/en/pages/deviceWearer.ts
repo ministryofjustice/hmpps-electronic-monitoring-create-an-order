@@ -40,9 +40,6 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     otherDisability: {
       text: "What is the device wearer's disability or health condition? (optional)",
     },
-    otherGender: {
-      text: "What is the device wearer's chosen identity?",
-    },
     sex: {
       text: 'What is the sex of the device wearer?',
       hint: "Select the sex recorded on the device wearer's birth certificate.",

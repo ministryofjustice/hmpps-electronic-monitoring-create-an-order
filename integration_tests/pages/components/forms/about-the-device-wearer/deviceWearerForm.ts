@@ -75,11 +75,6 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     ])
   }
 
-  get otherGenderField(): FormInputComponent {
-    const label = "What is the device wearer's chosen identity?"
-    return new FormInputComponent(this.form, label)
-  }
-
   // Disabilities
 
   get disabilityField(): FormRadiosComponent {

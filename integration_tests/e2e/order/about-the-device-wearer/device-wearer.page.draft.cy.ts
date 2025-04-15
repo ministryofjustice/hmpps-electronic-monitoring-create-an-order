@@ -65,7 +65,6 @@ context('About the device wearer', () => {
               adultAtTimeOfInstallation: null,
               sex: null,
               gender: 'self-identify',
-              otherGender: 'Furby',
               disabilities: 'OTHER',
               otherDisability: 'Broken arm',
               noFixedAbode: null,
@@ -81,7 +80,6 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         page.form.genderIdentityField.shouldHaveValue('Self identify')
-        page.form.otherGenderField.shouldHaveValue('Furby')
         page.form.disabilityField.shouldHaveValue('The device wearer has a disability or health condition not listed')
         page.form.otherDisabilityField.shouldHaveValue('Broken arm')
       })

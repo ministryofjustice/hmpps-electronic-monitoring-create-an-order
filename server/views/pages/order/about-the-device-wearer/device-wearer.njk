@@ -146,22 +146,6 @@
     disabled: not isOrderEditable
   }) }}
 
-  {% set otherGenderHtml %}
-    {{
-      govukInput({
-      label: {
-        text: content.pages.deviceWearer.questions.otherGender.text
-      },
-      id: "otherGender",
-      name: "otherGender",
-      classes: "govuk-!-width-one-third",
-      errorMessage: otherGender.error,
-      disabled: not isOrderEditable,
-      value: otherGender.value
-      })
-    }}
-  {% endset %}
-
   {{ govukRadios({
     name: "gender",
     fieldset: {
@@ -193,9 +177,6 @@
       {
         value: "self-identify",
         text: "Self identify",
-        conditional: {
-          html: otherGenderHtml
-        },
         disabled: not isOrderEditable
       },
       {
