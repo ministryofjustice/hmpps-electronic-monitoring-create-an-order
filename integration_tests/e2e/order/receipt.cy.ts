@@ -32,7 +32,7 @@ context('Receipt', () => {
     cy.get('@print').should('be.calledOnce')
   })
 
-  it('Should should show status section', () => {
+  it('Should should show all sections', () => {
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,
