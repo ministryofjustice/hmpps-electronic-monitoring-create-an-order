@@ -14,31 +14,34 @@ const SECTIONS = {
 
 type Section = (typeof SECTIONS)[keyof typeof SECTIONS]
 
-type Page =
-  | 'DEVICE_WEARER'
-  | 'RESPONSIBLE_ADULT'
-  | 'IDENTITY_NUMBERS'
-  | 'CHECK_ANSWERS_DEVICE_WEARER'
-  | 'CONTACT_DETAILS'
-  | 'NO_FIXED_ABODE'
-  | 'PRIMARY_ADDRESS'
-  | 'SECONDARY_ADDRESS'
-  | 'TERTIARY_ADDRESS'
-  | 'INTERESTED_PARTIES'
-  | 'CHECK_ANSWERS_CONTACT_INFORMATION'
-  | 'INSTALLATION_AND_RISK'
-  | 'MONITORING_CONDITIONS'
-  | 'INSTALLATION_ADDRESS'
-  | 'CURFEW_RELEASE_DATE'
-  | 'CURFEW_CONDITIONS'
-  | 'CURFEW_TIMETABLE'
-  | 'ENFORCEMENT_ZONE_MONITORING'
-  | 'TRAIL_MONITORING'
-  | 'ATTENDANCE_MONITORING'
-  | 'ALCOHOL_MONITORING'
-  | 'CHECK_ANSWERS_MONITORING_CONDITIONS'
-  | 'ATTACHMENTS'
-  | 'VARIATION_DETAILS'
+const PAGES = {
+  deviceWearer: 'DEVICE_WEARER',
+  responsibleAdult: 'RESPONSIBLE_ADULT',
+  identityNumbers: 'IDENTITY_NUMBERS',
+  checkAnswersDeviceWearer: 'CHECK_ANSWERS_DEVICE_WEARER',
+  contactDetails: 'CONTACT_DETAILS',
+  noFixedAbode: 'NO_FIXED_ABODE',
+  primaryAddress: 'PRIMARY_ADDRESS',
+  secondaryAddress: 'SECONDARY_ADDRESS',
+  tertiaryAddress: 'TERTIARY_ADDRESS',
+  interestParties: 'INTERESTED_PARTIES',
+  checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+  installationAndRisk: 'INSTALLATION_AND_RISK',
+  monitoringCondtions: 'MONITORING_CONDITIONS',
+  installationAddress: 'INSTALLATION_ADDRESS',
+  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
+  curfewConditions: 'CURFEW_CONDITIONS',
+  curfewTimetable: 'CURFEW_TIMETABLE',
+  enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
+  trailMonitoring: 'TRAIL_MONITORING',
+  attendanceMonitoring: 'ATTENDANCE_MONITORING',
+  alchoholMonitoring: 'ALCOHOL_MONITORING',
+  checkAnswersMonitoringCondtions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+  attachments: 'ATTACHMENTS',
+  variationDetails: 'VARIATION_DETAILS',
+}
+
+type Page = (typeof PAGES)[keyof typeof PAGES]
 
 const STATES = {
   required: 'REQUIRED',
@@ -70,13 +73,13 @@ type SectionBlock = {
 type FormData = Record<string, string | boolean>
 
 const canBeCompleted = (task: Task, formData: FormData): boolean => {
-  if (['SECONDARY_ADDRESS', 'TERTIARY_ADDRESS'].includes(task.name)) {
-    if (task.name === 'SECONDARY_ADDRESS') {
+  if ([PAGES.secondaryAddress, PAGES.tertiaryAddress].includes(task.name)) {
+    if (task.name === PAGES.secondaryAddress) {
       if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
         return false
       }
     }
-    if (task.name === 'TERTIARY_ADDRESS') {
+    if (task.name === PAGES.tertiaryAddress) {
       if (!(formData.hasAnotherAddress === true && formData.addressType === 'secondary')) {
         return false
       }
@@ -100,7 +103,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.variationDetails,
-      name: 'VARIATION_DETAILS',
+      name: PAGES.variationDetails,
       path: paths.VARIATION.VARIATION_DETAILS,
       state: order.type === 'VARIATION' ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
@@ -108,7 +111,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
-      name: 'DEVICE_WEARER',
+      name: PAGES.deviceWearer,
       path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.firstName),
@@ -116,7 +119,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
-      name: 'RESPONSIBLE_ADULT',
+      name: PAGES.responsibleAdult,
       path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT,
       state: convertBooleanToEnum<State>(
         order.deviceWearer.adultAtTimeOfInstallation,
@@ -129,7 +132,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
-      name: 'IDENTITY_NUMBERS',
+      name: PAGES.identityNumbers,
       path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
       state: STATES.optional,
       completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
@@ -137,7 +140,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
-      name: 'CHECK_ANSWERS_DEVICE_WEARER',
+      name: PAGES.checkAnswersDeviceWearer,
       path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
       state: STATES.hidden,
       completed: true,
@@ -145,7 +148,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'CONTACT_DETAILS',
+      name: PAGES.contactDetails,
       path: paths.CONTACT_INFORMATION.CONTACT_DETAILS,
       state: STATES.optional,
       completed: isNotNullOrUndefined(order.contactDetails),
@@ -153,7 +156,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'NO_FIXED_ABODE',
+      name: PAGES.noFixedAbode,
       path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
@@ -161,7 +164,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'PRIMARY_ADDRESS',
+      name: PAGES.primaryAddress,
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
       state: convertBooleanToEnum<State>(
         order.deviceWearer.noFixedAbode,
@@ -174,7 +177,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'SECONDARY_ADDRESS',
+      name: PAGES.secondaryAddress,
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
       state: convertBooleanToEnum<State>(
         order.deviceWearer.noFixedAbode,
@@ -187,7 +190,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'TERTIARY_ADDRESS',
+      name: PAGES.tertiaryAddress,
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
       state: convertBooleanToEnum<State>(
         order.deviceWearer.noFixedAbode,
@@ -200,7 +203,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'INTERESTED_PARTIES',
+      name: PAGES.interestParties,
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.interestedParties),
@@ -208,7 +211,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.contactInformation,
-      name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+      name: PAGES.checkAnswersContactInformation,
       path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
       state: STATES.hidden,
       completed: true,
@@ -216,7 +219,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.riskInformation,
-      name: 'INSTALLATION_AND_RISK',
+      name: PAGES.installationAndRisk,
       path: paths.INSTALLATION_AND_RISK,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.installationAndRisk),
@@ -224,7 +227,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'MONITORING_CONDITIONS',
+      name: PAGES.monitoringCondtions,
       path: paths.MONITORING_CONDITIONS.BASE_URL,
       state: STATES.required,
       completed: order.monitoringConditions.isValid,
@@ -232,7 +235,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'INSTALLATION_ADDRESS',
+      name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: STATES.required,
       completed: isCompletedAddress(order, 'INSTALLATION'),
@@ -240,7 +243,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'CURFEW_RELEASE_DATE',
+      name: PAGES.curfewReleaseDate,
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew,
@@ -253,7 +256,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'CURFEW_CONDITIONS',
+      name: PAGES.curfewConditions,
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew,
@@ -266,7 +269,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'CURFEW_TIMETABLE',
+      name: PAGES.curfewTimetable,
       path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew,
@@ -279,7 +282,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'ENFORCEMENT_ZONE_MONITORING',
+      name: PAGES.enforcementZoneMonitoring,
       path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.exclusionZone,
@@ -292,7 +295,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'TRAIL_MONITORING',
+      name: PAGES.monitoringCondtions,
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.trail,
@@ -305,7 +308,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'ATTENDANCE_MONITORING',
+      name: PAGES.attendanceMonitoring,
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.mandatoryAttendance,
@@ -319,7 +322,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'ALCOHOL_MONITORING',
+      name: PAGES.alchoholMonitoring,
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.alcohol,
@@ -332,7 +335,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+      name: PAGES.checkAnswersMonitoringCondtions,
       path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
       state: STATES.hidden,
       completed: true,
@@ -340,7 +343,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
-      name: 'ATTACHMENTS',
+      name: PAGES.attachments,
       path: paths.ATTACHMENT.ATTACHMENTS,
       state: STATES.optional,
       completed: false,
