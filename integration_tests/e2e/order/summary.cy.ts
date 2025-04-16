@@ -27,9 +27,11 @@ context('Order Summary', () => {
     it('should display all tasks as incomplete or unable to start for a new order', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
+      page.aboutTheDeviceWearerTask.shouldExist()
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
       page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
 
+      page.contactInformationTask.shouldExist()
       page.contactInformationTask.shouldHaveStatus('Incomplete')
       page.contactInformationTask.link.should(
         'have.attr',
@@ -37,14 +39,68 @@ context('Order Summary', () => {
         `/order/${mockOrderId}/contact-information/contact-details`,
       )
 
+      page.riskInformationTask.shouldExist()
       page.riskInformationTask.shouldHaveStatus('Incomplete')
       page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
 
+      page.electronicMonitoringTask.shouldExist()
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
       page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
 
-      page.additionalDocuments.shouldHaveStatus('Incomplete')
-      page.additionalDocuments.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+      page.additionalDocumentsTask.shouldExist()
+      page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+
+      page.variationDetailsTask.shouldNotExist()
+    })
+
+    it('Should be accessible', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.checkIsAccessible()
+    })
+  })
+
+  context('Variation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      // Create an order with noFixedAbode set to null and all monitoringConditions set to null
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: { type: 'VARIATION' } })
+
+      cy.signIn()
+    })
+
+    it('should display all tasks as incomplete or unable to start for a new variation', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.aboutTheDeviceWearerTask.shouldExist()
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
+      page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
+
+      page.contactInformationTask.shouldExist()
+      page.contactInformationTask.shouldHaveStatus('Incomplete')
+      page.contactInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/contact-information/contact-details`,
+      )
+
+      page.riskInformationTask.shouldExist()
+      page.riskInformationTask.shouldHaveStatus('Incomplete')
+      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
+
+      page.electronicMonitoringTask.shouldExist()
+      page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
+      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+
+      page.additionalDocumentsTask.shouldExist()
+      page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+
+      page.variationDetailsTask.shouldExist()
+      page.variationDetailsTask.shouldHaveStatus('Incomplete')
+      page.variationDetailsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/variation/details`)
     })
 
     it('Should be accessible', () => {
@@ -253,7 +309,9 @@ context('Order Summary', () => {
       page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
 
       // page.additionalDocuments.shouldHaveStatus('Complete')
-      page.additionalDocuments.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+
+      page.variationDetailsTask.shouldNotExist()
     })
   })
 
@@ -461,8 +519,10 @@ context('Order Summary', () => {
       page.electronicMonitoringTask.shouldNotHaveStatus()
       page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
 
-      page.additionalDocuments.shouldNotHaveStatus()
-      page.additionalDocuments.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+      page.additionalDocumentsTask.shouldNotHaveStatus()
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+
+      page.variationDetailsTask.shouldNotExist()
     })
   })
 

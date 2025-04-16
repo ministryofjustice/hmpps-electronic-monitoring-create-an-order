@@ -52,7 +52,7 @@ export default class OrderTasksPage extends AppPage {
     return new Task('Electronic monitoring conditions')
   }
 
-  get additionalDocuments(): Task {
+  get additionalDocumentsTask(): Task {
     return new Task('Additional documents')
   }
 

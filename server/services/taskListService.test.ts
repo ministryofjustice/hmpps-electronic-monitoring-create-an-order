@@ -723,7 +723,6 @@ describe('TaskListService', () => {
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
         },
-        { completed: true, name: 'VARIATION', path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id) },
       ])
     })
 
@@ -786,7 +785,6 @@ describe('TaskListService', () => {
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
         },
-        { completed: true, name: 'VARIATION', path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id) },
       ])
     })
 
@@ -838,7 +836,6 @@ describe('TaskListService', () => {
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
         },
-        { completed: true, name: 'VARIATION', path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id) },
       ])
     })
 

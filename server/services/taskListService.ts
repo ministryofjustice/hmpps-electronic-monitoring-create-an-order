@@ -9,7 +9,7 @@ const SECTIONS = [
   'RISK_INFORMATION',
   'ELECTRONIC_MONITORING_CONDITIONS',
   'ADDITIONAL_DOCUMENTS',
-  'VARIATION',
+  'VARIATION_DETAILS',
 ] as const
 
 type Section = (typeof SECTIONS)[number]
@@ -87,7 +87,7 @@ export default class TaskListService {
     const tasks: Array<Task> = []
 
     tasks.push({
-      section: 'VARIATION',
+      section: 'VARIATION_DETAILS',
       name: 'VARIATION_DETAILS',
       path: paths.VARIATION.VARIATION_DETAILS,
       state: order.type === 'VARIATION' ? 'REQUIRED' : 'DISABLED',
