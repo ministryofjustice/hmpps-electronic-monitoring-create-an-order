@@ -360,7 +360,7 @@ export default class TaskListService {
   getSections(order: Order): SectionBlock[] {
     const tasks = this.getTasks(order)
 
-    return SECTIONS.map(section => {
+    return SECTIONS.filter(section => section !== 'VARIATION_DETAILS' || order.type === 'VARIATION').map(section => {
       const sectionsTasks = this.findTaskBySection(tasks, section)
       const completed = this.isSectionComplete(sectionsTasks)
       return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }

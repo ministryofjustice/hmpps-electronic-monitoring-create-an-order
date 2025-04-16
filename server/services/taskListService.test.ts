@@ -888,7 +888,11 @@ describe('TaskListService', () => {
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
         },
-        { completed: false, name: 'VARIATION', path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id) },
+        {
+          completed: false,
+          name: 'VARIATION_DETAILS',
+          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
+        },
       ])
     })
   })

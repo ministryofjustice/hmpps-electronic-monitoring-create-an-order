@@ -4,12 +4,16 @@ import { PageElement } from '../page'
 export default class Task {
   private elementCacheId: string = uuidv4()
 
-  constructor(private readonly name: string) {}
-
-  get element(): PageElement {
-    return cy.get('.govuk-task-list__item')
+  constructor(private readonly name: string) {
+    cy.get('.govuk-task-list__item')
       .contains('.govuk-task-list__name-and-hint', this.name)
       .parent()
+      .as(`${this.elementCacheId}-element`)
+    this.element.should('exist')
+  }
+
+  get element(): PageElement {
+    return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
   get status(): PageElement {
@@ -22,14 +26,6 @@ export default class Task {
 
   click(): void {
     this.link.click()
-  }
-
-  shouldExist() {
-    this.element.should('exist')
-  }
-
-  shouldNotExist() {
-    this.element.should('not.exist')
   }
 
   shouldHaveStatus(value: string): void {
