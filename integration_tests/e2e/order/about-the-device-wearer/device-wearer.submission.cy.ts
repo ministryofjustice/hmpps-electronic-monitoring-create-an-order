@@ -199,7 +199,7 @@ context('About the device wearer', () => {
             alias: 'Barty',
             adultAtTimeOfInstallation: false,
             sex: 'MALE',
-            gender: 'male',          
+            gender: 'male',
             dateOfBirth: '2020-01-01T00:00:00.000Z',
             disabilities: 'OTHER',
             otherDisability: 'Test disabilities',
