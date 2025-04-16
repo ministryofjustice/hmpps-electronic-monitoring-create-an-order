@@ -11,23 +11,36 @@ import I18n from '../../types/i18n'
 type CheckYourAnswerViewModel = {
   [field: string]: Answer[] | Answer[][]
 }
-const removeModelActionItems = (viewModel: CheckYourAnswerViewModel) =>
-  Object.values(viewModel).forEach(answers => removeAnswerActionItems(answers))
+const removeModelActionItems = (viewModel: CheckYourAnswerViewModel): CheckYourAnswerViewModel => {
+  const result: CheckYourAnswerViewModel = {}
+  Object.keys(viewModel).forEach(key => {
+    result[key] = removeAnswerActionItems(viewModel[key])
+  })
+  return result
+}
 
-const removeAnswerActionItems = (answers: Answer[] | Answer[][]) => {
-  answers.forEach(answer => {
+const removeAnswerActionItems = (answers: Answer[] | Answer[][]): Answer[] | Answer[][] => {
+  return answers.flatMap(answer => {
     if (Array.isArray(answer)) {
-      answer.forEach(entry => removeActionItems(entry))
-    } else {
-      removeActionItems(answer)
+      return answer.flatMap(entry => duplicateAnswerWithNoActions(entry))
     }
+    return duplicateAnswerWithNoActions(answer)
   })
 }
 
-const removeActionItems = (answer: Answer) => {
-  // bypass ESLint no-pparam-reassign rule
-  const item = answer
-  item.actions.items = []
+const duplicateAnswerWithNoActions = (answer: Answer): Answer => {
+  return {
+    key: {
+      text: answer.key.text,
+    },
+    value: {
+      text: answer.value.text,
+      html: answer.value.html,
+    },
+    actions: {
+      items: [],
+    },
+  }
 }
 
 const createOrderStatusAnswers = (order: Order) => {
@@ -40,18 +53,13 @@ const createOrderStatusAnswers = (order: Order) => {
 }
 
 const createViewModel = (order: Order, content: I18n) => {
-  const statusDetails = createOrderStatusAnswers(order)
-  const contactInformation = ContactInformationCheckAnswers.default(order, content)
-  const devicewearer = DeviceWearerCheckAnswers.default(order, content)
-  const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
-  const riskDetails = RiskInformationCheckAnswers.default(order, content)
-  const additionalDocumentDetails = AdditionalDocumentsCheckAnswers.default(order)
-  removeModelActionItems(contactInformation)
-  removeModelActionItems(devicewearer)
-  removeModelActionItems(monitoringConditions)
-  removeAnswerActionItems(statusDetails)
-  removeAnswerActionItems(riskDetails)
-  removeAnswerActionItems(additionalDocumentDetails)
+  const statusDetails = removeAnswerActionItems(createOrderStatusAnswers(order))
+  const contactInformation = removeModelActionItems(ContactInformationCheckAnswers.default(order, content))
+  const devicewearer = removeModelActionItems(DeviceWearerCheckAnswers.default(order, content))
+  const monitoringConditions = removeModelActionItems(MonitoringConditionsCheckAnswers.default(order, content))
+  const riskDetails = removeAnswerActionItems(RiskInformationCheckAnswers.default(order, content))
+  const additionalDocumentDetails = removeAnswerActionItems(AdditionalDocumentsCheckAnswers.default(order))
+
   return {
     statusDetails,
     ...contactInformation,
