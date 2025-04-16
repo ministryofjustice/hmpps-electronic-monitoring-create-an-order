@@ -47,17 +47,18 @@
     {% set href = section.path %}
     {% set status = 'COMPLETE' if section.completed else 
       'INCOMPLETE' %}
+    {% set statusArgs = { 
+      tag: {
+        text: status | capitalize,
+        classes: tagColour
+      } 
+    } if isOrderEditable else {} %}
     {% set tagColour = 'govuk-tag--green' if section.completed else 'govuk-tag--grey' %}
     {% set items = (items.push({
       idPrefix: "order-section",
       title: { text: name },
       href: href,
-      status: {
-        tag: {
-          text: status | capitalize,
-          classes: tagColour
-        }
-      }
+      status: statusArgs
     }), items) %}
   {% endfor %}
 

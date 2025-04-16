@@ -6,9 +6,9 @@ import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 const SECTIONS = [
   'ABOUT_THE_DEVICE_WEARER',
   'CONTACT_INFORMATION',
-  'INSTALLATION_AND_RISK',
-  'MONITORING_CONDITIONS',
-  'ATTACHMENTS',
+  'RISK_INFORMATION',
+  'ELECTRONIC_MONITORING_CONDITIONS',
+  'ADDITIONAL_DOCUMENTS',
   'VARIATION',
 ] as const
 
@@ -207,7 +207,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'INSTALLATION_AND_RISK',
+      section: 'RISK_INFORMATION',
       name: 'INSTALLATION_AND_RISK',
       path: paths.INSTALLATION_AND_RISK,
       state: 'REQUIRED',
@@ -215,7 +215,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.BASE_URL,
       state: 'REQUIRED',
@@ -223,7 +223,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'INSTALLATION_ADDRESS',
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: 'REQUIRED',
@@ -231,7 +231,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CURFEW_RELEASE_DATE',
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
@@ -244,7 +244,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CURFEW_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
       state: convertBooleanToEnum<State>(
@@ -257,7 +257,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CURFEW_TIMETABLE',
       path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
       state: convertBooleanToEnum<State>(
@@ -270,7 +270,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'ENFORCEMENT_ZONE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
@@ -283,7 +283,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'TRAIL_MONITORING',
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
@@ -296,7 +296,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'ATTENDANCE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
       state: convertBooleanToEnum<State>(
@@ -310,7 +310,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'ALCOHOL_MONITORING',
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
@@ -323,7 +323,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
       state: 'HIDDEN',
@@ -331,7 +331,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'ATTACHMENTS',
+      section: 'ADDITIONAL_DOCUMENTS',
       name: 'ATTACHMENTS',
       path: paths.ATTACHMENT.ATTACHMENTS,
       state: 'OPTIONAL',
@@ -374,15 +374,19 @@ export default class TaskListService {
     return tasks.filter(task => task.section === section)
   }
 
+  isSectionComplete(tasks: Task[]): boolean {
+    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+  }
+
   getSections(order: Order): SectionBlock[] {
-    const tasks = this.getTasks(order).filter(({ state }) => state !== 'DISABLED')
+    const tasks = this.getTasks(order)
 
     const sectionBlocks: SectionBlock[] = []
 
     SECTIONS.forEach(section => {
       const sectionsTasks = this.findTaskBySection(tasks, section)
-      const completed: boolean = sectionsTasks.filter(sectionTasks => !sectionTasks.completed).length > 0
-      sectionBlocks.push({ name: section, completed, path: 'something' })
+      const completed = this.isSectionComplete(sectionsTasks)
+      sectionBlocks.push({ name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) })
     })
 
     return sectionBlocks

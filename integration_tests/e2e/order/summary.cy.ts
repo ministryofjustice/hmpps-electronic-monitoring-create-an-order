@@ -53,7 +53,7 @@ context('Order Summary', () => {
     })
   })
 
-  context('Submitted Order', () => {
+  context('Complete order, not submitted', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -64,10 +64,214 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
-          id: 'bddf3cdf-1cf7-42df-a08a-9b03fe53cd29',
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: '',
+            lastName: null,
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: { contactNumber: '' },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          enforcementZoneConditions: [
+            {
+              description: null,
+              duration: null,
+              endDate: null,
+              fileId: null,
+              fileName: null,
+              startDate: null,
+              zoneId: null,
+              zoneType: null,
+            },
+          ],
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          additionalDocuments: [],
+          monitoringConditions: {
+            orderType: null,
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            orderTypeDescription: null,
+            conditionType: null,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            isValid: true,
+          },
+          monitoringConditionsTrail: { startDate: null, endDate: null },
+          monitoringConditionsAlcohol: {
+            endDate: null,
+            installationLocation: null,
+            monitoringType: null,
+            prisonName: null,
+            probationOfficeName: null,
+            startDate: null,
+          },
+          isValid: false,
+          mandatoryAttendanceConditions: [
+            {
+              addressLine1: null,
+              addressLine2: null,
+              addressLine3: null,
+              addressLine4: null,
+              appointmentDay: null,
+              endDate: null,
+              endTime: null,
+              postcode: null,
+              purpose: null,
+              startDate: null,
+              startTime: null,
+            },
+          ],
+          curfewReleaseDateConditions: {
+            curfewAddress: null,
+            endTime: null,
+            orderId: null,
+            releaseDate: null,
+            startTime: null,
+          },
+          curfewConditions: {
+            curfewAddress: null,
+            endDate: null,
+            orderId: null,
+            startDate: null,
+          },
+          curfewTimeTable: [
+            {
+              curfewAddress: '',
+              dayOfWeek: '',
+              endTime: '',
+              orderId: '',
+              startTime: '',
+            },
+          ],
+        },
+      })
+
+      cy.signIn()
+    })
+
+    it('should display all tasks as complete', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+      page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
+
+      page.contactInformationTask.shouldHaveStatus('Complete')
+      page.contactInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/contact-information/contact-details`,
+      )
+
+      page.riskInformationTask.shouldHaveStatus('Complete')
+      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
+
+      page.electronicMonitoringTask.shouldHaveStatus('Complete')
+      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+
+      // page.additionalDocuments.shouldHaveStatus('Complete')
+      page.additionalDocuments.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+    })
+  })
+
+  context('Complete order, submitted', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      // Create an order with all fields present (even though they're not valid)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          id: mockOrderId,
           status: 'SUBMITTED',
           deviceWearer: {
-            nomisId: null,
+            nomisId: '',
             pncId: null,
             deliusId: null,
             prisonNumber: null,

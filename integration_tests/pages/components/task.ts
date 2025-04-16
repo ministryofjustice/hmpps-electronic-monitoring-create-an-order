@@ -33,6 +33,6 @@ export default class Task {
   }
 
   shouldNotHaveStatus(): void {
-    this.status.should('not.exist')
+    this.status.find('.govuk-tag').should('have.length', 0)
   }
 }
