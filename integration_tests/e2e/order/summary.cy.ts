@@ -47,6 +47,8 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
+
+      page.submitOrderButton.should('be.disabled')
     })
 
     it('Should be accessible', () => {
@@ -95,6 +97,8 @@ context('Order Summary', () => {
 
       page.variationDetailsTask.shouldHaveStatus('Incomplete')
       page.variationDetailsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/variation/details`)
+
+      page.submitOrderButton.should('be.disabled')
     })
 
     it('Should be accessible', () => {
@@ -122,8 +126,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
-            firstName: '',
-            lastName: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
             alias: null,
             dateOfBirth: null,
             adultAtTimeOfInstallation: false,
@@ -239,7 +243,7 @@ context('Order Summary', () => {
             probationOfficeName: null,
             startDate: null,
           },
-          isValid: false,
+          isValid: true,
           mandatoryAttendanceConditions: [
             {
               addressLine1: null,
@@ -306,6 +310,8 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
+
+      page.submitOrderButton.should('not.be.disabled')
     })
   })
 
@@ -328,8 +334,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
-            firstName: '',
-            lastName: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
             alias: null,
             dateOfBirth: null,
             adultAtTimeOfInstallation: false,
@@ -497,6 +503,8 @@ context('Order Summary', () => {
     it('should display all tasks as complete', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
+      cy.get('h1', { log: false }).contains(page.title + ' for Joe Bloggs')
+
       page.aboutTheDeviceWearerTask.shouldNotHaveStatus()
       page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
 
@@ -517,6 +525,8 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
+
+      page.submitOrderButton.should('not.exist')
     })
   })
 

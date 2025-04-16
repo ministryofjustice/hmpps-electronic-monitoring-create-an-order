@@ -29,7 +29,7 @@ import SecondaryAddressPage from './contact-information/secondary-address'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
-    super('Tag request form', paths.ORDER.SUMMARY, 'Form sections')
+    super('Electronic Monitoring application form', paths.ORDER.SUMMARY, '')
   }
 
   get variationDetailsTask(): Task {
@@ -57,7 +57,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   get submitOrderButton(): PageElement {
-    return cy.contains('button', 'Submit order')
+    return cy.contains('button', 'Submit form')
   }
 
   get backToSearchButton(): PageElement {
