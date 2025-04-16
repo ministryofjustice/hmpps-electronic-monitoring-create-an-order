@@ -22,6 +22,7 @@ type Answer = {
   }
 }
 
+export default Answer
 export const createTextAnswer = (key: string, value: Optional<string>, uri: string): Answer => {
   return {
     key: {

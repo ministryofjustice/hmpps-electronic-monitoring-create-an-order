@@ -3,10 +3,9 @@
 {% set pageTitle = applicationName + " - Form Details" %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
 
 {% block content %}
 
@@ -15,89 +14,50 @@
     href: "/"
   }) }}
 
-  <div id="receipt-download-banner">
-    {{ govukNotificationBanner({
-      text: "This tag request form summary page is designed to be downloaded as a PDF for your records."
-    }) }}
-
-    {{ govukButton({
-      text: "Download tag request form as PDF",
-      id: "download-pdf"
-    }) }}
+  <div id="receipt-download-banner">    
+    <h1 class="govuk-heading-xl">
+        Electronic Monitoring Order Form Summary
+        </h1>
+      {{ govukButton({
+        text: "Download a copy of your answers",
+        id: "download-pdf"
+      }) }}
   </div>
 
   <br><br><br>
 
   <div id="form-summary">
-    <h1 class="govuk-heading-xl">Submitted electronic monitoring order details</h1>
-
-    {% for orderKey, orderValue in order %}
-      {% if not orderValue | isEmpty %}
-        <h2 class="govuk-heading-l=">{{ orderKey | camelCaseToSentenceCase }}</h2>
-
-        {# String format #}
-        {% if orderValue | checkType == 'string' %}
-          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            <div class="govuk-summary-list__row">
-              <dd class="govuk-summary-list__value">
-                {{ orderValue }}
-              </dd>
-            </div>
-          </dl>
-        {% endif %}
-
-        {# Object format #}
-        {% if orderValue | checkType == 'object' %}
-          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            {% for key, value in orderValue %}
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  {{ key | camelCaseToSentenceCase }}
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  {% if value | checkType == 'array' %}
-                    {{ value | join(', ') }}
-                  {% else %}
-                    {{ value }}
-                  {% endif %}
-                </dd>
-              </div>
-            {% endfor %}
-          </dl>
-        {% endif %}
-
-        {# Array Format #}
-        {% if orderValue | checkType == 'array' %}
-          {% for item in orderValue %}
-            <h3 class="govuk-heading-m">{{ orderKey | camelCaseToSentenceCase }} item {{ loop.index }}</h3>
-            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-              {% for key, value in item %}
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    {{ key | camelCaseToSentenceCase }}
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    {% if value | checkType == 'array' %}
-                      {{ value | join(', ') }}
-                    {% else %}
-                      {{ value }}
-                    {% endif %}
-                  </dd>
-                </div>
-              {% endfor %}
-            </dl>
-          {% endfor %}
-        {% endif %}
-
-      {% endif %}
-    {% endfor %}
-  </div>
-
-  <div class="govuk-button-group">
-    {{ govukButton({
-          text: "Back to your applications",
-          href: "/"
+    <h2 class="govuk-heading-l">Form details</h2>
+      {{ govukSummaryList({
+        classes: "govuk-!-margin-bottom-9",
+        rows: statusDetails
       }) }}
-  </div>
 
+    <h2 class="govuk-heading-l">About the device wearer</h2>
+      {% include "./about-the-device-wearer/answers.njk" %}
+      
+    <h2 class="govuk-heading-l">Contact information</h2>
+      {% include "./contact-information/answers.njk" %}
+
+    <h2 class="govuk-heading-l">Risk information</h2>
+        {{ govukSummaryList({
+        classes: "govuk-!-margin-bottom-9",
+        rows: riskDetails
+      }) }}
+
+    <h2 class="govuk-heading-l">Monitroing conditions</h2>
+      {% include "./monitoring-conditions/answers.njk" %}
+
+    <h2 class="govuk-heading-l">Additional documents</h2>
+       {{ govukSummaryList({
+        classes: "govuk-!-margin-bottom-9",
+        rows: additionalDocumentDetails
+      }) }}
+    <div class="govuk-button-group">
+      {{ govukButton({
+            text: "Back to your applications",
+            href: "/"
+        }) }}
+    </div>
+  </div>
 {% endblock %}

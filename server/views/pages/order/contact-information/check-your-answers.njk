@@ -7,26 +7,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% set section = "Contact information" %}
 {% block answers %}
-
-   <h2 class="govuk-heading-m">Telephone number</h2>
-
-  {{ govukSummaryList({
-    classes: "govuk-!-margin-bottom-9",
-    rows: contactDetails
-  }) }}
-
-   <h2 class="govuk-heading-m">Device wearer's addresses</h2>
-
-  {{ govukSummaryList({
-    classes: "govuk-!-margin-bottom-9",
-    rows: addresses
-  }) }}
-
-   <h2 class="govuk-heading-m">Organisations details</h2>
-
-  {{ govukSummaryList({
-    classes: "govuk-!-margin-bottom-9",
-    rows: interestedParties
-  }) }}
-
+    {% include "./answers.njk" %} 
 {% endblock %}
