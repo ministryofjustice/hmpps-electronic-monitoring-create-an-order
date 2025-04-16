@@ -14,6 +14,8 @@ export type AboutDeviceWearerFormData = {
   genderIdentity?: string
   interpreterRequired?: boolean
   language?: string
+  disabilities?: string
+  otherDisability?: string
 }
 
 export default class AboutDeviceWearerFormComponent extends FormComponent {
@@ -95,7 +97,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get otherDisabilityField(): FormInputComponent {
-    const label = "What is the device wearer's disability or health condition? (optional)"
+    const label = "What is the device wearer's disability or health condition?"
     return new FormInputComponent(this.form, label)
   }
 
@@ -257,6 +259,14 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
     if (profile.language) {
       this.languageField.set(profile.language)
+    }
+
+    if (profile.disabilities) {
+      this.disabilityField.set(profile.disabilities)
+    }
+
+    if (profile.otherDisability) {
+      this.otherDisabilityField.set(profile.otherDisability)
     }
   }
 

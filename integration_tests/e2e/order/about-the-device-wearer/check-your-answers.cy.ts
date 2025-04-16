@@ -95,7 +95,7 @@ context('Device wearer - check your answers', () => {
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.personDetailsSection.shouldNotHaveItems([
-        "What is the device wearer's disability or health condition? (optional)",
+        "What is the device wearer's disability or health condition?",
         "What is the device wearer's chosen identity?",
       ])
       page.identityNumbersSection.shouldExist()
@@ -161,7 +161,7 @@ context('Device wearer - check your answers', () => {
           key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           value: 'Other',
         },
-        { key: "What is the device wearer's disability or health condition? (optional)", value: 'Broken arm' },
+        { key: "What is the device wearer's disability or health condition?", value: 'Broken arm' },
         { key: 'What language does the interpreter need to use? (optional)', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
