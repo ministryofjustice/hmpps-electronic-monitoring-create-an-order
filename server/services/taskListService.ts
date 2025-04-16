@@ -56,10 +56,6 @@ type SectionBlock = {
   path: string
 }
 
-type TasksBySections = {
-  [k in Section]: Array<Task>
-}
-
 type FormData = Record<string, string | boolean>
 
 const canBeCompleted = (task: Task, formData: FormData): boolean => {
@@ -353,23 +349,6 @@ export default class TaskListService {
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
 
-  getTasksBySection(order: Order) {
-    const tasks = this.getTasks(order).filter(({ state }) => state !== 'DISABLED')
-
-    return tasks.reduce((acc, task) => {
-      if (!acc[task.section]) {
-        acc[task.section] = []
-      }
-
-      acc[task.section].push({
-        ...task,
-        path: task.path.replace(':orderId', order.id),
-      })
-
-      return acc
-    }, {} as TasksBySections)
-  }
-
   findTaskBySection(tasks: Task[], section: Section): Task[] {
     return tasks.filter(task => task.section === section)
   }
@@ -381,15 +360,11 @@ export default class TaskListService {
   getSections(order: Order): SectionBlock[] {
     const tasks = this.getTasks(order)
 
-    const sectionBlocks: SectionBlock[] = []
-
-    SECTIONS.forEach(section => {
+    return SECTIONS.map(section => {
       const sectionsTasks = this.findTaskBySection(tasks, section)
       const completed = this.isSectionComplete(sectionsTasks)
-      sectionBlocks.push({ name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) })
+      return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }
     })
-
-    return sectionBlocks
   }
 }
 
