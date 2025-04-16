@@ -3,16 +3,16 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 
-const SECTIONS = [
-  'ABOUT_THE_DEVICE_WEARER',
-  'CONTACT_INFORMATION',
-  'RISK_INFORMATION',
-  'ELECTRONIC_MONITORING_CONDITIONS',
-  'ADDITIONAL_DOCUMENTS',
-  'VARIATION_DETAILS',
-] as const
+const SECTIONS = {
+  aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
+  contactInformation: 'CONTACT_INFORMATION',
+  riskInformation: 'RISK_INFORMATION',
+  electronicMonitoringCondition: 'ELECTRONIC_MONITORING_CONDITIONS',
+  additionalDocuments: 'ADDITIONAL_DOCUMENTS',
+  variationDetails: 'VARIATION_DETAILS',
+} as const
 
-type Section = (typeof SECTIONS)[number]
+type Section = (typeof SECTIONS)[keyof typeof SECTIONS]
 
 type Page =
   | 'DEVICE_WEARER'
@@ -40,7 +40,18 @@ type Page =
   | 'ATTACHMENTS'
   | 'VARIATION_DETAILS'
 
-type State = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL' | 'CANT_BE_STARTED' | 'DISABLED' | 'HIDDEN'
+const STATES = {
+  required: 'REQUIRED',
+  notRequired: 'NOT_REQUIRED',
+  optional: 'OPTIONAL',
+  cantBeStarted: 'CANT_BE_STARTED',
+  disabled: 'DISABLED',
+  hidden: 'HIDDEN',
+} as const
+
+type State = (typeof STATES)[keyof typeof STATES]
+
+const COMPLETABLE_STATES: State[] = [STATES.optional, STATES.required, STATES.hidden]
 
 type Task = {
   section: Section
@@ -72,8 +83,9 @@ const canBeCompleted = (task: Task, formData: FormData): boolean => {
     }
   }
 
-  return ['OPTIONAL', 'REQUIRED', 'HIDDEN'].includes(task.state)
+  return COMPLETABLE_STATES.includes(task.state)
 }
+
 const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === currentPage
 
 const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
@@ -87,250 +99,250 @@ export default class TaskListService {
     const tasks: Array<Task> = []
 
     tasks.push({
-      section: 'VARIATION_DETAILS',
+      section: SECTIONS.variationDetails,
       name: 'VARIATION_DETAILS',
       path: paths.VARIATION.VARIATION_DETAILS,
-      state: order.type === 'VARIATION' ? 'REQUIRED' : 'DISABLED',
+      state: order.type === 'VARIATION' ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
     })
 
     tasks.push({
-      section: 'ABOUT_THE_DEVICE_WEARER',
+      section: SECTIONS.aboutTheDeviceWearer,
       name: 'DEVICE_WEARER',
       path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER,
-      state: 'REQUIRED',
+      state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.firstName),
     })
 
     tasks.push({
-      section: 'ABOUT_THE_DEVICE_WEARER',
+      section: SECTIONS.aboutTheDeviceWearer,
       name: 'RESPONSIBLE_ADULT',
       path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT,
       state: convertBooleanToEnum<State>(
         order.deviceWearer.adultAtTimeOfInstallation,
-        'CANT_BE_STARTED',
-        'NOT_REQUIRED',
-        'REQUIRED',
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.required,
       ),
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
     })
 
     tasks.push({
-      section: 'ABOUT_THE_DEVICE_WEARER',
+      section: SECTIONS.aboutTheDeviceWearer,
       name: 'IDENTITY_NUMBERS',
       path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
-      state: 'OPTIONAL',
+      state: STATES.optional,
       completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
     })
 
     tasks.push({
-      section: 'ABOUT_THE_DEVICE_WEARER',
+      section: SECTIONS.aboutTheDeviceWearer,
       name: 'CHECK_ANSWERS_DEVICE_WEARER',
       path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
-      state: 'HIDDEN',
+      state: STATES.hidden,
       completed: true,
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'CONTACT_DETAILS',
       path: paths.CONTACT_INFORMATION.CONTACT_DETAILS,
-      state: 'OPTIONAL',
+      state: STATES.optional,
       completed: isNotNullOrUndefined(order.contactDetails),
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'NO_FIXED_ABODE',
       path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE,
-      state: 'REQUIRED',
+      state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'PRIMARY_ADDRESS',
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
       state: convertBooleanToEnum<State>(
         order.deviceWearer.noFixedAbode,
-        'CANT_BE_STARTED',
-        'NOT_REQUIRED',
-        'REQUIRED',
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.required,
       ),
       completed: isCompletedAddress(order, 'PRIMARY'),
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'SECONDARY_ADDRESS',
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
       state: convertBooleanToEnum<State>(
         order.deviceWearer.noFixedAbode,
-        'CANT_BE_STARTED',
-        'NOT_REQUIRED',
-        'OPTIONAL',
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.optional,
       ),
       completed: isCompletedAddress(order, 'SECONDARY'),
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'TERTIARY_ADDRESS',
       path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
       state: convertBooleanToEnum<State>(
         order.deviceWearer.noFixedAbode,
-        'CANT_BE_STARTED',
-        'NOT_REQUIRED',
-        'OPTIONAL',
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.optional,
       ),
       completed: isCompletedAddress(order, 'TERTIARY'),
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'INTERESTED_PARTIES',
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
-      state: 'REQUIRED',
+      state: STATES.required,
       completed: isNotNullOrUndefined(order.interestedParties),
     })
 
     tasks.push({
-      section: 'CONTACT_INFORMATION',
+      section: SECTIONS.contactInformation,
       name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
       path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
-      state: 'HIDDEN',
+      state: STATES.hidden,
       completed: true,
     })
 
     tasks.push({
-      section: 'RISK_INFORMATION',
+      section: SECTIONS.riskInformation,
       name: 'INSTALLATION_AND_RISK',
       path: paths.INSTALLATION_AND_RISK,
-      state: 'REQUIRED',
+      state: STATES.required,
       completed: isNotNullOrUndefined(order.installationAndRisk),
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.BASE_URL,
-      state: 'REQUIRED',
+      state: STATES.required,
       completed: order.monitoringConditions.isValid,
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'INSTALLATION_ADDRESS',
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
-      state: 'REQUIRED',
+      state: STATES.required,
       completed: isCompletedAddress(order, 'INSTALLATION'),
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'CURFEW_RELEASE_DATE',
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'CURFEW_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.curfewConditions),
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'CURFEW_TIMETABLE',
       path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.curfewTimeTable) && order.curfewTimeTable.length > 0,
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'ENFORCEMENT_ZONE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.exclusionZone,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed: order.enforcementZoneConditions.length > 0,
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'TRAIL_MONITORING',
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.trail,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.monitoringConditionsTrail),
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'ATTENDANCE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.mandatoryAttendance,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed:
         isNotNullOrUndefined(order.mandatoryAttendanceConditions) && order.mandatoryAttendanceConditions.length > 0,
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'ALCOHOL_MONITORING',
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.alcohol,
-        'CANT_BE_STARTED',
-        'REQUIRED',
-        'NOT_REQUIRED',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
     })
 
     tasks.push({
-      section: 'ELECTRONIC_MONITORING_CONDITIONS',
+      section: SECTIONS.electronicMonitoringCondition,
       name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
-      state: 'HIDDEN',
+      state: STATES.hidden,
       completed: true,
     })
 
     tasks.push({
-      section: 'ADDITIONAL_DOCUMENTS',
+      section: SECTIONS.additionalDocuments,
       name: 'ATTACHMENTS',
       path: paths.ATTACHMENT.ATTACHMENTS,
-      state: 'OPTIONAL',
+      state: STATES.optional,
       completed: false,
     })
 
@@ -360,11 +372,13 @@ export default class TaskListService {
   getSections(order: Order): SectionBlock[] {
     const tasks = this.getTasks(order)
 
-    return SECTIONS.filter(section => section !== 'VARIATION_DETAILS' || order.type === 'VARIATION').map(section => {
-      const sectionsTasks = this.findTaskBySection(tasks, section)
-      const completed = this.isSectionComplete(sectionsTasks)
-      return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }
-    })
+    return Object.values(SECTIONS)
+      .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
+      .map(section => {
+        const sectionsTasks = this.findTaskBySection(tasks, section)
+        const completed = this.isSectionComplete(sectionsTasks)
+        return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }
+      })
   }
 }
 
