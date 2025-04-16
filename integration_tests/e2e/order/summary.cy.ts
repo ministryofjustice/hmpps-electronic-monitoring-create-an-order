@@ -503,7 +503,7 @@ context('Order Summary', () => {
     it('should display all tasks as complete', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('h1', { log: false }).contains(page.title + ' for Joe Bloggs')
+      cy.get('h1', { log: false }).contains(`${page.title} for Joe Bloggs`)
 
       page.aboutTheDeviceWearerTask.shouldNotHaveStatus()
       page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
