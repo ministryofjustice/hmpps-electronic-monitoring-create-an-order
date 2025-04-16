@@ -27,7 +27,7 @@ const PAGES = {
   interestParties: 'INTERESTED_PARTIES',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
   installationAndRisk: 'INSTALLATION_AND_RISK',
-  monitoringCondtions: 'MONITORING_CONDITIONS',
+  monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
   curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewConditions: 'CURFEW_CONDITIONS',
@@ -35,8 +35,8 @@ const PAGES = {
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
   trailMonitoring: 'TRAIL_MONITORING',
   attendanceMonitoring: 'ATTENDANCE_MONITORING',
-  alchoholMonitoring: 'ALCOHOL_MONITORING',
-  checkAnswersMonitoringCondtions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
+  alcoholMonitoring: 'ALCOHOL_MONITORING',
+  checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
   attachments: 'ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
 }
@@ -227,7 +227,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.monitoringCondtions,
+      name: PAGES.monitoringConditions,
       path: paths.MONITORING_CONDITIONS.BASE_URL,
       state: STATES.required,
       completed: order.monitoringConditions.isValid,
@@ -295,7 +295,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.monitoringCondtions,
+      name: PAGES.trailMonitoring,
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.trail,
@@ -322,7 +322,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.alchoholMonitoring,
+      name: PAGES.alcoholMonitoring,
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.alcohol,
@@ -335,7 +335,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.checkAnswersMonitoringCondtions,
+      name: PAGES.checkAnswersMonitoringConditions,
       path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
       state: STATES.hidden,
       completed: true,
