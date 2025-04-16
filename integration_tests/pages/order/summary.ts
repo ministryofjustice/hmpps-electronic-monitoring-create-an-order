@@ -29,91 +29,35 @@ import SecondaryAddressPage from './contact-information/secondary-address'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
-    super('Tag request form', paths.ORDER.SUMMARY, 'Form sections')
+    super('Electronic Monitoring application form', paths.ORDER.SUMMARY, '')
   }
 
   get variationDetailsTask(): Task {
     return new Task('Variation details')
   }
 
-  get deviceWearerTask(): Task {
-    return new Task('Device wearer')
+  get aboutTheDeviceWearerTask(): Task {
+    return new Task('About the device wearer')
   }
 
-  get responsibleAdultTask(): Task {
-    return new Task('Responsible adult')
+  get contactInformationTask(): Task {
+    return new Task('Contact information')
   }
 
-  get contactDetailsTask(): Task {
-    return new Task('Contact details')
+  get riskInformationTask(): Task {
+    return new Task('Risk information')
   }
 
-  get noFixedAbodeTask(): Task {
-    return new Task('No fixed abode')
+  get electronicMonitoringTask(): Task {
+    return new Task('Electronic monitoring conditions')
   }
 
-  get primaryAddressTask(): Task {
-    return new Task('Primary address')
-  }
-
-  get secondaryAddressTask(): Task {
-    return new Task('Secondary address')
-  }
-
-  get tertiaryAddressTask(): Task {
-    return new Task('Tertiary address')
-  }
-
-  get interestedPartiesTask(): Task {
-    return new Task('Interested parties')
-  }
-
-  get installationAndRiskTask(): Task {
-    return new Task('Installation and risk')
-  }
-
-  get monitoringConditionsTask(): Task {
-    return new Task('Monitoring conditions')
-  }
-
-  get installationAddressTask(): Task {
-    return new Task('Installation address')
-  }
-
-  get curfewReleaseDateTask(): Task {
-    return new Task('Curfew release date')
-  }
-
-  get curfewConditionsTask(): Task {
-    return new Task('Curfew conditions')
-  }
-
-  get curfewTimetableTask(): Task {
-    return new Task('Curfew timetable')
-  }
-
-  get zoneTask(): Task {
-    return new Task('Enforcement zone monitoring')
-  }
-
-  get trailTask(): Task {
-    return new Task('Trail monitoring')
-  }
-
-  get attendanceTask(): Task {
-    return new Task('Attendance monitoring')
-  }
-
-  get alcoholTask(): Task {
-    return new Task('Alcohol monitoring')
-  }
-
-  get attachmentsTask(): Task {
-    return new Task('Attachments')
+  get additionalDocumentsTask(): Task {
+    return new Task('Additional documents')
   }
 
   get submitOrderButton(): PageElement {
-    return cy.contains('button', 'Submit order')
+    return cy.contains('button', 'Submit form')
   }
 
   get backToSearchButton(): PageElement {
@@ -134,7 +78,7 @@ export default class OrderTasksPage extends AppPage {
     curfewTimetable,
     files,
   }): OrderTasksPage {
-    this.deviceWearerTask.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -177,7 +121,7 @@ export default class OrderTasksPage extends AppPage {
     trailMonitoringDetails,
     files,
   }): OrderTasksPage {
-    this.deviceWearerTask.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -295,7 +239,7 @@ export default class OrderTasksPage extends AppPage {
     enforcementZoneDetails,
     files,
   }): OrderTasksPage {
-    this.deviceWearerTask.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -372,7 +316,7 @@ export default class OrderTasksPage extends AppPage {
     alcoholMonitoringDetails,
     files,
   }): OrderTasksPage {
-    this.deviceWearerTask.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -449,7 +393,7 @@ export default class OrderTasksPage extends AppPage {
     trailMonitoringDetails,
     files,
   }): OrderTasksPage {
-    this.deviceWearerTask.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,

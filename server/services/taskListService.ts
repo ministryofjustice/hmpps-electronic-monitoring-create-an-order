@@ -3,13 +3,16 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 
-type Section =
-  | 'ABOUT_THE_DEVICE_WEARER'
-  | 'CONTACT_INFORMATION'
-  | 'INSTALLATION_AND_RISK'
-  | 'MONITORING_CONDITIONS'
-  | 'ATTACHMENTS'
-  | 'VARIATION'
+const SECTIONS = [
+  'ABOUT_THE_DEVICE_WEARER',
+  'CONTACT_INFORMATION',
+  'RISK_INFORMATION',
+  'ELECTRONIC_MONITORING_CONDITIONS',
+  'ADDITIONAL_DOCUMENTS',
+  'VARIATION_DETAILS',
+] as const
+
+type Section = (typeof SECTIONS)[number]
 
 type Page =
   | 'DEVICE_WEARER'
@@ -47,8 +50,10 @@ type Task = {
   completed: boolean
 }
 
-type TasksBySections = {
-  [k in Section]: Array<Task>
+type SectionBlock = {
+  name: Section
+  completed: boolean
+  path: string
 }
 
 type FormData = Record<string, string | boolean>
@@ -82,7 +87,7 @@ export default class TaskListService {
     const tasks: Array<Task> = []
 
     tasks.push({
-      section: 'VARIATION',
+      section: 'VARIATION_DETAILS',
       name: 'VARIATION_DETAILS',
       path: paths.VARIATION.VARIATION_DETAILS,
       state: order.type === 'VARIATION' ? 'REQUIRED' : 'DISABLED',
@@ -198,7 +203,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'INSTALLATION_AND_RISK',
+      section: 'RISK_INFORMATION',
       name: 'INSTALLATION_AND_RISK',
       path: paths.INSTALLATION_AND_RISK,
       state: 'REQUIRED',
@@ -206,7 +211,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.BASE_URL,
       state: 'REQUIRED',
@@ -214,7 +219,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'INSTALLATION_ADDRESS',
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: 'REQUIRED',
@@ -222,7 +227,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CURFEW_RELEASE_DATE',
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
@@ -235,7 +240,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CURFEW_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
       state: convertBooleanToEnum<State>(
@@ -248,7 +253,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CURFEW_TIMETABLE',
       path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
       state: convertBooleanToEnum<State>(
@@ -261,7 +266,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'ENFORCEMENT_ZONE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
@@ -274,7 +279,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'TRAIL_MONITORING',
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
@@ -287,7 +292,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'ATTENDANCE_MONITORING',
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
       state: convertBooleanToEnum<State>(
@@ -301,7 +306,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'ALCOHOL_MONITORING',
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
@@ -314,7 +319,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'MONITORING_CONDITIONS',
+      section: 'ELECTRONIC_MONITORING_CONDITIONS',
       name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
       path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
       state: 'HIDDEN',
@@ -322,7 +327,7 @@ export default class TaskListService {
     })
 
     tasks.push({
-      section: 'ATTACHMENTS',
+      section: 'ADDITIONAL_DOCUMENTS',
       name: 'ATTACHMENTS',
       path: paths.ATTACHMENT.ATTACHMENTS,
       state: 'OPTIONAL',
@@ -344,21 +349,22 @@ export default class TaskListService {
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
 
-  getTasksBySection(order: Order) {
-    const tasks = this.getTasks(order).filter(({ state }) => state !== 'DISABLED')
+  findTaskBySection(tasks: Task[], section: Section): Task[] {
+    return tasks.filter(task => task.section === section)
+  }
 
-    return tasks.reduce((acc, task) => {
-      if (!acc[task.section]) {
-        acc[task.section] = []
-      }
+  isSectionComplete(tasks: Task[]): boolean {
+    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+  }
 
-      acc[task.section].push({
-        ...task,
-        path: task.path.replace(':orderId', order.id),
-      })
+  getSections(order: Order): SectionBlock[] {
+    const tasks = this.getTasks(order)
 
-      return acc
-    }, {} as TasksBySections)
+    return SECTIONS.filter(section => section !== 'VARIATION_DETAILS' || order.type === 'VARIATION').map(section => {
+      const sectionsTasks = this.findTaskBySection(tasks, section)
+      const completed = this.isSectionComplete(sectionsTasks)
+      return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }
+    })
   }
 }
 

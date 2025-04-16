@@ -116,7 +116,7 @@ describe('authorised user', () => {
         .get(`/order/${mockSubmittedOrder.id}/summary`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Tag request form')
+          expect(res.text).toContain('Electronic Monitoring application form')
         })
     })
   })

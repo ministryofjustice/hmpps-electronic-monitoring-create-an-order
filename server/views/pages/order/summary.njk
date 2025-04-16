@@ -4,30 +4,39 @@
 {% set error = error %}
 {% set mainClasses = "app-container govuk-body" %}
 {% set formDownloadIcon = '/assets/images/form_download.svg' %}
-{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+  {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block content %}
+
+  {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if order.status === 'SUBMITTED' else "Electronic Monitoring application form" %}
 
   {{ govukBackLink({
     text: "Back",
     href: "/"
   }) }}
 
-  {{ mojPageHeaderActions({
-    heading: {
-      text: "Tag request form"
-    }
-  }) }}
+  <h1 class="govuk-heading-l">
+    {{ heading }}
+  </h1>
+    
+  {% if order.status === 'SUBMITTED' %}
+    <p>
+      You can make changes to this form or end all monitoring for the device wearer
+    </p>
+  {% endif %}
 
-  <h2 class="govuk-heading-l">Form sections</h2>
-
-  <p class="govuk-body-l">
-    Complete all sections before submitting the form.
-  </p>
+  {% if order.status === "ERROR" %}
+    {% set insetHtml %}
+      Your application form and attachments failed to submit. This was due to a technical problem. For more information <a class="govuk-link" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/Help-when-something-goes-wrong.html#form-failed-to-submit" target="_blank">View the guidance (opens in a new tab)</a>
+    {% endset %}
+    {{ govukInsetText({
+      html: insetHtml
+    }) }}
+  {% endif %}
 
   {% if error %}
     {{ govukErrorSummary({
@@ -41,99 +50,46 @@
     }) }}
   {% endif %}
 
-  {% for section, tasks in sections %}
-    <h3 class="govuk-heading-m">{{ section | replace("_", " ") | capitalize }}</h3>
-
-    {% set taskListItems = [] %}
-    {% for task in tasks %}
-      {% set name = task.name | replace("_", " ") | capitalize %}
-      {% set href = task.path %}
-      {% set status = 'COMPLETE' if task.completed else 
-        'INCOMPLETE' %}
-      {% set tagColour = 'govuk-tag--green' if task.completed else 'govuk-tag--grey' %}
-
-      {% if task.state == 'CANT_BE_STARTED' %}
-        {% set taskListItems = (taskListItems.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          status: {
-            text: 'Cannot start yet',
-            classes: "govuk-task-list__status--cannot-start-yet"
-            
-          }
-        }), taskListItems) %}
-      {% elif task.state == 'NOT_REQUIRED' %}
-        {% set taskListItems = (taskListItems.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          status: {
-            text: 'Not required',
-            classes: "govuk-task-list__status--cannot-start-yet"
-            
-          }
-        }), taskListItems) %}
-      {% elif task.state == 'OPTIONAL' %}
-        {% set tagHtml %}
-        <strong class="govuk-tag govuk-tag--light-blue">
-              Optional
-            </strong>
-        <strong class="govuk-tag {{ tagColour }}">
-          {{ status | capitalize }}
-        </strong>
-        {% endset %}
-        {% set taskListItems = (taskListItems.push({
-            idPrefix: "order-section",
-            title: { text: name },
-            href: href,
-            status: {
-              html: tagHtml
-            }
-          }), taskListItems) %}
-      {% elif task.state == 'HIDDEN' %}
-        {# do not display #}
-      {% else %}
-        {% set taskListItems = (taskListItems.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          href: href,
-          status: {
-            tag: {
-              text: status | capitalize,
-              classes: tagColour
-            }
-          }
-        }), taskListItems) %}
-
-      {% endif %}
-    {% endfor %}
-    {{ govukTaskList({ idPrefix: "sections", items: taskListItems }) }}
+  {% set items = [] %}
+  {% for section in sections %}
+    {% set name = section.name | replace("_", " ") | capitalize %}
+    {% set href = section.path %}
+    {% set status = 'COMPLETE' if section.completed else 
+      'INCOMPLETE' %}
+    {% set tagColour = 'govuk-tag--green' if section.completed else '' %}
+    {% set statusArgs = { 
+      tag: {
+        text: status | capitalize,
+        classes: tagColour
+      } 
+    } if isOrderEditable else {} %}
+    {% set items = (items.push({
+      idPrefix: "order-section",
+      title: { text: name },
+      href: href,
+      status: statusArgs
+    }), items) %}
   {% endfor %}
+
+  {{ govukTaskList({ idPrefix: "sections", items: items }) }}
 
   {% if order.status == "IN_PROGRESS" %}
     <form action="/order/{{ order.id }}/submit" method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div class="govuk-button-group">
         {{ govukButton({
-            text: "Submit order",
+            text: "Submit form",
             disabled: not order.isValid
         }) }}
-        {{ govukButton({
-          text: "Delete order",
-          href: "/order/" + orderId + "/delete",
-          classes: "govuk-button--warning"
-        }) }}
+        <a href="/order/{{ orderId }}/delete" class="govuk-link">Delete form</a>.
       </div>
     </form>
   {% else %}
-    <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+    <img src="{{ formDownloadIcon }}" width="62px" height="85px" alt="Icon of a form">
     {{ govukButton({
-      text: "Get tag request form summary for download",
+      text: "View and download the completed application form",
       href: "/order/" + orderId + "/receipt",
       classes: "govuk-button--secondary"
     }) }}
-
-    <div class="govuk-button-group">
-      <a id="backToSearch" class="govuk-link" href="/">Return to order search view</a>
-    </div>
   {% endif %}
 {% endblock %}

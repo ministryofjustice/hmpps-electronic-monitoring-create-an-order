@@ -687,201 +687,43 @@ describe('TaskListService', () => {
     })
   })
 
-  describe('getTasksBySection', () => {
+  describe('getSections', () => {
     it('should return all tasks grouped by section and marked as incomplete', () => {
       // Given
       const order = getMockOrder()
       const taskListService = new TaskListService()
 
       // When
-      const sections = taskListService.getTasksBySection(order)
+      const sections = taskListService.getSections(order)
 
       // Then
-      expect(sections).toEqual({
-        ABOUT_THE_DEVICE_WEARER: [
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'RESPONSIBLE_ADULT',
-            path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'IDENTITY_NUMBERS',
-            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'CHECK_ANSWERS_DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        CONTACT_INFORMATION: [
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CONTACT_DETAILS',
-            path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'NO_FIXED_ABODE',
-            path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'PRIMARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'primary',
-            ).replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'SECONDARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'secondary',
-            ).replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'TERTIARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'tertiary',
-            ).replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'INTERESTED_PARTIES',
-            path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
-            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        INSTALLATION_AND_RISK: [
-          {
-            section: 'INSTALLATION_AND_RISK',
-            name: 'INSTALLATION_AND_RISK',
-            path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-        ],
-        MONITORING_CONDITIONS: [
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'INSTALLATION_ADDRESS',
-            path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(
-              ':addressType(installation)',
-              'installation',
-            ).replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_RELEASE_DATE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_TIMETABLE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ENFORCEMENT_ZONE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        ATTACHMENTS: [
-          {
-            section: 'ATTACHMENTS',
-            name: 'ATTACHMENTS',
-            path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-        ],
-      })
+      expect(sections).toEqual([
+        {
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+        },
+      ])
     })
 
     it('should return all tasks grouped by section and marked as complete', () => {
@@ -914,194 +756,36 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService()
 
       // When
-      const sections = taskListService.getTasksBySection(order)
+      const sections = taskListService.getSections(order)
 
       // Then
-      expect(sections).toEqual({
-        ABOUT_THE_DEVICE_WEARER: [
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'RESPONSIBLE_ADULT',
-            path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'IDENTITY_NUMBERS',
-            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: true,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'CHECK_ANSWERS_DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        CONTACT_INFORMATION: [
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CONTACT_DETAILS',
-            path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'NO_FIXED_ABODE',
-            path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'PRIMARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'primary',
-            ).replace(':orderId', order.id),
-            state: 'NOT_REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'SECONDARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'secondary',
-            ).replace(':orderId', order.id),
-            state: 'NOT_REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'TERTIARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'tertiary',
-            ).replace(':orderId', order.id),
-            state: 'NOT_REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'INTERESTED_PARTIES',
-            path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
-            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        INSTALLATION_AND_RISK: [
-          {
-            section: 'INSTALLATION_AND_RISK',
-            name: 'INSTALLATION_AND_RISK',
-            path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-        ],
-        MONITORING_CONDITIONS: [
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'INSTALLATION_ADDRESS',
-            path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(
-              ':addressType(installation)',
-              'installation',
-            ).replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_RELEASE_DATE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_TIMETABLE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ENFORCEMENT_ZONE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
-            state: 'CANT_BE_STARTED',
-            completed: true,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        ATTACHMENTS: [
-          {
-            section: 'ATTACHMENTS',
-            name: 'ATTACHMENTS',
-            path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-        ],
-      })
+      expect(sections).toEqual([
+        {
+          completed: true,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+        },
+        {
+          completed: true,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+        },
+        {
+          completed: true,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        },
+        {
+          completed: true,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+        },
+      ])
     })
 
     it('should return all tasks grouped by section and ready to start', () => {
@@ -1123,194 +807,36 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService()
 
       // When
-      const sections = taskListService.getTasksBySection(order)
+      const sections = taskListService.getSections(order)
 
       // Then
-      expect(sections).toEqual({
-        ABOUT_THE_DEVICE_WEARER: [
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'RESPONSIBLE_ADULT',
-            path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'IDENTITY_NUMBERS',
-            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'CHECK_ANSWERS_DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        CONTACT_INFORMATION: [
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CONTACT_DETAILS',
-            path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'NO_FIXED_ABODE',
-            path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'PRIMARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'primary',
-            ).replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'SECONDARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'secondary',
-            ).replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'TERTIARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'tertiary',
-            ).replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'INTERESTED_PARTIES',
-            path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
-            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        INSTALLATION_AND_RISK: [
-          {
-            section: 'INSTALLATION_AND_RISK',
-            name: 'INSTALLATION_AND_RISK',
-            path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-        ],
-        MONITORING_CONDITIONS: [
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'INSTALLATION_ADDRESS',
-            path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(
-              ':addressType(installation)',
-              'installation',
-            ).replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_RELEASE_DATE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_TIMETABLE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ENFORCEMENT_ZONE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        ATTACHMENTS: [
-          {
-            section: 'ATTACHMENTS',
-            name: 'ATTACHMENTS',
-            path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-        ],
-      })
+      expect(sections).toEqual([
+        {
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+        },
+      ])
     })
 
     it('should return all tasks grouped by section and ready to start for a variation', () => {
@@ -1333,203 +859,41 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService()
 
       // When
-      const sections = taskListService.getTasksBySection(order)
+      const sections = taskListService.getSections(order)
 
       // Then
-      expect(sections).toEqual({
-        VARIATION: [
-          {
-            section: 'VARIATION',
-            name: 'VARIATION_DETAILS',
-            path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-        ],
-        ABOUT_THE_DEVICE_WEARER: [
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'RESPONSIBLE_ADULT',
-            path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'IDENTITY_NUMBERS',
-            path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'ABOUT_THE_DEVICE_WEARER',
-            name: 'CHECK_ANSWERS_DEVICE_WEARER',
-            path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        CONTACT_INFORMATION: [
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CONTACT_DETAILS',
-            path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'NO_FIXED_ABODE',
-            path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: true,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'PRIMARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'primary',
-            ).replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'SECONDARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'secondary',
-            ).replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'TERTIARY_ADDRESS',
-            path: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-              ':addressType(primary|secondary|tertiary)',
-              'tertiary',
-            ).replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'INTERESTED_PARTIES',
-            path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'CONTACT_INFORMATION',
-            name: 'CHECK_ANSWERS_CONTACT_INFORMATION',
-            path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        INSTALLATION_AND_RISK: [
-          {
-            section: 'INSTALLATION_AND_RISK',
-            name: 'INSTALLATION_AND_RISK',
-            path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-        ],
-        MONITORING_CONDITIONS: [
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'INSTALLATION_ADDRESS',
-            path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(
-              ':addressType(installation)',
-              'installation',
-            ).replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_RELEASE_DATE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CURFEW_TIMETABLE',
-            path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ENFORCEMENT_ZONE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'TRAIL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ATTENDANCE_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'ALCOHOL_MONITORING',
-            path: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
-            state: 'REQUIRED',
-            completed: false,
-          },
-          {
-            section: 'MONITORING_CONDITIONS',
-            name: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
-            path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            state: 'HIDDEN',
-            completed: true,
-          },
-        ],
-        ATTACHMENTS: [
-          {
-            section: 'ATTACHMENTS',
-            name: 'ATTACHMENTS',
-            path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-            state: 'OPTIONAL',
-            completed: false,
-          },
-        ],
-      })
+      expect(sections).toEqual([
+        {
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'VARIATION_DETAILS',
+          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
+        },
+      ])
     })
   })
 })

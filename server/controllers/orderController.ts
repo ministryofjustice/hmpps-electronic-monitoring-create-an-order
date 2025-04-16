@@ -20,7 +20,7 @@ export default class OrderController {
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
-    const sections = this.taskListService.getTasksBySection(req.order!)
+    const sections = this.taskListService.getSections(req.order!)
     const error = req.flash('submissionError')
 
     res.render('pages/order/summary', {
