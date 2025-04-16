@@ -140,7 +140,7 @@ context('Scenarios', () => {
 
         let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.deviceWearerTask.click()
+        orderSummaryPage.aboutTheDeviceWearerTask.click()
 
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
