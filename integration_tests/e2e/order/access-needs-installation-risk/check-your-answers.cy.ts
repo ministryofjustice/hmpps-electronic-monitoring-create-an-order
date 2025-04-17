@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
-import CheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import IntallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 
@@ -16,24 +16,24 @@ context('installation and risk - check your answers', () => {
     })
 
     it('Should display the user name visible in header', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
       page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Should display the phase banner in header', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Should render the save and continue, and return buttons', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.continueButton().should('exist')
       page.returnButton().should('exist')
     })
 
     it('Should be accessible', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
       page.checkIsAccessible()
     })
   })
@@ -74,7 +74,7 @@ context('installation and risk - check your answers', () => {
     })
 
     it('shows notify organisations details section', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.notifyOrganisationsDetailsSection.shouldExist()
       page.notifyOrganisationsDetailsSection.shouldHaveItems([
@@ -85,7 +85,7 @@ context('installation and risk - check your answers', () => {
     })
 
     it('shows responsible officers details section', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.responsibleOfficersDetailsSection.shouldExist()
       page.responsibleOfficersDetailsSection.shouldHaveItems([
@@ -97,7 +97,7 @@ context('installation and risk - check your answers', () => {
     })
 
     it('Responsible Organisations details', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.responsibleOrganisationsDetails.shouldExist()
       page.responsibleOrganisationsDetails.shouldHaveItems([
