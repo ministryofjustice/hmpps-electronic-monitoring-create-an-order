@@ -84,32 +84,7 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
-      items: [
-        {
-          text: "MAPPA 1",
-          value: "MAPPA1",
-          hint: {
-            text: "Ordinary agency management, where the offender can be managed by the lead agency in consultation with other agencies involved."
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          text: "MAPPA 2",
-          value: "MAPPA2",
-          hint: {
-            text: "For cases where active interagency management is required in order to manage the risk of serious harm posed."
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          text: "MAPPA 3",
-          value: "MAPPA3",
-          hint: {
-            text: "For the most complex cases which require active interagency management by Senior Managers from the agencies involved."
-          },
-          disabled: not isOrderEditable
-        }
-      ],
+      items: content.reference.mappaLevel | toOptions(not isOrderEditable),
       value: mappaLevel.value,
       errorMessage: mappaLevel.error,
       disabled: not isOrderEditable
@@ -124,38 +99,7 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
-      items: [
-        {
-          text: "Serious Organised Crime",
-          value: "SOC",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Terrorism Act, Counter Terrorism",
-          value: "TERRORISM_ACT",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Terrorism Prevention and Investigation measures",
-          value: "TERRORISM_PREVENTION",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Special Immigration Appeals Commission",
-          value: "SPECIAL_IMMIGRATION_APPEALS",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "High Profile Immigration",
-          value: "HIGH_PROFILE_IMMIGRATION",
-          disabled: not isOrderEditable
-        },
-        {
-          text: "Critical Public Protection Case",
-          value: "CPP_CASE",
-          disabled: not isOrderEditable
-        }
-      ],
+      items: content.reference.mappaCaseType | toOptions(not isOrderEditable),
       value: mappaCaseType.value,
       errorMessage: mappaCaseType.error,
       disabled: not isOrderEditable

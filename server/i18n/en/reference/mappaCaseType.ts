@@ -6,7 +6,7 @@ const mappaCaseType: MappaCaseType = {
   'TPIM (Terrorism Prevention and Investigation measures)': 'Terrorism Prevention and Investigation measures',
   'SIAC  (Special Immigration Appeals Commission)': 'Special Immigration Appeals Commission',
   'High Profile Immigration': 'High Profile Immigration',
-  'CPPC (Critical Public Protection case)': 'Critical Public Protection case',
+  'CPPC (Critical Public Protection case)': 'Critical Public Protection Case',
 }
 
 export default mappaCaseType

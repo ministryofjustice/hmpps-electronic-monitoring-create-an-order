@@ -51,8 +51,8 @@ context('Access needs and installation risk information', () => {
             offence: 'ROBBERY',
             riskCategory: ['SEXUAL_OFFENCES'],
             riskDetails: '',
-            mappaLevel: 'MAPPA1',
-            mappaCaseType: 'SOC',
+            mappaLevel: 'MAPPA 1',
+            mappaCaseType: 'SOC (Serious Organised Crime)',
           },
         }).should('be.true')
       })
