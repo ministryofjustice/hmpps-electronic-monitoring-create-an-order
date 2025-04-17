@@ -220,7 +220,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.riskInformation,
       name: PAGES.installationAndRisk,
-      path: paths.INSTALLATION_AND_RISK,
+      path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.installationAndRisk),
     })
