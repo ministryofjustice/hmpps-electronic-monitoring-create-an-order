@@ -130,4 +130,114 @@ describe('InstallationAndRiskCheckAnswersController', () => {
       ],
     })
   })
+
+  it('should render the check answers page all answers complete', async () => {
+    // Given
+    const order = getMockOrder({
+      installationAndRisk: {
+        offence: 'some offence',
+        riskCategory: ['some risk category'],
+        riskDetails: 'some risk details',
+        mappaLevel: 'some mappaLevel',
+        mappaCaseType: 'some mappaCaseType',
+      },
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
+      riskInformation: [
+        {
+          key: {
+            text: questions.offence.text,
+          },
+          value: {
+            text: 'some offence',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.offence.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskCategory.text,
+          },
+          value: {
+            html: 'some risk category',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskDetails.text,
+          },
+          value: {
+            text: 'some risk details',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.mappaLevel.text,
+          },
+          value: {
+            text: 'some mappaLevel',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.mappaCaseType.text,
+          },
+          value: {
+            text: 'some mappaCaseType',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+      ],
+    })
+  })
 })
