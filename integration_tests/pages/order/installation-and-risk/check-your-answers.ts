@@ -1,6 +1,7 @@
 import paths from '../../../../server/constants/paths'
-import SummaryListComponent from '../../components/summaryListComponent'
+import { SummaryListComponentWithoutHeading } from '../../components/summaryListComponent'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
+import { PageElement } from '../../page'
 
 export default class IntallationAndRiskCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
@@ -8,18 +9,12 @@ export default class IntallationAndRiskCheckYourAnswersPage extends CheckYourAns
   }
 
   // SECTIONS
-  get notifyOrganisationsDetailsSection(): SummaryListComponent {
-    const label = "Notify Organisation's details"
-    return new SummaryListComponent(label)
+
+  get caption(): PageElement {
+    return cy.get('.govuk-caption-l')
   }
 
-  get responsibleOfficersDetailsSection(): SummaryListComponent {
-    const label = "Responsible Officer's details"
-    return new SummaryListComponent(label)
-  }
-
-  get responsibleOrganisationsDetails(): SummaryListComponent {
-    const label = "Responsible Organisation's details"
-    return new SummaryListComponent(label)
+  get installationRiskSection(): SummaryListComponentWithoutHeading {
+    return new SummaryListComponentWithoutHeading()
   }
 }
