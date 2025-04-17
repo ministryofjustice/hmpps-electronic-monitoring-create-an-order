@@ -27,7 +27,10 @@ const paths = {
     INTERESTED_PARTIES: '/order/:orderId/contact-information/interested-parties',
   },
 
-  INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
+  INSTALLATION_AND_RISK: {
+    INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
+    CHECK_YOUR_ANSWERS: '/order/:orderId/installation-and-risk/check-your-answers',
+  },
 
   MONITORING_CONDITIONS: {
     BASE_URL: '/order/:orderId/monitoring-conditions',

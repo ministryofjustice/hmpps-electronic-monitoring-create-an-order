@@ -177,8 +177,8 @@ export default function routes({
   /**
    * INSTALLATION AND RISK
    */
-  get(paths.INSTALLATION_AND_RISK, installationAndRiskController.view)
-  post(paths.INSTALLATION_AND_RISK, installationAndRiskController.update)
+  get(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.view)
+  post(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.update)
 
   /**
    * MONITORING CONDITIONS
