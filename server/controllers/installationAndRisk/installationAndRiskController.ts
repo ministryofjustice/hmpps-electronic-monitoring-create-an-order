@@ -50,7 +50,7 @@ export default class InstallationAndRiskController {
       req.flash('formData', formData)
       req.flash('validationErrors', updateResult)
 
-      res.redirect(paths.INSTALLATION_AND_RISK.replace(':orderId', orderId))
+      res.redirect(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
       res.redirect(this.taskListService.getNextPage('INSTALLATION_AND_RISK', req.order!))
     } else {
