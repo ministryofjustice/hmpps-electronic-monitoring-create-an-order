@@ -258,9 +258,22 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
     })
 
-    it('should return monitoring conditions if current page is installation and risk', () => {
+    it('should return check answers if current page is installation and risk', () => {
       // Given
       const currentPage = 'INSTALLATION_AND_RISK'
+      const taskListService = new TaskListService()
+      const order = getMockOrder()
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('should return monitoring address if current page is installation and risk check answers', () => {
+      // Given
+      const currentPage = 'CHECK_ANSWERS_INSTALLATION_AND_RISK'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
