@@ -38,7 +38,7 @@ context('installation and risk - check your answers', () => {
     })
   })
 
-  context('Notifying organisations details', () => {
+  context('risk information check answers page', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -48,61 +48,42 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          deviceWearer: {
-            nomisId: 'nomis',
-            pncId: 'pnc',
-            deliusId: 'delius',
-            prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
-            firstName: 'test',
-            lastName: 'tester',
-            alias: 'tes',
-            dateOfBirth: '2000-01-01T00:00:00Z',
-            adultAtTimeOfInstallation: true,
-            sex: 'MALE',
-            gender: 'male',
-            disabilities: 'MENTAL_HEALTH',
-            otherDisability: null,
-            noFixedAbode: null,
-            interpreterRequired: false,
+          installationAndRisk: {
+            offence: 'some offence',
+            riskCategory: ['some risk category'],
+            riskDetails: 'some risk details',
+            mappaLevel: 'some mappaLevel',
+            mappaCaseType: 'some mappaCaseType',
           },
-          DeviceWearerResponsibleAdult: null,
         },
       })
-
       cy.signIn()
     })
 
-    it('shows notify organisations details section', () => {
+    it('shows risk information caption', () => {
       const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
-      page.notifyOrganisationsDetailsSection.shouldExist()
-      page.notifyOrganisationsDetailsSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'test' },
-        { key: 'Name of the prison', value: 'tester' },
-        { key: "What is your team's contact email address?", value: 'tes' },
+      page.caption.contains('Risk information')
+    })
+
+    it('shows answers for checking', () => {
+      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'What type of offence did the device wearer commit? (optional)', value: 'some offence' },
+        { key: 'At installation what are the possible risks? (optional)', value: 'some risk category' },
+        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: 'Which level of MAPPA applies? (optional)', value: 'some mappaLevel' },
+        { key: 'What is the MAPPA case type? (optional)', value: 'some mappaCaseType' },
       ])
     })
 
-    it('shows responsible officers details section', () => {
+    it('shows correct buttons', () => {
       const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
-      page.responsibleOfficersDetailsSection.shouldExist()
-      page.responsibleOfficersDetailsSection.shouldHaveItems([
-        { key: "What is the Responsible Officer's first name?", value: 'test' },
-        { key: "What is the Responsible Officer's last name?", value: 'tester' },
-        { key: "What is the Responsible Officer's telephone number?", value: 'tes' },
-        { key: "What is the Responsible Officers's team contact email address? (optional)", value: 'tes' },
-      ])
-    })
-
-    it('Responsible Organisations details', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
-
-      page.responsibleOrganisationsDetails.shouldExist()
-      page.responsibleOrganisationsDetails.shouldHaveItems([
-        { key: "What is the Responsible Officer's organisation?", value: 'test' },
-      ])
+      page.continueButton().should('exist')
+      page.returnButton().should('exist')
     })
   })
 })
