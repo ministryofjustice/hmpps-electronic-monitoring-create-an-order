@@ -1,4 +1,4 @@
-import { disabilitiesMap, genderMap } from '../../constants/about-the-device-wearer'
+import { disabilitiesMap } from '../../constants/about-the-device-wearer'
 import { relationshipMap } from '../../constants/about-the-device-wearer/responsibleAdult'
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
@@ -45,7 +45,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
     ),
     createTextAnswer(
       content.pages.deviceWearer.questions.gender.text,
-      lookup(genderMap, order.deviceWearer.gender),
+      lookup(content.reference.gender, order.deviceWearer.gender),
       uri,
     ),
     createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri),

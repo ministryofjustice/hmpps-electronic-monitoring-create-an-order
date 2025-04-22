@@ -24,7 +24,7 @@ const adultDeviceWearer = createDeviceWearer({
   dateOfBirth: '1980-10-10T00:00:00.000Z',
   adultAtTimeOfInstallation: true,
   sex: 'MALE',
-  gender: 'male',
+  gender: 'MALE',
   disabilities: ['VISION', 'MOBILITY'],
   interpreterRequired: false,
 })

@@ -148,11 +148,6 @@
 
   {% set genderOptions = [] %}
   {% for gender in content.reference.gender | toOptions(not isOrderEditable) %}
-    {% if gender.value %}
-      true - {{ gender.value }} <br/>
-    {% else %}
-      false - {{ gender.value }}
-    {% endif %}
     {% if gender.value == '' %}
       {% set genderOptions = (genderOptions.push({
         divider: "or"

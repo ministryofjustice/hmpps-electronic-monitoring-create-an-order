@@ -16,7 +16,7 @@ const mockDeviceWearer = {
   dateOfBirth: '2000-01-01T00:00:00Z',
   adultAtTimeOfInstallation: true,
   sex: 'FEMALE',
-  gender: 'Prefer to self-describe',
+  gender: 'PREFER_TO_SELF_DESCRIBE',
   disabilities: 'OTHER',
   otherDisability: 'Broken arm',
   noFixedAbode: true,
@@ -84,7 +84,7 @@ context('About the device wearer', () => {
           order: {
             deviceWearer: {
               ...mockDeviceWearer,
-              gender: 'Male'
+              gender: 'MALE',
             },
           },
         })
@@ -102,7 +102,7 @@ context('About the device wearer', () => {
           order: {
             deviceWearer: {
               ...mockDeviceWearer,
-              gender: 'Female'
+              gender: 'FEMALE',
             },
           },
         })
@@ -120,7 +120,7 @@ context('About the device wearer', () => {
           order: {
             deviceWearer: {
               ...mockDeviceWearer,
-              gender: 'Non-Binary'
+              gender: 'NON_BINARY',
             },
           },
         })
@@ -138,7 +138,7 @@ context('About the device wearer', () => {
           order: {
             deviceWearer: {
               ...mockDeviceWearer,
-              gender: ''
+              gender: 'NOT_ABLE_TO_PROVIDE_THIS_INFORMATION',
             },
           },
         })
