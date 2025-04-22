@@ -10,6 +10,7 @@ import OrderTypes from './orderTypes'
 import Relationship from './relationship'
 import RiskCategories from './riskCategories'
 import Sex from './sex'
+import VariationTypes from './variationTypes'
 
 type ReferenceCatalog = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -24,6 +25,7 @@ type ReferenceCatalog = {
   relationship: Relationship
   riskCategories: RiskCategories
   sex: Sex
+  variationTypes: VariationTypes
 }
 
 export default ReferenceCatalog

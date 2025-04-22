@@ -11,6 +11,7 @@ import orderTypes from './orderTypes'
 import relationship from './responsibleAdult'
 import riskCategories from './riskCategories'
 import sex from './sex'
+import variationTypes from './variationTypes'
 
 const reference: ReferenceCatalog = {
   alcoholMonitoringTypes,
@@ -25,6 +26,7 @@ const reference: ReferenceCatalog = {
   relationship,
   riskCategories,
   sex,
+  variationTypes,
 }
 
 export default reference

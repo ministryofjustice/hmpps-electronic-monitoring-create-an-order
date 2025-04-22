@@ -6,7 +6,6 @@ import fs from 'fs'
 import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
-import { variationTypeMap } from '../constants/variation'
 import prisons from '../reference/prisons'
 import probationRegions from '../reference/probation-regions'
 import youthJusticeServiceRegions from '../reference/youth-justice-service-regions'
@@ -89,7 +88,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
 
   // Add data to global nunjucks env
-  njkEnv.addGlobal('variationTypes', variationTypeMap)
   njkEnv.addGlobal('prisons', toOptions(prisons, false, true))
   njkEnv.addGlobal('probationRegions', toOptions(probationRegions, false, true))
   njkEnv.addGlobal('yjsRegions', toOptions(youthJusticeServiceRegions, false, true))

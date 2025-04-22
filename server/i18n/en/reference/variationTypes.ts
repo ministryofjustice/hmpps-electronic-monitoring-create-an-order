@@ -1,4 +1,6 @@
-const variationTypeMap: Record<string, string> = {
+import VariationTypes from '../../../types/i18n/reference/variationTypes'
+
+const variationTypes: VariationTypes = {
   CURFEW_HOURS: 'Change of curfew hours',
   ADDRESS: 'Change of address',
   ENFORCEMENT_ADD: 'Change to add an Inclusion or Exclusion Zone(s)',
@@ -6,5 +8,4 @@ const variationTypeMap: Record<string, string> = {
   SUSPENSION: 'Order Suspension',
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export { variationTypeMap }
+export default variationTypes

@@ -71,7 +71,7 @@
       },
       value: variationType.value,
       errorMessage: variationType.error,
-      items: variationTypes | toOptions(not isOrderEditable)
+      items: content.reference.variationTypes | toOptions(not isOrderEditable)
     }) }}
 
   {% endcall %}
