@@ -1,12 +1,3 @@
-const orderTypeMap: Record<string, string> = {
-  CIVIL: 'Civil',
-  COMMUNITY: 'Community',
-  IMMIGRATION: 'Immigration',
-  POST_RELEASE: 'Post Release',
-  PRE_TRIAL: 'Pre-Trial',
-  SPECIAL: 'Special',
-}
-
 const orderTypeDescriptionMap: Record<string, string> = {
   DAPO: 'DAPO',
   DAPOL: 'DAPOL',
@@ -15,4 +6,5 @@ const orderTypeDescriptionMap: Record<string, string> = {
   GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime Parole',
 }
 
-export { orderTypeMap, orderTypeDescriptionMap }
+// eslint-disable-next-line import/prefer-default-export
+export { orderTypeDescriptionMap }

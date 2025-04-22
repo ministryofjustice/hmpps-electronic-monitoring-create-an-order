@@ -6,6 +6,7 @@ import gender from './gender'
 import mappaCaseType from './mappaCaseType'
 import mappaLevel from './mappaLevel'
 import offences from './offences'
+import orderTypes from './orderTypes'
 import relationship from './responsibleAdult'
 import riskCategories from './riskCategories'
 import sex from './sex'
@@ -18,6 +19,7 @@ const reference: ReferenceCatalog = {
   mappaCaseType,
   mappaLevel,
   offences,
+  orderTypes,
   relationship,
   riskCategories,
   sex,
