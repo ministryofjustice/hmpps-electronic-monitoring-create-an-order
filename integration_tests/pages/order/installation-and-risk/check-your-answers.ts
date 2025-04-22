@@ -3,7 +3,7 @@ import SummaryListComponentWithoutHeading from '../../components/SummaryListComp
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import { PageElement } from '../../page'
 
-export default class IntallationAndRiskCheckYourAnswersPage extends CheckYourAnswersPage {
+export default class InstallationAndRiskCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
     super('Check your answers', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
   }

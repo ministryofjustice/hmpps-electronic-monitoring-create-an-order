@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
-import IntallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 
@@ -16,24 +16,24 @@ context('installation and risk - check your answers', () => {
     })
 
     it('Should display the user name visible in header', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
       page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Should display the phase banner in header', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Should render the save and continue, and return buttons', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.continueButton().should('exist')
       page.returnButton().should('exist')
     })
 
     it('Should be accessible', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
       page.checkIsAccessible()
     })
   })
@@ -61,13 +61,13 @@ context('installation and risk - check your answers', () => {
     })
 
     it('shows risk information caption', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.caption.contains('Risk information')
     })
 
     it('shows answers for checking', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
@@ -83,7 +83,7 @@ context('installation and risk - check your answers', () => {
     })
 
     it('shows correct buttons', () => {
-      const page = Page.visit(IntallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.continueButton().should('exist')
       page.returnButton().should('exist')
