@@ -1,5 +1,4 @@
 import { disabilitiesMap } from '../../constants/about-the-device-wearer'
-import { relationshipMap } from '../../constants/about-the-device-wearer/responsibleAdult'
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
 import {
@@ -102,7 +101,7 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
   return [
     createTextAnswer(
       content.pages.responsibleAdult.questions.relationship.text,
-      lookup(relationshipMap, order.deviceWearerResponsibleAdult?.relationship),
+      lookup(content.reference.relationship, order.deviceWearerResponsibleAdult?.relationship),
       uri,
     ),
     ...createOtherRelationshipAnswer(order, content, uri),
