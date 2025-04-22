@@ -100,7 +100,7 @@ context('Scenarios', () => {
               .replace('Prefer not to say', 'Prefer Not to Say'),
             gender_identity: deviceWearerDetails.genderIdentity
               .toLocaleLowerCase()
-              .replace('not able to provide this information', 'unknown')
+              .replace('not able to provide this information', '')
               .replace('self identify', 'self-identify')
               .replace('non binary', 'non-binary'),
             disability: [],
