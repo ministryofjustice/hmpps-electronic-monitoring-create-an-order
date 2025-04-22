@@ -2,7 +2,7 @@ import { createTextAnswer, createMultipleChoiceAnswer } from '../../utils/checkY
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
-import { lookup } from '../../../server/utils/utils'
+import { lookup } from '../../utils/utils'
 import offences from '../../i18n/en/reference/offences'
 import riskCategories from '../../i18n/en/reference/riskCategories'
 import mappaLevel from '../../i18n/en/reference/mappaLevel'

@@ -1,4 +1,4 @@
-import { createAddress, createDeviceWearer, getMockOrder } from '../../../test/mocks/mockOrder'
+import { getMockOrder } from '../../../test/mocks/mockOrder'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import AuditService from '../../services/auditService'
 import CheckAnswersController from './installationAndRiskCheckAnswersController'
@@ -6,6 +6,7 @@ import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import installationAndRiskPageContent from '../../i18n/en/pages/installationAndRisk'
+
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
 jest.mock('../../services/deviceWearerService')
