@@ -135,11 +135,11 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     // Given
     const order = getMockOrder({
       installationAndRisk: {
-        offence: 'some offence',
-        riskCategory: ['some risk category'],
+        offence: 'SEXUAL_OFFENCES',
+        riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
-        mappaLevel: 'some mappaLevel',
-        mappaCaseType: 'some mappaCaseType',
+        mappaLevel: 'MAPPA 1',
+        mappaCaseType: 'SOC (Serious Organised Crime)',
       },
     })
     const req = createMockRequest({ order })
@@ -157,7 +157,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.offence.text,
           },
           value: {
-            text: 'some offence',
+            text: 'Sexual offences',
           },
           actions: {
             items: [
@@ -174,7 +174,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.riskCategory.text,
           },
           value: {
-            html: 'some risk category',
+            html: 'Offensive towards someone because of their sex or gender',
           },
           actions: {
             items: [
@@ -208,7 +208,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.mappaLevel.text,
           },
           value: {
-            text: 'some mappaLevel',
+            text: 'MAPPA 1',
           },
           actions: {
             items: [
@@ -225,7 +225,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.mappaCaseType.text,
           },
           value: {
-            text: 'some mappaCaseType',
+            text: 'Serious Organised Crime',
           },
           actions: {
             items: [
