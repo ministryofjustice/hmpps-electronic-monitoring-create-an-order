@@ -1,5 +1,5 @@
 import paths from '../../constants/paths'
-import { conditionTypeMap, orderTypeDescriptionMap, orderTypeMap } from '../../constants/monitoring-conditions'
+import { orderTypeDescriptionMap, orderTypeMap } from '../../constants/monitoring-conditions'
 import {
   convertBooleanToEnum,
   convertToTitleCase,
@@ -34,7 +34,7 @@ const getSelectedMonitoringTypes = (order: Order) => {
 
 const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
-  const conditionType = lookup(conditionTypeMap, order.monitoringConditions.conditionType)
+  const conditionType = lookup(content.reference.conditionTypes, order.monitoringConditions.conditionType)
   const orderType = lookup(orderTypeMap, order.monitoringConditions.orderType)
   const orderTypeDescription = lookup(orderTypeDescriptionMap, order.monitoringConditions.orderTypeDescription)
   const sentenceType = lookup(sentenceTypes, order.monitoringConditions.sentenceType)

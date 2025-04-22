@@ -1,11 +1,3 @@
-const conditionTypeMap: Record<string, string> = {
-  REQUIREMENT_OF_A_COMMUNITY_ORDER: 'Requirement of a Community Order',
-  LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER: 'License Condition of a Custodial Order',
-  POST_SENTENCE_SUPERVISION_REQUIREMENT:
-    'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-  BAIL_ORDER: 'Bail Order',
-}
-
 const orderTypeMap: Record<string, string> = {
   CIVIL: 'Civil',
   COMMUNITY: 'Community',
@@ -23,4 +15,4 @@ const orderTypeDescriptionMap: Record<string, string> = {
   GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime Parole',
 }
 
-export { conditionTypeMap, orderTypeMap, orderTypeDescriptionMap }
+export { orderTypeMap, orderTypeDescriptionMap }
