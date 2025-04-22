@@ -20,14 +20,6 @@ export default class DeviceWearerController {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
-    console.log(
-      deviceWearerViewModel.construct(
-        order.deviceWearer,
-        formData.length > 0 ? (formData[0] as never) : ({} as never),
-        errors as never,
-      ),
-    )
-
     res.render(
       'pages/order/about-the-device-wearer/device-wearer',
       deviceWearerViewModel.construct(
