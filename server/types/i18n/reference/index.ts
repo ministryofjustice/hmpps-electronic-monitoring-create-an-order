@@ -1,3 +1,4 @@
+import Disabilities from './disabilities'
 import Gender from './gender'
 import MappaCaseType from './mappaCaseType'
 import MappaLevel from './mappaLevel'
@@ -7,6 +8,7 @@ import RiskCategories from './riskCategories'
 import Sex from './sex'
 
 type ReferenceCatalog = {
+  disabilities: Disabilities
   gender: Gender
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel

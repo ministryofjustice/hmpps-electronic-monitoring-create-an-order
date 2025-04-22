@@ -1,3 +1,4 @@
+import disabilities from './disabilities'
 import gender from './gender'
 import mappaCaseType from './mappaCaseType'
 import mappaLevel from './mappaLevel'
@@ -7,6 +8,7 @@ import riskCategories from './riskCategories'
 import sex from './sex'
 
 const reference = {
+  disabilities,
   gender,
   mappaCaseType,
   mappaLevel,

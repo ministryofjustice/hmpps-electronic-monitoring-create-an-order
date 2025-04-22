@@ -1,4 +1,6 @@
-const disabilitiesMap: Record<string, string> = {
+import Disabilities from '../../../types/i18n/reference/disabilities'
+
+const disabilities: Disabilities = {
   VISION: 'Vision',
   HEARING: 'Hearing',
   MOBILITY: 'Mobility',
@@ -13,5 +15,4 @@ const disabilitiesMap: Record<string, string> = {
   PREFER_NOT_TO_SAY: 'Prefer Not to Say',
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export { disabilitiesMap }
+export default disabilities

@@ -1,4 +1,3 @@
-import { disabilitiesMap } from '../../constants/about-the-device-wearer'
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
 import {
@@ -26,7 +25,9 @@ const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) =
 
 const createDeviceWearerAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
-  const disabilities = order.deviceWearer.disabilities.map(disability => lookup(disabilitiesMap, disability))
+  const disabilities = order.deviceWearer.disabilities.map(disability =>
+    lookup(content.reference.disabilities, disability),
+  )
   return [
     createTextAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri),
     createTextAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri),
