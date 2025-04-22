@@ -1,6 +1,5 @@
 import paths from '../../constants/paths'
 import { conditionTypeMap, orderTypeDescriptionMap, orderTypeMap } from '../../constants/monitoring-conditions'
-import { monitoringTypeMap } from '../../constants/monitoring-conditions/alcohol'
 import {
   convertBooleanToEnum,
   convertToTitleCase,
@@ -234,7 +233,10 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
 
 const createAlcoholAnswers = (order: Order, content: I18n) => {
   const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
-  const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
+  const monitoringType = lookup(
+    content.reference.alcoholMonitoringTypes,
+    order.monitoringConditionsAlcohol?.monitoringType,
+  )
   const { questions } = content.pages.alcohol
 
   if (!order.monitoringConditions.alcohol) {

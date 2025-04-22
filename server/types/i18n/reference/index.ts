@@ -1,3 +1,4 @@
+import AlcoholMonitoringTypes from './alcoholMonitoringTypes'
 import Disabilities from './disabilities'
 import Gender from './gender'
 import MappaCaseType from './mappaCaseType'
@@ -8,6 +9,7 @@ import RiskCategories from './riskCategories'
 import Sex from './sex'
 
 type ReferenceCatalog = {
+  alcoholMonitoringTypes: AlcoholMonitoringTypes
   disabilities: Disabilities
   gender: Gender
   mappaCaseType: MappaCaseType

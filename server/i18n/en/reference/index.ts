@@ -1,3 +1,4 @@
+import alcoholMonitoringTypes from './alcoholMonitoringTypes'
 import disabilities from './disabilities'
 import gender from './gender'
 import mappaCaseType from './mappaCaseType'
@@ -8,6 +9,7 @@ import riskCategories from './riskCategories'
 import sex from './sex'
 
 const reference = {
+  alcoholMonitoringTypes,
   disabilities,
   gender,
   mappaCaseType,
