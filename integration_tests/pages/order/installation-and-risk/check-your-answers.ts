@@ -1,5 +1,5 @@
 import paths from '../../../../server/constants/paths'
-import { SummaryListComponentWithoutHeading } from '../../components/summaryListComponent'
+import SummaryListComponentWithoutHeading from '../../components/SummaryListComponentWithoutHeading'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import { PageElement } from '../../page'
 
