@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
+import CheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-and-risk'
@@ -71,7 +71,7 @@ context('Access needs and installation risk information', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(MonitoringConditionsPage)
+        Page.verifyOnPage(CheckYourAnswersPage)
       })
 
       it('should return to the summary page', () => {
