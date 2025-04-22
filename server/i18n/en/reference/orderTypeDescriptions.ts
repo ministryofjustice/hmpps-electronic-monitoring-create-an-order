@@ -1,4 +1,6 @@
-const orderTypeDescriptionMap: Record<string, string> = {
+import OrderTypeDescriptions from '../../../types/i18n/reference/orderTypeDescriptions'
+
+const orderTypeDescriptions: OrderTypeDescriptions = {
   DAPO: 'DAPO',
   DAPOL: 'DAPOL',
   DAPOL_HDC: 'DAPOL HDC',
@@ -6,5 +8,4 @@ const orderTypeDescriptionMap: Record<string, string> = {
   GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime Parole',
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export { orderTypeDescriptionMap }
+export default orderTypeDescriptions
