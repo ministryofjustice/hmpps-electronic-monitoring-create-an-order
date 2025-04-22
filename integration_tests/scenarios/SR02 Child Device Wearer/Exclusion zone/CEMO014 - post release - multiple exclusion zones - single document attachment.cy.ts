@@ -26,6 +26,7 @@ import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-dev
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -178,6 +179,9 @@ context('Scenarios', () => {
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.form.saveAndContinueButton.click()
+
+        const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+        installationAndRiskCheckYourAnswersPage.continueButton().click()
 
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
         monitoringConditionsPage.form.fillInWith(monitoringConditions)

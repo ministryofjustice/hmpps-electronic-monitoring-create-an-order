@@ -13,6 +13,7 @@ import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
@@ -123,6 +124,9 @@ context.skip('Scenarios', () => {
 
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       installationAndRiskPage.form.saveAndContinueButton.click()
+
+      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+      installationAndRiskCheckYourAnswersPage.continueButton().click()
 
       const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
