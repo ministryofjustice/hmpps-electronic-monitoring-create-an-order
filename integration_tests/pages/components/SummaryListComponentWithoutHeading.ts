@@ -21,8 +21,4 @@ export default class SummaryListComponentWithoutHeading {
       .siblings('.govuk-summary-list__value')
       .should('contain.text', value)
   }
-
-  hasChangeLinks() {
-    cy.get(':nth-child(1) > .govuk-summary-list__actions > .govuk-link')
-  }
 }
