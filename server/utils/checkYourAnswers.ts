@@ -22,45 +22,92 @@ type Answer = {
   }
 }
 
-export default Answer
-export const createTextAnswer = (key: string, value: Optional<string>, uri: string): Answer => {
-  return {
-    key: {
-      text: key,
-    },
-    value: {
-      text: isNullOrUndefined(value) ? '' : value,
-    },
-    actions: {
-      items: [
-        {
-          href: uri,
-          text: 'Change',
-          visuallyHiddenText: key.toLowerCase(),
-        },
-      ],
-    },
+interface AnswerBuilderI {
+  setKey(key: string): AnswerBuilder
+  setTextValue(value: Optional<string>): AnswerBuilder
+  setHtmlValue(value: Optional<string>): AnswerBuilder
+  addAction(uri: string): AnswerBuilder
+  getAnswer(): Answer
+}
+
+export class AnswerBuilder implements AnswerBuilderI {
+  private answer: Answer
+  constructor() {
+    this.answer = {
+      key: {
+        text: '',
+      },
+      value: {},
+      actions: {
+        items: [],
+      },
+    }
+  }
+
+  private reset() {
+    this.answer = {
+      key: {
+        text: '',
+      },
+      value: {},
+      actions: {
+        items: [],
+      },
+    }
+  }
+
+  public setKey(key: string): AnswerBuilder {
+    this.answer.key.text = key
+    return this
+  }
+
+  public setTextValue(value: Optional<string>): AnswerBuilder {
+    if (this.answer.value.html) {
+      throw new Error('Cannot set value text when value html is already set')
+    }
+    this.answer.value.text = isNullOrUndefined(value) ? '' : value
+    return this
+  }
+
+  public setHtmlValue(value: Optional<string>): AnswerBuilder {
+    if (this.answer.value.text) {
+      throw new Error('Cannot set value html when value text is already set')
+    }
+    this.answer.value.html = isNullOrUndefined(value) ? '' : value
+    return this
+  }
+
+  public addAction(uri: string): AnswerBuilder {
+    this.answer.actions.items.push({
+      href: uri,
+      text: 'Change',
+      visuallyHiddenText: this.answer.key.text.toLowerCase(),
+    })
+    return this
+  }
+
+  public getAnswer(): Answer {
+    const result = this.answer
+    this.reset()
+    return result
   }
 }
 
+export default Answer
+export const createTextAnswer = (key: string, value: Optional<string>, uri: string): Answer => {
+  return new AnswerBuilder().setKey(key).setTextValue(value).addAction(uri).getAnswer()
+}
+
+export const createTextAnswerWithoutActions = (key: string, value: Optional<string>): Answer => {
+  return new AnswerBuilder().setKey(key).setTextValue(value).getAnswer()
+}
+
 export const createHtmlAnswer = (key: string, value: Optional<string>, uri: string): Answer => {
-  return {
-    key: {
-      text: key,
-    },
-    value: {
-      html: isNullOrUndefined(value) ? '' : value,
-    },
-    actions: {
-      items: [
-        {
-          href: uri,
-          text: 'Change',
-          visuallyHiddenText: key.toLowerCase(),
-        },
-      ],
-    },
-  }
+  return new AnswerBuilder().setKey(key).setHtmlValue(value).addAction(uri).getAnswer()
+}
+
+export const createHtmlAnswerWithoutActions = (key: string, value: Optional<string>): Answer => {
+  return new AnswerBuilder().setKey(key).setHtmlValue(value).getAnswer()
 }
 
 const createDatePreview = (value: Optional<string>) =>
