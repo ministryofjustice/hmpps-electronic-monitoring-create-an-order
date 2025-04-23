@@ -1,7 +1,8 @@
-import Answer, {
+import {
   createTextAnswer,
   createMultipleChoiceAnswer,
   createTextAnswerWithoutActions,
+  createMultipleChoiceAnswerWithoutActions,
 } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
@@ -10,14 +11,18 @@ import { lookup } from '../../utils/utils'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
+
   const createTextAnswerMethod = order.status === 'SUBMITTED' ? createTextAnswerWithoutActions : createTextAnswer
+  const createMultipleChoiceAnswerMethod =
+    order.status === 'SUBMITTED' ? createMultipleChoiceAnswerWithoutActions : createMultipleChoiceAnswer
+
   const answers = [
     createTextAnswerMethod(
       questions.offence.text,
       lookup(content.reference.offences, order.installationAndRisk?.offence),
       uri,
     ),
-    createMultipleChoiceAnswer(
+    createMultipleChoiceAnswerMethod(
       questions.riskCategory.text,
       order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.riskCategories, category)) ??
         [],

@@ -32,6 +32,7 @@ interface AnswerBuilderI {
 
 export class AnswerBuilder implements AnswerBuilderI {
   private answer: Answer
+
   constructor() {
     this.answer = {
       key: {
@@ -127,6 +128,9 @@ export const createBooleanAnswer = (key: string, value: boolean | null, uri: str
 
 export const createMultipleChoiceAnswer = (key: string, values: Array<string>, uri: string): Answer =>
   createHtmlAnswer(key, values.join('<br/>'), uri)
+
+export const createMultipleChoiceAnswerWithoutActions = (key: string, values: Array<string>): Answer =>
+  createHtmlAnswerWithoutActions(key, values.join('<br/>'))
 
 const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
   isNullOrUndefined(from) && isNullOrUndefined(to)
