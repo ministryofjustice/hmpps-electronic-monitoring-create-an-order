@@ -9,12 +9,23 @@ export default class InstallationAndRiskCheckYourAnswersPage extends CheckYourAn
   }
 
   // SECTIONS
+  get banner(): PageElement {
+    return cy.get('.govuk-notification-banner')
+  }
 
   get caption(): PageElement {
     return cy.get('.govuk-caption-l')
   }
 
+  get heading(): PageElement {
+    return cy.get('.govuk-heading-l')
+  }
+
   get installationRiskSection(): SummaryListComponentWithoutHeading {
     return new SummaryListComponentWithoutHeading()
+  }
+
+  get changeLinks() {
+    return cy.contains('.govuk-link', 'Change')
   }
 }
