@@ -255,12 +255,25 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
     })
 
-    it('should return monitoring conditions if current page is installation and risk', () => {
+    it('should return check answers if current page is installation and risk', () => {
       // Given
       const currentPage = 'INSTALLATION_AND_RISK'
+      const taskListService = new TaskListService()
+      const order = getMockOrder()
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('should return monitoring conditions if current page is installation and risk check answers', () => {
+      // Given
+      const currentPage = 'CHECK_ANSWERS_INSTALLATION_AND_RISK'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
@@ -711,7 +724,7 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'RISK_INFORMATION',
-          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
         },
         {
           completed: false,
@@ -773,7 +786,7 @@ describe('TaskListService', () => {
         {
           completed: true,
           name: 'RISK_INFORMATION',
-          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
         },
         {
           completed: true,
@@ -824,7 +837,7 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'RISK_INFORMATION',
-          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
         },
         {
           completed: false,
@@ -876,7 +889,7 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'RISK_INFORMATION',
-          path: paths.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
         },
         {
           completed: false,

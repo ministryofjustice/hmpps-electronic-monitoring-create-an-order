@@ -8,6 +8,6 @@ export default class InstallationAndRiskPage extends AppFormPage {
   public form = new InstallationAndRiskFormComponent()
 
   constructor() {
-    super('Details for installation', paths.INSTALLATION_AND_RISK, 'Risk information')
+    super('Details for installation', paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, 'Risk information')
   }
 }

@@ -1,0 +1,11 @@
+{% extends "../../../partials/check-your-answers-layout.njk" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set section = "Risk information" %}
+
+{% block answers %}
+
+   {% include "./answers.njk" %}
+
+{% endblock %}

@@ -92,8 +92,8 @@ context('Receipt', () => {
           offence: 'SEXUAL_OFFENCES',
           riskCategory: ['RISK_TO_GENDER'],
           riskDetails: 'Information about potential risks',
-          mappaLevel: 'MAPPA1',
-          mappaCaseType: 'TERRORISM_ACT',
+          mappaLevel: 'MAPPA 1',
+          mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
         },
         additionalDocuments: [
           {
@@ -119,11 +119,14 @@ context('Receipt', () => {
     ])
     page.riskInformationSection.shouldExist()
     page.riskInformationSection.shouldHaveItems([
-      { key: 'What type of offence did the device wearer commit? (optional)', value: 'SEXUAL_OFFENCES' },
-      { key: 'At installation what are the possible risks? (optional)', value: 'RISK_TO_GENDER' },
+      { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
+      {
+        key: 'At installation what are the possible risks? (optional)',
+        value: 'Offensive towards someone because of their sex or gender',
+      },
       { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
-      { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA1' },
-      { key: 'What is the MAPPA case type? (optional)', value: 'TERRORISM_ACT' },
+      { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
+      { key: 'What is the MAPPA case type? (optional)', value: 'Terrorism Act, Counter Terrorism' },
     ])
     page.deviceWearerSection.shouldExist()
     page.contactInformationSection.shouldExist()

@@ -11,6 +11,7 @@ import InterestedPartiesPage from './contact-information/interested-parties'
 import MonitoringConditionsPage from './monitoring-conditions'
 import InstallationAddressPage from './monitoring-conditions/installation-address'
 import InstallationAndRiskPage from './installationAndRisk'
+import InstallationAndRiskCheckYourAnswersPage from './installation-and-risk/check-your-answers'
 import CurfewTimetablePage from './monitoring-conditions/curfew-timetable'
 import CurfewConditionsPage from './monitoring-conditions/curfew-conditions'
 import CurfewReleaseDatePage from './monitoring-conditions/curfew-release-date'
@@ -477,6 +478,9 @@ export default class OrderTasksPage extends AppPage {
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
+
+    const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+    installationAndRiskCheckYourAnswersPage.continueButton().click()
 
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
     monitoringConditionsPage.form.fillInWith(monitoringConditions)

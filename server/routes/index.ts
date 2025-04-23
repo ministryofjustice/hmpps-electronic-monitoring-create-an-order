@@ -10,6 +10,7 @@ import DeviceWearerController from '../controllers/about-the-device-wearer/devic
 import ResponsibleAdultController from '../controllers/about-the-device-wearer/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/about-the-device-wearer/deviceWearerCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
+import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
@@ -82,6 +83,10 @@ export default function routes({
   const installationAndRiskController = new InstallationAndRiskController(
     auditService,
     installationAndRiskService,
+    taskListService,
+  )
+  const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
+    auditService,
     taskListService,
   )
   const monitoringConditionsController = new MonitoringConditionsController(
@@ -177,8 +182,11 @@ export default function routes({
   /**
    * INSTALLATION AND RISK
    */
-  get(paths.INSTALLATION_AND_RISK, installationAndRiskController.view)
-  post(paths.INSTALLATION_AND_RISK, installationAndRiskController.update)
+  get(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.view)
+  post(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.update)
+
+  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.view)
+  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.update)
 
   /**
    * MONITORING CONDITIONS

@@ -27,6 +27,7 @@ const PAGES = {
   interestParties: 'INTERESTED_PARTIES',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
   installationAndRisk: 'INSTALLATION_AND_RISK',
+  checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
   curfewReleaseDate: 'CURFEW_RELEASE_DATE',
@@ -220,9 +221,17 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.riskInformation,
       name: PAGES.installationAndRisk,
-      path: paths.INSTALLATION_AND_RISK,
+      path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.installationAndRisk),
+    })
+
+    tasks.push({
+      section: SECTIONS.riskInformation,
+      name: PAGES.checkAnswersInstallationAndRisk,
+      path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+      state: STATES.required,
+      completed: true,
     })
 
     tasks.push({

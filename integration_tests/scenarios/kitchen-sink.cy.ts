@@ -27,6 +27,7 @@ import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-we
 import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
+import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -268,6 +269,13 @@ context('The kitchen sink', () => {
       // installationAndRiskPage.fillInWith()
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
+
+      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+      if (takeScreenshots)
+        cy.screenshot('11. installationAndRiskCheckYourAnswersPage - validation', { overwrite: true })
+      // installationAndRiskPage.fillInWith()
+      if (takeScreenshots) cy.screenshot('11. installationAndRiskCheckYourAnswersPage', { overwrite: true })
+      installationAndRiskCheckYourAnswersPage.continueButton().click()
 
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()
