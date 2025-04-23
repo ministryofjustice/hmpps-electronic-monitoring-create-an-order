@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import InstallationAndRiskCheckYourAnswersSubmittedPage from '../../../pages/order/installation-and-risk/check-your-answers-submitted'
 
 const mockOrderId = uuidv4()
 
@@ -121,25 +122,25 @@ context('installation and risk - check your answers', () => {
     })
 
     it('shows correct banner', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
       page.banner.contains('You are viewing a submitted form. This form was submitted on the 14 December 2024.')
     })
 
     it('shows risk information caption', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
       page.caption.contains('Risk information')
     })
 
     it('shows view answers heading', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
       page.heading.contains('View answers')
     })
 
     it('shows answers for checking', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
@@ -155,16 +156,16 @@ context('installation and risk - check your answers', () => {
     })
 
     it('does not show "change" links', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
       page.changeLinks.should('not.exist')
     })
 
     it('shows correct buttons', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
       page.continueButton().should('exist')
-      page.continueButton().contains('Go to the next section')
+      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
     })
