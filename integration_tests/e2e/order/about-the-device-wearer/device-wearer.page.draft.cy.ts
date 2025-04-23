@@ -42,7 +42,7 @@ context('About the device wearer', () => {
       })
     })
 
-    context('Viewing a draft order with other gender and other disability', () => {
+    context('Viewing a draft order with other disability', () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -64,7 +64,7 @@ context('About the device wearer', () => {
               dateOfBirth: null,
               adultAtTimeOfInstallation: null,
               sex: null,
-              gender: 'self-identify',
+              gender: 'PREFER_TO_SELF_DESCRIBE',
               disabilities: 'OTHER',
               otherDisability: 'Broken arm',
               noFixedAbode: null,

@@ -146,6 +146,16 @@
     disabled: not isOrderEditable
   }) }}
 
+  {% set genderOptions = [] %}
+  {% for gender in content.reference.gender | toOptions(not isOrderEditable) %}
+    {% if gender.value == '' %}
+      {% set genderOptions = (genderOptions.push({
+        divider: "or"
+      }), genderOptions) %}
+    {% endif %}
+    {% set genderOptions = (genderOptions.push(gender), genderOptions) %}
+  {% endfor %}
+
   {{ govukRadios({
     name: "gender",
     fieldset: {
@@ -158,36 +168,7 @@
     hint: {
       text: content.pages.deviceWearer.questions.gender.hint
     },
-    items: [
-      {
-        value: "male",
-        text: "Male",
-        disabled: not isOrderEditable
-      },
-      {
-        value: "female",
-        text: "Female",
-        disabled: not isOrderEditable
-      },
-      {
-        value: "non-binary",
-        text: "Non binary",
-        disabled: not isOrderEditable
-      },     
-      {
-        value: "self-identify",
-        text: "Self identify",
-        disabled: not isOrderEditable
-      },
-      {
-        divider: "or"
-      },
-      {
-          value: "unknown",
-          text: "Not able to provide this information",
-          disabled: not isOrderEditable
-      }
-    ],
+    items: genderOptions,
     value: gender.value,
     errorMessage: gender.error,
     disabled: not isOrderEditable

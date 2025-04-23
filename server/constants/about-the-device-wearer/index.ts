@@ -13,12 +13,5 @@ const disabilitiesMap: Record<string, string> = {
   PREFER_NOT_TO_SAY: 'Prefer Not to Say',
 }
 
-const genderMap: Record<string, string> = {
-  male: 'Male',
-  female: 'Female',
-  'non-binary': 'Non binary',
-  unknown: 'Not able to provide this information',
-  'self-identify': 'Self identify',
-}
-
-export { disabilitiesMap, genderMap }
+// eslint-disable-next-line import/prefer-default-export
+export { disabilitiesMap }

@@ -81,7 +81,7 @@ context.skip('Scenarios', () => {
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.deviceWearerTask.click()
+      orderSummaryPage.aboutTheDeviceWearerTask.click()
 
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -155,10 +155,9 @@ context.skip('Scenarios', () => {
             .replace('Not able to provide this information', 'Prefer Not to Say')
             .replace('Prefer not to say', 'Prefer Not to Say'),
           gender_identity: deviceWearerDetails.genderIdentity
-            .toLocaleLowerCase()
-            .replace('not able to provide this information', 'unknown')
-            .replace('self identify', 'self-identify')
-            .replace('non binary', 'non-binary'),
+            .replace('Not able to provide this information', '')
+            .replace('Self identify', 'Prefer to self-describe')
+            .replace('Non binary', 'Non-Binary'),
           disability: [],
           address_1: fakePrimaryAddress.line1,
           address_2: 'N/A',
