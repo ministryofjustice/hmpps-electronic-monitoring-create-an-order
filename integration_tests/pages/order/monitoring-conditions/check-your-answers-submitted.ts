@@ -4,7 +4,20 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
 export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
-    super('Check your answers', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
+    super('View answers', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
+  }
+
+  // SECTIONS
+  get banner(): PageElement {
+    return cy.get('.govuk-notification-banner')
+  }
+
+  get caption(): PageElement {
+    return cy.get('.govuk-caption-l')
+  }
+
+  get heading(): PageElement {
+    return cy.get('.govuk-heading-l')
   }
 
   monitoringConditionsSection = (): PageElement => cy.contains('Monitoring details')
