@@ -6,7 +6,6 @@ import { lookup } from '../../utils/utils'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
-
   const answers = [
     createTextAnswer(
       questions.offence.text,
