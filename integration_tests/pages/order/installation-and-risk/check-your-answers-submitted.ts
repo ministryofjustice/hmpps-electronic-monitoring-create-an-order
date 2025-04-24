@@ -24,8 +24,4 @@ export default class InstallationAndRiskCheckYourAnswersSubmittedPage extends Ch
   get installationRiskSection(): SummaryListComponentWithoutHeading {
     return new SummaryListComponentWithoutHeading()
   }
-
-  get changeLinks() {
-    return cy.contains('.govuk-link', 'Change')
-  }
 }
