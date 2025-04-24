@@ -41,7 +41,7 @@ export const createTextAnswer = (key: string, value: Optional<string>, uri?: str
     answer.actions?.items.push({
       href: uri,
       text: 'Change',
-      visuallyHiddenText: key,
+      visuallyHiddenText: key.toLowerCase(),
     })
   }
 
@@ -65,7 +65,7 @@ export const createHtmlAnswer = (key: string, value: Optional<string>, uri?: str
     answer.actions?.items.push({
       href: uri,
       text: 'Change',
-      visuallyHiddenText: key,
+      visuallyHiddenText: key.toLowerCase(),
     })
   }
 
