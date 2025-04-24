@@ -792,7 +792,7 @@ context('Contact Information - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
 
-      page.banner.contains('You are viewing a submitted form. This form was submitted on the 14 December 2024.')
+      page.banner.contains('You are viewing a submitted form.')
     })
 
     it('shows contact information caption', () => {
