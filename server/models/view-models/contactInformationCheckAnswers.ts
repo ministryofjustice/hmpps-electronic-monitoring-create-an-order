@@ -12,7 +12,8 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 
 const createContactDetailsAnswers = (order: Order, content: I18n) => {
-  const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
+  const uri =
+    order.status === 'SUBMITTED' ? undefined : paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
   return [
     createTextAnswer(
       content.pages.contactDetails.questions.contactNumber.text,
@@ -23,11 +24,21 @@ const createContactDetailsAnswers = (order: Order, content: I18n) => {
 }
 
 const createAddressAnswers = (order: Order, content: I18n) => {
-  const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
-  const addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
-  const primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
-  const secondaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
-  const tertiaryddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
+  let noFixedAbodeUri
+  let addressUri
+  let primaryAddressUri
+  let secondaryAddressUri
+  let tertiaryddressUri
+
+  if (order.status !== 'SUBMITTED') {
+    noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
+    addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
+
+    primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
+    secondaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
+    tertiaryddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
+  }
+
   const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
   const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
   const tertiaryAddress = order.addresses.find(({ addressType }) => addressType === 'TERTIARY')
@@ -54,7 +65,7 @@ const createAddressAnswers = (order: Order, content: I18n) => {
   return answers
 }
 
-const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string) => {
+const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri?: string) => {
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
   if (notifyingOrganisation === 'PRISON') {
@@ -86,7 +97,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
   return []
 }
 
-const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri: string) => {
+const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri?: string) => {
   const responsibleOrganisation = order.interestedParties?.responsibleOrganisation
   const { questions } = content.pages.interestedParties
   if (responsibleOrganisation === 'PROBATION') {
@@ -113,7 +124,11 @@ const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri
 }
 
 const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
-  const uri = paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
+  const uri =
+    order.status === 'SUBMITTED'
+      ? undefined
+      : paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
+
   const responsibleOrganisationAddress = order.addresses.find(
     ({ addressType }) => addressType === 'RESPONSIBLE_ORGANISATION',
   )
