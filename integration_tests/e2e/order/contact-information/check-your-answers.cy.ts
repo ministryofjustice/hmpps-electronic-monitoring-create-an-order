@@ -2,12 +2,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import ContactInformationCheckYourAnswersSubmittedPage from '../../../pages/order/contact-information/check-your-answers-submitted'
 
 const mockOrderId = uuidv4()
 const pagePath = '/contact-information/check-your-answers'
 
 context('Contact Information - check your answers', () => {
+  const pageHeading = 'Check your answers'
   context('Draft order', () => {
     beforeEach(() => {
       cy.task('reset')
@@ -19,24 +19,24 @@ context('Contact Information - check your answers', () => {
     })
 
     it('Should display the user name visible in header', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Should display the phase banner in header', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Should render the save and continue, and return buttons', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
       page.returnButton().should('exist')
     })
 
     it('Should be accessible', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.checkIsAccessible()
     })
   })
@@ -105,7 +105,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
@@ -199,7 +199,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
@@ -270,7 +270,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
@@ -341,7 +341,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
@@ -412,7 +412,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
@@ -484,7 +484,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
@@ -571,7 +571,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
@@ -689,7 +689,7 @@ context('Contact Information - check your answers', () => {
           },
         },
       })
-      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
@@ -789,27 +789,22 @@ context('Contact Information - check your answers', () => {
       })
     })
 
-    it('shows correct banner', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
+    const pageHeading = 'View answers'
 
-      page.banner.contains('You are viewing a submitted form.')
+    it('shows correct banner', () => {
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.submittedBanner.contains('You are viewing a submitted form.')
     })
 
     it('shows contact information caption', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.caption.contains('Contact information')
-    })
-
-    it('shows view answers heading', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
-
-      page.heading.contains('View answers')
+      page.checkOnPage()
     })
 
     it('displays the correct answers for checking', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
-
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
         { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
@@ -845,13 +840,13 @@ context('Contact Information - check your answers', () => {
       ])
     })
     it('does not show "change" links', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.changeLinks.should('not.exist')
     })
 
     it('shows correct buttons', () => {
-      const page = Page.visit(ContactInformationCheckYourAnswersSubmittedPage, { orderId: mockOrderId })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
       page.continueButton().contains('Go to next section')

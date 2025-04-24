@@ -9,4 +9,12 @@ export default class CheckYourAnswersPage extends AppPage {
   get changeLinks() {
     return cy.contains('.govuk-link', 'Change')
   }
+
+  checkOnPage(): void {
+    cy.get('h1', { log: false }).contains(this.title)
+
+    if (this.subtitle) {
+      cy.get('h1 span', { log: false }).contains(this.subtitle)
+    }
+  }
 }
