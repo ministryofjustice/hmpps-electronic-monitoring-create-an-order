@@ -4,8 +4,8 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import { PageElement } from '../../page'
 
 export default class InstallationAndRiskCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor() {
-    super('Check your answers', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
+  constructor(heading: string) {
+    super(heading, paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, 'Risk information')
   }
 
   // SECTIONS
