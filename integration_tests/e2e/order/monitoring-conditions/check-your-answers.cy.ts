@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
-import CheckYourAnswersSubmitted from '../../../pages/order/monitoring-conditions/check-your-answers-submitted'
 
 const mockOrderId = uuidv4()
 
@@ -38,8 +37,10 @@ context('Check your answers', () => {
       cy.signIn()
     })
 
+    const pageHeading = 'Check your answers'
+
     it('shows answers for checking', () => {
-      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
@@ -51,7 +52,7 @@ context('Check your answers', () => {
     })
 
     it('shows correct buttons', () => {
-      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
       page.returnButton().should('exist')
@@ -89,26 +90,22 @@ context('Check your answers', () => {
       })
     })
 
+    const pageHeading = 'View answers'
+
     it('shows correct banner', () => {
-      const page = Page.visit(CheckYourAnswersSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.banner.contains('You are viewing a submitted form.')
+      page.submittedBanner.contains('You are viewing a submitted form.')
     })
 
-    it('shows electronic monitoring caption', () => {
-      const page = Page.visit(CheckYourAnswersSubmitted, { orderId: mockOrderId })
+    it('shows correct caption and heading', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.caption.contains('Electronic monitoring required')
-    })
-
-    it('shows view answers heading', () => {
-      const page = Page.visit(CheckYourAnswersSubmitted, { orderId: mockOrderId })
-
-      page.heading.contains('View answers')
+      page.checkOnPage()
     })
 
     it('shows answers for checking', () => {
-      const page = Page.visit(CheckYourAnswersSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
@@ -120,13 +117,13 @@ context('Check your answers', () => {
     })
 
     it('does not show "change" links', () => {
-      const page = Page.visit(CheckYourAnswersSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.changeLinks.should('not.exist')
     })
 
     it('shows correct buttons', () => {
-      const page = Page.visit(CheckYourAnswersSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
       page.continueButton().contains('Go to next section')

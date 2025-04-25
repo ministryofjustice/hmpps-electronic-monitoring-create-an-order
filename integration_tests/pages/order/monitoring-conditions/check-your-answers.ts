@@ -3,8 +3,8 @@ import { PageElement } from '../../page'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
 export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor() {
-    super('Check your answers', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
+  constructor(heading: string) {
+    super(heading, paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
   }
 
   monitoringConditionsSection = (): PageElement => cy.contains('Monitoring details')

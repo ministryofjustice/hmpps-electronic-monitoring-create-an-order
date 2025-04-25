@@ -4,7 +4,7 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
 export default class DeviceWearerCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor(heading: string) {
-    super(heading, paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS)
+    super(heading, paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, 'About the device wearer')
   }
 
   // SECTIONS
