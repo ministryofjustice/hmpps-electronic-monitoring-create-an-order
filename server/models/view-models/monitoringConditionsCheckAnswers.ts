@@ -250,18 +250,12 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
 }
 
 const createAlcoholAnswers = (order: Order, content: I18n) => {
-<<<<<<< HEAD
-  const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
+  const uri =
+    order.status === 'SUBMITTED' ? undefined : paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(
     content.reference.alcoholMonitoringTypes,
     order.monitoringConditionsAlcohol?.monitoringType,
   )
-=======
-  const uri =
-    order.status === 'SUBMITTED' ? undefined : paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
-
-  const monitoringType = lookup(monitoringTypeMap, order.monitoringConditionsAlcohol?.monitoringType)
->>>>>>> 3894f5b (remove change links if app is submitted)
   const { questions } = content.pages.alcohol
 
   if (!order.monitoringConditions.alcohol) {

@@ -7,8 +7,8 @@ const mockOrderId = uuidv4()
 const pagePath = '/contact-information/check-your-answers'
 
 context('Contact Information - check your answers', () => {
-  const pageHeading = 'Check your answers'
   context('Draft order', () => {
+    const pageHeading = 'Check your answers'
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -47,6 +47,7 @@ context('Contact Information - check your answers', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
     })
+    const pageHeading = 'Check your answers'
 
     it('should not show addresses section', () => {
       cy.task('stubCemoGetOrder', {
@@ -505,6 +506,8 @@ context('Contact Information - check your answers', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
     })
+
+    const pageHeading = 'View answers'
 
     it('should show main address section', () => {
       cy.task('stubCemoGetOrder', {
