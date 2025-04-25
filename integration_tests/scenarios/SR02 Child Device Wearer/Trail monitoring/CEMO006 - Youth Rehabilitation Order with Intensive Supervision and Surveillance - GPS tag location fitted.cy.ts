@@ -116,7 +116,10 @@ context('Scenarios', () => {
         identityNumbersPage.form.fillInWith(deviceWearerDetails)
         identityNumbersPage.form.saveAndContinueButton.click()
 
-        const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+        const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(
+          DeviceWearerCheckYourAnswersPage,
+          'Check your answer',
+        )
         deviceWearerCheckYourAnswersPage.continueButton().click()
 
         const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
@@ -135,13 +138,19 @@ context('Scenarios', () => {
         interestedPartiesPage.form.fillInWith(interestedParties)
         interestedPartiesPage.form.saveAndContinueButton.click()
 
-        const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+        const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+          ContactInformationCheckYourAnswersPage,
+          'Check your answer',
+        )
         contactInformationCheckYourAnswersPage.continueButton().click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
         installationAndRiskPage.form.saveAndContinueButton.click()
 
-        const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+        const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+          InstallationAndRiskCheckYourAnswersPage,
+          'Check your answer',
+        )
         installationAndRiskCheckYourAnswersPage.continueButton().click()
 
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
@@ -156,7 +165,10 @@ context('Scenarios', () => {
         trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
         trailMonitoringPage.form.saveAndContinueButton.click()
 
-        const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+        const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+          MonitoringConditionsCheckYourAnswersPage,
+          'Check your answer',
+        )
         monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
         const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
