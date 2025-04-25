@@ -500,14 +500,14 @@ context('Contact Information - check your answers', () => {
     })
   })
 
-  context('Device Wearer has  fixed address', () => {
+  context('Device Wearer has fixed address', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
     })
 
-    const pageHeading = 'View answers'
+    const pageHeading = 'Check your answers'
 
     it('should show main address section', () => {
       cy.task('stubCemoGetOrder', {

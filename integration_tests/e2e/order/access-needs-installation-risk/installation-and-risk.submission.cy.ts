@@ -71,7 +71,7 @@ context('Access needs and installation risk information', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(CheckYourAnswersPage)
+        Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
       })
 
       it('should return to the summary page', () => {

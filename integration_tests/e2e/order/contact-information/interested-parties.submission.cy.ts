@@ -92,7 +92,7 @@ context('Contact information', () => {
         page.form.fillInWith(sampleFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+        Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers')
       })
 
       it('should return to the summary page', () => {

@@ -81,7 +81,7 @@ context('About the device wearer', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers')
       })
 
       it('should return to the summary page', () => {
