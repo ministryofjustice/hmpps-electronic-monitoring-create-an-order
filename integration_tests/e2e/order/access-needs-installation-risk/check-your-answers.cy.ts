@@ -67,7 +67,7 @@ context('installation and risk - check your answers', () => {
     it('shows risk information caption', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.caption.contains('Risk information')
+      page.checkOnPage()
     })
 
     it('shows answers for checking', () => {
@@ -129,19 +129,13 @@ context('installation and risk - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.banner.contains('You are viewing a submitted form.')
+      page.submittedBanner.contains('You are viewing a submitted form.')
     })
 
-    it('shows risk information caption', () => {
+    it('shows correct caption and heading', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.caption.contains('Risk information')
-    })
-
-    it('shows view answers heading', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-
-      page.heading.contains('View answers')
+      page.checkOnPage()
     })
 
     it('shows answers for checking', () => {

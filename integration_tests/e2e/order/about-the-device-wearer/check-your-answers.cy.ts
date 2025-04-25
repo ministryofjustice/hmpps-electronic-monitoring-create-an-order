@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import CheckYourAnswersPageSubmitted from '../../../pages/order/about-the-device-wearer/check-your-answers-submitted'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'
@@ -18,25 +17,27 @@ context('Device wearer - check your answers', () => {
       cy.signIn()
     })
 
+    const pageHeading = 'Check your answers'
+
     it('Should display the user name visible in header', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.header.userName().should('contain.text', 'J. Smith')
     })
 
     it('Should display the phase banner in header', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
     it('Should render the save and continue, and return buttons', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
       page.returnButton().should('exist')
     })
 
     it('Should be accessible', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.checkIsAccessible()
     })
   })
@@ -77,7 +78,7 @@ context('Device wearer - check your answers', () => {
     })
 
     it('should not show responsible adult section', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.personDetailsSection.shouldExist()
       page.personDetailsSection.shouldHaveItems([
@@ -147,7 +148,7 @@ context('Device wearer - check your answers', () => {
     })
 
     it('should show otherDisability question and answer', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.personDetailsSection.shouldExist()
       page.personDetailsSection.shouldHaveItems([
@@ -219,7 +220,7 @@ context('Device wearer - check your answers', () => {
     })
 
     it('should show responsible adult section', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.personDetailsSection.shouldExist()
       page.personDetailsSection.shouldHaveItems([
@@ -296,7 +297,7 @@ context('Device wearer - check your answers', () => {
     })
 
     it('should show responsible adult section and otherRelationshipDeatils question and answer', () => {
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.personDetailsSection.shouldExist()
       page.personDetailsSection.shouldHaveItems([
@@ -367,26 +368,22 @@ context('Device wearer - check your answers', () => {
       cy.signIn()
     })
 
+    const pageHeading = 'View answers'
+
     it('shows correct banner', () => {
-      const page = Page.visit(CheckYourAnswersPageSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.banner.contains('You are viewing a submitted form.')
+      page.submittedBanner.contains('You are viewing a submitted form.')
     })
 
-    it('shows about the device wearer caption', () => {
-      const page = Page.visit(CheckYourAnswersPageSubmitted, { orderId: mockOrderId })
+    it('shows correct caption and heading', () => {
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.caption.contains('About the device wearer')
-    })
-
-    it('shows view answers heading', () => {
-      const page = Page.visit(CheckYourAnswersPageSubmitted, { orderId: mockOrderId })
-
-      page.heading.contains('View answers')
+      page.checkOnPage()
     })
 
     it('shows answers for checking', () => {
-      const page = Page.visit(CheckYourAnswersPageSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.personDetailsSection.shouldExist()
       page.personDetailsSection.shouldHaveItems([
@@ -420,13 +417,13 @@ context('Device wearer - check your answers', () => {
     })
 
     it('does not show "change" links', () => {
-      const page = Page.visit(CheckYourAnswersPageSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.changeLinks.should('not.exist')
     })
 
     it('shows correct buttons', () => {
-      const page = Page.visit(CheckYourAnswersPageSubmitted, { orderId: mockOrderId })
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
       page.continueButton().contains('Go to next section')

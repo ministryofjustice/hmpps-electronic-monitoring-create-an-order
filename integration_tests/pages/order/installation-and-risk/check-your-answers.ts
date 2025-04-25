@@ -8,19 +8,7 @@ export default class InstallationAndRiskCheckYourAnswersPage extends CheckYourAn
     super(heading, paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, 'Risk information')
   }
 
-  // SECTIONS
-  get banner(): PageElement {
-    return cy.get('.govuk-notification-banner')
-  }
-
-  get caption(): PageElement {
-    return cy.get('.govuk-caption-l')
-  }
-
-  get heading(): PageElement {
-    return cy.get('.govuk-heading-l')
-  }
-
+  // SECTIONS get banner(): PageElement {
   get installationRiskSection(): SummaryListComponentWithoutHeading {
     return new SummaryListComponentWithoutHeading()
   }
