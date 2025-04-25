@@ -41,8 +41,8 @@ export default abstract class Page {
     let query: object = {}
 
     if (typeof args[0] !== 'string') {
-      params = args.pop() as object
-      query = args.pop() as object
+      params = args.shift() as object
+      query = args.shift() as object
     }
 
     const page = new constructor(...args)
