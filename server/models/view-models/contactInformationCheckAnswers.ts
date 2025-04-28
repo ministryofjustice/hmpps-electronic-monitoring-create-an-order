@@ -6,60 +6,57 @@ import prisons from '../../reference/prisons'
 import probationRegions from '../../reference/probation-regions'
 import youthJusticeServiceRegions from '../../reference/youth-justice-service-regions'
 import responsibleOrganisations from '../../reference/responsible-organisations'
-import { createAddressAnswer, createBooleanAnswer, createTextAnswer } from '../../utils/checkYourAnswers'
+import { createAddressAnswer, createBooleanAnswer, createAnswer } from '../../utils/checkYourAnswers'
 import { lookup } from '../../utils/utils'
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 
 const createContactDetailsAnswers = (order: Order, content: I18n) => {
-  const uri =
-    order.status === 'SUBMITTED' ? '' : paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
+  const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
   return [
-    createTextAnswer(
-      content.pages.contactDetails.questions.contactNumber.text,
-      order.contactDetails?.contactNumber,
-      uri,
-    ),
+    createAnswer(content.pages.contactDetails.questions.contactNumber.text, order.contactDetails?.contactNumber, uri, {
+      ignoreActions: order.status === 'SUBMITTED',
+    }),
   ]
 }
 
 const createAddressAnswers = (order: Order, content: I18n) => {
-  let noFixedAbodeUri = ''
-  let addressUri = ''
-  let primaryAddressUri = ''
-  let secondaryAddressUri = ''
-  let tertiaryddressUri = ''
-
-  if (order.status !== 'SUBMITTED') {
-    noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
-    addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
-
-    primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
-    secondaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
-    tertiaryddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
-  }
+  const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
+  const addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
+  const primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
+  const secondaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
+  const tertiaryddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
 
   const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
   const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
   const tertiaryAddress = order.addresses.find(({ addressType }) => addressType === 'TERTIARY')
+
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   const answers = [
     createBooleanAnswer(
       content.pages.noFixedAbode.questions.noFixedAbode.text,
       order.deviceWearer.noFixedAbode === null ? null : !order.deviceWearer.noFixedAbode,
       noFixedAbodeUri,
+      answerOpts,
     ),
   ]
 
   if (primaryAddress) {
-    answers.push(createAddressAnswer(content.pages.primaryAddress.legend, primaryAddress, primaryAddressUri))
+    answers.push(
+      createAddressAnswer(content.pages.primaryAddress.legend, primaryAddress, primaryAddressUri, answerOpts),
+    )
   }
 
   if (secondaryAddress) {
-    answers.push(createAddressAnswer(content.pages.secondaryAddress.legend, secondaryAddress, secondaryAddressUri))
+    answers.push(
+      createAddressAnswer(content.pages.secondaryAddress.legend, secondaryAddress, secondaryAddressUri, answerOpts),
+    )
   }
 
   if (tertiaryAddress) {
-    answers.push(createAddressAnswer(content.pages.tertiaryAddress.legend, tertiaryAddress, tertiaryddressUri))
+    answers.push(
+      createAddressAnswer(content.pages.tertiaryAddress.legend, tertiaryAddress, tertiaryddressUri, answerOpts),
+    )
   }
 
   return answers
@@ -68,28 +65,36 @@ const createAddressAnswers = (order: Order, content: I18n) => {
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string) => {
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   if (notifyingOrganisation === 'PRISON') {
     return [
-      createTextAnswer(questions.prison.text, lookup(prisons, order.interestedParties?.notifyingOrganisationName), uri),
+      createAnswer(
+        questions.prison.text,
+        lookup(prisons, order.interestedParties?.notifyingOrganisationName),
+        uri,
+        answerOpts,
+      ),
     ]
   }
 
   if (notifyingOrganisation === 'CROWN_COURT') {
     return [
-      createTextAnswer(
+      createAnswer(
         questions.crownCourt.text,
         lookup(crownCourts, order.interestedParties?.notifyingOrganisationName),
         uri,
+        answerOpts,
       ),
     ]
   }
 
   if (notifyingOrganisation === 'MAGISTRATES_COURT') {
     return [
-      createTextAnswer(
+      createAnswer(
         questions.magistratesCourt.text,
         lookup(magistratesCourts, order.interestedParties?.notifyingOrganisationName),
         uri,
+        answerOpts,
       ),
     ]
   }
@@ -100,22 +105,26 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
 const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri: string) => {
   const responsibleOrganisation = order.interestedParties?.responsibleOrganisation
   const { questions } = content.pages.interestedParties
+
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   if (responsibleOrganisation === 'PROBATION') {
     return [
-      createTextAnswer(
+      createAnswer(
         questions.probationRegion.text,
         lookup(probationRegions, order.interestedParties?.responsibleOrganisationRegion),
         uri,
+        answerOpts,
       ),
     ]
   }
 
   if (responsibleOrganisation === 'YJS') {
     return [
-      createTextAnswer(
+      createAnswer(
         questions.yjsRegion.text,
         lookup(youthJusticeServiceRegions, order.interestedParties?.responsibleOrganisationRegion),
         uri,
+        answerOpts,
       ),
     ]
   }
@@ -124,47 +133,59 @@ const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri
 }
 
 const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
-  const uri =
-    order.status === 'SUBMITTED' ? '' : paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
+  const uri = paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
 
   const responsibleOrganisationAddress = order.addresses.find(
     ({ addressType }) => addressType === 'RESPONSIBLE_ORGANISATION',
   )
   const { questions } = content.pages.interestedParties
+
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
-    createTextAnswer(
+    createAnswer(
       questions.notifyingOrganisation.text,
       lookup(notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
       uri,
+      answerOpts,
     ),
     ...getNotifyingOrganisationNameAnswer(order, content, uri),
-    createTextAnswer(
+    createAnswer(
       questions.notifyingOrganisationEmail.text,
       order.interestedParties?.notifyingOrganisationEmail,
       uri,
+      answerOpts,
     ),
-    createTextAnswer(questions.responsibleOfficerName.text, order.interestedParties?.responsibleOfficerName, uri),
-    createTextAnswer(
+    createAnswer(
+      questions.responsibleOfficerName.text,
+      order.interestedParties?.responsibleOfficerName,
+      uri,
+      answerOpts,
+    ),
+    createAnswer(
       questions.responsibleOfficerPhoneNumber.text,
       order.interestedParties?.responsibleOfficerPhoneNumber,
       uri,
+      answerOpts,
     ),
-    createTextAnswer(
+    createAnswer(
       questions.responsibleOrganisation.text,
       lookup(responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
       uri,
+      answerOpts,
     ),
     ...getResponsibleOrganisationRegionAnswer(order, content, uri),
-    createAddressAnswer(questions.responsibleOrganisationAddress.text, responsibleOrganisationAddress, uri),
-    createTextAnswer(
+    createAddressAnswer(questions.responsibleOrganisationAddress.text, responsibleOrganisationAddress, uri, answerOpts),
+    createAnswer(
       questions.responsibleOrganisationPhoneNumber.text,
       order.interestedParties?.responsibleOrganisationPhoneNumber,
       uri,
+      answerOpts,
     ),
-    createTextAnswer(
+    createAnswer(
       questions.responsibleOrganisationEmail.text,
       order.interestedParties?.responsibleOrganisationEmail,
       uri,
+      answerOpts,
     ),
   ]
 }

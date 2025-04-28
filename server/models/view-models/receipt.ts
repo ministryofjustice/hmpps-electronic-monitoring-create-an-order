@@ -3,16 +3,17 @@ import * as DeviceWearerCheckAnswers from './deviceWearerCheckAnswers'
 import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAnswers'
 import * as RiskInformationCheckAnswers from './riskInformationCheckAnswers'
 import * as AdditionalDocumentsCheckAnswers from './additionalDocumentsCheckAnswers'
-import { createTextAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 
 const createOrderStatusAnswers = (order: Order) => {
+  const answerOpts = { ignoreActions: true }
   const answers = [
-    createTextAnswer('Status', order.status, ''),
-    createTextAnswer('Type', order.type, ''),
-    createTextAnswer('Reference number', order.id, ''),
+    createAnswer('Status', order.status, '', answerOpts),
+    createAnswer('Type', order.type, '', answerOpts),
+    createAnswer('Reference number', order.id, '', answerOpts),
   ]
   return answers
 }
