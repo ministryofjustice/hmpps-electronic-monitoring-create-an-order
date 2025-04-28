@@ -34,9 +34,7 @@ export const createAnswer = (key: string, value: Optional<string>, uri: string, 
     key: {
       text: key,
     },
-    value: {
-      text: isNullOrUndefined(value) ? '' : value,
-    },
+    value: {},
     actions: {
       items: [],
     },
@@ -84,8 +82,7 @@ export const createMultipleChoiceAnswer = (
   uri: string,
   opts: AnswerOptions = {},
 ): Answer => {
-  opts.valueType === 'html'
-  return createAnswer(key, values.join('<br/>'), uri, opts)
+  return createAnswer(key, values.join('<br/>'), uri, { ...opts, valueType: 'html' })
 }
 
 const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
