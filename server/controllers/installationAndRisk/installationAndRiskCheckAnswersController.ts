@@ -17,10 +17,7 @@ export default class CheckAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const uri =
-      order.status === 'SUBMITTED'
-        ? undefined
-        : paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
+    const uri = paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
 
     res.render(`pages/order/installation-and-risk/check-your-answers`, {
       riskInformation: createViewModel(order, res.locals.content!, uri),
