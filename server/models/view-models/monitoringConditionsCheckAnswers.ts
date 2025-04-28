@@ -32,8 +32,7 @@ const getSelectedMonitoringTypes = (order: Order) => {
 }
 
 const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
-  const uri =
-    order.status === 'SUBMITTED' ? undefined : paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
+  const uri = order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
   const conditionType = lookup(content.reference.conditionTypes, order.monitoringConditions.conditionType)
   const orderType = lookup(content.reference.orderTypes, order.monitoringConditions.orderType)
   const orderTypeDescription = lookup(
@@ -64,9 +63,7 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
 
 const createInstallationAddressAnswers = (order: Order, content: I18n) => {
   const uri =
-    order.status === 'SUBMITTED'
-      ? undefined
-      : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id)
+    order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id)
   const installationAddress = order.addresses.find(
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
@@ -101,9 +98,7 @@ const groupTimetableByAddress = (timetable: CurfewTimetable) =>
 const createCurfewTimetableAnswers = (order: Order) => {
   const timetable = order.curfewTimeTable
   const uri =
-    order.status === 'SUBMITTED'
-      ? undefined
-      : paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
+    order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
 
   if (!order.monitoringConditions.curfew) {
     return []
@@ -130,9 +125,7 @@ const createCurfewTimetableAnswers = (order: Order) => {
 
 const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
   const releaseDateUri =
-    order.status === 'SUBMITTED'
-      ? undefined
-      : paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
+    order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
   const { questions } = content.pages.curfewReleaseDate
 
   if (!order.monitoringConditions.curfew) {
@@ -153,9 +146,7 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
 
 const createCurfewAnswers = (order: Order, content: I18n) => {
   const conditionsUri =
-    order.status === 'SUBMITTED'
-      ? undefined
-      : paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+    order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
   const { questions } = content.pages.curfewConditions
 
   if (!order.monitoringConditions.curfew) {
@@ -174,7 +165,7 @@ const createCurfewAnswers = (order: Order, content: I18n) => {
 }
 
 const createExclusionZoneAnswers = (order: Order, content: I18n) => {
-  const uri = order.status === 'SUBMITTED' ? undefined : paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
+  const uri = order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
   const { questions } = content.pages.exclusionZone
 
   if (!order.monitoringConditions.exclusionZone) {
@@ -186,7 +177,7 @@ const createExclusionZoneAnswers = (order: Order, content: I18n) => {
     .map(enforcementZone => {
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
-      const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : undefined
+      const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
 
       return [
         createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri),
@@ -199,7 +190,7 @@ const createExclusionZoneAnswers = (order: Order, content: I18n) => {
 }
 
 const createTrailAnswers = (order: Order, content: I18n) => {
-  const uri = order.status === 'SUBMITTED' ? undefined : paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
+  const uri = order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
   const { questions } = content.pages.trailMonitoring
 
   if (!order.monitoringConditions.trail) {
@@ -220,7 +211,7 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
   return order.mandatoryAttendanceConditions.sort().map(attendance => {
     const uri =
       order.status === 'SUBMITTED'
-        ? undefined
+        ? ''
         : paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(`:orderId`, order.id).replace(
             `:conditionId`,
             attendance.id!,
@@ -250,8 +241,7 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
 }
 
 const createAlcoholAnswers = (order: Order, content: I18n) => {
-  const uri =
-    order.status === 'SUBMITTED' ? undefined : paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
+  const uri = order.status === 'SUBMITTED' ? '' : paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(
     content.reference.alcoholMonitoringTypes,
     order.monitoringConditionsAlcohol?.monitoringType,

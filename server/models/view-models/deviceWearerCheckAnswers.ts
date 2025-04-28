@@ -9,7 +9,7 @@ import {
 import { lookup } from '../../utils/utils'
 import { Order } from '../Order'
 
-const createOtherDisabilityAnswer = (order: Order, content: I18n, uri?: string) => {
+const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
     return [
       createTextAnswer(
@@ -25,7 +25,7 @@ const createOtherDisabilityAnswer = (order: Order, content: I18n, uri?: string) 
 
 const createDeviceWearerAnswers = (order: Order, content: I18n) => {
   const uri =
-    order.status === 'SUBMITTED' ? undefined : paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
+    order.status === 'SUBMITTED' ? '' : paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>
     lookup(content.reference.disabilities, disability),
   )
@@ -62,7 +62,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
 
 const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
   const uri =
-    order.status === 'SUBMITTED' ? undefined : paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
+    order.status === 'SUBMITTED' ? '' : paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
 
   return [
     createTextAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri),

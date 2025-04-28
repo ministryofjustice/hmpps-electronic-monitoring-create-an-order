@@ -10,9 +10,9 @@ import I18n from '../../types/i18n'
 
 const createOrderStatusAnswers = (order: Order) => {
   const answers = [
-    createTextAnswer('Status', order.status),
-    createTextAnswer('Type', order.type),
-    createTextAnswer('Reference number', order.id),
+    createTextAnswer('Status', order.status, ''),
+    createTextAnswer('Type', order.type, ''),
+    createTextAnswer('Reference number', order.id, ''),
   ]
   return answers
 }

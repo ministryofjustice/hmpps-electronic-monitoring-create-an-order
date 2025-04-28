@@ -24,7 +24,7 @@ type Answer = {
 
 export default Answer
 
-export const createTextAnswer = (key: string, value: Optional<string>, uri?: string): Answer => {
+export const createTextAnswer = (key: string, value: Optional<string>, uri: string): Answer => {
   const answer: Answer = {
     key: {
       text: key,
@@ -37,7 +37,7 @@ export const createTextAnswer = (key: string, value: Optional<string>, uri?: str
     },
   }
 
-  if (uri) {
+  if (uri !== '') {
     answer.actions?.items.push({
       href: uri,
       text: 'Change',
@@ -48,7 +48,7 @@ export const createTextAnswer = (key: string, value: Optional<string>, uri?: str
   return answer
 }
 
-export const createHtmlAnswer = (key: string, value: Optional<string>, uri?: string): Answer => {
+export const createHtmlAnswer = (key: string, value: Optional<string>, uri: string): Answer => {
   const answer: Answer = {
     key: {
       text: key,
@@ -61,7 +61,7 @@ export const createHtmlAnswer = (key: string, value: Optional<string>, uri?: str
     },
   }
 
-  if (uri) {
+  if (uri !== '') {
     answer.actions?.items.push({
       href: uri,
       text: 'Change',
@@ -78,16 +78,16 @@ const createDatePreview = (value: Optional<string>) =>
 const createTimePreview = (value: Optional<string>) =>
   isNullOrUndefined(value) ? '' : new Date(value).toLocaleTimeString('en-GB')
 
-export const createDateAnswer = (key: string, value: Optional<string>, uri?: string): Answer =>
+export const createDateAnswer = (key: string, value: Optional<string>, uri: string): Answer =>
   createTextAnswer(key, createDatePreview(value), uri)
 
-export const createTimeAnswer = (key: string, value: Optional<string>, uri?: string): Answer =>
+export const createTimeAnswer = (key: string, value: Optional<string>, uri: string): Answer =>
   createTextAnswer(key, createTimePreview(value), uri)
 
-export const createBooleanAnswer = (key: string, value: boolean | null, uri?: string): Answer =>
+export const createBooleanAnswer = (key: string, value: boolean | null, uri: string): Answer =>
   createTextAnswer(key, convertBooleanToEnum(value, '', 'Yes', 'No'), uri)
 
-export const createMultipleChoiceAnswer = (key: string, values: Array<string>, uri?: string): Answer =>
+export const createMultipleChoiceAnswer = (key: string, values: Array<string>, uri: string): Answer =>
   createHtmlAnswer(key, values.join('<br/>'), uri)
 
 const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
@@ -98,8 +98,8 @@ const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
 export const createTimeRangeAnswer = (key: string, from: Optional<string>, to: Optional<string>, uri: string): Answer =>
   createTextAnswer(key, createTimeRangePreview(from, to), uri)
 
-export const createMultipleAddressAnswer = (key: string, values: Array<AddressWithoutType>, uri?: string): Answer =>
+export const createMultipleAddressAnswer = (key: string, values: Array<AddressWithoutType>, uri: string): Answer =>
   createMultipleChoiceAnswer(key, isNullOrUndefined(values) ? [] : values.map(createAddressPreview), uri)
 
-export const createAddressAnswer = (key: string, value: Optional<AddressWithoutType>, uri?: string): Answer =>
+export const createAddressAnswer = (key: string, value: Optional<AddressWithoutType>, uri: string): Answer =>
   createMultipleAddressAnswer(key, isNullOrUndefined(value) ? [] : [value], uri)
