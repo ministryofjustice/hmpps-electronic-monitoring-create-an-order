@@ -63,7 +63,10 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n) => {
-  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id)
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
+    ':addressType(installation)',
+    'installation',
+  )
   const installationAddress = order.addresses.find(
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )

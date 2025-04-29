@@ -267,7 +267,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
+                    ':addressType(installation)',
+                    'installation',
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
                 },
@@ -666,7 +669,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
+                    ':addressType(installation)',
+                    'installation',
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
                 },
