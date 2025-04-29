@@ -160,7 +160,7 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
       identityNumbersPage.form.saveAndContinueButton.click()
 
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()
 
       let contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
@@ -197,7 +197,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        'Check your answer',
+      )
       contactInformationCheckYourAnswersPage.continueButton().click()
 
       // no validation
@@ -209,7 +212,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 
-      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        'Check your answer',
+      )
       if (takeScreenshots)
         cy.screenshot('11. installationAndRiskCheckYourAnswersPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
@@ -280,7 +286,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
 
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
@@ -416,7 +425,7 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
       identityNumbersPage.form.saveAndContinueButton.click()
 
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()
 
       let contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
@@ -453,7 +462,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        'Check your answer',
+      )
       contactInformationCheckYourAnswersPage.continueButton().click()
 
       // no validation
@@ -465,7 +477,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 
-      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        'Check your answer',
+      )
       if (takeScreenshots)
         cy.screenshot('11. installationAndRiskCheckYourAnswersPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
@@ -536,7 +551,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
       alcoholMonitoringPage.form.saveAndContinueButton.click()
 
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)

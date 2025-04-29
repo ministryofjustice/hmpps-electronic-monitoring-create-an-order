@@ -173,7 +173,10 @@ export default class OrderTasksPage extends AppPage {
       )
     }
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+      MonitoringConditionsCheckYourAnswersPage,
+      'Check your answer',
+    )
     monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
     this.fillInAttachmentDetailsWith({
@@ -441,7 +444,7 @@ export default class OrderTasksPage extends AppPage {
     identityNumbersPage.form.fillInWith(deviceWearerDetails)
     identityNumbersPage.form.saveAndContinueButton.click()
 
-    const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage)
+    const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
     deviceWearerCheckYourAnswersPage.continueButton().click()
 
     const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
@@ -472,14 +475,20 @@ export default class OrderTasksPage extends AppPage {
     interestedPartiesPage.form.fillInWith(interestedParties)
     interestedPartiesPage.form.saveAndContinueButton.click()
 
-    const contactInformationCheckYourAnswersPage = Page.verifyOnPage(ContactInformationCheckYourAnswersPage)
+    const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+      ContactInformationCheckYourAnswersPage,
+      'Check your answer',
+    )
     contactInformationCheckYourAnswersPage.continueButton().click()
 
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
 
-    const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage)
+    const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+      InstallationAndRiskCheckYourAnswersPage,
+      'Check your answer',
+    )
     installationAndRiskCheckYourAnswersPage.continueButton().click()
 
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
@@ -508,7 +517,10 @@ export default class OrderTasksPage extends AppPage {
     curfewTimetablePage.form.saveAndContinueButton.click()
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
     }
   }
@@ -519,7 +531,10 @@ export default class OrderTasksPage extends AppPage {
     enforcementZonePage.form.saveAndContinueButton.click()
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
     }
   }
@@ -530,7 +545,10 @@ export default class OrderTasksPage extends AppPage {
     alcoholMonitoringPage.form.saveAndContinueButton.click()
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
     }
   }
@@ -541,7 +559,10 @@ export default class OrderTasksPage extends AppPage {
     trailMonitoringPage.form.saveAndContinueButton.click()
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
     }
   }

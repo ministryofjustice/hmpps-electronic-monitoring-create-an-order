@@ -19,9 +19,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {% if not isOrderEditable %}
+	{# TODO #}
+	{% set submittedDate = "14 January 2025" %}
         {% set html %}
           <p class="govuk-notification-banner__heading">
-            You are viewing a submitted order.
+            You are viewing a submitted form.
           </p>
         {% endset %}
 
@@ -31,8 +33,13 @@
       {% endif %}
 
       <h1 class="govuk-heading-l">
+	{% if not isOrderEditable %}
+	    {% set caption = "View answers" %}
+	{% else %}
+	    {% set caption = "Check your answers" %}
+	{% endif %}
         <span class="govuk-caption-l">{{ section }}</span>
-        Check your answers
+	{{ caption }}
       </h1>
 
       {% block answers %}
@@ -40,16 +47,23 @@
 
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+	{% if not isOrderEditable %}
+	    {% set continueButton = "Go to next section" %}
+	    {% set secondaryButton = "Return to main form menu" %}
+	{% else %}
+	    {% set continueButton = "Save and go to next section" %}
+	    {% set secondaryButton = "Save as draft" %}
+	{% endif %}
 
         <div class="govuk-button-group">
           {{ govukButton({
-            text: "Save and go to next section",
+            text: continueButton,
             name: "action",
             value: "continue"
           })}}
 
           {{ govukButton({
-            text: "Save as draft",
+            text: secondaryButton,
             classes: "govuk-button--secondary",
             name: "action",
             value: "back"

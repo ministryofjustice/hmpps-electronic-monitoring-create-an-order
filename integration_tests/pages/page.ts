@@ -41,8 +41,8 @@ export default abstract class Page {
     let query: object = {}
 
     if (typeof args[0] !== 'string') {
-      params = args.pop() as object
-      query = args.pop() as object
+      params = args.shift() as object
+      query = args.shift() as object
     }
 
     const page = new constructor(...args)
@@ -68,8 +68,8 @@ export default abstract class Page {
     let query: object = {}
 
     if (typeof args[0] !== 'string') {
-      params = args.pop() as object
-      query = args.pop() as object
+      params = args.shift() as object
+      query = args.shift() as object
     }
 
     const page = new constructor(...args)
@@ -77,6 +77,7 @@ export default abstract class Page {
     if (!page.uri) {
       throw new Error(`${constructor} has no <uri: string> defined so it is not possible to visit it.`)
     }
+
     const url = buildUrl(page.uri as string, params, query)
     cy.visit(url)
 

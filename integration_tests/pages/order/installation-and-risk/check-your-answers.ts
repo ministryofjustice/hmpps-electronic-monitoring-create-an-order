@@ -1,19 +1,13 @@
 import paths from '../../../../server/constants/paths'
 import SummaryListComponentWithoutHeading from '../../components/SummaryListComponentWithoutHeading'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
-import { PageElement } from '../../page'
 
 export default class InstallationAndRiskCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor() {
-    super('Check your answers', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
+  constructor(heading: string) {
+    super(heading, paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, 'Risk information')
   }
 
-  // SECTIONS
-
-  get caption(): PageElement {
-    return cy.get('.govuk-caption-l')
-  }
-
+  // SECTIONS get banner(): PageElement {
   get installationRiskSection(): SummaryListComponentWithoutHeading {
     return new SummaryListComponentWithoutHeading()
   }

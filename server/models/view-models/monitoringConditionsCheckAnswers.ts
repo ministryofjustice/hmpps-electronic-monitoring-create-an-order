@@ -15,7 +15,7 @@ import {
   createTimeAnswer,
   createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
-  createTextAnswer,
+  createAnswer,
 } from '../../utils/checkYourAnswers'
 import sentenceTypes from '../../reference/sentence-types'
 import yesNoUnknown from '../../reference/yes-no-unknown'
@@ -45,19 +45,20 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
   const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
   const { questions } = content.pages.monitoringConditions
 
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
-    createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri),
-    createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri),
-    createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri),
-    createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri),
-    createTextAnswer(questions.orderType.text, orderType, uri),
-    createTextAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri),
-    createTextAnswer(questions.conditionType.text, conditionType, uri),
-    createTextAnswer(questions.sentenceType.text, sentenceType, uri),
-    createTextAnswer(questions.issp.text, issp, uri),
-    createTextAnswer(questions.hdc.text, hdc, uri),
-    createTextAnswer(questions.prarr.text, prarr, uri),
-    createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri),
+    createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts),
+    createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts),
+    createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts),
+    createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts),
+    createAnswer(questions.orderType.text, orderType, uri, answerOpts),
+    createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts),
+    createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
+    createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
+    createAnswer(questions.issp.text, issp, uri, answerOpts),
+    createAnswer(questions.hdc.text, hdc, uri, answerOpts),
+    createAnswer(questions.prarr.text, prarr, uri, answerOpts),
+    createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
   ]
 }
 
@@ -67,7 +68,11 @@ const createInstallationAddressAnswers = (order: Order, content: I18n) => {
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
 
-  return [createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri)]
+  return [
+    createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri, {
+      ignoreActions: order.status === 'SUBMITTED',
+    }),
+  ]
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
@@ -117,7 +122,9 @@ const createCurfewTimetableAnswers = (order: Order) => {
         ? `${convertToTitleCase(group)} address`
         : createAddressPreview(address)
 
-      return createMultipleChoiceAnswer(preview, groups[group].map(createSchedulePreview), uri)
+      return createMultipleChoiceAnswer(preview, groups[group].map(createSchedulePreview), uri, {
+        ignoreActions: order.status === 'SUBMITTED',
+      })
     })
 }
 
@@ -129,14 +136,26 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
     return []
   }
 
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
-    createDateAnswer(questions.releaseDate.text, order.curfewReleaseDateConditions?.releaseDate, releaseDateUri),
-    createTimeAnswer(questions.startTime.text, order.curfewReleaseDateConditions?.startTime, releaseDateUri),
-    createTimeAnswer(questions.endTime.text, order.curfewReleaseDateConditions?.endTime, releaseDateUri),
+    createDateAnswer(
+      questions.releaseDate.text,
+      order.curfewReleaseDateConditions?.releaseDate,
+      releaseDateUri,
+      answerOpts,
+    ),
+    createTimeAnswer(
+      questions.startTime.text,
+      order.curfewReleaseDateConditions?.startTime,
+      releaseDateUri,
+      answerOpts,
+    ),
+    createTimeAnswer(questions.endTime.text, order.curfewReleaseDateConditions?.endTime, releaseDateUri, answerOpts),
     createAddressAnswer(
       questions.address.text,
       order.addresses.find(({ addressType }) => addressType === order.curfewReleaseDateConditions?.curfewAddress),
       releaseDateUri,
+      answerOpts,
     ),
   ]
 }
@@ -149,13 +168,15 @@ const createCurfewAnswers = (order: Order, content: I18n) => {
     return []
   }
 
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
-    createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri),
-    createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri),
+    createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
+    createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
     createMultipleAddressAnswer(
       questions.addresses.text,
       order.addresses.filter(({ addressType }) => (order.curfewConditions?.curfewAddress || '').includes(addressType)),
       conditionsUri,
+      answerOpts,
     ),
   ]
 }
@@ -173,14 +194,15 @@ const createExclusionZoneAnswers = (order: Order, content: I18n) => {
     .map(enforcementZone => {
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
-      const zoneUri = uri.replace(':zoneId', zoneId.toString())
+      const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
 
+      const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
       return [
-        createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri),
-        createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri),
-        createTextAnswer(questions.description.text, enforcementZone.description, zoneUri),
-        createTextAnswer(questions.duration.text, enforcementZone.duration, zoneUri),
-        createTextAnswer(questions.file.text, fileName, zoneUri),
+        createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts),
+        createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts),
+        createAnswer(questions.description.text, enforcementZone.description, zoneUri, answerOpts),
+        createAnswer(questions.duration.text, enforcementZone.duration, zoneUri, answerOpts),
+        createAnswer(questions.file.text, fileName, zoneUri, answerOpts),
       ]
     })
 }
@@ -193,9 +215,10 @@ const createTrailAnswers = (order: Order, content: I18n) => {
     return []
   }
 
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
-    createDateAnswer(questions.startDate.text, order.monitoringConditionsTrail?.startDate, uri),
-    createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri),
+    createDateAnswer(questions.startDate.text, order.monitoringConditionsTrail?.startDate, uri, answerOpts),
+    createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri, answerOpts),
   ]
 }
 
@@ -211,13 +234,14 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
     )
     const { questions } = content.pages.attendance
 
+    const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
     return [
-      createDateAnswer(questions.startDate.text, attendance.startDate, uri),
-      createDateAnswer(questions.endDate.text, attendance.endDate, uri),
-      createTextAnswer(questions.purpose.text, attendance.purpose, uri),
-      createTextAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri),
-      createTextAnswer(questions.startTime.text, attendance.startTime, uri),
-      createTextAnswer(questions.endTime.text, attendance.endTime, uri),
+      createDateAnswer(questions.startDate.text, attendance.startDate, uri, answerOpts),
+      createDateAnswer(questions.endDate.text, attendance.endDate, uri, answerOpts),
+      createAnswer(questions.purpose.text, attendance.purpose, uri, answerOpts),
+      createAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri, answerOpts),
+      createAnswer(questions.startTime.text, attendance.startTime, uri, answerOpts),
+      createAnswer(questions.endTime.text, attendance.endTime, uri, answerOpts),
       createAddressAnswer(
         questions.address.text,
         {
@@ -228,6 +252,7 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
           postcode: attendance.postcode || '',
         },
         uri,
+        answerOpts,
       ),
     ]
   })
@@ -245,10 +270,11 @@ const createAlcoholAnswers = (order: Order, content: I18n) => {
     return []
   }
 
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
-    createTextAnswer(questions.monitoringType.text, monitoringType, uri),
-    createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri),
-    createDateAnswer(questions.endDate.text, order.monitoringConditionsAlcohol?.endDate, uri),
+    createAnswer(questions.monitoringType.text, monitoringType, uri, answerOpts),
+    createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri, answerOpts),
+    createDateAnswer(questions.endDate.text, order.monitoringConditionsAlcohol?.endDate, uri, answerOpts),
     ['PRIMARY', 'SECONDARY', 'TERTIARY', 'INSTALLATION'].includes(
       order.monitoringConditionsAlcohol?.installationLocation || '',
     )
@@ -258,11 +284,13 @@ const createAlcoholAnswers = (order: Order, content: I18n) => {
             ({ addressType }) => addressType === order.monitoringConditionsAlcohol?.installationLocation,
           ),
           uri,
+          answerOpts,
         )
-      : createTextAnswer(
+      : createAnswer(
           questions.installationLocation.text,
           order.monitoringConditionsAlcohol?.prisonName || order.monitoringConditionsAlcohol?.probationOfficeName,
           uri,
+          answerOpts,
         ),
   ]
 }
