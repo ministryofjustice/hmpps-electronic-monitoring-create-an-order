@@ -19,11 +19,10 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {% if not isOrderEditable %}
-	{# TODO #}
-	{% set submittedDate = "14 January 2025" %}
+	{% set submittedDate = submittedDate %}
         {% set html %}
           <p class="govuk-notification-banner__heading">
-            You are viewing a submitted form.
+            You are viewing a submitted form. This form was submitted on the {{ submittedDate }}.
           </p>
         {% endset %}
 

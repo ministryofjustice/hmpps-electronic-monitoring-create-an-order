@@ -15,6 +15,9 @@ const populateOrder =
       res.locals.orderId = order.id
       res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
       res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
+      if (order.fmsResultDate) {
+        res.locals.submittedDate = getFormattedDate(order.fmsResultDate)
+      }
 
       next()
     } catch (error) {
@@ -22,5 +25,11 @@ const populateOrder =
       next(error)
     }
   }
+
+const getFormattedDate = (dateToFormat: string): string => {
+  const date = new Date(dateToFormat)
+  const month = date.toLocaleString('default', { month: 'long' })
+  return date.getDate() + ' ' + month + ' ' + date.getFullYear()
+}
 
 export default populateOrder
