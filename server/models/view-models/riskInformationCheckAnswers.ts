@@ -23,18 +23,19 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
     createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts),
-    createAnswer(
-      questions.mappaLevel.text,
-      lookup(content.reference.mappaLevel, order.installationAndRisk?.mappaLevel),
-      uri,
-      answerOpts,
-    ),
-    createAnswer(
-      questions.mappaCaseType.text,
-      lookup(content.reference.mappaCaseType, order.installationAndRisk?.mappaCaseType),
-      uri,
-      answerOpts,
-    ),
+    // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+    // createAnswer(
+    //  questions.mappaLevel.text,
+    //  lookup(content.reference.mappaLevel, order.installationAndRisk?.mappaLevel),
+    //  uri,
+    //  answerOpts,
+    // ),
+    // createAnswer(
+    //  questions.mappaCaseType.text,
+    //  lookup(content.reference.mappaCaseType, order.installationAndRisk?.mappaCaseType),
+    //  uri,
+    //  answerOpts,
+    // ),
   ]
   return {
     riskInformation: answers,

@@ -81,8 +81,9 @@ context('installation and risk - check your answers', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
+        // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+        // { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
+        // { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
     })
 
@@ -152,8 +153,9 @@ context('installation and risk - check your answers', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
+        // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+        // { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
+        // { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
     })
 
