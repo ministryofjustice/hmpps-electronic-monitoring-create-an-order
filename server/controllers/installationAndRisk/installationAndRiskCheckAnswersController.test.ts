@@ -94,40 +94,41 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.mappaLevel.text,
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.mappaCaseType.text,
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+        // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+        // {
+        //   key: {
+        //     text: questions.mappaLevel.text,
+        //   },
+        //   value: {
+        //     text: '',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
+        // {
+        //   key: {
+        //     text: questions.mappaCaseType.text,
+        //   },
+        //   value: {
+        //     text: '',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
       ],
     })
   })
@@ -204,40 +205,41 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.mappaLevel.text,
-          },
-          value: {
-            text: 'MAPPA 1',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.mappaCaseType.text,
-          },
-          value: {
-            text: 'Serious Organised Crime',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+        // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+        // {
+        //   key: {
+        //     text: questions.mappaLevel.text,
+        //   },
+        //   value: {
+        //     text: 'MAPPA 1',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
+        // {
+        //   key: {
+        //     text: questions.mappaCaseType.text,
+        //   },
+        //   value: {
+        //     text: 'Serious Organised Crime',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
       ],
     })
   })
