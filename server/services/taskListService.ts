@@ -405,7 +405,7 @@ export default class TaskListService {
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks)
-        let path = sectionsTasks[0].path
+        let { path } = sectionsTasks[0]
         if (order.status === 'SUBMITTED') {
           path = this.getCheckYourAnswerPathForSection(sectionsTasks)
         }

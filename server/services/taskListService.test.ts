@@ -17,7 +17,7 @@ import {
 } from '../../test/mocks/mockOrder'
 import paths from '../constants/paths'
 import TaskListService, { Task } from './taskListService'
-import { Order } from '../../server/models/Order'
+import { Order } from '../models/Order'
 
 describe('TaskListService', () => {
   describe('getNextPage', () => {
