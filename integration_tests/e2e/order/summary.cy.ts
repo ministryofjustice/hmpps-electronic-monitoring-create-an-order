@@ -506,20 +506,32 @@ context('Order Summary', () => {
       cy.get('h1', { log: false }).contains(`${page.title} for Joe Bloggs`)
 
       page.aboutTheDeviceWearerTask.shouldNotHaveStatus()
-      page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
+      page.aboutTheDeviceWearerTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
+      )
 
       page.contactInformationTask.shouldNotHaveStatus()
       page.contactInformationTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/contact-information/contact-details`,
+        `/order/${mockOrderId}/contact-information/check-your-answers`,
       )
 
       page.riskInformationTask.shouldNotHaveStatus()
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/check-your-answers`,
+      )
 
       page.electronicMonitoringTask.shouldNotHaveStatus()
-      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.electronicMonitoringTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/monitoring-conditions/check-your-answers`,
+      )
 
       page.additionalDocumentsTask.shouldNotHaveStatus()
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
