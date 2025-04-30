@@ -36,7 +36,10 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
   ]
-  return { riskInformation: answers, submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '' }
+  return {
+    riskInformation: answers,
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+  }
 }
 
 export default createViewModel

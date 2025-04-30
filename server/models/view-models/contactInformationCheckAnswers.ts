@@ -184,7 +184,7 @@ const createViewModel = (order: Order, content: I18n) => ({
   contactDetails: createContactDetailsAnswers(order, content),
   addresses: createAddressAnswers(order, content),
   interestedParties: createInterestedPartiesAnswers(order, content),
-  submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '',
+  submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
 })
 
 export default createViewModel
