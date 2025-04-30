@@ -362,6 +362,9 @@ export default class TaskListService {
   }
 
   getNextPage(currentPage: Page, order: Order, formData: FormData = {}) {
+    if (order.status === 'SUBMITTED') {
+      return this.getNextCheckYourAnswersPage(currentPage, order)
+    }
     const tasks = this.getTasks(order)
     const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
     const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
@@ -371,6 +374,22 @@ export default class TaskListService {
     }
 
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+  }
+
+  getNextCheckYourAnswersPage(currentPage: Page, order: Order) {
+    const tasks = this.getTasks(order)
+
+    const checkYourAnswersTasks = tasks.filter(
+      task => canBeCompleted(task, {}) && task.path.includes('check-your-answers'),
+    )
+
+    const currentTaskIndex = checkYourAnswersTasks.findIndex(task => task.name === currentPage)
+
+    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= checkYourAnswersTasks.length) {
+      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    }
+
+    return checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
 
   findTaskBySection(tasks: Task[], section: Section): Task[] {
@@ -389,9 +408,16 @@ export default class TaskListService {
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks)
-        return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }
+        let path = sectionsTasks[0].path
+        if (order.status === 'SUBMITTED') {
+          path = this.getCheckYourAnswerLinkForSection(sectionsTasks)
+        }
+        return { name: section, completed, path: path.replace(':orderId', order.id) }
       })
   }
+
+  getCheckYourAnswerLinkForSection = (sectionTasks: Task[]) =>
+    (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
 }
 
 export { Page }
