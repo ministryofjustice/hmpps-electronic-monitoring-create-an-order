@@ -362,9 +362,6 @@ export default class TaskListService {
   }
 
   getNextPage(currentPage: Page, order: Order, formData: FormData = {}) {
-    if (order.status === 'SUBMITTED') {
-      return this.getNextCheckYourAnswersPage(currentPage, order)
-    }
     const tasks = this.getTasks(order)
     const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
     const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
