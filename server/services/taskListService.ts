@@ -40,7 +40,7 @@ const PAGES = {
   checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
   attachments: 'ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
-}
+} as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
 
