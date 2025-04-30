@@ -174,13 +174,6 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
       answerOpts,
     ),
     ...getResponsibleOrganisationRegionAnswer(order, content, uri),
-    createAddressAnswer(questions.responsibleOrganisationAddress.text, responsibleOrganisationAddress, uri, answerOpts),
-    createAnswer(
-      questions.responsibleOrganisationPhoneNumber.text,
-      order.interestedParties?.responsibleOrganisationPhoneNumber,
-      uri,
-      answerOpts,
-    ),
     createAnswer(
       questions.responsibleOrganisationEmail.text,
       order.interestedParties?.responsibleOrganisationEmail,

@@ -1,8 +1,7 @@
 import { z } from 'zod'
 
 export const ResponsibleOrganisationEnum = z.enum([
-  'YJS',
-  'YCS',
+  'YJS', 
   'PROBATION',
   'FIELD_MONITORING_SERVICE',
   'HOME_OFFICE',
