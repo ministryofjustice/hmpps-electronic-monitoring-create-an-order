@@ -16,7 +16,7 @@ import {
   getMockOrder,
 } from '../../test/mocks/mockOrder'
 import paths from '../constants/paths'
-import TaskListService from './taskListService'
+import TaskListService, { Task } from './taskListService'
 import { Order } from '../../server/models/Order'
 
 describe('TaskListService', () => {
@@ -1010,6 +1010,66 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order)
 
       expect(nextPage).toBe(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+  })
+
+  describe('getCheckYourAnswerPathForSection', () => {
+    it('extracts the correct link when check your answers is the only task', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+        state: 'HIDDEN',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService()
+
+      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
+    })
+
+    it('extracts the correct link when sections contains multiple tasks', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+        state: 'HIDDEN',
+        completed: true,
+      })
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        state: 'REQUIRED',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService()
+
+      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
+    })
+
+    it('defaults to first link if there is on check your answers page', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        state: 'REQUIRED',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService()
+
+      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK)
     })
   })
 })

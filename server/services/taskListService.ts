@@ -57,7 +57,7 @@ type State = (typeof STATES)[keyof typeof STATES]
 
 const COMPLETABLE_STATES: State[] = [STATES.optional, STATES.required, STATES.hidden]
 
-type Task = {
+export type Task = {
   section: Section
   name: Page
   path: string
@@ -407,14 +407,15 @@ export default class TaskListService {
         const completed = this.isSectionComplete(sectionsTasks)
         let path = sectionsTasks[0].path
         if (order.status === 'SUBMITTED') {
-          path = this.getCheckYourAnswerLinkForSection(sectionsTasks)
+          path = this.getCheckYourAnswerPathForSection(sectionsTasks)
         }
         return { name: section, completed, path: path.replace(':orderId', order.id) }
       })
   }
 
-  getCheckYourAnswerLinkForSection = (sectionTasks: Task[]) =>
-    (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
+  getCheckYourAnswerPathForSection = (sectionTasks: Task[]) => {
+    return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
+  }
 }
 
 export { Page }
