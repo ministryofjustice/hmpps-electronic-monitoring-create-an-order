@@ -19,9 +19,7 @@ export default class CheckAnswersController {
     const order = req.order!
     const uri = paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
 
-    res.render(`pages/order/installation-and-risk/check-your-answers`, {
-      riskInformation: createViewModel(order, res.locals.content!, uri),
-    })
+    res.render(`pages/order/installation-and-risk/check-your-answers`, createViewModel(order, res.locals.content!, uri))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
