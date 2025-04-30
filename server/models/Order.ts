@@ -40,7 +40,7 @@ const OrderModel = z.object({
   interestedParties: InterestedPartiesModel.nullable(),
   variationDetails: VariationDetailsModel.nullable(),
   isValid: z.boolean().optional().default(false),
-  fmsResultDate: z.string().datetime().optional(),
+  fmsResultDate: z.string().datetime().optional().nullable(),
 })
 
 export type Order = z.infer<typeof OrderModel>
