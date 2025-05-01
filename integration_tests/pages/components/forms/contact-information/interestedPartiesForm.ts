@@ -1,4 +1,4 @@
-import FormAddressComponent, { FormAddressData } from '../../formAddressComponent'
+import { FormAddressData } from '../../formAddressComponent'
 import FormAutocompleteComponent from '../../formAutocompleteComponent'
 import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
