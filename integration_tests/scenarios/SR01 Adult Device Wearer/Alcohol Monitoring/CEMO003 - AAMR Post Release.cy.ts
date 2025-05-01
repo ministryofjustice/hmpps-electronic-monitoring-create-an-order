@@ -205,7 +205,7 @@ context('Scenarios', () => {
             ro_address_2: '',
             ro_address_3: '',
             ro_address_4: '',
-            ro_email: '',
+            ro_email: 'probation@example.com',
             ro_phone: '',
             ro_region: interestedParties.responsibleOrganisationRegion,
             sentence_date: '',
