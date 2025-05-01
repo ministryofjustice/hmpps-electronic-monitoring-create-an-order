@@ -10,12 +10,12 @@ const InterestedPartiesModel = z
     responsibleOfficerName: z.string(),
     responsibleOfficerPhoneNumber: z.string().nullable(),
     responsibleOrganisation: ResponsibleOrganisationEnum,
-    responsibleOrganisationRegion: z.string(),   
+    responsibleOrganisationRegion: z.string(),
     responsibleOrganisationEmail: z.string(),
   })
-  .transform(({  ...interestedParties }) => {
+  .transform(({ ...interestedParties }) => {
     return {
-      ...interestedParties     
+      ...interestedParties,
     }
   })
 

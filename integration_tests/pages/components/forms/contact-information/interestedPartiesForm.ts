@@ -71,7 +71,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get responsibleOrganisationField(): FormRadiosComponent {
     return new FormRadiosComponent(this.form, "What is the Responsible Officer's organisation?", [
-      'Youth Justice Service (YJS)',      
+      'Youth Justice Service (YJS)',
       'Probation',
       'Field monitoring service',
       'Home Office',
@@ -110,6 +110,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'East and South East',
     ])
   }
+
   get responsibleOrganisationEmailAddressField(): FormInputComponent {
     const label = "What is the Responsible Organisation's email address?"
     return new FormInputComponent(this.form, label)
@@ -150,11 +151,9 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       this.yjsRegionField.set(profile.yjsRegion)
     }
 
-   
     if (profile.responsibleOrganisationEmailAddress) {
       this.responsibleOrganisationEmailAddressField.set(profile.responsibleOrganisationEmailAddress)
     }
-
 
     if (profile.responsibleOfficerName) {
       this.responsibleOfficerNameField.set(profile.responsibleOfficerName)
@@ -171,8 +170,8 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.notifyOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationField.shouldNotHaveValidationMessage()
     this.probationRegionField.shouldNotHaveValidationMessage()
-    this.yjsRegionField.shouldNotHaveValidationMessage()   
-    this.responsibleOrganisationEmailAddressField.shouldNotHaveValidationMessage()    
+    this.yjsRegionField.shouldNotHaveValidationMessage()
+    this.responsibleOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOfficerNameField.shouldNotHaveValidationMessage()
     this.responsibleOfficerContactNumberField.shouldNotHaveValidationMessage()
   }
@@ -182,8 +181,8 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.notifyOrganisationEmailAddressField.shouldBeDisabled()
     this.responsibleOrganisationField.shouldBeDisabled()
     this.probationRegionField.shouldBeDisabled()
-    this.yjsRegionField.shouldBeDisabled()   
-    this.responsibleOrganisationEmailAddressField.shouldBeDisabled()   
+    this.yjsRegionField.shouldBeDisabled()
+    this.responsibleOrganisationEmailAddressField.shouldBeDisabled()
     this.responsibleOfficerNameField.shouldBeDisabled()
     this.responsibleOfficerContactNumberField.shouldBeDisabled()
   }

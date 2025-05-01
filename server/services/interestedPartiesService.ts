@@ -22,7 +22,6 @@ export default class InterestedPartiesService {
     return data.responsibleOfficerPhoneNumber
   }
 
-
   private getResponsibleOrgansiationRegion(data: InterestedPartiesFormData) {
     if (data.responsibleOrganisation === 'PROBATION') {
       return data.probationRegion
@@ -56,10 +55,10 @@ export default class InterestedPartiesService {
       notifyingOrganisation: data.notifyingOrganisation,
       notifyingOrganisationName: this.getNotifyingOrganisationName(data),
       notifyingOrganisationEmail: data.notifyingOrganisationEmail,
-      responsibleOfficerName: data.responsibleOfficerName,    
-      responsibleOfficerPhoneNumber: this.getResponsibleOfficerPhoneNumber(data), 
+      responsibleOfficerName: data.responsibleOfficerName,
+      responsibleOfficerPhoneNumber: this.getResponsibleOfficerPhoneNumber(data),
       responsibleOrganisation: data.responsibleOrganisation,
-      responsibleOrganisationRegion: this.getResponsibleOrgansiationRegion(data),     
+      responsibleOrganisationRegion: this.getResponsibleOrgansiationRegion(data),
       responsibleOrganisationEmail: data.responsibleOrganisationEmail,
     }
   }

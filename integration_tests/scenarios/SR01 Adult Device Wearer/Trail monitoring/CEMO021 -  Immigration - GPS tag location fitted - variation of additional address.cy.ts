@@ -278,7 +278,7 @@ context.skip('Scenarios', () => {
               ro_address_3: interestedParties.responsibleOrganisationAddress.line3,
               ro_address_4: interestedParties.responsibleOrganisationAddress.line4,
               ro_email: interestedParties.responsibleOrganisationEmailAddress,
-              ro_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOrganisationContactNumber),
+              ro_phone: '',
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',

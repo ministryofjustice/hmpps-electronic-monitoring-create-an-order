@@ -23,7 +23,7 @@ context('Contact information', () => {
               responsibleOfficerName: 'John Smith',
               responsibleOfficerPhoneNumber: '01234567890',
               responsibleOrganisation: 'PROBATION',
-              responsibleOrganisationRegion: 'NORTH_EAST',             
+              responsibleOrganisationRegion: 'NORTH_EAST',
               responsibleOrganisationEmail: 'test2@test.com',
             },
           },
@@ -49,7 +49,7 @@ context('Contact information', () => {
         page.form.responsibleOfficerNameField.shouldHaveValue('John Smith')
         page.form.responsibleOfficerContactNumberField.shouldHaveValue('01234567890')
         page.form.responsibleOrganisationField.shouldHaveValue('Probation')
-        page.form.probationRegionField.shouldHaveValue('NORTH_EAST')       
+        page.form.probationRegionField.shouldHaveValue('NORTH_EAST')
         page.form.responsibleOrganisationEmailAddressField.shouldHaveValue('test2@test.com')
 
         // Should have the correct buttons

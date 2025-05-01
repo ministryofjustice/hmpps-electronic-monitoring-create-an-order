@@ -166,7 +166,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             ],
           },
         },
-       
+
         {
           key: {
             text: questions.responsibleOrganisationEmail.text,
@@ -344,8 +344,8 @@ describe('ContactDetailsCheckAnswersController', () => {
               },
             ],
           },
-        },        
-        
+        },
+
         {
           key: {
             text: questions.responsibleOrganisationEmail.text,
@@ -378,7 +378,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         notifyingOrganisationEmail: 'test@test',
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
-        responsibleOrganisation: 'PROBATION',       
+        responsibleOrganisation: 'PROBATION',
         responsibleOrganisationEmail: 'test@test.com',
         responsibleOrganisationRegion: 'NORTH_EAST',
       },

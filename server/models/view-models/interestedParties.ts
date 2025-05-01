@@ -67,7 +67,7 @@ const constructFromFormData = (
     responsibleOrganisationRegion: {
       value: getResponsibleOrgansiationRegion(formData),
       error: getError(validationErrors, 'responsibleOrganisationRegion'),
-    },    
+    },
     responsibleOrganisationEmail: {
       value: formData.responsibleOrganisationEmail,
       error: getError(validationErrors, 'responsibleOrganisationEmail'),
