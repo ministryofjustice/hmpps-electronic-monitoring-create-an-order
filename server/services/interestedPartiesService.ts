@@ -22,15 +22,6 @@ export default class InterestedPartiesService {
     return data.responsibleOfficerPhoneNumber
   }
 
-  private getResponsibleOrganisationPhoneNumber(data: InterestedPartiesFormData) {
-    // Empty strings are not valid phone numbers in the API
-    if (data.responsibleOrganisationPhoneNumber === '') {
-      return null
-    }
-
-    return data.responsibleOrganisationPhoneNumber
-  }
-
   private getResponsibleOrgansiationRegion(data: InterestedPartiesFormData) {
     if (data.responsibleOrganisation === 'PROBATION') {
       return data.probationRegion
@@ -68,12 +59,6 @@ export default class InterestedPartiesService {
       responsibleOfficerPhoneNumber: this.getResponsibleOfficerPhoneNumber(data),
       responsibleOrganisation: data.responsibleOrganisation,
       responsibleOrganisationRegion: this.getResponsibleOrgansiationRegion(data),
-      responsibleOrganisationAddressLine1: data.responsibleOrganisationAddressLine1,
-      responsibleOrganisationAddressLine2: data.responsibleOrganisationAddressLine2,
-      responsibleOrganisationAddressLine3: data.responsibleOrganisationAddressLine3,
-      responsibleOrganisationAddressLine4: data.responsibleOrganisationAddressLine4,
-      responsibleOrganisationAddressPostcode: data.responsibleOrganisationAddressPostcode,
-      responsibleOrganisationPhoneNumber: this.getResponsibleOrganisationPhoneNumber(data),
       responsibleOrganisationEmail: data.responsibleOrganisationEmail,
     }
   }

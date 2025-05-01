@@ -10,9 +10,7 @@ type InterestedPartiesPageContent = PageContent<
   | 'responsibleOfficerName'
   | 'responsibleOfficerPhoneNumber'
   | 'responsibleOrganisation'
-  | 'responsibleOrganisationAddress'
   | 'responsibleOrganisationEmail'
-  | 'responsibleOrganisationPhoneNumber'
   | 'yjsRegion'
 >
 

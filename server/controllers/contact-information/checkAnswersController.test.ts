@@ -166,40 +166,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.responsibleOrganisationAddress.text,
-          },
-          value: {
-            html: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.responsibleOrganisationAddress.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.responsibleOrganisationPhoneNumber.text,
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.responsibleOrganisationPhoneNumber.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+
         {
           key: {
             text: questions.responsibleOrganisationEmail.text,
@@ -233,13 +200,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
         responsibleOrganisation: 'HOME_OFFICE',
-        responsibleOrganisationAddressLine1: 'Line 1',
-        responsibleOrganisationAddressLine2: 'Line 2',
-        responsibleOrganisationAddressLine3: 'Line 3',
-        responsibleOrganisationAddressLine4: 'Line 4',
-        responsibleOrganisationAddressPostcode: 'Postcode',
         responsibleOrganisationEmail: 'test@test.com',
-        responsibleOrganisationPhoneNumber: '01234567891',
         responsibleOrganisationRegion: '',
       },
       addresses: [
@@ -384,40 +345,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.responsibleOrganisationAddress.text,
-          },
-          value: {
-            html: 'Line 1, Line 2, Postcode',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.responsibleOrganisationAddress.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.responsibleOrganisationPhoneNumber.text,
-          },
-          value: {
-            text: '01234567891',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.responsibleOrganisationPhoneNumber.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+
         {
           key: {
             text: questions.responsibleOrganisationEmail.text,
@@ -451,13 +379,7 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
         responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationAddressLine1: 'Line 1',
-        responsibleOrganisationAddressLine2: 'Line 2',
-        responsibleOrganisationAddressLine3: 'Line 3',
-        responsibleOrganisationAddressLine4: 'Line 4',
-        responsibleOrganisationAddressPostcode: 'Postcode',
         responsibleOrganisationEmail: 'test@test.com',
-        responsibleOrganisationPhoneNumber: '01234567891',
         responsibleOrganisationRegion: 'NORTH_EAST',
       },
       addresses: [
@@ -709,40 +631,6 @@ describe('ContactDetailsCheckAnswersController', () => {
                 href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.probationRegion.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.responsibleOrganisationAddress.text,
-          },
-          value: {
-            html: 'Line 1, Line 2, Postcode',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.responsibleOrganisationAddress.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.responsibleOrganisationPhoneNumber.text,
-          },
-          value: {
-            text: '01234567891',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.responsibleOrganisationPhoneNumber.text.toLowerCase(),
               },
             ],
           },

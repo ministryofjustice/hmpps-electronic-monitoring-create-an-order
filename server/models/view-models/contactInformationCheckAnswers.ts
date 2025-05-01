@@ -135,9 +135,6 @@ const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri
 const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
   const uri = paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
 
-  const responsibleOrganisationAddress = order.addresses.find(
-    ({ addressType }) => addressType === 'RESPONSIBLE_ORGANISATION',
-  )
   const { questions } = content.pages.interestedParties
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
@@ -174,13 +171,6 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
       answerOpts,
     ),
     ...getResponsibleOrganisationRegionAnswer(order, content, uri),
-    createAddressAnswer(questions.responsibleOrganisationAddress.text, responsibleOrganisationAddress, uri, answerOpts),
-    createAnswer(
-      questions.responsibleOrganisationPhoneNumber.text,
-      order.interestedParties?.responsibleOrganisationPhoneNumber,
-      uri,
-      answerOpts,
-    ),
     createAnswer(
       questions.responsibleOrganisationEmail.text,
       order.interestedParties?.responsibleOrganisationEmail,
