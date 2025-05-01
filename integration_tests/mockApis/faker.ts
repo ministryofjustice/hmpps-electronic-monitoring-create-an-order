@@ -155,10 +155,8 @@ export const createFakeInterestedParties = (
 ): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
-  const officerContactNumber = createFakeUkPhoneNumber()
-  const orgContactNumber = ''
+  const officerContactNumber = createFakeUkPhoneNumber() 
   const orgEmailAddress = `${responsibleOrganisation.toLowerCase().replace(/\s/g, '-')}@example.com`
-  const address = new Address('', '', '', '', '')
   let notifyingOrganisationName = ''
   let responsibleOrganisationRegion = ''
   let prison = ''
@@ -201,12 +199,10 @@ export const createFakeInterestedParties = (
     responsibleOfficerName: officerName,
     responsibleOfficerContactNumber: officerContactNumber,
     responsibleOrganisation,
-    responsibleOrganisationRegion,
-    responsibleOrganisationContactNumber: orgContactNumber,
+    responsibleOrganisationRegion,   
     responsibleOrganisationEmailAddress: orgEmailAddress,
     probationRegion,
     yjsRegion,
-    responsibleOrganisationAddress: address,
   }
 }
 
