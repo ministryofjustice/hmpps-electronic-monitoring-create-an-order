@@ -39,7 +39,7 @@ export default class ReceiptPage extends AppPage {
   }
 
   get monitoringConditionsSection(): SummaryListComponent {
-    const label = 'Monitroing conditions'
+    const label = 'Monitoring conditions'
     return new SummaryListComponent(label)
   }
 }
