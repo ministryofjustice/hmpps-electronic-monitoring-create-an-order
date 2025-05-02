@@ -44,10 +44,8 @@ context('Access needs and installation risk information', () => {
         page.form.riskCategoryField.shouldHaveValue('Offensive towards someone because of their sex or gender')
         page.form.riskCategoryField.shouldHaveValue('Safeguarding Issues')
         page.form.riskDetailsField.shouldHaveValue('Information about potential risks')
-
-        // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
-        // page.form.mappaLevelField.shouldHaveValue('MAPPA 1')
-        // page.form.mappaCaseTypeField.shouldHaveValue('Terrorism Act, Counter Terrorism')
+        page.form.mappaLevelField.shouldHaveValue('MAPPA 1')
+        page.form.mappaCaseTypeField.shouldHaveValue('Terrorism Act, Counter Terrorism')
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')

@@ -51,11 +51,8 @@ context('Access needs and installation risk information', () => {
             offence: 'ROBBERY',
             riskCategory: ['SEXUAL_OFFENCES'],
             riskDetails: '',
-            // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
-            // mappaLevel: 'MAPPA 1',
-            // mappaCaseType: 'SOC (Serious Organised Crime)',
-            mappaLevel: null,
-            mappaCaseType: null,
+            mappaLevel: 'MAPPA 1',
+            mappaCaseType: 'SOC (Serious Organised Crime)',
           },
         }).should('be.true')
       })

@@ -1,3 +1,4 @@
+import config from '../../config'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { InstallationAndRiskFormData } from '../form-data/installationAndRisk'
@@ -7,6 +8,7 @@ import { MultipleChoiceField, ViewModel } from './utils'
 
 type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory'>> & {
   riskCategory: MultipleChoiceField
+  mappaEnabled: boolean
 }
 
 const constructFromFormData = (
@@ -35,6 +37,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'mappaCaseType'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
+    mappaEnabled: config.mappa.enabled,
   }
 }
 
@@ -56,6 +59,7 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
       value: installationAndRisk?.mappaCaseType || '',
     },
     errorSummary: null,
+    mappaEnabled: config.mappa.enabled,
   }
 }
 
