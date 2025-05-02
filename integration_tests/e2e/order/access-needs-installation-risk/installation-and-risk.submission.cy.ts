@@ -54,6 +54,8 @@ context('Access needs and installation risk information', () => {
             // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
             // mappaLevel: 'MAPPA 1',
             // mappaCaseType: 'SOC (Serious Organised Crime)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
         }).should('be.true')
       })

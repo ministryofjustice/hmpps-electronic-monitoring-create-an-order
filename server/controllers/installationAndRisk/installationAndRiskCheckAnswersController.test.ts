@@ -140,9 +140,8 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         offence: 'SEXUAL_OFFENCES',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
-        // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
-        // mappaLevel: 'MAPPA 1',
-        // mappaCaseType: 'SOC (Serious Organised Crime)',
+        mappaLevel: 'MAPPA 1',
+        mappaCaseType: 'SOC (Serious Organised Crime)',
       },
     })
     const req = createMockRequest({ order })
