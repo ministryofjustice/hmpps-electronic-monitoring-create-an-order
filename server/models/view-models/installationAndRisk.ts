@@ -26,14 +26,15 @@ const constructFromFormData = (
       value: formData.riskDetails || '',
       error: getError(validationErrors, 'riskDetails'),
     },
-    mappaLevel: {
-      value: formData.mappaLevel || '',
-      error: getError(validationErrors, 'mappaLevel'),
-    },
-    mappaCaseType: {
-      value: formData.mappaCaseType || '',
-      error: getError(validationErrors, 'mappaCaseType'),
-    },
+    // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+    // mappaLevel: {
+    //   value: formData.mappaLevel || '',
+    //   error: getError(validationErrors, 'mappaLevel'),
+    // },
+    // mappaCaseType: {
+    //   value: formData.mappaCaseType || '',
+    //   error: getError(validationErrors, 'mappaCaseType'),
+    // },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -49,12 +50,13 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
     riskDetails: {
       value: installationAndRisk?.riskDetails || '',
     },
-    mappaLevel: {
-      value: installationAndRisk?.mappaLevel || '',
-    },
-    mappaCaseType: {
-      value: installationAndRisk?.mappaCaseType || '',
-    },
+    // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+    // mappaLevel: {
+    //   value: installationAndRisk?.mappaLevel || '',
+    // },
+    // mappaCaseType: {
+    //   value: installationAndRisk?.mappaCaseType || '',
+    // },
     errorSummary: null,
   }
 }
