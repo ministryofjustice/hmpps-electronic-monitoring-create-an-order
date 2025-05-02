@@ -26,7 +26,11 @@ export default class DeviceWearerCheckAnswersController {
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     if (action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_DEVICE_WEARER', order))
+      if (order.status === 'SUBMITTED') {
+        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order))
+      } else {
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_DEVICE_WEARER', order))
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }

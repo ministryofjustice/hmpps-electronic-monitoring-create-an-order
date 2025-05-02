@@ -1,4 +1,4 @@
-import FormAddressComponent, { FormAddressData } from '../../formAddressComponent'
+import { FormAddressData } from '../../formAddressComponent'
 import FormAutocompleteComponent from '../../formAutocompleteComponent'
 import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
@@ -72,7 +72,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   get responsibleOrganisationField(): FormRadiosComponent {
     return new FormRadiosComponent(this.form, "What is the Responsible Officer's organisation?", [
       'Youth Justice Service (YJS)',
-      'Youth Custody Service (YCS)',
       'Probation',
       'Field monitoring service',
       'Home Office',
@@ -110,16 +109,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'London',
       'East and South East',
     ])
-  }
-
-  get responsibleOrganisationAddressField(): FormAddressComponent {
-    const label = "What is the Responsible Organisation's address?"
-    return new FormAddressComponent(this.form, label)
-  }
-
-  get responsibleOrganisationContactNumberField(): FormInputComponent {
-    const label = "What is the Responsible Organisation's telephone number?"
-    return new FormInputComponent(this.form, label)
   }
 
   get responsibleOrganisationEmailAddressField(): FormInputComponent {
@@ -162,16 +151,8 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       this.yjsRegionField.set(profile.yjsRegion)
     }
 
-    if (profile.responsibleOrganisationContactNumber) {
-      this.responsibleOrganisationContactNumberField.set(profile.responsibleOrganisationContactNumber)
-    }
-
     if (profile.responsibleOrganisationEmailAddress) {
       this.responsibleOrganisationEmailAddressField.set(profile.responsibleOrganisationEmailAddress)
-    }
-
-    if (profile.responsibleOrganisationAddress) {
-      this.responsibleOrganisationAddressField.set(profile.responsibleOrganisationAddress)
     }
 
     if (profile.responsibleOfficerName) {
@@ -190,9 +171,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.responsibleOrganisationField.shouldNotHaveValidationMessage()
     this.probationRegionField.shouldNotHaveValidationMessage()
     this.yjsRegionField.shouldNotHaveValidationMessage()
-    this.responsibleOrganisationContactNumberField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationEmailAddressField.shouldNotHaveValidationMessage()
-    this.responsibleOrganisationAddressField.shouldNotHaveValidationMessage()
     this.responsibleOfficerNameField.shouldNotHaveValidationMessage()
     this.responsibleOfficerContactNumberField.shouldNotHaveValidationMessage()
   }
@@ -203,9 +182,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.responsibleOrganisationField.shouldBeDisabled()
     this.probationRegionField.shouldBeDisabled()
     this.yjsRegionField.shouldBeDisabled()
-    this.responsibleOrganisationContactNumberField.shouldBeDisabled()
     this.responsibleOrganisationEmailAddressField.shouldBeDisabled()
-    this.responsibleOrganisationAddressField.shouldBeDisabled()
     this.responsibleOfficerNameField.shouldBeDisabled()
     this.responsibleOfficerContactNumberField.shouldBeDisabled()
   }
@@ -216,9 +193,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.responsibleOrganisationField.shouldNotBeDisabled()
     this.probationRegionField.shouldNotBeDisabled()
     this.yjsRegionField.shouldNotBeDisabled()
-    this.responsibleOrganisationContactNumberField.shouldNotBeDisabled()
     this.responsibleOrganisationEmailAddressField.shouldNotBeDisabled()
-    this.responsibleOrganisationAddressField.shouldNotBeDisabled()
     this.responsibleOfficerNameField.shouldNotBeDisabled()
     this.responsibleOfficerContactNumberField.shouldNotBeDisabled()
   }

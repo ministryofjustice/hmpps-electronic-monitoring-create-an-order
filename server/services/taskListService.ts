@@ -42,7 +42,7 @@ const PAGES = {
   checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
   attachments: 'ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
-}
+} as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
 
@@ -59,7 +59,7 @@ type State = (typeof STATES)[keyof typeof STATES]
 
 const COMPLETABLE_STATES: State[] = [STATES.optional, STATES.required, STATES.hidden]
 
-type Task = {
+export type Task = {
   section: Section
   name: Page
   path: string
@@ -76,7 +76,7 @@ type SectionBlock = {
 type FormData = Record<string, string | boolean>
 
 const canBeCompleted = (task: Task, formData: FormData): boolean => {
-  if ([PAGES.secondaryAddress, PAGES.tertiaryAddress].includes(task.name)) {
+  if (([PAGES.secondaryAddress, PAGES.tertiaryAddress] as Page[]).includes(task.name)) {
     if (task.name === PAGES.secondaryAddress) {
       if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
         return false
@@ -404,6 +404,22 @@ export default class TaskListService {
     return tasks.find(task => task.name === currentPage)!.section
   }
 
+  getNextCheckYourAnswersPage(currentPage: Page, order: Order) {
+    const tasks = this.getTasks(order)
+
+    const checkYourAnswersTasks = tasks.filter(
+      task => canBeCompleted(task, {}) && task.path.includes('check-your-answers'),
+    )
+
+    const currentTaskIndex = checkYourAnswersTasks.findIndex(task => task.name === currentPage)
+
+    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= checkYourAnswersTasks.length) {
+      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    }
+
+    return checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+  }
+
   findTaskBySection(tasks: Task[], section: Section): Task[] {
     return tasks.filter(task => task.section === section)
   }
@@ -424,8 +440,16 @@ export default class TaskListService {
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks)
-        return { name: section, completed, path: sectionsTasks[0].path.replace(':orderId', order.id) }
+        let { path } = sectionsTasks[0]
+        if (order.status === 'SUBMITTED') {
+          path = this.getCheckYourAnswerPathForSection(sectionsTasks)
+        }
+        return { name: section, completed, path: path.replace(':orderId', order.id) }
       })
+  }
+
+  getCheckYourAnswerPathForSection = (sectionTasks: Task[]) => {
+    return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 }
 

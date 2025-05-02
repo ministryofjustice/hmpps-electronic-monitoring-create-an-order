@@ -16,7 +16,8 @@ import {
   getMockOrder,
 } from '../../test/mocks/mockOrder'
 import paths from '../constants/paths'
-import TaskListService from './taskListService'
+import TaskListService, { Task } from './taskListService'
+import { Order } from '../models/Order'
 
 describe('TaskListService', () => {
   describe('getNextPage', () => {
@@ -907,6 +908,168 @@ describe('TaskListService', () => {
           path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
         },
       ])
+    })
+    it('should return links to the check your answers pages if the order has been submitted', () => {
+      // Given
+      const order = getMockOrder({
+        status: 'SUBMITTED',
+        deviceWearer: createDeviceWearer({
+          firstName: '',
+          adultAtTimeOfInstallation: false,
+          noFixedAbode: false,
+        }),
+        monitoringConditions: createMonitoringConditions({
+          curfew: true,
+          alcohol: true,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: true,
+        }),
+      })
+      const taskListService = new TaskListService()
+
+      // When
+      const sections = taskListService.getSections(order)
+
+      expect(sections).toEqual([
+        {
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+        },
+      ])
+    })
+  })
+  describe('getNextCheckYourAnswersPage', () => {
+    let order: Order
+    beforeAll(() => {
+      order = getMockOrder({
+        status: 'SUBMITTED',
+        deviceWearer: createDeviceWearer({
+          firstName: '',
+          adultAtTimeOfInstallation: false,
+          noFixedAbode: false,
+        }),
+        monitoringConditions: createMonitoringConditions({
+          curfew: true,
+          alcohol: true,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: true,
+        }),
+      })
+    })
+
+    it('returns contact info CYA if current page is device wearer CYA', () => {
+      const taskListService = new TaskListService()
+
+      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order)
+
+      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('returns risk information CYA if current page is contact info CYA', () => {
+      const taskListService = new TaskListService()
+
+      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_CONTACT_INFORMATION', order)
+
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('returns monitoring conditions CYA if current page is risk information CYA', () => {
+      const taskListService = new TaskListService()
+
+      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_INSTALLATION_AND_RISK', order)
+
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
+
+    it('returns the summary page if current page is last CYA page', () => {
+      const taskListService = new TaskListService()
+
+      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order)
+
+      expect(nextPage).toBe(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+  })
+
+  describe('getCheckYourAnswerPathForSection', () => {
+    it('extracts the correct link when check your answers is the only task', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+        state: 'HIDDEN',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService()
+
+      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
+    })
+
+    it('extracts the correct link when sections contains multiple tasks', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+        state: 'HIDDEN',
+        completed: true,
+      })
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        state: 'REQUIRED',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService()
+
+      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
+    })
+
+    it('defaults to first link if there is on check your answers page', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'RISK_INFORMATION',
+        name: 'INSTALLATION_AND_RISK',
+        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        state: 'REQUIRED',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService()
+
+      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK)
     })
   })
 })

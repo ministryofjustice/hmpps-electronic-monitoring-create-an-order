@@ -19,14 +19,14 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -60,10 +60,10 @@ context('Scenarios', () => {
   })
 
   context(
-    'Youth Rehabilitation Order with Intensive Supervision and Surveillance (Community) with GPS Tag (Location - Fitted).',
+    'Youth Rehabilitation order (Community) with GPS Tag (Attendance Monitoring). Inclusion zone - "not to leave the boundary of the M60".',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer('CEMO006'),
+        ...createFakeYouthDeviceWearer('CEMO035'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -77,21 +77,33 @@ context('Scenarios', () => {
       const interestedParties = createFakeInterestedParties(
         'Magistrates Court',
         'YJS',
-        'Coventry Magistrates Court',
-        'Midlands',
+        'Bolton Magistrates Court',
+        'North West',
       )
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
         conditionType: 'Requirement of a Community Order',
-        monitoringRequired: 'Trail monitoring',
+        monitoringRequired: 'Mandatory attendance monitoring',
         // sentenceType: 'Community YRO',
-        issp: 'Yes',
       }
-      const trailMonitoringOrder = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+
+      const attendanceMonitoringOrder = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
+        purpose: 'Not to leave the boundary of the M60',
+        appointmentDay: 'Monday',
+        startTime: {
+          hours: '12',
+          minutes: '00',
+        },
+        endTime: {
+          hours: '13',
+          minutes: '00',
+        },
+        address: createKnownAddress(),
+        addAnother: 'No',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -161,9 +173,9 @@ context('Scenarios', () => {
         installationAddress.form.fillInWith(installationAddressDetails)
         installationAddress.form.saveAndContinueButton.click()
 
-        const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-        trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-        trailMonitoringPage.form.saveAndContinueButton.click()
+        const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
+        attendanceMonitoringPage.form.fillInWith(attendanceMonitoringOrder)
+        attendanceMonitoringPage.form.saveAndContinueButton.click()
 
         const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
           MonitoringConditionsCheckYourAnswersPage,
@@ -178,7 +190,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO006',
+          responseRecordFilename: 'CEMO035',
           httpStatus: 200,
           body: {
             title: '',
@@ -236,7 +248,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO006',
+              responseRecordFilename: 'CEMO035',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -249,9 +261,9 @@ context('Scenarios', () => {
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'Location Monitoring (Fitted Device)',
-                    start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate),
-                    end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate),
+                    condition: 'Attendance Requirement',
+                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -316,9 +328,23 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: 'Yes',
+                trail_monitoring: '',
                 exclusion_zones: [],
-                inclusion_zones: [],
+                inclusion_zones: [
+                  {
+                    description: `${attendanceMonitoringOrder.purpose}
+${attendanceMonitoringOrder.appointmentDay} ${attendanceMonitoringOrder.startTime.hours}:${attendanceMonitoringOrder.startTime.minutes}:00-${attendanceMonitoringOrder.endTime.hours}:${attendanceMonitoringOrder.endTime.minutes}:00
+${attendanceMonitoringOrder.address.line1}
+${attendanceMonitoringOrder.address.line2}
+${attendanceMonitoringOrder.address.line3}
+${attendanceMonitoringOrder.address.line4}
+${attendanceMonitoringOrder.address.postcode}
+`,
+                    duration: '',
+                    start: formatAsFmsDate(attendanceMonitoringOrder.startDate),
+                    end: formatAsFmsDate(attendanceMonitoringOrder.endDate),
+                  },
+                ],
                 abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
@@ -331,7 +357,7 @@ context('Scenarios', () => {
                 installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
-                issp: 'Yes',
+                issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
               },

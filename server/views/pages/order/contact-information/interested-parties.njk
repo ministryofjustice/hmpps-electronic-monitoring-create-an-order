@@ -232,7 +232,7 @@
     }
   }) %}
     <p>
-      The Responsible Organisation is the service the Responsible Officer is part of. For example, the Responsible Organisation for a probation officer is the Probation Service.
+      {{content.pages.interestedParties.questions.responsibleOrganisation.hint}}
     </p>
     {{ govukRadios({
       name: "responsibleOrganisation",
@@ -247,98 +247,19 @@
       errorMessage: responsibleOrganisation.error,
       items: responsibleOrgOptions
     }) }}
-
-    {% call govukFieldset({
-      legend: {
-        text: content.pages.interestedParties.questions.responsibleOrganisationAddress.text,
-        classes: "govuk-fieldset__legend--s",
-        isPageHeading: false
-      }
-    }) %}
-      {{ govukInput({
-        label: {
-          text: "Address line 1"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "responsibleOrganisationAddressLine1",
-        name: "responsibleOrganisationAddressLine1",
-        value: responsibleOrganisationAddressLine1.value,
-        errorMessage: responsibleOrganisationAddressLine1.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "Address line 2 (optional)"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "responsibleOrganisationAddressLine2",
-        name: "responsibleOrganisationAddressLine2",
-        value: responsibleOrganisationAddressLine2.value,
-        errorMessage: responsibleOrganisationAddressLine2.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "Town or city"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "responsibleOrganisationAddressLine3",
-        name: "responsibleOrganisationAddressLine3",
-        value: responsibleOrganisationAddressLine3.value,
-        errorMessage: responsibleOrganisationAddressLine3.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "County (optional)"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "responsibleOrganisationAddressLine4",
-        name: "responsibleOrganisationAddressLine4",
-        value: responsibleOrganisationAddressLine4.value,
-        errorMessage: responsibleOrganisationAddressLine4.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukInput({
-        label: {
-          text: "Postcode"
-        },
-        classes: "govuk-!-width-two-thirds",
-        id: "responsibleOrganisationAddressPostcode",
-        name: "responsibleOrganisationAddressPostcode",
-        value: responsibleOrganisationAddressPostcode.value,
-        errorMessage: responsibleOrganisationAddressPostcode.error,
-        disabled: not isOrderEditable
-      }) }}
-
-    {% endcall %}
+   
 
     {{ govukInput({
       label: {
-        text: content.pages.interestedParties.questions.responsibleOrganisationPhoneNumber.text,
+        text: content.pages.interestedParties.questions.responsibleOrganisationEmail.text,       
         classes: "govuk-label--s"
       },
-      classes: "govuk-!-width-one-half",
-      id: "responsibleOrganisationPhoneNumber",
-      name: "responsibleOrganisationPhoneNumber",
-      type: "tel",
-      value: responsibleOrganisationPhoneNumber.value,
-      errorMessage: responsibleOrganisationPhoneNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-
-    {{ govukInput({
-      label: {
-        text: content.pages.interestedParties.questions.responsibleOrganisationEmail.text,
-        classes: "govuk-label--s"
+      hint: {
+        html: content.pages.interestedParties.questions.responsibleOrganisationEmail.hint
       },
       classes: "govuk-!-width-one-half",
       id: "responsibleOrganisationEmail",
-      name: "responsibleOrganisationEmail",
+      name: "responsibleOrganisationEmail",      
       value: responsibleOrganisationEmail.value,
       errorMessage: responsibleOrganisationEmail.error,
       disabled: not isOrderEditable

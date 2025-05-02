@@ -62,6 +62,12 @@ export const deserialiseDateTime = (dateString: string | null | undefined) => {
   }
 }
 
+export const formatDateTime = (dateToFormat: string): string => {
+  const date = new Date(dateToFormat)
+  const month = date.toLocaleString('default', { month: 'long' })
+  return `${date.getDate()} ${month} ${date.getFullYear()}`
+}
+
 export const serialiseTime = (hour: string, minute: string): string | null => {
   const hourValid = /\d{1,2}/.test(hour)
   const minuteValid = /\d{1,2}/.test(minute)

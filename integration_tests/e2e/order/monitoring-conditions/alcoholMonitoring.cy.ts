@@ -300,7 +300,7 @@ context('Alcohol monitoring', () => {
           probationOfficeName: 'Probation Office',
         })
       })
-      Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers')
     })
 
     it('should correctly submit the data to the CEMO API and move to the next page (prison)', () => {
@@ -322,7 +322,7 @@ context('Alcohol monitoring', () => {
           prisonName: 'Prison Name',
         })
       })
-      Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage)
+      Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers')
     })
   })
 

@@ -3,8 +3,8 @@ import SummaryListComponent from '../../components/summaryListComponent'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
 export default class DeviceWearerCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor() {
-    super('Check your answers', paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS)
+  constructor(heading: string) {
+    super(heading, paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, 'About the device wearer')
   }
 
   // SECTIONS
