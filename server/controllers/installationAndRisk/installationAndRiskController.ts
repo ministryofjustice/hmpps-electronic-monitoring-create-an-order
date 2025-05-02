@@ -22,8 +22,9 @@ export default class InstallationAndRiskController {
       offence: formData.offence ?? null,
       riskCategory: formData.riskCategory ?? null,
       riskDetails: formData.riskDetails ?? null,
-      mappaLevel: formData.mappaLevel ?? null,
-      mappaCaseType: formData.mappaCaseType ?? null,
+      // Commented as part of https://dsdmoj.atlassian.net/browse/ELM-3422
+      // mappaLevel: formData.mappaLevel ?? null,
+      // mappaCaseType: formData.mappaCaseType ?? null,
     }
   }
 
