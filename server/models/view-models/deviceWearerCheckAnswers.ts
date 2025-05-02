@@ -6,7 +6,7 @@ import {
   createMultipleChoiceAnswer,
   createAnswer,
 } from '../../utils/checkYourAnswers'
-import { lookup } from '../../utils/utils'
+import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) => {
@@ -145,6 +145,7 @@ const createViewModel = (order: Order, content: I18n) => ({
   deviceWearer: createDeviceWearerAnswers(order, content),
   personIdentifiers: createPersonIdentifierAnswers(order, content),
   responsibleAdult: createResponsibeAdultAnswers(order, content),
+  submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
 })
 
 export default createViewModel

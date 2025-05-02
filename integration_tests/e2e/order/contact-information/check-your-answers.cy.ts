@@ -615,6 +615,7 @@ context('Contact Information - check your answers', () => {
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
+          fmsResultDate: new Date('2024 12 14'),
         },
       })
     })
@@ -624,7 +625,9 @@ context('Contact Information - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.submittedBanner.contains('You are viewing a submitted form.')
+      page.submittedBanner.contains(
+        'You are viewing a submitted form. This form was submitted on the 14 December 2024.',
+      )
     })
 
     it('shows contact information caption', () => {

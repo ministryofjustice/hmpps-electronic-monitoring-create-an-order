@@ -31,7 +31,7 @@ const createViewModel = (order: Order, content: I18n) => {
     ...contactInformation,
     ...devicewearer,
     ...monitoringConditions,
-    riskDetails,
+    ...riskDetails,
     additionalDocumentDetails,
   }
 }

@@ -40,12 +40,9 @@
       {% include "./contact-information/answers.njk" %}
 
     <h2 class="govuk-heading-l">Risk information</h2>
-        {{ govukSummaryList({
-        classes: "govuk-!-margin-bottom-9",
-        rows: riskDetails
-      }) }}
+      {% include "./installation-and-risk/answers.njk" %}
 
-    <h2 class="govuk-heading-l">Monitroing conditions</h2>
+    <h2 class="govuk-heading-l">Monitoring conditions</h2>
       {% include "./monitoring-conditions/answers.njk" %}
 
     <h2 class="govuk-heading-l">Additional documents</h2>

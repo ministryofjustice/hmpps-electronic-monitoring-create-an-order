@@ -26,7 +26,11 @@ export default class CheckAnswersController {
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     if (action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order))
+      if (order.status === 'SUBMITTED') {
+        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order))
+      } else {
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order))
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }

@@ -19,9 +19,7 @@ export default class CheckAnswersController {
     const order = req.order!
     const uri = paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
 
-    res.render(`pages/order/installation-and-risk/check-your-answers`, {
-      riskInformation: createViewModel(order, res.locals.content!, uri),
-    })
+    res.render(`pages/order/installation-and-risk/check-your-answers`, createViewModel(order, res.locals.content!, uri))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
@@ -29,7 +27,11 @@ export default class CheckAnswersController {
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     if (action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_INSTALLATION_AND_RISK', order))
+      if (order.status === 'SUBMITTED') {
+        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_INSTALLATION_AND_RISK', order))
+      } else {
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_INSTALLATION_AND_RISK', order))
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }

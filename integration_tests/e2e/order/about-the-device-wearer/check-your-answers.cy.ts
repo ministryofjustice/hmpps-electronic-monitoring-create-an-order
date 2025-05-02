@@ -361,6 +361,7 @@ context('Device wearer - check your answers', () => {
             noFixedAbode: null,
             interpreterRequired: false,
           },
+          fmsResultDate: new Date('2024 12 14'),
           DeviceWearerResponsibleAdult: null,
         },
       })
@@ -373,7 +374,9 @@ context('Device wearer - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.submittedBanner.contains('You are viewing a submitted form.')
+      page.submittedBanner.contains(
+        'You are viewing a submitted form. This form was submitted on the 14 December 2024.',
+      )
     })
 
     it('shows correct caption and heading', () => {

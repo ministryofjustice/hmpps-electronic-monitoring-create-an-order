@@ -3,6 +3,7 @@ import {
   convertBooleanToEnum,
   convertToTitleCase,
   createAddressPreview,
+  formatDateTime,
   isNullOrUndefined,
   lookup,
 } from '../../utils/utils'
@@ -309,6 +310,7 @@ const createViewModel = (order: Order, content: I18n) => {
     trail: createTrailAnswers(order, content),
     attendance: createAttendanceAnswers(order, content),
     alcohol: createAlcoholAnswers(order, content),
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
   }
 }
 

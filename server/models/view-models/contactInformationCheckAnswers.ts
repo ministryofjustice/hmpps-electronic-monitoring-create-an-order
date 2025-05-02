@@ -7,7 +7,7 @@ import probationRegions from '../../reference/probation-regions'
 import youthJusticeServiceRegions from '../../reference/youth-justice-service-regions'
 import responsibleOrganisations from '../../reference/responsible-organisations'
 import { createAddressAnswer, createBooleanAnswer, createAnswer } from '../../utils/checkYourAnswers'
-import { lookup } from '../../utils/utils'
+import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 
@@ -184,6 +184,7 @@ const createViewModel = (order: Order, content: I18n) => ({
   contactDetails: createContactDetailsAnswers(order, content),
   addresses: createAddressAnswers(order, content),
   interestedParties: createInterestedPartiesAnswers(order, content),
+  submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
 })
 
 export default createViewModel

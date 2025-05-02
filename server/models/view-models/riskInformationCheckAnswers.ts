@@ -2,7 +2,7 @@ import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourA
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
-import { lookup } from '../../utils/utils'
+import { formatDateTime, lookup } from '../../utils/utils'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -36,7 +36,10 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
   ]
-  return answers
+  return {
+    riskInformation: answers,
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+  }
 }
 
 export default createViewModel
