@@ -322,10 +322,10 @@
           value: "alcohol",
           text: "Alcohol monitoring",
           hint: {
-            text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
+            text: "This service does not yet offer Alcohol Monitoring as a monitoring requirement. If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process."
           },
           checked: monitoringRequired.values | select("equalto", "alcohol") | length,
-          disabled: not isOrderEditable
+          disabled: true
         }
       ],
       errorMessage: monitoringRequired.error,
