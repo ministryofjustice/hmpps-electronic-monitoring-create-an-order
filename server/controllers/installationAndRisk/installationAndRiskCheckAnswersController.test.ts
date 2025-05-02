@@ -6,6 +6,7 @@ import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import installationAndRiskPageContent from '../../i18n/en/pages/installationAndRisk'
+import config from '../../config'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -19,6 +20,8 @@ describe('InstallationAndRiskCheckAnswersController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   const { questions } = installationAndRiskPageContent
+  config.mappa.enabled = true
+
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
