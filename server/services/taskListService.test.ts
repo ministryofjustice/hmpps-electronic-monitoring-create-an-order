@@ -777,22 +777,22 @@ describe('TaskListService', () => {
         {
           completed: true,
           name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: true,
           name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: true,
           name: 'RISK_INFORMATION',
-          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: true,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: false,

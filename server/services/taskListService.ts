@@ -368,32 +368,21 @@ export default class TaskListService {
     const section = this.getCurrentSection(tasks, currentPage)
     const sectionTasks = tasks.filter(task => task.section === section)
 
-    console.log(tasks.filter(task => task.section === 'ABOUT_THE_DEVICE_WEARER'))
-
-    if(currentPage.startsWith(CYA_PREFIX)) {
-
+    if (currentPage.startsWith(CYA_PREFIX)) {
       const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
       const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
       return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    }
+    const availableTasks = sectionTasks.filter(
+      task => (canBeCompleted(task, formData) && this.incompleteTask(task)) || isCurrentPage(task, currentPage),
+    )
+    const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
 
-    } 
-    // else if(this.isSectionComplete(sectionTasks)) {
-    //   return this.getSectionCheckAnswers(sectionTasks).path.replace(':orderId', order.id)
+    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
+      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    }
 
-    // }
-    //  else {
-
-      const availableTasks = sectionTasks.filter(task => canBeCompleted(task, formData) && this.incompleteTask(task) || isCurrentPage(task, currentPage))
-      const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
-
-      if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
-        return paths.ORDER.SUMMARY.replace(':orderId', order.id)
-      }
-
-      return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
-    // }
-
-    // return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
 
   getSectionCheckAnswers(sectionTasks: Task[]): Task {
@@ -441,7 +430,7 @@ export default class TaskListService {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks)
         let { path } = sectionsTasks[0]
-        if (order.status === 'SUBMITTED') {
+        if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswerPathForSection(sectionsTasks)
         }
         return { name: section, completed, path: path.replace(':orderId', order.id) }

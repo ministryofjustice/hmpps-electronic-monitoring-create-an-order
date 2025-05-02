@@ -61,7 +61,7 @@ describe('AddressController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockAddressService: jest.Mocked<AddressService>
   let addressController: AddressController
-  const taskListService = new TaskListService()
+  let taskListService: TaskListService
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -77,6 +77,7 @@ describe('AddressController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAddressService = new AddressService(mockRestClient) as jest.Mocked<AddressService>
+    taskListService = new TaskListService()
     addressController = new AddressController(mockAuditService, mockAddressService, taskListService)
   })
 
@@ -312,6 +313,7 @@ describe('AddressController', () => {
     ])(
       'should go to the next address form if the user indicates they have another address',
       async (_: string, param: string, expectedLocation: string) => {
+        mockOrder.addresses = [primaryAddress]
         // Given
         const req = createMockRequest({
           order: mockOrder,

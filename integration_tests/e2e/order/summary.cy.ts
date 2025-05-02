@@ -291,20 +291,32 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
-      page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
+      page.aboutTheDeviceWearerTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
+      )
 
       page.contactInformationTask.shouldHaveStatus('Complete')
       page.contactInformationTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/contact-information/contact-details`,
+        `/order/${mockOrderId}/contact-information/check-your-answers`,
       )
 
       page.riskInformationTask.shouldHaveStatus('Complete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/check-your-answers`,
+      )
 
       page.electronicMonitoringTask.shouldHaveStatus('Complete')
-      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.electronicMonitoringTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/monitoring-conditions/check-your-answers`,
+      )
 
       // page.additionalDocuments.shouldHaveStatus('Complete')
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
