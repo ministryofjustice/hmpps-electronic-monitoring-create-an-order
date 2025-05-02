@@ -3,6 +3,8 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 
+const CYA_PREFIX = 'CHECK_ANSWERS'
+
 const SECTIONS = {
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
@@ -361,16 +363,45 @@ export default class TaskListService {
     return tasks
   }
 
-  getNextPage(currentPage: Page, order: Order, formData: FormData = {}) {
+  getNextPage(currentPage: Page, order: Order, formData: FormData = {}): string {
     const tasks = this.getTasks(order)
-    const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
-    const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
+    const section = this.getCurrentSection(tasks, currentPage)
+    const sectionTasks = tasks.filter(task => task.section === section)
 
-    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
-      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
-    }
+    console.log(tasks.filter(task => task.section === 'ABOUT_THE_DEVICE_WEARER'))
 
-    return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    if(currentPage.startsWith(CYA_PREFIX)) {
+
+      const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
+      const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
+      return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+
+    } 
+    // else if(this.isSectionComplete(sectionTasks)) {
+    //   return this.getSectionCheckAnswers(sectionTasks).path.replace(':orderId', order.id)
+
+    // }
+    //  else {
+
+      const availableTasks = sectionTasks.filter(task => canBeCompleted(task, formData) && this.incompleteTask(task) || isCurrentPage(task, currentPage))
+      const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
+
+      if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
+        return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+      }
+
+      return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    // }
+
+    // return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+  }
+
+  getSectionCheckAnswers(sectionTasks: Task[]): Task {
+    return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
+  }
+
+  getCurrentSection(tasks: Task[], currentPage: Page): Section {
+    return tasks.find(task => task.name === currentPage)!.section
   }
 
   findTaskBySection(tasks: Task[], section: Section): Task[] {
@@ -379,6 +410,10 @@ export default class TaskListService {
 
   isSectionComplete(tasks: Task[]): boolean {
     return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+  }
+
+  incompleteTask(task: Task): boolean {
+    return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
 
   getSections(order: Order): SectionBlock[] {
