@@ -106,7 +106,7 @@ export default {
     enabled: get('VARIATIONS_ENABLED', 'false') === 'true',
   },
   mappa: {
-    enabled: get('MAPPA_ENABLED', 'false') === 'true',
+    enabled: get('MAPPA_ENABLED', 'true') === 'true',
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
