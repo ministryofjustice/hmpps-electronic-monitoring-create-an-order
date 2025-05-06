@@ -261,7 +261,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
       const hours = parseInt(value.hours, 10)
       const minutes = parseInt(value.minutes, 10)
 
-      return new Date(Date.UTC(year, month, day, hours, minutes)).toISOString()
+      return new Date(year, month, day, hours, minutes).toISOString()
     })
     .pipe(z.string().datetime().nullable())
 }
