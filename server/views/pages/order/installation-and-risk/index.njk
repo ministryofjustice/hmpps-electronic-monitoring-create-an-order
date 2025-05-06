@@ -66,44 +66,46 @@
     }
   }) }}
 
-  {% call govukFieldset({
-    legend: {
-      text: "Multi-Agency Public Protection Arrangements (MAPPA)",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    <p class="govuk-body">If you are a Home Office employee, answer the below questions:</p>
+  {% if mappaEnabled %}
+    {% call govukFieldset({
+      legend: {
+        text: "Multi-Agency Public Protection Arrangements (MAPPA)",
+        classes: "govuk-fieldset__legend--m",
+        isPageHeading: false
+      }
+    }) %}
+      <p class="govuk-body">If you are a Home Office employee, answer the below questions:</p>
 
-    {{ govukRadios({
-      name: "mappaLevel",
-      fieldset: {
-        legend: {
-          text: content.pages.installationAndRisk.questions.mappaLevel.text,
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      items: content.reference.mappaLevel | toOptions(not isOrderEditable),
-      value: mappaLevel.value,
-      errorMessage: mappaLevel.error,
-      disabled: not isOrderEditable
-    }) }}
+      {{ govukRadios({
+        name: "mappaLevel",
+        fieldset: {
+          legend: {
+            text: content.pages.installationAndRisk.questions.mappaLevel.text,
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: content.reference.mappaLevel | toOptions(not isOrderEditable),
+        value: mappaLevel.value,
+        errorMessage: mappaLevel.error,
+        disabled: not isOrderEditable
+      }) }}
 
-    {{ govukRadios({
-      name: "mappaCaseType",
-      fieldset: {
-        legend: {
-          text: content.pages.installationAndRisk.questions.mappaCaseType.text,
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      items: content.reference.mappaCaseType | toOptions(not isOrderEditable),
-      value: mappaCaseType.value,
-      errorMessage: mappaCaseType.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endcall %}
+      {{ govukRadios({
+        name: "mappaCaseType",
+        fieldset: {
+          legend: {
+            text: content.pages.installationAndRisk.questions.mappaCaseType.text,
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: content.reference.mappaCaseType | toOptions(not isOrderEditable),
+        value: mappaCaseType.value,
+        errorMessage: mappaCaseType.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endcall %}
+  {% endif %}
 
 {% endblock %}

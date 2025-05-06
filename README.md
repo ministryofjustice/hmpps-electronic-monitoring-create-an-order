@@ -99,19 +99,72 @@ Instructions for this can be found in the readme of the [Create an EM Order API 
    - run tests in headless mode with `npm run int-test`
    - Or run tests with the cypress UI `npm run int-test-ui`
 
-#### Running end-to-end scenarios against the CEMO API
+    Integration tests can be found in the E2E directory in the Cypress UI.
 
-1. For local running, start an API, test db and wiremock instance by:
+    Note that the scenario tests will fail. To run the scenario tests see the section below, ["Running end-to-end scenarios"](#running-end-to-end-scenarios-against-the-cemo-api).
+
+#### Running end-to-end scenarios against the CEMO API running in Docker
+
+1. Pull the latest Docker images:
+
+    `docker compose -f docker-compose-scenarios.yml pull`
+
+2. For local running, start an API, test db and wiremock instance by:
 
     `docker compose -f docker-compose-scenarios.yml up`
 
-2. Then run the server so that it can connect to the services in the docker network:
+3. Then run the server so that it can connect to the services in the docker network:
 
     `npm run start-scenarios` (or `npm run start-scenarios:dev` to run with auto-restart on changes)
 
-3. And then either:
+4. And then either:
    - run scenario tests in headless mode with `npm run int-test-scenarios`
    - Or run tests with the cypress UI `npm run int-test-ui`
+
+    Scenario tests can be found in the Scenarios directory in the Cypress UI, or you can search for `CEMO0`.
+
+    Note that integration tests will fail. To run the integration tests see the section above, ["Running integration tests"](#running-integration-tests).
+
+#### Running end-to-end scenarios against the CEMO API running locally
+
+1. For local running, start test db and wiremock instance by:
+
+    `docker compose -f docker-compose-scenarios.yml up --scale cemo-api=0`
+
+2. Configure the local API for scenario testing.
+- Populate the environemnt variuables file (eg. .env) with the following values:
+
+    ```shell
+    HMPPS_AUTH_URL=http://localhost:9091/auth
+    DB_SERVER=localhost:5432
+    DB_NAME=postgres
+    DB_USER=postgres
+    DB_PASS=postgres
+    DOCUMENT_MANAGEMENT_URL=http://localhost:9091/hmpps/
+    SERCO_AUTH_URL=http://localhost:9091/auth/oauth/token
+    SERCO_CLIENT_ID=
+    SERCO_CLIENT_SECRET=
+    SERCO_USERNAME=
+    SERCO_PASSWORD=
+    SERCO_URL=http://localhost:9091/fms
+    CP_PROCESSING_ENABLED=false
+    CP_FMS_INTEGRATION_ENABLED=false
+    CEMO_FMS_INTEGRATION_ENABLED=true
+    HMPPS_S3_BUCKETNAME=test_bucket
+    ``` 
+- Run the API in intelliJ IDEA in debug mode (this allows you to set breakpoints and debug scenario tests).
+
+3. Run the UI server so that it can connect to the services in the docker & host network:
+
+    `npm run start-scenarios` (or `npm run start-scenarios:dev` to run with auto-restart on changes)
+
+4. And then either:
+   - run scenario tests in headless mode with `npm run int-test-scenarios`
+   - Or run tests with the cypress UI `npm run int-test-ui`
+
+    Scenario tests can be found in the Scenarios directory in the Cypress UI, or you can search for `CEMO0`.
+
+    Note that integration tests will fail. To run the integration tests see the section ["Running integration tests"](#running-integration-tests).
 
 ## Change log
 
