@@ -35,6 +35,7 @@ generic-service:
     AUDIT_SQS_REGION: 'eu-west-2'
     AUDIT_SERVICE_NAME: 'HMPPS529' # Your audit service name
     VARIATIONS_ENABLED: 'true'
+    MAPPA_ENABLED: 'false'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
