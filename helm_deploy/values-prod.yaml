@@ -12,5 +12,11 @@ generic-service:
     AUDIT_ENABLED: "false"
     CEMO_API_URL: "https://hmpps-electronic-monitoring-create-an-order-api.hmpps.service.justice.gov.uk"
 
+  allowlist:
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+      - prisons
+
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
