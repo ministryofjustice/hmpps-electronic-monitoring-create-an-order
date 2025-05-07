@@ -9,13 +9,7 @@ const apiPath = '/monitoring-conditions'
 const validFormData = {
   orderType: 'IMMIGRATION',
   orderTypeDescription: 'GPS Acquisitive Crime HDC',
-  monitoringRequired: [
-    'Curfew',
-    'Exclusion zone monitoring',
-    'Trail monitoring',
-    'Mandatory attendance monitoring',
-    'Alcohol monitoring',
-  ],
+  monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
@@ -74,7 +68,7 @@ context('Monitoring conditions', () => {
             exclusionZone: true,
             trail: true,
             mandatoryAttendance: true,
-            alcohol: true,
+            alcohol: false,
             startDate: '2024-02-27T11:02:00.000Z',
             endDate: '2025-03-08T04:40:00.000Z',
             sentenceType: 'EXTENDED_DETERMINATE_SENTENCE',
