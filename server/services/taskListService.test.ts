@@ -879,6 +879,11 @@ describe('TaskListService', () => {
       expect(sections).toEqual([
         {
           completed: false,
+          name: 'VARIATION_DETAILS',
+          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
         },
@@ -901,11 +906,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-        },
-        {
-          completed: false,
-          name: 'VARIATION_DETAILS',
-          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
         },
       ])
     })

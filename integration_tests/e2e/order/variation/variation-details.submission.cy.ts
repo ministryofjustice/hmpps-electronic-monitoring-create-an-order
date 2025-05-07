@@ -3,8 +3,7 @@ import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 
 import VariationDetailsPage from '../../../pages/order/variation/variationDetails'
-// commented out with below test
-// import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
+import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 
 const mockOrderId = uuidv4()
 const apiPath = '/variation'
@@ -49,16 +48,14 @@ context('Variation', () => {
         }).should('be.true')
       })
 
-      // RT 02/05/25 - this test breaks due to widespread navigation changes
-      //               commenting it out until we know what this should do now.
-      // it('should continue to collect device wearer details', () => {
-      //   const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+      it('should continue to collect device wearer details', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
-      //   page.form.fillInWith(sampleFormData)
-      //   page.form.saveAndContinueButton.click()
+        page.form.fillInWith(sampleFormData)
+        page.form.saveAndContinueButton.click()
 
-      //   Page.verifyOnPage(AboutDeviceWearerPage)
-      // })
+        Page.verifyOnPage(AboutDeviceWearerPage)
+      })
 
       it('should return to the summary page', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
