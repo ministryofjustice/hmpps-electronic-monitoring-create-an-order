@@ -9,7 +9,11 @@ const MonitoringConditionsFormDataParser = z.object({
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
   orderTypeDescription: z.coerce.string(),
-  conditionType: z.coerce.string(),
+  conditionType: z
+    .string()
+    .nullable()
+    .default(null)
+    .transform(val => (val === null ? '' : val)),
   startDate: z.object({
     day: z.string().default(''),
     month: z.string().default(''),
@@ -61,10 +65,9 @@ const MonitoringConditionsFormDataValidator = z
     hdc: z.string(),
     prarr: z.string(),
   })
-  .transform(({ monitoringRequired, orderType, orderTypeDescription, conditionType, ...formData }) => ({
+  .transform(({ monitoringRequired, orderType, orderTypeDescription, ...formData }) => ({
     orderType: orderType === '' ? null : orderType,
     orderTypeDescription: orderTypeDescription === '' ? null : orderTypeDescription,
-    conditionType: conditionType === '' ? null : conditionType,
     curfew: monitoringRequired.includes('curfew'),
     exclusionZone: monitoringRequired.includes('exclusionZone'),
     trail: monitoringRequired.includes('trail'),
