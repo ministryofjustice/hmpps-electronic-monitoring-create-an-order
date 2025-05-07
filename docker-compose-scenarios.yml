@@ -59,7 +59,7 @@ services:
 
   cemo-redis:
     container_name: cemo-redis
-    image: redis:7.2
+    image: redis:7.4
     networks:
       - hmpps_integration
     ports:
