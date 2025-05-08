@@ -69,7 +69,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
 }
 
 const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
-  const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
+  const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
