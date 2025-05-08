@@ -54,6 +54,14 @@ export default class FormCheckboxesComponent {
     this.element.find('input[type=checkbox]').each(input => cy.wrap(input).should('not.be.disabled'))
   }
 
+  shouldNotBeDisabledWithException(attribute: string, value: string): void {
+    this.element.find(`input[type=checkbox]:not([${attribute}="${value}"])`).then($inputs => {
+      cy.wrap($inputs).each($input => {
+        cy.wrap($input).should('not.be.disabled')
+      })
+    })
+  }
+
   get validationMessage() {
     return this.element.find('.govuk-error-message', { log: false })
   }

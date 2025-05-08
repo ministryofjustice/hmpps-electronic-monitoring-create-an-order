@@ -68,7 +68,7 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.shouldHaveValue('Trail monitoring')
         page.form.monitoringRequiredField.shouldHaveValue('Curfew')
         page.form.orderTypeDescriptionField.shouldHaveValue('DAPO')
-        page.form.conditionTypeField.shouldHaveValue('BAIL_ORDER')
+        page.form.conditionTypeField.shouldHaveValue('Bail Order')
         page.form.startDateField.shouldHaveValue(new Date(2025, 0, 1))
         page.form.endDateField.shouldHaveValue(new Date(2025, 1, 1))
         page.form.sentenceTypeField.shouldHaveValue('IPP')

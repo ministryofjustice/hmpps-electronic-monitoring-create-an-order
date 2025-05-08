@@ -17,7 +17,8 @@ import NoFixedAbodePage from '../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../pages/order/monitoring-conditions'
-import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
+// Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+// import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../pages/order/submit-success'
 import InstallationAddressPage from '../pages/order/monitoring-conditions/installation-address'
 import CurfewReleaseDatePage from '../pages/order/monitoring-conditions/curfew-release-date'
@@ -98,7 +99,8 @@ context('Mandatory fields only', () => {
         'Exclusion zone monitoring',
         'Trail monitoring',
         // 'Mandatory attendance monitoring',
-        'Alcohol monitoring',
+        // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+        // 'Alcohol monitoring',
       ],
     }
     const curfewReleaseDetails = {
@@ -127,11 +129,12 @@ context('Mandatory fields only', () => {
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
     }
-    const alcoholMonitoringOrder = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-      monitoringType: 'Alcohol abstinence',
-      installLocation: `at installation address: ${installationAddressDetails}`,
-    }
+    // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+    // const alcoholMonitoringOrder = {
+    //   startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+    //   monitoringType: 'Alcohol abstinence',
+    //   installLocation: `at installation address: ${installationAddressDetails}`,
+    // }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
     }
@@ -278,13 +281,14 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('19. trailMonitoringPage - minimum', { overwrite: true })
       trailMonitoringPage.form.saveAndContinueButton.click()
 
-      let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      alcoholMonitoringPage.form.saveAndContinueButton.click()
-      alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - validation', { overwrite: true })
-      alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
-      if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
-      alcoholMonitoringPage.form.saveAndContinueButton.click()
+      // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+      // let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
+      // alcoholMonitoringPage.form.saveAndContinueButton.click()
+      // alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
+      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - validation', { overwrite: true })
+      // alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
+      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
+      // alcoholMonitoringPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
@@ -355,7 +359,8 @@ context('Mandatory fields only', () => {
         'Exclusion zone monitoring',
         'Trail monitoring',
         // 'Mandatory attendance monitoring',
-        'Alcohol monitoring',
+        // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+        // 'Alcohol monitoring',
       ],
     }
     const curfewReleaseDetails = {
@@ -384,11 +389,12 @@ context('Mandatory fields only', () => {
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
     }
-    const alcoholMonitoringOrder = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
-      monitoringType: 'Alcohol abstinence',
-      installLocation: `at installation address: ${installationAddressDetails}`,
-    }
+    // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+    // const alcoholMonitoringOrder = {
+    //   startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+    //   monitoringType: 'Alcohol abstinence',
+    //   installLocation: `at installation address: ${installationAddressDetails}`,
+    // }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
     }
@@ -543,13 +549,14 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('19. trailMonitoringPage - minimum', { overwrite: true })
       trailMonitoringPage.form.saveAndContinueButton.click()
 
-      let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      alcoholMonitoringPage.form.saveAndContinueButton.click()
-      alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - validation', { overwrite: true })
-      alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
-      if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
-      alcoholMonitoringPage.form.saveAndContinueButton.click()
+      // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
+      // let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
+      // alcoholMonitoringPage.form.saveAndContinueButton.click()
+      // alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
+      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - validation', { overwrite: true })
+      // alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
+      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
+      // alcoholMonitoringPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,

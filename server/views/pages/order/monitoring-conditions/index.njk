@@ -95,23 +95,52 @@
       disabled: not isOrderEditable
     }) }}
 
-    {{ govukSelect({
-      id: "conditionType",
+    {{ govukRadios({
+      classes: "govuk-radios",
       name: "conditionType",
-      label: {
-       text: questions.conditionType.text,
-       classes: "govuk-fieldset__legend--s"
+      fieldset: {
+        legend: {
+          text: questions.conditionType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
       },
       items: [
-        { text: 'Select', value: '' },
-        { text: 'Requirement of a Community Order', value: 'REQUIREMENT_OF_A_COMMUNITY_ORDER' },
-        { text: 'License Condition of a Custodial Order', value: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER' },
-        { text: 'Post-Sentence Supervision Requirement following on from an Adult Custody order', value: 'POST_SENTENCE_SUPERVISION_REQUIREMENT' },
-        { text: 'Bail Order', value: 'BAIL_ORDER' }
+        {
+          value: "REQUIREMENT_OF_A_COMMUNITY_ORDER",
+          text: "Requirement of a Community Order",
+          hint: {
+            text: "Monitoring conditions are part of a Community Order, a Suspended Sentence Order, or a Youth Rehabilitation Order."
+          },
+          disabled: not isOrderEditable
+        },
+        {
+          value: "LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER",
+          text: "License Condition of a Custodial Order",
+          hint: {
+            text: "Device wearer is being released from prison before their sentence is complete. They are subject to specific licence conditions that include monitoring conditions."
+          },
+          disabled: not isOrderEditable
+        },
+        {
+          value: "POST_SENTENCE_SUPERVISION_REQUIREMENT",
+          text: "Post-Sentence Supervision Requirement following on from an Adult Custody order",
+          hint: {
+            text: "Device wearer licence period is complete. They are being released from a standard determinate custodial sentence of less than 2 years. They are subject to post-sentence supervision requirements that include monitoring conditions."
+          },
+          disabled: not isOrderEditable
+        },
+        {
+          value: "BAIL_ORDER",
+          text: "Bail Order",
+          hint: {
+            text: "Monitoring conditions are being imposed on the device wearer prior to trial."
+          },
+          disabled: not isOrderEditable
+        }
       ],
       value: conditionType.value,
-      errorMessage: conditionType.error,
-      disabled: not isOrderEditable
+      errorMessage: conditionType.error
     }) }}
 
     {{ govukSelect({
@@ -293,10 +322,10 @@
           value: "alcohol",
           text: "Alcohol monitoring",
           hint: {
-            text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
+            text: "This service does not yet offer Alcohol Monitoring as a monitoring requirement. If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process."
           },
           checked: monitoringRequired.values | select("equalto", "alcohol") | length,
-          disabled: not isOrderEditable
+          disabled: true
         }
       ],
       errorMessage: monitoringRequired.error,

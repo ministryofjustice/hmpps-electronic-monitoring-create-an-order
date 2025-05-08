@@ -7,7 +7,8 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// Scenario skipped as alcohol monitoring is currently disabled.
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
