@@ -19,6 +19,7 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
     },
     prison: {
       text: 'Select the name of the Prison',
+      hint: 'Enter the name without HMP. For example Berwyn prison.',
     },
     probationRegion: {
       text: 'Select the Probation region',
