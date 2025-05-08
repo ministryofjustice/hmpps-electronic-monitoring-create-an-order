@@ -17,6 +17,7 @@ generic-service:
       - digital_staff_and_mojo
       - moj_cloud_platform
       - prisons
+      - private_prisons
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
