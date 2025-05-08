@@ -13,10 +13,11 @@ import {
   createMonitoringConditionsAttendance,
   createMonitoringConditionsTrail,
   createResponsibleAdult,
+  getFilledMockOrder,
   getMockOrder,
 } from '../../test/mocks/mockOrder'
 import paths from '../constants/paths'
-import TaskListService, { Task } from './taskListService'
+import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
 
 describe('TaskListService', () => {
@@ -699,6 +700,27 @@ describe('TaskListService', () => {
       // Then
       expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
     })
+
+    it.each([
+      ['DEVICE_WEARER', paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS],
+      ['CONTACT_DETAILS', paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS],
+      ['INSTALLATION_AND_RISK', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS],
+      ['MONITORING_CONDITIONS', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS],
+    ])(
+      'should return check your answers if all other pages have been completed for that section',
+      (page: string, url: string) => {
+        // Given
+        const currentPage = page as Page
+        const taskListService = new TaskListService()
+        const order = getFilledMockOrder()
+
+        // When
+        const nextPage = taskListService.getNextPage(currentPage, order)
+
+        // Then
+        expect(nextPage).toBe(url.replace(':orderId', order.id))
+      },
+    )
   })
 
   describe('getSections', () => {
