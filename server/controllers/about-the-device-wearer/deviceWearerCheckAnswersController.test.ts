@@ -253,7 +253,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'national offender management information system (nomis) id (optional)',
               },
@@ -270,7 +270,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'police national computer (pnc) id (optional)',
               },
@@ -287,7 +287,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'delius id (optional)',
               },
@@ -304,7 +304,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number (optional)',
               },
@@ -321,7 +321,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'home office reference number (optional)',
               },
@@ -529,7 +529,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'national offender management information system (nomis) id (optional)',
               },
@@ -546,7 +546,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'police national computer (pnc) id (optional)',
               },
@@ -563,7 +563,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'delius id (optional)',
               },
@@ -580,7 +580,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number (optional)',
               },
@@ -597,7 +597,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'home office reference number (optional)',
               },
@@ -805,7 +805,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'national offender management information system (nomis) id (optional)',
               },
@@ -822,7 +822,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'police national computer (pnc) id (optional)',
               },
@@ -839,7 +839,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'delius id (optional)',
               },
@@ -856,7 +856,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number (optional)',
               },
@@ -873,7 +873,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'home office reference number (optional)',
               },
