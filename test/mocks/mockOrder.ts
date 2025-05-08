@@ -196,6 +196,54 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   ...overrideProperties,
 })
 
+export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order => ({
+  id: randomUUID(),
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  type: OrderTypeEnum.Enum.REQUEST,
+  deviceWearer: {
+    nomisId: '',
+    pncId: null,
+    deliusId: null,
+    prisonNumber: null,
+    homeOfficeReferenceNumber: null,
+    firstName: 'Test',
+    lastName: 'Testson',
+    alias: 'Test',
+    dateOfBirth: null,
+    adultAtTimeOfInstallation: null,
+    sex: null,
+    gender: null,
+    disabilities: [],
+    noFixedAbode: true,
+    interpreterRequired: null,
+  },
+  deviceWearerResponsibleAdult: null,
+  contactDetails: {
+    contactNumber: '07123456489',
+  },
+  installationAndRisk: null,
+  interestedParties: createInterestedParties(),
+  enforcementZoneConditions: [],
+  addresses: [
+    {
+      addressType: 'INSTALLATION',
+      addressLine1: '',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ],
+  additionalDocuments: [],
+  monitoringConditions: createMonitoringConditions(),
+  monitoringConditionsTrail: null,
+  mandatoryAttendanceConditions: [],
+  monitoringConditionsAlcohol: null,
+  variationDetails: null,
+  isValid: false,
+  ...overrideProperties,
+})
+
 export const getMockSubmittedOrder = (overrideProperties?: Partial<Order>) => {
   return getMockOrder({ ...overrideProperties, status: OrderStatusEnum.Enum.SUBMITTED })
 }

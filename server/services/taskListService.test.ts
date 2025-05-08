@@ -13,10 +13,11 @@ import {
   createMonitoringConditionsAttendance,
   createMonitoringConditionsTrail,
   createResponsibleAdult,
+  getFilledMockOrder,
   getMockOrder,
 } from '../../test/mocks/mockOrder'
 import paths from '../constants/paths'
-import TaskListService, { Task } from './taskListService'
+import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
 
 describe('TaskListService', () => {
@@ -699,6 +700,27 @@ describe('TaskListService', () => {
       // Then
       expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
     })
+
+    it.each([
+      ['DEVICE_WEARER', paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS],
+      ['CONTACT_DETAILS', paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS],
+      ['INSTALLATION_AND_RISK', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS],
+      ['MONITORING_CONDITIONS', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS],
+    ])(
+      'should return check your answers if all other pages have been completed for that section',
+      (page: string, url: string) => {
+        // Given
+        const currentPage = page as Page
+        const taskListService = new TaskListService()
+        const order = getFilledMockOrder()
+
+        // When
+        const nextPage = taskListService.getNextPage(currentPage, order)
+
+        // Then
+        expect(nextPage).toBe(url.replace(':orderId', order.id))
+      },
+    )
   })
 
   describe('getSections', () => {
@@ -777,22 +799,22 @@ describe('TaskListService', () => {
         {
           completed: true,
           name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: true,
           name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: true,
           name: 'RISK_INFORMATION',
-          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: true,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
           completed: false,
@@ -879,6 +901,11 @@ describe('TaskListService', () => {
       expect(sections).toEqual([
         {
           completed: false,
+          name: 'VARIATION_DETAILS',
+          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
+        },
+        {
+          completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
         },
@@ -901,11 +928,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-        },
-        {
-          completed: false,
-          name: 'VARIATION_DETAILS',
-          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
         },
       ])
     })

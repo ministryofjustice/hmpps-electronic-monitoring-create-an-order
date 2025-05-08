@@ -3,13 +3,15 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 
+const CYA_PREFIX = 'CHECK_ANSWERS'
+
 const SECTIONS = {
+  variationDetails: 'VARIATION_DETAILS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
   riskInformation: 'RISK_INFORMATION',
   electronicMonitoringCondition: 'ELECTRONIC_MONITORING_CONDITIONS',
   additionalDocuments: 'ADDITIONAL_DOCUMENTS',
-  variationDetails: 'VARIATION_DETAILS',
 } as const
 
 type Section = (typeof SECTIONS)[keyof typeof SECTIONS]
@@ -361,9 +363,19 @@ export default class TaskListService {
     return tasks
   }
 
-  getNextPage(currentPage: Page, order: Order, formData: FormData = {}) {
+  getNextPage(currentPage: Page, order: Order, formData: FormData = {}): string {
     const tasks = this.getTasks(order)
-    const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
+    const section = this.getCurrentSection(tasks, currentPage)
+    const sectionTasks = tasks.filter(task => task.section === section)
+
+    if (currentPage.startsWith(CYA_PREFIX) || currentPage === PAGES.variationDetails) {
+      const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
+      const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
+      return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    }
+    const availableTasks = sectionTasks.filter(
+      task => (canBeCompleted(task, formData) && this.incompleteTask(task)) || isCurrentPage(task, currentPage),
+    )
     const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
 
     if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
@@ -371,6 +383,14 @@ export default class TaskListService {
     }
 
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+  }
+
+  getSectionCheckAnswers(sectionTasks: Task[]): Task {
+    return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
+  }
+
+  getCurrentSection(tasks: Task[], currentPage: Page): Section {
+    return tasks.find(task => task.name === currentPage)!.section
   }
 
   getNextCheckYourAnswersPage(currentPage: Page, order: Order) {
@@ -397,6 +417,10 @@ export default class TaskListService {
     return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
   }
 
+  incompleteTask(task: Task): boolean {
+    return !task.completed || task.name.startsWith(CYA_PREFIX)
+  }
+
   getSections(order: Order): SectionBlock[] {
     const tasks = this.getTasks(order)
 
@@ -406,7 +430,7 @@ export default class TaskListService {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks)
         let { path } = sectionsTasks[0]
-        if (order.status === 'SUBMITTED') {
+        if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswerPathForSection(sectionsTasks)
         }
         return { name: section, completed, path: path.replace(':orderId', order.id) }
