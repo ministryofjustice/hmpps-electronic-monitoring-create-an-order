@@ -20,6 +20,7 @@ import tertiaryAddressPageContent from './pages/tertiaryAddress'
 import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
+import variationDetailsPageContent from './pages/variationDetails'
 import reference from './reference'
 
 const en: I18n = {
@@ -45,6 +46,7 @@ const en: I18n = {
     trailMonitoring: trailMonitoringPageContent,
     uploadLicense: uploadLicencePageContent,
     uploadPhotoId: uploadPhotoIdPageContent,
+    variationDetails: variationDetailsPageContent,
   },
   reference,
 }

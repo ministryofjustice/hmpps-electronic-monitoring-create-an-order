@@ -15,6 +15,7 @@ import NoFixedAbodePageContent from './pages/noFixedAbode'
 import ResponsibleAdultPageContent from './pages/responsibleAdult'
 import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
+import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
 
 type I18n = {
@@ -40,6 +41,7 @@ type I18n = {
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
+    variationDetails: VariationDetailsPageContent
   }
   reference: ReferenceData
 }

@@ -1,79 +1,71 @@
 {% extends "../../../partials/form-layout.njk" %}
 
-{% set pageTitle = "Variation - Variation details - " + applicationName %}
-{% set mainClasses = "app-container govuk-body" %}
-{% set section = "Variation" %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% set isDisabled = {} if isOrderEditable else { disabled: true } %}
 
+{% set section = content.pages.variationDetails.section %}
+{% set heading = content.pages.variationDetails.title %}
+{% set legend = content.pages.variationDetails.legend %}
+{% set helpText = content.pages.variationDetails.helpText %}
+
 {% block formInputs %}
 
-  {% call govukFieldset({
-    legend: {
-      text: "Variation details",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-
-    {{ govukDateInput({
-      id: "variationDate",
-      fieldset: {
-        legend: {
-          text: "When does the variation come into effect?",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
+  {{ govukDateInput({
+    id: "variationDate",
+    fieldset: {
+      legend: {
+        text: content.pages.variationDetails.questions.variationDate.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.variationDetails.questions.variationDate.hint
+    },
+    items: [
+      {
+        id: "variationDate-day",
+        name: "variationDate[day]",
+        label: "Day",
+        classes: "govuk-input--width-2",
+        value: variationDate.value.day,
+        attributes: isDisabled
       },
-      hint: {
-        text: "For example, 21 05 2025"
+      {
+        id: "variationDate-month",
+        name: "variationDate[month]",
+        label: "Month",
+        classes: "govuk-input--width-2",
+        value: variationDate.value.month,
+        attributes: isDisabled
       },
-      items: [
-        {
-          id: "variationDate-day",
-          name: "variationDate[day]",
-          label: "Day",
-          classes: "govuk-input--width-2",
-          value: variationDate.value.day,
-          attributes: isDisabled
-        },
-        {
-          id: "variationDate-month",
-          name: "variationDate[month]",
-          label: "Month",
-          classes: "govuk-input--width-2",
-          value: variationDate.value.month,
-          attributes: isDisabled
-        },
-        {
-          id: "variationDate-year",
-          name: "variationDate[year]",
-          label: "Year",
-          classes: "govuk-input--width-4",
-          value: variationDate.value.year,
-          attributes: isDisabled
-        }
-      ],
-      errorMessage: variationDate.error
-    }) }}
+      {
+        id: "variationDate-year",
+        name: "variationDate[year]",
+        label: "Year",
+        classes: "govuk-input--width-4",
+        value: variationDate.value.year,
+        attributes: isDisabled
+      }
+    ],
+    errorMessage: variationDate.error
+  }) }}
 
-    {{ govukRadios({
-      name: "variationType",
-      fieldset: {
-        legend: {
-          text: "What would you like to vary?",
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      value: variationType.value,
-      errorMessage: variationType.error,
-      items: content.reference.variationTypes | toOptions(not isOrderEditable)
-    }) }}
-
-  {% endcall %}
+  {{ govukRadios({
+    name: "variationType",
+    fieldset: {
+      legend: {
+        text: content.pages.variationDetails.questions.variationType.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    value: variationType.value,
+    errorMessage: variationType.error,
+    items: content.reference.variationTypes | toOptions(not isOrderEditable)
+  }) }}
 
 {% endblock %}
