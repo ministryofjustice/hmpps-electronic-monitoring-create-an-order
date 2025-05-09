@@ -6,7 +6,7 @@ import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
 const SECTIONS = {
-  variationDetails: 'VARIATION_DETAILS',
+  variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
   riskInformation: 'RISK_INFORMATION',

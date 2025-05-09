@@ -901,7 +901,7 @@ describe('TaskListService', () => {
       expect(sections).toEqual([
         {
           completed: false,
-          name: 'VARIATION_DETAILS',
+          name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
           path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
         },
         {

@@ -11,7 +11,7 @@ export default class VariationDetailsFormComponent extends FormComponent {
   // FIELDS
 
   get variationTypeField(): FormRadiosComponent {
-    const label = 'What would you like to vary?'
+    const label = 'What have you changed in the form?'
     return new FormRadiosComponent(this.form, label, [
       'Change of curfew hours',
       'Change of address',
@@ -22,7 +22,7 @@ export default class VariationDetailsFormComponent extends FormComponent {
   }
 
   get variationDateField(): FormDateComponent {
-    const label = 'When does the variation come into effect?'
+    const label = 'What is the date you want the changes to take effect?'
     return new FormDateComponent(this.form, label)
   }
 
