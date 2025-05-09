@@ -1,47 +1,46 @@
-{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
 {% extends "./partials/layout.njk" %}
 
 {% block content %}
   <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO) </h1>
+    <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO)</h1>
 
     <form class="form" method="post">
 
-     <p>Sign in to:</p>
+      <p>Use this service to:</p>
 
       <ul class="govuk-list govuk-list--bullet">
-        <li>submit an EMO application form</li>
-        <li>make changes to an EMO form submitted by you or someone else</li>
-        <li>view and download submitted application forms</li>
-        <li>end all monitoring early</li>
+        <li>submit an EMO application form electronically to EMS replacing sending it by email</li>
+        <li>view and download your submitted application forms</li>
+        <li>submit a change to an EMO application form</li>
       </ul>  
 
-      <h2 class="govuk-heading-s">How to sign in</h2>
+      <h2 class="govuk-heading-s">What you need to create an EMO</h2>
 
-      <p>Use the log in details you set up when your account was created.</p>
+      <p>This service does not yet allow you see and use information from other services such as Digital Prison Services (DPS) and Create and Vary a licence.</p>
+      <p>You will need to have and enter information about the device wearer and the monitoring requirements from the licence.</p>
+      <p>To help plan installation you will be asked risk information about the device wearer. Answer questions based on what you know about the device wearers previous offence and behaviour. If you do not have this information you can ask Probation.</p>
 
-      <h2 class="govuk-heading-s">Getting an account</h2>
+      <h2 class="govuk-heading-s">What is not part of this release of the online service</h2>
+      <p>This service does not yet offer Alcohol Monitoring as a monitoring requirement. You'll be notified when this service offers Alcohol Monitoring as a monitoring requirement.</p>
 
-      <p>If you don't have an account:</p>
+      {{ govukWarningText({
+        text: "If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process.",
+        iconFallbackText: "Warning"
+      }) }}
 
-       <ul class="govuk-list govuk-list--bullet">
-        <li><a class="govuk-link" target="_blank" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/get-started.html#get-started">view the timetable</a> to see if your team uses this service to submit applications. Your team may not be using the online service yet</li>
-        <li>if your team is using this service, follow the instructions to create a new account</li>
-       </ul> 
-
-      <p>You can get help with logging in if you don't have your log in details.</p>
-
-     {{ govukButton({
-        text: "Sign in",
+      {{ govukButton({
+        text: "Start now",
         href: "/sign-in",
         id: "sign-in-button",
         isStartButton: true
       }) }}
 
-    
+    </form>
   </div>
 </div>
 {% endblock %}
