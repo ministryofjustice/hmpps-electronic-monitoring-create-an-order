@@ -86,7 +86,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'Yes' },
+        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {
@@ -156,7 +156,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'Yes' },
+        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Female' },
         { key: "What is the device wearer's gender?", value: 'Self identify' },
         {
@@ -228,7 +228,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'No' },
+        { key: 'Is a responsible adult required?', value: 'Yes' },
         { key: 'What is the sex of the device wearer?', value: 'Prefer not to say' },
         { key: "What is the device wearer's gender?", value: 'Female' },
         {
@@ -305,7 +305,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'No' },
+        { key: 'Is a responsible adult required?', value: 'Yes' },
         { key: 'What is the sex of the device wearer?', value: 'Not able to provide this information' },
         { key: "What is the device wearer's gender?", value: 'Not able to provide this information' },
         {
@@ -394,7 +394,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'Yes' },
+        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {

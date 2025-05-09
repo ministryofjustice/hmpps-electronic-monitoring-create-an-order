@@ -40,7 +40,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
     ),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
-      order.deviceWearer.adultAtTimeOfInstallation,
+      order.deviceWearer.adultAtTimeOfInstallation === null ? null : !order.deviceWearer.adultAtTimeOfInstallation,
       uri,
       answerOpts,
     ),

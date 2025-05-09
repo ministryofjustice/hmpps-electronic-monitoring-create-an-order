@@ -419,7 +419,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Is a responsible adult required?',
           },
           value: {
-            text: 'Yes',
+            text: 'No',
           },
           actions: {
             items: [
@@ -695,7 +695,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Is a responsible adult required?',
           },
           value: {
-            text: 'No',
+            text: 'Yes',
           },
           actions: {
             items: [
