@@ -140,6 +140,21 @@ const signOut = (): Request =>
     },
   })
 
+const stubAuthServices = (): Request =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/auth',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: '<html><body><h1>Select service</h1></body></html>',
+    },
+  })
+
 const manageDetails = (): Request =>
   stubFor({
     request: {
@@ -223,6 +238,7 @@ const stubUnverifiableSignIn = async (userToken: UserToken) => {
 export default {
   getSignInUrl,
   stubAuthPing: ping,
+  stubAuthServices,
   stubAuthManageDetails: manageDetails,
   stubSignIn,
   stubUnverifiableSignIn,

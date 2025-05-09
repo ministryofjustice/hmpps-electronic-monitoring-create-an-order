@@ -2,6 +2,7 @@ import IndexPage from '../../pages/index'
 import AuthSignInPage from '../../pages/auth/signIn'
 import Page from '../../pages/page'
 import AuthManageDetailsPage from '../../pages/auth/manageDetails'
+import AuthServicesPage from '../../pages/auth/services'
 import StartPage from '../../pages/order/start'
 
 context('Authentication', () => {
@@ -48,6 +49,18 @@ context('Authentication', () => {
       indexPage.header.signOut().click()
 
       Page.verifyOnPage(AuthSignInPage)
+    })
+
+    it('can navigate to the HMPPS Auth services page', () => {
+      cy.task('stubAuthServices')
+
+      const indexPage = Page.visit(IndexPage)
+
+      // guard to stop page opening in new window
+      indexPage.header.authServices().get('a').invoke('removeAttr', 'target')
+      indexPage.header.authServices().click()
+
+      Page.verifyOnPage(AuthServicesPage)
     })
 
     it('can manage their details', () => {
