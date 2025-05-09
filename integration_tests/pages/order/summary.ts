@@ -34,7 +34,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   get variationDetailsTask(): Task {
-    return new Task('Variation details')
+    return new Task('About the changes in this version of the form')
   }
 
   get aboutTheDeviceWearerTask(): Task {
