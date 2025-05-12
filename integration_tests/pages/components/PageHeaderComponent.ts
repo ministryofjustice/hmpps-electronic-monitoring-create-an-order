@@ -18,6 +18,8 @@ export default class PageHeaderComponent {
     this.element.contains('Apply, change or end an Electronic Monitoring Order (EMO)', { log: false })
   }
 
+  authServices = (): PageElement => this.element.get('[data-qa=authServices]')
+
   signOut = (): PageElement => this.element.get('[data-qa=signOut]')
 
   manageDetails = (): PageElement => this.element.get('[data-qa=manageDetails]')

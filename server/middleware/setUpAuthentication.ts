@@ -42,6 +42,10 @@ export default function setUpAuth(): Router {
     } else res.redirect(authSignOutUrl)
   })
 
+  router.use('/auth', (req, res) => {
+    res.redirect(authUrl)
+  })
+
   router.use('/account-details', (req, res) => {
     res.redirect(`${authUrl}/account-details?${authParameters}`)
   })
