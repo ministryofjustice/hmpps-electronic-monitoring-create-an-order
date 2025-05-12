@@ -1,46 +1,56 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% extends "./partials/layout.njk" %}
 
 {% block content %}
   <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO)</h1>
+      {% set notificationBannerHtml %}
+        <p class="govuk-notification-banner__heading">This service is currently invite only</p>
+        <p> It is being trialed by a limited number of users before it will be rolled out to all users. You must continue to send EMO application forms by email until you receive an invite.</p>
+      {% endset %}
 
-    <form class="form" method="post">
-
-      <p>Use this service to:</p>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>submit an EMO application form electronically to EMS replacing sending it by email</li>
-        <li>view and download your submitted application forms</li>
-        <li>submit a change to an EMO application form</li>
-      </ul>  
-
-      <h2 class="govuk-heading-s">What you need to create an EMO</h2>
-
-      <p>This service does not yet allow you see and use information from other services such as Digital Prison Services (DPS) and Create and Vary a licence.</p>
-      <p>You will need to have and enter information about the device wearer and the monitoring requirements from the licence.</p>
-      <p>To help plan installation you will be asked risk information about the device wearer. Answer questions based on what you know about the device wearers previous offence and behaviour. If you do not have this information you can ask Probation.</p>
-
-      <h2 class="govuk-heading-s">What is not part of this release of the online service</h2>
-      <p>This service does not yet offer Alcohol Monitoring as a monitoring requirement. You'll be notified when this service offers Alcohol Monitoring as a monitoring requirement.</p>
-
-      {{ govukWarningText({
-        text: "If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process.",
-        iconFallbackText: "Warning"
+      {{ govukNotificationBanner({
+        html: notificationBannerHtml
       }) }}
 
-      {{ govukButton({
-        text: "Start now",
-        href: "/sign-in",
-        id: "sign-in-button",
-        isStartButton: true
-      }) }}
+      <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO)</h1>
 
-    </form>
+      <form class="form" method="post">
+
+        <p>Use this service to:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>submit an EMO application form electronically to EMS replacing sending it by email</li>
+          <li>view and download your submitted application forms</li>
+          <li>submit a change to an EMO application form</li>
+        </ul>  
+
+        <h2 class="govuk-heading-s">What you need to create an EMO</h2>
+
+        <p>This service does not yet allow you see and use information from other services such as Digital Prison Services (DPS) and Create and Vary a licence.</p>
+        <p>You will need to have and enter information about the device wearer and the monitoring requirements from the licence.</p>
+        <p>To help plan installation you will be asked risk information about the device wearer. Answer questions based on what you know about the device wearers previous offence and behaviour. If you do not have this information you can ask Probation.</p>
+
+        <h2 class="govuk-heading-s">What is not part of this release of the online service</h2>
+        <p>This service does not yet offer Alcohol Monitoring as a monitoring requirement. You'll be notified when this service offers Alcohol Monitoring as a monitoring requirement.</p>
+
+        {{ govukWarningText({
+          text: "If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process.",
+          iconFallbackText: "Warning"
+        }) }}
+
+        {{ govukButton({
+          text: "Start now",
+          href: "/sign-in",
+          id: "sign-in-button",
+          isStartButton: true
+        }) }}
+
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}
