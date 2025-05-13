@@ -46,7 +46,7 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
   const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
   const { questions } = content.pages.monitoringConditions
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts),
     createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts),
@@ -74,7 +74,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n) => {
 
   return [
     createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri, {
-      ignoreActions: order.status === 'SUBMITTED',
+      ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
     }),
   ]
 }
@@ -127,7 +127,7 @@ const createCurfewTimetableAnswers = (order: Order) => {
         : createAddressPreview(address)
 
       return createMultipleChoiceAnswer(preview, groups[group].map(createSchedulePreview), uri, {
-        ignoreActions: order.status === 'SUBMITTED',
+        ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
       })
     })
 }
@@ -140,7 +140,7 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createDateAnswer(
       questions.releaseDate.text,
@@ -172,7 +172,7 @@ const createCurfewAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
@@ -200,7 +200,7 @@ const createExclusionZoneAnswers = (order: Order, content: I18n) => {
       const zoneId = enforcementZone.zoneId || 0
       const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
 
-      const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+      const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
       return [
         createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts),
         createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts),
@@ -219,7 +219,7 @@ const createTrailAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createDateAnswer(questions.startDate.text, order.monitoringConditionsTrail?.startDate, uri, answerOpts),
     createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri, answerOpts),
@@ -238,7 +238,7 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
     )
     const { questions } = content.pages.attendance
 
-    const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+    const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
     return [
       createDateAnswer(questions.startDate.text, attendance.startDate, uri, answerOpts),
       createDateAnswer(questions.endDate.text, attendance.endDate, uri, answerOpts),
@@ -274,7 +274,7 @@ const createAlcoholAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createAnswer(questions.monitoringType.text, monitoringType, uri, answerOpts),
     createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri, answerOpts),

@@ -15,7 +15,7 @@ const createContactDetailsAnswers = (order: Order, content: I18n) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
   return [
     createAnswer(content.pages.contactDetails.questions.contactNumber.text, order.contactDetails?.contactNumber, uri, {
-      ignoreActions: order.status === 'SUBMITTED',
+      ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
     }),
   ]
 }
@@ -31,7 +31,7 @@ const createAddressAnswers = (order: Order, content: I18n) => {
   const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
   const tertiaryAddress = order.addresses.find(({ addressType }) => addressType === 'TERTIARY')
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = [
     createBooleanAnswer(
       content.pages.noFixedAbode.questions.noFixedAbode.text,
@@ -65,7 +65,7 @@ const createAddressAnswers = (order: Order, content: I18n) => {
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string) => {
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   if (notifyingOrganisation === 'PRISON') {
     return [
       createAnswer(
@@ -106,7 +106,7 @@ const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri
   const responsibleOrganisation = order.interestedParties?.responsibleOrganisation
   const { questions } = content.pages.interestedParties
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   if (responsibleOrganisation === 'PROBATION') {
     return [
       createAnswer(
@@ -137,7 +137,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
 
   const { questions } = content.pages.interestedParties
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createAnswer(
       questions.notifyingOrganisation.text,

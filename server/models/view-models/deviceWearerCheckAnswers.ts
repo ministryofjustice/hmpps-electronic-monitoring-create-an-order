@@ -13,7 +13,7 @@ const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) =
   if (order.deviceWearer.disabilities.includes('OTHER')) {
     return [
       createAnswer(content.pages.deviceWearer.questions.otherDisability.text, order.deviceWearer.otherDisability, uri, {
-        ignoreActions: order.status === 'SUBMITTED',
+        ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
       }),
     ]
   }
@@ -27,7 +27,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
     lookup(content.reference.disabilities, disability),
   )
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri, answerOpts),
     createAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri, answerOpts),
@@ -71,7 +71,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
 const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri, answerOpts),
     createAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri, answerOpts),
@@ -98,7 +98,7 @@ const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string)
         content.pages.responsibleAdult.questions.otherRelationship.text,
         order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
         uri,
-        { ignoreActions: order.status === 'SUBMITTED' },
+        { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' },
       ),
     ]
   }
@@ -117,7 +117,7 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   return [
     createAnswer(
       content.pages.responsibleAdult.questions.relationship.text,

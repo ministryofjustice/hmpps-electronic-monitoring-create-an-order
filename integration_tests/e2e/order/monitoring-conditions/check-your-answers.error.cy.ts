@@ -1,0 +1,62 @@
+import { v4 as uuidv4 } from 'uuid'
+import Page from '../../../pages/page'
+import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
+
+const mockOrderId = uuidv4()
+
+context('Monitoring conditions - check your answers', () => {
+  context('Order that failed to submit to Serco', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'ERROR',
+        order: {
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+          },
+          fmsResultDate: new Date('2024 12 14'),
+        },
+      })
+    })
+
+    it('should show answers without any actions', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, 'View answers')
+
+      // Should show the correct answers
+      page.monitoringConditionsSection().should('exist')
+      page.installationAddressSection().should('exist')
+      page.curfewOnDayOfReleaseSection().should('exist')
+      page.curfewSection().should('exist')
+      page.curfewTimetableSection().should('exist')
+      page.trailMonitoringConditionsSection().should('exist')
+      page.alcoholMonitoringConditionsSection().should('exist')
+
+      // Should not have any "change" links
+      page.changeLinks.should('not.exist')
+
+      // Should show the correct buttons
+      page.continueButton().should('exist')
+      page.continueButton().contains('Go to next section')
+      page.returnButton().should('exist')
+      page.returnButton().contains('Return to main form menu')
+    })
+  })
+})
