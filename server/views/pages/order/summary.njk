@@ -58,15 +58,26 @@
       {% for section in sections %}
         {% set name = section.name | replace("_", " ") | capitalize %}
 
-        {% set statusArgs = { 
+        {% if not isOrderEditable %}
+          {% set statusArgs = {} %}
+        {% elif section.name == 'ADDITIONAL_DOCUMENTS' %}
+          {% set statusArgs = { 
+            tag: {
+              text: 'Optional',
+              classes: 'govuk-tag--green'
+            }
+          } %}
+        {% elif section.completed %}
+          {% set statusArgs = { 
             text: 'Complete'
-        } if section.completed else {
-          tag: {
-            text: 'Incomplete'
-          }
-        } %}
-
-        {% set statusArgs = statusArgs if isOrderEditable else {} %}
+          } %}
+        {% else %}
+          {% set statusArgs = { 
+            tag: {
+              text: 'Incomplete'
+            }
+          } %}
+        {% endif %}
 
         {% set items = (items.push({
           idPrefix: "order-section",

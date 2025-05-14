@@ -24,7 +24,7 @@ context('Order Summary', () => {
       page.submitOrderButton.should('exist')
     })
 
-    it('should display all tasks as incomplete or unable to start for a new order', () => {
+    it('should display all tasks except Additional Documents as incomplete or unable to start for a new order', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
@@ -43,12 +43,16 @@ context('Order Summary', () => {
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
       page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
 
-      page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
-      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
-
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
 
       page.submitOrderButton.should('be.disabled')
+    })
+
+    it('should display the Additional Documents task as optional for a new order', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
     })
 
     it('Should be accessible', () => {
@@ -73,7 +77,7 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should display all tasks as incomplete or unable to start for a new variation', () => {
+    it('should display all tasks except Additional Documents as incomplete or unable to start for a new variation', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
@@ -92,13 +96,17 @@ context('Order Summary', () => {
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
       page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
 
-      page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
-      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
-
       page.variationDetailsTask.shouldHaveStatus('Incomplete')
       page.variationDetailsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/variation/details`)
 
       page.submitOrderButton.should('be.disabled')
+    })
+
+    it('should display the Additional Documents task as optional for a new variation', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
     })
 
     it('Should be accessible', () => {
