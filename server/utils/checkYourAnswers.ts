@@ -1,4 +1,4 @@
-import { isNullOrUndefined, convertBooleanToEnum, createAddressPreview } from './utils'
+import { isNullOrUndefined, convertBooleanToEnum, createAddressPreview, trimSeconds } from './utils'
 import { AddressWithoutType } from '../models/Address'
 
 type Optional<T> = T | null | undefined
@@ -61,7 +61,7 @@ const createDatePreview = (value: Optional<string>) =>
   isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString('en-GB')
 
 const createTimePreview = (value: Optional<string>) =>
-  isNullOrUndefined(value) ? '' : new Date(value).toLocaleTimeString('en-GB')
+  isNullOrUndefined(value) ? '' : trimSeconds(new Date(value).toLocaleTimeString('en-GB'))
 
 export const createDateAnswer = (key: string, value: Optional<string>, uri: string, opts: AnswerOptions = {}): Answer =>
   createAnswer(key, createDatePreview(value), uri, opts)
