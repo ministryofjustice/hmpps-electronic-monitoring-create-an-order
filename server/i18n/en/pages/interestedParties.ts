@@ -15,7 +15,7 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
     },
     notifyingOrganisationEmail: {
       text: "What is your team's contact email address?",
-      hint: "Provide the email address for a mailbox that member's of your team can access. Do not provide a personal email address.",
+      hint: 'Provide the email address for a mailbox that members of your team can access. Do not provide a personal email address.',
     },
     prison: {
       text: 'Select the name of the Prison',
