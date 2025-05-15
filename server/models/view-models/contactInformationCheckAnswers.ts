@@ -6,21 +6,24 @@ import prisons from '../../reference/prisons'
 import probationRegions from '../../reference/probation-regions'
 import youthJusticeServiceRegions from '../../reference/youth-justice-service-regions'
 import responsibleOrganisations from '../../reference/responsible-organisations'
-import { createAddressAnswer, createBooleanAnswer, createAnswer } from '../../utils/checkYourAnswers'
+import { createAddressAnswer, createBooleanAnswer, createAnswer, AnswerOptions } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 
-const createContactDetailsAnswers = (order: Order, content: I18n) => {
+const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
   return [
-    createAnswer(content.pages.contactDetails.questions.contactNumber.text, order.contactDetails?.contactNumber, uri, {
-      ignoreActions: order.status === 'SUBMITTED',
-    }),
+    createAnswer(
+      content.pages.contactDetails.questions.contactNumber.text,
+      order.contactDetails?.contactNumber,
+      uri,
+      answerOpts,
+    ),
   ]
 }
 
-const createAddressAnswers = (order: Order, content: I18n) => {
+const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
   const addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
   const primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
@@ -31,7 +34,6 @@ const createAddressAnswers = (order: Order, content: I18n) => {
   const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
   const tertiaryAddress = order.addresses.find(({ addressType }) => addressType === 'TERTIARY')
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   const answers = [
     createBooleanAnswer(
       content.pages.noFixedAbode.questions.noFixedAbode.text,
@@ -62,10 +64,10 @@ const createAddressAnswers = (order: Order, content: I18n) => {
   return answers
 }
 
-const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string) => {
+const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+
   if (notifyingOrganisation === 'PRISON') {
     return [
       createAnswer(
@@ -102,11 +104,15 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
   return []
 }
 
-const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri: string) => {
+const getResponsibleOrganisationRegionAnswer = (
+  order: Order,
+  content: I18n,
+  uri: string,
+  answerOpts: AnswerOptions,
+) => {
   const responsibleOrganisation = order.interestedParties?.responsibleOrganisation
   const { questions } = content.pages.interestedParties
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   if (responsibleOrganisation === 'PROBATION') {
     return [
       createAnswer(
@@ -132,12 +138,11 @@ const getResponsibleOrganisationRegionAnswer = (order: Order, content: I18n, uri
   return []
 }
 
-const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
+const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
 
   const { questions } = content.pages.interestedParties
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createAnswer(
       questions.notifyingOrganisation.text,
@@ -145,7 +150,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
       uri,
       answerOpts,
     ),
-    ...getNotifyingOrganisationNameAnswer(order, content, uri),
+    ...getNotifyingOrganisationNameAnswer(order, content, uri, answerOpts),
     createAnswer(
       questions.notifyingOrganisationEmail.text,
       order.interestedParties?.notifyingOrganisationEmail,
@@ -170,7 +175,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
       uri,
       answerOpts,
     ),
-    ...getResponsibleOrganisationRegionAnswer(order, content, uri),
+    ...getResponsibleOrganisationRegionAnswer(order, content, uri, answerOpts),
     createAnswer(
       questions.responsibleOrganisationEmail.text,
       order.interestedParties?.responsibleOrganisationEmail,
@@ -180,11 +185,16 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n) => {
   ]
 }
 
-const createViewModel = (order: Order, content: I18n) => ({
-  contactDetails: createContactDetailsAnswers(order, content),
-  addresses: createAddressAnswers(order, content),
-  interestedParties: createInterestedPartiesAnswers(order, content),
-  submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-})
+const createViewModel = (order: Order, content: I18n) => {
+  const answerOpts = {
+    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
+  }
+  return {
+    contactDetails: createContactDetailsAnswers(order, content, answerOpts),
+    addresses: createAddressAnswers(order, content, answerOpts),
+    interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+  }
+}
 
 export default createViewModel

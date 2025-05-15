@@ -14,10 +14,22 @@
     href: "/order/" + order.id + "/summary"
   }) }}
 
-  {% if order.status == "SUBMITTED" %}
+  {% if order.status === "SUBMITTED" %}
     {% set html %}
       <p class="govuk-notification-banner__heading">
         You are viewing a submitted order.
+      </p>
+    {% endset %}
+
+    {{ govukNotificationBanner({
+      html: html
+    }) }}
+  {% endif %}
+
+   {% if order.status === "ERROR" %}
+    {% set html %}
+      <p class="govuk-notification-banner__heading">
+         This form failed to submit. This was due to a technical problem. For more information <a href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/index.html">view the guidance (opens in a new tab)</a> .
       </p>
     {% endset %}
 
