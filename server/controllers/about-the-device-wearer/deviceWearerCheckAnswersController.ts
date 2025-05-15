@@ -26,7 +26,7 @@ export default class DeviceWearerCheckAnswersController {
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     if (action === 'continue') {
-      if (order.status === 'SUBMITTED') {
+      if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
         res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order))
       } else {
         res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_DEVICE_WEARER', order))

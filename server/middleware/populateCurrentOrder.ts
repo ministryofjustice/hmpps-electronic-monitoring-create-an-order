@@ -13,6 +13,7 @@ const populateOrder =
 
       req.order = order
       res.locals.orderId = order.id
+      res.locals.orderStatus = order.status
       res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
       res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
 

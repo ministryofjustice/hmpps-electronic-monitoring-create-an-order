@@ -686,6 +686,118 @@ context('Contact Information - check your answers', () => {
     })
   })
 
+  context('Application failed to submit', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'ERROR',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+          },
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            dateOfBirth: null,
+            disabilities: null,
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+        },
+      })
+    })
+
+    const pageHeading = 'View answers'
+
+    it('shows correct banner', () => {
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.submittedBanner.contains(
+        'This form failed to submit. This was due to a technical problem. For more information ',
+      )
+      page.submittedBanner.contains('a', 'view the guidance (opens in a new tab)')
+    })
+
+    it('shows contact information caption', () => {
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.checkOnPage()
+    })
+
+    it('displays the correct answers for checking', () => {
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+      page.contactDetailsSection.shouldExist()
+      page.contactDetailsSection.shouldHaveItems([
+        { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
+      ])
+
+      page.deviceWearerAddressesSection.shouldExist()
+      page.deviceWearerAddressesSection.shouldHaveItems([
+        { key: 'Does the device wearer have a fixed address?', value: 'No' },
+      ])
+
+      page.deviceWearerAddressesSection.shouldNotHaveItems([
+        "What is the device wearer's main address?",
+        "What is the device wearer's second address?",
+        "What is the device wearer's third address?",
+      ])
+      page.organisationDetailsSection.shouldExist()
+      page.organisationDetailsSection.shouldHaveItems([
+        { key: 'What organisation or related organisation are you part of?', value: 'Home Office' },
+        { key: "What is your team's contact email address?", value: 'notifying@organisation' },
+        { key: "What is the Responsible Officer's full name?", value: 'name' },
+        { key: "What is the Responsible Officer's telephone number?", value: '01234567891' },
+        { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+        { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
+      ])
+      page.deviceWearerAddressesSection.shouldNotHaveItems([
+        'Select the name of the Crown Court',
+        'Select the name of the Court',
+        'Select the name of the Prison',
+        'Select the Probation region',
+        'Select the Youth Justice Service region',
+      ])
+    })
+    it('does not show "change" links', () => {
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.changeLinks.should('not.exist')
+    })
+
+    it('shows correct buttons', () => {
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.continueButton().should('exist')
+      page.continueButton().contains('Go to next section')
+      page.returnButton().should('exist')
+      page.returnButton().contains('Return to main form menu')
+    })
+  })
+
   context('Unhealthy backend', () => {
     beforeEach(() => {
       cy.task('reset')
