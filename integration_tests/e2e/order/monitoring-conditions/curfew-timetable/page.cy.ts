@@ -41,7 +41,7 @@ context('Monitoring conditions - Curfew timetable', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
     })
 
     it('Should display the timetable form', () => {
@@ -101,7 +101,7 @@ context('Monitoring conditions - Curfew timetable', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
     })
 
     it('Should display the timetable form', () => {
@@ -194,7 +194,7 @@ context('Monitoring conditions - Curfew timetable', () => {
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()

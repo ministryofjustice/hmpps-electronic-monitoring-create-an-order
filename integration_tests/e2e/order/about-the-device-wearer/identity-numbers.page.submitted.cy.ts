@@ -36,7 +36,7 @@ context('About the device wearer', () => {
 
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
-        page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+        page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
         page.form.shouldBeDisabled()
         page.errorSummary.shouldNotExist()
       })

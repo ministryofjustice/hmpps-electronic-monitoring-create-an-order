@@ -85,7 +85,7 @@ context('Alcohol monitoring', () => {
       page.form.probationNameField.shouldHaveValue('Probation Office')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndContinueButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
     })
 
     it('Should correctly display the submitted data in disabled fields (prison)', () => {
@@ -110,7 +110,7 @@ context('Alcohol monitoring', () => {
       page.form.prisonNameField.shouldHaveValue('Prison Name')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndContinueButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
     })
   })
 

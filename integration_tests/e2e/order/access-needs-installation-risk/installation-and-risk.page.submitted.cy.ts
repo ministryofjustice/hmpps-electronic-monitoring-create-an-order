@@ -50,7 +50,7 @@ context('Access needs and installation risk information', () => {
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
-        page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+        page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable
         page.form.shouldBeDisabled()

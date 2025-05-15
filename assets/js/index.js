@@ -11,3 +11,10 @@ if (downloadButton) {
     window.print()
   })
 }
+
+const backButton = document.getElementsByClassName('govuk-back-link')[0]
+if(backButton) {
+  backButton.addEventListener('click', () => {
+    window.history.back()
+  })
+}
