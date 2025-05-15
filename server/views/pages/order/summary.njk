@@ -26,12 +26,6 @@
       <h1 class="govuk-heading-l">
         {{ heading }}
       </h1>
-        
-      {% if order.status === 'SUBMITTED' %}
-        <p>
-          You can make changes to this form or end all monitoring for the device wearer
-        </p>
-      {% endif %}
 
       {% if order.status === "ERROR" %}
         {% set insetHtml %}
