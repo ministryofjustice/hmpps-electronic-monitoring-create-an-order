@@ -89,6 +89,13 @@ export const deserialiseTime = (timeString?: string | null): [hours: string, min
   return [timeMatch[1], timeMatch[2]]
 }
 
+export const trimSeconds = (timeString?: string | null): string => {
+  if (!timeString || isBlank(timeString)) {
+    return ''
+  }
+  return timeString.split(':').slice(0, 2).join(':')
+}
+
 export const getError = (validationErrors: ValidationResult, field: string): ErrorMessage | undefined => {
   const matchedError = validationErrors.find(e => e.field === field)
 

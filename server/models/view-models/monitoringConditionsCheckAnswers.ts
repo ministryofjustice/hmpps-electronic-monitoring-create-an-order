@@ -6,6 +6,7 @@ import {
   formatDateTime,
   isNullOrUndefined,
   lookup,
+  trimSeconds,
 } from '../../utils/utils'
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
@@ -80,7 +81,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n) => {
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
-  `${convertToTitleCase(schedule.dayOfWeek)} - ${schedule.startTime}-${schedule.endTime}`
+  `${convertToTitleCase(schedule.dayOfWeek)} - ${trimSeconds(schedule.startTime)}-${trimSeconds(schedule.endTime)}`
 
 const groupTimetableByAddress = (timetable: CurfewTimetable) =>
   timetable.reduce(
@@ -244,8 +245,8 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
       createDateAnswer(questions.endDate.text, attendance.endDate, uri, answerOpts),
       createAnswer(questions.purpose.text, attendance.purpose, uri, answerOpts),
       createAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri, answerOpts),
-      createAnswer(questions.startTime.text, attendance.startTime, uri, answerOpts),
-      createAnswer(questions.endTime.text, attendance.endTime, uri, answerOpts),
+      createAnswer(questions.startTime.text, trimSeconds(attendance.startTime), uri, answerOpts),
+      createAnswer(questions.endTime.text, trimSeconds(attendance.endTime), uri, answerOpts),
       createAddressAnswer(
         questions.address.text,
         {
