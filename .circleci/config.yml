@@ -143,6 +143,8 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
+    environment:
+      TZ: Europe/London
     steps:
       - checkout
       - attach_workspace:
