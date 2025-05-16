@@ -103,7 +103,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
       const month = parseInt(value.month, 10) - 1
       const year = parseInt(value.year, 10)
 
-      return new Date(Date.UTC(year, month, day)).toISOString()
+      return new Date(year, month, day).toISOString()
     })
     .pipe(z.string().datetime().nullable())
 }
