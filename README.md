@@ -169,3 +169,47 @@ Instructions for this can be found in the readme of the [Create an EM Order API 
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)
+
+## Architecture
+
+```mermaid
+C4Context
+  title Create an EM Order
+
+  Enterprise_Boundary(hmpps, "HMPPS") {
+    Person(prisonUser, "Prison User", "Prison Admin")
+    Person(probationUser, "Probation User", "Probation Admin")
+  
+    Enterprise_Boundary(justiceDigital, "HMPPS Digital") {
+      System_Ext(hmppsAuth, "HMPPS Auth", "")
+      System(cemo, "CEMO", "")
+      System_Ext(probationInCourtService, "Prepare a Case for Sentence Service", "")
+    }
+  }
+
+  Enterprise_Boundary(FMS, "Field Monitoring Service") {
+    System_Ext(emFMS, "EM Field Monitoring Service (FMS)", "")
+
+    Person(emFMSUser, "FMS User", "Serco Employee")
+  }
+  
+  Enterprise_Boundary(HMTCS, "HMCTS") {
+    Person(courtUser, "Court User", "Court Admin")
+    System_Ext(commonPlatform, "Common Platform (HMCTS)", "")
+  }
+  
+  Person(homeOfficeUser , "Home Office User", "Immigration")
+
+  Rel(commonPlatform, probationInCourtService, "Streams court events")
+  Rel(probationInCourtService, cemo, "Streams court events")
+  Rel(cemo, hmppsAuth, "Gets an Auth token")
+  Rel(cemo, emFMS, "Creates an Order over API")
+
+  Rel(courtUser, commonPlatform, "Order created on Common Platform")
+  Rel(prisonUser, cemo, "Enter an order")
+  Rel(probationUser, cemo, "Enter an order")
+  Rel(homeOfficeUser, cemo, "Enter an order")
+  Rel(emFMSUser, emFMS, "Validates order")
+
+UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+```
