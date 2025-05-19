@@ -4,7 +4,6 @@ import { MonitoringConditionsFormData } from '../form-data/monitoringConditions'
 import { MonitoringConditions } from '../MonitoringConditions'
 import { ValidationResult } from '../Validation'
 import { DateTimeField, MultipleChoiceField, ViewModel } from './utils'
-import config from '../../config'
 
 type MonitoringConditionsViewModel = ViewModel<
   Pick<
@@ -69,7 +68,6 @@ const createViewModelFromMonitoringConditions = (
     value: deserialiseDateTime(monitoringConditions.startDate),
   },
   errorSummary: null,
-  monitoringConditionTimes: config.monitroingConditionTimes.enabled,
 })
 
 const createViewModelFromFormData = (
@@ -123,7 +121,6 @@ const createViewModelFromFormData = (
       timeError: getError(validationErrors, 'startDate_time'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    monitoringConditionTimes: config.monitroingConditionTimes.enabled,
   }
 }
 
