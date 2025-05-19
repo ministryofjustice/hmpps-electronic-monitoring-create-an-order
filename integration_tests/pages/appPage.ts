@@ -17,6 +17,10 @@ export default class AppPage extends Page {
     return cy.contains('Save and return to main form menu')
   }
 
+  get returnBackToFormSectionMenuButton(): PageElement {
+    return cy.contains('Return back to form section menu')
+  }
+
   get submittedBanner(): PageElement {
     return cy.get('.govuk-notification-banner')
   }
