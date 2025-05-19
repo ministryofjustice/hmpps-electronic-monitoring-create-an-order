@@ -17,6 +17,8 @@ const backButton = document.getElementsByClassName('govuk-back-link')[0]
 if(backButton) {
   backButton.addEventListener('click', () => {
     window.history.back()
+  })
+}
 
 function nodeListForEach(nodes, callback) {
   if (window.NodeList.prototype.forEach) {
