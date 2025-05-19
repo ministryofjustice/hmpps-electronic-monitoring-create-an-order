@@ -8,5 +8,5 @@ export default class DeleteSuccessPage extends AppPage {
     super('Application form successfully deleted', paths.ORDER.DELETE)
   }
 
-  backButton = (): PageElement => cy.get('#back-button')
+  backToStartButton = (): PageElement => cy.get('#back-button')
 }

@@ -33,7 +33,7 @@ context('Access needs and installation risk information', () => {
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
-        page.backToSummaryButton.should('exist')
+        page.backButton.should('exist')
       })
 
       it('Should be accessible', () => {

@@ -104,7 +104,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-year').invoke('val').should('equal', '2025')
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
+      page.backButton.should('exist').should('have.attr', 'href', '#')
       page.errorSummary.shouldNotExist()
     })
   })

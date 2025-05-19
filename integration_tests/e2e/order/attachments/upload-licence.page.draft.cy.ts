@@ -31,7 +31,7 @@ context('Attachments', () => {
         // Buttons
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
-        page.backToSummaryButton.should('exist')
+        page.backButton.should('exist')
       })
 
       it('Should be accessible', () => {

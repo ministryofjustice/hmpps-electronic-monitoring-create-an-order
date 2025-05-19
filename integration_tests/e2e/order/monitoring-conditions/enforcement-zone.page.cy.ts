@@ -32,7 +32,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist')
+      page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
     })
 
@@ -59,7 +59,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
+      page.backButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()

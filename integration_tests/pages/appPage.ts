@@ -9,6 +9,10 @@ export default class AppPage extends Page {
     super(title, uri, subtitle)
   }
 
+  get backButton(): PageElement {
+    return cy.contains('Back')
+  }
+
   get backToSummaryButton(): PageElement {
     return cy.contains('Save and return to main form menu')
   }

@@ -77,7 +77,7 @@ context('Monitoring conditions', () => {
         page.form.prarrField.shouldHaveValue('Not able to provide this information')
 
         page.errorSummary.shouldNotExist()
-        page.backToSummaryButton.should('exist')
+        page.backButton.should('exist')
       })
     })
   })

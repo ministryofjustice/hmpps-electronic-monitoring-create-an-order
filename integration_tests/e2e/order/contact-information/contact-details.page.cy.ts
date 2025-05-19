@@ -32,7 +32,7 @@ context('Contact details - Contact information', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist')
+      page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
     })
 
@@ -60,7 +60,7 @@ context('Contact details - Contact information', () => {
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.errorSummary.shouldNotExist()
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', '#')
+      page.backButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()
