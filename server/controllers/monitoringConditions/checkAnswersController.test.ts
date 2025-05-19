@@ -37,7 +37,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
   describe('view', () => {
     it('should render the check answers page without any answers completed', async () => {
       // Given
-      config.monitroingConditionTimes.enabled = true
+      config.monitoringConditionTimes.enabled = true
       const order = getMockOrder()
       const req = createMockRequest({
         order,
@@ -292,7 +292,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed feature flag is on', async () => {
       // Given
-      config.monitroingConditionTimes.enabled = true
+      config.monitoringConditionTimes.enabled = true
       const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94'
       const order = getMockOrder({
         addresses: [
@@ -1274,7 +1274,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed feature flag is off', async () => {
       // Given
-      config.monitroingConditionTimes.enabled = false
+      config.monitoringConditionTimes.enabled = false
       const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94'
       const order = getMockOrder({
         addresses: [

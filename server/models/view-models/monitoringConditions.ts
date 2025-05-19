@@ -69,7 +69,7 @@ const createViewModelFromMonitoringConditions = (
     value: deserialiseDateTime(monitoringConditions.startDate),
   },
   errorSummary: null,
-  monitoringConditionTimes: config.monitroingConditionTimes.enabled,
+  monitoringConditionTimes: config.monitoringConditionTimes.enabled,
 })
 
 const createViewModelFromFormData = (
@@ -123,7 +123,7 @@ const createViewModelFromFormData = (
       timeError: getError(validationErrors, 'startDate_time'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    monitoringConditionTimes: config.monitroingConditionTimes.enabled,
+    monitoringConditionTimes: config.monitoringConditionTimes.enabled,
   }
 }
 

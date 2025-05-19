@@ -51,10 +51,10 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
 
   const answers: Answer[] = []
   answers.push(createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts))
-  if (config.monitroingConditionTimes.enabled)
+  if (config.monitoringConditionTimes.enabled)
     answers.push(createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts))
   answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
-  if (config.monitroingConditionTimes.enabled)
+  if (config.monitoringConditionTimes.enabled)
     answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
   answers.push(
     ...[
