@@ -184,13 +184,13 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'Curfew with EM',
-                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
-                    end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                   },
                   {
                     condition: 'Location Monitoring (Fitted Device)',
-                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -251,8 +251,8 @@ context('Scenarios', () => {
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
                 curfew_description: '',
-                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
-                curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+                curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 curfew_duration: [
                   {
                     location: 'primary',

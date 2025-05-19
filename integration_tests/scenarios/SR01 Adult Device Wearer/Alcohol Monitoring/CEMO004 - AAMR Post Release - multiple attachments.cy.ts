@@ -234,8 +234,8 @@ context.skip('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'AAMR',
-                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate),
+                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',

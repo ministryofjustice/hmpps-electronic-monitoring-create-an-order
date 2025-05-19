@@ -157,8 +157,8 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'Location Monitoring (Fitted Device)',
-                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
