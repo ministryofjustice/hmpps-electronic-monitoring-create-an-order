@@ -32,11 +32,13 @@ export default class MonitoringConditionsController {
     const { orderId } = req.params
     const formData = MonitoringConditionsFormDataParser.parse(req.body)
 
-    if (!config.monitroingContionTimes.enabled) {
+    if (!config.monitroingConditionTimes.enabled) {
       formData.startDate.hours = '00'
       formData.startDate.minutes = '00'
-      formData.endDate.hours = '23'
-      formData.endDate.minutes = '59'
+      if (formData.endDate.day) {
+        formData.endDate.hours = '23'
+        formData.endDate.minutes = '59'
+      }
     }
     const updateMonitoringConditionsResult = await this.monitoringConditionsService.updateMonitoringConditions({
       accessToken: res.locals.user.token,
