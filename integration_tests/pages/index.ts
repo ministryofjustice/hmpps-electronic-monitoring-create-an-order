@@ -44,4 +44,8 @@ export default class IndexPage extends AppPage {
   DraftOrderFor(name: string): PageElement {
     return this.ordersList.contains('li', `${name} Draft`)
   }
+
+  FailedOrderFor(name: string): PageElement {
+    return this.ordersList.contains('li', `${name} Failed to submit`)
+  }
 }

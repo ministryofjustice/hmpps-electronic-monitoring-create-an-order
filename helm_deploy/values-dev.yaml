@@ -14,6 +14,9 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
     CEMO_API_URL: "https://hmpps-electronic-monitoring-create-an-order-api-dev.hmpps.service.justice.gov.uk"
+    
+  allowlist:
+    unrestricted: "0.0.0.0/0"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-electronic-monitoring-create-an-order-dev

@@ -8,7 +8,7 @@ import config from '../../config'
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = [
     createAnswer(
       questions.offence.text,

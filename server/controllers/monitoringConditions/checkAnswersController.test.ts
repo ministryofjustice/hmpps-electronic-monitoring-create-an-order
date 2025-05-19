@@ -473,7 +473,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What is the start time on the first day of monitoring?',
             },
             value: {
-              text: '01:01:00',
+              text: '01:01',
             },
             actions: {
               items: [
@@ -507,7 +507,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What is the end time on the last day of monitoring? (optional)',
             },
             value: {
-              text: '01:01:00',
+              text: '01:01',
             },
             actions: {
               items: [
@@ -809,7 +809,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Line 1, Line 2, Postcode',
             },
             value: {
-              html: 'Monday - 11:11:00-11:11:00<br/>Tuesday - 11:11:00-11:11:00<br/>Wednesday - 11:11:00-11:11:00<br/>Thursday - 11:11:00-11:11:00<br/>Friday - 11:11:00-11:11:00<br/>Saturday - 11:11:00-11:11:00<br/>Sunday - 11:11:00-11:11:00',
+              html: 'Monday - 11:11-11:11<br/>Tuesday - 11:11-11:11<br/>Wednesday - 11:11-11:11<br/>Thursday - 11:11-11:11<br/>Friday - 11:11-11:11<br/>Saturday - 11:11-11:11<br/>Sunday - 11:11-11:11',
             },
             actions: {
               items: [
@@ -826,7 +826,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Line 1, Line 2, Postcode',
             },
             value: {
-              html: 'Monday - 11:11:00-11:11:00',
+              html: 'Monday - 11:11-11:11',
             },
             actions: {
               items: [
@@ -1139,7 +1139,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 text: 'What time does the appointment start?',
               },
               value: {
-                text: '01:11:00',
+                text: '01:11',
               },
               actions: {
                 items: [
@@ -1159,7 +1159,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 text: 'What time does the appointment end?',
               },
               value: {
-                text: '11:11:00',
+                text: '11:11',
               },
               actions: {
                 items: [

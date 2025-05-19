@@ -125,6 +125,10 @@
               <strong class="govuk-tag govuk-tag--green">
                 Submitted
               </strong>
+            {% elif order.status == 'ERROR' %}
+              <strong class="govuk-tag govuk-tag--red">
+                Failed to submit
+              </strong>            
             {% else %}
               <strong class="govuk-tag govuk-tag--grey">
                 Draft
