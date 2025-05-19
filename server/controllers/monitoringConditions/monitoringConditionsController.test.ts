@@ -5,6 +5,7 @@ import MonitoringConditionsController from './monitoringConditionsController'
 import RestClient from '../../data/restClient'
 import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
+import config from '../../config'
 
 jest.mock('../../services/monitoringConditionsService')
 jest.mock('../../data/restClient')
@@ -55,6 +56,118 @@ describe(MonitoringConditionsController, () => {
           },
         }),
       )
+    })
+  })
+
+  describe('update monitoring conditions', () => {
+    it('should default start time and end time when feature flag is turned off', async () => {
+      const mockOrder = getMockOrder({
+        id: mockId,
+        monitoringConditions: createMonitoringConditions({
+          mandatoryAttendance: true,
+          curfew: true,
+          exclusionZone: true,
+          trail: true,
+          alcohol: true,
+        }),
+      })
+
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
+      req.params.orderId = mockId
+      req.body = {
+        startDate: {
+          day: '11',
+          month: '05',
+          year: '2025',
+          hours: '11',
+          minutes: '23',
+        },
+        endDate: {
+          day: '11',
+          month: '06',
+          year: '2025',
+          hours: '13',
+          minutes: '25',
+        },
+      }
+      const res = createMockResponse()
+      const next = jest.fn()
+      config.monitroingContionTimes.enabled = false
+      mockMonitoringConditionsService.updateMonitoringConditions = jest.fn().mockResolvedValue({ isValid: true })
+      await controller.update(req, res, next)
+
+      expect(mockMonitoringConditionsService.updateMonitoringConditions).toHaveBeenCalledWith({
+        accessToken: res.locals.user.token,
+        orderId: mockId,
+        data: {
+          action: 'continue',
+          orderType: 'undefined',
+          monitoringRequired: [],
+          orderTypeDescription: 'undefined',
+          conditionType: '',
+          startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
+          endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
+          sentenceType: null,
+          issp: 'UNKNOWN',
+          hdc: 'UNKNOWN',
+          prarr: 'UNKNOWN',
+        },
+      })
+    })
+
+    it('should use actual start time and end time when feature flag is turned on', async () => {
+      const mockOrder = getMockOrder({
+        id: mockId,
+        monitoringConditions: createMonitoringConditions({
+          mandatoryAttendance: true,
+          curfew: true,
+          exclusionZone: true,
+          trail: true,
+          alcohol: true,
+        }),
+      })
+
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
+      req.params.orderId = mockId
+      req.body = {
+        startDate: {
+          day: '11',
+          month: '05',
+          year: '2025',
+          hours: '11',
+          minutes: '23',
+        },
+        endDate: {
+          day: '11',
+          month: '06',
+          year: '2025',
+          hours: '13',
+          minutes: '25',
+        },
+      }
+      const res = createMockResponse()
+      const next = jest.fn()
+      config.monitroingContionTimes.enabled = true
+      mockMonitoringConditionsService.updateMonitoringConditions = jest.fn().mockResolvedValue({ isValid: true })
+      await controller.update(req, res, next)
+
+      expect(mockMonitoringConditionsService.updateMonitoringConditions).toHaveBeenCalledWith({
+        accessToken: res.locals.user.token,
+        orderId: mockId,
+        data: {
+          action: 'continue',
+          orderType: 'undefined',
+          monitoringRequired: [],
+          orderTypeDescription: 'undefined',
+          conditionType: '',
+          startDate: { day: '11', month: '05', year: '2025', hours: '11', minutes: '23' },
+          endDate: { day: '11', month: '06', year: '2025', hours: '13', minutes: '25' },
+          sentenceType: null,
+          issp: 'UNKNOWN',
+          hdc: 'UNKNOWN',
+          prarr: 'UNKNOWN',
+        },
+      })
     })
   })
 })

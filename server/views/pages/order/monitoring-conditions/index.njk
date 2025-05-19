@@ -28,7 +28,8 @@
         date: errors.dateError,
         time: errors.timeError
       },
-      disabled: not isOrderEditable
+      disabled: not isOrderEditable,
+      timesEnabled: monitoringConditionTimes
     })}}
 
     {{dateTimeInput({
@@ -44,7 +45,8 @@
         date: errors.dateError,
         time: errors.timeError
       },
-      disabled: not isOrderEditable
+      disabled: not isOrderEditable,
+       timesEnabled: monitoringConditionTimes
     })}}
 
   {% call govukFieldset({

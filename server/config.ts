@@ -106,6 +106,9 @@ export default {
   variations: {
     enabled: get('VARIATIONS_ENABLED', 'false') === 'true',
   },
+  monitroingContionTimes: {
+    enabled: get('MONITORING_CONDITION_TIMES_ENABLED', 'false') === 'true',
+  },
   mappa: {
     enabled: get('MAPPA_ENABLED', 'true') === 'true',
   },
