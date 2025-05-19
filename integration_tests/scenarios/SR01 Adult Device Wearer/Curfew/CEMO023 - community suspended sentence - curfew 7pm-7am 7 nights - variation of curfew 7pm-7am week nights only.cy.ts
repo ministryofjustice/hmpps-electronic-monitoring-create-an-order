@@ -228,7 +228,7 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'Curfew with EM',
-                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+                    start_date: formatAsFmsDateTime(variationCurfewConditionDetails.startDate, 0, 0),
                     end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                   },
                 ],
@@ -290,7 +290,7 @@ context('Scenarios', () => {
                 business_unit: '',
                 service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
                 curfew_description: '',
-                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+                curfew_start: formatAsFmsDateTime(variationCurfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 curfew_duration: [
                   {
