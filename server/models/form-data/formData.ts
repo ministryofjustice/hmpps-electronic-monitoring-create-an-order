@@ -202,20 +202,53 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
         }
       }
 
-      if (val.hours === '' && val.minutes !== '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: messages.time.mustIncludeHour,
-          fatal: true,
-        })
+      if (val.hours) {
+        if (val.hours === '' && val.minutes !== '') {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.time.mustIncludeHour,
+            fatal: true,
+          })
 
-        return z.NEVER
+          return z.NEVER
+        }
+
+        if (val.hours !== '' && val.minutes === '') {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.time.mustIncludeMinute,
+            fatal: true,
+          })
+
+          return z.NEVER
+        }
+        if (
+          z
+            .object({
+              hours: z
+                .string()
+                .transform(hour => (hour === '' ? Number.isNaN : hour))
+                .pipe(z.coerce.number().int().min(0).max(23)),
+              minutes: z
+                .string()
+                .transform(min => (min === '' ? Number.isNaN : min))
+                .pipe(z.coerce.number().int().min(0).max(59)),
+            })
+            .safeParse(val).error
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: messages.time.mustBeReal,
+            fatal: true,
+          })
+
+          return z.NEVER
+        }
       }
-
-      if (val.hours !== '' && val.minutes === '') {
+      if (messages.time.required && val.hours === '' && val.minutes === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: messages.time.mustIncludeMinute,
+          message: messages.time.required,
           fatal: true,
         })
 
@@ -224,32 +257,6 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
 
       return false
     })
-    .refine(
-      value => {
-        // Empty inputs are valid
-        if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
-          return true
-        }
-
-        // Inputs should be valid integers
-        return z
-          .object({
-            hours: z
-              .string()
-              .transform(val => (val === '' ? Number.isNaN : val))
-              .pipe(z.coerce.number().int().min(0).max(23)),
-            minutes: z
-              .string()
-              .transform(val => (val === '' ? Number.isNaN : val))
-              .pipe(z.coerce.number().int().min(0).max(59)),
-          })
-          .safeParse(value).success
-      },
-      {
-        message: messages.time.mustBeReal,
-        path: [],
-      },
-    )
     .transform(value => {
       if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
         return null
@@ -258,8 +265,12 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
       const day = parseInt(value.day, 10)
       const month = parseInt(value.month, 10) - 1
       const year = parseInt(value.year, 10)
-      const hours = parseInt(value.hours, 10)
-      const minutes = parseInt(value.minutes, 10)
+      let hours = 0
+      let minutes = 0
+      if (value.hours !== '' && value.minutes !== '') {
+        hours = parseInt(value.hours, 10)
+        minutes = parseInt(value.minutes, 10)
+      }
 
       return new Date(year, month, day, hours, minutes).toISOString()
     })

@@ -299,6 +299,7 @@ describe('DateTimeInputModel', () => {
       expect(validationResult.error!.issues).toEqual([
         {
           code: 'custom',
+          fatal: true,
           message: 'Start time for monitoring must be a real time',
           path: [],
         },

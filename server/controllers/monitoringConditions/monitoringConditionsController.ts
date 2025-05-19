@@ -5,6 +5,7 @@ import MonitoringConditionsService from '../../services/monitoringConditionsServ
 import TaskListService from '../../services/taskListService'
 import { MonitoringConditionsFormDataParser } from '../../models/form-data/monitoringConditions'
 import createViewModel from '../../models/view-models/monitoringConditions'
+import config from '../../config'
 
 export default class MonitoringConditionsController {
   constructor(
@@ -31,6 +32,12 @@ export default class MonitoringConditionsController {
     const { orderId } = req.params
     const formData = MonitoringConditionsFormDataParser.parse(req.body)
 
+    if (!config.monitroingContionTimes.enabled) {
+      formData.startDate.hours = '00'
+      formData.startDate.minutes = '00'
+      formData.endDate.hours = '23'
+      formData.endDate.minutes = '59'
+    }
     const updateMonitoringConditionsResult = await this.monitoringConditionsService.updateMonitoringConditions({
       accessToken: res.locals.user.token,
       orderId,

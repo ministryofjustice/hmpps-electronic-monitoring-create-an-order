@@ -2,7 +2,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
   {% set isDisabled = { disabled: true } if input.disabled else {} %}
-
+ 
   <div
     id="{{input.id}}-form"
     class="govuk-form-group{% if input.errorMessages.field %} govuk-form-group--error{% endif %}"
@@ -58,6 +58,7 @@
       </div>
 
 
+{% if input.timesEnabled %}
 {# The time input below is much like the timeInput.njk component, with small differences such as input names in the format eg. "StartDate[hours]" for use with the node package "qs". The existing timeInput.njk component could be replaced with this component in a future refactor. #}
       <div class="form-time govuk-form-group {% if input.errorMessages.time %} govuk-form-group--error{% endif %}">
         <fieldset class="govuk-fieldset">
@@ -126,6 +127,6 @@
           </div>
         </fieldset>
       </div>
-
+ {% endif %}
   </div>
 {% endmacro %}
