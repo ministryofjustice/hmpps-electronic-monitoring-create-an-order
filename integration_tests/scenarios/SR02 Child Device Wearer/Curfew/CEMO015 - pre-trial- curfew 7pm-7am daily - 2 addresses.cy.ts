@@ -10,7 +10,7 @@ import {
   createKnownAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -116,7 +116,7 @@ context('Scenarios', () => {
             middle_name: '',
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
-            date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+            date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
             adult_child: 'child',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -237,10 +237,10 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
+                conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

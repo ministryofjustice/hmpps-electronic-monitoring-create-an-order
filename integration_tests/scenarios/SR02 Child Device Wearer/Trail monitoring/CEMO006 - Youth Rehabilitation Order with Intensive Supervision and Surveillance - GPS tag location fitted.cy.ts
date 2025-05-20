@@ -22,7 +22,7 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/instal
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
@@ -186,7 +186,7 @@ context('Scenarios', () => {
             middle_name: '',
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
-            date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+            date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
             adult_child: 'child',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -311,7 +311,7 @@ context('Scenarios', () => {
                 conditional_release_date: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',
