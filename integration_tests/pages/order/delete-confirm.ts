@@ -10,5 +10,5 @@ export default class DeleteConfirmPage extends AppPage {
 
   confirmDeleteButton = (): PageElement => cy.get('#confirm-delete-button')
 
-  backButton = (): PageElement => cy.get('#back-button')
+  backToStartButton = (): PageElement => cy.get('#back-button')
 }
