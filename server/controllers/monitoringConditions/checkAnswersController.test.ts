@@ -720,7 +720,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'On the day of release, what time does the curfew end?',
+              text: 'On the day after release, what time does the curfew end?',
             },
             value: {
               text: 'Invalid Date',
@@ -730,7 +730,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'on the day of release, what time does the curfew end?',
+                  visuallyHiddenText: 'on the day after release, what time does the curfew end?',
                 },
               ],
             },
@@ -1668,7 +1668,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'On the day of release, what time does the curfew end?',
+              text: 'On the day after release, what time does the curfew end?',
             },
             value: {
               text: 'Invalid Date',
@@ -1678,7 +1678,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'on the day of release, what time does the curfew end?',
+                  visuallyHiddenText: 'on the day after release, what time does the curfew end?',
                 },
               ],
             },
