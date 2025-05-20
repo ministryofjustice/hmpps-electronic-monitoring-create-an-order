@@ -44,7 +44,7 @@ interface TimeErrorMessages {
   mustBeReal: string
   mustIncludeHour: string
   mustIncludeMinute: string
-  required: string
+  required?: string
 }
 
 export interface DateTimeErrorMessages {
@@ -93,7 +93,6 @@ const validationErrors: ValidationErrors = {
         mustBeReal: 'Start time for monitoring must be a real time',
         mustIncludeHour: 'Start time for monitoring must include an hour',
         mustIncludeMinute: 'Start time for monitoring must include a minute',
-        required: 'Enter start time for monitoring',
       },
     },
     endDateTime: {
@@ -108,7 +107,6 @@ const validationErrors: ValidationErrors = {
         mustBeReal: 'End time for monitoring must be a real time',
         mustIncludeHour: 'End time for monitoring must include an hour',
         mustIncludeMinute: 'End time for monitoring must include a minute',
-        required: 'Enter end time for monitoring',
       },
     },
   },
