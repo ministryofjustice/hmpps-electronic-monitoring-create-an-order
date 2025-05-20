@@ -1653,7 +1653,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             key: {
               text: 'On the day of release, what time does the curfew start?',
             },
-            value: { 
+            value: {
               text: '11:11',
             },
             actions: {
