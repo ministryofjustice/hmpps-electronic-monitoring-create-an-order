@@ -706,7 +706,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'On the day of release, what time does the curfew start?',
             },
             value: {
-              text: 'Invalid Date',
+              text: '11:11',
             },
             actions: {
               items: [
@@ -723,7 +723,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'On the day of release, what time does the curfew end?',
             },
             value: {
-              text: 'Invalid Date',
+              text: '11:11',
             },
             actions: {
               items: [
@@ -1654,7 +1654,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'On the day of release, what time does the curfew start?',
             },
             value: {
-              text: 'Invalid Date',
+              text: '11:11',
             },
             actions: {
               items: [
@@ -1671,7 +1671,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'On the day of release, what time does the curfew end?',
             },
             value: {
-              text: 'Invalid Date',
+              text: '11:11',
             },
             actions: {
               items: [
