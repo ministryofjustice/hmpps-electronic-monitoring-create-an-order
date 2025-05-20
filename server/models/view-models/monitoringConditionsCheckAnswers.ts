@@ -11,7 +11,7 @@ import {
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
 import { Order } from '../Order'
-import {
+import Answer, {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
@@ -23,6 +23,7 @@ import {
 import sentenceTypes from '../../reference/sentence-types'
 import yesNoUnknown from '../../reference/yes-no-unknown'
 import I18n from '../../types/i18n'
+import config from '../../config'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -48,20 +49,26 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
   const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
   const { questions } = content.pages.monitoringConditions
 
-  return [
-    createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts),
-    createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts),
-    createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts),
-    createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts),
-    createAnswer(questions.orderType.text, orderType, uri, answerOpts),
-    createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts),
-    createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
-    createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
-    createAnswer(questions.issp.text, issp, uri, answerOpts),
-    createAnswer(questions.hdc.text, hdc, uri, answerOpts),
-    createAnswer(questions.prarr.text, prarr, uri, answerOpts),
-    createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
-  ]
+  const answers: Answer[] = []
+  answers.push(createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts))
+  if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts))
+  answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
+  if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
+  answers.push(
+    ...[
+      createAnswer(questions.orderType.text, orderType, uri, answerOpts),
+      createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts),
+      createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
+      createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
+      createAnswer(questions.issp.text, issp, uri, answerOpts),
+      createAnswer(questions.hdc.text, hdc, uri, answerOpts),
+      createAnswer(questions.prarr.text, prarr, uri, answerOpts),
+      createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
+    ],
+  )
+  return answers
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {

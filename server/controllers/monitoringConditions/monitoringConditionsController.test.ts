@@ -92,7 +92,7 @@ describe(MonitoringConditionsController, () => {
       }
       const res = createMockResponse()
       const next = jest.fn()
-      config.monitroingContionTimes.enabled = false
+      config.monitoringConditionTimes.enabled = false
       mockMonitoringConditionsService.updateMonitoringConditions = jest.fn().mockResolvedValue({ isValid: true })
       await controller.update(req, res, next)
 
@@ -147,7 +147,7 @@ describe(MonitoringConditionsController, () => {
       }
       const res = createMockResponse()
       const next = jest.fn()
-      config.monitroingContionTimes.enabled = true
+      config.monitoringConditionTimes.enabled = true
       mockMonitoringConditionsService.updateMonitoringConditions = jest.fn().mockResolvedValue({ isValid: true })
       await controller.update(req, res, next)
 
