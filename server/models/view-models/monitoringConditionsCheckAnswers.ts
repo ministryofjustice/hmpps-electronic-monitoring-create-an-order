@@ -149,13 +149,18 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
       releaseDateUri,
       answerOpts,
     ),
-    createTimeAnswer(
+    createAnswer(
       questions.startTime.text,
-      order.curfewReleaseDateConditions?.startTime,
+      trimSeconds(order.curfewReleaseDateConditions?.startTime),
       releaseDateUri,
       answerOpts,
     ),
-    createTimeAnswer(questions.endTime.text, order.curfewReleaseDateConditions?.endTime, releaseDateUri, answerOpts),
+    createAnswer(
+      questions.endTime.text,
+      trimSeconds(order.curfewReleaseDateConditions?.endTime),
+      releaseDateUri,
+      answerOpts,
+    ),
     createAddressAnswer(
       questions.address.text,
       order.addresses.find(({ addressType }) => addressType === order.curfewReleaseDateConditions?.curfewAddress),
