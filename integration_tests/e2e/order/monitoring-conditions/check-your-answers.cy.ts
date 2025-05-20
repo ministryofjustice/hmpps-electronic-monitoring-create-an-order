@@ -31,6 +31,12 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
           },
+          curfewReleaseDateConditions: {
+            curfewAddress: '',
+            releaseDate: '2025-05-11',
+            startTime: '19:00:00',
+            endTime: '07:00:00',
+          },
         },
       })
 
@@ -44,7 +50,12 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
-      page.curfewOnDayOfReleaseSection().should('exist')
+      page.curfewOnDayOfReleaseSection.shouldExist()
+      page.curfewOnDayOfReleaseSection.shouldHaveItems([
+        { key: 'What date is the device wearer released from custody?', value: '11/05/2025' },
+        { key: 'On the day of release, what time does the curfew start?', value: '19:00' },
+        { key: 'On the day of release, what time does the curfew end?', value: '07:00' },
+      ])
       page.curfewSection().should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
@@ -112,7 +123,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
-      page.curfewOnDayOfReleaseSection().should('exist')
+      page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection().should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
@@ -189,7 +200,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
-      page.curfewOnDayOfReleaseSection().should('exist')
+      page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection().should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')

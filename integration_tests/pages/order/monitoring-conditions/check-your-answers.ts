@@ -1,6 +1,7 @@
 import paths from '../../../../server/constants/paths'
 import { PageElement } from '../../page'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
+import SummaryListComponent from '../../components/summaryListComponent'
 
 export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor(heading: string) {
@@ -11,7 +12,10 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
 
   installationAddressSection = (): PageElement => cy.contains('Installation address')
 
-  curfewOnDayOfReleaseSection = (): PageElement => cy.contains('Curfew on day of release')
+  get curfewOnDayOfReleaseSection(): SummaryListComponent {
+    const label = 'Curfew on day of release'
+    return new SummaryListComponent(label)
+  }
 
   curfewSection = (): PageElement => cy.contains('Curfew')
 
