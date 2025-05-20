@@ -28,7 +28,7 @@ context('Variation', () => {
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
-        page.backToSummaryButton.should('exist')
+        page.backButton.should('exist')
 
         // A11y
         page.checkIsAccessible()

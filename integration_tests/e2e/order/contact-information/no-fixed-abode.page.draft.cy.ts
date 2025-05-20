@@ -33,7 +33,7 @@ context('Contact information', () => {
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
-        page.backToSummaryButton.should('exist')
+        page.backButton.should('exist')
       })
 
       // TODO: FAIL issue determining if autocomplete is valid

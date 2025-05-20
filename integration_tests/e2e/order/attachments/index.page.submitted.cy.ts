@@ -52,7 +52,7 @@ context('Attachments', () => {
 
         // Buttons
         page.saveAndReturnButton.should('not.exist')
-        page.backToSummaryButton.should('exist')
+        page.backButton.should('exist')
       })
     })
   })
