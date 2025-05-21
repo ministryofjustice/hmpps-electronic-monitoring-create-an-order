@@ -54,7 +54,7 @@ context('Check your answers', () => {
       page.curfewOnDayOfReleaseSection.shouldHaveItems([
         { key: 'What date is the device wearer released from custody?', value: '11/05/2025' },
         { key: 'On the day of release, what time does the curfew start?', value: '19:00' },
-        { key: 'On the day of release, what time does the curfew end?', value: '07:00' },
+        { key: 'On the day after release, what time does the curfew end?', value: '07:00' },
       ])
       page.curfewSection().should('exist')
       page.curfewTimetableSection().should('exist')

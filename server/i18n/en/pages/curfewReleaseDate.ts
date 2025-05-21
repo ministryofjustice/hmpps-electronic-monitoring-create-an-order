@@ -9,7 +9,7 @@ const curfewReleaseDatePageContent: CurfewReleaseDatePageContent = {
       hint: "Select one address. Addresses listed are those entered earlier in the form. Go to the 'Contact information' section to edit address information.",
     },
     endTime: {
-      text: 'On the day of release, what time does the curfew end?',
+      text: 'On the day after release, what time does the curfew end?',
       hint: 'Enter time using a 24 hour clock. For example 19:00 instead of 7:00pm.',
     },
     releaseDate: {
