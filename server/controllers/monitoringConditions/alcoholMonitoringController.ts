@@ -3,7 +3,7 @@ import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import { AlcoholMonitoringService, AuditService } from '../../services'
 import alcoholMonitoringViewModel from '../../models/view-models/alcoholMonitoring'
-import AlcoholMonitoringFormDataModel from '../../models/form-data/alcoholMonitoring'
+import {AlcoholMonitoringFormDataModel} from '../../models/form-data/alcoholMonitoring'
 import TaskListService from '../../services/taskListService'
 
 export default class AlcoholMonitoringController {

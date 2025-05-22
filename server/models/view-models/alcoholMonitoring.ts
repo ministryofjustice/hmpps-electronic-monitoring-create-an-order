@@ -4,13 +4,13 @@ import { Address, AddressTypeEnum } from '../Address'
 import { AlcoholMonitoring } from '../AlcoholMonitoring'
 import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField, ViewModel } from './utils'
+import { DateField,DateTimeField, TextField, ViewModel } from './utils'
 
 type AlcoholMonitoringViewModel = ViewModel<
   Pick<AlcoholMonitoring, 'installationLocation' | 'monitoringType' | 'prisonName' | 'probationOfficeName'>
 > & {
-  startDate: DateField
-  endDate: DateField
+  startDate: DateTimeField
+  endDate: DateTimeField
   primaryAddressView: TextField
   secondaryAddressView: TextField
   tertiaryAddressView: TextField
@@ -55,14 +55,22 @@ const createViewModelFromFormData = (
     monitoringType: { value: formData.monitoringType ?? '', error: getError(validationErrors, 'monitoringType') },
     startDate: {
       value: {
-        day: formData['startDate-day'],
-        month: formData['startDate-month'],
-        year: formData['startDate-year'],
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes
       },
       error: getError(validationErrors, 'startDate'),
     },
     endDate: {
-      value: { day: formData['endDate-day'], month: formData['endDate-month'], year: formData['endDate-year'] },
+      value:  {
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes
+      },
       error: getError(validationErrors, 'endDate'),
     },
     installationLocation: {
