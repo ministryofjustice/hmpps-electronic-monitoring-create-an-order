@@ -17,7 +17,7 @@
     id: 'crownCourt',
     name: 'crownCourt',
     label: content.pages.interestedParties.questions.crownCourt.text,
-    options: content.reference.crownCourts,
+    options: content.reference.crownCourts | toOptions(false, true),
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
@@ -31,7 +31,7 @@
     id: 'magistratesCourt',
     name: 'magistratesCourt',
     label: content.pages.interestedParties.questions.magistratesCourt.text,
-    options: content.reference.magistratesCourts,
+    options: content.reference.magistratesCourts | toOptions(false, true),
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
@@ -46,7 +46,7 @@
     name: 'prison',
     label: content.pages.interestedParties.questions.prison.text,
     hint: content.pages.interestedParties.questions.prison.hint,
-    options: content.reference.prisons,
+    options: content.reference.prisons | toOptions(false, true),
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
@@ -62,7 +62,7 @@
     label: {
       text: content.pages.interestedParties.questions.probationRegion.text
     },
-    items: content.reference.probationRegions,
+    items: content.reference.probationRegions | toOptions(false, true),
     value: responsibleOrganisationRegion.value,
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
@@ -78,7 +78,7 @@
     label: {
       text: content.pages.interestedParties.questions.yjsRegion.text
     },
-    items: content.reference.youthJusticeServiceRegions,
+    items: content.reference.youthJusticeServiceRegions | toOptions(false, true),
     value: responsibleOrganisationRegion.value,
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
