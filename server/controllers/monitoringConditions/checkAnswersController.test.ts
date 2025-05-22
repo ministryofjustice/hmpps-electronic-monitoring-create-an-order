@@ -773,7 +773,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What date does the curfew end? (optional)',
+              text: 'What date does the curfew end?',
             },
             value: {
               text: '11/11/2024',
@@ -783,7 +783,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what date does the curfew end? (optional)',
+                  visuallyHiddenText: 'what date does the curfew end?',
                 },
               ],
             },
@@ -1038,7 +1038,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What date does trail monitoring end? (optional)',
+              text: 'What date does trail monitoring end?',
             },
             value: {
               text: '11/11/2024',
@@ -1048,7 +1048,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what date does trail monitoring end? (optional)',
+                  visuallyHiddenText: 'what date does trail monitoring end?',
                 },
               ],
             },
@@ -1721,7 +1721,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What date does the curfew end? (optional)',
+              text: 'What date does the curfew end?',
             },
             value: {
               text: '11/11/2024',
@@ -1731,7 +1731,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what date does the curfew end? (optional)',
+                  visuallyHiddenText: 'what date does the curfew end?',
                 },
               ],
             },
@@ -1986,7 +1986,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What date does trail monitoring end? (optional)',
+              text: 'What date does trail monitoring end?',
             },
             value: {
               text: '11/11/2024',
@@ -1996,7 +1996,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what date does trail monitoring end? (optional)',
+                  visuallyHiddenText: 'what date does trail monitoring end?',
                 },
               ],
             },
