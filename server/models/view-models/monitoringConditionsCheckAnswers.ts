@@ -20,8 +20,6 @@ import Answer, {
   createAnswer,
   AnswerOptions,
 } from '../../utils/checkYourAnswers'
-import sentenceTypes from '../../reference/sentence-types'
-import yesNoUnknown from '../../reference/yes-no-unknown'
 import I18n from '../../types/i18n'
 import config from '../../config'
 
@@ -43,10 +41,10 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
     content.reference.orderTypeDescriptions,
     order.monitoringConditions.orderTypeDescription,
   )
-  const sentenceType = lookup(sentenceTypes, order.monitoringConditions.sentenceType)
-  const issp = lookup(yesNoUnknown, order.monitoringConditions.issp)
-  const hdc = lookup(yesNoUnknown, order.monitoringConditions.hdc)
-  const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
+  const sentenceType = lookup(content.reference.sentenceTypes, order.monitoringConditions.sentenceType)
+  const issp = lookup(content.reference.yesNoUnknown, order.monitoringConditions.issp)
+  const hdc = lookup(content.reference.yesNoUnknown, order.monitoringConditions.hdc)
+  const prarr = lookup(content.reference.yesNoUnknown, order.monitoringConditions.prarr)
   const { questions } = content.pages.monitoringConditions
 
   const answers: Answer[] = []

@@ -1,19 +1,22 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
-import prisons from '../../server/reference/prisons'
-import crownCourts from '../../server/reference/crown-courts'
-import magistratesCourts from '../../server/reference/magistrates-courts'
-import probationRegions from '../../server/reference/probation-regions'
-import yjsRegions from '../../server/reference/youth-justice-service-regions'
+import prisons from '../../server/i18n/en/reference/prisons'
+import crownCourts from '../../server/i18n/en/reference/crownCourts'
+import magistratesCourts from '../../server/i18n/en/reference/magistratesCourts'
+import probationRegions from '../../server/i18n/en/reference/probationRegions'
+import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegions'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
 
 const genderOptions = ['Male', 'Female', 'Non binary', 'Not able to provide this information', 'Self identify']
 
-const prisonTypes = Object.values(prisons)
-const crownCourtTypes = Object.values(crownCourts)
-const magistratesCourtTypes = Object.values(magistratesCourts)
-const probationRegionTypes = Object.values(probationRegions)
-const yjsRegionTypes = Object.values(yjsRegions)
+const extractValues = (values: Array<string | { text: string }>) =>
+  values.map(value => (typeof value === 'string' ? value : value.text))
+
+const prisonTypes = extractValues(Object.values(prisons))
+const crownCourtTypes = extractValues(Object.values(crownCourts))
+const magistratesCourtTypes = extractValues(Object.values(magistratesCourts))
+const probationRegionTypes = extractValues(Object.values(probationRegions))
+const yjsRegionTypes = extractValues(Object.values(yjsRegions))
 
 // https://www.ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama
 const validUkPhoneNumbers = [

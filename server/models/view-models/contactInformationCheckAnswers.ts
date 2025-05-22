@@ -1,11 +1,4 @@
 import paths from '../../constants/paths'
-import crownCourts from '../../reference/crown-courts'
-import magistratesCourts from '../../reference/magistrates-courts'
-import notifyingOrganisations from '../../reference/notifying-organisations'
-import prisons from '../../reference/prisons'
-import probationRegions from '../../reference/probation-regions'
-import youthJusticeServiceRegions from '../../reference/youth-justice-service-regions'
-import responsibleOrganisations from '../../reference/responsible-organisations'
 import { createAddressAnswer, createBooleanAnswer, createAnswer, AnswerOptions } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
@@ -72,7 +65,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     return [
       createAnswer(
         questions.prison.text,
-        lookup(prisons, order.interestedParties?.notifyingOrganisationName),
+        lookup(content.reference.prisons, order.interestedParties?.notifyingOrganisationName),
         uri,
         answerOpts,
       ),
@@ -83,7 +76,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     return [
       createAnswer(
         questions.crownCourt.text,
-        lookup(crownCourts, order.interestedParties?.notifyingOrganisationName),
+        lookup(content.reference.crownCourts, order.interestedParties?.notifyingOrganisationName),
         uri,
         answerOpts,
       ),
@@ -94,7 +87,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     return [
       createAnswer(
         questions.magistratesCourt.text,
-        lookup(magistratesCourts, order.interestedParties?.notifyingOrganisationName),
+        lookup(content.reference.magistratesCourts, order.interestedParties?.notifyingOrganisationName),
         uri,
         answerOpts,
       ),
@@ -117,7 +110,7 @@ const getResponsibleOrganisationRegionAnswer = (
     return [
       createAnswer(
         questions.probationRegion.text,
-        lookup(probationRegions, order.interestedParties?.responsibleOrganisationRegion),
+        lookup(content.reference.probationRegions, order.interestedParties?.responsibleOrganisationRegion),
         uri,
         answerOpts,
       ),
@@ -128,7 +121,7 @@ const getResponsibleOrganisationRegionAnswer = (
     return [
       createAnswer(
         questions.yjsRegion.text,
-        lookup(youthJusticeServiceRegions, order.interestedParties?.responsibleOrganisationRegion),
+        lookup(content.reference.youthJusticeServiceRegions, order.interestedParties?.responsibleOrganisationRegion),
         uri,
         answerOpts,
       ),
@@ -146,7 +139,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
   return [
     createAnswer(
       questions.notifyingOrganisation.text,
-      lookup(notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
+      lookup(content.reference.notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
       uri,
       answerOpts,
     ),
@@ -171,7 +164,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
     ),
     createAnswer(
       questions.responsibleOrganisation.text,
-      lookup(responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
+      lookup(content.reference.responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
       uri,
       answerOpts,
     ),

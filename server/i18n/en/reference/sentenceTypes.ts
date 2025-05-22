@@ -1,4 +1,6 @@
-const sentenceTypes: Record<string, string> = {
+import SentenceTypes from '../../../types/i18n/reference/sentenceTypes'
+
+const sentenceTypes: SentenceTypes = {
   EXTENDED_DETERMINATE_SENTENCE: 'Extended Determinate Sentence',
   IPP: 'Imprisonment for Public Protection (IPP)',
   LIFE_SENTENCE: 'Life Sentence',
