@@ -1,4 +1,4 @@
-import SentenceTypes from "../../../types/i18n/reference/sentenceTypes"
+import SentenceTypes from '../../../types/i18n/reference/sentenceTypes'
 
 const sentenceTypes: SentenceTypes = {
   EXTENDED_DETERMINATE_SENTENCE: 'Extended Determinate Sentence',

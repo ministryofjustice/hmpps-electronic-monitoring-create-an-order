@@ -1,4 +1,4 @@
-import ResponsibleOrganisations from "../../../types/i18n/reference/responsibleOrganisations"
+import ResponsibleOrganisations from '../../../types/i18n/reference/responsibleOrganisations'
 
 const responsibleOrganisations: ResponsibleOrganisations = {
   PROBATION: 'Probation',

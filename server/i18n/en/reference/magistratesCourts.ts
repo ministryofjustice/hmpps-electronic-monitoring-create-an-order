@@ -1,4 +1,4 @@
-import MagistratesCourts from "../../../types/i18n/reference/magistratesCourts"
+import MagistratesCourts from '../../../types/i18n/reference/magistratesCourts'
 
 const magistratesCourts: MagistratesCourts = {
   BARKINGSIDE_MAGISTRATES_COURT: 'Barkingside Magistrates Court',

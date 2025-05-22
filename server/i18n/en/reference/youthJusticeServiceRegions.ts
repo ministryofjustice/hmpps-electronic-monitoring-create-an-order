@@ -1,4 +1,4 @@
-import YouthJusticeServiceRegions from "../../../types/i18n/reference/youthJusticeServiceRegions"
+import YouthJusticeServiceRegions from '../../../types/i18n/reference/youthJusticeServiceRegions'
 
 const youthJusticeServiceRegions: YouthJusticeServiceRegions = {
   NORTH_EAST_AND_CUMBRIA: 'North East and Cumbria',

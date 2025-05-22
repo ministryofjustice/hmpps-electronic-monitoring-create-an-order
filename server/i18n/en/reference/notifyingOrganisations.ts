@@ -1,4 +1,4 @@
-import NotifyingOrganisations from "../../../types/i18n/reference/notifyingOrganisations"
+import NotifyingOrganisations from '../../../types/i18n/reference/notifyingOrganisations'
 
 const notifyingOrganisations: NotifyingOrganisations = {
   PRISON: 'Prison',

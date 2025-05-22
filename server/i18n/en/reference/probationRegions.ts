@@ -1,4 +1,4 @@
-import ProbationRegions from "../../../types/i18n/reference/probationRegions"
+import ProbationRegions from '../../../types/i18n/reference/probationRegions'
 
 const probationRegions: ProbationRegions = {
   NORTH_EAST: 'North East',

@@ -1,4 +1,4 @@
-import Prisons from "../../../types/i18n/reference/prisons"
+import Prisons from '../../../types/i18n/reference/prisons'
 
 const prisons: Prisons = {
   ALTCOURSE_PRISON: 'Altcourse Prison',

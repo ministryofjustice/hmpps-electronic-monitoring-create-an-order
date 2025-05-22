@@ -1,4 +1,4 @@
-import YesNoUnknown from "../../../types/i18n/reference/yesNoUnknown"
+import YesNoUnknown from '../../../types/i18n/reference/yesNoUnknown'
 
 const yesNoUnknown: YesNoUnknown = {
   YES: 'Yes',
