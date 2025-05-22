@@ -20,6 +20,14 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  monitoringConditionsAlcohol:{
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
+  mandatoryAttendanceConditions:{
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
   notifyingOrganisation: {
     notifyingOrganisationName: string
     responsibleOrganisation: string
@@ -93,6 +101,7 @@ const validationErrors: ValidationErrors = {
         mustBeReal: 'Start time for monitoring must be a real time',
         mustIncludeHour: 'Start time for monitoring must include an hour',
         mustIncludeMinute: 'Start time for monitoring must include a minute',
+        required: 'Enter start time for monitoring',
       },
     },
     endDateTime: {
@@ -107,6 +116,73 @@ const validationErrors: ValidationErrors = {
         mustBeReal: 'End time for monitoring must be a real time',
         mustIncludeHour: 'End time for monitoring must include an hour',
         mustIncludeMinute: 'End time for monitoring must include a minute',
+        required: 'Enter end time for monitoring',
+      },
+    },
+  },  
+  monitoringConditionsAlcohol: {   
+    startDateTime: {
+      date: {
+        mustBeReal: 'Start date for alcohol monitoring must be a real date',
+        mustIncludeDay: 'Start date for alcohol monitoring must include a day',
+        mustIncludeMonth: 'Start date for alcohol monitoring must include a month',
+        mustIncludeYear: 'Start date for alcohol monitoring must include a year',
+        required: 'Enter start date for alcohol monitoring',
+        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      },
+      time: {
+        mustBeReal: 'Start time for alcohol monitoring must be a real time',
+        mustIncludeHour: 'Start time for alcohol monitoring must include an hour',
+        mustIncludeMinute: 'Start time for alcohol monitoring must include a minute',
+        required: 'Enter end time for alcohol monitoring',
+      },
+    },
+    endDateTime: {
+      date: {
+        mustBeReal: 'End date for alcohol monitoring must be a real date',
+        mustIncludeDay: 'End date for alcohol monitoring must include a day',
+        mustIncludeMonth: 'End date for alcohol monitoring must include a month',
+        mustIncludeYear: 'End date for alcohol monitoring must include a year',
+        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      },
+      time: {
+        mustBeReal: 'End time for alcohol monitoring must be a real time',
+        mustIncludeHour: 'End time for alcohol monitoring must include an hour',
+        mustIncludeMinute: 'End time for alcohol monitoring must include a minute',
+        required: 'Enter end time for alcohol monitoring',
+      },
+    },
+  },
+  mandatoryAttendanceConditions: {   
+    startDateTime: {
+      date: {
+        mustBeReal: 'Start date for attendance monitoring must be a real date',
+        mustIncludeDay: 'Start date for attendance monitoring must include a day',
+        mustIncludeMonth: 'Start date for attendance monitoring must include a month',
+        mustIncludeYear: 'Start date for attendance monitoring must include a year',
+        required: 'Enter start date for attendance monitoring',
+        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      },
+      time: {
+        mustBeReal: 'Start time for attendance monitoring must be a real time',
+        mustIncludeHour: 'Start time for attendance monitoring must include an hour',
+        mustIncludeMinute: 'Start time for attendance monitoring must include a minute',
+        required: 'Enter end time for attendance monitoring',
+      },
+    },
+    endDateTime: {
+      date: {
+        mustBeReal: 'End date for attendance monitoring must be a real date',
+        mustIncludeDay: 'End date for attendance monitoring must include a day',
+        mustIncludeMonth: 'End date for attendance monitoring must include a month',
+        mustIncludeYear: 'End date for attendance monitoring must include a year',
+        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      },
+      time: {
+        mustBeReal: 'End time for attendance monitoring must be a real time',
+        mustIncludeHour: 'End time for attendance monitoring must include an hour',
+        mustIncludeMinute: 'End time for attendance monitoring must include a minute',
+        required: 'Enter end time for attendance monitoring',
       },
     },
   },
