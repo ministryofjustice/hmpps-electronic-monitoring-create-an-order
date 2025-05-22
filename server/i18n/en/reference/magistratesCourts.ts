@@ -1,4 +1,6 @@
-const magistratesCourts: Record<string, string> = {
+import MagistratesCourts from "../../../types/i18n/reference/magistratesCourts"
+
+const magistratesCourts: MagistratesCourts = {
   BARKINGSIDE_MAGISTRATES_COURT: 'Barkingside Magistrates Court',
   BARROW_IN_FURNESS_MAGISTRATES_COURT: 'Barrow-in-Furness Magistrates Court',
   BASILDON_MAGISTRATES_COURT: 'Basildon Magistrates Court',

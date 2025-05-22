@@ -1,4 +1,6 @@
-const prisons: Record<string, string> = {
+import Prisons from "../../../types/i18n/reference/prisons"
+
+const prisons: Prisons = {
   ALTCOURSE_PRISON: 'Altcourse Prison',
   ASHFIELD_PRISON: 'Ashfield Prison',
   ASKHAM_GRANGE_PRISON_AND_YOUNG_OFFENDER_INSTITUTION: 'Askham Grange Prison and Young Offender Institution',

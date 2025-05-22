@@ -1,4 +1,6 @@
-const probationRegions: Record<string, string> = {
+import ProbationRegions from "../../../types/i18n/reference/probationRegions"
+
+const probationRegions: ProbationRegions = {
   NORTH_EAST: 'North East',
   NORTH_WEST: 'North West',
   YORKSHIRE_AND_THE_HUMBER: 'Yorkshire and the Humber',

@@ -1,5 +1,6 @@
 import AlcoholMonitoringTypes from './alcoholMonitoringTypes'
 import ConditionTypes from './conditionTypes'
+import CrownCourts from './crownCourts'
 import Disabilities from './disabilities'
 import Gender from './gender'
 import MagistratesCourts from './magistratesCourts'
@@ -23,6 +24,7 @@ import YouthJusticeServiceRegions from './youthJusticeServiceRegions'
 type ReferenceCatalog = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
   conditionTypes: ConditionTypes
+  crownCourts: CrownCourts
   disabilities: Disabilities
   gender: Gender
   magistratesCourts: MagistratesCourts
