@@ -1,13 +1,24 @@
 import { z } from 'zod'
-
+import { DateTimeInputModel } from './formData'
+import { validationErrors } from '../../constants/validationErrors'
+import {  serialiseTime } from '../../utils/utils'
 const AttendanceMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
-  'startDate-day': z.string(),
-  'startDate-month': z.string(),
-  'startDate-year': z.string(),
-  'endDate-day': z.string(),
-  'endDate-month': z.string(),
-  'endDate-year': z.string(),
+  id: z.string().nullable().default(null),
+  startDate: z.object({
+    day: z.string().default(''),
+    month: z.string().default(''),
+    year: z.string().default(''),
+    hours: z.string().default(''),
+    minutes: z.string().default(''),
+  }),
+  endDate:z.object({
+    day: z.string().default(''),
+    month: z.string().default(''),
+    year: z.string().default(''),
+    hours: z.string().default(''),
+    minutes: z.string().default(''),
+  }),  
   purpose: z.string(),
   appointmentDay: z.string(),
   startTimeHours: z.string(),
@@ -25,5 +36,38 @@ const AttendanceMonitoringFormDataModel = z.object({
 type AttendanceMonitoringFormData = z.infer<typeof AttendanceMonitoringFormDataModel>
 
 export default AttendanceMonitoringFormDataModel
+
+const AttendanceMonitoringFormDataValidator = z
+  .object({   
+    id: z.string().nullable(),
+    startDate: DateTimeInputModel(validationErrors.mandatoryAttendanceConditions.startDateTime),
+    endDate: DateTimeInputModel(validationErrors.mandatoryAttendanceConditions.endDateTime),   
+    purpose: z.string(),
+    appointmentDay: z.string(),
+    addressLine1: z.string(),
+    addressLine2: z.string(),
+    addressLine3: z.string(),
+    addressLine4: z.string(),
+    addressPostcode: z.string(),   
+    startTimeHours: z.string(),
+    startTimeMinutes: z.string(),
+    endTimeHours: z.string(),
+    endTimeMinutes: z.string(),
+  })
+  .transform(({startTimeHours,startTimeMinutes,endTimeHours,endTimeMinutes ,addressPostcode, ...formData }) => ({   
+    startTime: serialiseTime(startTimeHours,startTimeMinutes),
+    endTime: serialiseTime(endTimeHours,endTimeMinutes),
+    postcode:  addressPostcode === '' ? null : addressPostcode,
+    ...formData,
+  }))
+
+  type AttendanceMonitoringApiRequestBody = z.infer<typeof AttendanceMonitoringFormDataValidator>
+
+export { 
+  AttendanceMonitoringFormDataModel,
+  AttendanceMonitoringApiRequestBody,
+  AttendanceMonitoringFormDataValidator
+}
+
 
 export { AttendanceMonitoringFormData }

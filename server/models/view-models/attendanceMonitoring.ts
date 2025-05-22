@@ -1,15 +1,15 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { deserialiseTime, getError } from '../../utils/utils'
+import { deserialiseTime,deserialiseDateTime, getError } from '../../utils/utils'
 import { AttendanceMonitoring } from '../AttendanceMonitoring'
 import { AttendanceMonitoringFormData } from '../form-data/attendanceMonitoring'
 import { ValidationResult } from '../Validation'
-import { AddressField, DateField, TimeField, ViewModel } from './utils'
+import { AddressField, DateTimeField, TimeField, ViewModel } from './utils'
 
 type AttendanceMonitoringViewModel = ViewModel<Pick<AttendanceMonitoring, 'appointmentDay' | 'purpose'>> & {
   address: AddressField
-  endDate: DateField
+  endDate: DateTimeField
   endTime: TimeField
-  startDate: DateField
+  startDate: DateTimeField
   startTime: TimeField
 }
 
@@ -51,10 +51,12 @@ const constructFromFormData = (
       error: getError(validationErrors, 'appointmentDay'),
     },
     endDate: {
-      value: {
-        day: formData['endDate-day'],
-        month: formData['endDate-month'],
-        year: formData['endDate-year'],
+      value:  {
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes
       },
       error: getError(validationErrors, 'endDate'),
     },
@@ -65,9 +67,11 @@ const constructFromFormData = (
     purpose: { value: formData.purpose, error: getError(validationErrors, 'purpose') },
     startDate: {
       value: {
-        day: formData['startDate-day'],
-        month: formData['startDate-month'],
-        year: formData['startDate-year'],
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes
       },
       error: getError(validationErrors, 'startDate'),
     },
@@ -97,14 +101,14 @@ const createFromEntity = (attendanceMonitoring?: AttendanceMonitoring): Attendan
       value: attendanceMonitoring?.appointmentDay || '',
     },
     endDate: {
-      value: deserialiseDate(attendanceMonitoring?.endDate ?? null),
+      value: deserialiseDateTime(attendanceMonitoring?.endDate ?? null),
     },
     endTime: {
       value: { hours: endTimeHours, minutes: endTimeMinutes },
     },
     purpose: { value: attendanceMonitoring?.purpose || '' },
     startDate: {
-      value: deserialiseDate(attendanceMonitoring?.startDate ?? null),
+      value: deserialiseDateTime(attendanceMonitoring?.startDate ?? null),
     },
     startTime: {
       value: { hours: startTimeHours, minutes: startTimeMinutes },

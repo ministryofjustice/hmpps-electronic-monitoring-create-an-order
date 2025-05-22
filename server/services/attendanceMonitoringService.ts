@@ -1,23 +1,15 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
+import { ZodError } from 'zod'
 import AttendanceMonitoringModel, { AttendanceMonitoring } from '../models/AttendanceMonitoring'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
+import {AttendanceMonitoringFormDataValidator,AttendanceMonitoringFormData} from '../models/form-data/attendanceMonitoring'
+import { convertZodErrorToValidationError } from '../utils/errors'
 
 type AttendanceMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
-  addressLine1: string | null
-  addressLine2: string | null
-  addressLine3: string | null
-  addressLine4: string | null
-  postcode: string | null
-  appointmentDay: string | null
-  endDate: string | null
-  endTime: string | null
-  purpose: string | null
-  startDate: string | null
-  startTime: string | null
-  id?: string | undefined
+  data: AttendanceMonitoringFormData
 }
 
 export default class AttendanceMonitoringService {
@@ -25,13 +17,17 @@ export default class AttendanceMonitoringService {
 
   async update(input: AttendanceMonitoringInput): Promise<AttendanceMonitoring | ValidationResult> {
     try {
+      const requestBody = AttendanceMonitoringFormDataValidator.parse(input.data)      
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/mandatory-attendance`,
-        data: input,
+        data: requestBody,
         token: input.accessToken,
       })
       return AttendanceMonitoringModel.parse(result)
     } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
       const sanitisedError = e as SanitisedError
 
       if (sanitisedError.status === 400) {
