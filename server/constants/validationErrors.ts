@@ -33,6 +33,12 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  enforcementZone:{
+    descriptionRequired:string
+    durationRequired:string
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
   notifyingOrganisation: {
     notifyingOrganisationName: string
     responsibleOrganisation: string
@@ -147,6 +153,12 @@ const validationErrors: ValidationErrors = {
     addressesRequired: 'Select where the device wearer will be during curfew hours' ,
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
+  },
+  enforcementZone: {   
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('enforcement zone'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('enforcement zone', true),
+    descriptionRequired:'Enforcement zone description is required',
+    durationRequired:'Enforcement zone duration is required',
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',

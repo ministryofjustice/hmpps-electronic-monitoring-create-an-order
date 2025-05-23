@@ -4,7 +4,7 @@ import { getErrorsViewModel } from '../../utils/utils'
 import paths from '../../constants/paths'
 import { ErrorsViewModel } from '../../models/view-models/utils'
 import TaskListService from '../../services/taskListService'
-import EnforcementZoneFormDataModel from '../../models/form-data/enforcementZone'
+import {EnforcementZoneFormDataModel} from '../../models/form-data/enforcementZone'
 import enforcementZoneViewModel from '../../models/view-models/enforcementZone'
 import { ValidationResult } from '../../models/Validation'
 
@@ -16,39 +16,39 @@ export default class EnforcementZoneController {
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, zoneId } = req.params
-    const { action, ...formData } = EnforcementZoneFormDataModel.parse(req.body)
+    const { orderId, zoneId } = req.params   
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
-
+    req.body.zoneId = zoneIdInt
+    const { action, ...formData } = EnforcementZoneFormDataModel.parse(req.body)
     const errors: ValidationResult = []
     let errorViewModel: ErrorsViewModel = {}
     // Update/Create zone details
     const result = await this.zoneService.updateZone({
       accessToken: res.locals.user.token,
-      orderId,
-      zoneId: zoneIdInt,
-      ...formData,
+      orderId,      
+     data:formData,
     })
     if (result !== null) {
       errorViewModel = getErrorsViewModel(result)
       errors.push(...result)
     }
-
-    // Upload file if exist
-    if (file !== null && file !== undefined) {
-      const uploadResult = await this.zoneService.uploadZoneAttachment({
-        accessToken: res.locals.user.token,
-        orderId,
-        zoneId: zoneIdInt,
-        file,
-      })
-      if (uploadResult.userMessage != null) {
-        errorViewModel.file = { text: uploadResult.userMessage }
-        errors.push({
-          field: 'file',
-          error: uploadResult.userMessage,
+    else{
+      // Upload file if exist
+      if (file !== null && file !== undefined) {
+        const uploadResult = await this.zoneService.uploadZoneAttachment({
+          accessToken: res.locals.user.token,
+          orderId,
+          zoneId: zoneIdInt,
+          file,
         })
+        if (uploadResult.userMessage != null) {
+          errorViewModel.file = { text: uploadResult.userMessage }
+          errors.push({
+            field: 'file',
+            error: uploadResult.userMessage,
+          })
+        }
       }
     }
     if (Object.keys(errorViewModel).length !== 0) {
