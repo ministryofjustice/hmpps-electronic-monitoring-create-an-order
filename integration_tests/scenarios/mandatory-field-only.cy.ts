@@ -111,6 +111,7 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
       addresses: [/Main address/],
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -137,6 +138,7 @@ context('Mandatory fields only', () => {
     // }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -371,6 +373,7 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
       addresses: [/Main address/],
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -397,6 +400,7 @@ context('Mandatory fields only', () => {
     // }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
 
     it('Should successfully submit the order to the FMS API', () => {
