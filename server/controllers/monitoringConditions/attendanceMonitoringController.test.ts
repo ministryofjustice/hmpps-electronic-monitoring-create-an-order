@@ -72,13 +72,21 @@ describe('attendanceMonitoringController', () => {
   ]
 
   const invalidBody = {
-    action: 'continue',
-    'startDate-day': '',
-    'startDate-month': '',
-    'startDate-year': '',
-    'endDate-day': '11',
-    'endDate-month': '1',
-    'endDate-year': '2025',
+    action: 'continue',    
+    startDate: {
+      day: '',
+      month: '',
+      year: '',
+      hours: '00',
+      minutes: '00',
+    },
+    endDate: {
+      day: '11',
+      month: '06',
+      year: '2025',
+      hours: '23',
+      minutes: '59',
+    },
     purpose: 'test purpose',
     appointmentDay: 'test day',
     startTimeMinutes: '11',
@@ -94,13 +102,21 @@ describe('attendanceMonitoringController', () => {
   }
 
   const validBody = {
-    action: 'continue',
-    'startDate-day': '1',
-    'startDate-month': '1',
-    'startDate-year': '2025',
-    'endDate-day': '11',
-    'endDate-month': '1',
-    'endDate-year': '2025',
+    action: 'continue',    
+    startDate: {
+      day: '01',
+      month: '01',
+      year: '2025',
+      hours: '00',
+      minutes: '00',
+    },
+    endDate: {
+      day: '11',
+      month: '01',
+      year: '2025',
+      hours: '23',
+      minutes: '59',
+    },
     purpose: 'test purpose',
     appointmentDay: 'test day',
     startTimeMinutes: '11',
@@ -158,6 +174,8 @@ describe('attendanceMonitoringController', () => {
             day: '11',
             month: '01',
             year: '2025',
+            hours: '00',
+            minutes: '00',
           },
         },
         endTime: { value: { hours: '11', minutes: '11' } },
@@ -167,6 +185,8 @@ describe('attendanceMonitoringController', () => {
             day: '01',
             month: '01',
             year: '2025',
+            hours: '00',
+            minutes: '00',
           },
         },
         startTime: { value: { hours: '01', minutes: '11' } },
@@ -195,15 +215,23 @@ describe('attendanceMonitoringController', () => {
               addressLine4: '',
               addressPostcode: '',
               appointmentDay: '',
-              'endDate-day': '',
-              'endDate-month': '',
-              'endDate-year': '',
+              startDate:{
+                day: '',
+                month: '',
+                year: '',
+                hours: '',
+                minutes: '',
+              },
+              endDate:{
+                day: '',
+                month: '',
+                year: '',
+                hours: '',
+                minutes: '',
+              },
               endTimeHours: '',
               endTimeMinutes: '',
-              purpose: '',
-              'startDate-day': '',
-              'startDate-month': '',
-              'startDate-year': '',
+              purpose: '',             
               startTimeHours: '',
               startTimeMinutes: '',
             },
@@ -217,6 +245,7 @@ describe('attendanceMonitoringController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/attendance-monitoring', {
+        id:undefined,
         address: {
           error: undefined,
           value: {
@@ -237,6 +266,8 @@ describe('attendanceMonitoringController', () => {
             day: '',
             month: '',
             year: '',
+            hours: '',
+            minutes: '',
           },
         },
         endTime: {
@@ -255,6 +286,8 @@ describe('attendanceMonitoringController', () => {
             day: '',
             month: '',
             year: '',
+            hours: '',
+            minutes: '',
           },
           error: {
             text: 'Please enter a mandatory attendance monitoring start date date to continue to the next page',
@@ -305,7 +338,7 @@ describe('attendanceMonitoringController', () => {
 
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
-      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', invalidBody)
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {...invalidBody, id:null})
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
           error: 'Please enter a mandatory attendance monitoring start date date to continue to the next page',
