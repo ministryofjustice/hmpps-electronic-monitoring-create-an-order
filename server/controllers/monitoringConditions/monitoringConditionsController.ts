@@ -5,7 +5,6 @@ import MonitoringConditionsService from '../../services/monitoringConditionsServ
 import TaskListService from '../../services/taskListService'
 import { MonitoringConditionsFormDataParser } from '../../models/form-data/monitoringConditions'
 import createViewModel from '../../models/view-models/monitoringConditions'
-import config from '../../config'
 
 export default class MonitoringConditionsController {
   constructor(

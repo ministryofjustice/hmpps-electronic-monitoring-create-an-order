@@ -20,26 +20,26 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
-  monitoringConditionsAlcohol:{
+  monitoringConditionsAlcohol: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
-  mandatoryAttendanceConditions:{
+  mandatoryAttendanceConditions: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
-  curfewConditions:{
-    addressesRequired:string
+  curfewConditions: {
+    addressesRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
-  enforcementZone:{
-    descriptionRequired:string
-    durationRequired:string
+  enforcementZone: {
+    descriptionRequired: string
+    durationRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
-  trailMonitoring:{
+  trailMonitoring: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -50,7 +50,7 @@ interface ValidationErrors {
   variationDetails: {
     variationDate: DateErrorMessages
     variationTypeRequired: string
-  }  
+  }
 }
 
 export interface DateErrorMessages {
@@ -75,8 +75,7 @@ export interface DateTimeErrorMessages {
   time: TimeErrorMessages
 }
 
-
-const getMonitoringConditionStartDateTimeErrorMessages=(type:string) =>{
+const getMonitoringConditionStartDateTimeErrorMessages = (type: string) => {
   return {
     date: {
       mustBeReal: `Start date for ${type} must be a real date`,
@@ -92,10 +91,10 @@ const getMonitoringConditionStartDateTimeErrorMessages=(type:string) =>{
       mustIncludeMinute: `Start time for ${type} must include a minute`,
       required: `Enter start time for ${type}`,
     },
-  } 
+  }
 }
 
-const getMonitoringConditionEndDateTimeErrorMessages=(type:string, required:boolean=false) =>{
+const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: boolean = false) => {
   return {
     date: {
       mustBeReal: `End date for ${type} must be a real date`,
@@ -103,7 +102,7 @@ const getMonitoringConditionEndDateTimeErrorMessages=(type:string, required:bool
       mustIncludeMonth: `End date for ${type} must include a month`,
       mustIncludeYear: `End date for ${type} must include a year`,
       yearMustIncludeFourNumbers: `Year must include 4 numbers`,
-      required: required?`Enter end date for ${type}`:undefined
+      required: required ? `Enter end date for ${type}` : undefined,
     },
     time: {
       mustBeReal: `End time for ${type} must be a real time`,
@@ -144,34 +143,34 @@ const validationErrors: ValidationErrors = {
     orderTypeRequired: 'Select order type',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring'),
-  },  
-  monitoringConditionsAlcohol: {   
+  },
+  monitoringConditionsAlcohol: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('alcohol monitoring', true),
   },
-  mandatoryAttendanceConditions: {   
+  mandatoryAttendanceConditions: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring', true),
   },
-  curfewConditions: {  
-    addressesRequired: 'Select where the device wearer will be during curfew hours' ,
+  curfewConditions: {
+    addressesRequired: 'Select where the device wearer will be during curfew hours',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
   },
-  enforcementZone: {   
+  enforcementZone: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('enforcement zone'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('enforcement zone', true),
-    descriptionRequired:'Enforcement zone description is required',
-    durationRequired:'Enforcement zone duration is required',
+    descriptionRequired: 'Enforcement zone description is required',
+    durationRequired: 'Enforcement zone duration is required',
   },
-  trailMonitoring: {   
+  trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', true),
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',
     responsibleOrganisation: "Select the responsible officer's organisation",
-  }, 
+  },
   variationDetails: {
     variationDate: {
       mustBeReal: 'Variation date must be a real date',

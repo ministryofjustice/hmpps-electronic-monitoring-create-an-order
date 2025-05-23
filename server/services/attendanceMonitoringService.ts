@@ -1,10 +1,13 @@
+import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import { ZodError } from 'zod'
 import AttendanceMonitoringModel, { AttendanceMonitoring } from '../models/AttendanceMonitoring'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
-import {AttendanceMonitoringFormDataValidator,AttendanceMonitoringFormData} from '../models/form-data/attendanceMonitoring'
+import {
+  AttendanceMonitoringFormDataValidator,
+  AttendanceMonitoringFormData,
+} from '../models/form-data/attendanceMonitoring'
 import { convertZodErrorToValidationError } from '../utils/errors'
 
 type AttendanceMonitoringInput = AuthenticatedRequestInput & {
@@ -17,7 +20,7 @@ export default class AttendanceMonitoringService {
 
   async update(input: AttendanceMonitoringInput): Promise<AttendanceMonitoring | ValidationResult> {
     try {
-      const requestBody = AttendanceMonitoringFormDataValidator.parse(input.data)      
+      const requestBody = AttendanceMonitoringFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/mandatory-attendance`,
         data: requestBody,

@@ -11,28 +11,22 @@ const TrailMonitoringFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  endDate:z.object({
+  endDate: z.object({
     day: z.string().default(''),
     month: z.string().default(''),
     year: z.string().default(''),
     hours: z.string().default(''),
     minutes: z.string().default(''),
-  }),  
+  }),
 })
 
+const TrailMonitoringFormDataValidator = z.object({
+  startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
+  endDate: DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
+})
+type TrailMonitoringApiRequestBody = z.infer<typeof TrailMonitoringFormDataValidator>
 
-const TrailMonitoringFormDataValidator = z
-  .object({   
-    startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
-    endDate: DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),   
-  }) 
-  type TrailMonitoringApiRequestBody = z.infer<typeof TrailMonitoringFormDataValidator>
-
-export { 
-  TrailMonitoringFormDataModel,
-  TrailMonitoringApiRequestBody,
-  TrailMonitoringFormDataValidator
-}
+export { TrailMonitoringFormDataModel, TrailMonitoringApiRequestBody, TrailMonitoringFormDataValidator }
 export type TrailMonitoringFormData = z.infer<typeof TrailMonitoringFormDataModel>
 
 export default TrailMonitoringFormDataModel

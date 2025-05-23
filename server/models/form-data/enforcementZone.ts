@@ -14,13 +14,13 @@ const EnforcementZoneFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  endDate:z.object({
+  endDate: z.object({
     day: z.string().default(''),
     month: z.string().default(''),
     year: z.string().default(''),
     hours: z.string().default(''),
     minutes: z.string().default(''),
-  }),  
+  }),
   anotherZone: z.string().default(''),
 })
 
@@ -34,16 +34,16 @@ const EnforcementZoneFormDataValidator = z
     startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
     endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
   })
-  .transform(({...formData}) =>( { 
-      zoneType: 'EXCLUSION',
-      ...formData,   
+  .transform(({ ...formData }) => ({
+    zoneType: 'EXCLUSION',
+    ...formData,
   }))
 
-  type EnforcementZoneApiRequestBody = z.infer<typeof EnforcementZoneFormDataValidator>
+type EnforcementZoneApiRequestBody = z.infer<typeof EnforcementZoneFormDataValidator>
 
-export { 
+export {
   EnforcementZoneFormDataModel,
   EnforcementZoneApiRequestBody,
   EnforcementZoneFormDataValidator,
-  EnforcementZoneFormData
+  EnforcementZoneFormData,
 }

@@ -4,7 +4,7 @@ import { getErrorsViewModel } from '../../utils/utils'
 import paths from '../../constants/paths'
 import { ErrorsViewModel } from '../../models/view-models/utils'
 import TaskListService from '../../services/taskListService'
-import {EnforcementZoneFormDataModel} from '../../models/form-data/enforcementZone'
+import { EnforcementZoneFormDataModel } from '../../models/form-data/enforcementZone'
 import enforcementZoneViewModel from '../../models/view-models/enforcementZone'
 import { ValidationResult } from '../../models/Validation'
 
@@ -16,7 +16,7 @@ export default class EnforcementZoneController {
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, zoneId } = req.params   
+    const { orderId, zoneId } = req.params
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
     req.body.zoneId = zoneIdInt
@@ -26,31 +26,30 @@ export default class EnforcementZoneController {
     // Update/Create zone details
     const result = await this.zoneService.updateZone({
       accessToken: res.locals.user.token,
-      orderId,      
-     data:formData,
+      orderId,
+      data: formData,
     })
     if (result !== null) {
       errorViewModel = getErrorsViewModel(result)
       errors.push(...result)
     }
-    else{
-      // Upload file if exist
-      if (file !== null && file !== undefined) {
-        const uploadResult = await this.zoneService.uploadZoneAttachment({
-          accessToken: res.locals.user.token,
-          orderId,
-          zoneId: zoneIdInt,
-          file,
+    // Upload file if exist and only if the enforcement is updated
+    else if (file !== null && file !== undefined) {
+      const uploadResult = await this.zoneService.uploadZoneAttachment({
+        accessToken: res.locals.user.token,
+        orderId,
+        zoneId: zoneIdInt,
+        file,
+      })
+      if (uploadResult.userMessage != null) {
+        errorViewModel.file = { text: uploadResult.userMessage }
+        errors.push({
+          field: 'file',
+          error: uploadResult.userMessage,
         })
-        if (uploadResult.userMessage != null) {
-          errorViewModel.file = { text: uploadResult.userMessage }
-          errors.push({
-            field: 'file',
-            error: uploadResult.userMessage,
-          })
-        }
       }
     }
+
     if (Object.keys(errorViewModel).length !== 0) {
       const viewModel = enforcementZoneViewModel.construct(parseInt(zoneId, 10), [], formData, errors)
       res.render(`pages/order/monitoring-conditions/enforcement-zone`, viewModel)
@@ -76,7 +75,9 @@ export default class EnforcementZoneController {
         else {
           res.redirect(this.taskListService.getNextPage('ENFORCEMENT_ZONE_MONITORING', req.order!))
         }
-      } else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      } else {
+        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      }
     }
   }
 

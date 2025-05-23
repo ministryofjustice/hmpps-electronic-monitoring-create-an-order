@@ -1,12 +1,9 @@
 import { Request, RequestHandler, Response } from 'express'
-
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
-
-
 import TaskListService from '../../services/taskListService'
-import AttendanceMonitoringFormDataModel from '../../models/form-data/attendanceMonitoring'
+import { AttendanceMonitoringFormDataModel } from '../../models/form-data/attendanceMonitoring'
 import attendanceMonitoringViewModel from '../../models/view-models/attendanceMonitoring'
 
 export default class AttendanceMonitoringController {
@@ -14,7 +11,7 @@ export default class AttendanceMonitoringController {
     private readonly attendanceMonitoringService: AttendanceMonitoringService,
     private readonly taskListService: TaskListService,
   ) {}
-   
+
   new: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
@@ -38,14 +35,14 @@ export default class AttendanceMonitoringController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, conditionId } = req.params
-   
-    req.body.id= conditionId
-    const formData = AttendanceMonitoringFormDataModel.parse(req.body)    
+
+    req.body.id = conditionId
+    const formData = AttendanceMonitoringFormDataModel.parse(req.body)
 
     const updateResult = await this.attendanceMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
-     
+
       data: formData,
     })
 

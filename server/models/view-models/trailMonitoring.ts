@@ -21,21 +21,21 @@ const createViewModelFromFormData = (
         month: formData.startDate.month,
         year: formData.startDate.year,
         hours: formData.startDate.hours,
-        minutes: formData.startDate.minutes
+        minutes: formData.startDate.minutes,
       },
       error: getError(validationErrors, 'startDate'),
     },
     endDate: {
-      value:  {
+      value: {
         day: formData.endDate.day,
         month: formData.endDate.month,
         year: formData.endDate.year,
         hours: formData.endDate.hours,
-        minutes: formData.endDate.minutes
+        minutes: formData.endDate.minutes,
       },
       error: getError(validationErrors, 'endDate'),
     },
-     errorSummary: createGovukErrorSummary(validationErrors),
+    errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 

@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { deserialiseTime,deserialiseDateTime, getError } from '../../utils/utils'
+import { deserialiseTime, deserialiseDateTime, getError } from '../../utils/utils'
 import { AttendanceMonitoring } from '../AttendanceMonitoring'
 import { AttendanceMonitoringFormData } from '../form-data/attendanceMonitoring'
 import { ValidationResult } from '../Validation'
@@ -12,7 +12,6 @@ type AttendanceMonitoringViewModel = ViewModel<Pick<AttendanceMonitoring, 'appoi
   startDate: DateTimeField
   startTime: TimeField
 }
-
 
 const constructFromFormData = (
   formData: AttendanceMonitoringFormData,
@@ -34,12 +33,12 @@ const constructFromFormData = (
       error: getError(validationErrors, 'appointmentDay'),
     },
     endDate: {
-      value:  {
+      value: {
         day: formData.endDate.day,
         month: formData.endDate.month,
         year: formData.endDate.year,
         hours: formData.endDate.hours,
-        minutes: formData.endDate.minutes
+        minutes: formData.endDate.minutes,
       },
       error: getError(validationErrors, 'endDate'),
     },
@@ -54,7 +53,7 @@ const constructFromFormData = (
         month: formData.startDate.month,
         year: formData.startDate.year,
         hours: formData.startDate.hours,
-        minutes: formData.startDate.minutes
+        minutes: formData.startDate.minutes,
       },
       error: getError(validationErrors, 'startDate'),
     },

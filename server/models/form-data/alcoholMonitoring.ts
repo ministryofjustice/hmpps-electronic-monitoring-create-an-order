@@ -1,10 +1,7 @@
 import { z } from 'zod'
 import { DateTimeInputModel } from './formData'
 import { validationErrors } from '../../constants/validationErrors'
-import  {  
-  AlcoholMonitoringType,
-  InstallationLocationType,
-} from '../AlcoholMonitoring'
+import { AlcoholMonitoringType, InstallationLocationType } from '../AlcoholMonitoring'
 
 const AlcoholMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -16,13 +13,13 @@ const AlcoholMonitoringFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  endDate:z.object({
+  endDate: z.object({
     day: z.string().default(''),
     month: z.string().default(''),
     year: z.string().default(''),
     hours: z.string().default(''),
     minutes: z.string().default(''),
-  }),  
+  }),
   installationLocation: z.string().nullable().default(null),
   prisonName: z.string().nullable().default(null),
   probationOfficeName: z.string().nullable().default(null),
@@ -36,10 +33,10 @@ const AlcoholMonitoringFormDataValidator = z
     startDate: DateTimeInputModel(validationErrors.monitoringConditionsAlcohol.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditionsAlcohol.endDateTime),
     installationLocation: z.string(),
-    prisonName:z.string(),
-    probationOfficeName: z.string()
+    prisonName: z.string(),
+    probationOfficeName: z.string(),
   })
-  .transform(({ monitoringType, installationLocation, probationOfficeName,prisonName, ...formData }) => ({
+  .transform(({ monitoringType, installationLocation, probationOfficeName, prisonName, ...formData }) => ({
     monitoringType: (monitoringType as AlcoholMonitoringType) ?? null,
     installationLocation: (installationLocation as InstallationLocationType) ?? null,
     probationOfficeName: probationOfficeName || null,
@@ -47,11 +44,6 @@ const AlcoholMonitoringFormDataValidator = z
     ...formData,
   }))
 
-  type AlcoholMonitoringApiRequestBody = z.infer<typeof AlcoholMonitoringFormDataValidator>
+type AlcoholMonitoringApiRequestBody = z.infer<typeof AlcoholMonitoringFormDataValidator>
 
-export { 
-  AlcoholMonitoringFormDataModel,
-  AlcoholMonitoringApiRequestBody,
-  AlcoholMonitoringFormDataValidator
-}
-
+export { AlcoholMonitoringFormDataModel, AlcoholMonitoringApiRequestBody, AlcoholMonitoringFormDataValidator }

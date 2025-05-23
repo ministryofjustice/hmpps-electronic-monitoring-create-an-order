@@ -3,7 +3,7 @@ import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import { AuditService } from '../../services'
 import CurfewConditionsService from '../../services/curfewConditionsService'
-import CurfewConditionsFormDataModel from '../../models/form-data/curfewConditions'
+import { CurfewConditionsFormDataModel } from '../../models/form-data/curfewConditions'
 import CurfewConditionsViewModel from '../../models/view-models/curfewConditions'
 import TaskListService from '../../services/taskListService'
 

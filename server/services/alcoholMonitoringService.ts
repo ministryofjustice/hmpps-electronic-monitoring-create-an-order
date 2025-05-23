@@ -1,9 +1,7 @@
+import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import AlcoholMonitoringModel, {
-  AlcoholMonitoring
-} from '../models/AlcoholMonitoring'
-import { ZodError } from 'zod'
+import AlcoholMonitoringModel, { AlcoholMonitoring } from '../models/AlcoholMonitoring'
 import { AlcoholMonitoringFormData, AlcoholMonitoringFormDataValidator } from '../models/form-data/alcoholMonitoring'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
@@ -18,8 +16,6 @@ export default class AlcoholMonitoringService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: AlcoholMonitoringInput): Promise<AlcoholMonitoring | ValidationResult> {
-    
-
     try {
       const requestBody = AlcoholMonitoringFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
@@ -41,6 +37,4 @@ export default class AlcoholMonitoringService {
       throw e
     }
   }
-
-  
 }
