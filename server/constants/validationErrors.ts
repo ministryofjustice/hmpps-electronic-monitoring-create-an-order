@@ -39,6 +39,10 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  trailMonitoring:{
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
   notifyingOrganisation: {
     notifyingOrganisationName: string
     responsibleOrganisation: string
@@ -160,10 +164,14 @@ const validationErrors: ValidationErrors = {
     descriptionRequired:'Enforcement zone description is required',
     durationRequired:'Enforcement zone duration is required',
   },
+  trailMonitoring: {   
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', true),
+  },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',
     responsibleOrganisation: "Select the responsible officer's organisation",
-  },
+  }, 
   variationDetails: {
     variationDate: {
       mustBeReal: 'Variation date must be a real date',
