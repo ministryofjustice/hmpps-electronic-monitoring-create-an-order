@@ -28,6 +28,11 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  curfewConditions:{
+    addressesRequired:string
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
   notifyingOrganisation: {
     notifyingOrganisationName: string
     responsibleOrganisation: string
@@ -35,7 +40,7 @@ interface ValidationErrors {
   variationDetails: {
     variationDate: DateErrorMessages
     variationTypeRequired: string
-  }
+  }  
 }
 
 export interface DateErrorMessages {
@@ -58,6 +63,45 @@ interface TimeErrorMessages {
 export interface DateTimeErrorMessages {
   date: DateErrorMessages
   time: TimeErrorMessages
+}
+
+
+const getMonitoringConditionStartDateTimeErrorMessages=(type:string) =>{
+  return {
+    date: {
+      mustBeReal: `Start date for ${type} must be a real date`,
+      mustIncludeDay: `Start date for ${type} must include a day`,
+      mustIncludeMonth: `Start date for ${type} must include a month`,
+      mustIncludeYear: `Start date for ${type} must include a year`,
+      required: `Enter start date for ${type}`,
+      yearMustIncludeFourNumbers: `Year must include 4 numbers`,
+    },
+    time: {
+      mustBeReal: `Start time for ${type} must be a real time`,
+      mustIncludeHour: `Start time for ${type} must include an hour`,
+      mustIncludeMinute: `Start time for ${type} must include a minute`,
+      required: `Enter start time for ${type}`,
+    },
+  } 
+}
+
+const getMonitoringConditionEndDateTimeErrorMessages=(type:string, required:boolean=false) =>{
+  return {
+    date: {
+      mustBeReal: `End date for ${type} must be a real date`,
+      mustIncludeDay: `End date for ${type} must include a day`,
+      mustIncludeMonth: `End date for ${type} must include a month`,
+      mustIncludeYear: `End date for ${type} must include a year`,
+      yearMustIncludeFourNumbers: `Year must include 4 numbers`,
+      required: required?`Enter end date for ${type}`:undefined
+    },
+    time: {
+      mustBeReal: `End time for ${type} must be a real time`,
+      mustIncludeHour: `End time for ${type} must include an hour`,
+      mustIncludeMinute: `End time for ${type} must include a minute`,
+      required: `Enter end time for ${type}`,
+    },
+  }
 }
 
 const validationErrors: ValidationErrors = {
@@ -88,103 +132,21 @@ const validationErrors: ValidationErrors = {
     conditionTypeRequired: 'Select order type condition',
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeRequired: 'Select order type',
-    startDateTime: {
-      date: {
-        mustBeReal: 'Start date for monitoring must be a real date',
-        mustIncludeDay: 'Start date for monitoring must include a day',
-        mustIncludeMonth: 'Start date for monitoring must include a month',
-        mustIncludeYear: 'Start date for monitoring must include a year',
-        required: 'Enter start date for monitoring',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'Start time for monitoring must be a real time',
-        mustIncludeHour: 'Start time for monitoring must include an hour',
-        mustIncludeMinute: 'Start time for monitoring must include a minute',
-        required: 'Enter start time for monitoring',
-      },
-    },
-    endDateTime: {
-      date: {
-        mustBeReal: 'End date for monitoring must be a real date',
-        mustIncludeDay: 'End date for monitoring must include a day',
-        mustIncludeMonth: 'End date for monitoring must include a month',
-        mustIncludeYear: 'End date for monitoring must include a year',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'End time for monitoring must be a real time',
-        mustIncludeHour: 'End time for monitoring must include an hour',
-        mustIncludeMinute: 'End time for monitoring must include a minute',
-        required: 'Enter end time for monitoring',
-      },
-    },
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring'),
   },  
   monitoringConditionsAlcohol: {   
-    startDateTime: {
-      date: {
-        mustBeReal: 'Start date for alcohol monitoring must be a real date',
-        mustIncludeDay: 'Start date for alcohol monitoring must include a day',
-        mustIncludeMonth: 'Start date for alcohol monitoring must include a month',
-        mustIncludeYear: 'Start date for alcohol monitoring must include a year',
-        required: 'Enter start date for alcohol monitoring',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'Start time for alcohol monitoring must be a real time',
-        mustIncludeHour: 'Start time for alcohol monitoring must include an hour',
-        mustIncludeMinute: 'Start time for alcohol monitoring must include a minute',
-        required: 'Enter end time for alcohol monitoring',
-      },
-    },
-    endDateTime: {
-      date: {
-        mustBeReal: 'End date for alcohol monitoring must be a real date',
-        mustIncludeDay: 'End date for alcohol monitoring must include a day',
-        mustIncludeMonth: 'End date for alcohol monitoring must include a month',
-        mustIncludeYear: 'End date for alcohol monitoring must include a year',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'End time for alcohol monitoring must be a real time',
-        mustIncludeHour: 'End time for alcohol monitoring must include an hour',
-        mustIncludeMinute: 'End time for alcohol monitoring must include a minute',
-        required: 'Enter end time for alcohol monitoring',
-      },
-    },
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('alcohol monitoring', true),
   },
   mandatoryAttendanceConditions: {   
-    startDateTime: {
-      date: {
-        mustBeReal: 'Start date for attendance monitoring must be a real date',
-        mustIncludeDay: 'Start date for attendance monitoring must include a day',
-        mustIncludeMonth: 'Start date for attendance monitoring must include a month',
-        mustIncludeYear: 'Start date for attendance monitoring must include a year',
-        required: 'Enter start date for attendance monitoring',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'Start time for attendance monitoring must be a real time',
-        mustIncludeHour: 'Start time for attendance monitoring must include an hour',
-        mustIncludeMinute: 'Start time for attendance monitoring must include a minute',
-        required: 'Enter end time for attendance monitoring',
-      },
-    },
-    endDateTime: {
-      date: {
-        mustBeReal: 'End date for attendance monitoring must be a real date',
-        mustIncludeDay: 'End date for attendance monitoring must include a day',
-        mustIncludeMonth: 'End date for attendance monitoring must include a month',
-        mustIncludeYear: 'End date for attendance monitoring must include a year',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'End time for attendance monitoring must be a real time',
-        mustIncludeHour: 'End time for attendance monitoring must include an hour',
-        mustIncludeMinute: 'End time for attendance monitoring must include a minute',
-        required: 'Enter end time for attendance monitoring',
-      },
-    },
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring', true),
+  },
+  curfewConditions: {  
+    addressesRequired: 'Select where the device wearer will be during curfew hours' ,
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',

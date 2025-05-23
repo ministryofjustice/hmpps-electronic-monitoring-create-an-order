@@ -1,7 +1,7 @@
 import { deserialiseDateTime, getError } from '../../utils/utils'
 import { CurfewConditions } from '../CurfewConditions'
 import { ValidationResult } from '../Validation'
-import { DateField, MultipleChoiceField, AddressViewsViewModel, getAddressViews, AddressViews } from './utils'
+import { DateTimeField, MultipleChoiceField, AddressViewsViewModel, getAddressViews, AddressViews } from './utils'
 import { CurfewConditionsFormData } from '../form-data/curfewConditions'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { Address } from '../Address'
@@ -10,8 +10,8 @@ type CurfewConditionsViewModel = AddressViewsViewModel<
   Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate'>
 > & {
   addresses: MultipleChoiceField
-  startDate: DateField
-  endDate: DateField
+  startDate: DateTimeField
+  endDate: DateTimeField
 }
 
 const createViewModelFromFormData = (
@@ -25,15 +25,27 @@ const createViewModelFromFormData = (
   } else if (formData.addresses) {
     addresses = [formData.addresses]
   }
-
+   
   return {
-    addresses: { values: addresses, error: getError(validationErrors, 'curfewAddress') },
+    addresses: { values: addresses, error: getError(validationErrors, 'curfewAddress')||getError(validationErrors, 'addresses') },
     startDate: {
-      value: { day: formData['startDate-day'], month: formData['startDate-month'], year: formData['startDate-year'] },
+      value: {
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes
+      },
       error: getError(validationErrors, 'startDate'),
     },
     endDate: {
-      value: { day: formData['endDate-day'], month: formData['endDate-month'], year: formData['endDate-year'] },
+      value:  {
+        day: formData.endDate.day,
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes
+      },
       error: getError(validationErrors, 'endDate'),
     },
     primaryAddressView: { value: addressViews.primaryAddressView },
@@ -47,13 +59,10 @@ const createViewModelFromCurfewConditions = (
   addressViews: AddressViews,
   curfewConditions: CurfewConditions | undefined | null,
 ): CurfewConditionsViewModel => {
-  const startDate = deserialiseDateTime(curfewConditions?.startDate)
-  const endDate = deserialiseDateTime(curfewConditions?.endDate)
-
   return {
     addresses: { values: curfewConditions?.curfewAddress?.split(',') ?? [] },
-    startDate: { value: startDate },
-    endDate: { value: endDate },
+    startDate: { value: deserialiseDateTime(curfewConditions?.startDate) },
+    endDate: { value: deserialiseDateTime(curfewConditions?.endDate) },
     primaryAddressView: { value: addressViews.primaryAddressView },
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },

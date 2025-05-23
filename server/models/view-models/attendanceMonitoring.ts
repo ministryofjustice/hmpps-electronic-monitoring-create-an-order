@@ -13,23 +13,6 @@ type AttendanceMonitoringViewModel = ViewModel<Pick<AttendanceMonitoring, 'appoi
   startTime: TimeField
 }
 
-const deserialiseDate = (dateString: string | null) => {
-  if (dateString === null || dateString === '') {
-    return {
-      day: '',
-      month: '',
-      year: '',
-    }
-  }
-
-  const date = new Date(dateString)
-
-  return {
-    day: date.getDate().toString().padStart(2, '0'),
-    month: (date.getMonth() + 1).toString().padStart(2, '0'),
-    year: date.getFullYear().toString(),
-  }
-}
 
 const constructFromFormData = (
   formData: AttendanceMonitoringFormData,
@@ -52,11 +35,11 @@ const constructFromFormData = (
     },
     endDate: {
       value:  {
-        day: formData.startDate.day,
-        month: formData.startDate.month,
-        year: formData.startDate.year,
-        hours: formData.startDate.hours,
-        minutes: formData.startDate.minutes
+        day: formData.endDate.day,
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes
       },
       error: getError(validationErrors, 'endDate'),
     },

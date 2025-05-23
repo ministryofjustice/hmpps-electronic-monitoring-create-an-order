@@ -258,7 +258,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
       return false
     })
     .transform(value => {
-      if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
+      if (value.day === '' && value.month === '' && value.year === '' ) {
         return null
       }
 

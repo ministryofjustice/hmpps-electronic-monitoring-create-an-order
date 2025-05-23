@@ -65,11 +65,11 @@ const createViewModelFromFormData = (
     },
     endDate: {
       value:  {
-        day: formData.startDate.day,
-        month: formData.startDate.month,
-        year: formData.startDate.year,
-        hours: formData.startDate.hours,
-        minutes: formData.startDate.minutes
+        day: formData.endDate.day,
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes
       },
       error: getError(validationErrors, 'endDate'),
     },
