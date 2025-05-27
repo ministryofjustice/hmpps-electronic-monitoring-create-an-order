@@ -1,4 +1,6 @@
-const notifyingOrganisations: Record<string, string> = {
+import NotifyingOrganisations from '../../../types/i18n/reference/notifyingOrganisations'
+
+const notifyingOrganisations: NotifyingOrganisations = {
   PRISON: 'Prison',
   PROBATION: 'Probation',
   HOME_OFFICE: 'Home Office',
