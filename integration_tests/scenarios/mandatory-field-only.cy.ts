@@ -35,7 +35,7 @@ import ContactInformationCheckYourAnswersPage from '../pages/order/contact-infor
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 
-context.skip('Mandatory fields only', () => {
+context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
 
