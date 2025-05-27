@@ -1,4 +1,6 @@
-const youthJusticeServiceRegions: Record<string, string> = {
+import YouthJusticeServiceRegions from '../../../types/i18n/reference/youthJusticeServiceRegions'
+
+const youthJusticeServiceRegions: YouthJusticeServiceRegions = {
   NORTH_EAST_AND_CUMBRIA: 'North East and Cumbria',
   NORTH_WEST: 'North West',
   YORKSHIRE_AND_HUMBERSIDE: 'Yorkshire and Humberside',

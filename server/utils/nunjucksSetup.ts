@@ -6,14 +6,6 @@ import fs from 'fs'
 import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
-import prisons from '../reference/prisons'
-import probationRegions from '../reference/probation-regions'
-import youthJusticeServiceRegions from '../reference/youth-justice-service-regions'
-import crownCourts from '../reference/crown-courts'
-import magistratesCourts from '../reference/magistrates-courts'
-import responsibleOrganisations from '../reference/responsible-organisations'
-import notifyingOrganisations from '../reference/notifying-organisations'
-import sentenceTypes from '../reference/sentence-types'
 import ReferenceData from '../types/i18n/reference/reference'
 import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
 import { RadiosItem } from './govukFrontEndTypes/radioItem'
@@ -86,14 +78,4 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
   njkEnv.addFilter('toOptions', toOptions)
-
-  // Add data to global nunjucks env
-  njkEnv.addGlobal('prisons', toOptions(prisons, false, true))
-  njkEnv.addGlobal('probationRegions', toOptions(probationRegions, false, true))
-  njkEnv.addGlobal('yjsRegions', toOptions(youthJusticeServiceRegions, false, true))
-  njkEnv.addGlobal('crownCourts', toOptions(crownCourts, false, true))
-  njkEnv.addGlobal('magistratesCourts', toOptions(magistratesCourts, false, true))
-  njkEnv.addGlobal('responsibleOrganisations', responsibleOrganisations)
-  njkEnv.addGlobal('notifyingOrganisations', notifyingOrganisations)
-  njkEnv.addGlobal('sentenceTypes', sentenceTypes)
 }
