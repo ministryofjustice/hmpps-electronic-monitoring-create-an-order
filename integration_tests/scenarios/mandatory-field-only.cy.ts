@@ -59,7 +59,7 @@ context.skip('Mandatory fields only', () => {
     })
   })
 
-  context.skip('Fill in adult mandatory only fields and screenshot', () => {
+  context('Fill in adult mandatory only fields and screenshot', () => {
     const fullDeviceWearerDetails = createFakeAdultDeviceWearer()
     const deviceWearerDetails = {
       firstNames: fullDeviceWearerDetails.firstNames,
@@ -313,7 +313,7 @@ context.skip('Mandatory fields only', () => {
     })
   })
 
-  context.skip('Fill in youth mandatory only fields and screenshot', () => {
+  context('Fill in youth mandatory only fields and screenshot', () => {
     const fullDeviceWearerDetails = createFakeYouthDeviceWearer()
     const deviceWearerDetails = {
       firstNames: fullDeviceWearerDetails.firstNames,
