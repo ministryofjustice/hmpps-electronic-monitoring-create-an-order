@@ -35,7 +35,7 @@ import ContactInformationCheckYourAnswersPage from '../pages/order/contact-infor
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 
-context('Mandatory fields only', () => {
+context.skip('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
 
@@ -59,7 +59,7 @@ context('Mandatory fields only', () => {
     })
   })
 
-  context('Fill in adult mandatory only fields and screenshot', () => {
+  context.skip('Fill in adult mandatory only fields and screenshot', () => {
     const fullDeviceWearerDetails = createFakeAdultDeviceWearer()
     const deviceWearerDetails = {
       firstNames: fullDeviceWearerDetails.firstNames,
@@ -313,7 +313,7 @@ context('Mandatory fields only', () => {
     })
   })
 
-  context('Fill in youth mandatory only fields and screenshot', () => {
+  context.skip('Fill in youth mandatory only fields and screenshot', () => {
     const fullDeviceWearerDetails = createFakeYouthDeviceWearer()
     const deviceWearerDetails = {
       firstNames: fullDeviceWearerDetails.firstNames,

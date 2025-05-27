@@ -28,7 +28,7 @@ type EnforcementZoneFormData = Omit<z.infer<typeof EnforcementZoneFormDataModel>
 
 const EnforcementZoneFormDataValidator = z
   .object({
-    zoneId: z.number().nullable(),
+    zoneId: z.number().nullable().default(0),
     description: z.string().min(1, validationErrors.enforcementZone.descriptionRequired),
     duration: z.string().min(1, validationErrors.enforcementZone.durationRequired),
     startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
