@@ -27,6 +27,7 @@ import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
+import ReceiptController from '../controllers/receiptController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -117,6 +118,7 @@ export default function routes({
     taskListService,
   )
   const variationDetailsController = new VariationDetailsController(auditService, variationService, taskListService)
+  const receiptController = new ReceiptController()
 
   router.param('orderId', populateOrder(orderService))
 
@@ -133,7 +135,8 @@ export default function routes({
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
   get(paths.ORDER.SUBMIT_PATIAL_SUCCESS, orderController.submitPartialSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
-  get(paths.ORDER.RECEIPT, orderController.getReceipt)
+  get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
+  get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
 
   /**
    * ABOUT THE DEVICE WEARER

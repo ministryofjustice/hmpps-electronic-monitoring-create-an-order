@@ -10,6 +10,7 @@ const paths = {
     SUBMIT_PATIAL_SUCCESS: '/order/:orderId/submit/partial-success',
     SUBMIT_SUCCESS: '/order/:orderId/submit/success',
     RECEIPT: '/order/:orderId/receipt',
+    RECEIPT_DOWNLOAD: '/order/:orderId/pdf',
   },
 
   ABOUT_THE_DEVICE_WEARER: {

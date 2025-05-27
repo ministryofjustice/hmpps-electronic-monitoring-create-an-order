@@ -69,6 +69,16 @@ export default {
   },
   activeAgencies: get('ACTIVE_AGENCIES', '', requiredInProduction),
   apis: {
+    gotenberg: {
+      apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      pdfMargins: {
+        marginTop: '1.0',
+        marginBottom: '0.8',
+        marginLeft: '0.0',
+        marginRight: '0.0',
+        scale: '0.93',
+      },
+    },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
