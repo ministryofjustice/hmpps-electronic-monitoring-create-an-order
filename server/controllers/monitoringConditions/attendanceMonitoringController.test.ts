@@ -72,7 +72,7 @@ describe('attendanceMonitoringController', () => {
   ]
 
   const invalidBody = {
-    action: 'continue',    
+    action: 'continue',
     startDate: {
       day: '',
       month: '',
@@ -102,7 +102,7 @@ describe('attendanceMonitoringController', () => {
   }
 
   const validBody = {
-    action: 'continue',    
+    action: 'continue',
     startDate: {
       day: '01',
       month: '01',
@@ -215,14 +215,14 @@ describe('attendanceMonitoringController', () => {
               addressLine4: '',
               addressPostcode: '',
               appointmentDay: '',
-              startDate:{
+              startDate: {
                 day: '',
                 month: '',
                 year: '',
                 hours: '',
                 minutes: '',
               },
-              endDate:{
+              endDate: {
                 day: '',
                 month: '',
                 year: '',
@@ -231,7 +231,7 @@ describe('attendanceMonitoringController', () => {
               },
               endTimeHours: '',
               endTimeMinutes: '',
-              purpose: '',             
+              purpose: '',
               startTimeHours: '',
               startTimeMinutes: '',
             },
@@ -245,7 +245,7 @@ describe('attendanceMonitoringController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/attendance-monitoring', {
-        id:undefined,
+        id: undefined,
         address: {
           error: undefined,
           value: {
@@ -338,7 +338,7 @@ describe('attendanceMonitoringController', () => {
 
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
-      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {...invalidBody, id:null})
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', { ...invalidBody, id: null })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
           error: 'Please enter a mandatory attendance monitoring start date date to continue to the next page',

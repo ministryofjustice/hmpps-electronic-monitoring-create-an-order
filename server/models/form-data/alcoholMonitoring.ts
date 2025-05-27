@@ -5,7 +5,7 @@ import { AlcoholMonitoringType, InstallationLocationType } from '../AlcoholMonit
 
 const AlcoholMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
-  monitoringType: z.string().nullable().default(null),
+  monitoringType: z.string().default(''),
   startDate: z.object({
     day: z.string().default(''),
     month: z.string().default(''),
@@ -20,7 +20,7 @@ const AlcoholMonitoringFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  installationLocation: z.string().nullable().default(null),
+  installationLocation: z.string().default(''),
   prisonName: z.string().nullable().default(null),
   probationOfficeName: z.string().nullable().default(null),
 })
@@ -29,10 +29,10 @@ export type AlcoholMonitoringFormData = z.infer<typeof AlcoholMonitoringFormData
 
 const AlcoholMonitoringFormDataValidator = z
   .object({
-    monitoringType: z.string(),
+    monitoringType: z.string().min(1, validationErrors.monitoringConditionsAlcohol.monitoringTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditionsAlcohol.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditionsAlcohol.endDateTime),
-    installationLocation: z.string(),
+    installationLocation: z.string().min(1, validationErrors.monitoringConditionsAlcohol.installationLocationRequired),
     prisonName: z.string(),
     probationOfficeName: z.string(),
   })

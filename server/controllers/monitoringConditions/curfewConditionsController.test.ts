@@ -266,7 +266,7 @@ describe('CurfewConditionsController', () => {
       })
       req.body = {
         action: 'continue',
-        address: ['PRIMARY', 'SECONDARY'],       
+        address: ['PRIMARY', 'SECONDARY'],
         startDate: {
           day: '11',
           month: '09',

@@ -139,8 +139,11 @@ describe('AlcoholMonitoringController', () => {
         'pages/order/monitoring-conditions/alcohol-monitoring',
         expect.objectContaining({
           monitoringType: { value: 'ALCOHOL_ABSTINENCE' },
-          startDate: { value: { day: '', month: '', year: '', hours: "00", minutes: "00"}, error: { text: 'Start date is required' } },
-          endDate: { value: { day: '30', month: '12', year: '2027', hours: '00', minutes: '00'},error: undefined, },
+          startDate: {
+            value: { day: '', month: '', year: '', hours: '00', minutes: '00' },
+            error: { text: 'Start date is required' },
+          },
+          endDate: { value: { day: '30', month: '12', year: '2027', hours: '00', minutes: '00' }, error: undefined },
           prisonName: { value: '' },
           probationOfficeName: { value: '' },
           primaryAddressView: { value: '1 Mock Street, Mock City, Mock Postcode' },
@@ -274,7 +277,7 @@ describe('AlcoholMonitoringController', () => {
     req.flash = jest.fn()
     req.body = {
       action: 'back',
-      monitoringType: 'ALCOHOL_ABSTINENCE',     
+      monitoringType: 'ALCOHOL_ABSTINENCE',
       startDate: {
         day: '30',
         month: '12',

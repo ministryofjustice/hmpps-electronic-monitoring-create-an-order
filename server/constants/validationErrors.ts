@@ -23,6 +23,8 @@ interface ValidationErrors {
   monitoringConditionsAlcohol: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    monitoringTypeRequired: string
+    installationLocationRequired: string
   }
   mandatoryAttendanceConditions: {
     startDateTime: DateTimeErrorMessages
@@ -147,6 +149,8 @@ const validationErrors: ValidationErrors = {
   monitoringConditionsAlcohol: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('alcohol monitoring', true),
+    monitoringTypeRequired: 'Select what alcohol monitoring the device wearer needs',
+    installationLocationRequired: 'Select the address of the base station',
   },
   mandatoryAttendanceConditions: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),

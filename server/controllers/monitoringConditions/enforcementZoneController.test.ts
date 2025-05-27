@@ -10,6 +10,7 @@ import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import EnforcementZoneController from './enforcementZoneController'
 import { EnforcementZone } from '../../models/EnforcementZone'
 import TaskListService from '../../services/taskListService'
+
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../services/attachmentService')
@@ -115,7 +116,7 @@ describe('EnforcementZoneController', () => {
             month: '02',
             year: '2026',
             hours: '23',
-            minutes: '59'
+            minutes: '59',
           },
         },
         file: {
@@ -128,7 +129,7 @@ describe('EnforcementZoneController', () => {
             month: '02',
             year: '2025',
             hours: '00',
-            minutes: '00'
+            minutes: '00',
           },
         },
       })
@@ -324,7 +325,7 @@ describe('EnforcementZoneController', () => {
 
 const createMockBody = (anotherZone: string = 'false', action: string = 'sumbit'): ZoneFormDataModel => {
   return {
-    action,   
+    action,
     startDate: {
       day: '15',
       month: '02',
@@ -369,10 +370,10 @@ type ZoneFormDataModel = {
   anotherZone: string
 }
 
-type DateTimeModel={
-  day:string
-  month:string
-  year:string
-  hours:string
-  minutes:string
+type DateTimeModel = {
+  day: string
+  month: string
+  year: string
+  hours: string
+  minutes: string
 }
