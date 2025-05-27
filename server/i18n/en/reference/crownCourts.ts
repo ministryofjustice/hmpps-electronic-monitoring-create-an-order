@@ -1,4 +1,6 @@
-const crownCourts: Record<string, string> = {
+import CrownCourts from '../../../types/i18n/reference/crownCourts'
+
+const crownCourts: CrownCourts = {
   YORK_CROWN_COURT: 'York Crown Court',
   AYLESBURY_CROWN_COURT: 'Aylesbury Crown Court',
   BIRMINGHAM_CROWN_COURT: 'Birmingham Crown Court',
