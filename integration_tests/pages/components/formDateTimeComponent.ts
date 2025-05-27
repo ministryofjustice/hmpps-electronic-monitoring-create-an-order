@@ -85,12 +85,14 @@ export default class FormDateTimeComponent {
     this.minutes.should('have.value', `0${value.getMinutes()}`.slice(-2))
   }
 
-  shouldNotHaveValue(): void {
+  shouldNotHaveValue(checkTimes: boolean = true): void {
     this.day.should('have.value', '')
     this.month.should('have.value', '')
     this.year.should('have.value', '')
-    this.hours.should('have.value', '')
-    this.minutes.should('have.value', '')
+    if (checkTimes) {
+      this.hours.should('have.value', '')
+      this.minutes.should('have.value', '')
+    }
   }
 
   shouldBeDisabled(): void {
