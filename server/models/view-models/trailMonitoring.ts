@@ -1,4 +1,4 @@
-import { FormField, TextField, ViewModel } from './utils'
+import { DateTimeField, ViewModel } from './utils'
 import { ValidationResult } from '../Validation'
 import { TrailMonitoring } from '../TrailMonitoring'
 import { deserialiseDateTime, getError } from '../../utils/utils'
@@ -6,14 +6,8 @@ import { TrailMonitoringFormData } from '../form-data/trailMonitoring'
 import { createGovukErrorSummary } from '../../utils/errors'
 
 type TrailMonitoringViewModel = ViewModel<unknown> & {
-  startDate?: FormField
-  startDateDay: TextField
-  startDateMonth: TextField
-  startDateYear: TextField
-  endDate?: FormField
-  endDateDay?: TextField
-  endDateMonth?: TextField
-  endDateYear?: TextField
+  startDate: DateTimeField
+  endDate: DateTimeField
 }
 
 const createViewModelFromFormData = (
@@ -21,29 +15,34 @@ const createViewModelFromFormData = (
   validationErrors: ValidationResult,
 ): TrailMonitoringViewModel => {
   return {
-    startDate: { error: getError(validationErrors, 'startDate') },
-    startDateDay: { value: formData['startDate-day'] ?? '' },
-    startDateMonth: { value: formData['startDate-month'] ?? '' },
-    startDateYear: { value: formData['startDate-year'] ?? '' },
-    endDate: { error: getError(validationErrors, 'endDate') },
-    endDateDay: { value: formData['endDate-day'] ?? '' },
-    endDateMonth: { value: formData['endDate-month'] ?? '' },
-    endDateYear: { value: formData['endDate-year'] ?? '' },
+    startDate: {
+      value: {
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes,
+      },
+      error: getError(validationErrors, 'startDate'),
+    },
+    endDate: {
+      value: {
+        day: formData.endDate.day,
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes,
+      },
+      error: getError(validationErrors, 'endDate'),
+    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
 const createViewModelFromTrailMonitoring = (trailMonitoring: TrailMonitoring): TrailMonitoringViewModel => {
-  const startDate = deserialiseDateTime(trailMonitoring?.startDate)
-  const endDate = deserialiseDateTime(trailMonitoring?.endDate)
-
   return {
-    startDateDay: { value: startDate.day },
-    startDateMonth: { value: startDate.month },
-    startDateYear: { value: startDate.year },
-    endDateDay: { value: endDate.day },
-    endDateMonth: { value: endDate.month },
-    endDateYear: { value: endDate.year },
+    startDate: { value: deserialiseDateTime(trailMonitoring?.startDate) },
+    endDate: { value: deserialiseDateTime(trailMonitoring?.endDate) },
     errorSummary: null,
   }
 }

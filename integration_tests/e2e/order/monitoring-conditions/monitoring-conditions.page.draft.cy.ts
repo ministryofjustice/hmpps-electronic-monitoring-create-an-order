@@ -41,8 +41,8 @@ context('Monitoring conditions', () => {
         page.form.saveAndReturnButton.should('exist')
         page.errorSummary.shouldNotExist()
 
-        page.form.startDateField.shouldNotHaveValue()
-        page.form.endDateField.shouldNotHaveValue()
+        page.form.startDateField.shouldNotHaveValue(false)
+        page.form.endDateField.shouldNotHaveValue(false)
         page.form.orderTypeField.shouldHaveValue('')
         page.form.conditionTypeField.shouldNotHaveValue()
         page.form.orderTypeDescriptionField.shouldHaveValue('')

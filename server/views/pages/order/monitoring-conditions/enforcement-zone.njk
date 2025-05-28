@@ -6,7 +6,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-
+{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
 {% set section = content.pages.exclusionZone.section %}
 {% set heading = content.pages.exclusionZone.title %}
 {% set legend = content.pages.exclusionZone.legend %}
@@ -17,81 +17,39 @@
 
   {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
 
-  {{ govukDateInput({
-    id: "startDate",
-    fieldset: {
-      legend: {
-        text: questions.startDate.text,
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: questions.startDate.hint
-    },
-    items: [
-      {
-        name: "startDay",
-        classes: "govuk-input--width-2",
-        label: "Day",
-        value: startDate.value.day,
-        attributes: attributes
+   {{dateTimeInput({
+      id: "startDate",
+      name: "startDate",
+      date: startDate.value,
+      dateLabel:  questions.startDate.text,
+      dateHint: questions.startDate.hint,
+      errorMessages: {
+        field: startDate.error,
+        date: errors.dateError,
+        time: errors.timeError
       },
-      {
-        name: "startMonth",
-        classes: "govuk-input--width-2",
-        label: "Month",
-        value: startDate.value.month,
-        attributes: attributes
-      },
-      {
-        name: "startYear",
-        classes: "govuk-input--width-4",
-        label: "Year",
-        value: startDate.value.year,
-        attributes: attributes
-      }
-    ],
-    errorMessage: startDate.error
-  }) }}
+      disabled: not isOrderEditable,
+      timesEnabled: false,
+      defaultHours: "00",
+      defaultMinutes: "00"
+    })}}
 
-  {{ govukDateInput({
-    id: "endDate",
-    fieldset: {
-      legend: {
-        text: questions.endDate.text,
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: questions.endDate.hint
-    },
-    items: [
-      {
-        name: "endDay",
-        label: "Day",
-        classes: "govuk-input--width-2",
-        value: endDate.value.day,
-        attributes: attributes
+  {{dateTimeInput({
+      id: "endDate",
+      name: "endDate",
+      date: endDate.value,
+      dateLabel:  questions.endDate.text,
+      dateHint: questions.endDate.hint,
+      errorMessages: {
+        field: endDate.error,
+        date: errors.dateError,
+        time: errors.timeError
       },
-      {
-        name: "endMonth",
-        label: "Month",
-        classes: "govuk-input--width-2",
-        value: endDate.value.month,
-        attributes: attributes
-      },
-      {
-        name: "endYear",
-        label: "Year",
-        classes: "govuk-input--width-4",
-        value: endDate.value.year,
-        attributes: attributes
-      }
-    ],
-    errorMessage: endDate.error
-  }) }}
+      disabled: not isOrderEditable,
+      timesEnabled: false,
+      defaultHours: 23,
+      defaultMinutes: 59
+    })}}
 
   {% call govukFieldset({
     legend: {

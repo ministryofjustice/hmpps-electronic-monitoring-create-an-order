@@ -20,6 +20,31 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  monitoringConditionsAlcohol: {
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+    monitoringTypeRequired: string
+    installationLocationRequired: string
+  }
+  mandatoryAttendanceConditions: {
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
+  curfewConditions: {
+    addressesRequired: string
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
+  enforcementZone: {
+    descriptionRequired: string
+    durationRequired: string
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
+  trailMonitoring: {
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+  }
   notifyingOrganisation: {
     notifyingOrganisationName: string
     responsibleOrganisation: string
@@ -52,6 +77,44 @@ export interface DateTimeErrorMessages {
   time: TimeErrorMessages
 }
 
+const getMonitoringConditionStartDateTimeErrorMessages = (type: string) => {
+  return {
+    date: {
+      mustBeReal: `Start date for ${type} must be a real date`,
+      mustIncludeDay: `Start date for ${type} must include a day`,
+      mustIncludeMonth: `Start date for ${type} must include a month`,
+      mustIncludeYear: `Start date for ${type} must include a year`,
+      required: `Enter start date for ${type}`,
+      yearMustIncludeFourNumbers: `Year must include 4 numbers`,
+    },
+    time: {
+      mustBeReal: `Start time for ${type} must be a real time`,
+      mustIncludeHour: `Start time for ${type} must include an hour`,
+      mustIncludeMinute: `Start time for ${type} must include a minute`,
+      required: `Enter start time for ${type}`,
+    },
+  }
+}
+
+const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: boolean = false) => {
+  return {
+    date: {
+      mustBeReal: `End date for ${type} must be a real date`,
+      mustIncludeDay: `End date for ${type} must include a day`,
+      mustIncludeMonth: `End date for ${type} must include a month`,
+      mustIncludeYear: `End date for ${type} must include a year`,
+      yearMustIncludeFourNumbers: `Year must include 4 numbers`,
+      required: required ? `Enter end date for ${type}` : undefined,
+    },
+    time: {
+      mustBeReal: `End time for ${type} must be a real time`,
+      mustIncludeHour: `End time for ${type} must include an hour`,
+      mustIncludeMinute: `End time for ${type} must include a minute`,
+      required: `Enter end time for ${type}`,
+    },
+  }
+}
+
 const validationErrors: ValidationErrors = {
   attachments: {
     licenceRequired: 'Select the licence document',
@@ -80,35 +143,33 @@ const validationErrors: ValidationErrors = {
     conditionTypeRequired: 'Select order type condition',
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeRequired: 'Select order type',
-    startDateTime: {
-      date: {
-        mustBeReal: 'Start date for monitoring must be a real date',
-        mustIncludeDay: 'Start date for monitoring must include a day',
-        mustIncludeMonth: 'Start date for monitoring must include a month',
-        mustIncludeYear: 'Start date for monitoring must include a year',
-        required: 'Enter start date for monitoring',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'Start time for monitoring must be a real time',
-        mustIncludeHour: 'Start time for monitoring must include an hour',
-        mustIncludeMinute: 'Start time for monitoring must include a minute',
-      },
-    },
-    endDateTime: {
-      date: {
-        mustBeReal: 'End date for monitoring must be a real date',
-        mustIncludeDay: 'End date for monitoring must include a day',
-        mustIncludeMonth: 'End date for monitoring must include a month',
-        mustIncludeYear: 'End date for monitoring must include a year',
-        yearMustIncludeFourNumbers: 'Year must include 4 numbers',
-      },
-      time: {
-        mustBeReal: 'End time for monitoring must be a real time',
-        mustIncludeHour: 'End time for monitoring must include an hour',
-        mustIncludeMinute: 'End time for monitoring must include a minute',
-      },
-    },
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring'),
+  },
+  monitoringConditionsAlcohol: {
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('alcohol monitoring', true),
+    monitoringTypeRequired: 'Select what alcohol monitoring the device wearer needs',
+    installationLocationRequired: 'Select the address of the base station',
+  },
+  mandatoryAttendanceConditions: {
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring', true),
+  },
+  curfewConditions: {
+    addressesRequired: 'Select where the device wearer will be during curfew hours',
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
+  },
+  enforcementZone: {
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('enforcement zone'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('enforcement zone', true),
+    descriptionRequired: 'Enforcement zone description is required',
+    durationRequired: 'Enforcement zone duration is required',
+  },
+  trailMonitoring: {
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', true),
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',

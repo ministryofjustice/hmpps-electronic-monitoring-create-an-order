@@ -17,7 +17,7 @@ context('Monitoring conditions', () => {
           status: 'SUBMITTED',
           order: {
             monitoringConditions: {
-              startDate: '2025-01-01T00:00:00Z',
+              startDate: '2024-06-01T00:00:00Z',
               endDate: '2025-02-01T00:00:00Z',
               orderType: 'CIVIL',
               curfew: true,
@@ -69,8 +69,8 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.shouldHaveValue('Curfew')
         page.form.orderTypeDescriptionField.shouldHaveValue('DAPO')
         page.form.conditionTypeField.shouldHaveValue('Bail Order')
-        page.form.startDateField.shouldHaveValue(new Date(2025, 0, 1))
-        page.form.endDateField.shouldHaveValue(new Date(2025, 1, 1))
+        page.form.startDateField.shouldHaveValue(new Date(2024, 5, 1))
+        page.form.endDateField.shouldHaveValue(new Date(2025, 1, 1, 23, 59, 0))
         page.form.sentenceTypeField.shouldHaveValue('IPP')
         page.form.isspField.shouldHaveValue('Yes')
         page.form.hdcField.shouldHaveValue('No')
