@@ -11,6 +11,7 @@ import Offences from './offences'
 import OrderTypeDescriptions from './orderTypeDescriptions'
 import OrderTypes from './orderTypes'
 import Prisons from './prisons'
+import ProbationDeliveryUnits from './probationDeliveryUnits'
 import ProbationRegions from './probationRegions'
 import Relationship from './relationship'
 import ResponsibleOrganisations from './responsibleOrganisations'
@@ -35,6 +36,7 @@ type ReferenceCatalog = {
   orderTypeDescriptions: OrderTypeDescriptions
   orderTypes: OrderTypes
   prisons: Prisons
+  probationDeliveryUnits: ProbationDeliveryUnits
   probationRegions: ProbationRegions
   relationship: Relationship
   responsibleOrganisations: ResponsibleOrganisations

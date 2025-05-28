@@ -12,6 +12,7 @@ import offences from './offences'
 import orderTypeDescriptions from './orderTypeDescriptions'
 import orderTypes from './orderTypes'
 import prisons from './prisons'
+import probationDeliveryUnits from './probationDeliveryUnits'
 import probationRegions from './probationRegions'
 import relationship from './responsibleAdult'
 import responsibleOrganisations from './responsibleOrganisations'
@@ -36,6 +37,7 @@ const reference: ReferenceCatalog = {
   orderTypeDescriptions,
   orderTypes,
   prisons,
+  probationDeliveryUnits,
   probationRegions,
   relationship,
   responsibleOrganisations,
