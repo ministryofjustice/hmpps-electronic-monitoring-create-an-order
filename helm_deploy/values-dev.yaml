@@ -14,7 +14,7 @@ generic-service:
     CEMO_API_URL: "https://hmpps-electronic-monitoring-create-an-order-api-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
-    DATA_DICTIONARY_V5_1_ENABLED: "true"
+    DD_V5_1_ENABLED: "true"
     
   allowlist:
     unrestricted: "0.0.0.0/0"

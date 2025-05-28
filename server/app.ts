@@ -19,7 +19,7 @@ import setUpWebSession from './middleware/setUpWebSession'
 import routes from './routes'
 import type { Services } from './services'
 import populateContent from './middleware/populateContent'
-import FeatureFlags from './utils/featureFlags/featureFlags'
+import FeatureFlags from './utils/featureFlags'
 
 export default function createApp(services: Services): express.Application {
   FeatureFlags.getInstance()
