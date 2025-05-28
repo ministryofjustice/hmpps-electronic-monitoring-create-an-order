@@ -1,4 +1,4 @@
-import DataDictionaryVersion from '../../../types/i18n/dataDictionaryVersion'
+import DataDictionaryVersion, { DataDictionaryVersions } from '../../../types/i18n/dataDictionaryVersion'
 import ReferenceCatalog, { ReferenceCatalogDDv4, ReferenceCatalogDDv5 } from '../../../types/i18n/reference'
 import alcoholMonitoringTypes from './alcoholMonitoringTypes'
 import conditionTypes from './conditionTypes'
@@ -91,7 +91,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
-  if (ddVersion === 'DDv5') {
+  if (ddVersion === DataDictionaryVersions.DDv5) {
     return referenceCatalogDDv5
   }
 

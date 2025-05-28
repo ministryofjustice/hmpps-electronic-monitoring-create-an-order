@@ -1,6 +1,10 @@
-type DDv4 = 'DDv4'
-type DDv5 = 'DDv5'
+const DataDictionaryVersions = {
+  DDv4: 'DDv4',
+  DDv5: 'DDv5',
+} as const
 
-type DataDictionaryVersion = DDv4 | DDv5
+type DataDictionaryVersion = keyof typeof DataDictionaryVersions
 
 export default DataDictionaryVersion
+
+export { DataDictionaryVersions }
