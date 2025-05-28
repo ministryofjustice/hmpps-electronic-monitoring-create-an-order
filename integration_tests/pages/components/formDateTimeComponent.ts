@@ -27,6 +27,7 @@ export default class FormDateTimeComponent {
   }
 
   setDay(value: string) {
+    this.day.clear()
     this.day.type(value)
   }
 
@@ -35,6 +36,7 @@ export default class FormDateTimeComponent {
   }
 
   setMonth(value: string) {
+    this.month.clear()
     this.month.type(value)
   }
 
@@ -43,6 +45,7 @@ export default class FormDateTimeComponent {
   }
 
   setYear(value: string) {
+    this.year.clear()
     this.year.type(value)
   }
 
@@ -51,6 +54,7 @@ export default class FormDateTimeComponent {
   }
 
   setHours(value: string) {
+    this.hours.clear()
     this.hours.type(value)
   }
 
@@ -59,15 +63,18 @@ export default class FormDateTimeComponent {
   }
 
   setMinutes(value: string) {
+    this.minutes.clear()
     this.minutes.type(value)
   }
 
-  set(value: Date) {
+  set(value: Date, setTime: boolean = true) {
     this.setDay(`0${value.getDate()}`.slice(-2))
     this.setMonth(`0${value.getMonth() + 1}`.slice(-2))
     this.setYear(`${value.getFullYear()}`)
-    this.setHours(`0${value.getHours()}`.slice(-2))
-    this.setMinutes(`0${value.getMinutes()}`.slice(-2))
+    if (setTime) {
+      this.setHours(`0${value.getHours()}`.slice(-2))
+      this.setMinutes(`0${value.getMinutes()}`.slice(-2))
+    }
   }
 
   shouldHaveValue(value: Date): void {
@@ -78,12 +85,14 @@ export default class FormDateTimeComponent {
     this.minutes.should('have.value', `0${value.getMinutes()}`.slice(-2))
   }
 
-  shouldNotHaveValue(): void {
+  shouldNotHaveValue(checkTimes: boolean = true): void {
     this.day.should('have.value', '')
     this.month.should('have.value', '')
     this.year.should('have.value', '')
-    this.hours.should('have.value', '')
-    this.minutes.should('have.value', '')
+    if (checkTimes) {
+      this.hours.should('have.value', '')
+      this.minutes.should('have.value', '')
+    }
   }
 
   shouldBeDisabled(): void {

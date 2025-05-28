@@ -69,8 +69,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: new Date('2024-10-10T00:00:00.000Z'),
-        endDate: new Date('2024-10-11T00:00:00.000Z'),
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        endDate: new Date('2024-12-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -81,12 +81,11 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
-          orderId: mockOrderId,
           zoneType: zoneTypeId,
           zoneId: 1,
 
-          startDate: '2024-10-10T00:00:00.000Z',
-          endDate: '2024-10-11T00:00:00.000Z',
+          startDate: '2024-12-10T00:00:00.000Z',
+          endDate: '2024-12-11T23:59:00.000Z',
           description: 'A test description: Lorum ipsum dolar sit amet...',
           duration: 'A test duration: Lorum ipsum dolar sit amet...',
         },
@@ -99,8 +98,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: new Date('2024-10-10T00:00:00.000Z'),
-        endDate: new Date('2024-10-11T00:00:00.000Z'),
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        endDate: new Date('2024-12-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -117,8 +116,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: new Date('2024-10-10T00:00:00.000Z'),
-        endDate: new Date('2024-10-11T00:00:00.000Z'),
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        endDate: new Date('2024-12-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
       }
@@ -196,8 +195,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: new Date('2024-10-10T00:00:00.000Z'),
-        endDate: new Date('2024-10-11T00:00:00.000Z'),
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        endDate: new Date('2024-12-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -227,8 +226,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData: EnforcementZoneFormData = {
-        startDate: new Date('2024-10-10T00:00:00.000Z'),
-        endDate: new Date('2024-10-11T00:00:00.000Z'),
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        endDate: new Date('2024-12-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
@@ -250,8 +249,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData = {
         zoneType,
 
-        startDate: new Date('2024-10-10T00:00:00.000Z'),
-        endDate: new Date('2024-10-11T00:00:00.000Z'),
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        endDate: new Date('2024-12-11T00:00:00.000Z'),
         description: 'A test description: Lorum ipsum dolar sit amet...',
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
 
