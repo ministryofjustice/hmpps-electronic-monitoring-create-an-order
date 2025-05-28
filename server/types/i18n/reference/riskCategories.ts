@@ -36,6 +36,4 @@ type RiskCategoriesDDv5 = ReferenceData<
 
 export default RiskCategories
 
-export {
-  RiskCategoriesDDv5
-}
+export { RiskCategoriesDDv5 }
