@@ -61,7 +61,7 @@
 
 {# The time input below is much like the timeInput.njk component, with small differences such as input names in the format eg. "StartDate[hours]" for use with the node package "qs". The existing timeInput.njk component could be replaced with this component in a future refactor. #}
       <div class="form-time govuk-form-group {% if input.errorMessages.time %} govuk-form-group--error{% endif %}"
-          style= 'display: {% if input.timesEnabled %}inline {% else %} none {% endif %}'>
+          style= 'display: {% if input.timesEnabled %}inline; {% else %} none {% endif %}'>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.timeLabel }}</legend>
 
