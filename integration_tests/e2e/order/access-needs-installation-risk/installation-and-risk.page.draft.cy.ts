@@ -40,6 +40,40 @@ context('Access needs and installation risk information', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
         page.checkIsAccessible()
       })
+
+      context('With MAPPA disabled', () => {
+        const testFlags = { MAPPA_ENABLED: false }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should not render the MAPPA form sections', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+          cy.get('form').find('legend').contains('Which level of MAPPA applies? (optional)').should('not.exist')
+          cy.get('form').find('legend').contains('What is the MAPPA case type? (optional)').should('not.exist')
+        })
+      })
+
+      context('With MAPPA enabled', () => {
+        const testFlags = { MAPPA_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should render the MAPPA form sections', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+          cy.get('form').find('legend').contains('Which level of MAPPA applies? (optional)').should('exist')
+          cy.get('form').find('legend').contains('What is the MAPPA case type? (optional)').should('exist')
+        })
+      })
     })
   })
 })

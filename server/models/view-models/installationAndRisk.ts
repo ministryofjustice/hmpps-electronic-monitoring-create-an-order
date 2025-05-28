@@ -1,5 +1,5 @@
-import config from '../../config'
 import { createGovukErrorSummary } from '../../utils/errors'
+import FeatureFlags from '../../utils/featureFlags'
 import { getError } from '../../utils/utils'
 import { InstallationAndRiskFormData } from '../form-data/installationAndRisk'
 import { InstallationAndRisk } from '../InstallationAndRisk'
@@ -37,7 +37,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'mappaCaseType'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    mappaEnabled: config.mappa.enabled,
+    mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
   }
 }
 
@@ -59,7 +59,7 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
       value: installationAndRisk?.mappaCaseType || '',
     },
     errorSummary: null,
-    mappaEnabled: config.mappa.enabled,
+    mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
   }
 }
 
