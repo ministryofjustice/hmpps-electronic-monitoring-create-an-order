@@ -29,7 +29,9 @@
         time: errors.timeError
       },
       disabled: not isOrderEditable,
-      timesEnabled: monitoringConditionTimes
+      timesEnabled: monitoringConditionTimes,
+      defaultHours: "00",
+      defaultMinutes: "00"
     })}}
 
     {{dateTimeInput({
@@ -46,7 +48,9 @@
         time: errors.timeError
       },
       disabled: not isOrderEditable,
-       timesEnabled: monitoringConditionTimes
+      timesEnabled: monitoringConditionTimes,
+      defaultHours: 23,
+      defaultMinutes: 59
     })}}
 
   {% call govukFieldset({

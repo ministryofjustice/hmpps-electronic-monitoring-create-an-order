@@ -1,14 +1,9 @@
 import { Request, RequestHandler, Response } from 'express'
-
 import paths from '../../constants/paths'
-import { AttendanceMonitoring } from '../../models/AttendanceMonitoring'
 import { isValidationResult } from '../../models/Validation'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
-import { serialiseDate, serialiseTime } from '../../utils/utils'
 import TaskListService from '../../services/taskListService'
-import AttendanceMonitoringFormDataModel, {
-  AttendanceMonitoringFormData,
-} from '../../models/form-data/attendanceMonitoring'
+import { AttendanceMonitoringFormDataModel } from '../../models/form-data/attendanceMonitoring'
 import attendanceMonitoringViewModel from '../../models/view-models/attendanceMonitoring'
 
 export default class AttendanceMonitoringController {
@@ -16,27 +11,6 @@ export default class AttendanceMonitoringController {
     private readonly attendanceMonitoringService: AttendanceMonitoringService,
     private readonly taskListService: TaskListService,
   ) {}
-
-  createApiModelFromFormData(formData: AttendanceMonitoringFormData): AttendanceMonitoring {
-    const startDate = serialiseDate(formData['startDate-year'], formData['startDate-month'], formData['startDate-day'])
-    const endDate = serialiseDate(formData['endDate-year'], formData['endDate-month'], formData['endDate-day'])
-    const startTime = serialiseTime(formData.startTimeHours, formData.startTimeMinutes)
-    const endTime = serialiseTime(formData.endTimeHours, formData.endTimeMinutes)
-
-    return {
-      startDate,
-      endDate,
-      purpose: formData.purpose,
-      appointmentDay: formData.appointmentDay,
-      startTime,
-      endTime,
-      addressLine1: formData.addressLine1,
-      addressLine2: formData.addressLine2,
-      addressLine3: formData.addressLine3,
-      addressLine4: formData.addressLine4,
-      postcode: formData.addressPostcode,
-    }
-  }
 
   new: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')
@@ -61,15 +35,15 @@ export default class AttendanceMonitoringController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, conditionId } = req.params
-    const formData = AttendanceMonitoringFormDataModel.parse(req.body)
 
-    const record = this.createApiModelFromFormData(formData)
-    record.id = conditionId
+    req.body.id = conditionId
+    const formData = AttendanceMonitoringFormDataModel.parse(req.body)
 
     const updateResult = await this.attendanceMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
-      ...record,
+
+      data: formData,
     })
 
     if (isValidationResult(updateResult)) {

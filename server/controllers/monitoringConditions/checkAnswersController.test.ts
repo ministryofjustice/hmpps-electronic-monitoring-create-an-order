@@ -863,7 +863,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -873,7 +873,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -950,7 +950,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -960,7 +960,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -1811,7 +1811,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -1821,7 +1821,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -1898,7 +1898,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -1908,7 +1908,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },

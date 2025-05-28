@@ -126,6 +126,7 @@ context('Mandatory fields only', () => {
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 3000 * 60 * 60 * 24 * 10), // 30 days
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
@@ -388,6 +389,7 @@ context('Mandatory fields only', () => {
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 3000 * 60 * 60 * 24 * 10), // 30 days
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',

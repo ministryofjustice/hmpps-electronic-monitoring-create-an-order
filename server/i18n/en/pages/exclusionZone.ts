@@ -17,7 +17,7 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
       hint: 'For example, On Monday to Friday between 08:00 to 17:00 every week',
     },
     endDate: {
-      text: 'What date does exclusion zone monitoring end? (optional)',
+      text: 'What date does exclusion zone monitoring end?',
       hint: 'For example, 21 05 2025',
     },
     file: {

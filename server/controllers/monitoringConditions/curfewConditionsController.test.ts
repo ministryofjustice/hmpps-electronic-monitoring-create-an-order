@@ -89,12 +89,20 @@ describe('CurfewConditionsController', () => {
       const mockFormData = {
         action: 'continue',
         addresses: ['PRIMARY', 'SECONDARY'],
-        'startDate-day': '11',
-        'startDate-month': '09',
-        'startDate-year': '2024',
-        'endDate-day': '11',
-        'endDate-month': '09',
-        'endDate-year': '2025',
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
       }
       req.flash = jest.fn().mockReturnValueOnce(mockValidationError).mockReturnValueOnce([mockFormData])
 
@@ -111,6 +119,8 @@ describe('CurfewConditionsController', () => {
             year: '2024',
             month: '09',
             day: '11',
+            hours: '00',
+            minutes: '00',
           },
           error: {
             text: 'mock start date Error',
@@ -121,6 +131,8 @@ describe('CurfewConditionsController', () => {
             year: '2025',
             month: '09',
             day: '11',
+            hours: '23',
+            minutes: '59',
           },
           error: undefined,
         },
@@ -217,12 +229,20 @@ describe('CurfewConditionsController', () => {
       req.body = {
         action: 'continue',
         addresses: ['PRIMARY', 'SECONDARY'],
-        'startDate-day': '11',
-        'startDate-month': '09',
-        'startDate-year': '2024',
-        'endDate-day': '11',
-        'endDate-month': '09',
-        'endDate-year': '2025',
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
       }
       const mockValidationError = [
         { field: 'curfewAddress', error: 'mockError' },
@@ -247,12 +267,20 @@ describe('CurfewConditionsController', () => {
       req.body = {
         action: 'continue',
         address: ['PRIMARY', 'SECONDARY'],
-        'startDate-day': '11',
-        'startDate-month': '09',
-        'startDate-year': '2024',
-        'endDate-day': '11',
-        'endDate-month': '09',
-        'endDate-year': '2025',
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
       }
       mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
 
@@ -269,12 +297,20 @@ describe('CurfewConditionsController', () => {
       req.body = {
         action: 'back',
         address: ['PRIMARY', 'SECONDARY'],
-        'startDate-day': '11',
-        'startDate-month': '09',
-        'startDate-year': '2024',
-        'endDate-day': '11',
-        'endDate-month': '09',
-        'endDate-year': '2025',
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
       }
       mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
 
