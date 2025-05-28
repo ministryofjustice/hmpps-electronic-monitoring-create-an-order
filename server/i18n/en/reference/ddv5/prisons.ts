@@ -1,6 +1,6 @@
 import { PrisonsDDv5 } from '../../../../types/i18n/reference/prisons'
 
-const prisons: PrisonsDDv5 = {
+const prisonsDDv5: PrisonsDDv5 = {
   ALTCOURSE_PRISON: 'Altcourse Prison',
   ASHFIELD_PRISON: 'Ashfield Prison',
   ASKHAM_GRANGE_PRISON_AND_YOUNG_OFFENDER_INSTITUTION: 'Askham Grange Prison and Young Offender Institution',
@@ -125,4 +125,4 @@ const prisons: PrisonsDDv5 = {
   WYMOTT_PRISON: 'Wymott Prison',
 }
 
-export default prisons
+export default prisonsDDv5

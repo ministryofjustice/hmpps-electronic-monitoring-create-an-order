@@ -1,6 +1,6 @@
 import { MagistratesCourtsDDv5 } from '../../../../types/i18n/reference/magistratesCourts'
 
-const magistratesCourts: MagistratesCourtsDDv5 = {
+const magistratesCourtsDDv5: MagistratesCourtsDDv5 = {
   ABERDARE_MAGISTRATES_COURT: 'Aberdare Magistrates Court',
   ABERGAVENNY_MAGISTRATES_COURT: 'Abergavenny Magistrates Court',
   ABERTILLERY_MAGISTRATES_COURT: 'Abertillery Magistrates Court',
@@ -417,4 +417,4 @@ const magistratesCourts: MagistratesCourtsDDv5 = {
   YSTRADGYNLAIS_MAGISTRATES_COURT: 'Ystradgynlais Magistrates Court',
 }
 
-export default magistratesCourts
+export default magistratesCourtsDDv5
