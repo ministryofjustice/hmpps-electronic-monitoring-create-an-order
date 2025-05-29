@@ -6,13 +6,6 @@ const mockOrderId = uuidv4()
 
 context('Variation', () => {
   context('Variation Details', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
-    beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
-    })
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
-    })
     context('Viewing a draft order', () => {
       beforeEach(() => {
         cy.task('reset')

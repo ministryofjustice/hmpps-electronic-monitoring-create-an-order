@@ -13,11 +13,16 @@ export default class VariationDetailsFormComponent extends FormComponent {
   get variationTypeField(): FormRadiosComponent {
     const label = 'What have you changed in the form?'
     return new FormRadiosComponent(this.form, label, [
-      'Change of curfew hours',
-      'Change of address',
+      'Change to Address',
+      'Change to Personal Details',
       'Change to add an Inclusion or Exclusion Zone(s)',
-      'Change to an existing Inclusion or Exclusion Zone(s).',
+      'Change to an existing Inclusion or Exclusion',
+      'Change to Curfew Hours',
       'Order Suspension',
+      'Change to Device Type',
+      'Change to Enforceable Condition',
+      'Admin Error',
+      'Other',
     ])
   }
 
