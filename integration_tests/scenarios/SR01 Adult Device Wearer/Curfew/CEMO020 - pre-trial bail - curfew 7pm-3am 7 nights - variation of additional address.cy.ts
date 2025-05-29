@@ -88,7 +88,7 @@ context('Scenarios', () => {
       ])
 
       const variationDetails = {
-        variationType: 'Change to Address',
+        variationType: 'Change of address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
       let fakeVariationSecondaryAddress = createKnownAddress()

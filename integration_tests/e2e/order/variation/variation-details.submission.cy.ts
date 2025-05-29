@@ -8,11 +8,18 @@ import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/
 const mockOrderId = uuidv4()
 const apiPath = '/variation'
 const sampleFormData = {
-  variationType: 'Change to Curfew Hours',
+  variationType: 'Change of curfew hours',
   variationDate: new Date(2024, 0, 1),
 }
 
 context('Variation', () => {
+  const testFlags = { DD_V5_1_ENABLED: false }
+  beforeEach(() => {
+    cy.task('setFeatureFlags', testFlags)
+  })
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
   context('Variation Details', () => {
     context('Submitting valid data', () => {
       beforeEach(() => {
@@ -42,7 +49,7 @@ context('Variation', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            variationType: 'CHANGE_TO_CURFEW_HOURS',
+            variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
           },
         }).should('be.true')
