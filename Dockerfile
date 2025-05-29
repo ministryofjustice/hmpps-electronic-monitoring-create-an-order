@@ -62,8 +62,6 @@ COPY --from=build --chown=appuser:appgroup \
 
 # Create writable data directory for feature flags
 RUN mkdir /app/data && chown appuser:appgroup /app/data
-RUN echo '{}' > /app/data/feature-flags.json
-RUN echo '{}' > /app/data/default-feature-flags.json
 
 EXPOSE 3000
 ENV NODE_ENV='production'

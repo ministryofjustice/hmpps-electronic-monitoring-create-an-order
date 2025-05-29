@@ -3,8 +3,17 @@ import path from 'path'
 
 type FeatureFlagMap = Record<string, boolean>
 
-const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json')
-const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
+const featureFlagDir = path.join(process.cwd(), 'data')
+const featureFlagFilePath = path.join(featureFlagDir, 'feature-flags.json')
+const defaultFeatureFlagFilePath = path.join(featureFlagDir, 'default-feature-flags.json')
+
+// Create feature flag files (if they don't already exist) before the class is instantiated.
+if (!fs.existsSync(featureFlagFilePath)) {
+  fs.writeFileSync(featureFlagFilePath, '{}', 'utf-8')
+}
+if (!fs.existsSync(defaultFeatureFlagFilePath)) {
+  fs.writeFileSync(defaultFeatureFlagFilePath, '{}', 'utf-8')
+}
 
 export default class FeatureFlags {
   private static instance: FeatureFlags
