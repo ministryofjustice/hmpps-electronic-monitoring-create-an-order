@@ -26,9 +26,8 @@ context('Access needs and installation risk information', () => {
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
-      })     
-   
-  
+      })
+
       context('With MAPPA disabled', () => {
         const testFlags = { MAPPA_ENABLED: false }
         beforeEach(() => {
@@ -63,8 +62,7 @@ context('Access needs and installation risk information', () => {
         })
       })
 
-      context('With DDv5 enabled', ()=>{
-
+      context('With DDv5 enabled', () => {
         const testFlags = { DD_V5_1_ENABLED: true }
         beforeEach(() => {
           cy.task('setFeatureFlags', testFlags)
@@ -73,18 +71,17 @@ context('Access needs and installation risk information', () => {
           cy.task('resetFeatureFlags')
         })
 
-        it('Should have additional safeguarding options', ()=>{
+        it('Should have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-         var page = Page.verifyOnPage(InstallationAndRiskPage)
-         page.form.riskCategoryField.shouldHaveOption('Safeguarding Adult')
-         page.form.riskCategoryField.shouldHaveOption('Safeguarding Child')
-         page.form.riskCategoryField.shouldHaveOption('Safeguarding Domestic Abuse')
-         cy.get('form').find('legend').contains('Safeguarding Issues').should('not.exist')
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Adult')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Child')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Domestic Abuse')
+          cy.get('form').find('legend').contains('Safeguarding Issues').should('not.exist')
         })
       })
 
-      context('With DDv5 disabled', ()=>{
-
+      context('With DDv5 disabled', () => {
         const testFlags = { DD_V5_1_ENABLED: false }
         beforeEach(() => {
           cy.task('setFeatureFlags', testFlags)
@@ -93,13 +90,13 @@ context('Access needs and installation risk information', () => {
           cy.task('resetFeatureFlags')
         })
 
-        it('Should have additional safeguarding options', ()=>{
+        it('Should have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-         var page = Page.verifyOnPage(InstallationAndRiskPage)
-         page.form.riskCategoryField.shouldHaveOption('Safeguarding Issues')
-         cy.get('form').find('legend').contains('Safeguarding Adult').should('not.exist')
-         cy.get('form').find('legend').contains('Safeguarding Child').should('not.exist')
-         cy.get('form').find('legend').contains('Safeguarding Domestic Abuse').should('not.exist')
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Issues')
+          cy.get('form').find('legend').contains('Safeguarding Adult').should('not.exist')
+          cy.get('form').find('legend').contains('Safeguarding Child').should('not.exist')
+          cy.get('form').find('legend').contains('Safeguarding Domestic Abuse').should('not.exist')
         })
       })
     })

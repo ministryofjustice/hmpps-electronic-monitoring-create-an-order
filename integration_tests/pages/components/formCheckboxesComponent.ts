@@ -25,7 +25,6 @@ export default class FormCheckboxesComponent {
       this.element.getByLabel(value).check()
     })
   }
-  
 
   shouldHaveValue(value: string | RegExp): void {
     this.element.getByLabel(value).should('be.checked')
