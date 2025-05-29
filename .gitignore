@@ -108,6 +108,9 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+# Stores feature flags used at runtime. Created on instantiation of FeatureFlags class.
+data/
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged
