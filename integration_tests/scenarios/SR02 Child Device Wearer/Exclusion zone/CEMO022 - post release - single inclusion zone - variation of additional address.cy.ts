@@ -28,7 +28,13 @@ context('Scenarios', () => {
     })
   }
 
+  const testFlags = { DD_V5_1_ENABLED: false }
+ 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
   beforeEach(() => {
+    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 
