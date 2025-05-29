@@ -21,9 +21,14 @@ context('Variation', () => {
     context('Submitting invalid data', () => {
       beforeEach(() => {
         cy.task('reset')
+        cy.task('setFeatureFlags', { DD_V5_1_ENABLED: false })
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
         cy.signIn()
+      })
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
       })
 
       it('Should display validation error messages when the form has not been filled in', () => {

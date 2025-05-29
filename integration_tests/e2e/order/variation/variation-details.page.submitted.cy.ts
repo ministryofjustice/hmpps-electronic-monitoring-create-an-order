@@ -9,6 +9,7 @@ context('Variation', () => {
     context('Viewing a submitted order', () => {
       beforeEach(() => {
         cy.task('reset')
+        cy.task('setFeatureFlags', { DD_V5_1_ENABLED: false })
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
         cy.task('stubCemoGetOrder', {
@@ -24,6 +25,10 @@ context('Variation', () => {
         })
 
         cy.signIn()
+      })
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
       })
 
       it('should correctly display the page', () => {
