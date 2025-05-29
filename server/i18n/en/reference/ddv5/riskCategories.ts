@@ -1,6 +1,6 @@
 import { RiskCategoriesDDv5 } from '../../../../types/i18n/reference/riskCategories'
 
-const riskCategories: RiskCategoriesDDv5 = {
+const riskCategoriesDDv5: RiskCategoriesDDv5 = {
   THREATS_OF_VIOLENCE: 'Violent behaviour or threats of violence',
   SEXUAL_OFFENCES: 'Sex offender',
   RISK_TO_GENDER: 'Offensive towards someone because of their sex or gender',
@@ -18,4 +18,4 @@ const riskCategories: RiskCategoriesDDv5 = {
   OTHER_RISKS: 'Other known risks',
 }
 
-export default riskCategories
+export default riskCategoriesDDv5

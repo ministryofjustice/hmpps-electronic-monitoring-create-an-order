@@ -1,7 +1,20 @@
-import ReferenceCatalog from '../../../types/i18n/reference'
+import DataDictionaryVersion, { DataDictionaryVersions } from '../../../types/i18n/dataDictionaryVersion'
+import ReferenceCatalog, { ReferenceCatalogDDv4, ReferenceCatalogDDv5 } from '../../../types/i18n/reference'
 import alcoholMonitoringTypes from './alcoholMonitoringTypes'
 import conditionTypes from './conditionTypes'
 import crownCourts from './crownCourts'
+import civilCountyCourts from './ddv5/civilCountyCourts'
+import crownCourtsDDv5 from './ddv5/crownCourts'
+import disabilitiesDDv5 from './ddv5/disabilities'
+import familyCourts from './ddv5/familyCourts'
+import magistratesCourtsDDv5 from './ddv5/magistratesCourts'
+import militaryCourts from './ddv5/militaryCourts'
+import notifyingOrganisationsDDv5 from './ddv5/notifyingOrganisations'
+import pilots from './ddv5/pilots'
+import prisonsDDv5 from './ddv5/prisons'
+import riskCategoriesDDv5 from './ddv5/riskCategories'
+import variationTypesDDv5 from './ddv5/variationTypes'
+import youthCourts from './ddv5/youthCourts'
 import disabilities from './disabilities'
 import gender from './gender'
 import magistratesCourts from './magistratesCourts'
@@ -22,7 +35,7 @@ import variationTypes from './variationTypes'
 import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
 
-const reference: ReferenceCatalog = {
+const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
   conditionTypes,
   crownCourts,
@@ -47,4 +60,42 @@ const reference: ReferenceCatalog = {
   youthJusticeServiceRegions,
 }
 
-export default reference
+const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
+  alcoholMonitoringTypes,
+  civilCountyCourts,
+  conditionTypes,
+  crownCourts: crownCourtsDDv5,
+  disabilities: disabilitiesDDv5,
+  familyCourts,
+  gender,
+  magistratesCourts: magistratesCourtsDDv5,
+  mappaCaseType,
+  mappaLevel,
+  militaryCourts,
+  notifyingOrganisations: notifyingOrganisationsDDv5,
+  offences,
+  orderTypeDescriptions,
+  orderTypes,
+  pilots,
+  prisons: prisonsDDv5,
+  probationRegions,
+  relationship,
+  responsibleOrganisations,
+  riskCategories: riskCategoriesDDv5,
+  sentenceTypes,
+  sex,
+  variationTypes: variationTypesDDv5,
+  yesNoUnknown,
+  youthCourts,
+  youthJusticeServiceRegions,
+}
+
+const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
+  if (ddVersion === DataDictionaryVersions.DDv5) {
+    return referenceCatalogDDv5
+  }
+
+  return referenceCatalogDDv4
+}
+
+export default getReferenceData

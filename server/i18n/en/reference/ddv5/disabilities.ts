@@ -1,6 +1,6 @@
 import { DisabilitiesDDv5 } from '../../../../types/i18n/reference/disabilities'
 
-const disabilities: DisabilitiesDDv5 = {
+const disabilitiesDDv5: DisabilitiesDDv5 = {
   VISION: 'Visual impairment or blindness not corrected by wearing glasses',
   HEARING: 'Deafness or serious hearing impairment',
   MOBILITY: 'Physical disability or mobility issue',
@@ -16,4 +16,4 @@ const disabilities: DisabilitiesDDv5 = {
   NONE_OF_THE_ABOVE: 'Not able to provide this information',
 }
 
-export default disabilities
+export default disabilitiesDDv5

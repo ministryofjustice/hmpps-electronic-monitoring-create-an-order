@@ -1,6 +1,6 @@
 import { NotifyingOrganisationsDDv5 } from '../../../../types/i18n/reference/notifyingOrganisations'
 
-const notifyingOrganisations: NotifyingOrganisationsDDv5 = {
+const notifyingOrganisationsDDv5: NotifyingOrganisationsDDv5 = {
   CIVIL_AND_COUNTY_COURT: 'Civil & County Court',
   CROWN_COURT: 'Crown Court',
   FAMILY_COURT: 'Family Court',
@@ -14,4 +14,4 @@ const notifyingOrganisations: NotifyingOrganisationsDDv5 = {
   YOUTH_COURT: 'Youth Court',
 }
 
-export default notifyingOrganisations
+export default notifyingOrganisationsDDv5
