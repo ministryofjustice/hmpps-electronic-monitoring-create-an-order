@@ -11,8 +11,6 @@ export default class FormRadiosComponent {
     private readonly options: (string | RegExp)[],
   ) {
     this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
-
-    this.options.forEach(option => this.shouldHaveOption(option))
   }
 
   get element(): PageElement {
@@ -61,5 +59,9 @@ export default class FormRadiosComponent {
 
   shouldNotHaveValidationMessage(): void {
     this.validationMessage.should('not.exist')
+  }
+
+  shouldHaveAllOptions(): void {
+    this.options.forEach(option => this.shouldHaveOption(option))
   }
 }

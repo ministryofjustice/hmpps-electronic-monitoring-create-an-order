@@ -107,6 +107,7 @@ context('Attendance monitoring', () => {
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
+      page.form.shouldHaveAllOptions()
     })
   })
 

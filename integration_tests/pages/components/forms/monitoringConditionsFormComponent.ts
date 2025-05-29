@@ -186,4 +186,15 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.hdcField.shouldNotBeDisabled()
     this.prarrField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.orderTypeField.shouldHaveAllOptions()
+    this.orderTypeDescriptionField.shouldHaveAllOptions()
+    this.conditionTypeField.shouldHaveAllOptions()
+    this.monitoringRequiredField.shouldHaveAllOptions()
+    this.sentenceTypeField.shouldHaveAllOptions()
+    this.isspField.shouldHaveAllOptions()
+    this.hdcField.shouldHaveAllOptions()
+    this.prarrField.shouldHaveAllOptions()
+  }
 }

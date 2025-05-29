@@ -29,7 +29,7 @@ context('Variation', () => {
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
-
+        page.form.shouldHaveAllOptions()
         // A11y
         page.checkIsAccessible()
       })
