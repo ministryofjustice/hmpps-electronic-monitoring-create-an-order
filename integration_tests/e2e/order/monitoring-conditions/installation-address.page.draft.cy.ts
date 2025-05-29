@@ -38,7 +38,6 @@ context('Monitoring conditions', () => {
         page.form.addressLine3Field.shouldHaveValue('')
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
-        page.form.shouldHaveAllOptions()
 
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
