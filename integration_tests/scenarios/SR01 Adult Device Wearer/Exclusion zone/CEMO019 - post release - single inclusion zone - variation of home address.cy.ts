@@ -24,7 +24,7 @@ context('Scenarios', () => {
   }
 
   const testFlags = { DD_V5_1_ENABLED: false }
- 
+
   afterEach(() => {
     cy.task('resetFeatureFlags')
   })
