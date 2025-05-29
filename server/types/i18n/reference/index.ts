@@ -43,7 +43,7 @@ type ReferenceCatalogDDv4 = {
   probationRegions: ProbationRegions
   relationship: Relationship
   responsibleOrganisations: ResponsibleOrganisations
-  riskCategories: RiskCategories | RiskCategoriesDDv5
+  riskCategories: RiskCategories
   sentenceTypes: SentenceTypes
   sex: Sex
   variationTypes: VariationTypes
