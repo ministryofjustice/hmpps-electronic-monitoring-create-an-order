@@ -17,6 +17,7 @@ context('Variation', () => {
     context('Submitting valid data', () => {
       beforeEach(() => {
         cy.task('reset')
+        cy.task('setFeatureFlags', { DD_V5_1_ENABLED: false })
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
@@ -31,6 +32,10 @@ context('Variation', () => {
         })
 
         cy.signIn()
+      })
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
       })
 
       it('should submit a correctly formatted variation details submission', () => {
