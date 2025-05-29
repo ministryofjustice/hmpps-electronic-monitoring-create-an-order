@@ -40,7 +40,7 @@ context('Contact information', () => {
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
         page.backToSummaryButton.should('not.exist')
-        page.errorSummary.shouldNotExist()       
+        page.errorSummary.shouldNotExist()
       })
 
       // TODO: FAIL issue determining if autocomplete is valid
