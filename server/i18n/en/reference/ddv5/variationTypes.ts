@@ -1,6 +1,6 @@
 import { VariationTypesDDv5 } from '../../../../types/i18n/reference/variationTypes'
 
-const variationTypes: VariationTypesDDv5 = {
+const variationTypesDDv5: VariationTypesDDv5 = {
   CHANGE_TO_ADDRESS: 'Change to Address',
   CHANGE_TO_PERSONAL_DETAILS: 'Change to Personal Details',
   CHANGE_TO_ADD_AN_INCLUSION_OR_EXCLUSION_ZONES: 'Change to add an Inclusion or Exclusion Zone(s)',
@@ -13,4 +13,4 @@ const variationTypes: VariationTypesDDv5 = {
   OTHER: 'Other',
 }
 
-export default variationTypes
+export default variationTypesDDv5

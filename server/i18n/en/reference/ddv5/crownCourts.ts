@@ -1,6 +1,6 @@
 import { CrownCourtsDDv5 } from '../../../../types/i18n/reference/crownCourts'
 
-const crownCourts: CrownCourtsDDv5 = {
+const crownCourtsDDv5: CrownCourtsDDv5 = {
   AMERSHAM_CROWN_COURT: 'Amersham Crown Court',
   AYLESBURY_CROWN_COURT: 'Aylesbury Crown Court',
   BARBICAN_ALDERSGATE_HOUSE_CROWN_COURT: 'Barbican (Aldersgate House) Crown Court',
@@ -104,4 +104,4 @@ const crownCourts: CrownCourtsDDv5 = {
   YORK_CROWN_COURT: 'York Crown Court',
 }
 
-export default crownCourts
+export default crownCourtsDDv5
