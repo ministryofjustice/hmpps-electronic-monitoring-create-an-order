@@ -13,6 +13,13 @@ const sampleFormData = {
 }
 
 context('Variation', () => {
+  const testFlags = { DD_V5_1_ENABLED: false }
+  beforeEach(() => {
+    cy.task('setFeatureFlags', testFlags)
+  })
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
   context('Variation Details', () => {
     context('Submitting valid data', () => {
       beforeEach(() => {
