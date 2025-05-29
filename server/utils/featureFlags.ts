@@ -7,7 +7,10 @@ const featureFlagDir = path.join(process.cwd(), 'data')
 const featureFlagFilePath = path.join(featureFlagDir, 'feature-flags.json')
 const defaultFeatureFlagFilePath = path.join(featureFlagDir, 'default-feature-flags.json')
 
-// Create feature flag files (if they don't already exist) before the class is instantiated.
+// Create data dirctory and feature flag files (if they don't already exist) before the class is instantiated.
+if (!fs.existsSync(featureFlagDir)) {
+  fs.mkdirSync(featureFlagDir)
+}
 if (!fs.existsSync(featureFlagFilePath)) {
   fs.writeFileSync(featureFlagFilePath, '{}', 'utf-8')
 }
