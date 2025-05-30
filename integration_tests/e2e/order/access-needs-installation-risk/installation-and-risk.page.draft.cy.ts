@@ -62,6 +62,44 @@ context('Access needs and installation risk information', () => {
           cy.get('form').find('legend').contains('What is the MAPPA case type? (optional)').should('exist')
         })
       })
+
+      context('With DDv5 enabled', () => {
+        const testFlags = { DD_V5_1_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should have additional safeguarding options', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Adult')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Child')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Domestic Abuse')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Issues')
+        })
+      })
+
+      context('With DDv5 disabled', () => {
+        const testFlags = { DD_V5_1_ENABLED: false }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should have additional safeguarding options', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Issues')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Adult')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Child')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Domestic Abuse')
+        })
+      })
     })
   })
 })
