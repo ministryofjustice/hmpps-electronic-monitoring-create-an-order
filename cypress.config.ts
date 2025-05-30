@@ -1,12 +1,18 @@
 import { defineConfig } from 'cypress'
 import { fakerEN_GB as faker } from '@faker-js/faker'
+import fs from 'fs'
+import path from 'path'
 
+import logger from './logger'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import cemo from './integration_tests/mockApis/cemo'
 import fms from './integration_tests/mockApis/fms'
 import hmppsDocumentManagement from './integration_tests/mockApis/hmppsDocumentManagement'
+
+const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json')
+const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -49,6 +55,35 @@ export default defineConfig({
           console.table(message)
 
           return null
+        },
+        /*
+        * Used to change feature flags during integration testing.
+        Takes an object of flags. Only updates the values of flags that already exist; won't create new flags.
+        */
+        setFeatureFlags(newFlags: Record<string, boolean>) {
+          return fs.promises
+            .readFile(featureFlagFilePath, 'utf-8')
+            .then(data => {
+              const flags = JSON.parse(data) as Record<string, boolean>
+
+              Object.entries(newFlags).forEach(([key, value]) => {
+                if (key in flags) {
+                  flags[key] = value
+                } else {
+                  logger.warn(`Flag ${key} not found.`)
+                }
+              })
+
+              const jsonString = JSON.stringify(flags, null, 2)
+              return fs.promises.writeFile(featureFlagFilePath, jsonString, 'utf-8')
+            })
+            .then(() => null)
+        },
+        /*
+         * Used to reset feature flags to their original values after integration testing.
+         */
+        resetFeatureFlags() {
+          return fs.promises.copyFile(defaultFeatureFlagFilePath, featureFlagFilePath).then(() => null)
         },
       })
     },

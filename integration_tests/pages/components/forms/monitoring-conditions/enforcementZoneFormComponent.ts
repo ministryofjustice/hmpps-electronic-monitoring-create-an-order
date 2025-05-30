@@ -91,4 +91,8 @@ export default class EnforcementZoneFormComponent extends FormComponent {
     // this.anotherZoneField.shouldBeDisabled()
     cy.contains('legend', 'Add another exclusion or inclusion zone?', { log: false }).should('not.exist')
   }
+
+  shouldHaveAllOptions(): void {
+    this.anotherZoneField.shouldHaveAllOptions()
+  }
 }

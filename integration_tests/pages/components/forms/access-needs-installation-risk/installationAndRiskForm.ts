@@ -45,7 +45,6 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
       'History of substance abuse',
       'Diversity concerns (mental health issues, learning difficulties etc)',
       'Managed through IOM',
-      'Safeguarding Issues',
       'Another person or people living at the property who are threatening or violent',
       'Children under the age of 18 are living at the property',
       'Animals at the property, for example dogs',
@@ -121,5 +120,12 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
     this.riskDetailsField.shouldNotBeDisabled()
     this.mappaLevelField.shouldNotBeDisabled()
     this.mappaCaseTypeField.shouldNotBeDisabled()
+  }
+
+  shouldHaveAllOptions(): void {
+    this.offenceField.shouldHaveAllOptions()
+    this.riskCategoryField.shouldHaveAllOptions()
+    this.mappaLevelField.shouldHaveAllOptions()
+    this.mappaCaseTypeField.shouldHaveAllOptions()
   }
 }
