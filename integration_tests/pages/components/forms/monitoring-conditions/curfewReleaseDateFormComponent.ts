@@ -66,4 +66,8 @@ export default class CurfewReleaseDateFormComponent extends FormComponent {
     this.endTimeField.shouldBeDisabled()
     this.addressField.shouldNotHaveValidationMessage()
   }
+
+  shouldHaveAllOptions(): void {
+    this.addressField.shouldHaveAllOptions()
+  }
 }

@@ -54,4 +54,8 @@ export default class CurfewConditionsFormComponent extends FormComponent {
     this.endDateField.shouldBeDisabled()
     this.addressesField.shouldBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.addressesField.shouldHaveAllOptions()
+  }
 }

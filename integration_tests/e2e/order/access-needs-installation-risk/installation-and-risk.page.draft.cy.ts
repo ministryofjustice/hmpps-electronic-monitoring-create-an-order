@@ -18,7 +18,6 @@ context('Access needs and installation risk information', () => {
 
       it('Should display contents', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-        page.checkIsAccessible()
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
         page.form.saveAndContinueButton.should('exist')
@@ -26,6 +25,8 @@ context('Access needs and installation risk information', () => {
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
+        page.checkIsAccessible()
+        page.form.shouldHaveAllOptions()
       })
 
       context('With MAPPA disabled', () => {

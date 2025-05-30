@@ -197,4 +197,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.responsibleOfficerNameField.shouldNotBeDisabled()
     this.responsibleOfficerContactNumberField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.notifyingOrganisationField.shouldHaveAllOptions()
+    this.responsibleOrganisationField.shouldHaveAllOptions()
+    this.probationRegionField.shouldHaveAllOptions()
+    this.yjsRegionField.shouldHaveAllOptions()
+  }
 }

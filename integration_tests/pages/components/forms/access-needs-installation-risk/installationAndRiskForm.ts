@@ -121,4 +121,11 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
     this.mappaLevelField.shouldNotBeDisabled()
     this.mappaCaseTypeField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.offenceField.shouldHaveAllOptions()
+    this.riskCategoryField.shouldHaveAllOptions()
+    this.mappaLevelField.shouldHaveAllOptions()
+    this.mappaCaseTypeField.shouldHaveAllOptions()
+  }
 }
