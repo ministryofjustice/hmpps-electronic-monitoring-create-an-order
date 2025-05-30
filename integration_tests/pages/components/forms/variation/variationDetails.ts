@@ -52,4 +52,8 @@ export default class VariationDetailsFormComponent extends FormComponent {
     this.variationDateField.shouldNotBeDisabled()
     this.variationTypeField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.variationTypeField.shouldHaveAllOptions()
+  }
 }

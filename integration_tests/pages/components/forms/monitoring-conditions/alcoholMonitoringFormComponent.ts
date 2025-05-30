@@ -96,4 +96,9 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
     this.endDateField.shouldNotBeDisabled()
     this.installLocationField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.monitoringTypeField.shouldHaveAllOptions()
+    this.installLocationField.shouldHaveAllOptions()
+  }
 }

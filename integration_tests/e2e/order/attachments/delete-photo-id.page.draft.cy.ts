@@ -28,10 +28,7 @@ context('Attachments', () => {
         page.form.deleteButton.should('exist')
         page.form.backButton.should('exist')
         page.backButton.should('exist')
-      })
 
-      it('Should be accessible', () => {
-        const page = Page.visit(DeletePhotoIdPage, { orderId: mockOrderId })
         page.checkIsAccessible()
       })
     })

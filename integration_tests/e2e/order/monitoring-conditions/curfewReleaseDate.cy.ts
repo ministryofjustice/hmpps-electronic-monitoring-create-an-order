@@ -138,6 +138,7 @@ context('Curfew monitoring - release date', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.form.shouldHaveAllOptions()
       page.errorSummary.shouldNotExist()
     })
   })

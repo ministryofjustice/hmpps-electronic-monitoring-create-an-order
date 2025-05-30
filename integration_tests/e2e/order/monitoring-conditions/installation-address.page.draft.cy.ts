@@ -16,28 +16,13 @@ context('Monitoring conditions', () => {
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('Should display contents', () => {
         const page = Page.visit(InstallationAddressPage, {
           orderId: mockOrderId,
           'addressType(installation)': 'installation',
         })
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(InstallationAddressPage, {
-          orderId: mockOrderId,
-          'addressType(installation)': 'installation',
-        })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
-
-      it('Should allow the user to update the installation address details', () => {
-        const page = Page.visit(InstallationAddressPage, {
-          orderId: mockOrderId,
-          'addressType(installation)': 'installation',
-        })
-
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
@@ -53,6 +38,7 @@ context('Monitoring conditions', () => {
         page.form.addressLine3Field.shouldHaveValue('')
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
+
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
       })

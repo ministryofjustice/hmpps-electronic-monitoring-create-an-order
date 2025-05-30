@@ -32,4 +32,8 @@ export default class NoFixedAbodeFormComponent extends FormComponent {
   shouldNotBeDisabled(): void {
     this.hasFixedAddressField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.hasFixedAddressField.shouldHaveAllOptions()
+  }
 }

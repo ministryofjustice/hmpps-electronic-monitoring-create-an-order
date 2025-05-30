@@ -107,4 +107,8 @@ export default class AddressFormComponent extends FormComponent {
       this.hasAnotherAddressField.shouldNotBeDisabled()
     }
   }
+
+  shouldHaveAllOptions(): void {
+    this.hasAnotherAddressField.shouldHaveAllOptions()
+  }
 }

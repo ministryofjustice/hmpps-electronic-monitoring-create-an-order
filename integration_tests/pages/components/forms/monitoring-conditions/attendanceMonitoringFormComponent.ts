@@ -118,4 +118,8 @@ export default class AttendanceMonitoringFormComponent extends FormComponent {
     this.endTimeField.shouldNotBeDisabled()
     this.addressField.shouldNotBeDisabled()
   }
+
+  shouldHaveAllOptions(): void {
+    this.addAnotherField.shouldHaveAllOptions()
+  }
 }

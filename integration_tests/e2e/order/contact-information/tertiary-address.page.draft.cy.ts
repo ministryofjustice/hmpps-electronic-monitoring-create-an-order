@@ -16,27 +16,13 @@ context('Contact information', () => {
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('Should display contents', () => {
         const page = Page.visit(TertiaryAddressPage, {
           orderId: mockOrderId,
           'addressType(primary|secondary|tertiary)': 'tertiary',
         })
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(TertiaryAddressPage, {
-          orderId: mockOrderId,
-          'addressType(primary|secondary|tertiary)': 'tertiary',
-        })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
-
-      it('Should allow the user to update the tertiary address details', () => {
-        const page = Page.visit(TertiaryAddressPage, {
-          orderId: mockOrderId,
-          'addressType(primary|secondary|tertiary)': 'tertiary',
-        })
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
