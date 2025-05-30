@@ -5,9 +5,16 @@ import VariationDetailsPage from '../../../pages/order/variation/variationDetail
 const mockOrderId = uuidv4()
 
 context('Variation', () => {
+  const testFlags = { DD_V5_1_ENABLED: false }
+
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
   context('Variation Details', () => {
     context('Viewing a submitted order', () => {
       beforeEach(() => {
+        cy.task('setFeatureFlags', testFlags)
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 

@@ -16,29 +16,17 @@ context('Access needs and installation risk information', () => {
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('Should display contents', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
-
-      it('Should allow the user to update the identity numbers', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
-      })
-
-      it('Should be accessible', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
         page.checkIsAccessible()
+        page.form.shouldHaveAllOptions()
       })
 
       context('With MAPPA disabled', () => {
@@ -72,6 +60,44 @@ context('Access needs and installation risk information', () => {
 
           cy.get('form').find('legend').contains('Which level of MAPPA applies? (optional)').should('exist')
           cy.get('form').find('legend').contains('What is the MAPPA case type? (optional)').should('exist')
+        })
+      })
+
+      context('With DDv5 enabled', () => {
+        const testFlags = { DD_V5_1_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should have additional safeguarding options', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Adult')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Child')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Domestic Abuse')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Issues')
+        })
+      })
+
+      context('With DDv5 disabled', () => {
+        const testFlags = { DD_V5_1_ENABLED: false }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should have additional safeguarding options', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding Issues')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Adult')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Child')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Domestic Abuse')
         })
       })
     })
