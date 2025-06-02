@@ -19,7 +19,7 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "cy:run": "cypress run --config video=false",
@@ -36,6 +36,9 @@
     "npm": "^10"
   },
   "jest": {
+    "setupFiles": [
+      "<rootDir>/test/jest/jest.setup.ts"
+    ],
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",
