@@ -193,6 +193,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   monitoringConditionsAlcohol: null,
   variationDetails: null,
   isValid: false,
+  probationDeliveryUnit: null,
   ...overrideProperties,
 })
 
@@ -223,6 +224,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   },
   installationAndRisk: null,
   interestedParties: createInterestedParties(),
+  probationDeliveryUnit: null,
   enforcementZoneConditions: [],
   addresses: [
     {

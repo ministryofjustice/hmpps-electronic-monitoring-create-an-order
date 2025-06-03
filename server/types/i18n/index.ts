@@ -10,6 +10,7 @@ import ExclusionZonePageContent from './pages/exclusionZone'
 import IdentityNumbersPageContent from './pages/identityNumbers'
 import InstallationAndRiskPageContent from './pages/installationAndRisk'
 import InterestedPartiesPageContent from './pages/interestedParties'
+import ProbationDeliveryUnit from './pages/probationDeliveryUnit'
 import MonitoringConditionsPageContent from './pages/monitoringConditions'
 import NoFixedAbodePageContent from './pages/noFixedAbode'
 import ResponsibleAdultPageContent from './pages/responsibleAdult'
@@ -32,6 +33,7 @@ type I18n = {
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
     interestedParties: InterestedPartiesPageContent
+    probationDeliveryUnit: ProbationDeliveryUnit
     monitoringConditions: MonitoringConditionsPageContent
     noFixedAbode: NoFixedAbodePageContent
     primaryAddress: AddressPageContent

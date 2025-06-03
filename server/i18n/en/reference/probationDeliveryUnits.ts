@@ -112,5 +112,4 @@ const probationDeliveryUnits: ProbationDeliveryUnits = {
   WORCESTERSHIRE: 'Worcestershire',
   YORK: 'York',
 }
-
 export default probationDeliveryUnits

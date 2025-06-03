@@ -26,6 +26,7 @@ import VariationTypes, { VariationTypesDDv5 } from './variationTypes'
 import YesNoUnknown from './yesNoUnknown'
 import YouthCourts from './youthCourts'
 import YouthJusticeServiceRegions from './youthJusticeServiceRegions'
+import ProbationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -71,7 +72,8 @@ type ReferenceCatalogDDv5 = {
   pilots: Pilots
   prisons: PrisonsDDv5
   probationRegions: ProbationRegions
-    probationDeliveryUnits: ProbationDeliveryUnits
+  probationDeliveryUnits: ProbationDeliveryUnits
+  probationRegionDeliveryUnits: ProbationRegionDeliveryUnits
   relationship: Relationship
   responsibleOrganisations: ResponsibleOrganisations
   riskCategories: RiskCategoriesDDv5
@@ -86,3 +88,5 @@ type ReferenceCatalogDDv5 = {
 type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5
 
 export default ReferenceCatalog
+
+export { ReferenceCatalogDDv4, ReferenceCatalogDDv5 }
