@@ -648,7 +648,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Curfew<br/>Exlusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
+              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
             },
             actions: {
               items: [
@@ -1596,7 +1596,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Curfew<br/>Exlusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
+              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
             },
             actions: {
               items: [

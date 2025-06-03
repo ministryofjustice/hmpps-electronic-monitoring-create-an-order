@@ -26,7 +26,7 @@ import config from '../../config'
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
     convertBooleanToEnum(order.monitoringConditions.curfew, '', 'Curfew', ''),
-    convertBooleanToEnum(order.monitoringConditions.exclusionZone, '', 'Exlusion zone', ''),
+    convertBooleanToEnum(order.monitoringConditions.exclusionZone, '', 'Exclusion zone', ''),
     convertBooleanToEnum(order.monitoringConditions.trail, '', 'Trail', ''),
     convertBooleanToEnum(order.monitoringConditions.mandatoryAttendance, '', 'Mandatory attendance', ''),
     convertBooleanToEnum(order.monitoringConditions.alcohol, '', 'Alcohol', ''),
