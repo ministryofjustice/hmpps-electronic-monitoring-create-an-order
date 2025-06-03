@@ -20,6 +20,10 @@ const constructFromFormData = (
       value: formData.offence || '',
       error: getError(validationErrors, 'offence'),
     },
+    offenceAdditionalDetails: {
+      value: formData.offenceAdditionalDetails || '',
+      error: getError(validationErrors, 'offenceAdditionalDetails'),
+    },
     riskCategory: {
       values: formData.riskCategory || [],
       error: getError(validationErrors, 'riskCategory'),
@@ -45,6 +49,9 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
   return {
     offence: {
       value: installationAndRisk?.offence || '',
+    },
+    offenceAdditionalDetails: {
+      value: installationAndRisk?.offenceAdditionalDetails || '',
     },
     riskCategory: {
       values: installationAndRisk?.riskCategory || [],

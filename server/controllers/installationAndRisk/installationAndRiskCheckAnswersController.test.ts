@@ -64,6 +64,23 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
+            text: questions.offenceAdditionalDetails.text,
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.offenceAdditionalDetails.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
             text: questions.riskCategory.text,
           },
           value: {
@@ -139,6 +156,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const order = getMockOrder({
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
@@ -168,6 +186,23 @@ describe('InstallationAndRiskCheckAnswersController', () => {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.offenceAdditionalDetails.text,
+          },
+          value: {
+            text: 'some offence details',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.offenceAdditionalDetails.text.toLowerCase(),
               },
             ],
           },
@@ -248,6 +283,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const order = getMockOrder({
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
@@ -278,6 +314,23 @@ describe('InstallationAndRiskCheckAnswersController', () => {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.offenceAdditionalDetails.text,
+          },
+          value: {
+            text: 'some offence details',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.offenceAdditionalDetails.text.toLowerCase(),
               },
             ],
           },

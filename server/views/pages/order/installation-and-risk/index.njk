@@ -32,6 +32,21 @@
     errorMessage: offence.error,
     disabled: not isOrderEditable
   }) }}
+
+  {{ govukTextarea({
+    name: "offenceAdditionalDetails",
+    id: "offenceAdditionalDetails",
+    value: offenceAdditionalDetails.value,
+    errorMessage: offenceAdditionalDetails.error,
+    disabled: not isOrderEditable,
+    label: {
+      text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.text,
+      classes: "govuk-label--s"
+    },
+    hint: {
+      text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.hint
+    }
+  }) }}
  
   {{ govukCheckboxes({
     idPrefix: "riskCategory",

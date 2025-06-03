@@ -16,6 +16,12 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       uri,
       answerOpts,
     ),
+    createAnswer(
+      questions.offenceAdditionalDetails.text,
+      order.installationAndRisk?.offenceAdditionalDetails,
+      uri,
+      answerOpts,
+    ),
     createMultipleChoiceAnswer(
       questions.riskCategory.text,
       order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.riskCategories, category)) ??
