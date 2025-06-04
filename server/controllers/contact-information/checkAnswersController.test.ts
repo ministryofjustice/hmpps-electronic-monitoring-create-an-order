@@ -6,6 +6,9 @@ import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import interestedPartiesPageContent from '../../i18n/en/pages/interestedParties'
+import getContent from '../../i18n'
+import { Locales } from '../../types/i18n/locale'
+import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -18,7 +21,9 @@ describe('ContactDetailsCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-  const { questions } = interestedPartiesPageContent
+  let content = getContent(Locales.en, DataDictionaryVersions.DDv5)
+  const { questions } = content.pages.interestedParties
+
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -28,6 +33,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     controller = new CheckAnswersController(mockAuditService, taskListService)
+    process.env.DD_V5_1_ENABLED= 'true'
   })
 
   it('should render the check answers page without any answers completed', async () => {
@@ -185,6 +191,8 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
+      probationDeliveryUnit:  [],
+      submittedDate: undefined,
     })
   })
 
@@ -364,6 +372,8 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
+      probationDeliveryUnit:  [],
+      submittedDate: undefined,
     })
   })
 
@@ -381,6 +391,9 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOrganisation: 'PROBATION',
         responsibleOrganisationEmail: 'test@test.com',
         responsibleOrganisationRegion: 'NORTH_EAST',
+      },
+      probationDeliveryUnit:{
+        unit: 'COUNTY_DURHAM_AND_DARLINGTON'
       },
       addresses: [
         createAddress({
@@ -407,6 +420,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           postcode: 'Postcode',
         }),
       ],
+      
     })
     const req = createMockRequest({ order })
     const res = createMockResponse()
@@ -653,6 +667,26 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
+      probationDeliveryUnit:  [
+        {
+          key: {
+            text: content.pages.probationDeliveryUnit.title,
+          },
+          value: {
+            text: 'County Durham and Darlington',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: content.pages.probationDeliveryUnit.title.toLowerCase(),
+              },
+            ],
+          },
+        }
+      ],
+      submittedDate: undefined,
     })
   })
 })
