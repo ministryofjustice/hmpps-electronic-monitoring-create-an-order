@@ -179,7 +179,11 @@ context('Scenarios', () => {
           risk_details: '',
           mappa: 'MAPPA 1',
           mappa_case_type: 'SOC (Serious Organised Crime)',
-          risk_categories: [],
+          risk_categories: [
+            {
+              category: 'Sexual Offences',
+            },
+          ],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',
