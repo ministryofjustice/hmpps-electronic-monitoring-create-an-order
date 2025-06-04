@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import { mock } from 'node:test'
 
 const mockOrderId = uuidv4()
 

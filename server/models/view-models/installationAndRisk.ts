@@ -9,6 +9,7 @@ import { MultipleChoiceField, ViewModel } from './utils'
 type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory'>> & {
   riskCategory: MultipleChoiceField
   mappaEnabled: boolean
+  ddVersion5: boolean
 }
 
 const constructFromFormData = (
@@ -42,6 +43,7 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
+    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
@@ -67,6 +69,7 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
     },
     errorSummary: null,
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
+    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
