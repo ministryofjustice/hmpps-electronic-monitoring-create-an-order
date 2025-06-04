@@ -21,6 +21,7 @@ context('Access needs and installation risk information', () => {
           subPath: apiPath,
           response: {
             offence: null,
+            offenceAdditionalDetails: null,
             riskCategory: null,
             riskDetails: null,
             mappaLevel: null,
@@ -36,6 +37,7 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
+          offenceAdditionalDetails: '',
           riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
@@ -49,6 +51,7 @@ context('Access needs and installation risk information', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             offence: 'ROBBERY',
+            offenceAdditionalDetails: '',
             riskCategory: ['SEXUAL_OFFENCES'],
             riskDetails: '',
             mappaLevel: 'MAPPA 1',
