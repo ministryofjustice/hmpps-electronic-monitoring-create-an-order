@@ -2,12 +2,12 @@ import ProbationDeliveryUnit from '../../../types/i18n/pages/probationDeliveryUn
 
 const probationDeliveryUnitPageContent: ProbationDeliveryUnit = {
   section: 'Contact information',
-  title: "What is the Responsible Organisation's Probation Delivery Unit(PDU)",
+  title: '',
   helpText: '',
   legend: '',
   questions: {
     unit: {
-      text: '',
+      text: "What is the Responsible Organisation's Probation Delivery Unit(PDU)",
     },
   },
 }

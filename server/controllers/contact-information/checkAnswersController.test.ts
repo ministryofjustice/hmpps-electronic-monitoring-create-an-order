@@ -5,7 +5,6 @@ import CheckAnswersController from './checkAnswersController'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import interestedPartiesPageContent from '../../i18n/en/pages/interestedParties'
 import getContent from '../../i18n'
 import { Locales } from '../../types/i18n/locale'
 import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
@@ -21,7 +20,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-  let content = getContent(Locales.en, DataDictionaryVersions.DDv5)
+  const content = getContent(Locales.en, DataDictionaryVersions.DDv5)
   const { questions } = content.pages.interestedParties
 
   beforeEach(() => {
@@ -33,7 +32,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     controller = new CheckAnswersController(mockAuditService, taskListService)
-    process.env.DD_V5_1_ENABLED= 'true'
+    process.env.DD_V5_1_ENABLED = 'true'
   })
 
   it('should render the check answers page without any answers completed', async () => {
@@ -191,7 +190,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
-      probationDeliveryUnit:  [],
+      probationDeliveryUnit: [],
       submittedDate: undefined,
     })
   })
@@ -372,7 +371,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
-      probationDeliveryUnit:  [],
+      probationDeliveryUnit: [],
       submittedDate: undefined,
     })
   })
@@ -392,8 +391,8 @@ describe('ContactDetailsCheckAnswersController', () => {
         responsibleOrganisationEmail: 'test@test.com',
         responsibleOrganisationRegion: 'NORTH_EAST',
       },
-      probationDeliveryUnit:{
-        unit: 'COUNTY_DURHAM_AND_DARLINGTON'
+      probationDeliveryUnit: {
+        unit: 'COUNTY_DURHAM_AND_DARLINGTON',
       },
       addresses: [
         createAddress({
@@ -420,7 +419,6 @@ describe('ContactDetailsCheckAnswersController', () => {
           postcode: 'Postcode',
         }),
       ],
-      
     })
     const req = createMockRequest({ order })
     const res = createMockResponse()
@@ -667,7 +665,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
-      probationDeliveryUnit:  [
+      probationDeliveryUnit: [
         {
           key: {
             text: content.pages.probationDeliveryUnit.title,
@@ -684,7 +682,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               },
             ],
           },
-        }
+        },
       ],
       submittedDate: undefined,
     })

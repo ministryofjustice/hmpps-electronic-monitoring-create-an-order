@@ -19,7 +19,14 @@
     {% set unitOptions = (unitOptions.push(option), unitOptions) %}
   {% endfor %}
 {{ govukRadios({
-      name: "unit",     
+      name: "unit",  
+      fieldset: {
+        legend: {
+          text: content.pages.probationDeliveryUnit.questions.unit.text,
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },   
       items: unitOptions,
       value: unit.value,
       errorMessage: unit.error,
