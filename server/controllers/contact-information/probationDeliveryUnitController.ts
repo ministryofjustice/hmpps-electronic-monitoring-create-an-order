@@ -8,6 +8,7 @@ import TaskListService from '../../services/taskListService'
 import ProbationDeliveryUnitService from '../../services/probationDeliveryUnitService'
 import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
 import ProbationRegionDeliveryUnits from '../../types/i18n/reference/probationRegionDeliveryUnits'
+import ReferenceData from '../../types/i18n/reference/reference'
 
 export default class ProbationDeliveryUnitController {
   constructor(
@@ -19,12 +20,12 @@ export default class ProbationDeliveryUnitController {
   getDeliveryUnitsForProbationRegion = (
     content: ProbationRegionDeliveryUnits,
     region: keyof ProbationRegionDeliveryUnits,
-  ): (string | { text: string; description: string })[] => {
+  ): ReferenceData => {
     return content[region]
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { probationDeliveryUnit } = req.order!
+    const { probationDeliveryUnit, interestedParties } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = probationDeliveryUnitViewModel.construct(
@@ -35,7 +36,7 @@ export default class ProbationDeliveryUnitController {
     const content = <ReferenceCatalogDDv5>res.locals.content?.reference
     res.locals.unitList = this.getDeliveryUnitsForProbationRegion(
       content.probationRegionDeliveryUnits,
-      'YORKSHIRE_AND_THE_HUMBER',
+      <keyof ProbationRegionDeliveryUnits>interestedParties?.responsibleOrganisationRegion,
     )
     res.render('pages/order/contact-information/probation-delivery-unit', viewModel)
   }
@@ -56,7 +57,12 @@ export default class ProbationDeliveryUnitController {
 
       res.redirect(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('INTERESTED_PARTIES', req.order!))
+      res.redirect(
+        this.taskListService.getNextPage('INTERESTED_PARTIES', {
+          ...req.order!,
+          probationDeliveryUnit: result,
+        }),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

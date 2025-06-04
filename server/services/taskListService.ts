@@ -27,6 +27,7 @@ const PAGES = {
   secondaryAddress: 'SECONDARY_ADDRESS',
   tertiaryAddress: 'TERTIARY_ADDRESS',
   interestParties: 'INTERESTED_PARTIES',
+  probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
   installationAndRisk: 'INSTALLATION_AND_RISK',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
@@ -210,6 +211,19 @@ export default class TaskListService {
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.interestedParties),
+    })
+
+    tasks.push({
+      section: SECTIONS.contactInformation,
+      name: PAGES.probationDeliveryUnit,
+      path: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
+      state: convertBooleanToEnum<State>(
+        order.interestedParties?.responsibleOrganisation === 'PROBATION',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.probationDeliveryUnit),
     })
 
     tasks.push({

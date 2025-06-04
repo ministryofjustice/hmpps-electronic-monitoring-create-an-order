@@ -39,7 +39,13 @@ export default class InterestedPartiesController {
 
       res.redirect(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('INTERESTED_PARTIES', req.order!))
+      res.redirect(
+        this.taskListService.getNextPage('INTERESTED_PARTIES', {
+          ...req.order!,
+          interestedParties: result,
+          probationDeliveryUnit: null,
+        }),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

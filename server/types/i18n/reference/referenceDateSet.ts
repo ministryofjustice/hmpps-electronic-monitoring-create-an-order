@@ -1,12 +1,5 @@
-type ReferenceDateSet<T extends string = string> = Record<
-  T,
-  (
-    | string
-    | {
-        text: string
-        description: string
-      }
-  )[]
->
+import ReferenceData from './reference'
+
+type ReferenceDateSet<T extends string = string> = Record<T, ReferenceData>
 
 export default ReferenceDateSet
