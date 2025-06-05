@@ -260,7 +260,7 @@ context('installation and risk - check your answers', () => {
     })
   })
   context('when ddv5 is not enabled', () => {
-    const testFlags = { DD_V5_1_ENABLED: true }
+    const testFlags = { DD_V5_1_ENABLED: false }
     const pageHeading = 'View answers'
     beforeEach(() => {
       cy.task('setFeatureFlags', testFlags)
@@ -304,6 +304,9 @@ context('installation and risk - check your answers', () => {
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
+      page.installationRiskSection.shouldNotHaveItem(
+        'Any other information to be aware of about the offence committed? (optional)',
+      )
     })
   })
 })

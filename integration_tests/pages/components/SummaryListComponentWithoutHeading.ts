@@ -21,4 +21,8 @@ export default class SummaryListComponentWithoutHeading {
       .siblings('.govuk-summary-list__value')
       .should('contain.text', value)
   }
+
+  shouldNotHaveItem(key: string) {
+    return this.element.contains('.govuk-summary-list__key', key).should('not.exist')
+  }
 }

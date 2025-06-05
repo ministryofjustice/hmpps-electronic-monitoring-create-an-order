@@ -4,24 +4,32 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
-  const answers = [
+  const answers = []
+  answers.push(
     createAnswer(
       questions.offence.text,
       lookup(content.reference.offences, order.installationAndRisk?.offence),
       uri,
       answerOpts,
     ),
-    createAnswer(
-      questions.offenceAdditionalDetails.text,
-      order.installationAndRisk?.offenceAdditionalDetails,
-      uri,
-      answerOpts,
-    ),
+  )
+  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    answers.push(
+      createAnswer(
+        questions.offenceAdditionalDetails.text,
+        order.installationAndRisk?.offenceAdditionalDetails,
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+  answers.push(
     createMultipleChoiceAnswer(
       questions.riskCategory.text,
       order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.riskCategories, category)) ??
@@ -29,8 +37,9 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       uri,
       answerOpts,
     ),
-    createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts),
-  ]
+  )
+  answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
+
   if (config.mappa.enabled) {
     answers.push(
       createAnswer(

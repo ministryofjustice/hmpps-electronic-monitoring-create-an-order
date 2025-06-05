@@ -64,23 +64,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.offenceAdditionalDetails.text,
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.offenceAdditionalDetails.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: questions.riskCategory.text,
           },
           value: {
@@ -186,23 +169,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.offenceAdditionalDetails.text,
-          },
-          value: {
-            text: 'some offence details',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.offenceAdditionalDetails.text.toLowerCase(),
               },
             ],
           },
@@ -320,23 +286,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.offenceAdditionalDetails.text,
-          },
-          value: {
-            text: 'some offence details',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.offenceAdditionalDetails.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: questions.riskCategory.text,
           },
           value: {
@@ -371,5 +320,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
       ],
     })
+    config.mappa.enabled = true
   })
 })
