@@ -90,6 +90,7 @@ context('Receipt', () => {
         },
         installationAndRisk: {
           offence: 'SEXUAL_OFFENCES',
+          offenceAdditionalDetails: 'Information about offence',
           riskCategory: ['RISK_TO_GENDER'],
           riskDetails: 'Information about potential risks',
           mappaLevel: 'MAPPA 1',
@@ -219,6 +220,7 @@ context('Receipt when app is submitted', () => {
         },
         installationAndRisk: {
           offence: 'SEXUAL_OFFENCES',
+          offenceAdditionalDetails: 'Information about offence',
           riskCategory: ['RISK_TO_GENDER'],
           riskDetails: 'Information about potential risks',
           mappaLevel: 'MAPPA 1',

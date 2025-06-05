@@ -55,6 +55,7 @@ export const createInstallationAndRisk = (overrideProperties?: Partial<Installat
   riskCategory: null,
   riskDetails: null,
   offence: null,
+  offenceAdditionalDetails: null,
   ...overrideProperties,
 })
 

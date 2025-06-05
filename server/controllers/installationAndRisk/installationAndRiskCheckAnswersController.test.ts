@@ -139,6 +139,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const order = getMockOrder({
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
@@ -248,6 +249,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const order = getMockOrder({
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
@@ -318,5 +320,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
       ],
     })
+    config.mappa.enabled = true
   })
 })
