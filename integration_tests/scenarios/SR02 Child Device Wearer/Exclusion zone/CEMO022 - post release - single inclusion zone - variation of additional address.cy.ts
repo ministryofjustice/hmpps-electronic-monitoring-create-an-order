@@ -111,6 +111,7 @@ context('Scenarios', () => {
         'Feltham Young Offender Institution',
         'London',
       )
+
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
@@ -156,6 +157,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -180,6 +182,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakeVariationSecondaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 

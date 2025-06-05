@@ -104,6 +104,7 @@ context('Scenarios', () => {
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 

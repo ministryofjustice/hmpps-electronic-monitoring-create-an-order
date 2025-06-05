@@ -145,6 +145,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -169,6 +170,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakeVariationPrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 

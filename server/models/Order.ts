@@ -14,6 +14,7 @@ import InstallationAndRiskModel from './InstallationAndRisk'
 import MonitoringConditionsModel from './MonitoringConditions'
 import TrailMonitoringModel from './TrailMonitoring'
 import InterestedPartiesModel from './InterestedParties'
+import ProbationDeliveryUnitModel from './ProbationDeliveryUnit'
 import VariationDetailsModel from './VariationDetails'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
@@ -38,6 +39,7 @@ const OrderModel = z.object({
   curfewConditions: CurfewConditionsModel.nullable().optional(),
   curfewTimeTable: CurfewTimetableModel.optional(),
   interestedParties: InterestedPartiesModel.nullable(),
+  probationDeliveryUnit: ProbationDeliveryUnitModel.nullable().optional(),
   variationDetails: VariationDetailsModel.nullable(),
   isValid: z.boolean().optional().default(false),
   fmsResultDate: z.string().datetime().optional().nullable(),

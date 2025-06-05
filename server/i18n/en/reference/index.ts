@@ -25,6 +25,7 @@ import offences from './offences'
 import orderTypeDescriptions from './orderTypeDescriptions'
 import orderTypes from './orderTypes'
 import prisons from './prisons'
+import probationDeliveryUnits from './probationDeliveryUnits'
 import probationRegions from './probationRegions'
 import relationship from './responsibleAdult'
 import responsibleOrganisations from './responsibleOrganisations'
@@ -34,6 +35,7 @@ import sex from './sex'
 import variationTypes from './variationTypes'
 import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
+import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -79,6 +81,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   pilots,
   prisons: prisonsDDv5,
   probationRegions,
+  probationDeliveryUnits,
   relationship,
   responsibleOrganisations,
   riskCategories: riskCategoriesDDv5,
@@ -88,13 +91,13 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   yesNoUnknown,
   youthCourts,
   youthJusticeServiceRegions,
+  probationRegionDeliveryUnits,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
   if (ddVersion === DataDictionaryVersions.DDv5) {
     return referenceCatalogDDv5
   }
-
   return referenceCatalogDDv4
 }
 

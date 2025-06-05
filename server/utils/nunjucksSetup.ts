@@ -14,6 +14,7 @@ const toOptions = (
   values: ReferenceData,
   disabled: boolean = false,
   includeEmptyOption: boolean = false,
+  type: string = '',
 ): Array<CheckboxItem | RadiosItem> => {
   const options = Object.keys(values).map(key => {
     if (typeof values[key] === 'object') {
@@ -35,7 +36,8 @@ const toOptions = (
   })
 
   if (includeEmptyOption) {
-    options.unshift({ value: '', text: 'Select', disabled })
+    if (type === 'Radio') options.push({ value: '', text: 'Not able to provide this information', disabled })
+    else options.unshift({ value: '', text: 'Select', disabled })
   }
 
   return options

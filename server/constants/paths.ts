@@ -25,6 +25,7 @@ const paths = {
     NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
     ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType(primary|secondary|tertiary)',
     INTERESTED_PARTIES: '/order/:orderId/contact-information/interested-parties',
+    PROBATION_DELIVERY_UNIT: '/order/:orderId/contact-information/probation-delivery-unit',
   },
 
   INSTALLATION_AND_RISK: {

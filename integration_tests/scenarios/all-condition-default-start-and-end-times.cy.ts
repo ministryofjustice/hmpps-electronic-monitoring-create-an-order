@@ -87,7 +87,7 @@ context('The kitchen sink', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
     const monitoringConditions = {
       startDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
       endDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
@@ -137,6 +137,9 @@ context('The kitchen sink', () => {
       startDate: new Date(currenDate.getFullYear(), 11, 1),
       endDate: new Date(currenDate.getFullYear() + 1, 11, 1, 23, 59, 0),
     }
+    const probationDeliveryUnit = {
+      unit: 'Blackburn',
+    }
 
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
@@ -161,6 +164,7 @@ context('The kitchen sink', () => {
         alcoholMonitoringDetails: undefined,
         trailMonitoringDetails: trailMonitoringOrder,
         files: undefined,
+        probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
@@ -278,7 +282,7 @@ context('The kitchen sink', () => {
             order_variation_details: '',
             order_variation_req_received_date: '',
             order_variation_type: '',
-            pdu_responsible: '',
+            pdu_responsible: 'Blackburn',
             pdu_responsible_email: '',
             planned_order_end_date: '',
             responsible_officer_details_received: '',
