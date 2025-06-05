@@ -136,6 +136,7 @@ context('Scenarios', () => {
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -162,6 +163,7 @@ context('Scenarios', () => {
           curfewConditionDetails: variationCurfewConditionDetails,
           curfewTimetable: variationCurfewTimetable,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 

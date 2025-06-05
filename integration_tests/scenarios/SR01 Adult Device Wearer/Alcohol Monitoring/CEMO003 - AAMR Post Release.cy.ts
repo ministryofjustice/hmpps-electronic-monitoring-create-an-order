@@ -52,6 +52,7 @@ context.skip('Scenarios', () => {
       'Birmingham Crown Court',
       'Greater Manchester',
     )
+    const probationDeliveryUnit = { unit: 'Manchester North' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -85,6 +86,7 @@ context.skip('Scenarios', () => {
         installationAddressDetails: fakePrimaryAddress,
         alcoholMonitoringDetails,
         files: undefined,
+        probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -193,7 +195,7 @@ context.skip('Scenarios', () => {
             order_variation_details: '',
             order_variation_req_received_date: '',
             order_variation_type: '',
-            pdu_responsible: '',
+            pdu_responsible: 'Manchester North',
             pdu_responsible_email: '',
             planned_order_end_date: '',
             responsible_officer_details_received: '',

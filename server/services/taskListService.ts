@@ -2,6 +2,7 @@ import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import FeatureFlags from '../utils/featureFlags'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -213,18 +214,20 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.interestedParties),
     })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.probationDeliveryUnit,
-      path: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
-      state: convertBooleanToEnum<State>(
-        order.interestedParties?.responsibleOrganisation === 'PROBATION',
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.probationDeliveryUnit),
-    })
+    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.probationDeliveryUnit,
+        path: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.responsibleOrganisation === 'PROBATION',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.probationDeliveryUnit),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.contactInformation,

@@ -42,10 +42,15 @@ context('Contact Information - check your answers', () => {
   })
 
   context('Device Wearer has no fixed address', () => {
+    const testFlags = { DD_V5_1_ENABLED: true }
     beforeEach(() => {
+      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
+    })
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
     const pageHeading = 'Check your answers'
 
@@ -314,6 +319,9 @@ context('Contact Information - check your answers', () => {
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
+          probationDeliveryUnit: {
+            unit: 'SUNDERLAND',
+          },
         },
       })
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
@@ -323,12 +331,71 @@ context('Contact Information - check your answers', () => {
         { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
         { key: 'Select the Probation region', value: 'North East' },
       ])
+      page.probationDeliveryUnitSection.shouldExist()
+      page.organisationDetailsSection.shouldHaveItems([
+        { key: "What is the Responsible Organisation's Probation Delivery Unit(PDU)", value: 'Sunderland' },
+      ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
         'Select the name of the Prison',
         'Select the name of the Crown Court',
         'Select the name of the Court',
         'Select the Youth Justice Service region',
       ])
+    })
+
+    context('With DDv5 disabled', () => {
+      const disabledFlags = { DD_V5_1_ENABLED: false }
+      beforeEach(() => {
+        cy.task('setFeatureFlags', disabledFlags)
+      })
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      it('Should show probation delivery unit', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            contactDetails: {
+              contactNumber: '01234567890',
+            },
+            deviceWearer: {
+              nomisId: null,
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              firstName: null,
+              lastName: null,
+              alias: null,
+              adultAtTimeOfInstallation: null,
+              sex: null,
+              gender: null,
+              dateOfBirth: null,
+              disabilities: null,
+              noFixedAbode: true,
+              interpreterRequired: null,
+            },
+            interestedParties: {
+              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'PROBATION',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: 'NORTH_EAST',
+              responsibleOfficerName: 'name',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+            probationDeliverUnit: {
+              unit: 'Sunderland',
+            },
+          },
+        })
+        const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+        page.probationDeliveryUnitSection.shouldNotExist()
+      })
     })
 
     it('should show YJS region', () => {

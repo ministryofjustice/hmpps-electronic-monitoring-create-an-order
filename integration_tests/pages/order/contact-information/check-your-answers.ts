@@ -23,4 +23,9 @@ export default class ContactInformationCheckYourAnswersPage extends CheckYourAns
     const label = 'Organisations details'
     return new SummaryListComponent(label)
   }
+
+  get probationDeliveryUnitSection(): SummaryListComponent {
+    const lable = 'Probation delivery unit'
+    return new SummaryListComponent(lable)
+  }
 }

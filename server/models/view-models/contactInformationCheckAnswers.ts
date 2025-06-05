@@ -183,7 +183,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
 const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT.replace(':orderId', order.id)
 
-  const { title } = content.pages.probationDeliveryUnit
+  const { questions } = content.pages.probationDeliveryUnit
   const result = []
   if (
     FeatureFlags.getInstance().get('DD_V5_1_ENABLED') &&
@@ -191,7 +191,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   ) {
     result.push(
       createAnswer(
-        title,
+        questions.unit.text,
         lookup((<ReferenceCatalogDDv5>content.reference).probationDeliveryUnits, order.probationDeliveryUnit?.unit),
         uri,
         answerOpts,
