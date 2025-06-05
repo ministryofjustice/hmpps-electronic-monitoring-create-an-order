@@ -34,6 +34,11 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
     ])
   }
 
+  get offenceAdditionalDetailsField(): FormTextareaComponent {
+    const label = 'Any other information to be aware of about the offence committed?'
+    return new FormTextareaComponent(this.form, label)
+  }
+
   get riskCategoryField(): FormCheckboxesComponent {
     const label = 'At installation what are the possible risks?'
     return new FormCheckboxesComponent(this.form, label, [

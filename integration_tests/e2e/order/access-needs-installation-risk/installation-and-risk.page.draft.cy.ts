@@ -80,6 +80,12 @@ context('Access needs and installation risk information', () => {
           page.form.riskCategoryField.shouldHaveOption('Safeguarding Domestic Abuse')
           page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Issues')
         })
+
+        it('Should have offence additional details field', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.offenceAdditionalDetailsField.element.should('exist')
+        })
       })
 
       context('With DDv5 disabled', () => {
@@ -91,13 +97,19 @@ context('Access needs and installation risk information', () => {
           cy.task('resetFeatureFlags')
         })
 
-        it('Should have additional safeguarding options', () => {
+        it('Should not have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(InstallationAndRiskPage)
           page.form.riskCategoryField.shouldHaveOption('Safeguarding Issues')
           page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Adult')
           page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Child')
           page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Domestic Abuse')
+        })
+
+        it('Should not have offence additional details field', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          Page.verifyOnPage(InstallationAndRiskPage)
+          cy.get('#offenceAdditionalDetails').should('not.exist')
         })
       })
     })
