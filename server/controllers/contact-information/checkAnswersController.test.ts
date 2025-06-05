@@ -668,7 +668,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       probationDeliveryUnit: [
         {
           key: {
-            text: content.pages.probationDeliveryUnit.title,
+            text: content.pages.probationDeliveryUnit.questions.unit.text,
           },
           value: {
             text: 'County Durham and Darlington',
@@ -678,7 +678,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: content.pages.probationDeliveryUnit.title.toLowerCase(),
+                visuallyHiddenText: content.pages.probationDeliveryUnit.questions.unit.text.toLowerCase(),
               },
             ],
           },
