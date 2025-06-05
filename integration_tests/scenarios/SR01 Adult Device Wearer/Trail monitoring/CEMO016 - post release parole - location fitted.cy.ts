@@ -87,6 +87,7 @@ context('Scenarios', () => {
       'Elmley Prison',
       'Kent, Surrey & Sussex',
     )
+    const probationDeliveryUnit = { unit: 'Surrey' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
@@ -120,6 +121,7 @@ context('Scenarios', () => {
         installationAddressDetails: fakePrimaryAddress,
         trailMonitoringDetails,
         files: undefined,
+        probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -229,7 +231,7 @@ context('Scenarios', () => {
               order_variation_details: '',
               order_variation_req_received_date: '',
               order_variation_type: '',
-              pdu_responsible: '',
+              pdu_responsible: 'Surrey',
               pdu_responsible_email: '',
               planned_order_end_date: '',
               responsible_officer_details_received: '',

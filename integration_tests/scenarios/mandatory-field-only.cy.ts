@@ -34,6 +34,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-
 import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
+import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -88,7 +89,8 @@ context('Mandatory fields only', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = fakeAddress
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       orderType: 'Post Release',
@@ -195,13 +197,15 @@ context('Mandatory fields only', () => {
       primaryAddressPage.form.saveAndContinueButton.click()
 
       // no validation
-      let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      // interestedPartiesPage.form.saveAndContinueButton.click()
-      interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+      probationDeliveryUnitPage.form.saveAndContinueButton.click()
 
       const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
         ContactInformationCheckYourAnswersPage,
@@ -351,7 +355,8 @@ context('Mandatory fields only', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = fakeAddress
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       orderType: 'Post Release',
@@ -473,6 +478,10 @@ context('Mandatory fields only', () => {
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+      probationDeliveryUnitPage.form.saveAndContinueButton.click()
 
       const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
         ContactInformationCheckYourAnswersPage,

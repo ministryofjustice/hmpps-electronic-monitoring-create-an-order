@@ -27,6 +27,7 @@ import AlcoholMonitoringPage from './monitoring-conditions/alcohol-monitoring'
 import UploadLicencePage from './attachments/uploadLicence'
 import TrailMonitoringPage from './monitoring-conditions/trail-monitoring'
 import SecondaryAddressPage from './contact-information/secondary-address'
+import ProbationDeliveryUnitPage from './contact-information/probation-delivery-unit'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -78,6 +79,7 @@ export default class OrderTasksPage extends AppPage {
     curfewConditionDetails,
     curfewTimetable,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -90,6 +92,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInCurfewOrderDetailsWith({
@@ -121,6 +124,7 @@ export default class OrderTasksPage extends AppPage {
     alcoholMonitoringDetails,
     trailMonitoringDetails,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -133,6 +137,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     if (curfewReleaseDetails) {
@@ -200,6 +205,7 @@ export default class OrderTasksPage extends AppPage {
     curfewConditionDetails,
     curfewTimetable,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.variationDetailsTask.click()
 
@@ -216,6 +222,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInCurfewOrderDetailsWith({
@@ -242,6 +249,7 @@ export default class OrderTasksPage extends AppPage {
     installationAddressDetails,
     enforcementZoneDetails,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -254,6 +262,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInEnforcementZoneOrderDetailsWith({
@@ -279,6 +288,7 @@ export default class OrderTasksPage extends AppPage {
     installationAddressDetails,
     enforcementZoneDetails,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.variationDetailsTask.click()
 
@@ -295,6 +305,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInEnforcementZoneOrderDetailsWith({
@@ -319,6 +330,7 @@ export default class OrderTasksPage extends AppPage {
     installationAddressDetails,
     alcoholMonitoringDetails,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -331,6 +343,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInAlcoholMonitoringOrderDetailsWith({
@@ -356,6 +369,7 @@ export default class OrderTasksPage extends AppPage {
     installationAddressDetails,
     alcoholMonitoringDetails,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.variationDetailsTask.click()
 
@@ -372,6 +386,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInAlcoholMonitoringOrderDetailsWith({
@@ -396,6 +411,7 @@ export default class OrderTasksPage extends AppPage {
     installationAddressDetails,
     trailMonitoringDetails,
     files,
+    probationDeliveryUnit,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -408,6 +424,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       installationAddressDetails,
+      probationDeliveryUnit,
     })
 
     this.fillInTrailMonitoringOrderDetailsWith({
@@ -430,6 +447,7 @@ export default class OrderTasksPage extends AppPage {
     installationAndRisk,
     monitoringConditions,
     installationAddressDetails,
+    probationDeliveryUnit,
   }): void {
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
     aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -475,6 +493,11 @@ export default class OrderTasksPage extends AppPage {
     interestedPartiesPage.form.fillInWith(interestedParties)
     interestedPartiesPage.form.saveAndContinueButton.click()
 
+    if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
+      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+      probationDeliveryUnitPage.form.saveAndContinueButton.click()
+    }
     const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
       ContactInformationCheckYourAnswersPage,
       'Check your answer',

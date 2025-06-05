@@ -20,6 +20,7 @@ import EnforcementZoneController from '../controllers/monitoringConditions/enfor
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
+import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -49,6 +50,7 @@ export default function routes({
   taskListService,
   trailMonitoringService,
   variationService,
+  probationDeliveryUnitService,
   zoneService,
 }: Services): Router {
   const router = Router()
@@ -118,6 +120,11 @@ export default function routes({
   )
   const variationDetailsController = new VariationDetailsController(auditService, variationService, taskListService)
 
+  const probationDeliveryUnitController = new ProbationDeliveryUnitController(
+    auditService,
+    probationDeliveryUnitService,
+    taskListService,
+  )
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.search)
@@ -171,9 +178,13 @@ export default function routes({
   get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.view)
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
-  // Device wearer addresses
+  // Interested parties
   get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
   post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
+
+  // Probation delivery unit
+  get(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.view)
+  post(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.update)
 
   // Check your answers
   get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)

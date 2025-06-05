@@ -3,6 +3,7 @@ import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
 const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
@@ -70,6 +71,64 @@ context('Contact information', () => {
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers')
+      })
+
+      context('DDv5 feature set to true', () => {
+        const testFlags = { MAPPA_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+        it('should continue to probation delivery unit page', () => {
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'PROBATION',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: 'NORTH_EAST',
+              responsibleOfficerName: 'name',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          })
+
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: {
+              interestedParties: {
+                notifyingOrganisation: 'HOME_OFFICE',
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: 'notifying@organisation',
+                responsibleOrganisation: 'PROBATION',
+                responsibleOrganisationEmail: 'responsible@organisation',
+                responsibleOrganisationRegion: 'NORTH_EAST',
+                responsibleOfficerName: 'name',
+                responsibleOfficerPhoneNumber: '01234567891',
+              },
+            },
+          })
+          page.form.fillInWith({
+            ...sampleFormData,
+            responsibleOrganisation: 'Probation',
+            probationRegion: 'North East',
+          })
+
+          page.form.saveAndContinueButton.click()
+
+          Page.verifyOnPage(
+            ProbationDeliveryUnitPage,
+            "What is the Responsible Organisation's Probation Delivery Unit(PDU)",
+          )
+        })
       })
 
       it('should return to the summary page', () => {

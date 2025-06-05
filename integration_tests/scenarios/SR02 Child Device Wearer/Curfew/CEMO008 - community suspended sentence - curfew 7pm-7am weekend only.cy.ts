@@ -52,6 +52,7 @@ context('Scenarios', () => {
     const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'YJS', 'Cardiff Crown Court', 'Wales')
+
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -102,6 +103,7 @@ context('Scenarios', () => {
         curfewConditionDetails,
         curfewTimetable,
         files: undefined,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 

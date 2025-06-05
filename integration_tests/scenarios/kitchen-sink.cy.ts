@@ -29,6 +29,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-
 import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
+import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -109,7 +110,8 @@ context('The kitchen sink', () => {
     }
     const tertiaryAddressDetails = createFakeAddress()
     const installationAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -260,6 +262,10 @@ context('The kitchen sink', () => {
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. interestedPartiesPage', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+      probationDeliveryUnitPage.form.saveAndContinueButton.click()
 
       const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
         ContactInformationCheckYourAnswersPage,

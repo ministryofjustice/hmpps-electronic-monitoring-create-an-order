@@ -85,6 +85,7 @@ context('Scenarios', () => {
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+
     const installationAndRisk = {
       offence: 'Robbery',
       riskCategory: 'Sex offender',
@@ -141,6 +142,7 @@ context('Scenarios', () => {
         curfewConditionDetails,
         curfewTimetable,
         files,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 

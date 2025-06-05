@@ -48,6 +48,7 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = kelvinCloseAddress
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -81,6 +82,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -190,7 +192,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: '',
+                pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',

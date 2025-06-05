@@ -22,6 +22,7 @@ import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
 import variationDetailsPageContent from './pages/variationDetails'
+import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
 import getReferenceData from './reference'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
@@ -49,6 +50,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
       variationDetails: variationDetailsPageContent,
+      probationDeliveryUnit: probationDeliveryUnitPageContent,
     },
     reference: getReferenceData(ddVersion),
   }
