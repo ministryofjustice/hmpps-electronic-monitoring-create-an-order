@@ -9,6 +9,7 @@ import { MultipleChoiceField, ViewModel } from './utils'
 type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory'>> & {
   riskCategory: MultipleChoiceField
   mappaEnabled: boolean
+  ddVersion5: boolean
 }
 
 const constructFromFormData = (
@@ -19,6 +20,10 @@ const constructFromFormData = (
     offence: {
       value: formData.offence || '',
       error: getError(validationErrors, 'offence'),
+    },
+    offenceAdditionalDetails: {
+      value: formData.offenceAdditionalDetails || '',
+      error: getError(validationErrors, 'offenceAdditionalDetails'),
     },
     riskCategory: {
       values: formData.riskCategory || [],
@@ -38,6 +43,7 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
+    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
@@ -45,6 +51,9 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
   return {
     offence: {
       value: installationAndRisk?.offence || '',
+    },
+    offenceAdditionalDetails: {
+      value: installationAndRisk?.offenceAdditionalDetails || '',
     },
     riskCategory: {
       values: installationAndRisk?.riskCategory || [],
@@ -60,6 +69,7 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
     },
     errorSummary: null,
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
+    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 

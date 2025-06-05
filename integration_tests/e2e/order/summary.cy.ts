@@ -158,6 +158,7 @@ context('Order Summary', () => {
             riskCategory: null,
             riskDetails: null,
             offence: null,
+            offenceAdditionalDetails: null,
           },
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
@@ -378,6 +379,7 @@ context('Order Summary', () => {
             riskCategory: null,
             riskDetails: null,
             offence: null,
+            offenceAdditionalDetails: null,
           },
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
