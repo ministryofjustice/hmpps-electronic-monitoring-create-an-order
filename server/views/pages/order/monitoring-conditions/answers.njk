@@ -59,18 +59,18 @@
   
   {% if attendance | length > 0 %}
     <h2 class="govuk-heading-m">Mandatory attendance monitoring</h2>
-  {% endif %}
 
-  {% for item in attendance %}
-    {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Attendance monitoring"
-        }
-      },
-      rows: item
-    }) }}
-  {% endfor %}
+    {% for item in attendance %}
+      {{ govukSummaryList({
+        card: {
+          title: {
+            text: "Attendance monitoring"
+          }
+        },
+        rows: item
+      }) }}
+    {% endfor %}
+  {% endif %}
   
 
   {% if alcohol | length > 0 %}
