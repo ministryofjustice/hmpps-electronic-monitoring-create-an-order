@@ -50,22 +50,25 @@
       }) }}
   {% endif %}
  
-  {{ govukCheckboxes({
-    idPrefix: "riskCategory",
-    name: "riskCategory[]",
-    fieldset: {
-      legend: {
-        text: content.pages.installationAndRisk.questions.riskCategory.text,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: content.pages.installationAndRisk.questions.riskCategory.hint
-    },
-    items: content.reference.riskCategories | toOptions(not isOrderEditable),
-    errorMessage: riskCategory.error,
-    values: riskCategory.values
-  }) }}
+  ## Temporarily disabled until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+  <div class="govuk-form-hidden-items">
+    {{ govukCheckboxes({
+      idPrefix: "riskCategory",
+      name: "riskCategory[]",
+      fieldset: {
+        legend: {
+          text: content.pages.installationAndRisk.questions.riskCategory.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.installationAndRisk.questions.riskCategory.hint
+      },
+      items: content.reference.riskCategories | toOptions(not isOrderEditable),
+      errorMessage: riskCategory.error,
+      values: riskCategory.values
+    }) }}
+  </div>
 
   {{ govukTextarea({
     name: "riskDetails",

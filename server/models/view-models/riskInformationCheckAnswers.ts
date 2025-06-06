@@ -1,4 +1,4 @@
-import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
@@ -29,15 +29,17 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       ),
     )
   }
-  answers.push(
-    createMultipleChoiceAnswer(
-      questions.riskCategory.text,
-      order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.riskCategories, category)) ??
-        [],
-      uri,
-      answerOpts,
-    ),
-  )
+  // Temporarily disabled until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+  // answers.push(
+  //   createMultipleChoiceAnswer(
+  //     questions.riskCategory.text,
+  //     order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.riskCategories, category)) ??
+  //       [],
+  //     uri,
+  //     answerOpts,
+  //   ),
+  // )
+
   answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
 
   if (config.mappa.enabled) {
