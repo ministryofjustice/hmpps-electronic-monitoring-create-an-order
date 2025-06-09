@@ -5,16 +5,9 @@ import VariationDetailsPage from '../../../pages/order/variation/variationDetail
 const mockOrderId = uuidv4()
 
 context('Variation', () => {
-  const testFlags = { DD_V5_1_ENABLED: false }
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
-
   context('Variation Details', () => {
     context('Viewing a submitted order', () => {
       beforeEach(() => {
-        cy.task('setFeatureFlags', testFlags)
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -24,7 +17,7 @@ context('Variation', () => {
           status: 'SUBMITTED',
           order: {
             variationDetails: {
-              variationType: 'ADDRESS',
+              variationType: 'CHANGE_TO_ADDRESS',
               variationDate: '2025-01-01T00:00:00Z',
             },
           },
@@ -44,7 +37,7 @@ context('Variation', () => {
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
 
         // Should display the saved data
-        page.form.variationTypeField.shouldHaveValue('Change of address')
+        page.form.variationTypeField.shouldHaveValue('Change to Address')
         page.form.variationDateField.shouldHaveValue(new Date('2025-01-01T00:00:00Z'))
 
         // Should have the correct buttons

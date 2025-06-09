@@ -17,13 +17,6 @@ const expectedValidationErrors = {
 }
 
 context('Variation', () => {
-  const testFlags = { DD_V5_1_ENABLED: false }
-  beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
-  })
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
   context('Variation Details', () => {
     context('Submitting invalid data', () => {
       beforeEach(() => {
@@ -51,7 +44,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
-          variationType: 'Change of curfew hours',
+          variationType: 'Change to Curfew Hours',
           variationDate: new Date(2024, 1, 1),
         })
         page.form.variationDateField.setDay('q')
