@@ -18,9 +18,7 @@ context('Scenarios', () => {
     })
   }
 
- 
-  
-  beforeEach(() => {   
+  beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
 

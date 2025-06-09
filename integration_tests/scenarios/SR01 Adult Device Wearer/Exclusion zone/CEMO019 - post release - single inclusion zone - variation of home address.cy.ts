@@ -21,8 +21,8 @@ context('Scenarios', () => {
       const parts = url.replace(Cypress.config().baseUrl, '').split('/')
       ;[, , orderId] = parts
     })
-  } 
-  beforeEach(() => {   
+  }
+  beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
 
@@ -139,7 +139,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
-          probationDeliveryUnit: probationDeliveryUnit,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -164,7 +164,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakeVariationPrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
-          probationDeliveryUnit: probationDeliveryUnit,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 

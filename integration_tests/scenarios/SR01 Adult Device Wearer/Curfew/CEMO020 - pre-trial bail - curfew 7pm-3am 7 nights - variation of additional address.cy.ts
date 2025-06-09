@@ -18,7 +18,7 @@ context('Scenarios', () => {
     })
   }
 
-  beforeEach(() => {   
+  beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
 
@@ -131,7 +131,7 @@ context('Scenarios', () => {
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
-          probationDeliveryUnit: probationDeliveryUnit,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -158,7 +158,7 @@ context('Scenarios', () => {
           curfewConditionDetails: variationCurfewConditionDetails,
           curfewTimetable: variationCurfewTimetable,
           files: undefined,
-          probationDeliveryUnit: probationDeliveryUnit,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 

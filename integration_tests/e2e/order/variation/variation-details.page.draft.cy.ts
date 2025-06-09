@@ -46,8 +46,8 @@ context('Variation', () => {
         it('Should have DDv5 options only', () => {
           Page.visit(VariationDetailsPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(VariationDetailsPage)
-          page.form.variationTypeField.shouldHaveOption("The device wearer’s address")
-          page.form.variationTypeField.shouldHaveOption("The device wearer’s personal details")
+          page.form.variationTypeField.shouldHaveOption('The device wearer’s address')
+          page.form.variationTypeField.shouldHaveOption('The device wearer’s personal details')
           page.form.variationTypeField.shouldHaveOption(' Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('The curfew hours')
@@ -84,8 +84,8 @@ context('Variation', () => {
           page.form.variationTypeField.shouldHaveOption('Change to an existing Inclusion or Exclusion Zone(s).')
           page.form.variationTypeField.shouldHaveOption('Order Suspension')
 
-          page.form.variationTypeField.shouldNotHaveOption("The device wearer’s address")
-          page.form.variationTypeField.shouldNotHaveOption("The device wearer’s personal details")
+          page.form.variationTypeField.shouldNotHaveOption('The device wearer’s address')
+          page.form.variationTypeField.shouldNotHaveOption('The device wearer’s personal details')
           page.form.variationTypeField.shouldNotHaveOption('Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('The curfew hours')

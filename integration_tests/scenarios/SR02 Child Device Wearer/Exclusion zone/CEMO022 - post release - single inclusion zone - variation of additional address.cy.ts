@@ -28,7 +28,7 @@ context('Scenarios', () => {
     })
   }
 
-  beforeEach(() => {   
+  beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
 
@@ -151,7 +151,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
-          probationDeliveryUnit: probationDeliveryUnit,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -176,7 +176,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakeVariationSecondaryAddress,
           enforcementZoneDetails,
           files: undefined,
-          probationDeliveryUnit: probationDeliveryUnit,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
