@@ -62,23 +62,24 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.riskCategory.text,
-          },
-          value: {
-            html: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+        // {
+        //   key: {
+        //     text: questions.riskCategory.text,
+        //   },
+        //   value: {
+        //     html: '',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
         {
           key: {
             text: questions.riskDetails.text,
@@ -173,23 +174,24 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.riskCategory.text,
-          },
-          value: {
-            html: 'Offensive towards someone because of their sex or gender',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+        // {
+        //   key: {
+        //     text: questions.riskCategory.text,
+        //   },
+        //   value: {
+        //     html: '',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
         {
           key: {
             text: questions.riskDetails.text,
@@ -284,23 +286,24 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.riskCategory.text,
-          },
-          value: {
-            html: 'Offensive towards someone because of their sex or gender',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
-              },
-            ],
-          },
-        },
+        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+        // {
+        //   key: {
+        //     text: questions.riskCategory.text,
+        //   },
+        //   value: {
+        //     html: '',
+        //   },
+        //   actions: {
+        //     items: [
+        //       {
+        //         href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        //         text: 'Change',
+        //         visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+        //       },
+        //     ],
+        //   },
+        // },
         {
           key: {
             text: questions.riskDetails.text,

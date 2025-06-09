@@ -227,7 +227,7 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
 }
 
 const createAttendanceAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  if (!order.mandatoryAttendanceConditions) {
+  if (!order.monitoringConditions.mandatoryAttendance) {
     return []
   }
 
