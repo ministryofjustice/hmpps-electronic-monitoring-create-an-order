@@ -8,7 +8,7 @@ import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/
 const mockOrderId = uuidv4()
 const apiPath = '/variation'
 const sampleFormData = {
-  variationType: 'Change to Curfew Hours',
+  variationType: 'The curfew hours',
   variationDate: new Date(2024, 0, 1),
 }
 

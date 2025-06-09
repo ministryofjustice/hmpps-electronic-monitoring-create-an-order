@@ -51,7 +51,7 @@ context('Variation', () => {
           page.form.variationTypeField.shouldHaveOption(' Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('The curfew hours')
-          page.form.variationTypeField.shouldHaveOption('Order Suspension')
+          page.form.variationTypeField.shouldHaveOption('I am suspending monitoring for the device wearer')
           page.form.variationTypeField.shouldHaveOption('Change to a device type')
           page.form.variationTypeField.shouldHaveOption('Change to an enforceable condition')
           page.form.variationTypeField.shouldHaveOption('I am suspending monitoring for the device wearer')
