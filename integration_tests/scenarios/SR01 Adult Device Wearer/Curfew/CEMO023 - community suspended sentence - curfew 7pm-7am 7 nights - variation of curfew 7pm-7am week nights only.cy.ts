@@ -18,13 +18,7 @@ context('Scenarios', () => {
     })
   }
 
-  const testFlags = { DD_V5_1_ENABLED: false }
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
-  beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
+  beforeEach(() => {  
     cy.task('resetDB')
     cy.task('reset')
 
@@ -64,6 +58,7 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Crown Court', 'Probation', 'Cardiff Crown Court', 'Wales')
+      const probationDeliveryUnit = { unit: 'Gwent' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -93,7 +88,7 @@ context('Scenarios', () => {
       ])
 
       const variationDetails = {
-        variationType: 'Change of curfew hours',
+        variationType: 'Change to Curfew Hours',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
       const variationCurfewConditionDetails = {
@@ -132,7 +127,7 @@ context('Scenarios', () => {
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
-          probationDeliveryUnit: undefined,
+          probationDeliveryUnit: probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -159,7 +154,7 @@ context('Scenarios', () => {
           curfewConditionDetails: variationCurfewConditionDetails,
           curfewTimetable: variationCurfewTimetable,
           files: undefined,
-          probationDeliveryUnit: undefined,
+          probationDeliveryUnit: probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -269,7 +264,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: variationDetails.variationType,
-                pdu_responsible: '',
+                pdu_responsible: 'Gwent',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',

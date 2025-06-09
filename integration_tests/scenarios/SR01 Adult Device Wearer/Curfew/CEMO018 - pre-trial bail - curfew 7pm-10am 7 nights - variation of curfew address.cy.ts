@@ -18,13 +18,9 @@ context('Scenarios', () => {
     })
   }
 
-  const testFlags = { DD_V5_1_ENABLED: false }
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
-  beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
+ 
+  
+  beforeEach(() => {   
     cy.task('resetDB')
     cy.task('reset')
 
@@ -93,7 +89,7 @@ context('Scenarios', () => {
       ])
 
       const variationDetails = {
-        variationType: 'Change of address',
+        variationType: 'Change to Address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
       let fakeVariationPrimaryAddress = createKnownAddress()

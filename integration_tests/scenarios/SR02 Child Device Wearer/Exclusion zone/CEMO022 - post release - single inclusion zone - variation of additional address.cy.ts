@@ -28,13 +28,7 @@ context('Scenarios', () => {
     })
   }
 
-  const testFlags = { DD_V5_1_ENABLED: false }
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
-  beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
+  beforeEach(() => {   
     cy.task('resetDB')
     cy.task('reset')
 
@@ -111,7 +105,7 @@ context('Scenarios', () => {
         'Feltham Young Offender Institution',
         'London',
       )
-
+      const probationDeliveryUnit = { unit: 'Brent' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
@@ -130,7 +124,7 @@ context('Scenarios', () => {
       }
 
       const variationDetails = {
-        variationType: 'Change of address',
+        variationType: 'Change to Address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
       let fakeVariationSecondaryAddress = createKnownAddress()
@@ -157,7 +151,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
-          probationDeliveryUnit: undefined,
+          probationDeliveryUnit: probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -182,7 +176,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakeVariationSecondaryAddress,
           enforcementZoneDetails,
           files: undefined,
-          probationDeliveryUnit: undefined,
+          probationDeliveryUnit: probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
