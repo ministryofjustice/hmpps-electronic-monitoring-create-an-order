@@ -39,6 +39,19 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     ])
   }
 
+  get notifyingOrganisationFieldDDV5(): FormRadiosComponent {
+    const label = 'What organisation or related organisation are you part of?'
+    return new FormRadiosComponent(this.form, label, [
+      'Crown Court',
+      'Magistrates Court',
+      'Prison',
+      'Home Office',
+      'Scottish Court',
+      'Family Court',
+      'Probation',
+    ])
+  }
+
   get prisonField(): FormAutocompleteComponent {
     const label = 'Select the name of the Prison'
     return new FormAutocompleteComponent(this.form, label, [])
@@ -200,6 +213,13 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   shouldHaveAllOptions(): void {
     this.notifyingOrganisationField.shouldHaveAllOptions()
+    this.responsibleOrganisationField.shouldHaveAllOptions()
+    this.probationRegionField.shouldHaveAllOptions()
+    this.yjsRegionField.shouldHaveAllOptions()
+  }
+
+  shouldHaveAllDDV5Options(): void {
+    this.notifyingOrganisationFieldDDV5.shouldHaveAllOptions()
     this.responsibleOrganisationField.shouldHaveAllOptions()
     this.probationRegionField.shouldHaveAllOptions()
     this.yjsRegionField.shouldHaveAllOptions()

@@ -7,28 +7,74 @@ const mockOrderId = uuidv4()
 context('Contact information', () => {
   context('Interested parties', () => {
     context('Viewing a draft order', () => {
-      beforeEach(() => {
-        cy.task('reset')
-        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      context('DDv4', () => {
+        const testFlags = { DD_V5_1_ENABLED: false }
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+          cy.task('reset')
+          cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+          cy.signIn()
+        })
 
-        cy.signIn()
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should display DDv4 content', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+          page.header.userName().should('contain.text', 'J. Smith')
+          page.header.phaseBanner().should('contain.text', 'dev')
+
+          page.form.saveAndContinueButton.should('exist')
+          page.form.saveAndReturnButton.should('exist')
+          page.form.shouldNotBeDisabled()
+          page.errorSummary.shouldNotExist()
+          page.backButton.should('exist')
+          page.form.shouldHaveAllOptions()
+
+          page.form.crownCourtField.shouldNotHaveOption('Barbican (Aldersgate House) Crown Court')
+          page.form.crownCourtField.shouldNotHaveOption('Mold Crown Court')
+          page.form.crownCourtField.shouldNotHaveOption('Truro Crown Court')
+          page.checkIsAccessible()
+        })
       })
 
-      it('Should display contents', () => {
-        const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
-        page.header.userName().should('contain.text', 'J. Smith')
-        page.header.phaseBanner().should('contain.text', 'dev')
+      context('DDv5', () => {
+        const testFlags = { DD_V5_1_ENABLED: true }
 
-        page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
-        page.form.shouldNotBeDisabled()
-        page.errorSummary.shouldNotExist()
-        page.backButton.should('exist')
-        page.form.shouldHaveAllOptions()
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+          cy.task('reset')
+          cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+          cy.signIn()
+        })
 
-        page.checkIsAccessible()
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should display DDV5 content', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+          page.header.userName().should('contain.text', 'J. Smith')
+          page.header.phaseBanner().should('contain.text', 'dev')
+
+          page.form.saveAndContinueButton.should('exist')
+          page.form.saveAndReturnButton.should('exist')
+          page.form.shouldNotBeDisabled()
+          page.errorSummary.shouldNotExist()
+          page.backButton.should('exist')
+
+          page.form.shouldHaveAllDDV5Options()
+
+          page.form.crownCourtField.shouldHaveOption('Barbican (Aldersgate House) Crown Court')
+          page.form.crownCourtField.shouldHaveOption('Mold Crown Court')
+          page.form.crownCourtField.shouldHaveOption('Truro Crown Court')
+
+          page.checkIsAccessible()
+        })
       })
     })
   })

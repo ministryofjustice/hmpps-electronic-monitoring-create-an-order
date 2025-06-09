@@ -11,19 +11,39 @@
 {% set legend = content.pages.interestedParties.legend %}
 {% set helpText = content.pages.interestedParties.helpText %}
 
-{% set crownCourtHtml %}
+{% if not dataDictionaryV5 %}
 
-  {{ accessibleAutocomplete({
-    id: 'crownCourt',
-    name: 'crownCourt',
-    label: content.pages.interestedParties.questions.crownCourt.text,
-    options: content.reference.crownCourts | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
+  {% set crownCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'crownCourt',
+      name: 'crownCourt',
+      label: content.pages.interestedParties.questions.crownCourt.text,
+      options: content.reference.crownCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 
-{% endset %}
+{% endif %}
+
+
+{% if dataDictionaryV5 %}
+  {% set crownCourtHtml %}
+
+    {{ accessibleAutocomplete({
+      id: 'crownCourt',
+      name: 'crownCourt',
+      label: content.pages.interestedParties.questions.crownCourt.text,
+      options: content.reference.ddv5.crownCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+
+  {% endset %}
+{% endif %}
+
 
 {% set magistrateCourtHtml %}
 

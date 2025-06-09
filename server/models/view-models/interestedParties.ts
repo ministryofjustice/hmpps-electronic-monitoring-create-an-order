@@ -1,11 +1,14 @@
 import { createGovukErrorSummary } from '../../utils/errors'
+import FeatureFlags from '../../utils/featureFlags'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
 import { InterestedParties } from '../InterestedParties'
 import { ValidationResult } from '../Validation'
 import { ViewModel } from './utils'
 
-type InterestedPartiesViewModel = ViewModel<NonNullable<InterestedParties>>
+type InterestedPartiesViewModel = ViewModel<NonNullable<InterestedParties>> & {
+  DDv5: boolean
+}
 
 const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) => {
   if (formData.responsibleOrganisation === 'PROBATION') {
@@ -73,6 +76,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'responsibleOrganisationEmail'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
+    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
@@ -103,6 +107,7 @@ const constructFromEntity = (interestedParties: InterestedParties | null): Inter
       value: interestedParties?.responsibleOrganisationEmail ?? '',
     },
     errorSummary: null,
+    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
