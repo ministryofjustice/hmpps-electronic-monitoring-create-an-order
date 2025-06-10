@@ -51,6 +51,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'Prison',
       'Probation',
       'Scottish Court',
+      'Youth Court',
     ])
   }
 
@@ -99,6 +100,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get militaryCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Military Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get youthCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Youth Court'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 

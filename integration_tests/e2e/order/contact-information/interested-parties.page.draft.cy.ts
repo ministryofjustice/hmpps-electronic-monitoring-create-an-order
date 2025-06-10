@@ -97,6 +97,10 @@ context('Contact information', () => {
 
           page.form.prisonField.shouldHaveOption('Millsike Prison')
 
+          page.form.youthCourtField.shouldHaveOption('Barking Youth Court')
+          page.form.youthCourtField.shouldHaveOption('Llwynypia Youth Court')
+          page.form.youthCourtField.shouldHaveOption('Wrexham Youth Court')
+
           page.checkIsAccessible()
         })
       })

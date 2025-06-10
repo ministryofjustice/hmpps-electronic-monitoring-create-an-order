@@ -44,6 +44,7 @@ export default class InterestedPartiesService {
       MILITARY_COURT: data.militaryCourt,
       PRISON: data.prison,
       PROBATION: data.notifyingOrgProbationRegion,
+      YOUTH_COURT: data.youthCourt,
     }
 
     if (data.notifyingOrganisation && data.notifyingOrganisation in lookup) {

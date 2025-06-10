@@ -31,6 +31,7 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
     MILITARY_COURT: formData.militaryCourt,
     PRISON: formData.prison,
     PROBATION: formData.notifyingOrgProbationRegion,
+    YOUTH_COURT: formData.youthCourt,
   }
 
   if (formData.notifyingOrganisation && formData.notifyingOrganisation in lookup) {

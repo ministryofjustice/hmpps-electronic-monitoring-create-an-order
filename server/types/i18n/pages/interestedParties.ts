@@ -16,6 +16,7 @@ type InterestedPartiesPageContent = PageContent<
   | 'responsibleOrganisation'
   | 'responsibleOrganisationEmail'
   | 'yjsRegion'
+  | 'youthCourt'
 >
 
 export default InterestedPartiesPageContent
