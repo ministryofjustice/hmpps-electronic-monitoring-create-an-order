@@ -63,6 +63,17 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
 
+  if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
+    return [
+      createAnswer(
+        questions.civilCountyCourt.text,
+        lookup(content.reference.civilCountyCourts, order.interestedParties?.notifyingOrganisationName),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
   if (notifyingOrganisation === 'CROWN_COURT') {
     return [
       createAnswer(

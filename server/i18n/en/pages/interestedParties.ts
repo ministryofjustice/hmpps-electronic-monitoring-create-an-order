@@ -4,6 +4,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
   helpText: '',
   legend: '',
   questions: {
+    civilCountyCourt: {
+      text: 'Select the name of the Civil and County Court',
+    },
     crownCourt: {
       text: 'Select the name of the Crown Court',
     },

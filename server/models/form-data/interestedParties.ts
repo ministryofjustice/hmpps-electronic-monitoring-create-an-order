@@ -5,6 +5,7 @@ import { FormDataModel } from './formData'
 
 const InterestedPartiesFormDataModel = FormDataModel.extend({
   notifyingOrganisation: NotifyingOrganisationEnum.nullable().default(null),
+  civilCountyCourt: z.string().default(''),
   crownCourt: z.string().default(''),
   magistratesCourt: z.string().default(''),
   prison: z.string().default(''),

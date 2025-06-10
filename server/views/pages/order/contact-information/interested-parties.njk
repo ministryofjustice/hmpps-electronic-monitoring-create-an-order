@@ -49,6 +49,19 @@
 {% endset %}
 
 {% if DDv5 %}
+
+  {% set civilCountyCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'civilCountyCourt',
+      name: 'civilCountyCourt',
+      label: content.pages.interestedParties.questions.civilCountyCourt.text,
+      options: content.reference.civilCountyCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
   {% set notifyingOrgProbationRegionHtml %}
     {{ accessibleAutocomplete({
       id: "notifyingOrgProbationRegion",
@@ -63,7 +76,6 @@
 {% endif %}
 
 {% set responsibleOrgProbationRegionHtml %}
-
   {{ govukSelect({
     id: "responsibleOrgProbationRegion",
     name: "responsibleOrgProbationRegion",
@@ -75,11 +87,9 @@
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
   }) }}
-
 {% endset %}
 
 {% set yjsRegionHtml %}
-
   {{ govukSelect({
     id: "yjsRegion",
     name: "yjsRegion",
@@ -91,17 +101,16 @@
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
   }) }}
-
 {% endset %}
 
 {% set notifyingOrgOptions = [] %}
 {% for org in content.reference.notifyingOrganisations | toOptions(not isOrderEditable) %}
-  {% if org.value == 'PRISON' %}
+  {% if org.value == 'CIVIL_COUNTY_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
       conditional: {
-        html: prisonHtml
+        html: civilCountyCourtHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
@@ -122,6 +131,16 @@
       text: org.text,
       conditional: {
         html: magistratesCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif org.value == 'PRISON' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: prisonHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}

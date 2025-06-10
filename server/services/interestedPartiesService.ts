@@ -37,9 +37,10 @@ export default class InterestedPartiesService {
 
   private getNotifyingOrganisationName(data: InterestedPartiesFormData) {
     const lookup: Partial<Record<Exclude<NotifyingOrganisation, null>, string>> = {
+      CIVIL_COUNTY_COURT: data.civilCountyCourt,
+      CROWN_COURT: data.crownCourt,
       PRISON: data.prison,
       PROBATION: data.notifyingOrgProbationRegion,
-      CROWN_COURT: data.crownCourt,
       MAGISTRATES_COURT: data.magistratesCourt,
     }
 

@@ -42,6 +42,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   get notifyingOrganisationFieldDDV5(): FormRadiosComponent {
     const label = 'What organisation or related organisation are you part of?'
     return new FormRadiosComponent(this.form, label, [
+      'Civil & County Court',
       'Crown Court',
       'Magistrates Court',
       'Prison',
@@ -73,6 +74,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'London',
       'Kent, Surrey & Sussex',
     ])
+  }
+
+  get civilCountyCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Civil and County Court'
+    return new FormAutocompleteComponent(this.form, label, [])
   }
 
   get crownCourtField(): FormAutocompleteComponent {
@@ -126,6 +132,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'London',
       'Kent, Surrey & Sussex',
     ])
+    // ,'responsibleOrganisationProbationRegion')
   }
 
   get yjsRegionField(): FormSelectComponent {

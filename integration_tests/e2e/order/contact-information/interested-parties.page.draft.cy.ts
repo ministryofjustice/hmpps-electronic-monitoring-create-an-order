@@ -76,6 +76,10 @@ context('Contact information', () => {
 
           page.form.shouldHaveAllDDV5Options()
 
+          page.form.civilCountyCourtField.shouldHaveOption('Aberystwyth County and Civil Court')
+          page.form.civilCountyCourtField.shouldHaveOption('Gloucester County and Civil Court')
+          page.form.civilCountyCourtField.shouldHaveOption('Weston Super Mare County and Civil Court')
+
           page.form.crownCourtField.shouldHaveOption('Barbican (Aldersgate House) Crown Court')
           page.form.crownCourtField.shouldHaveOption('Mold Crown Court')
           page.form.crownCourtField.shouldHaveOption('Truro Crown Court')
