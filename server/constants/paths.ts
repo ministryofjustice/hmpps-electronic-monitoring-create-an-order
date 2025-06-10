@@ -35,6 +35,7 @@ const paths = {
 
   MONITORING_CONDITIONS: {
     BASE_URL: '/order/:orderId/monitoring-conditions',
+    INSTALLATION_LOCATION: '/order/:orderId/monitoring-conditions/installation-location',
     INSTALLATION_ADDRESS: '/order/:orderId/monitoring-conditions/:addressType(installation)',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
     ZONE: '/order/:orderId/monitoring-conditions/zone/:zoneId',
