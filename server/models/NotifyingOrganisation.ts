@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const NotifyingOrganisationEnum = z.enum([
   'CIVIL_COUNTY_COURT',
   'CROWN_COURT',
+  'FAMILY_COURT',
   'MAGISTRATES_COURT',
   'PRISON',
   'HOME_OFFICE',

@@ -84,6 +84,10 @@ context('Contact information', () => {
           page.form.crownCourtField.shouldHaveOption('Mold Crown Court')
           page.form.crownCourtField.shouldHaveOption('Truro Crown Court')
 
+          page.form.familyCourtField.shouldHaveOption('Barnstable Family Court')
+          page.form.familyCourtField.shouldHaveOption('Pontypridd Family Court')
+          page.form.familyCourtField.shouldHaveOption('Wolverhampton Family Court')
+
           page.form.magistratesCourtField.shouldHaveOption('Camberwell Green Magistrates Court')
           page.form.magistratesCourtField.shouldHaveOption('Maidenhead Magistrates Court')
           page.form.magistratesCourtField.shouldHaveOption('Sittingbourne Magistrates Court')

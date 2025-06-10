@@ -26,6 +26,7 @@ const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) =
 const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
   const lookup: Partial<Record<Exclude<NotifyingOrganisation, null>, string>> = {
     CROWN_COURT: formData.crownCourt,
+    FAMILY_COURT: formData.familyCourt,
     MAGISTRATES_COURT: formData.magistratesCourt,
     PRISON: formData.prison,
     PROBATION: formData.notifyingOrgProbationRegion,

@@ -10,6 +10,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
     crownCourt: {
       text: 'Select the name of the Crown Court',
     },
+    familyCourt: {
+      text: 'Select the name of the Family Court',
+    },
     magistratesCourt: {
       text: 'Select the name of the Court',
     },

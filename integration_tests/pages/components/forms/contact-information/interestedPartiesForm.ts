@@ -44,12 +44,12 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     return new FormRadiosComponent(this.form, label, [
       'Civil & County Court',
       'Crown Court',
+      'Family Court',
+      'Home Office',
       'Magistrates Court',
       'Prison',
-      'Home Office',
-      'Scottish Court',
-      'Family Court',
       'Probation',
+      'Scottish Court',
     ])
   }
 
@@ -83,6 +83,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get crownCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Crown Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get familyCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Family Court'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 

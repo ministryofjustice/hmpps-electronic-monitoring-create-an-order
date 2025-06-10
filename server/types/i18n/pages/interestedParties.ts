@@ -3,6 +3,7 @@ import PageContent from './page'
 type InterestedPartiesPageContent = PageContent<
   | 'civilCountyCourt'
   | 'crownCourt'
+  | 'familyCourt'
   | 'notifyingOrganisation'
   | 'magistratesCourt'
   | 'notifyingOrganisationEmail'

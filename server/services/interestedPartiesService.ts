@@ -39,6 +39,7 @@ export default class InterestedPartiesService {
     const lookup: Partial<Record<Exclude<NotifyingOrganisation, null>, string>> = {
       CIVIL_COUNTY_COURT: data.civilCountyCourt,
       CROWN_COURT: data.crownCourt,
+      FAMILY_COURT: data.familyCourt,
       PRISON: data.prison,
       PROBATION: data.notifyingOrgProbationRegion,
       MAGISTRATES_COURT: data.magistratesCourt,

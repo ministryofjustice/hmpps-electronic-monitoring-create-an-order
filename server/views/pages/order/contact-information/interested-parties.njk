@@ -49,13 +49,24 @@
 {% endset %}
 
 {% if DDv5 %}
-
   {% set civilCountyCourtHtml %}
     {{ accessibleAutocomplete({
       id: 'civilCountyCourt',
       name: 'civilCountyCourt',
       label: content.pages.interestedParties.questions.civilCountyCourt.text,
       options: content.reference.civilCountyCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+    {% set familyCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: "familyCourt",
+      name: "familyCourt",
+      label:content.pages.interestedParties.questions.familyCourt.text,
+      options: content.reference.familyCourts | toOptions(false, true),
       value: notifyingOrganisationName.value,
       errorMessage: notifyingOrganisationName.error,
       nonce: cspNonce
@@ -124,6 +135,17 @@
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
+  {% elif org.value == 'FAMILY_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: familyCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
 
   {% elif org.value == 'MAGISTRATES_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
