@@ -12,7 +12,6 @@
 {% set helpText = content.pages.interestedParties.helpText %}
 
 {% if not dataDictionaryV5 %}
-
   {% set crownCourtHtml %}
     {{ accessibleAutocomplete({
       id: 'crownCourt',
@@ -25,12 +24,35 @@
     }) }}
   {% endset %}
 
+  {% set magistratesCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'magistratesCourt',
+      name: 'magistratesCourt',
+      label: content.pages.interestedParties.questions.magistratesCourt.text,
+      options: content.reference.magistratesCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+  {% set prisonHtml %}
+    {{ accessibleAutocomplete({
+      id: 'prison',
+      name: 'prison',
+      label: content.pages.interestedParties.questions.prison.text,
+      hint: content.pages.interestedParties.questions.prison.hint,
+      options: content.reference.prisons | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 {% endif %}
 
 
 {% if dataDictionaryV5 %}
   {% set crownCourtHtml %}
-
     {{ accessibleAutocomplete({
       id: 'crownCourt',
       name: 'crownCourt',
@@ -40,39 +62,33 @@
       errorMessage: notifyingOrganisationName.error,
       nonce: cspNonce
     }) }}
+  {% endset %}
 
+  {% set magistratesCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'magistratesCourt',
+      name: 'magistratesCourt',
+      label: content.pages.interestedParties.questions.magistratesCourt.text,
+      options: content.reference.ddv5.magistratesCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+    {% set prisonHtml %}
+    {{ accessibleAutocomplete({
+      id: 'prison',
+      name: 'prison',
+      label: content.pages.interestedParties.questions.prison.text,
+      hint: content.pages.interestedParties.questions.prison.hint,
+      options: content.reference.ddv5.prisons | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
   {% endset %}
 {% endif %}
-
-
-{% set magistrateCourtHtml %}
-
-  {{ accessibleAutocomplete({
-    id: 'magistratesCourt',
-    name: 'magistratesCourt',
-    label: content.pages.interestedParties.questions.magistratesCourt.text,
-    options: content.reference.magistratesCourts | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-
-{% endset %}
-
-{% set prisonHtml %}
-
-  {{ accessibleAutocomplete({
-    id: 'prison',
-    name: 'prison',
-    label: content.pages.interestedParties.questions.prison.text,
-    hint: content.pages.interestedParties.questions.prison.hint,
-    options: content.reference.prisons | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-
-{% endset %}
 
 {% set probationRegionHtml %}
 
@@ -131,7 +147,7 @@
       value: org.value,
       text: org.text,
       conditional: {
-        html: magistrateCourtHtml
+        html: magistratesCourtHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}

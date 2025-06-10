@@ -37,6 +37,13 @@ context('Contact information', () => {
           page.form.crownCourtField.shouldNotHaveOption('Barbican (Aldersgate House) Crown Court')
           page.form.crownCourtField.shouldNotHaveOption('Mold Crown Court')
           page.form.crownCourtField.shouldNotHaveOption('Truro Crown Court')
+
+          page.form.magistratesCourtField.shouldNotHaveOption('Camberwell Green Magistrates Court')
+          page.form.magistratesCourtField.shouldNotHaveOption('Maidenhead Magistrates Court')
+          page.form.magistratesCourtField.shouldNotHaveOption('Sittingbourne Magistrates Court')
+
+          page.form.prisonField.shouldNotHaveOption('Millsike Prison')
+
           page.checkIsAccessible()
         })
       })
@@ -72,6 +79,12 @@ context('Contact information', () => {
           page.form.crownCourtField.shouldHaveOption('Barbican (Aldersgate House) Crown Court')
           page.form.crownCourtField.shouldHaveOption('Mold Crown Court')
           page.form.crownCourtField.shouldHaveOption('Truro Crown Court')
+
+          page.form.magistratesCourtField.shouldHaveOption('Camberwell Green Magistrates Court')
+          page.form.magistratesCourtField.shouldHaveOption('Maidenhead Magistrates Court')
+          page.form.magistratesCourtField.shouldHaveOption('Sittingbourne Magistrates Court')
+
+          page.form.prisonField.shouldHaveOption('Millsike Prison')
 
           page.checkIsAccessible()
         })
