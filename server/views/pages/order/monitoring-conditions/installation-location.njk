@@ -1,0 +1,30 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% set section = content.pages.installationLocation.section %}
+{% set heading = content.pages.installationLocation.title %}
+{% set legend = content.pages.installationLocation.legend %}
+{% set helpText = content.pages.installationLocation.helpText %}
+{% set questions = content.pages.installationLocation.questions %}
+{% block formInputs %}
+
+{{ govukRadios({
+    name: "installationLocation",
+    fieldset: {
+      legend: {
+        text: questions.location.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },   
+    items: [
+      {
+        value: "INSTALLATION",
+        text: "At another address",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: installationLocation.value,
+    errorMessage: installationLocation.error
+  }) 
+}}
+{% endblock %}

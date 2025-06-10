@@ -28,6 +28,7 @@ import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
+import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -125,6 +126,8 @@ export default function routes({
     probationDeliveryUnitService,
     taskListService,
   )
+
+  const installationLocationController = new InstallationLocationController()
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.search)
@@ -206,6 +209,9 @@ export default function routes({
   // Main monitoring conditions page
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
+
+  // Installation location page
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
 
   get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)
