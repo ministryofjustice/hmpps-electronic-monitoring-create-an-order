@@ -8,7 +8,7 @@ export type InstallationLocationFormData = {
 export default class InstallationLocationFormComponent extends FormComponent {
   // FIELDS
 
-  get unitField(): FormRadiosComponent {
+  get locationField(): FormRadiosComponent {
     return new FormRadiosComponent(
       this.form,
       'Where will installation of the electronic monitoring device take place?',
@@ -20,23 +20,23 @@ export default class InstallationLocationFormComponent extends FormComponent {
 
   fillInWith(profile: InstallationLocationFormData): void {
     if (profile.location) {
-      this.unitField.set(profile.location)
+      this.locationField.set(profile.location)
     }
   }
 
   shouldBeValid(): void {
-    this.unitField.shouldNotHaveValidationMessage()
+    this.locationField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
-    this.unitField.shouldBeDisabled()
+    this.locationField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
-    this.unitField.shouldNotBeDisabled()
+    this.locationField.shouldNotBeDisabled()
   }
 
   shouldHaveAllOptions(): void {
-    this.unitField.shouldHaveAllOptions()
+    this.locationField.shouldHaveAllOptions()
   }
 }

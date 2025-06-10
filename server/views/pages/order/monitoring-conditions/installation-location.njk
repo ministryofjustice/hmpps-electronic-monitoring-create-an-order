@@ -17,6 +17,11 @@
       }
     },   
     items: [
+        {
+            value: "PRIMARY",
+            text: "Device wearer has no fixed address" if not primaryAddressView.value else primaryAddressView.value,
+            disabled: not isOrderEditable or not primaryAddressView.value
+        },
       {
         value: "INSTALLATION",
         text: "At another address",

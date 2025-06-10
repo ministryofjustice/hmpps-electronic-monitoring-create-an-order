@@ -33,6 +33,10 @@ export default class FormRadiosComponent {
     this.element.getByLabel(value).should('exist')
   }
 
+  shouldHaveDisabledOption(value: string | RegExp): void {
+    this.element.getByLabel(value).should('be.disabled')
+  }
+
   shouldExist(): void {
     this.element.should('exist')
   }
