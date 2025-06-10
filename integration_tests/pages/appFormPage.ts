@@ -15,7 +15,7 @@ export default class AppFormPage extends AppPage {
     }
 
     if (this.subtitle) {
-      cy.get('h1 span', { log: false }).contains(this.subtitle)
+      cy.get('span', { log: false }).contains(this.subtitle)
     }
 
     if (this.form) {
