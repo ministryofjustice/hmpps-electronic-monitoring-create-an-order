@@ -28,8 +28,8 @@ const stubGetOrder = (noFixedAbode: boolean, addresses) => {
         noFixedAbode: true,
         interpreterRequired: noFixedAbode,
       },
+      addresses,
     },
-    addresses,
   })
 }
 
@@ -44,9 +44,9 @@ context('Monitoring conditions', () => {
             addressType: 'PRIMARY',
             addressLine1: '10 Downing Street',
             addressLine2: 'London',
-            addressLine3: 'SW1A 2AB',
+            addressLine3: '',
             addressLine4: '',
-            postcode: '',
+            postcode: 'SW1A 2AB',
           },
         ])
         cy.signIn()
@@ -73,6 +73,16 @@ context('Monitoring conditions', () => {
           orderId: mockOrderId,
         })
         page.form.locationField.shouldHaveDisabledOption('Device wearer has no fixed address')
+      })
+
+      it('Should show fixed address option, when device wearer has fixed address', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        const page = Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+        page.form.shouldNotBeDisabled()
+        page.form.locationField.shouldHaveOption('10 Downing Street, London, SW1A 2AB')
       })
     })
   })
