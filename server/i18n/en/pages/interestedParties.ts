@@ -17,6 +17,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
       text: "What is your team's contact email address?",
       hint: 'Provide the email address for a mailbox that members of your team can access. Do not provide a personal email address.',
     },
+    notifyingOrgProbationRegion: {
+      text: 'Select the Probation Service region',
+    },
     prison: {
       text: 'Select the name of the Prison',
       hint: 'Enter the name without HMP. For example Berwyn prison.',

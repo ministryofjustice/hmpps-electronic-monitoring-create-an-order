@@ -5,6 +5,7 @@ type InterestedPartiesPageContent = PageContent<
   | 'notifyingOrganisation'
   | 'magistratesCourt'
   | 'notifyingOrganisationEmail'
+  | 'notifyingOrgProbationRegion'
   | 'prison'
   | 'probationRegion'
   | 'responsibleOfficerName'

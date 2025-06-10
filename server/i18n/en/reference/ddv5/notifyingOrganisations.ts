@@ -8,7 +8,7 @@ const notifyingOrganisationsDDv5: NotifyingOrganisationsDDv5 = {
   MAGISTRATES_COURT: 'Magistrates Court',
   MILITARY_COURT: 'Military Court',
   PRISON: 'Prison Service',
-  PROBATION: 'Probation',
+  PROBATION: 'Probation Service',
   SCOTTISH_COURT: 'Scottish Court',
   YOUTH_CUSTODY_SERVICE: 'Youth Custody Service (YCS)',
   YOUTH_COURT: 'Youth Court',

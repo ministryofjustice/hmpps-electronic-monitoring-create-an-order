@@ -11,78 +11,50 @@
 {% set legend = content.pages.interestedParties.legend %}
 {% set helpText = content.pages.interestedParties.helpText %}
 
-{% if not dataDictionaryV5 %}
-  {% set crownCourtHtml %}
-    {{ accessibleAutocomplete({
-      id: 'crownCourt',
-      name: 'crownCourt',
-      label: content.pages.interestedParties.questions.crownCourt.text,
-      options: content.reference.crownCourts | toOptions(false, true),
-      value: notifyingOrganisationName.value,
-      errorMessage: notifyingOrganisationName.error,
-      nonce: cspNonce
-    }) }}
-  {% endset %}
+{% set crownCourtHtml %}
+  {{ accessibleAutocomplete({
+    id: 'crownCourt',
+    name: 'crownCourt',
+    label: content.pages.interestedParties.questions.crownCourt.text,
+    options: content.reference.crownCourts | toOptions(false, true),
+    value: notifyingOrganisationName.value,
+    errorMessage: notifyingOrganisationName.error,
+    nonce: cspNonce
+  }) }}
+{% endset %}
 
-  {% set magistratesCourtHtml %}
-    {{ accessibleAutocomplete({
-      id: 'magistratesCourt',
-      name: 'magistratesCourt',
-      label: content.pages.interestedParties.questions.magistratesCourt.text,
-      options: content.reference.magistratesCourts | toOptions(false, true),
-      value: notifyingOrganisationName.value,
-      errorMessage: notifyingOrganisationName.error,
-      nonce: cspNonce
-    }) }}
-  {% endset %}
+{% set magistratesCourtHtml %}
+  {{ accessibleAutocomplete({
+    id: 'magistratesCourt',
+    name: 'magistratesCourt',
+    label: content.pages.interestedParties.questions.magistratesCourt.text,
+    options: content.reference.magistratesCourts | toOptions(false, true),
+    value: notifyingOrganisationName.value,
+    errorMessage: notifyingOrganisationName.error,
+    nonce: cspNonce
+  }) }}
+{% endset %}
 
-  {% set prisonHtml %}
-    {{ accessibleAutocomplete({
-      id: 'prison',
-      name: 'prison',
-      label: content.pages.interestedParties.questions.prison.text,
-      hint: content.pages.interestedParties.questions.prison.hint,
-      options: content.reference.prisons | toOptions(false, true),
-      value: notifyingOrganisationName.value,
-      errorMessage: notifyingOrganisationName.error,
-      nonce: cspNonce
-    }) }}
-  {% endset %}
-{% endif %}
+{% set prisonHtml %}
+  {{ accessibleAutocomplete({
+    id: 'prison',
+    name: 'prison',
+    label: content.pages.interestedParties.questions.prison.text,
+    hint: content.pages.interestedParties.questions.prison.hint,
+    options: content.reference.prisons | toOptions(false, true),
+    value: notifyingOrganisationName.value,
+    errorMessage: notifyingOrganisationName.error,
+    nonce: cspNonce
+  }) }}
+{% endset %}
 
-
-{% if dataDictionaryV5 %}
-  {% set crownCourtHtml %}
+{% if DDv5 %}
+  {% set notifyingOrgProbationRegionHtml %}
     {{ accessibleAutocomplete({
-      id: 'crownCourt',
-      name: 'crownCourt',
-      label: content.pages.interestedParties.questions.crownCourt.text,
-      options: content.reference.ddv5.crownCourts | toOptions(false, true),
-      value: notifyingOrganisationName.value,
-      errorMessage: notifyingOrganisationName.error,
-      nonce: cspNonce
-    }) }}
-  {% endset %}
-
-  {% set magistratesCourtHtml %}
-    {{ accessibleAutocomplete({
-      id: 'magistratesCourt',
-      name: 'magistratesCourt',
-      label: content.pages.interestedParties.questions.magistratesCourt.text,
-      options: content.reference.ddv5.magistratesCourts | toOptions(false, true),
-      value: notifyingOrganisationName.value,
-      errorMessage: notifyingOrganisationName.error,
-      nonce: cspNonce
-    }) }}
-  {% endset %}
-
-    {% set prisonHtml %}
-    {{ accessibleAutocomplete({
-      id: 'prison',
-      name: 'prison',
-      label: content.pages.interestedParties.questions.prison.text,
-      hint: content.pages.interestedParties.questions.prison.hint,
-      options: content.reference.ddv5.prisons | toOptions(false, true),
+      id: "notifyingOrgProbationRegion",
+      name: "notifyingOrgProbationRegion",
+      label:content.pages.interestedParties.questions.notifyingOrgProbationRegion.text,
+      options: content.reference.probationRegions | toOptions(false, true),
       value: notifyingOrganisationName.value,
       errorMessage: notifyingOrganisationName.error,
       nonce: cspNonce
@@ -90,11 +62,11 @@
   {% endset %}
 {% endif %}
 
-{% set probationRegionHtml %}
+{% set responsibleOrgProbationRegionHtml %}
 
   {{ govukSelect({
-    id: "probationRegion",
-    name: "probationRegion",
+    id: "responsibleOrgProbationRegion",
+    name: "responsibleOrgProbationRegion",
     label: {
       text: content.pages.interestedParties.questions.probationRegion.text
     },
@@ -133,6 +105,7 @@
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
   {% elif org.value == 'CROWN_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
@@ -142,6 +115,7 @@
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
   {% elif org.value == 'MAGISTRATES_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
@@ -151,6 +125,17 @@
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'PROBATION' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: notifyingOrgProbationRegionHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
   {% else %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push(org), notifyingOrgOptions) %}
   {% endif %}
@@ -163,7 +148,7 @@
       value: org.value,
       text: org.text,
       conditional: {
-        html: probationRegionHtml
+        html: responsibleOrgProbationRegionHtml
       },
       disabled: org.disabled
     }), responsibleOrgOptions) %}
@@ -284,7 +269,6 @@
       errorMessage: responsibleOrganisation.error,
       items: responsibleOrgOptions
     }) }}
-   
 
     {{ govukInput({
       label: {
@@ -302,6 +286,4 @@
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
-
-
 {% endblock %}

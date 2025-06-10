@@ -63,17 +63,6 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
 
-  if (notifyingOrganisation === 'PRISON') {
-    return [
-      createAnswer(
-        questions.prison.text,
-        lookup(content.reference.prisons, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
-
   if (notifyingOrganisation === 'CROWN_COURT') {
     return [
       createAnswer(
@@ -90,6 +79,28 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
       createAnswer(
         questions.magistratesCourt.text,
         lookup(content.reference.magistratesCourts, order.interestedParties?.notifyingOrganisationName),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
+  if (notifyingOrganisation === 'PRISON') {
+    return [
+      createAnswer(
+        questions.prison.text,
+        lookup(content.reference.prisons, order.interestedParties?.notifyingOrganisationName),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
+  if (notifyingOrganisation === 'PROBATION') {
+    return [
+      createAnswer(
+        questions.notifyingOrgProbationRegion.text,
+        lookup(content.reference.probationRegions, order.interestedParties?.notifyingOrganisationName),
         uri,
         answerOpts,
       ),

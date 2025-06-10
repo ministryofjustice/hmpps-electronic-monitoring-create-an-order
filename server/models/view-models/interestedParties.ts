@@ -3,6 +3,7 @@ import FeatureFlags from '../../utils/featureFlags'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
 import { InterestedParties } from '../InterestedParties'
+import { NotifyingOrganisation } from '../NotifyingOrganisation'
 import { ValidationResult } from '../Validation'
 import { ViewModel } from './utils'
 
@@ -12,7 +13,7 @@ type InterestedPartiesViewModel = ViewModel<NonNullable<InterestedParties>> & {
 
 const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) => {
   if (formData.responsibleOrganisation === 'PROBATION') {
-    return formData.probationRegion
+    return formData.responsibleOrgProbationRegion
   }
 
   if (formData.responsibleOrganisation === 'YJS') {
@@ -23,16 +24,15 @@ const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) =
 }
 
 const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
-  if (formData.notifyingOrganisation === 'PRISON') {
-    return formData.prison
+  const lookup: Partial<Record<Exclude<NotifyingOrganisation, null>, string>> = {
+    CROWN_COURT: formData.crownCourt,
+    MAGISTRATES_COURT: formData.magistratesCourt,
+    PRISON: formData.prison,
+    PROBATION: formData.notifyingOrgProbationRegion,
   }
 
-  if (formData.notifyingOrganisation === 'CROWN_COURT') {
-    return formData.crownCourt
-  }
-
-  if (formData.notifyingOrganisation === 'MAGISTRATES_COURT') {
-    return formData.magistratesCourt
+  if (formData.notifyingOrganisation && formData.notifyingOrganisation in lookup) {
+    return lookup[formData.notifyingOrganisation] as Exclude<NotifyingOrganisation, null>
   }
 
   return ''
