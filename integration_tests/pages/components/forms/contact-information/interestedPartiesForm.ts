@@ -47,6 +47,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'Family Court',
       'Home Office',
       'Magistrates Court',
+      'Military Court',
       'Prison',
       'Probation',
       'Scottish Court',
@@ -93,6 +94,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get magistratesCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get militaryCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Military Court'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 

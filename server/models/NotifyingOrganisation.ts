@@ -5,6 +5,7 @@ export const NotifyingOrganisationEnum = z.enum([
   'CROWN_COURT',
   'FAMILY_COURT',
   'MAGISTRATES_COURT',
+  'MILITARY_COURT',
   'PRISON',
   'HOME_OFFICE',
   'SCOTTISH_COURT',

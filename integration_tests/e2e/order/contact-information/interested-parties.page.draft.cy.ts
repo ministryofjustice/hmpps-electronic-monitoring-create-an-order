@@ -92,6 +92,9 @@ context('Contact information', () => {
           page.form.magistratesCourtField.shouldHaveOption('Maidenhead Magistrates Court')
           page.form.magistratesCourtField.shouldHaveOption('Sittingbourne Magistrates Court')
 
+          page.form.militaryCourtField.shouldHaveOption('Bulford Military Court Centre')
+          page.form.militaryCourtField.shouldHaveOption('Catterick Military Court Centre')
+
           page.form.prisonField.shouldHaveOption('Millsike Prison')
 
           page.checkIsAccessible()

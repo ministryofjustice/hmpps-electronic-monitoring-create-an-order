@@ -9,6 +9,7 @@ const InterestedPartiesFormDataModel = FormDataModel.extend({
   crownCourt: z.string().default(''),
   familyCourt: z.string().default(''),
   magistratesCourt: z.string().default(''),
+  militaryCourt: z.string().default(''),
   prison: z.string().default(''),
   notifyingOrganisationEmail: z.string().default(''),
   notifyingOrgProbationRegion: z.string().default(''),

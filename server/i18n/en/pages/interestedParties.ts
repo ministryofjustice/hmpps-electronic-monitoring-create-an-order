@@ -16,6 +16,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
     magistratesCourt: {
       text: 'Select the name of the Court',
     },
+    militaryCourt: {
+      text: 'Select the name of the Military Court',
+    },
     notifyingOrganisation: {
       text: 'What organisation or related organisation are you part of?',
     },

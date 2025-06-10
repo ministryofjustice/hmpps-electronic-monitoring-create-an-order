@@ -107,6 +107,17 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     ]
   }
 
+  if ('militaryCourts' in content.reference && notifyingOrganisation === 'MILITARY_COURT') {
+    return [
+      createAnswer(
+        questions.militaryCourt.text,
+        lookup(content.reference.militaryCourts, order.interestedParties?.notifyingOrganisationName),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
   if (notifyingOrganisation === 'PRISON') {
     return [
       createAnswer(

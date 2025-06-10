@@ -73,6 +73,18 @@
     }) }}
   {% endset %}
 
+  {% set militaryCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: "militaryCourt",
+      name: "militaryCourt",
+      label:content.pages.interestedParties.questions.militaryCourt.text,
+      options: content.reference.militaryCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
   {% set notifyingOrgProbationRegionHtml %}
     {{ accessibleAutocomplete({
       id: "notifyingOrgProbationRegion",
@@ -146,13 +158,22 @@
       disabled: org.disabled
     }), notifyingOrgOptions) %}
 
-
   {% elif org.value == 'MAGISTRATES_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
       conditional: {
         html: magistratesCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'MILITARY_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: militaryCourtHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
