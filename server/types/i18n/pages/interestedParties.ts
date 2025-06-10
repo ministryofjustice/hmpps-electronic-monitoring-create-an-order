@@ -15,6 +15,7 @@ type InterestedPartiesPageContent = PageContent<
   | 'responsibleOfficerPhoneNumber'
   | 'responsibleOrganisation'
   | 'responsibleOrganisationEmail'
+  | 'youthCustodyServiceRegion'
   | 'yjsRegion'
   | 'youthCourt'
 >

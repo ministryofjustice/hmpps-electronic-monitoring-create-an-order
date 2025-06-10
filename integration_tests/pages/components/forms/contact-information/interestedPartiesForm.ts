@@ -52,6 +52,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'Probation',
       'Scottish Court',
       'Youth Court',
+      'Youth Custody Service (YCS)',
     ])
   }
 
@@ -105,6 +106,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get youthCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Youth Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get youthCustodyServiceField(): FormAutocompleteComponent {
+    const label = 'Select the YCS region'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 

@@ -108,6 +108,18 @@
       nonce: cspNonce
     }) }}
   {% endset %}
+
+  {% set youthCustodyServiceRegionHtml %}
+    {{ accessibleAutocomplete({
+      id: 'youthCustodyServiceRegion',
+      name: 'youthCustodyServiceRegion',
+      label: content.pages.interestedParties.questions.youthCustodyServiceRegion.text,
+      options: content.reference.youthCustodyServiceRegions | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 {% endif %}
 
 {% set responsibleOrgProbationRegionHtml %}
@@ -216,6 +228,16 @@
       text: org.text,
       conditional: {
         html: youthCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'YOUTH_CUSTODY_SERVICE' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: youthCustodyServiceRegionHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}

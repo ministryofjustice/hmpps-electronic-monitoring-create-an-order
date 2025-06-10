@@ -11,6 +11,7 @@ export const NotifyingOrganisationEnum = z.enum([
   'PROBATION',
   'SCOTTISH_COURT',
   'YOUTH_COURT',
+  'YOUTH_CUSTODY_SERVICE',
 ])
 
 export type NotifyingOrganisation = z.infer<typeof NotifyingOrganisationEnum>

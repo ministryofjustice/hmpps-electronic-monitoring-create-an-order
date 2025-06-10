@@ -51,6 +51,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
       text: "What is the Responsible Organisation's email address? (optional)",
       hint: 'Provide an email address that can be used to contact the Responsible Organisation if the Responsible Officer is unavaliable. Provide a functional mailbox not a personal email.',
     },
+    youthCustodyServiceRegion: {
+      text: 'Select the YCS region',
+    },
     yjsRegion: {
       text: 'Select the Youth Justice Service region',
     },
