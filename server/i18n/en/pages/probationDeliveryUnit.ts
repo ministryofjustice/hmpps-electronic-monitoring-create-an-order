@@ -7,7 +7,7 @@ const probationDeliveryUnitPageContent: ProbationDeliveryUnit = {
   legend: '',
   questions: {
     unit: {
-      text: "What is the Responsible Organisation's Probation Delivery Unit(PDU)",
+      text: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
     },
   },
 }
