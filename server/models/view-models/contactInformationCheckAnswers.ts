@@ -60,36 +60,15 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 }
 
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
+  const ddv5 = FeatureFlags.getInstance().get('DD_V5_1_ENABLED')
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
-
-  if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
-    return [
-      createAnswer(
-        questions.civilCountyCourt.text,
-        lookup(content.reference.civilCountyCourts, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
 
   if (notifyingOrganisation === 'CROWN_COURT') {
     return [
       createAnswer(
         questions.crownCourt.text,
         lookup(content.reference.crownCourts, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
-
-  if ('familyCourts' in content.reference && notifyingOrganisation === 'FAMILY_COURT') {
-    return [
-      createAnswer(
-        questions.familyCourt.text,
-        lookup(content.reference.familyCourts, order.interestedParties?.notifyingOrganisationName),
         uri,
         answerOpts,
       ),
@@ -107,17 +86,6 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     ]
   }
 
-  if ('militaryCourts' in content.reference && notifyingOrganisation === 'MILITARY_COURT') {
-    return [
-      createAnswer(
-        questions.militaryCourt.text,
-        lookup(content.reference.militaryCourts, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
-
   if (notifyingOrganisation === 'PRISON') {
     return [
       createAnswer(
@@ -129,37 +97,72 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     ]
   }
 
-  if (notifyingOrganisation === 'PROBATION') {
-    return [
-      createAnswer(
-        questions.notifyingOrgProbationRegion.text,
-        lookup(content.reference.probationRegions, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
+  if (ddv5) {
+    if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
+      return [
+        createAnswer(
+          questions.civilCountyCourt.text,
+          lookup(content.reference.civilCountyCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
 
-  if ('youthCourts' in content.reference && notifyingOrganisation === 'YOUTH_COURT') {
-    return [
-      createAnswer(
-        questions.youthCourt.text,
-        lookup(content.reference.youthCourts, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
+    if ('familyCourts' in content.reference && notifyingOrganisation === 'FAMILY_COURT') {
+      return [
+        createAnswer(
+          questions.familyCourt.text,
+          lookup(content.reference.familyCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
 
-  if ('youthCustodyServiceRegions' in content.reference && notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
-    return [
-      createAnswer(
-        questions.youthCustodyServiceRegion.text,
-        lookup(content.reference.youthCustodyServiceRegions, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
+    if ('militaryCourts' in content.reference && notifyingOrganisation === 'MILITARY_COURT') {
+      return [
+        createAnswer(
+          questions.militaryCourt.text,
+          lookup(content.reference.militaryCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if (notifyingOrganisation === 'PROBATION') {
+      return [
+        createAnswer(
+          questions.notifyingOrgProbationRegion.text,
+          lookup(content.reference.probationRegions, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if ('youthCourts' in content.reference && notifyingOrganisation === 'YOUTH_COURT') {
+      return [
+        createAnswer(
+          questions.youthCourt.text,
+          lookup(content.reference.youthCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if ('youthCustodyServiceRegions' in content.reference && notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+      return [
+        createAnswer(
+          questions.youthCustodyServiceRegion.text,
+          lookup(content.reference.youthCustodyServiceRegions, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
   }
 
   return []
