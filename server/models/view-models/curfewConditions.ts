@@ -7,7 +7,7 @@ import { createGovukErrorSummary } from '../../utils/errors'
 import { Address } from '../Address'
 
 type CurfewConditionsViewModel = AddressViewsViewModel<
-  Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate'>
+  Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate' | 'curfewAdditionalDetails'>
 > & {
   addresses: MultipleChoiceField
   startDate: DateTimeField
