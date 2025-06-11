@@ -20,6 +20,7 @@ import TaskListService from './taskListService'
 import TrailMonitoringService from './trailMonitoringService'
 import VariationService from './variationService'
 import ProbationDeliveryUnitService from './probationDeliveryUnitService'
+import CurfewAdditionalDetailsService from './curfewAdditionalDetailsService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -45,6 +46,7 @@ export const services = () => {
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
   const variationService = new VariationService(cemoApiClient)
   const probationDeliveryUnitService = new ProbationDeliveryUnitService(cemoApiClient)
+  const curfewAdditionalDetailsService = new CurfewAdditionalDetailsService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -54,6 +56,7 @@ export const services = () => {
     contactDetailsService,
     curfewReleaseDateService,
     curfewConditionsService,
+    curfewAdditionalDetailsService,
     curfewTimetableService,
     addressService,
     deviceWearerResponsibleAdultService,
@@ -78,6 +81,7 @@ export {
   AuditService,
   ContactDetailsService,
   CurfewConditionsService,
+  CurfewAdditionalDetailsService,
   CurfewReleaseDateService,
   CurfewTimetableService,
   DeviceWearerResponsibleAdultService,
