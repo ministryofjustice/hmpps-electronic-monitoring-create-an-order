@@ -1,0 +1,154 @@
+import type { NextFunction, Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
+import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
+import HmppsAuditClient from '../../data/hmppsAuditClient'
+import RestClient from '../../data/restClient'
+import AuditService from '../../services/auditService'
+import TaskListService from '../../services/taskListService'
+import CurfewAdditionalDetailsService from '../../services/curfewAdditionalDetailsService'
+import CurfewAdditionalDetailsController from './curfewAdditionalDetailsController'
+import curfewAdditionalDetails from '../../models/view-models/curfewAdditionalDetails'
+
+jest.mock('../../services/auditService')
+jest.mock('../../data/hmppsAuditClient')
+jest.mock('../../data/restClient')
+
+const mockId = uuidv4()
+
+describe('CurfewConditionsController', () => {
+  let mockAuditClient: jest.Mocked<HmppsAuditClient>
+  let mockAuditService: jest.Mocked<AuditService>
+  let mockCurfewAdditionalDetailsService: jest.Mocked<CurfewAdditionalDetailsService>
+  let controller: CurfewAdditionalDetailsController
+  const taskListService = new TaskListService()
+  let req: Request
+  let res: Response
+  let next: NextFunction
+
+  beforeEach(() => {
+    mockAuditClient = new HmppsAuditClient({
+      queueUrl: '',
+      enabled: true,
+      region: '',
+      serviceName: '',
+    }) as jest.Mocked<HmppsAuditClient>
+
+    const mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+
+    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
+    mockCurfewAdditionalDetailsService = new CurfewAdditionalDetailsService()
+
+    controller = new CurfewAdditionalDetailsController(
+      mockAuditService,
+      mockCurfewAdditionalDetailsService,
+      taskListService,
+    )
+
+    req = {
+      // @ts-expect-error stubbing session
+      session: {},
+      query: {},
+      params: {
+        orderId: mockId,
+      },
+      order: getMockOrder({ id: mockId }),
+      user: {
+        username: 'fakeUserName',
+        token: 'fakeUserToken',
+        authSource: 'auth',
+      },
+      flash: jest.fn(),
+    }
+
+    // @ts-expect-error stubbing res.render
+    res = {
+      locals: {
+        user: {
+          username: 'fakeUserName',
+          token: 'fakeUserToken',
+          authSource: 'nomis',
+          userId: 'fakeId',
+          name: 'fake user',
+          displayName: 'fuser',
+          userRoles: ['fakeRole'],
+          staffId: 123,
+        },
+        editable: false,
+        orderId: mockId,
+      },
+      redirect: jest.fn(),
+      render: jest.fn(),
+    }
+
+    next = jest.fn()
+  })
+
+  describe('View curfew additional details with form data', () => {
+    it('Should render when form data is empty', async () => {
+      const mockFormData = { curfewAdditionalDetails: '' }
+      req.flash = jest.fn().mockReturnValueOnce([mockFormData])
+
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
+        curfewAdditionalDetails: '',
+      })
+    })
+
+    it('Should render when form data has value', async () => {
+      const mockFormData = { curfewAdditionalDetails: 'some details' }
+      req.flash = jest.fn().mockReturnValueOnce([mockFormData])
+
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
+        curfewAdditionalDetails: 'some details',
+      })
+    })
+  })
+
+  describe('View curfew additional details with view model', () => {
+    it('Should render when form data is empty', async () => {
+      req.flash = jest.fn().mockReturnValueOnce([])
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
+        curfewAdditionalDetails: '',
+      })
+    })
+
+    it('Should render when form data has value', async () => {
+      req.flash = jest.fn().mockReturnValueOnce([])
+      req.order!.curfewConditions = {
+        startDate: '',
+        endDate: '',
+        curfewAddress: '',
+        curfewAdditionalDetails: 'some details',
+      }
+
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
+        curfewAdditionalDetails: 'some details',
+      })
+    })
+
+    describe('Update curfew additional details', () => {
+      it('Should redirect to next page', async () => {
+        req.order = getMockOrder({
+          id: mockId,
+          monitoringConditions: createMonitoringConditions({ curfew: true }),
+        })
+        req.body = {
+          action: 'continue',
+          curfewAdditionalDetails: 'some details',
+        }
+        mockCurfewAdditionalDetailsService.update = jest.fn().mockResolvedValue(undefined)
+
+        await controller.update(req, res, next)
+
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+      })
+    })
+  })
+})
