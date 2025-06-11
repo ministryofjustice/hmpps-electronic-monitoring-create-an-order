@@ -287,7 +287,7 @@ describe('CurfewConditionsController', () => {
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/additional-details`)
     })
 
     it('Should redirect back to summary page', async () => {
