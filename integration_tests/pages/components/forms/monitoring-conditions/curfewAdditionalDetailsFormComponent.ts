@@ -9,7 +9,10 @@ export default class CurfewAdditionalDetailsFormComponent extends FormComponent 
   // FIELDS
 
   get curfewAdditionalDetails(): FormTextareaComponent {
-    return new FormTextareaComponent(this.form, 'Where will the device wearer be during curfew hours?')
+    return new FormTextareaComponent(
+      this.form,
+      'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+    )
   }
 
   // FORM HELPERS

@@ -1,92 +1,60 @@
-
 {% extends "../../../partials/form-layout.njk" %}
 
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
-{% set section = content.pages.curfewConditions.section %}
-{% set heading = content.pages.curfewConditions.title %}
-{% set legend = content.pages.curfewConditions.legend %}
-{% set helpText = content.pages.curfewConditions.helpText %}
-{% set questions = content.pages.curfewConditions.questions %}
+{% set section = content.pages.curfewAdditionalDetails.section %}
+{% set heading = content.pages.curfewAdditionalDetails.title %}
+{% set questions = content.pages.curfewAdditionalDetails.questions %}
 {% block formInputs %}
 
-  {% set disabled = {} if isOrderEditable else { disabled:true } %}
+  <p>The standard curfew address boundary is “front door to back door” and does not include garden or adjoining areas. Occasionally there will be a need to extend the range.</p>
 
- {{dateTimeInput({
-      id: "startDate",
-      name: "startDate",
-      date: startDate.value,
-      dateLabel:  questions.startDate.text,
-      dateHint: questions.startDate.hint,
-      errorMessages: {
-        field: startDate.error,
-        date: errors.dateError,
-        time: errors.timeError
-      },
-      disabled: not isOrderEditable,
-      timesEnabled: false,
-      defaultHours: "00",
-      defaultMinutes: "00"
-    })}}
+  <p>Where a need for extending the range has been identified it must be agreed by the decision-maker's within the organisation. For example, the probation officer and their manager.</p>
 
-  {{dateTimeInput({
-      id: "endDate",
-      name: "endDate",
-      date: endDate.value,
-      dateLabel:  questions.endDate.text,
-      dateHint: questions.endDate.hint,
-      errorMessages: {
-        field: endDate.error,
-        date: errors.dateError,
-        time: errors.timeError
-      },
-      disabled: not isOrderEditable,
-      timesEnabled: false,
-      defaultHours: 23,
-      defaultMinutes: 59
-    })}}
+  {% set disabled = {}
+  if isOrderEditable else {
+    disabled : true
+  }
+ %}
 
-  {% call govukFieldset({
+  {% set detailsHtml %}
+  {{ govukTextarea({
+  name: "details",
+  id: "additional-details",
+  label: {
+    text: questions.curfewAdditionalDetails.text
+  },
+  hint: {
+    text: questions.curfewAdditionalDetails.hint
+  }
+}) }}
+  {% endset -%}
+
+  {{ govukRadios({
+  name: "details",
+  fieldset: {
     legend: {
-      text: "Curfew addresses",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
+      text: questions.provideDetails.text,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--s"
     }
-  }) %}
-    {{ govukCheckboxes({
-      name: "addresses",
-      fieldset: {
-        legend: {
-          text: questions.addresses.text,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: questions.addresses.hint
-      },
-      items: [
-        {
-          value: "PRIMARY",
-          text: "Main address (not provided)" if not primaryAddressView.value else "Main address - "+primaryAddressView.value,
-          disabled: not isOrderEditable or not primaryAddressView.value
-        },
-        {
-          value: "SECONDARY",
-          text: "Second address (not provided)" if not secondaryAddressView.value else "Second address - "+secondaryAddressView.value,
-          disabled: not isOrderEditable or not secondaryAddressView.value
-        },
-        {
-          value: "TERTIARY",
-          text: "Third address (not provided)" if not tertiaryAddressView.value else "Third address - "+tertiaryAddressView.value,
-          disabled: not isOrderEditable or not tertiaryAddressView.value
-        }
-      ],
-      errorMessage: addresses.error,
-      values: addresses.values
-    }) }}
-  {% endcall %}
+  },
+  items: [
+    {
+      value: "yes",
+      text: "Yes",
+      checked: true,
+      conditional: {
+        html: detailsHtml
+      }
+    },
+    { 
+      value: "no",
+      text: "No"
+    }
+  ]
+}) }}
 
 {% endblock %}
