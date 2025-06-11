@@ -4,6 +4,7 @@ import { Address, AddressTypeEnum } from '../Address'
 
 type InstallationLocationViewModel = ViewModel<object> & {
   primaryAddressView: TextField
+  showTagAtSourceOptions: boolean
 }
 
 const createPrimaryAddressView = (addresses: Address[]): string => {
@@ -14,9 +15,20 @@ const createPrimaryAddressView = (addresses: Address[]): string => {
 }
 
 const construct = (order: Order): InstallationLocationViewModel => {
+  let showTagAtSourceOptions = false
+  if (
+    order.monitoringConditions.alcohol === true &&
+    order.monitoringConditions.curfew === false &&
+    order.monitoringConditions.exclusionZone === false &&
+    order.monitoringConditions.mandatoryAttendance === false &&
+    order.monitoringConditions.trail === false
+  ) {
+    showTagAtSourceOptions = true
+  }
   return {
     primaryAddressView: { value: createPrimaryAddressView(order.addresses) },
     errorSummary: null,
+    showTagAtSourceOptions,
   }
 }
 

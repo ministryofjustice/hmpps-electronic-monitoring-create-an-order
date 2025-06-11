@@ -6,6 +6,32 @@
 {% set helpText = content.pages.installationLocation.helpText %}
 {% set questions = content.pages.installationLocation.questions %}
 {% block formInputs %}
+ {% set items =[
+        {
+            value: "PRIMARY",
+            text: "Device wearer has no fixed address" if not primaryAddressView.value else primaryAddressView.value,
+            disabled: not isOrderEditable or not primaryAddressView.value
+        },           
+        {
+          value: "INSTALLATION",
+          text: "At another address",
+          disabled: not isOrderEditable
+        }
+    ] %}
+
+ {% if showTagAtSourceOptions %}
+       {% set items =  (items.push({
+            value: "PRISON",
+            text: "At a prison",
+            disabled: not isOrderEditable
+        },
+        {
+            value: "PROBATION",
+            text: "At a probation office",
+            disabled: not isOrderEditable 
+        }), items) %}
+       
+  {% endif%}
 
 {{ govukRadios({
     name: "installationLocation",
@@ -16,18 +42,7 @@
         classes: "govuk-fieldset__legend--l"
       }
     },   
-    items: [
-        {
-            value: "PRIMARY",
-            text: "Device wearer has no fixed address" if not primaryAddressView.value else primaryAddressView.value,
-            disabled: not isOrderEditable or not primaryAddressView.value
-        },
-      {
-        value: "INSTALLATION",
-        text: "At another address",
-        disabled: not isOrderEditable
-      }
-    ],
+    items: items,
     value: installationLocation.value,
     errorMessage: installationLocation.error
   }) 
