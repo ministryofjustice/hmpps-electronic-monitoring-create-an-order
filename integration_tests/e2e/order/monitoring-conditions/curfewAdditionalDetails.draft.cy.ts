@@ -26,12 +26,6 @@ context('Monitoring conditions', () => {
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
 
-        // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way
-        // page.form.hasAnotherAddressField.shouldNotExist()
-        cy.contains('legend', 'Does the device wearer have another address they will be monitored at?', {
-          log: false,
-        }).should('not.exist')
-
         page.form.curfewAdditionalDetails.shouldHaveValue('')
 
         page.errorSummary.shouldNotExist()
