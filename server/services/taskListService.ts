@@ -36,6 +36,7 @@ const PAGES = {
   installationAddress: 'INSTALLATION_ADDRESS',
   curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewConditions: 'CURFEW_CONDITIONS',
+  curfewAdditionalDetails: 'CURFEW_ADDITIONAL_DETAILS',
   curfewTimetable: 'CURFEW_TIMETABLE',
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
   trailMonitoring: 'TRAIL_MONITORING',
@@ -293,6 +294,19 @@ export default class TaskListService {
         STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.curfewConditions),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.curfewAdditionalDetails,
+      path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null),
     })
 
     tasks.push({

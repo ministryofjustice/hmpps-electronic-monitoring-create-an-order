@@ -18,7 +18,7 @@ export default class CurfewAdditionalDetailsController {
     const { curfewConditions: model } = req.order!
     // const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = CurfewAdditionalDetailsViewModel.construct(model, formData as any)
+    const viewModel = CurfewAdditionalDetailsViewModel.construct(model, formData as never)
 
     res.render(`pages/order/monitoring-conditions/curfew-additional-details`, viewModel)
   }
@@ -33,16 +33,16 @@ export default class CurfewAdditionalDetailsController {
       data: formData,
     })
 
-    // if (isValidationResult(updateResult)) {
-    //   req.flash('formData', formData)
-    //   req.flash('validationErrors', updateResult)
+    if (isValidationResult(updateResult)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', updateResult)
 
-    //   res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
-    //   return
-    // }
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', orderId))
+      return
+    }
 
     if (formData.action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
+      res.redirect(this.taskListService.getNextPage('CURFEW_ADDITIONAL_DETAILS', req.order!))
       return
     }
 

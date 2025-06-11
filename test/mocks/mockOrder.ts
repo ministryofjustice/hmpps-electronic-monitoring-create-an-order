@@ -163,6 +163,7 @@ export const createCurfewConditions = (overrideProperties?: Partial<CurfewCondit
   curfewAddress: null,
   endDate: null,
   startDate: null,
+  curfewAdditionalDetails: null,
   ...overrideProperties,
 })
 

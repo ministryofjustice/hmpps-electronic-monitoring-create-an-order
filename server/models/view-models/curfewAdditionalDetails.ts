@@ -1,7 +1,7 @@
 import { CurfewConditions } from '../CurfewConditions'
 import { CurfewAdditionalDetailsFormData } from '../form-data/curfewAdditionalDetails'
 
-type CurfewAdditionalDetailsViewModel = { curfewAdditionalDetails: String }
+type CurfewAdditionalDetailsViewModel = { curfewAdditionalDetails: string }
 
 const construct = (
   model: CurfewConditions | undefined | null,

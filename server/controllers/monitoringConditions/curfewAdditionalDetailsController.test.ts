@@ -7,7 +7,6 @@ import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import CurfewAdditionalDetailsService from '../../services/curfewAdditionalDetailsService'
 import CurfewAdditionalDetailsController from './curfewAdditionalDetailsController'
-import curfewAdditionalDetails from '../../models/view-models/curfewAdditionalDetails'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -40,7 +39,9 @@ describe('CurfewConditionsController', () => {
     }) as jest.Mocked<RestClient>
 
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    mockCurfewAdditionalDetailsService = new CurfewAdditionalDetailsService()
+    mockCurfewAdditionalDetailsService = new CurfewAdditionalDetailsService(
+      mockRestClient,
+    ) as jest.Mocked<CurfewAdditionalDetailsService>
 
     controller = new CurfewAdditionalDetailsController(
       mockAuditService,
@@ -134,7 +135,7 @@ describe('CurfewConditionsController', () => {
     })
 
     describe('Update curfew additional details', () => {
-      it('Should redirect to next page', async () => {
+      it('Should redirect to next page when action is continue', async () => {
         req.order = getMockOrder({
           id: mockId,
           monitoringConditions: createMonitoringConditions({ curfew: true }),
@@ -148,6 +149,39 @@ describe('CurfewConditionsController', () => {
         await controller.update(req, res, next)
 
         expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+      })
+
+      it('Should redirect to summary when action is back', async () => {
+        req.order = getMockOrder({
+          id: mockId,
+          monitoringConditions: createMonitoringConditions({ curfew: true }),
+        })
+        req.body = {
+          action: 'back',
+          curfewAdditionalDetails: 'some details',
+        }
+        mockCurfewAdditionalDetailsService.update = jest.fn().mockResolvedValue(undefined)
+
+        await controller.update(req, res, next)
+
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/summary`)
+      })
+
+      it('Should redirect back to same page when there are errors', async () => {
+        req.order = getMockOrder({
+          id: mockId,
+          monitoringConditions: createMonitoringConditions({ curfew: true }),
+        })
+        req.body = {
+          action: 'continue',
+          curfewAdditionalDetails: 'some details',
+        }
+        const mockValidationError = [{ field: 'curfewAdditionalDetails', error: 'mockError' }]
+        mockCurfewAdditionalDetailsService.update = jest.fn().mockResolvedValue(mockValidationError)
+
+        await controller.update(req, res, next)
+
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/additional-details`)
       })
     })
   })
