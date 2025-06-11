@@ -3,7 +3,7 @@ import Page from '../../../pages/page'
 import { NotFoundErrorPage } from '../../../pages/error'
 
 const mockOrderId = uuidv4()
-const pagePath = '/monitoring-conditions/installation'
+
 context('Monitoring conditions', () => {
   context('Installation location', () => {
     context('Viewing a non-existent order', () => {
@@ -15,7 +15,9 @@ context('Monitoring conditions', () => {
       })
 
       it('Should indicate to the user that there was an error', () => {
-        cy.signIn().visit(`/order/${mockOrderId}${pagePath}`, { failOnStatusCode: false })
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/installation-location`, {
+          failOnStatusCode: false,
+        })
 
         Page.verifyOnPage(NotFoundErrorPage)
       })

@@ -16,6 +16,7 @@ import TrailMonitoringModel from './TrailMonitoring'
 import InterestedPartiesModel from './InterestedParties'
 import ProbationDeliveryUnitModel from './ProbationDeliveryUnit'
 import VariationDetailsModel from './VariationDetails'
+import InstallationLocationModel from './InstallationLocation'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 export const OrderTypeEnum = z.enum(['REQUEST', 'VARIATION'])
@@ -43,6 +44,7 @@ const OrderModel = z.object({
   variationDetails: VariationDetailsModel.nullable(),
   isValid: z.boolean().optional().default(false),
   fmsResultDate: z.string().datetime().optional().nullable(),
+  installationLocation: InstallationLocationModel.nullable().optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

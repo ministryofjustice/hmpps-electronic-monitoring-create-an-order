@@ -1,8 +1,9 @@
 import { Order } from '../Order'
 import { ViewModel, TextField } from './utils'
 import { Address, AddressTypeEnum } from '../Address'
+import { InstallationLocation } from '../InstallationLocation'
 
-type InstallationLocationViewModel = ViewModel<object> & {
+type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
   showTagAtSourceOptions: boolean
 }
@@ -26,6 +27,9 @@ const construct = (order: Order): InstallationLocationViewModel => {
     showTagAtSourceOptions = true
   }
   return {
+    location: {
+      value: order.installationLocation!.location ?? '',
+    },
     primaryAddressView: { value: createPrimaryAddressView(order.addresses) },
     errorSummary: null,
     showTagAtSourceOptions,

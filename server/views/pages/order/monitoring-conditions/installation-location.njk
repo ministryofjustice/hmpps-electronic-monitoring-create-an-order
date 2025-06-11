@@ -34,7 +34,7 @@
   {% endif%}
 
 {{ govukRadios({
-    name: "installationLocation",
+    name: "location",
     fieldset: {
       legend: {
         text: questions.location.text,
@@ -43,8 +43,8 @@
       }
     },   
     items: items,
-    value: installationLocation.value,
-    errorMessage: installationLocation.error
+    value: location.value,
+    errorMessage: location.error
   }) 
 }}
 {% endblock %}
