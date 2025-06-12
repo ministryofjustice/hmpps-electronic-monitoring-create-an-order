@@ -264,9 +264,22 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationLocation,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
+      state: STATES.required,
+      completed: isNotNullOrUndefined(order.installationLocation),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
-      state: STATES.required,
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'INSTALLATION',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
       completed: isCompletedAddress(order, 'INSTALLATION'),
     })
 
