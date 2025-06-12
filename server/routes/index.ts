@@ -21,6 +21,7 @@ import MonitoringConditionsController from '../controllers/monitoringConditions/
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
 import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
+import InstallationAppointmentController from '../controllers/monitoringConditions/installationAppointmentController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -132,6 +133,8 @@ export default function routes({
     installationLocationService,
     taskListService,
   )
+
+  const installationAppointmentController = new InstallationAppointmentController()
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.search)
@@ -218,6 +221,10 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.update)
 
+  // Installation appointment page
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.view)
+
+  // Installation address page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)
 

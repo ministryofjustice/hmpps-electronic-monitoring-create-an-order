@@ -18,6 +18,7 @@ import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
 import VariationDetailsPageContent from './pages/variationDetails'
 import InstallationLocationPageContent from './pages/installationLocation'
+import InstallationAppointmentPageContent from './pages/installationAppointment'
 import ReferenceData from './reference'
 
 type I18n = {
@@ -46,6 +47,7 @@ type I18n = {
     uploadPhotoId: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     installationLocation: InstallationLocationPageContent
+    installationAppointment: InstallationAppointmentPageContent
   }
   reference: ReferenceData
 }

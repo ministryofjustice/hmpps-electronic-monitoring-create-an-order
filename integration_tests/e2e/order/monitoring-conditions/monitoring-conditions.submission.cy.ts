@@ -78,6 +78,8 @@ context('Monitoring conditions', () => {
           },
         }).should('be.true')
       })
+
+      // TODO should go to installation location page and curfew page
     })
   })
 })
