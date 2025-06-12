@@ -21,8 +21,8 @@ const createPrimaryAddressView = (addresses: Address[]): string => {
 
 const constructFromFormData = (
   formData: InstallationLocationFormData,
-  showTagAtSourceOptions:boolean,
-  primaryAddressView:string,
+  showTagAtSourceOptions: boolean,
+  primaryAddressView: string,
   validationErrors: ValidationResult,
 ): InstallationLocationViewModel => {
   return {
@@ -32,12 +32,15 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     showTagAtSourceOptions,
-    primaryAddressView: { value: primaryAddressView }
+    primaryAddressView: { value: primaryAddressView },
   }
 }
 
-const constructFromEntity =( location:string = '', showTagAtSourceOptions:boolean,
-primaryAddressView:string,):InstallationLocationViewModel=>{
+const constructFromEntity = (
+  showTagAtSourceOptions: boolean,
+  primaryAddressView: string,
+  location: string = '',
+): InstallationLocationViewModel => {
   return {
     location: {
       value: location ?? '',
@@ -48,11 +51,11 @@ primaryAddressView:string,):InstallationLocationViewModel=>{
   }
 }
 
-const construct = (order: Order,
+const construct = (
+  order: Order,
   formData: InstallationLocationFormData,
   validationErrors: ValidationResult,
-  ): InstallationLocationViewModel => {
-
+): InstallationLocationViewModel => {
   let showTagAtSourceOptions = false
   if (
     order.monitoringConditions.alcohol === true &&
@@ -65,11 +68,11 @@ const construct = (order: Order,
   }
 
   const primaryAddressView = createPrimaryAddressView(order.addresses)
-  
+
   if (validationErrors.length > 0) {
-    return constructFromFormData(formData,showTagAtSourceOptions, primaryAddressView, validationErrors)
+    return constructFromFormData(formData, showTagAtSourceOptions, primaryAddressView, validationErrors)
   }
-  return constructFromEntity(order.installationLocation?.location,showTagAtSourceOptions, primaryAddressView ) 
+  return constructFromEntity(showTagAtSourceOptions, primaryAddressView, order.installationLocation?.location)
 }
 
 export default {

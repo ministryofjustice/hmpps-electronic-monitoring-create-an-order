@@ -292,7 +292,7 @@ context('Monitoring conditions', () => {
         })
       })
 
-      //TODO should continue to installation appointment page
+      // TODO should continue to installation appointment page
     })
   })
 })

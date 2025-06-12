@@ -13,7 +13,7 @@ context('Monitoring conditions', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
-          status: 'IN_PROGRESS'
+          status: 'IN_PROGRESS',
         })
 
         cy.signIn()
@@ -23,9 +23,13 @@ context('Monitoring conditions', () => {
         const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
         page.form.saveAndContinueButton.click()
 
-        page.form.locationField.shouldHaveValidationMessage('Select where will installation of the electronic monitoring device take place')
+        page.form.locationField.shouldHaveValidationMessage(
+          'Select where will installation of the electronic monitoring device take place',
+        )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Select where will installation of the electronic monitoring device take place')
+        page.errorSummary.shouldHaveError(
+          'Select where will installation of the electronic monitoring device take place',
+        )
       })
     })
   })

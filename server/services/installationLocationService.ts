@@ -1,11 +1,12 @@
+import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import InstallationLocationModel, { InstallationLocation } from '../models/InstallationLocation'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { InstallationLocationFromDataValidator } from '../models/form-data/installationLocation'
 import { SanitisedError } from '../sanitisedError'
-import { ZodError } from 'zod'
 import { convertZodErrorToValidationError } from '../utils/errors'
+
 type UpdateInstallationLocationInput = AuthenticatedRequestInput & {
   orderId: string
   data: {
