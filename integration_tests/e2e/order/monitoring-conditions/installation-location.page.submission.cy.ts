@@ -291,6 +291,8 @@ context('Monitoring conditions', () => {
           Page.verifyOnPage(AttendanceMonitoringPage)
         })
       })
+
+      //TODO should continue to installation appointment page
     })
   })
 })

@@ -13,7 +13,11 @@ export default class InstallationLocationController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const viewModel = installationLocationViewModel.construct(req.order!)
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+    const viewModel = installationLocationViewModel.construct(req.order!,
+      formData[0] as never,
+      errors as never,)
     res.render('pages/order/monitoring-conditions/installation-location', viewModel)
   }
 

@@ -53,6 +53,9 @@ interface ValidationErrors {
     variationDate: DateErrorMessages
     variationTypeRequired: string
   }
+  installationLOcation:{
+    locationRequired:string
+  }
 }
 
 export interface DateErrorMessages {
@@ -186,6 +189,9 @@ const validationErrors: ValidationErrors = {
     },
     variationTypeRequired: 'Variation type is required',
   },
+  installationLOcation:{
+    locationRequired: "Select where will installation of the electronic monitoring device take place"
+  }
 }
 
 export { validationErrors }

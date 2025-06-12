@@ -2,6 +2,10 @@ import { Order } from '../Order'
 import { ViewModel, TextField } from './utils'
 import { Address, AddressTypeEnum } from '../Address'
 import { InstallationLocation } from '../InstallationLocation'
+import { InstallationLocationFormData } from '../form-data/installationLocation'
+import { ValidationResult } from '../Validation'
+import { createGovukErrorSummary } from '../../utils/errors'
+import { getError } from '../../utils/utils'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
@@ -15,7 +19,40 @@ const createPrimaryAddressView = (addresses: Address[]): string => {
     : ''
 }
 
-const construct = (order: Order): InstallationLocationViewModel => {
+const constructFromFormData = (
+  formData: InstallationLocationFormData,
+  showTagAtSourceOptions:boolean,
+  primaryAddressView:string,
+  validationErrors: ValidationResult,
+): InstallationLocationViewModel => {
+  return {
+    location: {
+      value: formData.location || '',
+      error: getError(validationErrors, 'location'),
+    },
+    errorSummary: createGovukErrorSummary(validationErrors),
+    showTagAtSourceOptions,
+    primaryAddressView: { value: primaryAddressView }
+  }
+}
+
+const constructFromEntity =( location:string = '', showTagAtSourceOptions:boolean,
+primaryAddressView:string,):InstallationLocationViewModel=>{
+  return {
+    location: {
+      value: location ?? '',
+    },
+    primaryAddressView: { value: primaryAddressView },
+    errorSummary: null,
+    showTagAtSourceOptions,
+  }
+}
+
+const construct = (order: Order,
+  formData: InstallationLocationFormData,
+  validationErrors: ValidationResult,
+  ): InstallationLocationViewModel => {
+
   let showTagAtSourceOptions = false
   if (
     order.monitoringConditions.alcohol === true &&
@@ -26,14 +63,13 @@ const construct = (order: Order): InstallationLocationViewModel => {
   ) {
     showTagAtSourceOptions = true
   }
-  return {
-    location: {
-      value: order.installationLocation?.location ?? '',
-    },
-    primaryAddressView: { value: createPrimaryAddressView(order.addresses) },
-    errorSummary: null,
-    showTagAtSourceOptions,
+
+  const primaryAddressView = createPrimaryAddressView(order.addresses)
+  
+  if (validationErrors.length > 0) {
+    return constructFromFormData(formData,showTagAtSourceOptions, primaryAddressView, validationErrors)
   }
+  return constructFromEntity(order.installationLocation?.location,showTagAtSourceOptions, primaryAddressView ) 
 }
 
 export default {
