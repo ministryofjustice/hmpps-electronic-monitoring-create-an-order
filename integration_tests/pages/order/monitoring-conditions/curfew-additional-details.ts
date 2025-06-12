@@ -8,7 +8,11 @@ export default class CurfewAdditionalDetailsPage extends AppFormPage {
   public form = new CurfewAdditionalDetailsFormComponent()
 
   constructor() {
-    super('Curfew', paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, 'Electronic monitoring required')
+    super(
+      'Curfew address boundary',
+      paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
+      'Electronic monitoring required',
+    )
   }
 
   fillInForm = (): void => {}

@@ -28,7 +28,8 @@
   },
   hint: {
     text: questions.curfewAdditionalDetails.hint
-  }
+  },
+  value: curfewAdditionalDetails
 }) }}
   {% endset -%}
 
@@ -45,7 +46,7 @@
     {
       value: "yes",
       text: "Yes",
-      checked: true,
+      checked: curfewAdditionalDetails,
       conditional: {
         html: detailsHtml
       }
