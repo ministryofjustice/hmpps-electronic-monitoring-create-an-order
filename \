@@ -1,5 +1,0 @@
-import PageContent from './page'
-
-type CurfewAdditionalDetailsPageContent = PageContent<''>
-
-export default CurfewAdditionalDetailsPageContent
