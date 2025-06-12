@@ -28,7 +28,7 @@ const construct = (order: Order): InstallationLocationViewModel => {
   }
   return {
     location: {
-      value: order.installationLocation!.location ?? '',
+      value: order.installationLocation?.location ?? '',
     },
     primaryAddressView: { value: createPrimaryAddressView(order.addresses) },
     errorSummary: null,

@@ -20,6 +20,7 @@ import TaskListService from './taskListService'
 import TrailMonitoringService from './trailMonitoringService'
 import VariationService from './variationService'
 import ProbationDeliveryUnitService from './probationDeliveryUnitService'
+import InstallationLocationService from './installationLocationService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -45,6 +46,7 @@ export const services = () => {
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
   const variationService = new VariationService(cemoApiClient)
   const probationDeliveryUnitService = new ProbationDeliveryUnitService(cemoApiClient)
+  const installationLocationService = new InstallationLocationService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -68,6 +70,7 @@ export const services = () => {
     variationService,
     zoneService,
     probationDeliveryUnitService,
+    installationLocationService,
   }
 }
 
@@ -89,4 +92,5 @@ export {
   OrderService,
   TrailMonitoringService,
   ProbationDeliveryUnitService,
+  InstallationLocationService,
 }
