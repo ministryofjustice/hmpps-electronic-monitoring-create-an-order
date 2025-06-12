@@ -4,9 +4,11 @@ import { AuthenticatedRequestInput } from '../interfaces/request'
 import CurfewConditionsModel, { CurfewConditions } from '../models/CurfewConditions'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
-import { CurfewConditionsFormDataValidator } from '../models/form-data/curfewConditions'
 import { convertZodErrorToValidationError } from '../utils/errors'
-import { CurfewAdditionalDetailsFormData } from '../models/form-data/curfewAdditionalDetails'
+import {
+  CurfewAdditionalDetailsFormData,
+  CurfewAdditionalDetailsFormDataValidator,
+} from '../models/form-data/curfewAdditionalDetails'
 
 type CurfewAdditionalDetailsInput = AuthenticatedRequestInput & {
   orderId: string
@@ -18,12 +20,13 @@ export default class CurfewAdditionalDetailsService {
 
   async update(input: CurfewAdditionalDetailsInput): Promise<CurfewConditions | ValidationResult> {
     try {
-      const requestBody = CurfewConditionsFormDataValidator.parse(input.data)
+      const requestBody = CurfewAdditionalDetailsFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-additional-details`,
         data: requestBody,
         token: input.accessToken,
       })
+      // doesn't show
       return CurfewConditionsModel.parse(result)
     } catch (e) {
       if (e instanceof ZodError) {

@@ -21,15 +21,14 @@
 
   {% set detailsHtml %}
   {{ govukTextarea({
-  name: "details",
+  name: "curfewAdditionalDetails",
   id: "additional-details",
   label: {
     text: questions.curfewAdditionalDetails.text
   },
   hint: {
     text: questions.curfewAdditionalDetails.hint
-  },
-  value: curfewAdditionalDetails
+  }
 }) }}
   {% endset -%}
 
@@ -46,7 +45,7 @@
     {
       value: "yes",
       text: "Yes",
-      checked: curfewAdditionalDetails,
+      checked: true,
       conditional: {
         html: detailsHtml
       }
