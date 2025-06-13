@@ -35,6 +35,7 @@ import sex from './sex'
 import variationTypes from './variationTypes'
 import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
+import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
@@ -90,6 +91,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
+  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits,
 }

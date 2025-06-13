@@ -5,7 +5,7 @@ type NotifyingOrganisations = ReferenceData<
 >
 
 type NotifyingOrganisationsDDv5 = ReferenceData<
-  | 'CIVIL_AND_COUNTY_COURT'
+  | 'CIVIL_COUNTY_COURT'
   | 'CROWN_COURT'
   | 'FAMILY_COURT'
   | 'HOME_OFFICE'

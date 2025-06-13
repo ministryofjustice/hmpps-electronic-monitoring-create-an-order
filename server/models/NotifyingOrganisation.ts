@@ -1,13 +1,17 @@
 import { z } from 'zod'
 
 export const NotifyingOrganisationEnum = z.enum([
+  'CIVIL_COUNTY_COURT',
   'CROWN_COURT',
-  'MAGISTRATES_COURT',
-  'PRISON',
-  'HOME_OFFICE',
-  'SCOTTISH_COURT',
   'FAMILY_COURT',
+  'HOME_OFFICE',
+  'MAGISTRATES_COURT',
+  'MILITARY_COURT',
+  'PRISON',
   'PROBATION',
+  'SCOTTISH_COURT',
+  'YOUTH_COURT',
+  'YOUTH_CUSTODY_SERVICE',
 ])
 
 export type NotifyingOrganisation = z.infer<typeof NotifyingOrganisationEnum>

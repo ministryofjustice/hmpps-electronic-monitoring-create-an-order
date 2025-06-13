@@ -1,8 +1,13 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
-import prisons from '../../server/i18n/en/reference/prisons'
+import civilCountyCourts from '../../server/i18n/en/reference/ddv5/civilCountyCourts'
 import crownCourts from '../../server/i18n/en/reference/crownCourts'
+import familyCourts from '../../server/i18n/en/reference/ddv5/familyCourts'
 import magistratesCourts from '../../server/i18n/en/reference/magistratesCourts'
+import prisons from '../../server/i18n/en/reference/prisons'
 import probationRegions from '../../server/i18n/en/reference/probationRegions'
+import militaryCourts from '../../server/i18n/en/reference/ddv5/militaryCourts'
+import youthCourts from '../../server/i18n/en/reference/ddv5/youthCourts'
+import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv5/youthCustodyServiceRegions'
 import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegions'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
@@ -12,9 +17,14 @@ const genderOptions = ['Male', 'Female', 'Non binary', 'Not able to provide this
 const extractValues = (values: Array<string | { text: string }>) =>
   values.map(value => (typeof value === 'string' ? value : value.text))
 
-const prisonTypes = extractValues(Object.values(prisons))
+const civilCountyCourtTypes = extractValues(Object.values(civilCountyCourts))
 const crownCourtTypes = extractValues(Object.values(crownCourts))
+const familyCourtTypes = extractValues(Object.values(familyCourts))
 const magistratesCourtTypes = extractValues(Object.values(magistratesCourts))
+const militaryCourtTypes = extractValues(Object.values(militaryCourts))
+const prisonTypes = extractValues(Object.values(prisons))
+const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
+const youthCourtTypes = extractValues(Object.values(youthCourts))
 const probationRegionTypes = extractValues(Object.values(probationRegions))
 const yjsRegionTypes = extractValues(Object.values(yjsRegions))
 
@@ -55,9 +65,15 @@ export class Address {
 export type InterestedParties = {
   notifyingOrganisation?: string
   notifyingOrganisationName?: string
-  prison?: string
+  civilCountyCourt?: string
   crownCourt?: string
+  familyCourt?: string
   magistratesCourt?: string
+  militaryCourt?: string
+  notifyingOrgProbationRegion?: string
+  prison?: string
+  ycsRegion?: string
+  youthCourt?: string
   notifyingOrganisationEmailAddress?: string
 
   responsibleOrganisation?: string
@@ -162,15 +178,31 @@ export const createFakeInterestedParties = (
   const orgEmailAddress = `${responsibleOrganisation.toLowerCase().replace(/\s/g, '-')}@example.com`
   let notifyingOrganisationName = ''
   let responsibleOrganisationRegion = ''
-  let prison = ''
+  let civilCountyCourt = ''
   let crownCourt = ''
+  let familyCourt = ''
   let magistratesCourt = ''
+  let militaryCourt = ''
+  let notifyingOrgProbationRegion = ''
+  let prison = ''
+  let ycsRegion = ''
+  let youthCourt = ''
   let probationRegion = ''
   let yjsRegion = ''
 
-  if (notifyingOrganisation === 'Prison') {
-    prison = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(prisonTypes)
-    notifyingOrganisationName = prison
+  if (notifyingOrganisation === 'Civil & County Court') {
+    civilCountyCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(civilCountyCourtTypes)
+    notifyingOrganisationName = civilCountyCourt
+  }
+
+  if (notifyingOrganisation === 'Crown Court') {
+    crownCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(crownCourtTypes)
+    notifyingOrganisationName = crownCourt
+  }
+
+  if (notifyingOrganisation === 'Family Court') {
+    familyCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(familyCourtTypes)
+    notifyingOrganisationName = familyCourt
   }
 
   if (notifyingOrganisation === 'Magistrates Court') {
@@ -178,9 +210,29 @@ export const createFakeInterestedParties = (
     notifyingOrganisationName = magistratesCourt
   }
 
-  if (notifyingOrganisation === 'Crown Court') {
-    crownCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(crownCourtTypes)
-    notifyingOrganisationName = crownCourt
+  if (notifyingOrganisation === 'Military Court') {
+    militaryCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(militaryCourtTypes)
+    notifyingOrganisationName = militaryCourt
+  }
+
+  if (notifyingOrganisation === 'Probation Service') {
+    notifyingOrgProbationRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(probationRegionTypes)
+    notifyingOrganisationName = notifyingOrgProbationRegion
+  }
+
+  if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
+    prison = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(prisonTypes)
+    notifyingOrganisationName = prison
+  }
+
+  if (notifyingOrganisation === 'Youth Court') {
+    youthCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(youthCourtTypes)
+    notifyingOrganisationName = youthCourt
+  }
+
+  if (notifyingOrganisation === 'Youth Custody Service') {
+    ycsRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(ycsRegionTypes)
+    notifyingOrganisationName = ycsRegion
   }
 
   if (responsibleOrganisation === 'Probation') {
@@ -199,6 +251,12 @@ export const createFakeInterestedParties = (
     prison,
     magistratesCourt,
     crownCourt,
+    familyCourt,
+    civilCountyCourt,
+    militaryCourt,
+    ycsRegion,
+    youthCourt,
+    notifyingOrgProbationRegion,
     responsibleOfficerName: officerName,
     responsibleOfficerContactNumber: officerContactNumber,
     responsibleOrganisation,

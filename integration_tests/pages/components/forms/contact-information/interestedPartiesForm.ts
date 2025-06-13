@@ -39,8 +39,48 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     ])
   }
 
+  get notifyingOrganisationFieldDDV5(): FormRadiosComponent {
+    const label = 'What organisation or related organisation are you part of?'
+    return new FormRadiosComponent(this.form, label, [
+      'Civil & County Court',
+      'Crown Court',
+      'Family Court',
+      'Home Office',
+      'Magistrates Court',
+      'Military Court',
+      'Prison',
+      'Probation',
+      'Scottish Court',
+      'Youth Court',
+      'Youth Custody Service (YCS)',
+    ])
+  }
+
   get prisonField(): FormAutocompleteComponent {
     const label = 'Select the name of the Prison'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get notifyingOrgProbationField(): FormAutocompleteComponent {
+    const label = 'Select the Probation Service region'
+    return new FormAutocompleteComponent(this.form, label, [
+      'North East',
+      'North West',
+      'Yorkshire and the Humber',
+      'Greater Manchester',
+      'East Midlands',
+      'Wales',
+      'West Midlands',
+      'East of England',
+      'South West',
+      'South Central',
+      'London',
+      'Kent, Surrey & Sussex',
+    ])
+  }
+
+  get civilCountyCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Civil and County Court'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
@@ -49,8 +89,28 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
+  get familyCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Family Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
   get magistratesCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get militaryCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Military Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get youthCourtField(): FormAutocompleteComponent {
+    const label = 'Select the name of the Youth Court'
+    return new FormAutocompleteComponent(this.form, label, [])
+  }
+
+  get youthCustodyServiceField(): FormAutocompleteComponent {
+    const label = 'Select the YCS region'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
@@ -79,7 +139,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     ])
   }
 
-  get probationRegionField(): FormSelectComponent {
+  get responsibleOrgProbationField(): FormSelectComponent {
     const label = 'Select the Probation region'
     return new FormSelectComponent(this.form, label, [
       'North East',
@@ -95,6 +155,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'London',
       'Kent, Surrey & Sussex',
     ])
+    // ,'responsibleOrganisationProbationRegion')
   }
 
   get yjsRegionField(): FormSelectComponent {
@@ -144,7 +205,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     }
 
     if (profile.probationRegion) {
-      this.probationRegionField.set(profile.probationRegion)
+      this.responsibleOrgProbationField.set(profile.probationRegion)
     }
 
     if (profile.yjsRegion) {
@@ -169,7 +230,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.prisonField.shouldNotHaveValidationMessage()
     this.notifyOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationField.shouldNotHaveValidationMessage()
-    this.probationRegionField.shouldNotHaveValidationMessage()
+    this.responsibleOrgProbationField.shouldNotHaveValidationMessage()
     this.yjsRegionField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOfficerNameField.shouldNotHaveValidationMessage()
@@ -180,7 +241,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.notifyingOrganisationField.shouldBeDisabled()
     this.notifyOrganisationEmailAddressField.shouldBeDisabled()
     this.responsibleOrganisationField.shouldBeDisabled()
-    this.probationRegionField.shouldBeDisabled()
+    this.responsibleOrgProbationField.shouldBeDisabled()
     this.yjsRegionField.shouldBeDisabled()
     this.responsibleOrganisationEmailAddressField.shouldBeDisabled()
     this.responsibleOfficerNameField.shouldBeDisabled()
@@ -191,7 +252,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.notifyingOrganisationField.shouldNotBeDisabled()
     this.notifyOrganisationEmailAddressField.shouldNotBeDisabled()
     this.responsibleOrganisationField.shouldNotBeDisabled()
-    this.probationRegionField.shouldNotBeDisabled()
+    this.responsibleOrgProbationField.shouldNotBeDisabled()
     this.yjsRegionField.shouldNotBeDisabled()
     this.responsibleOrganisationEmailAddressField.shouldNotBeDisabled()
     this.responsibleOfficerNameField.shouldNotBeDisabled()
@@ -201,7 +262,15 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   shouldHaveAllOptions(): void {
     this.notifyingOrganisationField.shouldHaveAllOptions()
     this.responsibleOrganisationField.shouldHaveAllOptions()
-    this.probationRegionField.shouldHaveAllOptions()
+    this.responsibleOrgProbationField.shouldHaveAllOptions()
+    this.yjsRegionField.shouldHaveAllOptions()
+  }
+
+  shouldHaveAllDDV5Options(): void {
+    this.notifyingOrganisationFieldDDV5.shouldHaveAllOptions()
+    this.responsibleOrganisationField.shouldHaveAllOptions()
+    this.notifyingOrgProbationField.shouldHaveAllOptions()
+    this.responsibleOrgProbationField.shouldHaveAllOptions()
     this.yjsRegionField.shouldHaveAllOptions()
   }
 }

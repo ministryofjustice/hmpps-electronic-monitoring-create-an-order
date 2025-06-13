@@ -61,7 +61,7 @@ const magistratesCourts: MagistratesCourts = {
   LEEDS_MAGISTRATES_COURT: 'Leeds Magistrates Court',
   LEICESTER_MAGISTRATES_COURT: 'Leicester Magistrates Court',
   LINCOLN_MAGISTRATES_COURT: 'Lincoln Magistrates Court',
-  LIVERPOOL_KNOWSLEY_MAGISTRATES_COURT: 'Liverpool & Knowsley Magistrates Court',
+  LIVERPOOL_AND_KNOWSLEY_MAGISTRATES_COURT: 'Liverpool & Knowsley Magistrates Court',
   LLANDUDNO_MAGISTRATES_COURT: 'Llandudno Magistrates Court',
   LUTON_AND_SOUTH_BEDFORDSHIRE_MAGISTRATES_COURT: 'Luton and South Bedfordshire Magistrates Court',
   MAIDSTONE_MAGISTRATES_COURT: 'Maidstone Magistrates Court',
@@ -120,7 +120,7 @@ const magistratesCourts: MagistratesCourts = {
   WIMBLEDON_MAGISTRATES_COURT: 'Wimbledon Magistrates Court',
   WIRRAL_MAGISTRATES_COURT: 'Wirral Magistrates Court',
   WOLVERHAMPTON_MAGISTRATES_COURT: 'Wolverhampton Magistrates Court',
-  WORTHIN_MAGISTRATE_COURT: 'Worthing Magistrates Court',
+  WORTHING_MAGISTRATE_COURT: 'Worthing Magistrates Court',
   WREXHAM_MAGISTRATES_COURT: 'Wrexham Magistrates Court',
   YEOVIL_COUNTY_MAGISTRATES_COURT: 'Yeovil County, Magistrates Court',
 }

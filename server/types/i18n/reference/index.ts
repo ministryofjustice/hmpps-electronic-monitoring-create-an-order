@@ -27,6 +27,7 @@ import YesNoUnknown from './yesNoUnknown'
 import YouthCourts from './youthCourts'
 import YouthJusticeServiceRegions from './youthJusticeServiceRegions'
 import ProbationRegionDeliveryUnits from './probationRegionDeliveryUnits'
+import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -82,6 +83,7 @@ type ReferenceCatalogDDv5 = {
   variationTypes: VariationTypesDDv5
   yesNoUnknown: YesNoUnknown
   youthCourts: YouthCourts
+  youthCustodyServiceRegions: YouthCustodyServiceRegions
   youthJusticeServiceRegions: YouthJusticeServiceRegions
 }
 
