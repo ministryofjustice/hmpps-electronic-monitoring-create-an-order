@@ -17,8 +17,6 @@ const construct = (
   validationErrors: ValidationResult,
 ): CurfewAdditionalDetailsViewModel => {
   if (formData.length > 0 && validationErrors.length > 0) {
-    console.log(formData)
-    console.log(validationErrors)
     return {
       curfewAdditionalDetails: {
         value: formData[0].curfewAdditionalDetails,
