@@ -9,7 +9,6 @@ import {
   CurfewAdditionalDetailsFormData,
   CurfewAdditionalDetailsFormDataValidator,
 } from '../models/form-data/curfewAdditionalDetails'
-import curfewAdditionalDetails from '../models/view-models/curfewAdditionalDetails'
 
 type CurfewAdditionalDetailsInput = AuthenticatedRequestInput & {
   orderId: string
