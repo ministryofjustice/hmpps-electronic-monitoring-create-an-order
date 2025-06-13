@@ -14,6 +14,4 @@ export default class CurfewAdditionalDetailsPage extends AppFormPage {
       'Electronic monitoring required',
     )
   }
-
-  fillInForm = (): void => {}
 }
