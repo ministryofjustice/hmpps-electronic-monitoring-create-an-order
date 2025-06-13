@@ -13,11 +13,7 @@
 
   <p>Where a need for extending the range has been identified it must be agreed by the decision-maker's within the organisation. For example, the probation officer and their manager.</p>
 
-  {% set disabled = {}
-  if isOrderEditable else {
-    disabled : true
-  }
- %}
+  {% set disabled = false if isOrderEditable else true %}
 
   {% set detailsHtml %}
   {{ govukTextarea({
@@ -30,7 +26,8 @@
     text: questions.curfewAdditionalDetails.hint
   },
   value: curfewAdditionalDetails.value,
-  errorMessage: curfewAdditionalDetails.error
+  errorMessage: curfewAdditionalDetails.error,
+  disabled: disabled
 }) }}
   {% endset -%}
 
@@ -51,12 +48,14 @@
       checked: details.value == 'yes',
       conditional: {
         html: detailsHtml
-      }
+      },
+      disabled: disabled
     },
     { 
       value: "no",
       text: "No",
-      checked: details.value == 'no'
+      checked: (details.value == 'no') or (disabled and not curfewAdditionalDetails.value),
+      disabled: disabled
     }
   ]
 }) }}
