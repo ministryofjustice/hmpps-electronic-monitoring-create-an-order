@@ -32,42 +32,91 @@ context('Monitoring conditions', () => {
         cy.signIn()
       })
 
-      it('should submit a correctly formatted address submission', () => {
+      it('should submit when I check the no radio button', () => {
         const page = Page.visit(CurfewAdditionalDetailsPage, {
           orderId: mockOrderId,
         })
 
-        // fill in page
+        page.form.curfewRadios.element.getByLabel('No').check()
 
         page.form.saveAndContinueButton.click()
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/monitoring-conditions-curfew-additional-details`,
-          body: {},
+          body: {
+            curfewAdditionalDetails: '',
+          },
         }).should('be.true')
       })
 
-      it.only('test test', () => {
+      it('should submit when I check yes and fill in the text box', () => {
+        const page = Page.visit(CurfewAdditionalDetailsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.curfewRadios.element.getByLabel('Yes').check()
+        cy.get('#additional-details').type('some curfew additional details')
+
+        page.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/monitoring-conditions-curfew-additional-details`,
+          body: {
+            curfewAdditionalDetails: 'some curfew additional details',
+          },
+        }).should('be.true')
+      })
+    })
+    describe('submitting an invalid form', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {},
+        })
+
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,
           subPath: '/monitoring-conditions-curfew-additional-details',
-          response: {},
-        })
-        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/additional-details`)
-        const page = Page.verifyOnPage(CurfewAdditionalDetailsPage)
-        page.form.saveAndContinueButton.click()
-        page.form.curfewRadios.element.getByLabel('Yes').check()
-        cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-additional-details`).then(
-          requests => {
-            expect(requests).to.have.lengthOf(1)
-            expect(requests[0]).to.deep.equal({
-              curfewAddress: 'SECONDARY,TERTIARY',
-              startDate: '2025-03-27T00:00:00.000Z',
-              endDate: '2026-04-28T22:59:00.000Z',
-            })
+          response: {
+            curfewAddress: null,
+            orderId: mockOrderId,
+            startDate: null,
+            endDate: null,
           },
-        )
+        })
+
+        cy.signIn()
+      })
+
+      it('should error when no radio buttons are selected', () => {
+        const page = Page.visit(CurfewAdditionalDetailsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.saveAndContinueButton.click()
+
+        cy.get('#details-error').should('contain', 'Enter detail of the curfew address boundary')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Enter detail of the curfew address boundary')
+      })
+
+      it('should error when I select yes but submit an empty textarea', () => {
+        const page = Page.visit(CurfewAdditionalDetailsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.curfewRadios.element.getByLabel('Yes').check()
+        page.form.saveAndContinueButton.click()
+
+        cy.get('#additional-details-error').should('contain', 'Enter detail of the curfew address boundary')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Enter detail of the curfew address boundary')
       })
     })
   })

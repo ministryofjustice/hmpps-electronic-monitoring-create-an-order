@@ -9,6 +9,7 @@ import {
   CurfewAdditionalDetailsFormData,
   CurfewAdditionalDetailsFormDataValidator,
 } from '../models/form-data/curfewAdditionalDetails'
+import curfewAdditionalDetails from '../models/view-models/curfewAdditionalDetails'
 
 type CurfewAdditionalDetailsInput = AuthenticatedRequestInput & {
   orderId: string
@@ -20,7 +21,8 @@ export default class CurfewAdditionalDetailsService {
 
   async update(input: CurfewAdditionalDetailsInput): Promise<CurfewConditions | ValidationResult> {
     try {
-      const requestBody = CurfewAdditionalDetailsFormDataValidator.parse(input.data)
+      const validatedBody = CurfewAdditionalDetailsFormDataValidator.parse(input.data)
+      const requestBody = { curfewAdditionalDetails: validatedBody.curfewAdditionalDetails }
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-additional-details`,
         data: requestBody,

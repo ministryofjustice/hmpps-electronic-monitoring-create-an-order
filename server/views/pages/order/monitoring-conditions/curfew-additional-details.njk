@@ -28,7 +28,9 @@
   },
   hint: {
     text: questions.curfewAdditionalDetails.hint
-  }
+  },
+  value: curfewAdditionalDetails.value,
+  errorMessage: curfewAdditionalDetails.error
 }) }}
   {% endset -%}
 
@@ -41,18 +43,20 @@
       classes: "govuk-fieldset__legend--s"
     }
   },
+  errorMessage: details.error,
   items: [
     {
       value: "yes",
       text: "Yes",
-      checked: true,
+      checked: details.value == 'yes',
       conditional: {
         html: detailsHtml
       }
     },
     { 
       value: "no",
-      text: "No"
+      text: "No",
+      checked: details.value == 'no'
     }
   ]
 }) }}
