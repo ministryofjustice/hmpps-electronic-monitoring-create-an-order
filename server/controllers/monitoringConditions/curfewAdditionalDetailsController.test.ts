@@ -99,17 +99,7 @@ describe('CurfewConditionsController', () => {
         curfewAdditionalDetails: {
           value: '',
         },
-        errorSummary: null,
-      })
-    })
-
-    it('Should render when form data has value', async () => {
-      const mockFormData = { curfewAdditionalDetails: 'some details' }
-      req.flash = jest.fn().mockReturnValueOnce([mockFormData]).mockReturnValueOnce([])
-
-      await controller.view(req, res, next)
-      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
-        curfewAdditionalDetails: {
+        details: {
           value: '',
         },
         errorSummary: null,
@@ -152,7 +142,6 @@ describe('CurfewConditionsController', () => {
         },
         details: {
           value: '',
-          error: undefined,
         },
         errorSummary: expect.anything(),
       })
@@ -165,6 +154,9 @@ describe('CurfewConditionsController', () => {
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
         curfewAdditionalDetails: {
+          value: '',
+        },
+        details: {
           value: '',
         },
         errorSummary: null,
@@ -184,6 +176,9 @@ describe('CurfewConditionsController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
         curfewAdditionalDetails: {
           value: 'some details',
+        },
+        details: {
+          value: 'yes',
         },
         errorSummary: null,
       })
