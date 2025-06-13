@@ -16,8 +16,8 @@ export default class CurfewAdditionalDetailsController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { curfewConditions: model } = req.order!
-    const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const errors = req.flash('validationErrors')
     const viewModel = CurfewAdditionalDetailsViewModel.construct(model, formData as never, errors as never)
 
     res.render(`pages/order/monitoring-conditions/curfew-additional-details`, viewModel)

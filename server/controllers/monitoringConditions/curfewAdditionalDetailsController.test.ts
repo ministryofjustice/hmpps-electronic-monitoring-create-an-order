@@ -7,6 +7,8 @@ import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import CurfewAdditionalDetailsService from '../../services/curfewAdditionalDetailsService'
 import CurfewAdditionalDetailsController from './curfewAdditionalDetailsController'
+import curfewAdditionalDetails from '../../models/view-models/curfewAdditionalDetails'
+import { ValidationError } from '../../models/Validation'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -91,36 +93,87 @@ describe('CurfewConditionsController', () => {
   describe('View curfew additional details with form data', () => {
     it('Should render when form data is empty', async () => {
       const mockFormData = { curfewAdditionalDetails: '' }
-      req.flash = jest.fn().mockReturnValueOnce([mockFormData])
+      req.flash = jest.fn().mockReturnValueOnce([mockFormData]).mockReturnValueOnce([])
 
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
-        curfewAdditionalDetails: '',
+        curfewAdditionalDetails: {
+          value: '',
+        },
+        errorSummary: null,
       })
     })
 
     it('Should render when form data has value', async () => {
       const mockFormData = { curfewAdditionalDetails: 'some details' }
-      req.flash = jest.fn().mockReturnValueOnce([mockFormData])
+      req.flash = jest.fn().mockReturnValueOnce([mockFormData]).mockReturnValueOnce([])
 
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
-        curfewAdditionalDetails: 'some details',
+        curfewAdditionalDetails: {
+          value: '',
+        },
+        errorSummary: null,
+      })
+    })
+
+    it('Should render when there is a no detail error', async () => {
+      const mockFormData = { curfewAdditionalDetails: '' }
+      const error: ValidationError = { error: 'blah', field: 'details' }
+      req.flash = jest.fn().mockReturnValueOnce([mockFormData]).mockReturnValueOnce([error])
+
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
+        curfewAdditionalDetails: {
+          value: '',
+          error: undefined,
+        },
+        details: {
+          value: '',
+          error: {
+            text: 'blah',
+          },
+        },
+        errorSummary: expect.anything(),
+      })
+    })
+
+    it('Should render when there is a empty curfew details error', async () => {
+      const mockFormData = { curfewAdditionalDetails: '' }
+      const error: ValidationError = { error: 'empty curfew details', field: 'curfewAdditionalDetails' }
+      req.flash = jest.fn().mockReturnValueOnce([mockFormData]).mockReturnValueOnce([error])
+
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
+        curfewAdditionalDetails: {
+          value: '',
+          error: {
+            text: 'empty curfew details',
+          },
+        },
+        details: {
+          value: '',
+          error: undefined,
+        },
+        errorSummary: expect.anything(),
       })
     })
   })
 
   describe('View curfew additional details with view model', () => {
     it('Should render when form data is empty', async () => {
-      req.flash = jest.fn().mockReturnValueOnce([])
+      req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
-        curfewAdditionalDetails: '',
+        curfewAdditionalDetails: {
+          value: '',
+        },
+        errorSummary: null,
       })
     })
 
     it('Should render when form data has value', async () => {
-      req.flash = jest.fn().mockReturnValueOnce([])
+      req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
       req.order!.curfewConditions = {
         startDate: '',
         endDate: '',
@@ -130,7 +183,10 @@ describe('CurfewConditionsController', () => {
 
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-additional-details', {
-        curfewAdditionalDetails: 'some details',
+        curfewAdditionalDetails: {
+          value: 'some details',
+        },
+        errorSummary: null,
       })
     })
 
