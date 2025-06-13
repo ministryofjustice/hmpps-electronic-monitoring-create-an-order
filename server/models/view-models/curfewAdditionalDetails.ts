@@ -31,6 +31,7 @@ const construct = (
   }
   return {
     curfewAdditionalDetails: { value: model?.curfewAdditionalDetails ?? '' },
+    details: { value: model?.curfewAdditionalDetails ? 'yes' : '' },
     errorSummary: null,
   }
 }
