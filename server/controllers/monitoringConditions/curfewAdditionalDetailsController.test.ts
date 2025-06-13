@@ -7,7 +7,6 @@ import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import CurfewAdditionalDetailsService from '../../services/curfewAdditionalDetailsService'
 import CurfewAdditionalDetailsController from './curfewAdditionalDetailsController'
-import curfewAdditionalDetails from '../../models/view-models/curfewAdditionalDetails'
 import { ValidationError } from '../../models/Validation'
 
 jest.mock('../../services/auditService')
