@@ -68,7 +68,8 @@ context('Monitoring conditions', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
-
+        page.form.placeNameField.shouldExist()
+        page.form.appointmentDateField.shouldExist()
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
         page.checkIsAccessible()

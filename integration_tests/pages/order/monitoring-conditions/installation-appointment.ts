@@ -2,10 +2,10 @@ import AppFormPage from '../../appFormPage'
 
 import paths from '../../../../server/constants/paths'
 
-import InstallationLocationFormComponent from '../../components/forms/monitoring-conditions/installationLocationFormComponent'
+import InstallationAppointmentFormComponent from '../../components/forms/monitoring-conditions/installationAppointmentFormComponent'
 
 export default class InstallationLocationPage extends AppFormPage {
-  public form = new InstallationLocationFormComponent()
+  public form = new InstallationAppointmentFormComponent()
 
   constructor() {
     super(
