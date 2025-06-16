@@ -94,7 +94,7 @@ context('Monitoring conditions', () => {
           prarr: 'Not able to provide this information',
         }
 
-        const mockResponse = {
+        const response = {
           orderType: 'IMMIGRATION',
           orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
@@ -111,7 +111,7 @@ context('Monitoring conditions', () => {
           prarr: 'UNKNOWN',
         }
 
-        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: mockResponse })
+        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
         const page = Page.visit(MonitoringConditionsPage, {
           orderId: mockOrderId,
         })
