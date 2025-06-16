@@ -7,6 +7,7 @@ import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
+import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-location'
@@ -106,7 +107,7 @@ context('Monitoring conditions', () => {
           ['At another address', 'INSTALLATION'],
           ['10 Downing Street, London, SW1A 2AB', 'PRIMARY'],
           ['At a prison', 'PRISON'],
-          ['At a probation office', 'PROBATION'],
+          ['At a probation office', 'PROBATION_OFFICE'],
         ])
         locationMap.forEach((key, value) =>
           it(`Should submit location as ${key}`, () => {
@@ -292,7 +293,43 @@ context('Monitoring conditions', () => {
         })
       })
 
-      // TODO should continue to installation appointment page
+      context('Shoud continue to Installation appointment page', () => {
+        it(`when selected location is prison`, () => {
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              location: 'PROBATION_OFFICE',
+            },
+          })
+          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
+          const validFormData = {
+            location: 'At a prison',
+          }
+          page.form.fillInWith(validFormData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(InstallationAppointmentPage)
+        })
+
+        it(`when selected location is prison`, () => {
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              location: 'PROBATION_OFFICE',
+            },
+          })
+          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
+          const validFormData = {
+            location: 'At a probation office',
+          }
+          page.form.fillInWith(validFormData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(InstallationAppointmentPage)
+        })
+      })
     })
   })
 })
