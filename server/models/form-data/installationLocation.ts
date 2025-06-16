@@ -8,9 +8,9 @@ const InstallationLocationFormDataModel = z.object({
 
 type InstallationLocationFormData = z.infer<typeof InstallationLocationFormDataModel>
 
-const InstallationLocationFromDataValidator = z.object({
-  location: z.string().min(1, validationErrors.installationLOcation.locationRequired),
+const InstallationLocationFormDataValidator = z.object({
+  location: z.string().min(1, validationErrors.installationLocation.locationRequired),
 })
 
 export default InstallationLocationFormDataModel
-export { InstallationLocationFormData, InstallationLocationFromDataValidator }
+export { InstallationLocationFormData, InstallationLocationFormDataValidator }

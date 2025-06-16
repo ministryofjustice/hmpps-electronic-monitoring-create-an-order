@@ -45,6 +45,7 @@ const PAGES = {
   attachments: 'ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
+  installationAppointment: 'INSTALLATION_APPOINTMENT',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
@@ -272,10 +273,26 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationAppointment,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.installationAppointment),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: convertBooleanToEnum<State>(
-        order.installationLocation?.location === 'INSTALLATION',
+        order.installationLocation?.location === 'INSTALLATION' ||
+          order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,

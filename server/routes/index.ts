@@ -55,6 +55,7 @@ export default function routes({
   probationDeliveryUnitService,
   zoneService,
   installationLocationService,
+  installationAppointmentService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -134,7 +135,10 @@ export default function routes({
     taskListService,
   )
 
-  const installationAppointmentController = new InstallationAppointmentController()
+  const installationAppointmentController = new InstallationAppointmentController(
+    installationAppointmentService,
+    taskListService,
+  )
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.search)
@@ -223,7 +227,7 @@ export default function routes({
 
   // Installation appointment page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.view)
-
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.update)
   // Installation address page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)

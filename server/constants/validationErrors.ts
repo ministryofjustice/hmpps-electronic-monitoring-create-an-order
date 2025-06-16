@@ -53,8 +53,12 @@ interface ValidationErrors {
     variationDate: DateErrorMessages
     variationTypeRequired: string
   }
-  installationLOcation: {
+  installationLocation: {
     locationRequired: string
+  }
+  installationAppointment: {
+    placeNameRequired: string
+    appointmentDate: DateTimeErrorMessages
   }
 }
 
@@ -189,8 +193,27 @@ const validationErrors: ValidationErrors = {
     },
     variationTypeRequired: 'Variation type is required',
   },
-  installationLOcation: {
+  installationLocation: {
     locationRequired: 'Select where will installation of the electronic monitoring device take place',
+  },
+  installationAppointment: {
+    placeNameRequired: 'Enter name of the place where installation takes place',
+    appointmentDate: {
+      date: {
+        mustBeReal: `Date of installation must be a real date`,
+        mustIncludeDay: `Date of installation must include a day`,
+        mustIncludeMonth: `Date of installation must include a month`,
+        mustIncludeYear: `Date of installation must include a year`,
+        yearMustIncludeFourNumbers: `Year must include 4 numbers`,
+        required: `Enter date of installation `,
+      },
+      time: {
+        mustBeReal: `Time of installation must be a real time`,
+        mustIncludeHour: `Time of installation must include an hour`,
+        mustIncludeMinute: `Time of installation must include a minute`,
+        required: `Enter time of installation`,
+      },
+    },
   },
 }
 

@@ -21,6 +21,7 @@ import TrailMonitoringService from './trailMonitoringService'
 import VariationService from './variationService'
 import ProbationDeliveryUnitService from './probationDeliveryUnitService'
 import InstallationLocationService from './installationLocationService'
+import InstallationAppointmentService from './installationAppointmentService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -47,6 +48,7 @@ export const services = () => {
   const variationService = new VariationService(cemoApiClient)
   const probationDeliveryUnitService = new ProbationDeliveryUnitService(cemoApiClient)
   const installationLocationService = new InstallationLocationService(cemoApiClient)
+  const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -71,6 +73,7 @@ export const services = () => {
     zoneService,
     probationDeliveryUnitService,
     installationLocationService,
+    installationAppointmentService,
   }
 }
 
