@@ -340,6 +340,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
+          curfewAdditionalDetails: 'some additional curfew details',
         }),
         curfewTimeTable: [
           {
@@ -801,6 +802,24 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'where will the device wearer be during curfew hours?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+            },
+            value: {
+              text: 'some additional curfew details',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText:
+                    'do you want to change the standard curfew address boundary for any of the curfew addresses?',
                 },
               ],
             },
@@ -1322,6 +1341,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
+          curfewAdditionalDetails: 'some additional curfew details',
         }),
         curfewTimeTable: [
           {
@@ -1749,6 +1769,24 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'where will the device wearer be during curfew hours?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+            },
+            value: {
+              text: 'some additional curfew details',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText:
+                    'do you want to change the standard curfew address boundary for any of the curfew addresses?',
                 },
               ],
             },

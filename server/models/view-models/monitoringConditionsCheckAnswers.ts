@@ -170,7 +170,9 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
 
 const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+  const curfewAdditionalDetailsUri = paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id)
   const { questions } = content.pages.curfewConditions
+  const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
 
   if (!order.monitoringConditions.curfew) {
     return []
@@ -183,6 +185,12 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
       questions.addresses.text,
       order.addresses.filter(({ addressType }) => (order.curfewConditions?.curfewAddress || '').includes(addressType)),
       conditionsUri,
+      answerOpts,
+    ),
+    createAnswer(
+      curfewAdditionalDetailsQuestions.provideDetails.text,
+      order.curfewConditions?.curfewAdditionalDetails,
+      curfewAdditionalDetailsUri,
       answerOpts,
     ),
   ]

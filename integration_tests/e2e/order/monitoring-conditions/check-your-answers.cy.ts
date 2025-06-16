@@ -37,6 +37,12 @@ context('Check your answers', () => {
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
+          curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: 'some additional details',
+          },
         },
       })
 
@@ -56,7 +62,13 @@ context('Check your answers', () => {
         { key: 'On the day of release, what time does the curfew start?', value: '19:00' },
         { key: 'On the day after release, what time does the curfew end?', value: '07:00' },
       ])
-      page.curfewSection().should('exist')
+      page.curfewSection.element.should('exist')
+      page.curfewSection.shouldHaveItems([
+        {
+          key: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+          value: 'some additional details',
+        },
+      ])
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
@@ -124,7 +136,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection().should('exist')
+      page.curfewSection.element.should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
@@ -201,7 +213,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection().should('exist')
+      page.curfewSection.element.should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
