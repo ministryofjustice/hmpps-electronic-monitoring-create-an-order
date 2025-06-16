@@ -333,7 +333,7 @@ context('Contact Information - check your answers', () => {
       ])
       page.probationDeliveryUnitSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
-        { key: "What is the Responsible Organisation's Probation Delivery Unit(PDU)", value: 'Sunderland' },
+        { key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)", value: 'Sunderland' },
       ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
         'Select the name of the Prison',
