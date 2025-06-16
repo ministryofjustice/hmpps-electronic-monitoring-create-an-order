@@ -806,24 +806,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
-            },
-            value: {
-              text: 'some additional curfew details',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'do you want to change the standard curfew address boundary for any of the curfew addresses?',
-                },
-              ],
-            },
-          },
         ],
         curfewTimetable: [
           {
@@ -1769,24 +1751,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'where will the device wearer be during curfew hours?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
-            },
-            value: {
-              text: 'some additional curfew details',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'do you want to change the standard curfew address boundary for any of the curfew addresses?',
                 },
               ],
             },
