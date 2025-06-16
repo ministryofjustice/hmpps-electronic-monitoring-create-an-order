@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
-import CurfewAdditionalDetailsPage from '../../../pages/order/monitoring-conditions/curfew-additional-details'
 
 const mockOrderId = uuidv4()
 
