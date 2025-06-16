@@ -4,7 +4,7 @@ import paths from '../../../../server/constants/paths'
 
 import InstallationAppointmentFormComponent from '../../components/forms/monitoring-conditions/installationAppointmentFormComponent'
 
-export default class InstallationLocationPage extends AppFormPage {
+export default class InstallationAppointmentPage extends AppFormPage {
   public form = new InstallationAppointmentFormComponent()
 
   constructor() {

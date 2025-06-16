@@ -102,6 +102,16 @@ const isCompletedAddress = (order: Order, addressType: AddressType): boolean => 
   return order.addresses.find(address => address.addressType === addressType) !== undefined
 }
 
+const isCurfewOnly = (order: Order): boolean => {
+  return (
+    order.monitoringConditions.alcohol === false &&
+    order.monitoringConditions.curfew === true &&
+    order.monitoringConditions.exclusionZone === false &&
+    order.monitoringConditions.mandatoryAttendance === false &&
+    order.monitoringConditions.trail === false
+  )
+}
+
 export default class TaskListService {
   constructor() {}
 
@@ -267,7 +277,12 @@ export default class TaskListService {
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationLocation,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
-      state: STATES.required,
+      state: convertBooleanToEnum<State>(
+        isCurfewOnly(order),
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.required,
+      ),
       completed: isNotNullOrUndefined(order.installationLocation),
     })
 
