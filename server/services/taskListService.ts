@@ -296,18 +296,22 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.curfewConditions),
     })
 
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewAdditionalDetails,
-      path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null),
-    })
+    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.electronicMonitoringCondition,
+        name: PAGES.curfewAdditionalDetails,
+        path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
+        state: convertBooleanToEnum<State>(
+          order.monitoringConditions.curfew,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(
+          order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null,
+        ),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,

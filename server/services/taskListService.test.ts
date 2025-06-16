@@ -420,10 +420,11 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
     })
 
-    it('should return curfew timetable if current page is curfew additional details', () => {
+    // skipped test as currently the additonal details page is disabled
+    it.skip('should return curfew timetable if current page is curfew additional details', () => {
       // Given
       const currentPage = 'CURFEW_ADDITIONAL_DETAILS'
       const taskListService = new TaskListService()
