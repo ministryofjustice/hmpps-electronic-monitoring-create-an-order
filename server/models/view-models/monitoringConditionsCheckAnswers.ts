@@ -22,6 +22,7 @@ import Answer, {
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
 import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -170,13 +171,14 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
 
 const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+  const curfewAdditionalDetailsUri = paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id)
   const { questions } = content.pages.curfewConditions
+  const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
 
   if (!order.monitoringConditions.curfew) {
     return []
   }
-
-  return [
+  const answers = [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
     createMultipleAddressAnswer(
@@ -186,6 +188,19 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
       answerOpts,
     ),
   ]
+
+  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    answers.push(
+      createAnswer(
+        curfewAdditionalDetailsQuestions.provideDetails.text,
+        order.curfewConditions?.curfewAdditionalDetails,
+        curfewAdditionalDetailsUri,
+        answerOpts,
+      ),
+    )
+  }
+
+  return answers
 }
 
 const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
