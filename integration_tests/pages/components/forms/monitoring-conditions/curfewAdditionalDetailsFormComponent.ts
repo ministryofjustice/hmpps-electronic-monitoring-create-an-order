@@ -16,7 +16,7 @@ export default class CurfewAdditionalDetailsFormComponent extends FormComponent 
   // FORM HELPERS
 
   fillInWith(curfewConditionDetails: CurfewAdditionalDetailsFormData) {
-    if (curfewConditionDetails.curfewAdditionalDetails.length > 0) {
+    if (curfewConditionDetails.curfewAdditionalDetails && curfewConditionDetails.curfewAdditionalDetails.length > 0) {
       this.curfewRadios.element.getByLabel('Yes').check()
       cy.get('#additional-details').type(curfewConditionDetails.curfewAdditionalDetails)
     } else {
