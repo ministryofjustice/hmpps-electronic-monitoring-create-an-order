@@ -28,6 +28,7 @@ import UploadLicencePage from './attachments/uploadLicence'
 import TrailMonitoringPage from './monitoring-conditions/trail-monitoring'
 import SecondaryAddressPage from './contact-information/secondary-address'
 import ProbationDeliveryUnitPage from './contact-information/probation-delivery-unit'
+import InstallationLocationPage from './monitoring-conditions/installation-location'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -518,9 +519,15 @@ export default class OrderTasksPage extends AppPage {
     monitoringConditionsPage.form.fillInWith(monitoringConditions)
     monitoringConditionsPage.form.saveAndContinueButton.click()
 
-    const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-    installationAddress.form.fillInWith(installationAddressDetails)
-    installationAddress.form.saveAndContinueButton.click()
+    if (monitoringConditions.monitoringRequired !== 'Curfew') {
+      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      installationLocationPage.form.saveAndContinueButton.click()
+
+      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
+      installationAddress.form.fillInWith(installationAddressDetails)
+      installationAddress.form.saveAndContinueButton.click()
+    }
   }
 
   fillInCurfewOrderDetailsWith(

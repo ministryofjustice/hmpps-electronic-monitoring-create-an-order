@@ -30,6 +30,7 @@ import ContactInformationCheckYourAnswersPage from '../pages/order/contact-infor
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
+import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -299,6 +300,14 @@ context('The kitchen sink', () => {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
+
+      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.saveAndContinueButton.click()
+      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
+      installationLocationPage.form.saveAndContinueButton.click()
 
       let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
       installationAddressPage.form.saveAndContinueButton.click()
