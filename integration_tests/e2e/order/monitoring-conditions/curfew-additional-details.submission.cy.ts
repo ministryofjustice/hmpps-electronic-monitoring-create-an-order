@@ -101,9 +101,12 @@ context('Monitoring conditions', () => {
 
         page.form.saveAndContinueButton.click()
 
-        cy.get('#details-error').should('contain', 'Enter detail of the curfew address boundary')
+        cy.get('#details-error').should(
+          'contain',
+          "Select 'Yes' if you want to change the standard curfew address boundary",
+        )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Enter detail of the curfew address boundary')
+        page.errorSummary.shouldHaveError("Select 'Yes' if you want to change the standard curfew address boundary")
       })
 
       it('should error when I select yes but submit an empty textarea', () => {

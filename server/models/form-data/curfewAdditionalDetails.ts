@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { validationErrors } from '../../constants/validationErrors'
 
 const CurfewAdditionalDetailsFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -11,13 +12,13 @@ export type CurfewAdditionalDetailsFormData = z.infer<typeof CurfewAdditionalDet
 const CurfewAdditionalDetailsFormDataValidator = z
   .object({
     curfewAdditionalDetails: z.string(),
-    details: z.string({ required_error: 'Enter detail of the curfew address boundary' }),
+    details: z.string({ required_error: validationErrors.curfewAdditionalDetails.changeCurfewDetailsRequired }),
   })
   .superRefine((data, ctx) => {
     if (data.details === 'yes' && data.curfewAdditionalDetails.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Enter detail of the curfew address boundary',
+        message: validationErrors.curfewAdditionalDetails.curfewDetailsRequired,
         fatal: true,
         path: ['curfewAdditionalDetails'],
       })
