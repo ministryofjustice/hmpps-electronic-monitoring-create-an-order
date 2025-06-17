@@ -42,12 +42,12 @@ context('Check your answers', () => {
           postcode: 'SW1A 2AB',
         },
       ],
-        curfewConditions: {
-            curfewAddress: 'PRIMARY,SECONDARY',
-            endDate: '2024-11-11T00:00:00Z',
-            startDate: '2024-11-11T00:00:00Z',
-            curfewAdditionalDetails: 'some additional details',
-        },
+      curfewConditions: {
+        curfewAddress: 'PRIMARY,SECONDARY',
+        endDate: '2024-11-11T00:00:00Z',
+        startDate: '2024-11-11T00:00:00Z',
+        curfewAdditionalDetails: 'some additional details',
+      },
     }
     beforeEach(() => {
       cy.task('reset')
