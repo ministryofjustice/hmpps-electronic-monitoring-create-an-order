@@ -17,7 +17,10 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  curfewSection = (): PageElement => cy.contains('Curfew')
+  get curfewSection(): SummaryListComponent {
+    const label = 'Curfew'
+    return new SummaryListComponent(label)
+  }
 
   curfewTimetableSection = (): PageElement => cy.contains('Curfew Timetable')
 
