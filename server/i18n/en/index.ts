@@ -4,6 +4,7 @@ import alcoholPageContent from './pages/alcohol'
 import attendancePageContent from './pages/attendance'
 import contactDetailsPageContent from './pages/contactDetails'
 import curfewConditionsPageContent from './pages/curfewConditions'
+import curfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import curfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import curfewTimeTablePageContent from './pages/curfewTimetable'
 import deviceWearerPageContent from './pages/deviceWearer'
@@ -34,6 +35,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       attendance: attendancePageContent,
       contactDetails: contactDetailsPageContent,
       curfewConditions: curfewConditionsPageContent,
+      curfewAdditionalDetails: curfewAdditionalDetailsPageContent,
       curfewReleaseDate: curfewReleaseDatePageContent,
       curfewTimetable: curfewTimeTablePageContent,
       deviceWearer: deviceWearerPageContent,

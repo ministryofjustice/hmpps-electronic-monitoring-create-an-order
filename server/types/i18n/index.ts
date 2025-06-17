@@ -2,6 +2,7 @@ import AddressPageContent from './pages/address'
 import AlcoholPageContent from './pages/alcohol'
 import AttendancePageContent from './pages/attendance'
 import ContactDetailsPageContent from './pages/contactDetails'
+import CurfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import CurfewConditionsPageContent from './pages/curfewConditions'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
@@ -27,6 +28,7 @@ type I18n = {
     attendance: AttendancePageContent
     contactDetails: ContactDetailsPageContent
     curfewConditions: CurfewConditionsPageContent
+    curfewAdditionalDetails: CurfewAdditionalDetailsPageContent
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
     deviceWearer: DeviceWearerPageContent

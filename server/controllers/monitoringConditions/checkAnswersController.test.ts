@@ -321,6 +321,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
+          curfewAdditionalDetails: 'some additional curfew details',
         }),
         curfewTimeTable: [
           {
@@ -1284,6 +1285,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
+          curfewAdditionalDetails: 'some additional curfew details',
         }),
         curfewTimeTable: [
           {

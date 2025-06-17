@@ -473,9 +473,27 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id))
     })
 
-    it('should return curfew timetable if current page is curfew conitions', () => {
+    it('should return curfew additional details if current page is curfew conitions', () => {
       // Given
       const currentPage = 'CURFEW_CONDITIONS'
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({
+          curfew: true,
+        }),
+      })
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
+    })
+
+    // skipped test as currently the additonal details page is disabled
+    it.skip('should return curfew timetable if current page is curfew additional details', () => {
+      // Given
+      const currentPage = 'CURFEW_ADDITIONAL_DETAILS'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({

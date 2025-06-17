@@ -29,6 +29,7 @@ import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
+import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,6 +40,7 @@ export default function routes({
   auditService,
   contactDetailsService,
   curfewConditionsService,
+  curfewAdditionalDetailsService,
   curfewReleaseDateService,
   curfewTimetableService,
   addressService,
@@ -82,6 +84,11 @@ export default function routes({
   const curfewConditionsController = new CurfewConditionsController(
     auditService,
     curfewConditionsService,
+    taskListService,
+  )
+  const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(
+    auditService,
+    curfewAdditionalDetailsService,
     taskListService,
   )
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, taskListService)
@@ -253,6 +260,10 @@ export default function routes({
   // Curfew conditions page
   get(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController.update)
+
+  // Curfew additional details page
+  get(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController.update)
 
   // Curfew dates page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)

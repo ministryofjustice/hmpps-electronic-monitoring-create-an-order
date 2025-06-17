@@ -42,6 +42,12 @@ context('Check your answers', () => {
           postcode: 'SW1A 2AB',
         },
       ],
+        curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: 'some additional details',
+        },
     }
     beforeEach(() => {
       cy.task('reset')
@@ -70,7 +76,13 @@ context('Check your answers', () => {
         { key: 'On the day of release, what time does the curfew start?', value: '19:00' },
         { key: 'On the day after release, what time does the curfew end?', value: '07:00' },
       ])
-      page.curfewSection().should('exist')
+      page.curfewSection.element.should('exist')
+      page.curfewSection.shouldHaveItems([
+        {
+          key: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+          value: 'some additional details',
+        },
+      ])
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
@@ -292,7 +304,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection().should('exist')
+      page.curfewSection.element.should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
@@ -382,7 +394,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection().should('exist')
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection().should('exist')
+      page.curfewSection.element.should('exist')
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
@@ -401,6 +413,66 @@ context('Check your answers', () => {
       page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
+    })
+  })
+  context('when ddv5 is not enabled', () => {
+    const testFlags = { DD_V5_1_ENABLED: false }
+    const pageHeading = 'Check your answers'
+    beforeEach(() => {
+      cy.task('setFeatureFlags', testFlags)
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+          },
+          curfewReleaseDateConditions: {
+            curfewAddress: '',
+            releaseDate: '2025-05-11',
+            startTime: '19:00:00',
+            endTime: '07:00:00',
+          },
+          curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: 'some additional details',
+          },
+        },
+      })
+
+      cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
+
+    it('does not show curfew additional details', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.curfewSection.shouldExist()
+      page.curfewSection.shouldNotHaveItems([
+        'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+      ])
     })
   })
 })

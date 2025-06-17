@@ -35,6 +35,10 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  curfewAdditionalDetails: {
+    changeCurfewDetailsRequired: string
+    curfewDetailsRequired: string
+  }
   enforcementZone: {
     descriptionRequired: string
     durationRequired: string
@@ -167,6 +171,10 @@ const validationErrors: ValidationErrors = {
     addressesRequired: 'Select where the device wearer will be during curfew hours',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
+  },
+  curfewAdditionalDetails: {
+    changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",
+    curfewDetailsRequired: 'Enter detail of the curfew address boundary',
   },
   enforcementZone: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('enforcement zone'),
