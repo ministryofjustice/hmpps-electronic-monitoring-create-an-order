@@ -181,6 +181,42 @@ context('Check your answers', () => {
       page.installationAddressSection().should('exist')
     })
 
+    it('shows installation appointment', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+          installationAppointment: {
+            placeName: 'Mock Place',
+            appointmentDate: '2025-02-01T10:30:00Z',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationAppointmentSection().shouldExist()
+      page.installationAppointmentSection().shouldHaveItems([
+        {
+          key: 'What is the name of the place where installation will take place?',
+          value: 'Mock Place',
+        },
+        {
+          key: 'What date will installation take place?',
+          value: '01/02/2025',
+        },
+        {
+          key: 'What time will installation take place?',
+          value: '10:30',
+        },
+      ])
+      page.installationAddressSection().should('exist')
+    })
+
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 

@@ -12,6 +12,14 @@
   }) }}
   {% endif %}
 
+    {% if installationAppointment | length > 0 %}
+   <h2 class="govuk-heading-m">Installation appointment</h2>
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: installationAppointment
+  }) }}
+  {% endif %}
+
   {% if installationAddress | length > 0 %}
   <h2 class="govuk-heading-m">Installation address</h2>
   {{ govukSummaryList({

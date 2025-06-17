@@ -70,6 +70,9 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
+    return []
+  }
   const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
     ':addressType(installation)',
     'installation',
@@ -320,6 +323,22 @@ const createInstallationLocationAnswers = (order: Order, content: I18n, answerOp
         ),
   ]
 }
+
+const createInstallationAppointmentAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id)
+
+  const { questions } = content.pages.installationAppointment
+
+  if (!order.installationAppointment) {
+    return []
+  }
+  return [
+    createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
+    createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+    createTimeAnswer(questions.appointmentTime.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+  ]
+}
+
 const createViewModel = (order: Order, content: I18n) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
@@ -335,10 +354,8 @@ const createViewModel = (order: Order, content: I18n) => {
     alcohol: createAlcoholAnswers(order, content, ignoreActions),
     installationLocation: createInstallationLocationAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    installationAddress:
-      order.installationLocation && order.installationLocation.location !== 'PRIMARY'
-        ? createInstallationAddressAnswers(order, content, ignoreActions)
-        : [],
+    installationAddress: createInstallationAddressAnswers(order, content, ignoreActions),
+    installationAppointment: createInstallationAppointmentAnswer(order, content, ignoreActions),
   }
 }
 

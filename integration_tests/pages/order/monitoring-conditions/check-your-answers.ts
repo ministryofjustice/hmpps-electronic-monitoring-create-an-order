@@ -29,4 +29,9 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     const label = 'Installation location'
     return new SummaryListComponent(label)
   }
+
+  installationAppointmentSection(): SummaryListComponent {
+    const label = 'Installation appointment'
+    return new SummaryListComponent(label)
+  }
 }
