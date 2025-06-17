@@ -87,7 +87,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the date when all monitoring ends? (optional)',
+              text: 'What is the date when all monitoring ends?',
             },
             value: {
               text: '',
@@ -97,7 +97,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
+                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
@@ -491,7 +491,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the date when all monitoring ends? (optional)',
+              text: 'What is the date when all monitoring ends?',
             },
             value: {
               text: '11/11/2024',
@@ -501,7 +501,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
+                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
@@ -1079,7 +1079,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does mandatory attendance monitoring end? (optional)',
+                text: 'What date does mandatory attendance monitoring end?',
               },
               value: {
                 text: '11/01/2025',
@@ -1092,7 +1092,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does mandatory attendance monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does mandatory attendance monitoring end?',
                   },
                 ],
               },
@@ -1457,7 +1457,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the date when all monitoring ends? (optional)',
+              text: 'What is the date when all monitoring ends?',
             },
             value: {
               text: '11/11/2024',
@@ -1467,7 +1467,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
+                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
@@ -2028,7 +2028,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does mandatory attendance monitoring end? (optional)',
+                text: 'What date does mandatory attendance monitoring end?',
               },
               value: {
                 text: '11/01/2025',
@@ -2041,7 +2041,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does mandatory attendance monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does mandatory attendance monitoring end?',
                   },
                 ],
               },

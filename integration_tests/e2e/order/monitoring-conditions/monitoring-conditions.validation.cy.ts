@@ -14,6 +14,7 @@ const errorMessages = {
   startDateMustIncludeMonth: 'Start date for monitoring must include a month',
   startDateMustIncludeYear: 'Start date for monitoring must include a year',
   startDateRequired: 'Enter start date for monitoring',
+  endDateRequired: 'Enter end date for monitoring',
   yearMustIncludeFourNumbers: 'Year must include 4 numbers',
 }
 
@@ -60,6 +61,7 @@ context('Monitoring conditions', () => {
         page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
+        page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
       })
 
       it('should show errors from API response if frontend validation passes', () => {
