@@ -4,11 +4,21 @@
     rows: monitoringConditions
   }) }}
 
+  {% if installationLocation | length > 0 %}
+   <h2 class="govuk-heading-m">Installation location</h2>
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: installationLocation
+  }) }}
+  {% endif %}
+
+  {% if installationAddress | length > 0 %}
   <h2 class="govuk-heading-m">Installation address</h2>
   {{ govukSummaryList({
     classes: "govuk-!-margin-bottom-9",
     rows: installationAddress
   }) }}
+  {% endif %}
 
   {% if curfew | length > 0 %}
 

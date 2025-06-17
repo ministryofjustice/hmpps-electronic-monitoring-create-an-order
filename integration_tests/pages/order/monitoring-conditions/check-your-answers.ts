@@ -24,4 +24,9 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
   trailMonitoringConditionsSection = (): PageElement => cy.contains('Trail monitoring')
 
   alcoholMonitoringConditionsSection = (): PageElement => cy.contains('Alcohol monitoring')
+
+  installationLocationSection(): SummaryListComponent {
+    const label = 'Installation location'
+    return new SummaryListComponent(label)
+  }
 }

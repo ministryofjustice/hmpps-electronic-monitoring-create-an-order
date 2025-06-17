@@ -296,13 +296,36 @@ const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   ]
 }
 
+const createInstallationLocationAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
+
+  const { questions } = content.pages.installationLocation
+
+  if (!order.installationLocation) {
+    return []
+  }
+  return [
+    order.installationLocation?.location === 'PRIMARY'
+      ? createAddressAnswer(
+          questions.location.text,
+          order.addresses.find(({ addressType }) => addressType === order.installationLocation?.location),
+          uri,
+          answerOpts,
+        )
+      : createAnswer(
+          questions.location.text,
+          lookup(content.reference.installationLocations, order.installationLocation?.location),
+          uri,
+          answerOpts,
+        ),
+  ]
+}
 const createViewModel = (order: Order, content: I18n) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
   return {
     monitoringConditions: createMonitoringConditionsAnswers(order, content, ignoreActions),
-    installationAddress: createInstallationAddressAnswers(order, content, ignoreActions),
     curfew: createCurfewAnswers(order, content, ignoreActions),
     curfewReleaseDate: createCurfewReleaseDateAnswers(order, content, ignoreActions),
     curfewTimetable: createCurfewTimetableAnswers(order, ignoreActions),
@@ -310,7 +333,12 @@ const createViewModel = (order: Order, content: I18n) => {
     trail: createTrailAnswers(order, content, ignoreActions),
     attendance: createAttendanceAnswers(order, content, ignoreActions),
     alcohol: createAlcoholAnswers(order, content, ignoreActions),
+    installationLocation: createInstallationLocationAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    installationAddress:
+      order.installationLocation && order.installationLocation.location !== 'PRIMARY'
+        ? createInstallationAddressAnswers(order, content, ignoreActions)
+        : [],
   }
 }
 

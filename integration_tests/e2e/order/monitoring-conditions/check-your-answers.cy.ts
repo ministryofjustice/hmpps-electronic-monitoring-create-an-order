@@ -6,6 +6,43 @@ const mockOrderId = uuidv4()
 
 context('Check your answers', () => {
   context('Application in progress', () => {
+    const mockOrder = {
+      monitoringConditions: {
+        startDate: '2025-01-01T00:00:00Z',
+        endDate: '2025-02-01T00:00:00Z',
+        orderType: 'CIVIL',
+        curfew: true,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
+        conditionType: 'BAIL_ORDER',
+        orderTypeDescription: 'DAPO',
+        sentenceType: 'IPP',
+        issp: 'YES',
+        hdc: 'NO',
+        prarr: 'UNKNOWN',
+      },
+      curfewReleaseDateConditions: {
+        curfewAddress: '',
+        releaseDate: '2025-05-11',
+        startTime: '19:00:00',
+        endTime: '07:00:00',
+      },
+      installationLocation: {
+        location: 'INSTALLATION',
+      },
+      addresses: [
+        {
+          addressType: 'INSTALLATION',
+          addressLine1: '10 Downing Street',
+          addressLine2: 'London',
+          addressLine3: '',
+          addressLine4: '',
+          postcode: 'SW1A 2AB',
+        },
+      ],
+    }
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -14,30 +51,7 @@ context('Check your answers', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: {
-          monitoringConditions: {
-            startDate: '2025-01-01T00:00:00Z',
-            endDate: '2025-02-01T00:00:00Z',
-            orderType: 'CIVIL',
-            curfew: true,
-            exclusionZone: true,
-            trail: true,
-            mandatoryAttendance: true,
-            alcohol: true,
-            conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
-            sentenceType: 'IPP',
-            issp: 'YES',
-            hdc: 'NO',
-            prarr: 'UNKNOWN',
-          },
-          curfewReleaseDateConditions: {
-            curfewAddress: '',
-            releaseDate: '2025-05-11',
-            startTime: '19:00:00',
-            endTime: '07:00:00',
-          },
-        },
+        order: mockOrder,
       })
 
       cy.signIn()
@@ -60,6 +74,111 @@ context('Check your answers', () => {
       page.curfewTimetableSection().should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
+    })
+
+    it('shows installation location - Primary', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'PRIMARY',
+          },
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '10 Downing Street',
+              addressLine2: 'London',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationLocationSection().shouldExist()
+      page.installationLocationSection().shouldHaveItems([
+        {
+          key: 'Where will installation of the electronic monitoring device take place?',
+          value: '10 Downing Street, London, SW1A 2AB',
+        },
+      ])
+      page.installationAddressSection().should('not.exist')
+    })
+
+    it('shows installation location - Prison', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'PRISON',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationLocationSection().shouldExist()
+      page
+        .installationLocationSection()
+        .shouldHaveItems([
+          { key: 'Where will installation of the electronic monitoring device take place?', value: 'At a prison' },
+        ])
+      page.installationAddressSection().should('exist')
+    })
+
+    it('shows installation location - Probation Office', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'PROBATION_OFFICE',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationLocationSection().shouldExist()
+      page.installationLocationSection().shouldHaveItems([
+        {
+          key: 'Where will installation of the electronic monitoring device take place?',
+          value: 'At a probation office',
+        },
+      ])
+      page.installationAddressSection().should('exist')
+    })
+
+    it('shows installation location - INSTALLATION', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationLocationSection().shouldExist()
+      page.installationLocationSection().shouldHaveItems([
+        {
+          key: 'Where will installation of the electronic monitoring device take place?',
+          value: 'At another address',
+        },
+      ])
+      page.installationAddressSection().should('exist')
     })
 
     it('shows correct buttons', () => {
@@ -97,6 +216,19 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
           },
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '10 Downing Street',
+              addressLine2: 'London',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
           fmsResultDate: new Date('2024 12 14'),
         },
       })
@@ -173,6 +305,19 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
           },
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '10 Downing Street',
+              addressLine2: 'London',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
           fmsResultDate: new Date('2024 12 14'),
         },
       })
