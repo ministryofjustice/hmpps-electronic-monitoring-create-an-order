@@ -286,11 +286,74 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id))
     })
 
-    it('should return installation address if current page is monitoring conditions', () => {
+    it('should return installation location if current page is monitoring conditions', () => {
       // Given
       const currentPage = 'MONITORING_CONDITIONS'
       const taskListService = new TaskListService()
       const order = getMockOrder()
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id))
+    })
+
+    it('should return installation appointment if current page is installation location and location is PRISON', () => {
+      // Given
+      const currentPage = 'INSTALLATION_LOCATION'
+      const taskListService = new TaskListService()
+      const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id))
+    })
+
+    it('should return installation appointment if current page is installation location and location is PROBATION_OFFICE', () => {
+      // Given
+      const currentPage = 'INSTALLATION_LOCATION'
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        installationLocation: { location: 'PROBATION_OFFICE' },
+      })
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id))
+    })
+
+    it('should return exclusion zone page if current page is installation location and location is PRIMARY', () => {
+      // Given
+      const currentPage = 'INSTALLATION_LOCATION'
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({
+          curfew: false,
+          trail: false,
+          alcohol: false,
+          exclusionZone: true,
+          mandatoryAttendance: false,
+        }),
+        installationLocation: { location: 'PRIMARY' },
+      })
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id).replace(':zoneId', '0'))
+    })
+
+    it('should return installation address if current page is installation location', () => {
+      // Given
+      const currentPage = 'INSTALLATION_LOCATION'
+      const taskListService = new TaskListService()
+      const order = getMockOrder({ installationLocation: { location: 'INSTALLATION' } })
 
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
@@ -304,13 +367,17 @@ describe('TaskListService', () => {
       )
     })
 
-    it('should return curfew release date if current page is installation address and curfew was selected', () => {
+    it('should return curfew release date if current page is monitoring conditions and only curfew was selected', () => {
       // Given
-      const currentPage = 'INSTALLATION_ADDRESS'
+      const currentPage = 'MONITORING_CONDITIONS'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
           curfew: true,
+          trail: false,
+          alcohol: false,
+          exclusionZone: false,
+          mandatoryAttendance: false,
         }),
       })
 
@@ -788,6 +855,7 @@ describe('TaskListService', () => {
         curfewReleaseDateConditions: createCurfewReleaseDateConditions(),
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
+        installationLocation: { location: 'INSTALLATION' },
       })
       const taskListService = new TaskListService()
 

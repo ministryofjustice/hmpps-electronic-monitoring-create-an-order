@@ -244,6 +244,9 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   monitoringConditionsAlcohol: null,
   variationDetails: null,
   isValid: false,
+  installationLocation: {
+    location: 'INSTALLATION',
+  },
   ...overrideProperties,
 })
 
