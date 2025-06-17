@@ -533,7 +533,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: questions.notifyingOrganisation.text,
           },
           value: {
-            text: 'Prison',
+            text: 'Prison Service',
           },
           actions: {
             items: [

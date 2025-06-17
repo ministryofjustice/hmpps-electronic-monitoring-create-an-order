@@ -126,7 +126,7 @@ context('Contact information', () => {
 
           Page.verifyOnPage(
             ProbationDeliveryUnitPage,
-            "What is the Responsible Organisation's Probation Delivery Unit(PDU)",
+            "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
           )
         })
       })

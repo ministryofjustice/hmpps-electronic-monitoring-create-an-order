@@ -12,7 +12,6 @@
 {% set helpText = content.pages.interestedParties.helpText %}
 
 {% set crownCourtHtml %}
-
   {{ accessibleAutocomplete({
     id: 'crownCourt',
     name: 'crownCourt',
@@ -22,11 +21,9 @@
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
   }) }}
-
 {% endset %}
 
-{% set magistrateCourtHtml %}
-
+{% set magistratesCourtHtml %}
   {{ accessibleAutocomplete({
     id: 'magistratesCourt',
     name: 'magistratesCourt',
@@ -36,11 +33,9 @@
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
   }) }}
-
 {% endset %}
 
 {% set prisonHtml %}
-
   {{ accessibleAutocomplete({
     id: 'prison',
     name: 'prison',
@@ -51,14 +46,86 @@
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
   }) }}
-
 {% endset %}
 
-{% set probationRegionHtml %}
+{% if DDv5 %}
+  {% set civilCountyCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'civilCountyCourt',
+      name: 'civilCountyCourt',
+      label: content.pages.interestedParties.questions.civilCountyCourt.text,
+      options: content.reference.civilCountyCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 
+    {% set familyCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: "familyCourt",
+      name: "familyCourt",
+      label:content.pages.interestedParties.questions.familyCourt.text,
+      options: content.reference.familyCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+  {% set militaryCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: "militaryCourt",
+      name: "militaryCourt",
+      label:content.pages.interestedParties.questions.militaryCourt.text,
+      options: content.reference.militaryCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+  {% set notifyingOrgProbationRegionHtml %}
+    {{ accessibleAutocomplete({
+      id: "notifyingOrgProbationRegion",
+      name: "notifyingOrgProbationRegion",
+      label:content.pages.interestedParties.questions.notifyingOrgProbationRegion.text,
+      options: content.reference.probationRegions | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+  {% set youthCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'youthCourt',
+      name: 'youthCourt',
+      label: content.pages.interestedParties.questions.youthCourt.text,
+      options: content.reference.youthCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+  {% set youthCustodyServiceRegionHtml %}
+    {{ accessibleAutocomplete({
+      id: 'youthCustodyServiceRegion',
+      name: 'youthCustodyServiceRegion',
+      label: content.pages.interestedParties.questions.youthCustodyServiceRegion.text,
+      options: content.reference.youthCustodyServiceRegions | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+{% endif %}
+
+{% set responsibleOrgProbationRegionHtml %}
   {{ govukSelect({
-    id: "probationRegion",
-    name: "probationRegion",
+    id: "responsibleOrgProbationRegion",
+    name: "responsibleOrgProbationRegion",
     label: {
       text: content.pages.interestedParties.questions.probationRegion.text
     },
@@ -67,11 +134,9 @@
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
   }) }}
-
 {% endset %}
 
 {% set yjsRegionHtml %}
-
   {{ govukSelect({
     id: "yjsRegion",
     name: "yjsRegion",
@@ -83,20 +148,20 @@
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
   }) }}
-
 {% endset %}
 
 {% set notifyingOrgOptions = [] %}
 {% for org in content.reference.notifyingOrganisations | toOptions(not isOrderEditable) %}
-  {% if org.value == 'PRISON' %}
+  {% if org.value == 'CIVIL_COUNTY_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
       conditional: {
-        html: prisonHtml
+        html: civilCountyCourtHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
   {% elif org.value == 'CROWN_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
@@ -106,15 +171,77 @@
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
+  {% elif org.value == 'FAMILY_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: familyCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
   {% elif org.value == 'MAGISTRATES_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
       conditional: {
-        html: magistrateCourtHtml
+        html: magistratesCourtHtml
       },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'MILITARY_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: militaryCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif org.value == 'PRISON' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: prisonHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'PROBATION' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: notifyingOrgProbationRegionHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'YOUTH_COURT' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: youthCourtHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
+  {% elif DDv5 and org.value == 'YOUTH_CUSTODY_SERVICE' %}
+    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: youthCustodyServiceRegionHtml
+      },
+      disabled: org.disabled
+    }), notifyingOrgOptions) %}
+
   {% else %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push(org), notifyingOrgOptions) %}
   {% endif %}
@@ -127,7 +254,7 @@
       value: org.value,
       text: org.text,
       conditional: {
-        html: probationRegionHtml
+        html: responsibleOrgProbationRegionHtml
       },
       disabled: org.disabled
     }), responsibleOrgOptions) %}
@@ -248,7 +375,6 @@
       errorMessage: responsibleOrganisation.error,
       items: responsibleOrgOptions
     }) }}
-   
 
     {{ govukInput({
       label: {
@@ -266,6 +392,4 @@
       disabled: not isOrderEditable
     }) }}
   {% endcall %}
-
-
 {% endblock %}
