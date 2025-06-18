@@ -60,8 +60,8 @@ context('Variation', () => {
 
           page.form.variationTypeField.shouldNotHaveOption('Change of curfew hours')
           page.form.variationTypeField.shouldNotHaveOption('Change of address')
-          page.form.variationTypeField.shouldNotHaveOption('Change to add an Inclusion or Exclusion Zone(s)')
-          page.form.variationTypeField.shouldNotHaveOption('Change to an existing Inclusion or Exclusion Zone(s).')
+          page.form.variationTypeField.shouldNotHaveOption('Change to add an Exclusion Zone(s)')
+          page.form.variationTypeField.shouldNotHaveOption('Change to an existing Exclusion Zone(s).')
         })
       })
 
@@ -80,8 +80,8 @@ context('Variation', () => {
 
           page.form.variationTypeField.shouldHaveOption('Change of curfew hours')
           page.form.variationTypeField.shouldHaveOption('Change of address')
-          page.form.variationTypeField.shouldHaveOption('Change to add an Inclusion or Exclusion Zone(s)')
-          page.form.variationTypeField.shouldHaveOption('Change to an existing Inclusion or Exclusion Zone(s).')
+          page.form.variationTypeField.shouldHaveOption('Change to add an Exclusion Zone(s)')
+          page.form.variationTypeField.shouldHaveOption('Change to an existing Exclusion Zone(s).')
           page.form.variationTypeField.shouldHaveOption('Order Suspension')
 
           page.form.variationTypeField.shouldNotHaveOption('The device wearer’s address')
