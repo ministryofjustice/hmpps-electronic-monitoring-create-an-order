@@ -258,28 +258,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        installationAddress: [
-          {
-            key: {
-              text: 'Where will the installation of the electronic monitoring device take place?',
-            },
-            value: {
-              html: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType(installation)',
-                    'installation',
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
-                },
-              ],
-            },
-          },
-        ],
+        installationAppointment: [],
+        installationLocation: [],
+        installationAddress: [],
         curfewReleaseDate: [],
         curfew: [],
         curfewTimetable: [],
@@ -662,28 +643,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        installationAddress: [
-          {
-            key: {
-              text: 'Where will the installation of the electronic monitoring device take place?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType(installation)',
-                    'installation',
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
-                },
-              ],
-            },
-          },
-        ],
+        installationAppointment: [],
+        installationLocation: [],
+        installationAddress: [],
         curfewReleaseDate: [
           {
             key: {
@@ -1611,28 +1573,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        installationAddress: [
-          {
-            key: {
-              text: 'Where will the installation of the electronic monitoring device take place?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType(installation)',
-                    'installation',
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
-                },
-              ],
-            },
-          },
-        ],
+        installationAppointment: [],
+        installationLocation: [],
+        installationAddress: [],
         curfewReleaseDate: [
           {
             key: {

@@ -44,4 +44,8 @@ export default class FormInputComponent {
   shouldNotHaveValidationMessage(): void {
     this.validationMessage.should('not.exist')
   }
+
+  shouldExist(): void {
+    this.element.should('exist')
+  }
 }

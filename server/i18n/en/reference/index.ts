@@ -37,6 +37,7 @@ import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
 import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
+import installationLocations from './installationLocations'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -61,6 +62,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   variationTypes,
   yesNoUnknown,
   youthJusticeServiceRegions,
+  installationLocations,
 }
 
 const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
@@ -94,6 +96,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits,
+  installationLocations,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
