@@ -155,7 +155,7 @@ const validationErrors: ValidationErrors = {
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeRequired: 'Select order type',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
   },
   monitoringConditionsAlcohol: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),

@@ -95,6 +95,7 @@ context('Mandatory fields only', () => {
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
@@ -378,6 +379,7 @@ context('Mandatory fields only', () => {
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
