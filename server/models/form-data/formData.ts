@@ -202,7 +202,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
         }
       }
 
-      if (val.hours) {
+      if (val.hours || val.minutes) {
         if (val.hours === '' && val.minutes !== '') {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

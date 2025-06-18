@@ -139,7 +139,7 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: fakePrimaryAddress,
+        installationAddressDetails: undefined,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,

@@ -163,6 +163,7 @@ export const createCurfewConditions = (overrideProperties?: Partial<CurfewCondit
   curfewAddress: null,
   endDate: null,
   startDate: null,
+  curfewAdditionalDetails: null,
   ...overrideProperties,
 })
 
@@ -244,6 +245,9 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   monitoringConditionsAlcohol: null,
   variationDetails: null,
   isValid: false,
+  installationLocation: {
+    location: 'INSTALLATION',
+  },
   ...overrideProperties,
 })
 

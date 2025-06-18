@@ -4,6 +4,7 @@ import alcoholPageContent from './pages/alcohol'
 import attendancePageContent from './pages/attendance'
 import contactDetailsPageContent from './pages/contactDetails'
 import curfewConditionsPageContent from './pages/curfewConditions'
+import curfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import curfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import curfewTimeTablePageContent from './pages/curfewTimetable'
 import deviceWearerPageContent from './pages/deviceWearer'
@@ -23,6 +24,8 @@ import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
 import variationDetailsPageContent from './pages/variationDetails'
 import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
+import installationLocationPageContent from './pages/installationLocation'
+import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
@@ -32,6 +35,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       attendance: attendancePageContent,
       contactDetails: contactDetailsPageContent,
       curfewConditions: curfewConditionsPageContent,
+      curfewAdditionalDetails: curfewAdditionalDetailsPageContent,
       curfewReleaseDate: curfewReleaseDatePageContent,
       curfewTimetable: curfewTimeTablePageContent,
       deviceWearer: deviceWearerPageContent,
@@ -51,6 +55,8 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadPhotoId: uploadPhotoIdPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
+      installationLocation: installationLocationPageContent,
+      installationAppointment: installationAppointmentPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

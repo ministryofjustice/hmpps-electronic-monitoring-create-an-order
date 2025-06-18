@@ -28,6 +28,8 @@ import UploadLicencePage from './attachments/uploadLicence'
 import TrailMonitoringPage from './monitoring-conditions/trail-monitoring'
 import SecondaryAddressPage from './contact-information/secondary-address'
 import ProbationDeliveryUnitPage from './contact-information/probation-delivery-unit'
+import CurfewAdditionalDetailsPage from './monitoring-conditions/curfew-additional-details'
+import InstallationLocationPage from './monitoring-conditions/installation-location'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -518,9 +520,15 @@ export default class OrderTasksPage extends AppPage {
     monitoringConditionsPage.form.fillInWith(monitoringConditions)
     monitoringConditionsPage.form.saveAndContinueButton.click()
 
-    const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-    installationAddress.form.fillInWith(installationAddressDetails)
-    installationAddress.form.saveAndContinueButton.click()
+    if (monitoringConditions.monitoringRequired !== 'Curfew') {
+      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      installationLocationPage.form.saveAndContinueButton.click()
+
+      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
+      installationAddress.form.fillInWith(installationAddressDetails)
+      installationAddress.form.saveAndContinueButton.click()
+    }
   }
 
   fillInCurfewOrderDetailsWith(
@@ -534,6 +542,10 @@ export default class OrderTasksPage extends AppPage {
     const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
     curfewConditionsPage.form.fillInWith(curfewConditionDetails)
     curfewConditionsPage.form.saveAndContinueButton.click()
+
+    const curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
+    curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
+    curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
 
     const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
     curfewTimetablePage.form.fillInWith(curfewTimetable)
