@@ -75,10 +75,16 @@ context('Access needs and installation risk information', () => {
         it('Should have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(InstallationAndRiskPage)
-          page.form.riskCategoryField.shouldHaveOption('Safeguarding Adult')
-          page.form.riskCategoryField.shouldHaveOption('Safeguarding Child')
-          page.form.riskCategoryField.shouldHaveOption('Safeguarding Domestic Abuse')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding adult')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding child')
+          page.form.riskCategoryField.shouldHaveOption('Safeguarding domestic abuse')
           page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Issues')
+        })
+
+        it('Should have offence additional details field', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(InstallationAndRiskPage)
+          page.form.offenceAdditionalDetailsField.element.should('exist')
         })
       })
 
@@ -91,13 +97,19 @@ context('Access needs and installation risk information', () => {
           cy.task('resetFeatureFlags')
         })
 
-        it('Should have additional safeguarding options', () => {
+        it('Should not have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(InstallationAndRiskPage)
           page.form.riskCategoryField.shouldHaveOption('Safeguarding Issues')
-          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Adult')
-          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Child')
-          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding Domestic Abuse')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding adult')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding child')
+          page.form.riskCategoryField.shouldNotHaveOption('Safeguarding domestic abuse')
+        })
+
+        it('Should not have offence additional details field', () => {
+          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+          Page.verifyOnPage(InstallationAndRiskPage)
+          cy.get('#offenceAdditionalDetails').should('not.exist')
         })
       })
     })

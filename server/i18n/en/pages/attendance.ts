@@ -15,7 +15,7 @@ const attendancePageContent: AttendancePageContent = {
       hint: 'For example, fortnightly on Mondays. Only include one day and frequency, if the same type of appointment occurs on another day on the same week enter this as a separate appointment.',
     },
     endDate: {
-      text: 'What date does mandatory attendance monitoring end? (optional)',
+      text: 'What date does mandatory attendance monitoring end?',
       hint: 'For example, 21 05 2025',
     },
     endTime: {

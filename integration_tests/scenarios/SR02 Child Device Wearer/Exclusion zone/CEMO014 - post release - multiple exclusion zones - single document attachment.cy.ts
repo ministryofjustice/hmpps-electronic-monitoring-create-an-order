@@ -27,6 +27,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -116,6 +117,7 @@ context('Scenarios', () => {
         'Feltham Young Offender Institution',
         'London',
       )
+
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
@@ -195,6 +197,10 @@ context('Scenarios', () => {
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
         monitoringConditionsPage.form.saveAndContinueButton.click()
+
+        const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+        installationLocationPage.form.fillInWith({ location: 'At another address' })
+        installationLocationPage.form.saveAndContinueButton.click()
 
         const installationAddress = Page.verifyOnPage(InstallationAddressPage)
         installationAddress.form.fillInWith(installationAddressDetails)

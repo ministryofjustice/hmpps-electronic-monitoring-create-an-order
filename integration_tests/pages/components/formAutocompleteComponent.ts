@@ -36,6 +36,14 @@ export default class FormAutocompleteComponent {
     this.element.contains('option', value).should('exist')
   }
 
+  shouldNotHaveOption(value: string): void {
+    this.element.find('option').contains(value).should('not.exist')
+  }
+
+  shouldHaveAllOptions(): void {
+    this.options.forEach(option => this.shouldHaveOption(option))
+  }
+
   shouldBeDisabled() {
     this.element.should('be.disabled')
   }

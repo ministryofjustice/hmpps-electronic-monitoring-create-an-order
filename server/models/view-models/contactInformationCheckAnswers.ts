@@ -3,6 +3,8 @@ import { createAddressAnswer, createBooleanAnswer, createAnswer, AnswerOptions }
 import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
+import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
@@ -58,19 +60,9 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 }
 
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
+  const ddv5 = FeatureFlags.getInstance().get('DD_V5_1_ENABLED')
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
-
-  if (notifyingOrganisation === 'PRISON') {
-    return [
-      createAnswer(
-        questions.prison.text,
-        lookup(content.reference.prisons, order.interestedParties?.notifyingOrganisationName),
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
 
   if (notifyingOrganisation === 'CROWN_COURT') {
     return [
@@ -92,6 +84,85 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
         answerOpts,
       ),
     ]
+  }
+
+  if (notifyingOrganisation === 'PRISON') {
+    return [
+      createAnswer(
+        questions.prison.text,
+        lookup(content.reference.prisons, order.interestedParties?.notifyingOrganisationName),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
+  if (ddv5) {
+    if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
+      return [
+        createAnswer(
+          questions.civilCountyCourt.text,
+          lookup(content.reference.civilCountyCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if ('familyCourts' in content.reference && notifyingOrganisation === 'FAMILY_COURT') {
+      return [
+        createAnswer(
+          questions.familyCourt.text,
+          lookup(content.reference.familyCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if ('militaryCourts' in content.reference && notifyingOrganisation === 'MILITARY_COURT') {
+      return [
+        createAnswer(
+          questions.militaryCourt.text,
+          lookup(content.reference.militaryCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if (notifyingOrganisation === 'PROBATION') {
+      return [
+        createAnswer(
+          questions.notifyingOrgProbationRegion.text,
+          lookup(content.reference.probationRegions, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if ('youthCourts' in content.reference && notifyingOrganisation === 'YOUTH_COURT') {
+      return [
+        createAnswer(
+          questions.youthCourt.text,
+          lookup(content.reference.youthCourts, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
+
+    if ('youthCustodyServiceRegions' in content.reference && notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+      return [
+        createAnswer(
+          questions.youthCustodyServiceRegion.text,
+          lookup(content.reference.youthCustodyServiceRegions, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
   }
 
   return []
@@ -178,6 +249,27 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
   ]
 }
 
+const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT.replace(':orderId', order.id)
+
+  const { questions } = content.pages.probationDeliveryUnit
+  const result = []
+  if (
+    FeatureFlags.getInstance().get('DD_V5_1_ENABLED') &&
+    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+  ) {
+    result.push(
+      createAnswer(
+        questions.unit.text,
+        lookup((<ReferenceCatalogDDv5>content.reference).probationDeliveryUnits, order.probationDeliveryUnit?.unit),
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+  return result
+}
+
 const createViewModel = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
@@ -186,6 +278,7 @@ const createViewModel = (order: Order, content: I18n) => {
     contactDetails: createContactDetailsAnswers(order, content, answerOpts),
     addresses: createAddressAnswers(order, content, answerOpts),
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
+    probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
   }
 }

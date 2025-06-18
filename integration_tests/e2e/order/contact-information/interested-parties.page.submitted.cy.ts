@@ -49,7 +49,7 @@ context('Contact information', () => {
         page.form.responsibleOfficerNameField.shouldHaveValue('John Smith')
         page.form.responsibleOfficerContactNumberField.shouldHaveValue('01234567890')
         page.form.responsibleOrganisationField.shouldHaveValue('Probation')
-        page.form.probationRegionField.shouldHaveValue('NORTH_EAST')
+        page.form.responsibleOrgProbationField.shouldHaveValue('NORTH_EAST')
         page.form.responsibleOrganisationEmailAddressField.shouldHaveValue('test2@test.com')
 
         // Should have the correct buttons

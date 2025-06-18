@@ -19,7 +19,7 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "cy:run": "cypress run --config video=false",
@@ -36,6 +36,9 @@
     "npm": "^10"
   },
   "jest": {
+    "setupFiles": [
+      "<rootDir>/test/jest/jest.setup.ts"
+    ],
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",
@@ -103,7 +106,7 @@
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
-    "multer": "^1.4.5-lts.2",
+    "multer": "^2.0.1",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",

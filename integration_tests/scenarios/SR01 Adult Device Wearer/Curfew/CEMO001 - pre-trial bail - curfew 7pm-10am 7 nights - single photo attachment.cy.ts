@@ -85,9 +85,12 @@ context('Scenarios', () => {
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Sex offender',
+      // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+      // riskCategory: 'Sex offender',
+      riskDetails: '',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -136,11 +139,12 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: fakePrimaryAddress,
+        installationAddressDetails: undefined,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
         files,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -179,11 +183,13 @@ context('Scenarios', () => {
           risk_details: '',
           mappa: 'MAPPA 1',
           mappa_case_type: 'SOC (Serious Organised Crime)',
-          risk_categories: [
-            {
-              category: 'Sexual Offences',
-            },
-          ],
+          // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+          // risk_categories: [
+          //   {
+          //     category: 'Sexual Offences',
+          //   },
+          // ],
+          risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',
