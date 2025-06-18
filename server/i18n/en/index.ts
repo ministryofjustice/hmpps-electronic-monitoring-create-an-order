@@ -24,6 +24,8 @@ import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
 import variationDetailsPageContent from './pages/variationDetails'
 import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
+import installationLocationPageContent from './pages/installationLocation'
+import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
@@ -53,6 +55,8 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadPhotoId: uploadPhotoIdPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
+      installationLocation: installationLocationPageContent,
+      installationAppointment: installationAppointmentPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

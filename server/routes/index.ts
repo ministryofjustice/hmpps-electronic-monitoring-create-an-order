@@ -21,6 +21,7 @@ import MonitoringConditionsController from '../controllers/monitoringConditions/
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
 import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
+import InstallationAppointmentController from '../controllers/monitoringConditions/installationAppointmentController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -29,6 +30,7 @@ import type { Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
+import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -54,6 +56,8 @@ export default function routes({
   variationService,
   probationDeliveryUnitService,
   zoneService,
+  installationLocationService,
+  installationAppointmentService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -130,6 +134,16 @@ export default function routes({
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     auditService,
     probationDeliveryUnitService,
+    taskListService,
+  )
+
+  const installationLocationController = new InstallationLocationController(
+    installationLocationService,
+    taskListService,
+  )
+
+  const installationAppointmentController = new InstallationAppointmentController(
+    installationAppointmentService,
     taskListService,
   )
   router.param('orderId', populateOrder(orderService))
@@ -214,6 +228,14 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
+  // Installation location page
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.update)
+
+  // Installation appointment page
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.view)
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.update)
+  // Installation address page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)
 
