@@ -27,6 +27,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -169,6 +170,10 @@ context('Scenarios', () => {
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
         monitoringConditionsPage.form.saveAndContinueButton.click()
 
+        const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+        installationLocationPage.form.fillInWith({ location: 'At another address' })
+        installationLocationPage.form.saveAndContinueButton.click()
+
         const installationAddress = Page.verifyOnPage(InstallationAddressPage)
         installationAddress.form.fillInWith(installationAddressDetails)
         installationAddress.form.saveAndContinueButton.click()
@@ -198,7 +203,7 @@ context('Scenarios', () => {
             middle_name: '',
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
-            date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+            date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
             adult_child: 'child',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -323,7 +328,7 @@ context('Scenarios', () => {
                 conditional_release_date: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',

@@ -12,8 +12,6 @@ export default class FormSelectComponent {
   ) {
     this.parent.getByLabel(this.label, { log: false }).as(`${this.elementCacheId}-element`)
     this.element.should('exist')
-
-    this.options.forEach(option => this.shouldHaveOption(option))
   }
 
   get element(): PageElement {
@@ -50,5 +48,9 @@ export default class FormSelectComponent {
 
   shouldNotHaveValidationMessage(): void {
     this.validationMessage.should('not.exist')
+  }
+
+  shouldHaveAllOptions(): void {
+    this.options.forEach(option => this.shouldHaveOption(option))
   }
 }

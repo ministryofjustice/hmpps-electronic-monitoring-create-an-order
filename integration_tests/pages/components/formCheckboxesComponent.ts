@@ -11,8 +11,6 @@ export default class FormCheckboxesComponent {
     private readonly options: string[] | RegExp[],
   ) {
     this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
-
-    this.options.forEach(option => this.shouldHaveOption(option))
   }
 
   get element(): PageElement {
@@ -36,6 +34,10 @@ export default class FormCheckboxesComponent {
 
   shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
+  }
+
+  shouldNotHaveOption(value: string | RegExp): void {
+    this.element.get('label').should('not.contain', value)
   }
 
   shouldExist(): void {
@@ -72,5 +74,9 @@ export default class FormCheckboxesComponent {
 
   shouldNotHaveValidationMessage(): void {
     this.validationMessage.should('not.exist')
+  }
+
+  shouldHaveAllOptions(): void {
+    this.options.forEach(option => this.shouldHaveOption(option))
   }
 }

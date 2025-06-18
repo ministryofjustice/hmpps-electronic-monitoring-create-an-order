@@ -1,22 +1,15 @@
+import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
-import { serialiseDate } from '../utils/utils'
-import DateValidator from '../utils/validators/dateValidator'
+import { EnforcementZoneFormData, EnforcementZoneFormDataValidator } from '../models/form-data/enforcementZone'
+import { convertZodErrorToValidationError } from '../utils/errors'
 
 type UpdateZoneRequestInpput = AuthenticatedRequestInput & {
   orderId: string
-  zoneId: number
-  description: string
-  duration: string
-  endDay: string
-  endMonth: string
-  endYear: string
-  startDay: string
-  startMonth: string
-  startYear: string
+  data: EnforcementZoneFormData
 }
 
 type UploadZoneAttachmentRequestInpput = AuthenticatedRequestInput & {
@@ -29,42 +22,18 @@ export default class EnforcementZoneService {
   constructor(private readonly apiClient: RestClient) {}
 
   async updateZone(input: UpdateZoneRequestInpput): Promise<ValidationResult | null> {
-    const dateValidationErrors: ValidationResult = []
-
-    const isStartDateValid = DateValidator.isValidDateFormat(
-      input.startDay,
-      input.startMonth,
-      input.startYear,
-      'startDate',
-    )
-    const isEndDateValid = DateValidator.isValidDateFormat(input.endDay, input.endMonth, input.endYear, 'endDate')
-    if (isStartDateValid.result === false) {
-      dateValidationErrors.push(isStartDateValid.error!)
-    }
-    if (isEndDateValid.result === false) {
-      dateValidationErrors.push(isEndDateValid.error!)
-    }
-
-    if (dateValidationErrors.length > 0) {
-      return ValidationResultModel.parse(dateValidationErrors)
-    }
-
     try {
+      const requestBody = EnforcementZoneFormDataValidator.parse(input.data)
       await this.apiClient.put({
         path: `/api/orders/${input.orderId}/enforcementZone`,
-        data: {
-          description: input.description,
-          duration: input.duration,
-          zoneType: 'EXCLUSION',
-          zoneId: input.zoneId,
-          orderId: input.orderId,
-          startDate: serialiseDate(input.startYear, input.startMonth, input.startDay),
-          endDate: serialiseDate(input.endYear, input.endMonth, input.endDay),
-        },
+        data: requestBody,
         token: input.accessToken,
       })
       return null
     } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
       const sanitisedError = e as SanitisedError
 
       if (sanitisedError.status === 400) {

@@ -1,0 +1,43 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+{% set section = content.pages.installationAppointment.section %}
+{% set heading = content.pages.installationAppointment.title %}
+{% set legend = content.pages.installationAppointment.legend %}
+{% set helpText = content.pages.installationAppointment.helpText %}
+{% set questions = content.pages.installationAppointment.questions %}
+{% block formInputs %}
+
+{{ govukInput({
+      label: {
+        text: questions.placeName.text,       
+        classes: "govuk-fieldset__legend--s"
+      },
+       hint: {
+          text: questions.placeName.hint
+      },
+      classes: "govuk-input--width-10",
+      id: "placeName",
+      name: "placeName",
+      value: placeName.value,
+      errorMessage: placeName.error,
+      disabled: not isOrderEditable
+    }) }}
+
+{{dateTimeInput({
+      id: "appointmentDate",
+      name: "appointmentDate",
+      date: appointmentDate.value,
+      dateLabel:  questions.appointmentDate.text,
+      dateHint: questions.appointmentDate.hint,
+      timeLabel: questions.appointmentTime.text,
+      timeHint: questions.appointmentTime.hint,
+      errorMessages: {
+        field: appointmentDate.error,
+        date: errors.dateError,
+        time: errors.timeError
+      },
+      disabled: not isOrderEditable,
+      timesEnabled: true     
+    })}}
+{% endblock %}

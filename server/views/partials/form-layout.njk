@@ -14,7 +14,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: orderSummaryUri
+    href: "#"
   }) }}
 {% endblock %}
 
@@ -24,7 +24,11 @@
       {% if not isOrderEditable %}
         {% set html %}
           <p class="govuk-notification-banner__heading">
-            You are viewing a submitted order.
+            {% if orderStatus === 'ERROR' %}
+              This form failed to submit. This was due to a technical problem. For more information <a href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/index.html">view the guidance (opens in a new tab)</a> .
+            {% else %}
+              You are viewing a submitted order.
+            {% endif %}
           </p>
         {% endset %}
 
@@ -37,10 +41,16 @@
         {{ govukErrorSummary(errorSummary) }}
       {% endif %}
 
-      <h1 class="govuk-heading-l">
+
+      {% if heading %}
+         <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l">{{ section }}</span>
+          {{ heading }}
+        </h1>
+      {% else %}
         <span class="govuk-caption-l">{{ section }}</span>
-        {{ heading }}
-      </h1>
+      {% endif %}
+     
 
       {{ govukFieldset({
         legend: {
@@ -49,9 +59,11 @@
         }
       }) }}
 
-      <p>
-        {{ helpText }}
-      </p>
+      {% if helpText %}
+        <p>
+          {{ helpText }}
+        </p>
+      {% endif %}
 
       <form action="" method="post" {{ formEncoding }}>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">

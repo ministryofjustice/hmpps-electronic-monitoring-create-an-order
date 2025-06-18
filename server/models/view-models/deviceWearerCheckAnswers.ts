@@ -5,29 +5,32 @@ import {
   createDateAnswer,
   createMultipleChoiceAnswer,
   createAnswer,
+  AnswerOptions,
 } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 
-const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string) => {
+const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
     return [
-      createAnswer(content.pages.deviceWearer.questions.otherDisability.text, order.deviceWearer.otherDisability, uri, {
-        ignoreActions: order.status === 'SUBMITTED',
-      }),
+      createAnswer(
+        content.pages.deviceWearer.questions.otherDisability.text,
+        order.deviceWearer.otherDisability,
+        uri,
+        answerOpts,
+      ),
     ]
   }
 
   return []
 }
 
-const createDeviceWearerAnswers = (order: Order, content: I18n) => {
+const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>
     lookup(content.reference.disabilities, disability),
   )
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri, answerOpts),
     createAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri, answerOpts),
@@ -57,7 +60,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
       answerOpts,
     ),
     createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri, answerOpts),
-    ...createOtherDisabilityAnswer(order, content, uri),
+    ...createOtherDisabilityAnswer(order, content, uri, answerOpts),
     createAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri, answerOpts),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.interpreterRequired.text,
@@ -68,10 +71,9 @@ const createDeviceWearerAnswers = (order: Order, content: I18n) => {
   ]
 }
 
-const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
+const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri, answerOpts),
     createAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri, answerOpts),
@@ -91,14 +93,14 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n) => {
   ]
 }
 
-const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string) => {
+const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearerResponsibleAdult?.relationship === 'other') {
     return [
       createAnswer(
         content.pages.responsibleAdult.questions.otherRelationship.text,
         order.deviceWearerResponsibleAdult?.otherRelationshipDetails,
         uri,
-        { ignoreActions: order.status === 'SUBMITTED' },
+        answerOpts,
       ),
     ]
   }
@@ -106,7 +108,7 @@ const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string)
   return []
 }
 
-const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
+const createResponsibeAdultAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id)
 
   if (order.deviceWearer.adultAtTimeOfInstallation === null) {
@@ -117,7 +119,6 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createAnswer(
       content.pages.responsibleAdult.questions.relationship.text,
@@ -125,7 +126,7 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
       uri,
       answerOpts,
     ),
-    ...createOtherRelationshipAnswer(order, content, uri),
+    ...createOtherRelationshipAnswer(order, content, uri, answerOpts),
     createAnswer(
       content.pages.responsibleAdult.questions.fullName.text,
       order.deviceWearerResponsibleAdult?.fullName,
@@ -141,11 +142,16 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n) => {
   ]
 }
 
-const createViewModel = (order: Order, content: I18n) => ({
-  deviceWearer: createDeviceWearerAnswers(order, content),
-  personIdentifiers: createPersonIdentifierAnswers(order, content),
-  responsibleAdult: createResponsibeAdultAnswers(order, content),
-  submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-})
+const createViewModel = (order: Order, content: I18n) => {
+  const ignoreActions = {
+    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
+  }
+  return {
+    deviceWearer: createDeviceWearerAnswers(order, content, ignoreActions),
+    personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions),
+    responsibleAdult: createResponsibeAdultAnswers(order, content, ignoreActions),
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+  }
+}
 
 export default createViewModel

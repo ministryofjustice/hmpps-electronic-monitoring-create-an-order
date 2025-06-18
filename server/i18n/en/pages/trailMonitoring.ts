@@ -5,7 +5,7 @@ const trailMonitoringPageContent: TrailMonitoringPageContent = {
   legend: '',
   questions: {
     endDate: {
-      text: 'What date does trail monitoring end? (optional)',
+      text: 'What date does trail monitoring end?',
       hint: 'For example, 21 05 2025',
     },
     startDate: {

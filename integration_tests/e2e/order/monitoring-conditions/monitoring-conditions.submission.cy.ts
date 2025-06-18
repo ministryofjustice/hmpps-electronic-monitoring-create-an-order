@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
+import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 
 const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions'
@@ -49,14 +50,14 @@ context('Monitoring conditions', () => {
         cy.signIn()
       })
 
-      it('Should submit a correctly formatted monitoring conditions', () => {
+      it('Should submit a correctly formatted monitoring conditions and got to installation location page', () => {
         const page = Page.visit(MonitoringConditionsPage, {
           orderId: mockOrderId,
         })
 
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
-        Page.verifyOnPage(InstallationAddressPage)
+        Page.verifyOnPage(InstallationLocationPage)
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
@@ -77,6 +78,47 @@ context('Monitoring conditions', () => {
             prarr: 'UNKNOWN',
           },
         }).should('be.true')
+      })
+
+      it('Should got to curfew page when curfew is only condition selected', () => {
+        const formData = {
+          orderType: 'IMMIGRATION',
+          orderTypeDescription: 'GPS Acquisitive Crime HDC',
+          monitoringRequired: ['Curfew'],
+          conditionType: 'License Condition of a Custodial Order',
+          startDate: new Date('2024-02-27T11:02:00Z'),
+          endDate: new Date('2025-03-08T04:40:00Z'),
+          sentenceType: 'Extended Determinate Sentence',
+          issp: 'No',
+          hdc: 'Yes',
+          prarr: 'Not able to provide this information',
+        }
+
+        const response = {
+          orderType: 'IMMIGRATION',
+          orderTypeDescription: 'DAPOL',
+          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          curfew: true,
+          exclusionZone: false,
+          trail: false,
+          mandatoryAttendance: false,
+          alcohol: false,
+          startDate: '2024-10-10T11:00:00.000Z',
+          endDate: '2024-10-11T11:00:00.000Z',
+          sentenceType: 'EPP',
+          issp: 'YES',
+          hdc: 'NO',
+          prarr: 'UNKNOWN',
+        }
+
+        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.fillInWith(formData)
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(CurfewConditionsPage)
       })
     })
   })

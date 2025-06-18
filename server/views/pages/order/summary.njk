@@ -13,7 +13,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: orderSummaryUri
+    href: "/"
   }) }}
 {% endblock %}
 
@@ -26,12 +26,6 @@
       <h1 class="govuk-heading-l">
         {{ heading }}
       </h1>
-        
-      {% if order.status === 'SUBMITTED' %}
-        <p>
-          You can make changes to this form or end all monitoring for the device wearer
-        </p>
-      {% endif %}
 
       {% if order.status === "ERROR" %}
         {% set insetHtml %}
@@ -58,15 +52,26 @@
       {% for section in sections %}
         {% set name = section.name | replace("_", " ") | capitalize %}
 
-        {% set statusArgs = { 
+        {% if not isOrderEditable %}
+          {% set statusArgs = {} %}
+        {% elif section.name == 'ADDITIONAL_DOCUMENTS' %}
+          {% set statusArgs = { 
+            tag: {
+              text: 'Optional',
+              classes: 'govuk-tag--green'
+            }
+          } %}
+        {% elif section.completed %}
+          {% set statusArgs = { 
             text: 'Complete'
-        } if section.completed else {
-          tag: {
-            text: 'Incomplete'
-          }
-        } %}
-
-        {% set statusArgs = statusArgs if isOrderEditable else {} %}
+          } %}
+        {% else %}
+          {% set statusArgs = { 
+            tag: {
+              text: 'Incomplete'
+            }
+          } %}
+        {% endif %}
 
         {% set items = (items.push({
           idPrefix: "order-section",
@@ -80,12 +85,13 @@
       {{ govukTaskList({ idPrefix: "sections", items: items }) }}
 
       {% if order.status == "IN_PROGRESS" %}
-        <form action="/order/{{ order.id }}/submit" method="post">
+        <form action="/order/{{ order.id }}/submit" method="post" data-module="form-spinner" data->
           <input type="hidden" name="_csrf" value="{{ csrfToken }}">
           <div class="govuk-button-group">
             {{ govukButton({
                 text: "Submit form",
-                disabled: not order.isValid
+                disabled: not order.isValid,
+                preventDoubleClick: true
             }) }}
             <a href="/order/{{ orderId }}/delete" class="govuk-link">Delete form</a>
           </div>

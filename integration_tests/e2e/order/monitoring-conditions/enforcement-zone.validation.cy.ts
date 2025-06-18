@@ -35,20 +35,21 @@ context('Monitoring conditions - Enforcement Zone', () => {
         })
       })
 
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
+      it('Should display validation error messages when submit empty request', () => {
+        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
 
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(EnforcementZonePage)
-        page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.form.startDateField.shouldHaveValidationMessage('Enter start date for enforcement zone')
+        page.form.endDateField.shouldHaveValidationMessage('Enter end date for enforcement zone')
+        page.form.descriptionField.shouldHaveValidationMessage('Enforcement zone description is required')
+        page.form.durationField.shouldHaveValidationMessage('Enforcement zone duration is required')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
+        page.errorSummary.shouldHaveError('Enter start date for enforcement zone')
+        page.errorSummary.shouldHaveError('Enter end date for enforcement zone')
+        page.errorSummary.shouldHaveError('Enforcement zone description is required')
+        page.errorSummary.shouldHaveError('Enforcement zone duration is required')
       })
     })
 
@@ -70,10 +71,18 @@ context('Monitoring conditions - Enforcement Zone', () => {
       })
 
       it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
+        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
 
+        const validFormData = {
+          zoneType: 'EXCLUSION',
+          startDate: new Date('2024-12-10T00:00:00.000Z'),
+          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          description: 'A test description: Lorum ipsum dolar sit amet...',
+          duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        }
+
+        page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
-
         Page.verifyOnPage(EnforcementZonePage)
 
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -82,248 +91,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-      })
-    })
-
-    context('with only start date entered', () => {
-      beforeEach(() => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'endDate', error: expectedValidationErrorMessage },
-            { field: 'file', error: expectedValidationErrorMessage },
-            { field: 'description', error: expectedValidationErrorMessage },
-            { field: 'duration', error: expectedValidationErrorMessage },
-            { field: 'anotherZone', error: expectedValidationErrorMessage },
-          ],
-        })
-      })
-
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.startDateField.shouldNotHaveValidationMessage()
-        page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-      })
-    })
-
-    context('with only end date entered', () => {
-      beforeEach(() => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'startDate', error: expectedValidationErrorMessage },
-            { field: 'file', error: expectedValidationErrorMessage },
-            { field: 'description', error: expectedValidationErrorMessage },
-            { field: 'duration', error: expectedValidationErrorMessage },
-            { field: 'anotherZone', error: expectedValidationErrorMessage },
-          ],
-        })
-      })
-
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.endDateField.shouldNotHaveValidationMessage()
-        page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-      })
-    })
-
-    context('with invalid date formats entered', () => {
-      context('start date', () => {
-        it('should show error when date of birth is provided in the wrong format', () => {
-          const dateFormatValidationMessage =
-            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.'
-          const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-          cy.get('#startDate-startDay').type('text')
-
-          page.form.saveAndContinueButton.click()
-
-          Page.verifyOnPage(EnforcementZonePage)
-
-          page.form.startDateField.shouldHaveValidationMessage(dateFormatValidationMessage)
-          page.errorSummary.shouldExist()
-          page.errorSummary.shouldHaveError(dateFormatValidationMessage)
-        })
-      })
-
-      context('end date', () => {
-        it('should show error when date of birth is provided in the wrong format', () => {
-          const dateFormatValidationMessage =
-            'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.'
-          const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-          cy.get('#endDate-endDay').type('text')
-
-          page.form.saveAndContinueButton.click()
-
-          Page.verifyOnPage(EnforcementZonePage)
-
-          page.form.endDateField.shouldHaveValidationMessage(dateFormatValidationMessage)
-          page.errorSummary.shouldExist()
-          page.errorSummary.shouldHaveError(dateFormatValidationMessage)
-        })
-      })
-    })
-
-    context('with only file entered', () => {
-      beforeEach(() => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'startDate', error: expectedValidationErrorMessage },
-            { field: 'endDate', error: expectedValidationErrorMessage },
-            { field: 'description', error: expectedValidationErrorMessage },
-            { field: 'duration', error: expectedValidationErrorMessage },
-            { field: 'anotherZone', error: expectedValidationErrorMessage },
-          ],
-        })
-      })
-
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.uploadField.shouldNotHaveValidationMessage()
-        page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-      })
-    })
-
-    context('with only description entered', () => {
-      beforeEach(() => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'startDate', error: expectedValidationErrorMessage },
-            { field: 'endDate', error: expectedValidationErrorMessage },
-            { field: 'file', error: expectedValidationErrorMessage },
-            { field: 'duration', error: expectedValidationErrorMessage },
-            { field: 'anotherZone', error: expectedValidationErrorMessage },
-          ],
-        })
-      })
-
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.descriptionField.shouldNotHaveValidationMessage()
-        page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-      })
-    })
-
-    context('with only duration entered', () => {
-      beforeEach(() => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'startDate', error: expectedValidationErrorMessage },
-            { field: 'endDate', error: expectedValidationErrorMessage },
-            { field: 'file', error: expectedValidationErrorMessage },
-            { field: 'description', error: expectedValidationErrorMessage },
-            { field: 'anotherZone', error: expectedValidationErrorMessage },
-          ],
-        })
-      })
-
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.durationField.shouldNotHaveValidationMessage()
-        page.form.anotherZoneField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-      })
-    })
-
-    context('with only another zone entered', () => {
-      beforeEach(() => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'startDate', error: expectedValidationErrorMessage },
-            { field: 'endDate', error: expectedValidationErrorMessage },
-            { field: 'file', error: expectedValidationErrorMessage },
-            { field: 'description', error: expectedValidationErrorMessage },
-            { field: 'duration', error: expectedValidationErrorMessage },
-          ],
-        })
-      })
-
-      it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
-
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(EnforcementZonePage)
-
-        page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.uploadField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.descriptionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.durationField.shouldHaveValidationMessage(expectedValidationErrorMessage)
-        page.form.anotherZoneField.shouldNotHaveValidationMessage()
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
       })

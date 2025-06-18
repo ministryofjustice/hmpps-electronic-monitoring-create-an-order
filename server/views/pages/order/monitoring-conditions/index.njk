@@ -28,7 +28,10 @@
         date: errors.dateError,
         time: errors.timeError
       },
-      disabled: not isOrderEditable
+      disabled: not isOrderEditable,
+      timesEnabled: monitoringConditionTimes,
+      defaultHours: "00",
+      defaultMinutes: "00"
     })}}
 
     {{dateTimeInput({
@@ -44,7 +47,10 @@
         date: errors.dateError,
         time: errors.timeError
       },
-      disabled: not isOrderEditable
+      disabled: not isOrderEditable,
+      timesEnabled: monitoringConditionTimes,
+      defaultHours: 23,
+      defaultMinutes: 59
     })}}
 
   {% call govukFieldset({
@@ -150,7 +156,7 @@
         text: questions.sentenceType.text,
         classes: "govuk-fieldset__legend--s"
       },
-      items: sentenceTypes | toOptions(false, true),
+      items: content.reference.sentenceTypes | toOptions(false, true),
       value: sentenceType.value,
       errorMessage: sentenceType.error,
       disabled: not isOrderEditable

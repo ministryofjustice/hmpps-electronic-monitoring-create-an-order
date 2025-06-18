@@ -25,7 +25,7 @@ export default class CheckAnswersController {
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     if (action === 'continue') {
-      if (order.status === 'SUBMITTED') {
+      if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
         res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_CONTACT_INFORMATION', order))
       } else {
         res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_CONTACT_INFORMATION', order))

@@ -5,7 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -85,9 +85,12 @@ context('Scenarios', () => {
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Sex offender',
+      // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+      // riskCategory: 'Sex offender',
+      riskDetails: '',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -136,11 +139,12 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: fakePrimaryAddress,
+        installationAddressDetails: undefined,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
         files,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -153,7 +157,7 @@ context('Scenarios', () => {
           middle_name: '',
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
-          date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+          date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
           adult_child: 'adult',
           sex: deviceWearerDetails.sex
             .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -179,6 +183,12 @@ context('Scenarios', () => {
           risk_details: '',
           mappa: 'MAPPA 1',
           mappa_case_type: 'SOC (Serious Organised Crime)',
+          // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+          // risk_categories: [
+          //   {
+          //     category: 'Sexual Offences',
+          //   },
+          // ],
           risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
@@ -217,8 +227,8 @@ context('Scenarios', () => {
               enforceable_condition: [
                 {
                   condition: 'Curfew with EM',
-                  start_date: formatAsFmsDateTime(curfewConditionDetails.startDate),
-                  end_date: formatAsFmsDateTime(curfewConditionDetails.endDate),
+                  start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+                  end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 },
               ],
               exclusion_allday: '',
@@ -275,13 +285,13 @@ context('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: curfewReleaseDetails.releaseDate.toISOString().split('T')[0],
+              conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
               curfew_description: '',
-              curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
-              curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+              curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+              curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
               curfew_duration: [
                 {
                   location: 'primary',

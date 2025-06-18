@@ -1,8 +1,8 @@
 import FormComponent from '../../formComponent'
 import FormTextareaComponent from '../../formTextareaComponent'
-import FormDateComponent from '../../formDateComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
 import FormFileUploadComponent from '../../formFileUploadComponent'
+import FormDateTimeComponent from '../../formDateTimeComponent'
 
 export type EnforcementZoneFormData = {
   startDate?: Date
@@ -19,12 +19,12 @@ export type EnforcementZoneFormData = {
 export default class EnforcementZoneFormComponent extends FormComponent {
   // FIELDS
 
-  get startDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'What date does exclusion zone monitoring start?')
+  get startDateField(): FormDateTimeComponent {
+    return new FormDateTimeComponent(this.form, 'startDate')
   }
 
-  get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'What date does exclusion zone monitoring end? (optional)')
+  get endDateField(): FormDateTimeComponent {
+    return new FormDateTimeComponent(this.form, 'endDate')
   }
 
   get uploadField(): FormFileUploadComponent {
@@ -47,11 +47,11 @@ export default class EnforcementZoneFormComponent extends FormComponent {
 
   fillInWith(data: EnforcementZoneFormData): void {
     if (data.startDate) {
-      this.startDateField.set(data.startDate)
+      this.startDateField.set(data.startDate, false)
     }
 
     if (data.endDate) {
-      this.endDateField.set(data.endDate)
+      this.endDateField.set(data.endDate, false)
     }
 
     if (data.uploadFile) {
@@ -90,5 +90,9 @@ export default class EnforcementZoneFormComponent extends FormComponent {
     // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way
     // this.anotherZoneField.shouldBeDisabled()
     cy.contains('legend', 'Add another exclusion or inclusion zone?', { log: false }).should('not.exist')
+  }
+
+  shouldHaveAllOptions(): void {
+    this.anotherZoneField.shouldHaveAllOptions()
   }
 }

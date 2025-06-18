@@ -17,28 +17,17 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.signIn()
     })
 
-    it('Should display the user name visible in header', () => {
+    it('Should display contents', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
       page.header.userName().should('contain.text', 'J. Smith')
-    })
-
-    it('Should display the phase banner in header', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
       page.header.phaseBanner().should('contain.text', 'dev')
-    })
-
-    it('Should render the save and continue/return buttons', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist')
+      page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
-    })
+      page.form.shouldHaveAllOptions()
 
-    // TODO: FAIL there is one form input related issues
-    it('Should be accessible', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
       page.checkIsAccessible()
     })
   })
@@ -59,7 +48,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()

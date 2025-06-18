@@ -6,7 +6,7 @@ const noFixedAbodePageContent: NoFixedAbodePageContent = {
   questions: {
     noFixedAbode: {
       text: 'Does the device wearer have a fixed address?',
-      hint: "An address the device wearer has registered as their home address. It can be temporary accommodation, a fixed tenancy or a permanent address. If they are registered as homeless, select 'No'.",
+      hint: "An address the device wearer has registered as their home address. It can be temporary accommodation, an Approved Premises (AP), a fixed tenancy or a permanent address. If they are registered as homeless, select 'No'.",
     },
   },
   section: 'Contact information',

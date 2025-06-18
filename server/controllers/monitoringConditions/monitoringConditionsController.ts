@@ -30,7 +30,6 @@ export default class MonitoringConditionsController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = MonitoringConditionsFormDataParser.parse(req.body)
-
     const updateMonitoringConditionsResult = await this.monitoringConditionsService.updateMonitoringConditions({
       accessToken: res.locals.user.token,
       orderId,

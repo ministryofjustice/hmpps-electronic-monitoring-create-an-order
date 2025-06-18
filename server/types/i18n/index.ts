@@ -2,6 +2,7 @@ import AddressPageContent from './pages/address'
 import AlcoholPageContent from './pages/alcohol'
 import AttendancePageContent from './pages/attendance'
 import ContactDetailsPageContent from './pages/contactDetails'
+import CurfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import CurfewConditionsPageContent from './pages/curfewConditions'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
@@ -10,12 +11,15 @@ import ExclusionZonePageContent from './pages/exclusionZone'
 import IdentityNumbersPageContent from './pages/identityNumbers'
 import InstallationAndRiskPageContent from './pages/installationAndRisk'
 import InterestedPartiesPageContent from './pages/interestedParties'
+import ProbationDeliveryUnit from './pages/probationDeliveryUnit'
 import MonitoringConditionsPageContent from './pages/monitoringConditions'
 import NoFixedAbodePageContent from './pages/noFixedAbode'
 import ResponsibleAdultPageContent from './pages/responsibleAdult'
 import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
 import VariationDetailsPageContent from './pages/variationDetails'
+import InstallationLocationPageContent from './pages/installationLocation'
+import InstallationAppointmentPageContent from './pages/installationAppointment'
 import ReferenceData from './reference'
 
 type I18n = {
@@ -24,6 +28,7 @@ type I18n = {
     attendance: AttendancePageContent
     contactDetails: ContactDetailsPageContent
     curfewConditions: CurfewConditionsPageContent
+    curfewAdditionalDetails: CurfewAdditionalDetailsPageContent
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
     deviceWearer: DeviceWearerPageContent
@@ -32,6 +37,7 @@ type I18n = {
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
     interestedParties: InterestedPartiesPageContent
+    probationDeliveryUnit: ProbationDeliveryUnit
     monitoringConditions: MonitoringConditionsPageContent
     noFixedAbode: NoFixedAbodePageContent
     primaryAddress: AddressPageContent
@@ -42,6 +48,8 @@ type I18n = {
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
+    installationLocation: InstallationLocationPageContent
+    installationAppointment: InstallationAppointmentPageContent
   }
   reference: ReferenceData
 }

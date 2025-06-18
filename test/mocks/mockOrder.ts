@@ -55,6 +55,7 @@ export const createInstallationAndRisk = (overrideProperties?: Partial<Installat
   riskCategory: null,
   riskDetails: null,
   offence: null,
+  offenceAdditionalDetails: null,
   ...overrideProperties,
 })
 
@@ -162,6 +163,7 @@ export const createCurfewConditions = (overrideProperties?: Partial<CurfewCondit
   curfewAddress: null,
   endDate: null,
   startDate: null,
+  curfewAdditionalDetails: null,
   ...overrideProperties,
 })
 
@@ -193,6 +195,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   monitoringConditionsAlcohol: null,
   variationDetails: null,
   isValid: false,
+  probationDeliveryUnit: null,
   ...overrideProperties,
 })
 
@@ -223,6 +226,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   },
   installationAndRisk: null,
   interestedParties: createInterestedParties(),
+  probationDeliveryUnit: null,
   enforcementZoneConditions: [],
   addresses: [
     {
@@ -241,6 +245,9 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   monitoringConditionsAlcohol: null,
   variationDetails: null,
   isValid: false,
+  installationLocation: {
+    location: 'INSTALLATION',
+  },
   ...overrideProperties,
 })
 

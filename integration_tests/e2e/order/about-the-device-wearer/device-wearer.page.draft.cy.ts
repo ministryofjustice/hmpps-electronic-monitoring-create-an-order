@@ -16,29 +16,17 @@ context('About the device wearer', () => {
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('Should display contents', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
-
-      it('Should allow the user to update the device wearer', () => {
-        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
-
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
-        page.backToSummaryButton.should('exist')
-      })
-
-      it('Should be accessible', () => {
-        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+        page.backButton.should('exist')
         page.checkIsAccessible()
+        page.form.shouldHaveAllOptions()
       })
     })
 

@@ -18,7 +18,8 @@ context('Access needs and installation risk information', () => {
           order: {
             installationAndRisk: {
               offence: 'SEXUAL_OFFENCES',
-              riskCategory: ['RISK_TO_GENDER', 'SAFEGUARDING_ISSUE'],
+              offenceAdditionalDetails: 'Information about offence',
+              riskCategory: ['RISK_TO_GENDER', 'SEXUAL_OFFENCES'],
               riskDetails: 'Information about potential risks',
               mappaLevel: 'MAPPA 1',
               mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
@@ -41,8 +42,9 @@ context('Access needs and installation risk information', () => {
 
         // Should display the saved data
         page.form.offenceField.shouldHaveValue('SEXUAL_OFFENCES')
+        page.form.offenceAdditionalDetailsField.shouldHaveValue('Information about offence')
         page.form.riskCategoryField.shouldHaveValue('Offensive towards someone because of their sex or gender')
-        page.form.riskCategoryField.shouldHaveValue('Safeguarding Issues')
+        page.form.riskCategoryField.shouldHaveValue('Sex offender')
         page.form.riskDetailsField.shouldHaveValue('Information about potential risks')
         page.form.mappaLevelField.shouldHaveValue('MAPPA 1')
         page.form.mappaCaseTypeField.shouldHaveValue('Terrorism Act, Counter Terrorism')
@@ -50,7 +52,7 @@ context('Access needs and installation risk information', () => {
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
-        page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+        page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable
         page.form.shouldBeDisabled()

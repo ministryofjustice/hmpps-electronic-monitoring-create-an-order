@@ -9,5 +9,7 @@ $govuk-page-width: $moj-page-width;
 @import "accessible-autocomplete/src/autocomplete";
 
 @import './components/header-bar';
+@import './components/form-spinner';
 @import './components/panel';
+@import './components/hidden-item';
 @import './local';
