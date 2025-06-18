@@ -20,6 +20,9 @@ import TaskListService from './taskListService'
 import TrailMonitoringService from './trailMonitoringService'
 import VariationService from './variationService'
 import ProbationDeliveryUnitService from './probationDeliveryUnitService'
+import CurfewAdditionalDetailsService from './curfewAdditionalDetailsService'
+import InstallationLocationService from './installationLocationService'
+import InstallationAppointmentService from './installationAppointmentService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -45,6 +48,9 @@ export const services = () => {
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
   const variationService = new VariationService(cemoApiClient)
   const probationDeliveryUnitService = new ProbationDeliveryUnitService(cemoApiClient)
+  const curfewAdditionalDetailsService = new CurfewAdditionalDetailsService(cemoApiClient)
+  const installationLocationService = new InstallationLocationService(cemoApiClient)
+  const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -54,6 +60,7 @@ export const services = () => {
     contactDetailsService,
     curfewReleaseDateService,
     curfewConditionsService,
+    curfewAdditionalDetailsService,
     curfewTimetableService,
     addressService,
     deviceWearerResponsibleAdultService,
@@ -68,6 +75,8 @@ export const services = () => {
     variationService,
     zoneService,
     probationDeliveryUnitService,
+    installationLocationService,
+    installationAppointmentService,
   }
 }
 
@@ -78,6 +87,7 @@ export {
   AuditService,
   ContactDetailsService,
   CurfewConditionsService,
+  CurfewAdditionalDetailsService,
   CurfewReleaseDateService,
   CurfewTimetableService,
   DeviceWearerResponsibleAdultService,
@@ -89,4 +99,5 @@ export {
   OrderService,
   TrailMonitoringService,
   ProbationDeliveryUnitService,
+  InstallationLocationService,
 }

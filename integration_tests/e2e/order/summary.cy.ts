@@ -280,6 +280,7 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
+            curfewAdditionalDetails: null,
           },
           curfewTimeTable: [
             {
@@ -290,6 +291,9 @@ context('Order Summary', () => {
               startTime: '',
             },
           ],
+          installationLocation: {
+            location: 'PRIMARY',
+          },
         },
       })
 
@@ -501,6 +505,7 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
+            curfewAdditionalDetails: null,
           },
           curfewTimeTable: [
             {

@@ -17,11 +17,24 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  curfewSection = (): PageElement => cy.contains('Curfew')
+  get curfewSection(): SummaryListComponent {
+    const label = 'Curfew'
+    return new SummaryListComponent(label)
+  }
 
   curfewTimetableSection = (): PageElement => cy.contains('Curfew Timetable')
 
   trailMonitoringConditionsSection = (): PageElement => cy.contains('Trail monitoring')
 
   alcoholMonitoringConditionsSection = (): PageElement => cy.contains('Alcohol monitoring')
+
+  installationLocationSection(): SummaryListComponent {
+    const label = 'Installation location'
+    return new SummaryListComponent(label)
+  }
+
+  installationAppointmentSection(): SummaryListComponent {
+    const label = 'Installation appointment'
+    return new SummaryListComponent(label)
+  }
 }
