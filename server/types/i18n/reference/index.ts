@@ -15,6 +15,7 @@ import OrderTypeDescriptions from './orderTypeDescriptions'
 import OrderTypes from './orderTypes'
 import Pilots from './pilots'
 import Prisons, { PrisonsDDv5 } from './prisons'
+import ProbationDeliveryUnits from './probationDeliveryUnits'
 import ProbationRegions from './probationRegions'
 import Relationship from './relationship'
 import ResponsibleOrganisations from './responsibleOrganisations'
@@ -25,6 +26,9 @@ import VariationTypes, { VariationTypesDDv5 } from './variationTypes'
 import YesNoUnknown from './yesNoUnknown'
 import YouthCourts from './youthCourts'
 import YouthJusticeServiceRegions from './youthJusticeServiceRegions'
+import ProbationRegionDeliveryUnits from './probationRegionDeliveryUnits'
+import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
+import InstallationLocations from './installationLocations'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -49,6 +53,7 @@ type ReferenceCatalogDDv4 = {
   variationTypes: VariationTypes
   yesNoUnknown: YesNoUnknown
   youthJusticeServiceRegions: YouthJusticeServiceRegions
+  installationLocations: InstallationLocations
 }
 
 type ReferenceCatalogDDv5 = {
@@ -70,6 +75,8 @@ type ReferenceCatalogDDv5 = {
   pilots: Pilots
   prisons: PrisonsDDv5
   probationRegions: ProbationRegions
+  probationDeliveryUnits: ProbationDeliveryUnits
+  probationRegionDeliveryUnits: ProbationRegionDeliveryUnits
   relationship: Relationship
   responsibleOrganisations: ResponsibleOrganisations
   riskCategories: RiskCategoriesDDv5
@@ -78,7 +85,9 @@ type ReferenceCatalogDDv5 = {
   variationTypes: VariationTypesDDv5
   yesNoUnknown: YesNoUnknown
   youthCourts: YouthCourts
+  youthCustodyServiceRegions: YouthCustodyServiceRegions
   youthJusticeServiceRegions: YouthJusticeServiceRegions
+  installationLocations: InstallationLocations
 }
 
 type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5

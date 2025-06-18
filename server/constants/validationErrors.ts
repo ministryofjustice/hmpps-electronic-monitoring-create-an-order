@@ -35,6 +35,10 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  curfewAdditionalDetails: {
+    changeCurfewDetailsRequired: string
+    curfewDetailsRequired: string
+  }
   enforcementZone: {
     descriptionRequired: string
     durationRequired: string
@@ -52,6 +56,13 @@ interface ValidationErrors {
   variationDetails: {
     variationDate: DateErrorMessages
     variationTypeRequired: string
+  }
+  installationLocation: {
+    locationRequired: string
+  }
+  installationAppointment: {
+    placeNameRequired: string
+    appointmentDate: DateTimeErrorMessages
   }
 }
 
@@ -144,7 +155,7 @@ const validationErrors: ValidationErrors = {
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeRequired: 'Select order type',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
   },
   monitoringConditionsAlcohol: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
@@ -160,6 +171,10 @@ const validationErrors: ValidationErrors = {
     addressesRequired: 'Select where the device wearer will be during curfew hours',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
+  },
+  curfewAdditionalDetails: {
+    changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",
+    curfewDetailsRequired: 'Enter detail of the curfew address boundary',
   },
   enforcementZone: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('enforcement zone'),
@@ -185,6 +200,28 @@ const validationErrors: ValidationErrors = {
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
     variationTypeRequired: 'Variation type is required',
+  },
+  installationLocation: {
+    locationRequired: 'Select where will installation of the electronic monitoring device take place',
+  },
+  installationAppointment: {
+    placeNameRequired: 'Enter name of the place where installation takes place',
+    appointmentDate: {
+      date: {
+        mustBeReal: `Date of installation must be a real date`,
+        mustIncludeDay: `Date of installation must include a day`,
+        mustIncludeMonth: `Date of installation must include a month`,
+        mustIncludeYear: `Date of installation must include a year`,
+        yearMustIncludeFourNumbers: `Year must include 4 numbers`,
+        required: `Enter date of installation `,
+      },
+      time: {
+        mustBeReal: `Time of installation must be a real time`,
+        mustIncludeHour: `Time of installation must include an hour`,
+        mustIncludeMinute: `Time of installation must include a minute`,
+        required: `Enter time of installation`,
+      },
+    },
   },
 }
 

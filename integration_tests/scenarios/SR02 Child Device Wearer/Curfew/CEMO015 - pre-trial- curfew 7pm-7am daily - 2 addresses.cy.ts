@@ -99,11 +99,12 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk: undefined,
           monitoringConditions,
-          installationAddressDetails: fakePrimaryAddress,
+          installationAddressDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
+          probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 

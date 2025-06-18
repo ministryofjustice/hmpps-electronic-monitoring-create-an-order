@@ -1,16 +1,16 @@
 import { VariationTypesDDv5 } from '../../../../types/i18n/reference/variationTypes'
 
 const variationTypesDDv5: VariationTypesDDv5 = {
-  CHANGE_TO_ADDRESS: 'Change to Address',
-  CHANGE_TO_PERSONAL_DETAILS: 'Change to Personal Details',
-  CHANGE_TO_ADD_AN_INCLUSION_OR_EXCLUSION_ZONES: 'Change to add an Inclusion or Exclusion Zone(s)',
-  CHANGE_TO_AN_EXISTING_INCLUSION_OR_EXCLUSION: 'Change to an existing Inclusion or Exclusion',
-  CHANGE_TO_CURFEW_HOURS: 'Change to Curfew Hours',
-  ORDER_SUSPENSION: 'Order Suspension',
-  CHANGE_TO_DEVICE_TYPE: 'Change to Device Type',
-  CHANGE_TO_ENFORCEABLE_CONDITION: 'Change to Enforceable Condition',
-  ADMIN_ERROR: 'Admin Error',
-  OTHER: 'Other',
+  CHANGE_TO_ADDRESS: 'The device wearer’s address',
+  CHANGE_TO_PERSONAL_DETAILS: 'The device wearer’s personal details',
+  CHANGE_TO_ADD_AN_EXCLUSION_ZONES: 'Change to add an exclusion zone(s)',
+  CHANGE_TO_AN_EXISTING_EXCLUSION: 'Change to an existing exclusion zone(s)',
+  CHANGE_TO_CURFEW_HOURS: 'The curfew hours',
+  ORDER_SUSPENSION: 'I am suspending monitoring for the device wearer',
+  CHANGE_TO_DEVICE_TYPE: 'Change to a device type',
+  CHANGE_TO_ENFORCEABLE_CONDITION: 'Change to an enforceable condition',
+  ADMIN_ERROR: 'I have changed something due to an administration error',
+  OTHER: 'I have changed something else in the form',
 }
 
 export default variationTypesDDv5

@@ -22,6 +22,7 @@ import Answer, {
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
 import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -70,6 +71,9 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
+    return []
+  }
   const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
     ':addressType(installation)',
     'installation',
@@ -170,13 +174,14 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
 
 const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+  const curfewAdditionalDetailsUri = paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id)
   const { questions } = content.pages.curfewConditions
+  const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
 
   if (!order.monitoringConditions.curfew) {
     return []
   }
-
-  return [
+  const answers = [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
     createMultipleAddressAnswer(
@@ -186,6 +191,19 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
       answerOpts,
     ),
   ]
+
+  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    answers.push(
+      createAnswer(
+        curfewAdditionalDetailsQuestions.provideDetails.text,
+        order.curfewConditions?.curfewAdditionalDetails,
+        curfewAdditionalDetailsUri,
+        answerOpts,
+      ),
+    )
+  }
+
+  return answers
 }
 
 const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
@@ -227,7 +245,7 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
 }
 
 const createAttendanceAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  if (!order.mandatoryAttendanceConditions) {
+  if (!order.monitoringConditions.mandatoryAttendance) {
     return []
   }
 
@@ -296,13 +314,52 @@ const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   ]
 }
 
+const createInstallationLocationAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
+
+  const { questions } = content.pages.installationLocation
+
+  if (!order.installationLocation) {
+    return []
+  }
+  return [
+    order.installationLocation?.location === 'PRIMARY'
+      ? createAddressAnswer(
+          questions.location.text,
+          order.addresses.find(({ addressType }) => addressType === order.installationLocation?.location),
+          uri,
+          answerOpts,
+        )
+      : createAnswer(
+          questions.location.text,
+          lookup(content.reference.installationLocations, order.installationLocation?.location),
+          uri,
+          answerOpts,
+        ),
+  ]
+}
+
+const createInstallationAppointmentAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id)
+
+  const { questions } = content.pages.installationAppointment
+
+  if (!order.installationAppointment) {
+    return []
+  }
+  return [
+    createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
+    createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+    createTimeAnswer(questions.appointmentTime.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+  ]
+}
+
 const createViewModel = (order: Order, content: I18n) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
   return {
     monitoringConditions: createMonitoringConditionsAnswers(order, content, ignoreActions),
-    installationAddress: createInstallationAddressAnswers(order, content, ignoreActions),
     curfew: createCurfewAnswers(order, content, ignoreActions),
     curfewReleaseDate: createCurfewReleaseDateAnswers(order, content, ignoreActions),
     curfewTimetable: createCurfewTimetableAnswers(order, ignoreActions),
@@ -310,7 +367,10 @@ const createViewModel = (order: Order, content: I18n) => {
     trail: createTrailAnswers(order, content, ignoreActions),
     attendance: createAttendanceAnswers(order, content, ignoreActions),
     alcohol: createAlcoholAnswers(order, content, ignoreActions),
+    installationLocation: createInstallationLocationAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    installationAddress: createInstallationAddressAnswers(order, content, ignoreActions),
+    installationAppointment: createInstallationAppointmentAnswer(order, content, ignoreActions),
   }
 }
 

@@ -24,7 +24,7 @@ export default class AttendanceMonitoringFormComponent extends FormComponent {
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'What date does mandatory attendance monitoring end? (optional)')
+    return new FormDateComponent(this.form, 'What date does mandatory attendance monitoring end?')
   }
 
   get purposeField(): FormInputComponent {
