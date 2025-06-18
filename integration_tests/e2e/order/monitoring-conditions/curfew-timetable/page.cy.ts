@@ -18,41 +18,19 @@ context('Monitoring conditions - Curfew timetable', () => {
       cy.signIn()
     })
 
-    it('Should display the user name visible in header', () => {
+    it('Should display contents', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
 
       page.header.userName().should('contain.text', 'J. Smith')
-    })
-
-    it('Should display the phase banner in header', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
-
       page.header.phaseBanner().should('contain.text', 'dev')
-    })
-
-    it('Should not indicate to the user that this is a submitted order', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
-
       page.submittedBanner.should('not.exist')
-    })
-
-    it('Should allow the user to update the curfew timetable details', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
-    })
-
-    it('Should display the timetable form', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
+      page.backButton.should('exist').should('have.attr', 'href', '#')
 
       page.form.shouldBeDisplayed()
       page.form.shouldBeEmpty()
-    })
-
-    it('Should be accessible', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
 
       page.checkIsAccessible()
     })
@@ -101,7 +79,7 @@ context('Monitoring conditions - Curfew timetable', () => {
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAndReturnButton.should('exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backButton.should('exist').should('have.attr', 'href', '#')
     })
 
     it('Should display the timetable form', () => {
@@ -194,7 +172,7 @@ context('Monitoring conditions - Curfew timetable', () => {
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()

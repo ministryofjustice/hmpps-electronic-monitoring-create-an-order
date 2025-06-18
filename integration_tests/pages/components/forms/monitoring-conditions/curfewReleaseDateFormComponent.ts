@@ -22,7 +22,7 @@ export default class CurfewReleaseDateFormComponent extends FormComponent {
   }
 
   get endTimeField(): FormTimeComponent {
-    return new FormTimeComponent(this.form, 'On the day of release, what time does the curfew end?')
+    return new FormTimeComponent(this.form, 'On the day after release, what time does the curfew end?')
   }
 
   get addressField(): FormRadiosComponent {
@@ -65,5 +65,9 @@ export default class CurfewReleaseDateFormComponent extends FormComponent {
     this.startTimeField.shouldBeDisabled()
     this.endTimeField.shouldBeDisabled()
     this.addressField.shouldNotHaveValidationMessage()
+  }
+
+  shouldHaveAllOptions(): void {
+    this.addressField.shouldHaveAllOptions()
   }
 }

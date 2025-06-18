@@ -29,9 +29,10 @@ context('Index', () => {
       page.newVariationFormButton.should('exist')
 
       // Order list
-      page.orders.should('exist').should('have.length', 2)
+      page.orders.should('exist').should('have.length', 3)
       page.SubmittedOrderFor('New form').should('exist')
       page.DraftOrderFor('test tester').should('exist')
+      page.FailedOrderFor('Failed request').should('exist')
 
       // A11y
       page.checkIsAccessible()

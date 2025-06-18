@@ -16,7 +16,7 @@ export default class CurfewConditionsFormComponent extends FormComponent {
   }
 
   get endDateField(): FormDateComponent {
-    return new FormDateComponent(this.form, 'What date does the curfew end? (optional)')
+    return new FormDateComponent(this.form, 'What date does the curfew end?')
   }
 
   get addressesField(): FormCheckboxesComponent {
@@ -53,5 +53,9 @@ export default class CurfewConditionsFormComponent extends FormComponent {
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
     this.addressesField.shouldBeDisabled()
+  }
+
+  shouldHaveAllOptions(): void {
+    this.addressesField.shouldHaveAllOptions()
   }
 }

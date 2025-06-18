@@ -1,8 +1,10 @@
 import I18n from '../../types/i18n'
+import DataDictionaryVersion from '../../types/i18n/dataDictionaryVersion'
 import alcoholPageContent from './pages/alcohol'
 import attendancePageContent from './pages/attendance'
 import contactDetailsPageContent from './pages/contactDetails'
 import curfewConditionsPageContent from './pages/curfewConditions'
+import curfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import curfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import curfewTimeTablePageContent from './pages/curfewTimetable'
 import deviceWearerPageContent from './pages/deviceWearer'
@@ -21,34 +23,43 @@ import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
 import variationDetailsPageContent from './pages/variationDetails'
-import reference from './reference'
+import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
+import installationLocationPageContent from './pages/installationLocation'
+import installationAppointmentPageContent from './pages/installationAppointment'
+import getReferenceData from './reference'
 
-const en: I18n = {
-  pages: {
-    alcohol: alcoholPageContent,
-    attendance: attendancePageContent,
-    contactDetails: contactDetailsPageContent,
-    curfewConditions: curfewConditionsPageContent,
-    curfewReleaseDate: curfewReleaseDatePageContent,
-    curfewTimetable: curfewTimeTablePageContent,
-    deviceWearer: deviceWearerPageContent,
-    exclusionZone: exclusionZonePageContent,
-    identityNumbers: identityNumbersPageContent,
-    installationAddress: installationAddressPageContent,
-    installationAndRisk: installationAndRiskPageContent,
-    interestedParties: interestedPartiesPageContent,
-    monitoringConditions: monitoringConditionsPageContent,
-    noFixedAbode: noFixedAbodePageContent,
-    primaryAddress: primaryAddressPageContent,
-    responsibleAdult: responsibleAdultPageContent,
-    secondaryAddress: secondaryAddressPageContent,
-    tertiaryAddress: tertiaryAddressPageContent,
-    trailMonitoring: trailMonitoringPageContent,
-    uploadLicense: uploadLicencePageContent,
-    uploadPhotoId: uploadPhotoIdPageContent,
-    variationDetails: variationDetailsPageContent,
-  },
-  reference,
+const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
+  return {
+    pages: {
+      alcohol: alcoholPageContent,
+      attendance: attendancePageContent,
+      contactDetails: contactDetailsPageContent,
+      curfewConditions: curfewConditionsPageContent,
+      curfewAdditionalDetails: curfewAdditionalDetailsPageContent,
+      curfewReleaseDate: curfewReleaseDatePageContent,
+      curfewTimetable: curfewTimeTablePageContent,
+      deviceWearer: deviceWearerPageContent,
+      exclusionZone: exclusionZonePageContent,
+      identityNumbers: identityNumbersPageContent,
+      installationAddress: installationAddressPageContent,
+      installationAndRisk: installationAndRiskPageContent,
+      interestedParties: interestedPartiesPageContent,
+      monitoringConditions: monitoringConditionsPageContent,
+      noFixedAbode: noFixedAbodePageContent,
+      primaryAddress: primaryAddressPageContent,
+      responsibleAdult: responsibleAdultPageContent,
+      secondaryAddress: secondaryAddressPageContent,
+      tertiaryAddress: tertiaryAddressPageContent,
+      trailMonitoring: trailMonitoringPageContent,
+      uploadLicense: uploadLicencePageContent,
+      uploadPhotoId: uploadPhotoIdPageContent,
+      variationDetails: variationDetailsPageContent,
+      probationDeliveryUnit: probationDeliveryUnitPageContent,
+      installationLocation: installationLocationPageContent,
+      installationAppointment: installationAppointmentPageContent,
+    },
+    reference: getReferenceData(ddVersion),
+  }
 }
 
-export default en
+export default getEnglishContent

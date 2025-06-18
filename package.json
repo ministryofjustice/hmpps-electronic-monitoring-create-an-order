@@ -19,7 +19,7 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "cy:run": "cypress run --config video=false",
@@ -36,6 +36,9 @@
     "npm": "^10"
   },
   "jest": {
+    "setupFiles": [
+      "<rootDir>/test/jest/jest.setup.ts"
+    ],
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",
@@ -96,14 +99,14 @@
     "compression": "^1.8.0",
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.0.3",
-    "csurf": "^1.11.0",
+    "csrf-sync": "^4.2.1",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "govuk-frontend": "^5.10.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
-    "multer": "^1.4.5-lts.2",
+    "multer": "^2.0.1",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
@@ -144,10 +147,10 @@
     "concurrently": "^9.1.2",
     "cypress": "^13.17.0",
     "cypress-axe": "^1.6.0",
-    "cypress-multi-reporters": "^1.6.4",
-    "cypress-parallel": "^0.14.0",
+    "cypress-multi-reporters": "^2.0.5",
+    "cypress-parallel": "^0.15.0",
     "dotenv": "^16.5.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.4",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",

@@ -1,33 +1,15 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
+import { getError, deserialiseDateTime } from '../../utils/utils'
 import { EnforcementZone } from '../EnforcementZone'
 import { EnforcementZoneFormData } from '../form-data/enforcementZone'
 import { ValidationResult } from '../Validation'
-import { DateField, TextField, ViewModel } from './utils'
+import { DateTimeField, TextField, ViewModel } from './utils'
 
 type EnforcementZoneViewModel = ViewModel<Pick<EnforcementZone, 'description' | 'duration'>> & {
-  endDate: DateField
-  startDate: DateField
+  endDate: DateTimeField
+  startDate: DateTimeField
   anotherZone: TextField
   file: TextField
-}
-
-const deserialiseDate = (dateString: string | null) => {
-  if (dateString === null || dateString === '') {
-    return {
-      day: '',
-      month: '',
-      year: '',
-    }
-  }
-
-  const date = new Date(dateString)
-
-  return {
-    day: date.getDate().toString(),
-    month: (date.getMonth() + 1).toString(),
-    year: date.getFullYear().toString(),
-  }
 }
 
 const constructFromFormData = (
@@ -49,9 +31,11 @@ const constructFromFormData = (
     },
     endDate: {
       value: {
-        day: formData.endDay,
-        month: formData.endMonth,
-        year: formData.endYear,
+        day: formData.endDate.day,
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes,
       },
       error: getError(validationErrors, 'endDate'),
     },
@@ -61,9 +45,11 @@ const constructFromFormData = (
     },
     startDate: {
       value: {
-        day: formData.startDay,
-        month: formData.startMonth,
-        year: formData.startYear,
+        day: formData.startDate.day,
+        month: formData.startDate.month,
+        year: formData.startDate.year,
+        hours: formData.startDate.hours,
+        minutes: formData.startDate.minutes,
       },
       error: getError(validationErrors, 'startDate'),
     },
@@ -86,13 +72,13 @@ const createFromEntity = (zoneId: number, enforcementZones: Array<EnforcementZon
       value: currentZone?.duration || '',
     },
     endDate: {
-      value: deserialiseDate(currentZone?.endDate || ''),
+      value: deserialiseDateTime(currentZone?.endDate || ''),
     },
     file: {
       value: '',
     },
     startDate: {
-      value: deserialiseDate(currentZone?.startDate || ''),
+      value: deserialiseDateTime(currentZone?.startDate || ''),
     },
     errorSummary: null,
   }

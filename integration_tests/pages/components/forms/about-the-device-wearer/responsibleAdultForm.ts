@@ -53,4 +53,8 @@ export default class ResponsibleAdultFormComponent extends FormComponent {
       this.relationshipDetailsField.set(profile.otherRelationshipDetails)
     }
   }
+
+  shouldHaveAllOptions(): void {
+    this.relationshipField.shouldHaveAllOptions()
+  }
 }

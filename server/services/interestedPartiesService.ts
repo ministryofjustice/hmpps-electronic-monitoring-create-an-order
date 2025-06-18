@@ -2,6 +2,7 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { InterestedPartiesFormData } from '../models/form-data/interestedParties'
 import InterestedPartiesModel, { InterestedParties } from '../models/InterestedParties'
+import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 
@@ -24,7 +25,7 @@ export default class InterestedPartiesService {
 
   private getResponsibleOrgansiationRegion(data: InterestedPartiesFormData) {
     if (data.responsibleOrganisation === 'PROBATION') {
-      return data.probationRegion
+      return data.responsibleOrgProbationRegion
     }
 
     if (data.responsibleOrganisation === 'YJS') {
@@ -35,16 +36,20 @@ export default class InterestedPartiesService {
   }
 
   private getNotifyingOrganisationName(data: InterestedPartiesFormData) {
-    if (data.notifyingOrganisation === 'PRISON') {
-      return data.prison
+    const lookup: Partial<Record<Exclude<NotifyingOrganisation, null>, string>> = {
+      CIVIL_COUNTY_COURT: data.civilCountyCourt,
+      CROWN_COURT: data.crownCourt,
+      FAMILY_COURT: data.familyCourt,
+      MAGISTRATES_COURT: data.magistratesCourt,
+      MILITARY_COURT: data.militaryCourt,
+      PRISON: data.prison,
+      PROBATION: data.notifyingOrgProbationRegion,
+      YOUTH_COURT: data.youthCourt,
+      YOUTH_CUSTODY_SERVICE: data.youthCustodyServiceRegion,
     }
 
-    if (data.notifyingOrganisation === 'CROWN_COURT') {
-      return data.crownCourt
-    }
-
-    if (data.notifyingOrganisation === 'MAGISTRATES_COURT') {
-      return data.magistratesCourt
+    if (data.notifyingOrganisation && data.notifyingOrganisation in lookup) {
+      return lookup[data.notifyingOrganisation] as Exclude<NotifyingOrganisation, null>
     }
 
     return ''

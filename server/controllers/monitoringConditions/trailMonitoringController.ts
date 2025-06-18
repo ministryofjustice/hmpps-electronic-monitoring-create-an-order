@@ -4,7 +4,7 @@ import { isValidationResult } from '../../models/Validation'
 import { AuditService } from '../../services'
 import TrailMonitoringService from '../../services/trailMonitoringService'
 import trailMonitoringViewModel from '../../models/view-models/trailMonitoring'
-import TrailMonitoringFormDataModel from '../../models/form-data/trailMonitoring'
+import { TrailMonitoringFormDataModel } from '../../models/form-data/trailMonitoring'
 import TaskListService from '../../services/taskListService'
 
 export default class TrailMonitoringController {

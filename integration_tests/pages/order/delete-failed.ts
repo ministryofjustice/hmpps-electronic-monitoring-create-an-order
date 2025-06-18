@@ -8,5 +8,5 @@ export default class DeleteFailedPage extends AppPage {
     super('You cannot delete an application that has been submitted', paths.ORDER.DELETE)
   }
 
-  backButton = (): PageElement => cy.get('#back-button')
+  backToStartButton = (): PageElement => cy.get('#back-button')
 }

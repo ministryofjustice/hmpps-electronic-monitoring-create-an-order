@@ -6,33 +6,35 @@ import {
   formatDateTime,
   isNullOrUndefined,
   lookup,
+  trimSeconds,
 } from '../../utils/utils'
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
 import { Order } from '../Order'
-import {
+import Answer, {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
   createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
   createAnswer,
+  AnswerOptions,
 } from '../../utils/checkYourAnswers'
-import sentenceTypes from '../../reference/sentence-types'
-import yesNoUnknown from '../../reference/yes-no-unknown'
 import I18n from '../../types/i18n'
+import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
     convertBooleanToEnum(order.monitoringConditions.curfew, '', 'Curfew', ''),
-    convertBooleanToEnum(order.monitoringConditions.exclusionZone, '', 'Exlusion zone', ''),
+    convertBooleanToEnum(order.monitoringConditions.exclusionZone, '', 'Exclusion zone', ''),
     convertBooleanToEnum(order.monitoringConditions.trail, '', 'Trail', ''),
     convertBooleanToEnum(order.monitoringConditions.mandatoryAttendance, '', 'Mandatory attendance', ''),
     convertBooleanToEnum(order.monitoringConditions.alcohol, '', 'Alcohol', ''),
   ].filter(val => val !== '')
 }
 
-const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
+const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
   const conditionType = lookup(content.reference.conditionTypes, order.monitoringConditions.conditionType)
   const orderType = lookup(content.reference.orderTypes, order.monitoringConditions.orderType)
@@ -40,30 +42,38 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n) => {
     content.reference.orderTypeDescriptions,
     order.monitoringConditions.orderTypeDescription,
   )
-  const sentenceType = lookup(sentenceTypes, order.monitoringConditions.sentenceType)
-  const issp = lookup(yesNoUnknown, order.monitoringConditions.issp)
-  const hdc = lookup(yesNoUnknown, order.monitoringConditions.hdc)
-  const prarr = lookup(yesNoUnknown, order.monitoringConditions.prarr)
+  const sentenceType = lookup(content.reference.sentenceTypes, order.monitoringConditions.sentenceType)
+  const issp = lookup(content.reference.yesNoUnknown, order.monitoringConditions.issp)
+  const hdc = lookup(content.reference.yesNoUnknown, order.monitoringConditions.hdc)
+  const prarr = lookup(content.reference.yesNoUnknown, order.monitoringConditions.prarr)
   const { questions } = content.pages.monitoringConditions
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
-  return [
-    createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts),
-    createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts),
-    createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts),
-    createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts),
-    createAnswer(questions.orderType.text, orderType, uri, answerOpts),
-    createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts),
-    createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
-    createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
-    createAnswer(questions.issp.text, issp, uri, answerOpts),
-    createAnswer(questions.hdc.text, hdc, uri, answerOpts),
-    createAnswer(questions.prarr.text, prarr, uri, answerOpts),
-    createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
-  ]
+  const answers: Answer[] = []
+  answers.push(createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts))
+  if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts))
+  answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
+  if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
+  answers.push(
+    ...[
+      createAnswer(questions.orderType.text, orderType, uri, answerOpts),
+      createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts),
+      createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
+      createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
+      createAnswer(questions.issp.text, issp, uri, answerOpts),
+      createAnswer(questions.hdc.text, hdc, uri, answerOpts),
+      createAnswer(questions.prarr.text, prarr, uri, answerOpts),
+      createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
+    ],
+  )
+  return answers
 }
 
-const createInstallationAddressAnswers = (order: Order, content: I18n) => {
+const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
+    return []
+  }
   const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
     ':addressType(installation)',
     'installation',
@@ -72,15 +82,11 @@ const createInstallationAddressAnswers = (order: Order, content: I18n) => {
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
 
-  return [
-    createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri, {
-      ignoreActions: order.status === 'SUBMITTED',
-    }),
-  ]
+  return [createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri, answerOpts)]
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
-  `${convertToTitleCase(schedule.dayOfWeek)} - ${schedule.startTime}-${schedule.endTime}`
+  `${convertToTitleCase(schedule.dayOfWeek)} - ${trimSeconds(schedule.startTime)}-${trimSeconds(schedule.endTime)}`
 
 const groupTimetableByAddress = (timetable: CurfewTimetable) =>
   timetable.reduce(
@@ -103,7 +109,7 @@ const groupTimetableByAddress = (timetable: CurfewTimetable) =>
     } as Record<Partial<AddressType>, Array<CurfewSchedule>>,
   )
 
-const createCurfewTimetableAnswers = (order: Order) => {
+const createCurfewTimetableAnswers = (order: Order, answerOpts: AnswerOptions) => {
   const timetable = order.curfewTimeTable
   const uri = paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
 
@@ -126,13 +132,11 @@ const createCurfewTimetableAnswers = (order: Order) => {
         ? `${convertToTitleCase(group)} address`
         : createAddressPreview(address)
 
-      return createMultipleChoiceAnswer(preview, groups[group].map(createSchedulePreview), uri, {
-        ignoreActions: order.status === 'SUBMITTED',
-      })
+      return createMultipleChoiceAnswer(preview, groups[group].map(createSchedulePreview), uri, answerOpts)
     })
 }
 
-const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
+const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
   const { questions } = content.pages.curfewReleaseDate
 
@@ -140,7 +144,6 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createDateAnswer(
       questions.releaseDate.text,
@@ -148,13 +151,18 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
       releaseDateUri,
       answerOpts,
     ),
-    createTimeAnswer(
+    createAnswer(
       questions.startTime.text,
-      order.curfewReleaseDateConditions?.startTime,
+      trimSeconds(order.curfewReleaseDateConditions?.startTime),
       releaseDateUri,
       answerOpts,
     ),
-    createTimeAnswer(questions.endTime.text, order.curfewReleaseDateConditions?.endTime, releaseDateUri, answerOpts),
+    createAnswer(
+      questions.endTime.text,
+      trimSeconds(order.curfewReleaseDateConditions?.endTime),
+      releaseDateUri,
+      answerOpts,
+    ),
     createAddressAnswer(
       questions.address.text,
       order.addresses.find(({ addressType }) => addressType === order.curfewReleaseDateConditions?.curfewAddress),
@@ -164,16 +172,16 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n) => {
   ]
 }
 
-const createCurfewAnswers = (order: Order, content: I18n) => {
+const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const conditionsUri = paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id)
+  const curfewAdditionalDetailsUri = paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id)
   const { questions } = content.pages.curfewConditions
+  const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
 
   if (!order.monitoringConditions.curfew) {
     return []
   }
-
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
-  return [
+  const answers = [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
     createMultipleAddressAnswer(
@@ -183,9 +191,22 @@ const createCurfewAnswers = (order: Order, content: I18n) => {
       answerOpts,
     ),
   ]
+
+  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    answers.push(
+      createAnswer(
+        curfewAdditionalDetailsQuestions.provideDetails.text,
+        order.curfewConditions?.curfewAdditionalDetails,
+        curfewAdditionalDetailsUri,
+        answerOpts,
+      ),
+    )
+  }
+
+  return answers
 }
 
-const createExclusionZoneAnswers = (order: Order, content: I18n) => {
+const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
   const { questions } = content.pages.exclusionZone
 
@@ -199,8 +220,6 @@ const createExclusionZoneAnswers = (order: Order, content: I18n) => {
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
       const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
-
-      const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
       return [
         createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts),
         createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts),
@@ -211,7 +230,7 @@ const createExclusionZoneAnswers = (order: Order, content: I18n) => {
     })
 }
 
-const createTrailAnswers = (order: Order, content: I18n) => {
+const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
   const { questions } = content.pages.trailMonitoring
 
@@ -219,15 +238,14 @@ const createTrailAnswers = (order: Order, content: I18n) => {
     return []
   }
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createDateAnswer(questions.startDate.text, order.monitoringConditionsTrail?.startDate, uri, answerOpts),
     createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri, answerOpts),
   ]
 }
 
-const createAttendanceAnswers = (order: Order, content: I18n) => {
-  if (!order.mandatoryAttendanceConditions) {
+const createAttendanceAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  if (!order.monitoringConditions.mandatoryAttendance) {
     return []
   }
 
@@ -238,14 +256,13 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
     )
     const { questions } = content.pages.attendance
 
-    const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
     return [
       createDateAnswer(questions.startDate.text, attendance.startDate, uri, answerOpts),
       createDateAnswer(questions.endDate.text, attendance.endDate, uri, answerOpts),
       createAnswer(questions.purpose.text, attendance.purpose, uri, answerOpts),
       createAnswer(questions.appointmentDay.text, attendance.appointmentDay, uri, answerOpts),
-      createAnswer(questions.startTime.text, attendance.startTime, uri, answerOpts),
-      createAnswer(questions.endTime.text, attendance.endTime, uri, answerOpts),
+      createAnswer(questions.startTime.text, trimSeconds(attendance.startTime), uri, answerOpts),
+      createAnswer(questions.endTime.text, trimSeconds(attendance.endTime), uri, answerOpts),
       createAddressAnswer(
         questions.address.text,
         {
@@ -262,7 +279,7 @@ const createAttendanceAnswers = (order: Order, content: I18n) => {
   })
 }
 
-const createAlcoholAnswers = (order: Order, content: I18n) => {
+const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id)
   const monitoringType = lookup(
     content.reference.alcoholMonitoringTypes,
@@ -273,8 +290,6 @@ const createAlcoholAnswers = (order: Order, content: I18n) => {
   if (!order.monitoringConditions.alcohol) {
     return []
   }
-
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' }
   return [
     createAnswer(questions.monitoringType.text, monitoringType, uri, answerOpts),
     createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri, answerOpts),
@@ -299,18 +314,63 @@ const createAlcoholAnswers = (order: Order, content: I18n) => {
   ]
 }
 
+const createInstallationLocationAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
+
+  const { questions } = content.pages.installationLocation
+
+  if (!order.installationLocation) {
+    return []
+  }
+  return [
+    order.installationLocation?.location === 'PRIMARY'
+      ? createAddressAnswer(
+          questions.location.text,
+          order.addresses.find(({ addressType }) => addressType === order.installationLocation?.location),
+          uri,
+          answerOpts,
+        )
+      : createAnswer(
+          questions.location.text,
+          lookup(content.reference.installationLocations, order.installationLocation?.location),
+          uri,
+          answerOpts,
+        ),
+  ]
+}
+
+const createInstallationAppointmentAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id)
+
+  const { questions } = content.pages.installationAppointment
+
+  if (!order.installationAppointment) {
+    return []
+  }
+  return [
+    createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
+    createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+    createTimeAnswer(questions.appointmentTime.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+  ]
+}
+
 const createViewModel = (order: Order, content: I18n) => {
+  const ignoreActions = {
+    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
+  }
   return {
-    monitoringConditions: createMonitoringConditionsAnswers(order, content),
-    installationAddress: createInstallationAddressAnswers(order, content),
-    curfew: createCurfewAnswers(order, content),
-    curfewReleaseDate: createCurfewReleaseDateAnswers(order, content),
-    curfewTimetable: createCurfewTimetableAnswers(order),
-    exclusionZone: createExclusionZoneAnswers(order, content),
-    trail: createTrailAnswers(order, content),
-    attendance: createAttendanceAnswers(order, content),
-    alcohol: createAlcoholAnswers(order, content),
+    monitoringConditions: createMonitoringConditionsAnswers(order, content, ignoreActions),
+    curfew: createCurfewAnswers(order, content, ignoreActions),
+    curfewReleaseDate: createCurfewReleaseDateAnswers(order, content, ignoreActions),
+    curfewTimetable: createCurfewTimetableAnswers(order, ignoreActions),
+    exclusionZone: createExclusionZoneAnswers(order, content, ignoreActions),
+    trail: createTrailAnswers(order, content, ignoreActions),
+    attendance: createAttendanceAnswers(order, content, ignoreActions),
+    alcohol: createAlcoholAnswers(order, content, ignoreActions),
+    installationLocation: createInstallationLocationAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    installationAddress: createInstallationAddressAnswers(order, content, ignoreActions),
+    installationAppointment: createInstallationAppointmentAnswer(order, content, ignoreActions),
   }
 }
 

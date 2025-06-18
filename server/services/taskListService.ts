@@ -2,6 +2,7 @@ import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import FeatureFlags from '../utils/featureFlags'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -27,6 +28,7 @@ const PAGES = {
   secondaryAddress: 'SECONDARY_ADDRESS',
   tertiaryAddress: 'TERTIARY_ADDRESS',
   interestParties: 'INTERESTED_PARTIES',
+  probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
   installationAndRisk: 'INSTALLATION_AND_RISK',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
@@ -34,6 +36,7 @@ const PAGES = {
   installationAddress: 'INSTALLATION_ADDRESS',
   curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewConditions: 'CURFEW_CONDITIONS',
+  curfewAdditionalDetails: 'CURFEW_ADDITIONAL_DETAILS',
   curfewTimetable: 'CURFEW_TIMETABLE',
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
   trailMonitoring: 'TRAIL_MONITORING',
@@ -42,6 +45,8 @@ const PAGES = {
   checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
   attachments: 'ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
+  installationLocation: 'INSTALLATION_LOCATION',
+  installationAppointment: 'INSTALLATION_APPOINTMENT',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
@@ -96,6 +101,16 @@ const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === 
 
 const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
   return order.addresses.find(address => address.addressType === addressType) !== undefined
+}
+
+const isCurfewOnly = (order: Order): boolean => {
+  return (
+    order.monitoringConditions.alcohol === false &&
+    order.monitoringConditions.curfew === true &&
+    order.monitoringConditions.exclusionZone === false &&
+    order.monitoringConditions.mandatoryAttendance === false &&
+    order.monitoringConditions.trail === false
+  )
 }
 
 export default class TaskListService {
@@ -212,6 +227,21 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.interestedParties),
     })
 
+    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.probationDeliveryUnit,
+        path: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.responsibleOrganisation === 'PROBATION',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.probationDeliveryUnit),
+      })
+    }
+
     tasks.push({
       section: SECTIONS.contactInformation,
       name: PAGES.checkAnswersContactInformation,
@@ -246,9 +276,43 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationLocation,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
+      state: convertBooleanToEnum<State>(
+        isCurfewOnly(order),
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.required,
+      ),
+      completed: isNotNullOrUndefined(order.installationLocation),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationAppointment,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.installationAppointment),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
-      state: STATES.required,
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'INSTALLATION' ||
+          order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
       completed: isCompletedAddress(order, 'INSTALLATION'),
     })
 
@@ -277,6 +341,23 @@ export default class TaskListService {
       ),
       completed: isNotNullOrUndefined(order.curfewConditions),
     })
+
+    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.electronicMonitoringCondition,
+        name: PAGES.curfewAdditionalDetails,
+        path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
+        state: convertBooleanToEnum<State>(
+          order.monitoringConditions.curfew,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(
+          order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null,
+        ),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,

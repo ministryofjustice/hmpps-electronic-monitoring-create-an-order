@@ -44,7 +44,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
-          variationType: 'Change of curfew hours',
+          variationType: 'The curfew hours',
           variationDate: new Date(2024, 1, 1),
         })
         page.form.variationDateField.setDay('q')

@@ -5,7 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { kelvinCloseAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -48,6 +48,7 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = kelvinCloseAddress
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -81,6 +82,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -93,7 +95,7 @@ context('Scenarios', () => {
             middle_name: '',
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
-            date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+            date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
             adult_child: 'adult',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -157,8 +159,8 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'Location Monitoring (Fitted Device)',
-                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate),
-                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate),
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -190,7 +192,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: '',
+                pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -217,7 +219,7 @@ context('Scenarios', () => {
                 conditional_release_date: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',

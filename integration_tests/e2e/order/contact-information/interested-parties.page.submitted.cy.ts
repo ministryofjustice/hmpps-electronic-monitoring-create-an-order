@@ -49,13 +49,13 @@ context('Contact information', () => {
         page.form.responsibleOfficerNameField.shouldHaveValue('John Smith')
         page.form.responsibleOfficerContactNumberField.shouldHaveValue('01234567890')
         page.form.responsibleOrganisationField.shouldHaveValue('Probation')
-        page.form.probationRegionField.shouldHaveValue('NORTH_EAST')
+        page.form.responsibleOrgProbationField.shouldHaveValue('NORTH_EAST')
         page.form.responsibleOrganisationEmailAddressField.shouldHaveValue('test2@test.com')
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
-        page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+        page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable
         page.form.shouldBeDisabled()

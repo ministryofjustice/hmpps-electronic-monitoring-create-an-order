@@ -16,27 +16,13 @@ context('Contact information', () => {
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('Should display contents', () => {
         const page = Page.visit(PrimaryAddressPage, {
           orderId: mockOrderId,
           'addressType(primary|secondary|tertiary)': 'primary',
         })
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(PrimaryAddressPage, {
-          orderId: mockOrderId,
-          'addressType(primary|secondary|tertiary)': 'primary',
-        })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
-
-      it('Should allow the user to update the primary address details', () => {
-        const page = Page.visit(PrimaryAddressPage, {
-          orderId: mockOrderId,
-          'addressType(primary|secondary|tertiary)': 'primary',
-        })
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAndReturnButton.should('exist')
@@ -50,6 +36,7 @@ context('Contact information', () => {
         page.form.postcodeField.shouldHaveValue('')
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
+        page.form.shouldHaveAllOptions()
       })
 
       // TODO: FAIL issue determining if autocomplete is valid

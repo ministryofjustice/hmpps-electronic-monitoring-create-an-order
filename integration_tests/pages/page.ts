@@ -86,13 +86,15 @@ export default abstract class Page {
   }
 
   constructor(
-    public readonly title: string,
+    public readonly title?: string,
     public readonly uri?: string | RegExp,
     public readonly subtitle?: string,
   ) {}
 
   checkOnPage(): void {
-    cy.get('h1', { log: false }).contains(this.title)
+    if (this.title) {
+      cy.get('h1', { log: false }).contains(this.title)
+    }
 
     if (this.subtitle) {
       cy.get('h2, legend', { log: false }).contains(this.subtitle)

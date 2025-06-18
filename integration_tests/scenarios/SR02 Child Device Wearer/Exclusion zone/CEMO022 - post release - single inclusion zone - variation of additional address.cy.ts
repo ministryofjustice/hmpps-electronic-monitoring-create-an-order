@@ -10,7 +10,7 @@ import {
   createFakeResponsibleAdult,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -105,6 +105,7 @@ context('Scenarios', () => {
         'Feltham Young Offender Institution',
         'London',
       )
+      const probationDeliveryUnit = { unit: 'Brent' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
@@ -123,7 +124,7 @@ context('Scenarios', () => {
       }
 
       const variationDetails = {
-        variationType: 'Change of address',
+        variationType: 'The device wearer’s address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
       let fakeVariationSecondaryAddress = createKnownAddress()
@@ -150,6 +151,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -174,6 +176,7 @@ context('Scenarios', () => {
           installationAddressDetails: fakeVariationSecondaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -186,7 +189,7 @@ context('Scenarios', () => {
             middle_name: '',
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
-            date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+            date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
             adult_child: 'child',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -284,7 +287,7 @@ context('Scenarios', () => {
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
                 order_variation_req_received_date: '',
-                order_variation_type: variationDetails.variationType,
+                order_variation_type: 'Change to Address',
                 pdu_responsible: '',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
@@ -312,7 +315,7 @@ context('Scenarios', () => {
                 conditional_release_date: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',
@@ -322,8 +325,8 @@ context('Scenarios', () => {
                   {
                     description: enforcementZoneDetails.description,
                     duration: enforcementZoneDetails.duration,
-                    start: enforcementZoneDetails.startDate.toISOString().split('T')[0],
-                    end: enforcementZoneDetails.endDate.toISOString().split('T')[0],
+                    start: formatAsFmsDate(enforcementZoneDetails.startDate),
+                    end: formatAsFmsDate(enforcementZoneDetails.endDate),
                   },
                 ],
                 inclusion_zones: [],

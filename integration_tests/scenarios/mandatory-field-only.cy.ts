@@ -34,6 +34,9 @@ import MonitoringConditionsCheckYourAnswersPage from '../pages/order/monitoring-
 import ContactInformationCheckYourAnswersPage from '../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
+import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
+import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
+import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -88,9 +91,11 @@ context('Mandatory fields only', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = fakeAddress
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
@@ -111,7 +116,9 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
       addresses: [/Main address/],
+      curfewAdditionalDetails: '',
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
@@ -125,6 +132,7 @@ context('Mandatory fields only', () => {
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 3000 * 60 * 60 * 24 * 10), // 30 days
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
@@ -137,6 +145,7 @@ context('Mandatory fields only', () => {
     // }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -192,13 +201,15 @@ context('Mandatory fields only', () => {
       primaryAddressPage.form.saveAndContinueButton.click()
 
       // no validation
-      let interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      // interestedPartiesPage.form.saveAndContinueButton.click()
-      interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
+
+      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+      probationDeliveryUnitPage.form.saveAndContinueButton.click()
 
       const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
         ContactInformationCheckYourAnswersPage,
@@ -233,6 +244,14 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - minimum', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
+      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.saveAndContinueButton.click()
+      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
+      installationLocationPage.form.saveAndContinueButton.click()
+
       let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
       installationAddressPage.form.saveAndContinueButton.click()
       installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
@@ -257,37 +276,45 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - minimum', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
 
+      let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
+      curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
+      curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
+      if (takeScreenshots) cy.screenshot('16. curfewAdditionalDetailsPage - validation', { overwrite: true })
+      curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
+      if (takeScreenshots) cy.screenshot('16. curfewAdditionalDetailsPage', { overwrite: true })
+      curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
+
       let curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
       curfewTimetablePage.form.saveAndContinueButton.click()
       curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-      if (takeScreenshots) cy.screenshot('16. curfewTimetablePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('17. curfewTimetablePage - validation', { overwrite: true })
       curfewTimetablePage.form.fillInWith(curfewTimetable)
-      if (takeScreenshots) cy.screenshot('16. curfewTimetablePage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('17. curfewTimetablePage - minimum', { overwrite: true })
       curfewTimetablePage.form.saveAndContinueButton.click()
 
       let enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
       enforcementZonePage.form.saveAndContinueButton.click()
       enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-      if (takeScreenshots) cy.screenshot('17. enforcementZonePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('18. enforcementZonePage - validation', { overwrite: true })
       enforcementZonePage.form.fillInWith(primaryEnforcementZoneDetails)
-      if (takeScreenshots) cy.screenshot('17. enforcementZonePage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('18. enforcementZonePage - minimum', { overwrite: true })
       enforcementZonePage.form.saveAndContinueButton.click()
 
       let trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
       trailMonitoringPage.form.saveAndContinueButton.click()
       trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      if (takeScreenshots) cy.screenshot('19. trailMonitoringPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('20. trailMonitoringPage - validation', { overwrite: true })
       trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      if (takeScreenshots) cy.screenshot('19. trailMonitoringPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('20. trailMonitoringPage - minimum', { overwrite: true })
       trailMonitoringPage.form.saveAndContinueButton.click()
 
       // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
       // let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
       // alcoholMonitoringPage.form.saveAndContinueButton.click()
       // alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - validation', { overwrite: true })
+      // if (takeScreenshots) cy.screenshot('21. alcoholMonitoringPage - validation', { overwrite: true })
       // alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
-      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
+      // if (takeScreenshots) cy.screenshot('21. alcoholMonitoringPage - minimum', { overwrite: true })
       // alcoholMonitoringPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
@@ -297,18 +324,18 @@ context('Mandatory fields only', () => {
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('22. attachmentPage', { overwrite: true })
       attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('21. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('23. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('22. indexPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('24. indexPageAfterSubmission', { overwrite: true })
       indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
@@ -348,9 +375,11 @@ context('Mandatory fields only', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = fakeAddress
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
       orderTypeDescription: 'DAPOL HDC',
       conditionType: 'Bail Order',
@@ -371,7 +400,9 @@ context('Mandatory fields only', () => {
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
       addresses: [/Main address/],
+      curfewAdditionalDetails: '',
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
@@ -385,6 +416,7 @@ context('Mandatory fields only', () => {
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 3000 * 60 * 60 * 24 * 10), // 30 days
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
@@ -397,6 +429,7 @@ context('Mandatory fields only', () => {
     // }
     const trailMonitoringOrder = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -468,6 +501,10 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('10. notifyingOrganisationPage - minimum', { overwrite: true })
       interestedPartiesPage.form.saveAndContinueButton.click()
 
+      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+      probationDeliveryUnitPage.form.saveAndContinueButton.click()
+
       const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
         ContactInformationCheckYourAnswersPage,
         'Check your answer',
@@ -501,6 +538,14 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - minimum', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
+      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.saveAndContinueButton.click()
+      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
+      installationLocationPage.form.saveAndContinueButton.click()
+
       let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
       installationAddressPage.form.saveAndContinueButton.click()
       installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
@@ -525,37 +570,45 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - minimum', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
 
+      let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
+      curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
+      curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
+      if (takeScreenshots) cy.screenshot('16. curfewAdditionalDetailsPage - validation', { overwrite: true })
+      curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
+      if (takeScreenshots) cy.screenshot('16. curfewAdditionalDetailsPage', { overwrite: true })
+      curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
+
       let curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
       curfewTimetablePage.form.saveAndContinueButton.click()
       curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-      if (takeScreenshots) cy.screenshot('16. curfewTimetablePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('17. curfewTimetablePage - validation', { overwrite: true })
       curfewTimetablePage.form.fillInWith(curfewTimetable)
-      if (takeScreenshots) cy.screenshot('16. curfewTimetablePage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('17. curfewTimetablePage - minimum', { overwrite: true })
       curfewTimetablePage.form.saveAndContinueButton.click()
 
       let enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
       enforcementZonePage.form.saveAndContinueButton.click()
       enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-      if (takeScreenshots) cy.screenshot('17. enforcementZonePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('18. enforcementZonePage - validation', { overwrite: true })
       enforcementZonePage.form.fillInWith(primaryEnforcementZoneDetails)
-      if (takeScreenshots) cy.screenshot('17. enforcementZonePage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('18. enforcementZonePage - minimum', { overwrite: true })
       enforcementZonePage.form.saveAndContinueButton.click()
 
       let trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
       trailMonitoringPage.form.saveAndContinueButton.click()
       trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      if (takeScreenshots) cy.screenshot('19. trailMonitoringPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('20. trailMonitoringPage - validation', { overwrite: true })
       trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      if (takeScreenshots) cy.screenshot('19. trailMonitoringPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('20. trailMonitoringPage - minimum', { overwrite: true })
       trailMonitoringPage.form.saveAndContinueButton.click()
 
       // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
       // let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
       // alcoholMonitoringPage.form.saveAndContinueButton.click()
       // alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - validation', { overwrite: true })
+      // if (takeScreenshots) cy.screenshot('21. alcoholMonitoringPage - validation', { overwrite: true })
       // alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
-      // if (takeScreenshots) cy.screenshot('20. alcoholMonitoringPage - minimum', { overwrite: true })
+      // if (takeScreenshots) cy.screenshot('21. alcoholMonitoringPage - minimum', { overwrite: true })
       // alcoholMonitoringPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
@@ -565,18 +618,18 @@ context('Mandatory fields only', () => {
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      if (takeScreenshots) cy.screenshot('21. attachmentPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('22. attachmentPage', { overwrite: true })
       attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('22. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('23. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('23. indexPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('24. indexPageAfterSubmission', { overwrite: true })
       indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })

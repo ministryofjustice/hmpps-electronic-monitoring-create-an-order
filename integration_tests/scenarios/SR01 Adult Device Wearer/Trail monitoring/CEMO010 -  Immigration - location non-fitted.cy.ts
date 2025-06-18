@@ -15,12 +15,13 @@ import InstallationAddressPage from '../../../pages/order/monitoring-conditions/
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -133,6 +134,10 @@ context.skip('Scenarios', () => {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
+      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      installationLocationPage.form.saveAndContinueButton.click()
+
       const installationAddress = Page.verifyOnPage(InstallationAddressPage)
       installationAddress.form.fillInWith(fakePrimaryAddress)
       installationAddress.form.saveAndContinueButton.click()
@@ -162,7 +167,7 @@ context.skip('Scenarios', () => {
           middle_name: '',
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
-          date_of_birth: deviceWearerDetails.dob.toISOString().split('T')[0],
+          date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
           adult_child: 'adult',
           sex: deviceWearerDetails.sex
             .replace('Not able to provide this information', 'Prefer Not to Say')
@@ -227,8 +232,8 @@ context.skip('Scenarios', () => {
               enforceable_condition: [
                 {
                   condition: 'Location Monitoring (Fitted Device)',
-                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate),
-                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate),
+                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate, 0, 0),
+                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
                 },
               ],
               exclusion_allday: '',
@@ -287,7 +292,7 @@ context.skip('Scenarios', () => {
               conditional_release_date: '',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: monitoringConditions.endDate.toISOString().split('T')[0],
+              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
               curfew_description: '',
               curfew_start: '',
               curfew_end: '',

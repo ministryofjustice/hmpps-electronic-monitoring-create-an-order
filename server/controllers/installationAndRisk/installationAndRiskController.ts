@@ -20,6 +20,7 @@ export default class InstallationAndRiskController {
   private createApiModelFromFormData(formData: InstallationAndRiskFormData): InstallationAndRisk {
     return {
       offence: formData.offence ?? null,
+      offenceAdditionalDetails: formData.offenceAdditionalDetails ?? null,
       riskCategory: formData.riskCategory ?? null,
       riskDetails: formData.riskDetails ?? null,
       mappaLevel: formData.mappaLevel ?? null,

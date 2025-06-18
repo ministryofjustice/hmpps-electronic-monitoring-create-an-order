@@ -26,8 +26,8 @@ context('Confirm delete', () => {
   it('should have a button that links to request form summary page for download', () => {
     cy.visit(`/order/${mockOrderId}/delete`)
     const page = Page.verifyOnPage(DeleteConfirmPage)
-    page.backButton().should('exist')
-    page.backButton().click()
+    page.backToStartButton().should('exist')
+    page.backToStartButton().click()
     Page.verifyOnPage(OrderTasksPage)
   })
 
@@ -38,8 +38,8 @@ context('Confirm delete', () => {
     page.confirmDeleteButton().should('exist')
     page.confirmDeleteButton().click()
     const deleteFailedPage = Page.verifyOnPage(DeleteFailedPage)
-    deleteFailedPage.backButton().should('exist')
-    deleteFailedPage.backButton().click()
+    deleteFailedPage.backToStartButton().should('exist')
+    deleteFailedPage.backToStartButton().click()
     Page.verifyOnPage(IndexPage)
   })
 
@@ -50,8 +50,8 @@ context('Confirm delete', () => {
     page.confirmDeleteButton().should('exist')
     page.confirmDeleteButton().click()
     const deleteSuccessPage = Page.verifyOnPage(DeleteSuccessPage)
-    deleteSuccessPage.backButton().should('exist')
-    deleteSuccessPage.backButton().click()
+    deleteSuccessPage.backToStartButton().should('exist')
+    deleteSuccessPage.backToStartButton().click()
     Page.verifyOnPage(IndexPage)
   })
 })

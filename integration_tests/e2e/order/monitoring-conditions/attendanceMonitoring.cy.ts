@@ -107,6 +107,7 @@ context('Attendance monitoring', () => {
       const page = Page.verifyOnPage(AttendanceMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
+      page.form.shouldHaveAllOptions()
     })
   })
 
@@ -141,7 +142,7 @@ context('Attendance monitoring', () => {
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAndReturnButton.should('not.exist')
       page.errorSummary.shouldNotExist()
-      page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.backButton.should('exist').should('have.attr', 'href', '#')
     })
   })
 

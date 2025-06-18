@@ -15,6 +15,7 @@ const mockSubmittedCurfewConditions = {
     startDate: '2025-03-27T00:00:00.000Z',
     orderId: mockOrderId,
     endDate: '2026-04-28T00:00:00.000Z',
+    curfewAdditionalDetails: '',
   },
   id: mockOrderId,
 }
@@ -57,6 +58,7 @@ const mockEmptyCurfewConditions = {
     orderId: mockOrderId,
     startDate: null,
     endDate: null,
+    curfewAdditionalDetails: null,
   },
   addresses: [
     {
@@ -114,6 +116,7 @@ context('Curfew conditions', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
       page.header.userName().should('contain.text', 'J. Smith')
+      page.form.shouldHaveAllOptions()
       page.errorSummary.shouldNotExist()
     })
   })
@@ -182,40 +185,26 @@ context('Curfew conditions', () => {
 
     context('Submitting an invalid order', () => {
       it('should show errors with an empty form submission', () => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: '/monitoring-conditions-curfew-conditions',
-          response: [
-            { field: 'startDate', error: 'You must enter a valid date' },
-            { field: 'endDate', error: 'You must enter a valid date' },
-            { field: 'curfewAddress', error: 'You must select a valid address' },
-          ],
-        })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
         const page = Page.verifyOnPage(CurfewConditionsPage)
         page.form.saveAndContinueButton.click()
-        cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-        cy.get('#endDate-error').should('contain', 'You must enter a valid date')
-        cy.get('#addresses-error').should('contain', 'You must select a valid address')
+        cy.get('#startDate-error').should('contain', 'Enter start date for curfew monitoring')
+        cy.get('#endDate-error').should('contain', 'Enter end date for curfew monitoring')
+        cy.get('#addresses-error').should('contain', 'Select where the device wearer will be during curfew hours')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('You must enter a valid date')
-        page.errorSummary.shouldHaveError('You must select a valid address')
+        page.errorSummary.shouldHaveError('Enter start date for curfew monitoring')
+        page.errorSummary.shouldHaveError('Enter end date for curfew monitoring')
+        page.errorSummary.shouldHaveError('Select where the device wearer will be during curfew hours')
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
         const page = Page.verifyOnPage(CurfewConditionsPage)
-        cy.get('#startDate-day').type('text')
+        cy.get('#startDate-year').type('text')
         page.form.saveAndContinueButton.click()
-        cy.get('#startDate-error').should(
-          'contain',
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        cy.get('#startDate-error').should('contain', 'Year must include 4 numbers')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.errorSummary.shouldHaveError('Year must include 4 numbers')
       })
 
       it('should show an error when endDate is provided in the wrong format', () => {
@@ -223,14 +212,9 @@ context('Curfew conditions', () => {
         const page = Page.verifyOnPage(CurfewConditionsPage)
         cy.get('#endDate-year').type('text')
         page.form.saveAndContinueButton.click()
-        cy.get('#endDate-error').should(
-          'contain',
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        cy.get('#endDate-error').should('contain', 'Year must include 4 numbers')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.errorSummary.shouldHaveError('Year must include 4 numbers')
       })
     })
 
@@ -250,7 +234,7 @@ context('Curfew conditions', () => {
         expect(requests[0]).to.deep.equal({
           curfewAddress: 'SECONDARY,TERTIARY',
           startDate: '2025-03-27T00:00:00.000Z',
-          endDate: '2026-04-28T00:00:00.000Z',
+          endDate: '2026-04-28T22:59:00.000Z',
         })
       })
       Page.verifyOnPage(CurfewTimetablePage)
