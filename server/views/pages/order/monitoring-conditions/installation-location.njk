@@ -1,0 +1,50 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% set section = content.pages.installationLocation.section %}
+{% set heading = content.pages.installationLocation.title %}
+{% set legend = content.pages.installationLocation.legend %}
+{% set helpText = content.pages.installationLocation.helpText %}
+{% set questions = content.pages.installationLocation.questions %}
+{% block formInputs %}
+ {% set items =[
+        {
+            value: "PRIMARY",
+            text: "Device wearer has no fixed address" if not primaryAddressView.value else primaryAddressView.value,
+            disabled: not isOrderEditable or not primaryAddressView.value
+        },           
+        {
+          value: "INSTALLATION",
+          text: "At another address",
+          disabled: not isOrderEditable
+        }
+    ] %}
+
+ {% if showTagAtSourceOptions %}
+       {% set items =  (items.push({
+            value: "PRISON",
+            text: "At a prison",
+            disabled: not isOrderEditable
+        },
+        {
+            value: "PROBATION_OFFICE",
+            text: "At a probation office",
+            disabled: not isOrderEditable 
+        }), items) %}
+       
+  {% endif%}
+
+{{ govukRadios({
+    name: "location",
+    fieldset: {
+      legend: {
+        text: questions.location.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },   
+    items: items,
+    value: location.value,
+    errorMessage: location.error
+  }) 
+}}
+{% endblock %}

@@ -58,7 +58,7 @@ export default class ProbationDeliveryUnitController {
       res.redirect(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT.replace(':orderId', orderId))
     } else if (action === 'continue') {
       res.redirect(
-        this.taskListService.getNextPage('INTERESTED_PARTIES', {
+        this.taskListService.getNextPage('PROBATION_DELIVERY_UNIT', {
           ...req.order!,
           probationDeliveryUnit: result,
         }),

@@ -36,6 +36,7 @@ import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
 import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
+import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -242,6 +243,14 @@ context('Mandatory fields only', () => {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - minimum', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
+
+      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.saveAndContinueButton.click()
+      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
+      installationLocationPage.form.saveAndContinueButton.click()
 
       let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
       installationAddressPage.form.saveAndContinueButton.click()
@@ -528,6 +537,14 @@ context('Mandatory fields only', () => {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - minimum', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
+
+      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.saveAndContinueButton.click()
+      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
+      installationLocationPage.form.saveAndContinueButton.click()
 
       let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
       installationAddressPage.form.saveAndContinueButton.click()
