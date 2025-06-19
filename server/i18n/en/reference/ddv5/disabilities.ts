@@ -5,7 +5,7 @@ const disabilitiesDDv5: DisabilitiesDDv5 = {
   HEARING: 'Deafness or serious hearing impairment',
   MOBILITY: 'Physical disability or mobility issue',
   DEXTERITY: 'Fine motor or dexterity impairment',
-  SKIN_CONDITION: 'Skin Condition',
+  SKIN_CONDITION: 'Skin condition',
   LEARNING_UNDERSTANDING_OR_CONCENTRATING:
     'Neurodiversity including conditions affecting learning, understanding or concentration',
   MEMORY: 'Condition affecting the memory or retaining information',
