@@ -1,5 +1,5 @@
 import z from 'zod'
-import { ValidationError, ValidationErrorModel } from '../../models/Validation'
+import { ValidationError } from '../../models/Validation'
 
 const dateModel = z.object({
   day: z.number().int().min(1).max(31),
@@ -7,12 +7,10 @@ const dateModel = z.object({
   year: z.number().int().min(1900).max(2200),
 })
 
-const DateValidationResonseModel = z.object({
-  result: z.boolean(),
-  error: ValidationErrorModel.optional(),
-})
-
-type DateValidationResponse = z.infer<typeof DateValidationResonseModel>
+type DateValidationResponse = {
+  result: boolean
+  error?: ValidationError
+}
 
 export default class DateValidator {
   static isValidDateFormat(dayStr: string, monthStr: string, yearStr: string, field: string): DateValidationResponse {
