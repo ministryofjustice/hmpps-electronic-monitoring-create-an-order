@@ -38,8 +38,7 @@ context('Access needs and installation risk information', () => {
         const validFormData = {
           offence: 'Robbery',
           offenceAdditionalDetails: '',
-          // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-          // riskCategory: 'Sex offender',
+          riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
@@ -53,9 +52,7 @@ context('Access needs and installation risk information', () => {
           body: {
             offence: 'ROBBERY',
             offenceAdditionalDetails: '',
-            // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-            // riskCategory: ['SEXUAL_OFFENCES'],
-            riskCategory: null,
+            riskCategory: ['SEXUAL_OFFENCES'],
             riskDetails: '',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -68,8 +65,7 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-          // riskCategory: 'Sex offender',
+          riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
@@ -86,8 +82,7 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-          // riskCategory: 'Sex offender',
+          riskCategory: 'Sex offender',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
