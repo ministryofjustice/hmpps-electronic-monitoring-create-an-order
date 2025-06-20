@@ -178,7 +178,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.riskCategory.text,
           },
           value: {
-            html: '',
+            html: 'Offensive towards someone because of their sex or gender',
           },
           actions: {
             items: [
@@ -289,7 +289,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.riskCategory.text,
           },
           value: {
-            html: '',
+            html: 'Offensive towards someone because of their sex or gender',
           },
           actions: {
             items: [
