@@ -12,7 +12,6 @@ type Disabilities = ReferenceData<
   | 'SOCIAL_BEHAVIOURAL'
   | 'OTHER'
   | 'NONE'
-  | 'PREFER_NOT_TO_SAY'
 >
 
 type DisabilitiesDDv5 = ReferenceData<

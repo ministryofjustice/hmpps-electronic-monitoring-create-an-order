@@ -12,7 +12,7 @@ const disabilitiesDDv5: DisabilitiesDDv5 = {
   MENTAL_HEALTH: 'Mental health condition',
   STAMINA_OR_BREATHING_OR_FATIGUE: 'Health condition affecting stamina, breathing or causing fatigue',
   SOCIALLY_OR_BEHAVIORALLY: 'Conditions affecting social skills and behaviour',
-  OTHER: 'The device wearer has a disability or health condition not listed ',
+  OTHER: 'The device wearer has a disability or health condition not listed',
   NONE_OF_THE_ABOVE: 'Not able to provide this information',
 }
 
