@@ -48,7 +48,7 @@ const MonitoringConditionsFormDataParser = z.object({
     .nullable()
     .default(null)
     .transform(val => (val === null ? 'UNKNOWN' : val)),
-  pilot: z.coerce.string(),
+  pilot: z.coerce.string().nullable(),
 })
 
 type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsFormDataParser>, 'action'>
@@ -65,7 +65,7 @@ const MonitoringConditionsFormDataValidator = z
     issp: z.string(),
     hdc: z.string(),
     prarr: z.string(),
-    pilot: z.string(),
+    pilot: z.string().nullable(),
   })
   .transform(({ monitoringRequired, orderType, orderTypeDescription, ...formData }) => ({
     orderType: orderType === '' ? null : orderType,
