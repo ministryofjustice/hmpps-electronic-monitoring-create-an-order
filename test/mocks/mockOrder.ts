@@ -52,6 +52,7 @@ export const createContactDetails = (overrideProperties?: Partial<ContactDetails
 export const createInstallationAndRisk = (overrideProperties?: Partial<InstallationAndRisk>): InstallationAndRisk => ({
   mappaCaseType: null,
   mappaLevel: null,
+  possibleRisk: null,
   riskCategory: null,
   riskDetails: null,
   offence: null,

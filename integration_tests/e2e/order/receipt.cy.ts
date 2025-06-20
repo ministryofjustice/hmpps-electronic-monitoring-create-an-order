@@ -122,7 +122,7 @@ context('Receipt', () => {
     page.riskInformationSection.shouldHaveItems([
       { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
       {
-        key: 'At installation what are the possible risks? (optional)',
+        key: 'At installation what are the possible risks at the insallation address? (optional)',
         value: 'Offensive towards someone because of their sex or gender',
       },
       { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
@@ -252,7 +252,7 @@ context('Receipt when app is submitted', () => {
     page.riskInformationSection.shouldHaveItems([
       { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
       {
-        key: 'At installation what are the possible risks? (optional)',
+        key: 'At installation what are the possible risks at the insallation address? (optional)',
         value: 'Offensive towards someone because of their sex or gender',
       },
       { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },

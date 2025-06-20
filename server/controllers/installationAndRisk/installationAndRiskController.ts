@@ -21,6 +21,7 @@ export default class InstallationAndRiskController {
     return {
       offence: formData.offence ?? null,
       offenceAdditionalDetails: formData.offenceAdditionalDetails ?? null,
+      possibleRisk: formData.possibleRisk ?? null,
       riskCategory: formData.riskCategory ?? null,
       riskDetails: formData.riskDetails ?? null,
       mappaLevel: formData.mappaLevel ?? null,
@@ -32,7 +33,7 @@ export default class InstallationAndRiskController {
     const { installationAndRisk } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = installationAndRiskViewModel.construct(installationAndRisk, errors as never, formData as never)
+    const viewModel = installationAndRiskViewModel.construct(installationAndRisk, formData as never, errors as never)
 
     res.render(`pages/order/installation-and-risk/index`, viewModel)
   }

@@ -53,7 +53,8 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            possibleRisk: ['RISK_TO_GENDER'],
+            riskCategory: ['IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -83,7 +84,7 @@ context('installation and risk - check your answers', () => {
         },
 
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
@@ -121,7 +122,8 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            possibleRisk: ['RISK_TO_GENDER'],
+            riskCategory: ['IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -160,8 +162,12 @@ context('installation and risk - check your answers', () => {
         },
 
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
+        },
+        {
+          key: 'At installation what are the possible risks at the insallation address? (optional)',
+          value: 'Managed through IOM',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
@@ -198,7 +204,8 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            possibleRisk: ['RISK_TO_GENDER'],
+            riskCategory: ['IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -237,7 +244,7 @@ context('installation and risk - check your answers', () => {
           value: 'some offence details',
         },
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
@@ -277,7 +284,8 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            possibleRisk: ['RISK_TO_GENDER'],
+            riskCategory: ['IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -299,7 +307,7 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldHaveItems([
         { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },

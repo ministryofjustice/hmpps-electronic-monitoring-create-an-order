@@ -1,0 +1,46 @@
+import { v4 as uuidv4 } from 'uuid'
+import Page from '../../../pages/page'
+import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+
+const mockOrderId = uuidv4()
+const apiPath = '/installation-and-risk'
+const possibleRiskError = 'Possible Risk is required'
+context('Access needs and installation risk information', () => {
+  context('Installation and Risk', () => {
+    context('Submitting invalid installation and risk information', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: [{ field: 'possibleRisk', error: possibleRiskError }],
+        })
+
+        cy.signIn()
+      })
+
+      it('should display error message', () => {
+        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+        const validFormData = {
+          offence: 'Robbery',
+          riskCategory: 'History of substance abuse',
+          riskDetails: '',
+          mappaLevel: 'MAPPA 1',
+          mappaCaseType: 'Serious Organised Crime',
+        }
+
+        page.form.fillInWith(validFormData)
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(InstallationAndRiskPage)
+        page.form.possibleRiskField.shouldHaveValidationMessage(possibleRiskError)
+        page.errorSummary.shouldHaveError(possibleRiskError)
+      })
+    })
+  })
+})

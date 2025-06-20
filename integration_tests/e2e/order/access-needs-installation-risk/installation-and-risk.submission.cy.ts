@@ -22,6 +22,7 @@ context('Access needs and installation risk information', () => {
           response: {
             offence: null,
             offenceAdditionalDetails: null,
+            possibleRisk: null,
             riskCategory: null,
             riskDetails: null,
             mappaLevel: null,
@@ -38,7 +39,8 @@ context('Access needs and installation risk information', () => {
         const validFormData = {
           offence: 'Robbery',
           offenceAdditionalDetails: '',
-          riskCategory: 'Sex offender',
+          possibleRisk: 'Sex offender',
+          riskCategory: 'History of substance abuse',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
@@ -52,7 +54,8 @@ context('Access needs and installation risk information', () => {
           body: {
             offence: 'ROBBERY',
             offenceAdditionalDetails: '',
-            riskCategory: ['SEXUAL_OFFENCES'],
+            possibleRisk: ['SEXUAL_OFFENCES'],
+            riskCategory: ['HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: '',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -65,7 +68,8 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sex offender',
+          possibleRisk: 'Sex offender',
+          riskCategory: 'History of substance abuse',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
@@ -82,7 +86,8 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sex offender',
+          possibleRisk: 'Sex offender',
+          riskCategory: 'History of substance abuse',
           riskDetails: '',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
