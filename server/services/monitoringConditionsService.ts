@@ -29,6 +29,7 @@ export default class MonitoringConditionsService {
       })
       return MonitoringConditionsModel.parse(result)
     } catch (e) {
+      console.log(e)
       if (e instanceof ZodError) {
         return convertZodErrorToValidationError(e)
       }
