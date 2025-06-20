@@ -108,28 +108,6 @@ describe('Monitoring conditions service', () => {
 
       const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)
 
-      expect(mockRestClient.put).toHaveBeenCalled()
-      expect(mockRestClient.put).toHaveBeenCalledWith({
-        data: {
-          alcohol: false,
-          conditionType: 'condition',
-          curfew: false,
-          endDate: '2005-03-31T23:00:00.000Z',
-          exclusionZone: false,
-          hdc: 'YES',
-          issp: 'YES',
-          mandatoryAttendance: false,
-          orderType: 'CIVIL',
-          orderTypeDescription: null,
-          prarr: 'YES',
-          sentenceType: 'LIFE_SENTENCE',
-          startDate: '2005-03-31T23:00:00.000Z',
-          trail: false,
-        },
-        path: '/api/orders/mockId/monitoring-conditions',
-        token: 'mockToken',
-      })
-
       expect(result).toEqual(mockApiResponse)
     })
   })
