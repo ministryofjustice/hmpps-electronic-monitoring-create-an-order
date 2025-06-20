@@ -10,7 +10,7 @@ import {
   MonitoringConditionsFormDataValidator,
 } from '../models/form-data/monitoringConditions'
 
-type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
+export type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string
   data: MonitoringConditionsFormData
 }
@@ -29,6 +29,7 @@ export default class MonitoringConditionsService {
       })
       return MonitoringConditionsModel.parse(result)
     } catch (e) {
+      console.log(e)
       if (e instanceof ZodError) {
         return convertZodErrorToValidationError(e)
       }

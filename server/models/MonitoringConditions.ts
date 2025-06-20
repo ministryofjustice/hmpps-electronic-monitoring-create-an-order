@@ -28,6 +28,7 @@ const MonitoringConditionsModel = z.object({
   issp: YesNoUnknownEnum.nullable(),
   hdc: YesNoUnknownEnum.nullable(),
   prarr: YesNoUnknownEnum.nullable(),
+  pilot: z.string().nullable(),
   isValid: z.boolean().default(false),
 })
 

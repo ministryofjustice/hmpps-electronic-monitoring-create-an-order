@@ -111,6 +111,7 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
+          pilot: 'undefined',
         },
       })
     })
@@ -166,6 +167,7 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
+          pilot: 'undefined',
         },
       })
     })
