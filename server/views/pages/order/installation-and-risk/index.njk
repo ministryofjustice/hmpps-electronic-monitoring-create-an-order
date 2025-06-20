@@ -50,8 +50,7 @@
       }) }}
   {% endif %}
  
-  {# Temporarily disabled until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765 #}
-  <div class="govuk-form-hidden-items">
+
     {{ govukCheckboxes({
       idPrefix: "riskCategory",
       name: "riskCategory[]",
@@ -68,7 +67,6 @@
       errorMessage: riskCategory.error,
       values: riskCategory.values
     }) }}
-  </div>
 
   {{ govukTextarea({
     name: "riskDetails",
