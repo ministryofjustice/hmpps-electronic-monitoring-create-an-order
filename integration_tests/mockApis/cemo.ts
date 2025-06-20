@@ -68,6 +68,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
   monitoringConditionsTrail: null,
   monitoringConditionsAlcohol: null,
