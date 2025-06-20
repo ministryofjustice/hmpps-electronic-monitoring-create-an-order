@@ -8,7 +8,7 @@ const MonitoringConditionsFormDataParser = z.object({
   monitoringRequired: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
-  orderTypeDescription: z.coerce.string(),
+  orderTypeDescription: z.coerce.string().nullable(),
   conditionType: z
     .string()
     .nullable()
@@ -57,7 +57,7 @@ const MonitoringConditionsFormDataValidator = z
   .object({
     orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
     monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
-    orderTypeDescription: z.string(),
+    orderTypeDescription: z.string().nullable(),
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),

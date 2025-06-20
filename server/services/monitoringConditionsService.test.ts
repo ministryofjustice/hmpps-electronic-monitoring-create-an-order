@@ -98,5 +98,17 @@ describe('Monitoring conditions service', () => {
 
       expect(result).toEqual(mockApiResponse)
     })
+
+    it('does not error if orderTypeDescription is null', async () => {
+      mockRestClient.put.mockResolvedValue(mockApiResponse)
+      const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
+      const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({
+        orderTypeDescription: null,
+      })
+
+      const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)
+
+      expect(result).toEqual(mockApiResponse)
+    })
   })
 })
