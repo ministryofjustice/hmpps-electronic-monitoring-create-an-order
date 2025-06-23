@@ -148,6 +148,10 @@ context('Mandatory fields only', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
 
+    const installationAndRisk = {
+      possibleRisk: 'Sex offender',
+      riskCategory: 'Children under the age of 18 are living at the property',
+    }
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
@@ -219,10 +223,10 @@ context('Mandatory fields only', () => {
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      // installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-      // installationAndRiskPage.fillInWith()
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 
@@ -431,6 +435,10 @@ context('Mandatory fields only', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
+    const installationAndRisk = {
+      possibleRisk: 'Sex offender',
+      riskCategory: 'Children under the age of 18 are living at the property',
+    }
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -513,10 +521,10 @@ context('Mandatory fields only', () => {
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      // installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-      // installationAndRiskPage.fillInWith()
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 

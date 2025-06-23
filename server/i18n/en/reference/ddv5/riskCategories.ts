@@ -1,10 +1,6 @@
 import { RiskCategoriesDDv5 } from '../../../../types/i18n/reference/riskCategories'
 
 const riskCategoriesDDv5: RiskCategoriesDDv5 = {
-  THREATS_OF_VIOLENCE: 'Violent behaviour or threats of violence',
-  SEXUAL_OFFENCES: 'Sex offender',
-  RISK_TO_GENDER: 'Offensive towards someone because of their sex or gender',
-  RACIAL_ABUSE_OR_THREATS: 'Offensive towards someone because of their race, nationality, ethnicity or national origin',
   HOMOPHOBIC_VIEWS: 'Offensive towards someone because of their sexual orientation',
   HISTORY_OF_SUBSTANCE_ABUSE: 'History of substance abuse',
   DIVERSITY_CONCERNS: 'Diversity concerns (mental health issues, learning difficulties etc)',

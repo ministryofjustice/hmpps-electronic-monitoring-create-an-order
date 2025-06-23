@@ -176,6 +176,10 @@ context('The kitchen sink', () => {
       duration: 'A second test duration: one, two, three...',
       anotherZone: 'No',
     }
+    const installationAndRisk = {
+      possibleRisk: 'Sex offender',
+      riskCategory: 'Children under the age of 18 are living at the property',
+    }
     // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
     // const alcoholMonitoringOrder = {
     //   startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -278,10 +282,10 @@ context('The kitchen sink', () => {
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      // installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-      // installationAndRiskPage.fillInWith()
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 
