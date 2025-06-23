@@ -5,11 +5,11 @@ const disabilities: Disabilities = {
   HEARING: 'Deafness or serious hearing impairment',
   MOBILITY: 'Physical disability or mobility issue',
   DEXTERITY: 'Fine motor or dexterity impairment',
-  LEARNING_UNDERSTANDING_CONCENTRATING:
+  LEARNING_UNDERSTANDING_OR_CONCENTRATING:
     'Neurodiversity including conditions affecting learning, understanding or concentration',
   MEMORY: 'Condition affecting the memory or retaining information',
   MENTAL_HEALTH: 'Mental health condition',
-  STAMINA_BREATHING_FATIGUE: 'Health condition affecting stamina, breathing or causing fatigue',
+  STAMINA_OR_BREATHING_OR_FATIGUE: 'Health condition affecting stamina, breathing or causing fatigue',
   SOCIAL_BEHAVIOURAL: 'Conditions affecting social skills and behaviour',
   OTHER: 'The device wearer has a disability or health condition not listed',
   NONE: 'Not able to provide this information',
