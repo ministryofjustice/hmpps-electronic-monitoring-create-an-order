@@ -81,6 +81,7 @@
       disabled: not isOrderEditable
     }) }}
 
+{% if not DDv5 %}
     {{ govukSelect({
       id: "orderTypeDescription",
       name: "orderTypeDescription",
@@ -100,6 +101,31 @@
       errorMessage: orderTypeDescription.error,
       disabled: not isOrderEditable
     }) }}
+{% endif %}
+    
+{% if DDv5 %}
+    {{ govukSelect({
+      id: "pilot",
+      name: "pilot",
+      label: {
+        text: questions.pilot.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      items: [
+        { text: 'Select', value: '' },
+        { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'something' },
+        { text: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)', value: 'something' },
+        { text: 'Domestic Abuse Perpetrator on Licence Project', value: 'something' },
+        { text: 'GPS Acquisitive Crime Home Detention Curfew', value: 'something' },
+        { text: 'GPS Acquisitive Crime Parole', value: 'something' },
+        { text: 'Acquisitive Crime Project', value: 'something' },
+        { text: 'Licence Variation Project', value: 'something' }
+      ],
+      value: pilot.value,
+      errorMessage: pilot.error,
+      disabled: not isOrderEditable
+    }) }}
+{% endif %}
 
     {{ govukRadios({
       classes: "govuk-radios",

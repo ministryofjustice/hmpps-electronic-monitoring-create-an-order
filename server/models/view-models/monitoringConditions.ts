@@ -5,6 +5,7 @@ import { MonitoringConditions } from '../MonitoringConditions'
 import { ValidationResult } from '../Validation'
 import { DateTimeField, MultipleChoiceField, ViewModel } from './utils'
 import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 type MonitoringConditionsViewModel = ViewModel<
   Pick<
@@ -16,6 +17,7 @@ type MonitoringConditionsViewModel = ViewModel<
   endDate: DateTimeField
   monitoringRequired: MultipleChoiceField
   monitoringConditionTimes: boolean
+  DDv5: boolean
 }
 
 const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): string[] => {
@@ -73,6 +75,7 @@ const createViewModelFromMonitoringConditions = (
   },
   errorSummary: null,
   monitoringConditionTimes: config.monitoringConditionTimes.enabled,
+  DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
 })
 
 const createViewModelFromFormData = (
@@ -131,6 +134,7 @@ const createViewModelFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     monitoringConditionTimes: config.monitoringConditionTimes.enabled,
+    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
