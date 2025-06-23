@@ -62,6 +62,10 @@ context('Scenarios', () => {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       }
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of'
+      
+      }
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -77,7 +81,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk: installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,

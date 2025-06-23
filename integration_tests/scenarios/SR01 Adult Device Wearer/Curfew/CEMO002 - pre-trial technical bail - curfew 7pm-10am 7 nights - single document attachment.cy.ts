@@ -116,6 +116,10 @@ context('Scenarios', () => {
         },
       ])
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of'
+      
+      }
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -130,7 +134,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk: installationAndRisk,
           monitoringConditions,
           installationAddressDetails: undefined,
           curfewReleaseDetails,

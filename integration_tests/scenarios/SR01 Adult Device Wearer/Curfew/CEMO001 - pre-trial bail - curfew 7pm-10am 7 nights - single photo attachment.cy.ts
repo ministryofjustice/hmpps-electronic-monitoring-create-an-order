@@ -88,7 +88,7 @@ context('Scenarios', () => {
 
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Sex offender',
+      possibleRisk: 'Sex offender',
       riskDetails: '',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
@@ -121,6 +121,7 @@ context('Scenarios', () => {
         addresses: curfewConditionDetails.addresses,
       },
     ])
+   
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()

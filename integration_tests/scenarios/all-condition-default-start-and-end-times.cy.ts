@@ -141,6 +141,10 @@ context('The kitchen sink', () => {
       unit: 'Blackburn',
     }
 
+    const installationAndRisk = {
+      possibleRisk: 'Sex offender',
+      riskCategory: 'Children under the age of 18 are living at the property'
+    }
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
@@ -154,7 +158,7 @@ context('The kitchen sink', () => {
         primaryAddressDetails,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk: installationAndRisk,
         monitoringConditions,
         installationAddressDetails,
         curfewReleaseDetails,
@@ -202,7 +206,12 @@ context('The kitchen sink', () => {
           risk_details: '',
           mappa: null,
           mappa_case_type: null,
-          risk_categories: [],
+          risk_categories: [{
+                 category: "Sexual Offences"
+               },
+              {
+                category: "Under 18 living at property"
+              }],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',
