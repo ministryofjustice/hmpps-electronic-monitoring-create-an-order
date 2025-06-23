@@ -88,7 +88,7 @@ context('Scenarios', () => {
 
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Sex offender',
+      possibleRisk: 'Sex offender',
       riskDetails: '',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',

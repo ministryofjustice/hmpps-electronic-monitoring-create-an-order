@@ -67,6 +67,10 @@ context.skip('Scenarios', () => {
       installLocation: `at installation address: ${fakePrimaryAddress}`,
     }
 
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+    }
+
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
@@ -81,7 +85,7 @@ context.skip('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
         alcoholMonitoringDetails,

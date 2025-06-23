@@ -19,7 +19,7 @@ context('Access needs and installation risk information', () => {
             installationAndRisk: {
               offence: 'SEXUAL_OFFENCES',
               offenceAdditionalDetails: 'Information about offence',
-              riskCategory: ['RISK_TO_GENDER', 'SEXUAL_OFFENCES'],
+              riskCategory: ['SEXUAL_OFFENCES', 'DANGEROUS_ANIMALS'],
               riskDetails: 'Information about potential risks',
               mappaLevel: 'MAPPA 1',
               mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
@@ -43,8 +43,8 @@ context('Access needs and installation risk information', () => {
         // Should display the saved data
         page.form.offenceField.shouldHaveValue('SEXUAL_OFFENCES')
         page.form.offenceAdditionalDetailsField.shouldHaveValue('Information about offence')
-        page.form.riskCategoryField.shouldHaveValue('Offensive towards someone because of their sex or gender')
-        page.form.riskCategoryField.shouldHaveValue('Sex offender')
+        page.form.possibleRiskField.shouldHaveValue('Sex offender')
+        page.form.riskCategoryField.shouldHaveValue('Animals at the property, for example dogs')
         page.form.riskDetailsField.shouldHaveValue('Information about potential risks')
         page.form.mappaLevelField.shouldHaveValue('MAPPA 1')
         page.form.mappaCaseTypeField.shouldHaveValue('Terrorism Act, Counter Terrorism')

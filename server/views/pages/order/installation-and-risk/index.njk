@@ -50,6 +50,22 @@
       }) }}
   {% endif %}
  
+    {{ govukCheckboxes({
+      idPrefix: "possibleRisk",
+      name: "possibleRisk[]",
+      fieldset: {
+        legend: {
+          text: content.pages.installationAndRisk.questions.possibleRisk.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.installationAndRisk.questions.possibleRisk.hint
+      },
+      items: content.reference.possibleRisks | toOptions(not isOrderEditable) | addDivider(),
+      errorMessage: possibleRisk.error,
+      values: possibleRisk.values
+    }) }}
 
     {{ govukCheckboxes({
       idPrefix: "riskCategory",
