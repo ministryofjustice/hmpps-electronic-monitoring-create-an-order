@@ -78,7 +78,7 @@ context('Monitoring conditions', () => {
             issp: 'NO',
             hdc: 'YES',
             prarr: 'UNKNOWN',
-            pilot: '',
+            pilot: 'undefined',
           },
         }).should('be.true')
       })
