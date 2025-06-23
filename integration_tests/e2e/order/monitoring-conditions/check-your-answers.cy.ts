@@ -22,6 +22,7 @@ context('Check your answers', () => {
         issp: 'YES',
         hdc: 'NO',
         prarr: 'UNKNOWN',
+        pilot: '',
       },
       curfewReleaseDateConditions: {
         curfewAddress: '',
@@ -263,6 +264,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -352,6 +354,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -443,6 +446,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           curfewReleaseDateConditions: {
             curfewAddress: '',

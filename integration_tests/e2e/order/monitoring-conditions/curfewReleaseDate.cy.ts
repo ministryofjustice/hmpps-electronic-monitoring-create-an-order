@@ -69,6 +69,7 @@ const mockEmptyCurfewReleaseDate = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
   curfewReleaseDateConditions: {
     curfewAddress: null,
