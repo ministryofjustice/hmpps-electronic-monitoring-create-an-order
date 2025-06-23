@@ -150,7 +150,7 @@ context('Mandatory fields only', () => {
 
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
-      riskCategory: 'Children under the age of 18 are living at the property'
+      riskCategory: 'Children under the age of 18 are living at the property',
     }
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -223,10 +223,10 @@ context('Mandatory fields only', () => {
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-       installationAndRiskPage.form.saveAndContinueButton.click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-       installationAndRiskPage.form.fillInWith(installationAndRisk)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 
@@ -437,7 +437,7 @@ context('Mandatory fields only', () => {
     }
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
-      riskCategory: 'Children under the age of 18 are living at the property'
+      riskCategory: 'Children under the age of 18 are living at the property',
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -524,7 +524,7 @@ context('Mandatory fields only', () => {
       installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-       installationAndRiskPage.form.fillInWith(installationAndRisk)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - minimum', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 

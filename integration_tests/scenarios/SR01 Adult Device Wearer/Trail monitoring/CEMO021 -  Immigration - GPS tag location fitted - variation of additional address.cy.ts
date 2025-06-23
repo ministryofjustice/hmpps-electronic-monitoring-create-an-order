@@ -80,8 +80,7 @@ context.skip('Scenarios', () => {
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
     }
     const installationAndRisk = {
-      possibleRisk: 'There are no risks that the installer should be aware of'
-    
+      possibleRisk: 'There are no risks that the installer should be aware of',
     }
 
     it('Should successfully submit the order to the FMS API', () => {

@@ -9,8 +9,8 @@ const InstallationAndRiskFormDataModel = z.object({
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
   riskCategory: z
-  .union([z.string(), z.array(z.string()).default([])])
-  .transform(val => (Array.isArray(val) ? val : [val])),
+    .union([z.string(), z.array(z.string()).default([])])
+    .transform(val => (Array.isArray(val) ? val : [val])),
   riskDetails: z.string().nullable().default(null),
   mappaLevel: z.string().nullable().default(null),
   mappaCaseType: z.string().nullable().default(null),
@@ -28,8 +28,8 @@ const InstallationAndRiskFormDataValidator = z
   })
   .transform(({ riskCategory, possibleRisk, ...formData }) => ({
     riskCategory: [...possibleRisk, ...riskCategory],
-    possibleRisk: undefined,   
-        ...formData,
+    possibleRisk: undefined,
+    ...formData,
   }))
 
 type InstallationAndRiskFormData = z.infer<typeof InstallationAndRiskFormDataModel>

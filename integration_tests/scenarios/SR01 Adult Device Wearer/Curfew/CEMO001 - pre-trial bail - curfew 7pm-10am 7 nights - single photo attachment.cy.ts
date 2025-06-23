@@ -121,7 +121,6 @@ context('Scenarios', () => {
         addresses: curfewConditionDetails.addresses,
       },
     ])
-   
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()

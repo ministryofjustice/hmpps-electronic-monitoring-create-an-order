@@ -178,7 +178,7 @@ context('The kitchen sink', () => {
     }
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
-      riskCategory: 'Children under the age of 18 are living at the property'
+      riskCategory: 'Children under the age of 18 are living at the property',
     }
     // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
     // const alcoholMonitoringOrder = {
@@ -282,10 +282,10 @@ context('The kitchen sink', () => {
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-       installationAndRiskPage.form.saveAndContinueButton.click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-       installationAndRiskPage.form.fillInWith(installationAndRisk)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 
