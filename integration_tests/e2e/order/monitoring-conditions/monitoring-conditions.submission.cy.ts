@@ -18,6 +18,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
+  pilot: '',
 }
 
 const mockResponse = {
@@ -35,6 +36,7 @@ const mockResponse = {
   issp: 'YES',
   hdc: 'NO',
   prarr: 'UNKNOWN',
+  pilot: '',
 }
 
 context('Monitoring conditions', () => {
@@ -76,6 +78,7 @@ context('Monitoring conditions', () => {
             issp: 'NO',
             hdc: 'YES',
             prarr: 'UNKNOWN',
+            pilot: 'undefined',
           },
         }).should('be.true')
       })
@@ -92,6 +95,7 @@ context('Monitoring conditions', () => {
           issp: 'No',
           hdc: 'Yes',
           prarr: 'Not able to provide this information',
+          pilot: '',
         }
 
         const response = {
@@ -109,6 +113,7 @@ context('Monitoring conditions', () => {
           issp: 'YES',
           hdc: 'NO',
           prarr: 'UNKNOWN',
+          pilot: '',
         }
 
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })

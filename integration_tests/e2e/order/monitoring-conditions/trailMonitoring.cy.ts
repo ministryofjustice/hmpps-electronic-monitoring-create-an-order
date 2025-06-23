@@ -28,6 +28,7 @@ const mockEmptyTrailMonitoring = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
 }
 
@@ -53,6 +54,7 @@ const mockSubmittedTrailMonitoring = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
 }
 

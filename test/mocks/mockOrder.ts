@@ -111,6 +111,7 @@ export const createMonitoringConditions = (
   hdc: null,
   prarr: null,
   isValid: false,
+  pilot: null,
   ...overrideProperties,
 })
 

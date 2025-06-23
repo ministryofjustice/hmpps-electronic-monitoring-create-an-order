@@ -105,7 +105,7 @@ const createViewModelFromFormData = (
       error: getError(validationErrors, 'orderType'),
     },
     orderTypeDescription: {
-      value: formData.orderTypeDescription,
+      value: formData.orderTypeDescription || '',
       error: getError(validationErrors, 'orderTypeDescription'),
     },
     prarr: {
