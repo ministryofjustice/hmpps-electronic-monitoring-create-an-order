@@ -9,7 +9,7 @@ import config from '../../config'
 type MonitoringConditionsViewModel = ViewModel<
   Pick<
     MonitoringConditions,
-    'conditionType' | 'hdc' | 'issp' | 'orderType' | 'orderTypeDescription' | 'prarr' | 'sentenceType'
+    'conditionType' | 'hdc' | 'issp' | 'orderType' | 'orderTypeDescription' | 'prarr' | 'sentenceType' | 'pilot'
   >
 > & {
   startDate: DateTimeField
@@ -68,6 +68,9 @@ const createViewModelFromMonitoringConditions = (
   startDate: {
     value: deserialiseDateTime(monitoringConditions.startDate),
   },
+  pilot: {
+    value: monitoringConditions.pilot || '',
+  },
   errorSummary: null,
   monitoringConditionTimes: config.monitoringConditionTimes.enabled,
 })
@@ -121,6 +124,10 @@ const createViewModelFromFormData = (
       error: getError(validationErrors, 'startDate'),
       dateError: getError(validationErrors, 'startDate_date'),
       timeError: getError(validationErrors, 'startDate_time'),
+    },
+    pilot: {
+      value: formData.pilot || '',
+      error: getError(validationErrors, 'pilot'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     monitoringConditionTimes: config.monitoringConditionTimes.enabled,
