@@ -155,7 +155,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: fakeVariationSecondaryAddress,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           curfewReleaseDetails,

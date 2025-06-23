@@ -163,7 +163,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakeVariationPrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakeVariationPrimaryAddress,
           enforcementZoneDetails,
