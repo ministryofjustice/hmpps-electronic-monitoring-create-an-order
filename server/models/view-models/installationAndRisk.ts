@@ -5,6 +5,8 @@ import { InstallationAndRiskFormData } from '../form-data/installationAndRisk'
 import { InstallationAndRisk } from '../InstallationAndRisk'
 import { ValidationResult } from '../Validation'
 import { MultipleChoiceField, ViewModel } from './utils'
+import possibleRisks from '../../i18n/en/reference/possibleRisks'
+import riskCategories from '../../i18n/en/reference/riskCategories'
 
 type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk'>> & {
   riskCategory: MultipleChoiceField
@@ -61,10 +63,10 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
       value: installationAndRisk?.offenceAdditionalDetails || '',
     },
     possibleRisk: {
-      values: installationAndRisk?.possibleRisk || [],
+      values: installationAndRisk?.riskCategory?.filter(it => Object.keys(possibleRisks).indexOf(it) !== -1) || [],
     },
     riskCategory: {
-      values: installationAndRisk?.riskCategory || [],
+      values: installationAndRisk?.riskCategory?.filter(it => Object.keys(riskCategories).indexOf(it) !== -1) || [],
     },
     riskDetails: {
       value: installationAndRisk?.riskDetails || '',

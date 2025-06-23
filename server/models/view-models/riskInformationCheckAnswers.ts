@@ -33,7 +33,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   answers.push(
     createMultipleChoiceAnswer(
       questions.possibleRisk.text,
-      order.installationAndRisk?.possibleRisk?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
+      order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
       uri,
       answerOpts,
     ),

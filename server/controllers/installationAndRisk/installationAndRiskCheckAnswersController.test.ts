@@ -157,8 +157,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
         offenceAdditionalDetails: 'some offence details',
-        possibleRisk: ['RISK_TO_GENDER'],
-        riskCategory: [],
+        riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
         mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -285,8 +284,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
         offenceAdditionalDetails: 'some offence details',
-        possibleRisk: ['RISK_TO_GENDER'],
-        riskCategory: [],
+        riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
         mappaCaseType: 'SOC (Serious Organised Crime)',

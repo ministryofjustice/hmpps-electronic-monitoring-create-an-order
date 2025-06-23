@@ -22,7 +22,6 @@ context('Access needs and installation risk information', () => {
           response: {
             offence: null,
             offenceAdditionalDetails: null,
-            possibleRisk: null,
             riskCategory: null,
             riskDetails: null,
             mappaLevel: null,
@@ -54,8 +53,7 @@ context('Access needs and installation risk information', () => {
           body: {
             offence: 'ROBBERY',
             offenceAdditionalDetails: '',
-            possibleRisk: ['SEXUAL_OFFENCES'],
-            riskCategory: ['HISTORY_OF_SUBSTANCE_ABUSE'],
+            riskCategory: ['SEXUAL_OFFENCES', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: '',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
