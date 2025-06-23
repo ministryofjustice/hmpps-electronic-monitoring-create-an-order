@@ -53,8 +53,8 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            possibleRisk: ['RISK_TO_GENDER'],
-            riskCategory: ['IOM'],
+
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -122,8 +122,7 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            possibleRisk: ['RISK_TO_GENDER'],
-            riskCategory: ['IOM'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -169,6 +168,10 @@ context('installation and risk - check your answers', () => {
           key: 'At installation what are the possible risks at the insallation address? (optional)',
           value: 'Managed through IOM',
         },
+        {
+          key: 'At installation what are the possible risks at the insallation address? (optional)',
+          value: 'History of substance abuse',
+        },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
@@ -204,8 +207,7 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            possibleRisk: ['RISK_TO_GENDER'],
-            riskCategory: ['IOM'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -284,8 +286,7 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            possibleRisk: ['RISK_TO_GENDER'],
-            riskCategory: ['IOM'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
