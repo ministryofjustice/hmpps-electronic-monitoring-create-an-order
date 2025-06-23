@@ -10,7 +10,7 @@ import {
   MonitoringConditionsFormDataValidator,
 } from '../models/form-data/monitoringConditions'
 
-type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
+export type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string
   data: MonitoringConditionsFormData
 }

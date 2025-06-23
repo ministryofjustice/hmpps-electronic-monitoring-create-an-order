@@ -31,6 +31,7 @@ context('Monitoring conditions', () => {
               issp: 'YES',
               hdc: 'NO',
               prarr: 'UNKNOWN',
+              pilot: '',
             },
           },
         })
