@@ -92,7 +92,7 @@ context('Scenarios', () => {
         orderType: 'Pre-Trial',
         conditionType: 'Bail Order',
         monitoringRequired: 'Curfew',
-        pilot: 'DAPOL',
+        pilot: 'GPS Acquisitive Crime Parole',
         // sentenceType: 'DAPO'
       }
       const curfewReleaseDetails = {

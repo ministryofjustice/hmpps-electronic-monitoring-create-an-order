@@ -97,7 +97,7 @@ context('Mandatory fields only', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
-      pilot: 'DAPOL HDC',
+      pilot: 'GPS Acquisitive Crime Parole',
       conditionType: 'Bail Order',
       monitoringRequired: [
         'Curfew',
@@ -385,7 +385,7 @@ context('Mandatory fields only', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
-      pilot: 'DAPOL HDC',
+      pilot: 'GPS Acquisitive Crime Parole',
       conditionType: 'Bail Order',
       monitoringRequired: [
         'Curfew',

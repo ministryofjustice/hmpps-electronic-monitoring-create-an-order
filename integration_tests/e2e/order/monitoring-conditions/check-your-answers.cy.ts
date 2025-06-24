@@ -268,7 +268,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
-            pilot: 'DAPOL',
+            pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
           },
           installationLocation: {
             location: 'INSTALLATION',
