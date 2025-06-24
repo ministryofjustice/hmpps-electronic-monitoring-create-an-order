@@ -1,7 +1,6 @@
 import RiskCategories from '../../../types/i18n/reference/riskCategories'
 
 const riskCategories: RiskCategories = {
-  HOMOPHOBIC_VIEWS: 'Offensive towards someone because of their sexual orientation',
   HISTORY_OF_SUBSTANCE_ABUSE: 'History of substance abuse',
   DIVERSITY_CONCERNS: 'Diversity concerns (mental health issues, learning difficulties etc)',
   IOM: 'Managed through IOM',
