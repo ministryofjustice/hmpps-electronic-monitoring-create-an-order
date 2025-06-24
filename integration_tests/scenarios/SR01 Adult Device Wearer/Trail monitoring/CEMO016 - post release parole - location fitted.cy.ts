@@ -229,7 +229,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.pilot,
+              pilot: monitoringConditions.pilot,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
