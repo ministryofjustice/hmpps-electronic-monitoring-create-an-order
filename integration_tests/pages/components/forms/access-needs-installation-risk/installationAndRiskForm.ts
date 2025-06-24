@@ -43,6 +43,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   get possibleRiskField(): FormCheckboxesComponent {
     const label = "At installation what are the possible risks from the device wearer's behaviour?"
     return new FormCheckboxesComponent(this.form, label, [
+      'Offensive towards someone because of their sexual orientation',
       'Violent behaviour or threats of violence',
       'Sex offender',
       'Offensive towards someone because of their sex or gender',
@@ -54,7 +55,6 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   get riskCategoryField(): FormCheckboxesComponent {
     const label = 'At installation what are the possible risks at the insallation address? (optional)'
     return new FormCheckboxesComponent(this.form, label, [
-      'Offensive towards someone because of their sexual orientation',
       'History of substance abuse',
       'Diversity concerns (mental health issues, learning difficulties etc)',
       'Managed through IOM',
