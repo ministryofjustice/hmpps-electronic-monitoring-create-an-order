@@ -66,7 +66,7 @@ context.skip('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Immigration',
-      orderTypeDescription: 'DAPOL',
+      pilot: 'Acquisitive Crime Project',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
     }
@@ -262,7 +262,7 @@ context.skip('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',

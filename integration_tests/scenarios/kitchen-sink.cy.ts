@@ -120,7 +120,7 @@ context('The kitchen sink', () => {
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL HDC',
+      pilot: 'GPS Acquisitive Crime Parole',
       conditionType: 'Bail Order',
       monitoringRequired: [
         'Curfew',

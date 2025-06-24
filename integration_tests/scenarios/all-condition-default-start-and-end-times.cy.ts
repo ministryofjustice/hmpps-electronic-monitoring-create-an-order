@@ -94,7 +94,7 @@ context('The kitchen sink', () => {
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL HDC',
+      pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
       conditionType: 'Bail Order',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
     }
@@ -287,7 +287,7 @@ context('The kitchen sink', () => {
             order_request_type: 'New Order',
             order_start: formatAsFmsDateTime(monitoringConditions.startDate),
             order_type: monitoringConditions.orderType,
-            order_type_description: monitoringConditions.orderTypeDescription,
+            order_type_description: null,
             order_type_detail: '',
             order_variation_date: '',
             order_variation_details: '',
