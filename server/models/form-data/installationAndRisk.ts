@@ -3,8 +3,8 @@ import { validationErrors } from '../../constants/validationErrors'
 
 const InstallationAndRiskFormDataModel = z.object({
   action: z.string().default('continue'),
-  offence: z.string().optional(),
-  offenceAdditionalDetails: z.string().optional(),
+  offence: z.string().nullable().default(null),
+  offenceAdditionalDetails: z.string().nullable().default(null),
   possibleRisk: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
