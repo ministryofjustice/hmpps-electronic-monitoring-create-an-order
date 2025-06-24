@@ -12,7 +12,7 @@ type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCat
   riskCategory: MultipleChoiceField
   possibleRisk: MultipleChoiceField
   mappaEnabled: boolean
-  ddVersion5: boolean
+  ddVersion: string
 }
 
 const constructFromFormData = (
@@ -50,7 +50,7 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    ddVersion: FeatureFlags.getInstance().get('DD_VERSION'),
   }
 }
 
@@ -79,7 +79,7 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
     },
     errorSummary: null,
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    ddVersion: FeatureFlags.getInstance().get('DD_VERSION'),
   }
 }
 

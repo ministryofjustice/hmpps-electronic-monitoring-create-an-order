@@ -60,7 +60,7 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 }
 
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
-  const ddv5 = FeatureFlags.getInstance().get('DD_V5_1_ENABLED')
+  const ddVersion = FeatureFlags.getInstance().get('DD_VERSION')
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
 
@@ -97,7 +97,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     ]
   }
 
-  if (ddv5) {
+  if (ddVersion === '5') {
     if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
       return [
         createAnswer(
@@ -255,7 +255,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   const { questions } = content.pages.probationDeliveryUnit
   const result = []
   if (
-    FeatureFlags.getInstance().get('DD_V5_1_ENABLED') &&
+    FeatureFlags.getInstance().get('DD_VERSION') === '5' &&
     order.interestedParties?.responsibleOrganisation === 'PROBATION'
   ) {
     result.push(

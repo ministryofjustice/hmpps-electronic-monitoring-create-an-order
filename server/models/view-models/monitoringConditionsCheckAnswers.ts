@@ -192,7 +192,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
     ),
   ]
 
-  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+  if (FeatureFlags.getInstance().get('DD_VERSION') === '5') {
     answers.push(
       createAnswer(
         curfewAdditionalDetailsQuestions.provideDetails.text,

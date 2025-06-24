@@ -28,7 +28,9 @@ export const createMockResponse = (): Response => {
     locals: {
       content: getContent(
         Locales.en,
-        FeatureFlags.getInstance().get('DD_V5_1_ENABLED') ? DataDictionaryVersions.DDv5 : DataDictionaryVersions.DDv4,
+        FeatureFlags.getInstance().get('DD_VERSION') === '5'
+          ? DataDictionaryVersions.DDv5
+          : DataDictionaryVersions.DDv4,
       ),
       user: {
         username: 'fakeUserName',

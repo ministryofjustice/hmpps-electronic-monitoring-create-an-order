@@ -64,7 +64,7 @@ context('Access needs and installation risk information', () => {
       })
 
       context('With DDv5 enabled', () => {
-        const testFlags = { DD_V5_1_ENABLED: true }
+        const testFlags = { DD_VERSION: '5' }
         beforeEach(() => {
           cy.task('setFeatureFlags', testFlags)
         })
@@ -88,8 +88,8 @@ context('Access needs and installation risk information', () => {
         })
       })
 
-      context('With DDv5 disabled', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
+      context('With DDv4 enabled', () => {
+        const testFlags = { DD_VERSION: '4' }
         beforeEach(() => {
           cy.task('setFeatureFlags', testFlags)
         })

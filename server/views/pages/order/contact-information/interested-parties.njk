@@ -48,7 +48,7 @@
   }) }}
 {% endset %}
 
-{% if DDv5 %}
+{% if ddVersion === "5" %}
   {% set civilCountyCourtHtml %}
     {{ accessibleAutocomplete({
       id: 'civilCountyCourt',
@@ -192,7 +192,7 @@
       disabled: org.disabled
     }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'MILITARY_COURT' %}
+  {% elif ddVersion == "5" and org.value == 'MILITARY_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
@@ -212,7 +212,7 @@
       disabled: org.disabled
     }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'PROBATION' %}
+  {% elif ddVersion == "5" and org.value == 'PROBATION' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
@@ -222,7 +222,7 @@
       disabled: org.disabled
     }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'YOUTH_COURT' %}
+  {% elif ddVersion == "5" and org.value == 'YOUTH_COURT' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
@@ -232,7 +232,7 @@
       disabled: org.disabled
     }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'YOUTH_CUSTODY_SERVICE' %}
+  {% elif ddVersion == "5" and org.value == 'YOUTH_CUSTODY_SERVICE' %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,

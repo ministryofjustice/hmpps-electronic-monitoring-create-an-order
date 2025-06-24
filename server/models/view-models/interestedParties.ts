@@ -8,7 +8,7 @@ import { ValidationResult } from '../Validation'
 import { ViewModel } from './utils'
 
 type InterestedPartiesViewModel = ViewModel<NonNullable<InterestedParties>> & {
-  DDv5: boolean
+  ddVersion: string
 }
 
 const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) => {
@@ -80,7 +80,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'responsibleOrganisationEmail'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    ddVersion: FeatureFlags.getInstance().get('DD_VERSION'),
   }
 }
 
@@ -111,7 +111,7 @@ const constructFromEntity = (interestedParties: InterestedParties | null): Inter
       value: interestedParties?.responsibleOrganisationEmail ?? '',
     },
     errorSummary: null,
-    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    ddVersion: FeatureFlags.getInstance().get('DD_VERSION'),
   }
 }
 

@@ -42,7 +42,7 @@ context('Contact Information - check your answers', () => {
   })
 
   context('Device Wearer has no fixed address', () => {
-    const testFlags = { DD_V5_1_ENABLED: true }
+    const testFlags = { DD_VERSION: '5' }
     beforeEach(() => {
       cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
@@ -343,11 +343,11 @@ context('Contact Information - check your answers', () => {
       ])
     })
 
-    context('With DDv5 disabled', () => {
-      const disabledFlags = { DD_V5_1_ENABLED: false }
+    context('With DDv4 enabled', () => {
+      const featureFlags = { DD_VERSION: '4' }
 
       beforeEach(() => {
-        cy.task('setFeatureFlags', disabledFlags)
+        cy.task('setFeatureFlags', featureFlags)
       })
 
       afterEach(() => {
@@ -402,10 +402,10 @@ context('Contact Information - check your answers', () => {
     })
 
     context('With DDv5 enabled', () => {
-      const enabledFlags = { DD_V5_1_ENABLED: true }
+      const featureFlags = { DD_VERSION: '5' }
 
       beforeEach(() => {
-        cy.task('setFeatureFlags', enabledFlags)
+        cy.task('setFeatureFlags', featureFlags)
       })
 
       afterEach(() => {

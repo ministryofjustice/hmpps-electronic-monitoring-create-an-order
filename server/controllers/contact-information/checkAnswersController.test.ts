@@ -32,7 +32,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     controller = new CheckAnswersController(mockAuditService, taskListService)
-    process.env.DD_V5_1_ENABLED = 'true'
+    process.env.DD_VERSION = '5'
   })
 
   it('should render the check answers page without any answers completed', async () => {

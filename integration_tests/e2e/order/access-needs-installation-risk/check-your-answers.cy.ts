@@ -270,8 +270,8 @@ context('installation and risk - check your answers', () => {
       page.returnButton().contains('Return to main form menu')
     })
   })
-  context('when ddv5 is not enabled', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
+  context('With DDv4 enabled', () => {
+    const testFlags = { DD_VERSION: '4' }
     const pageHeading = 'View answers'
     beforeEach(() => {
       cy.task('setFeatureFlags', testFlags)

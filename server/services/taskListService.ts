@@ -227,7 +227,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.interestedParties),
     })
 
-    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    if (FeatureFlags.getInstance().get('DD_VERSION') === '5') {
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.probationDeliveryUnit,
@@ -342,7 +342,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.curfewConditions),
     })
 
-    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    if (FeatureFlags.getInstance().get('DD_VERSION') === '5') {
       tasks.push({
         section: SECTIONS.electronicMonitoringCondition,
         name: PAGES.curfewAdditionalDetails,

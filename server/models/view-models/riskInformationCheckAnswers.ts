@@ -19,7 +19,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
   )
-  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+  if (FeatureFlags.getInstance().get('DD_VERSION') === '5') {
     answers.push(
       createAnswer(
         questions.offenceAdditionalDetails.text,

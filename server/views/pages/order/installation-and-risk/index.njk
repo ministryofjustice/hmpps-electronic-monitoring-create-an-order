@@ -33,7 +33,7 @@
     disabled: not isOrderEditable
   }) }}
 
-  {% if ddVersion5 %}
+  {% if ddVersion === '5' %}
       {{ govukTextarea({
 	name: "offenceAdditionalDetails",
 	id: "offenceAdditionalDetails",
