@@ -103,7 +103,7 @@ describe(MonitoringConditionsController, () => {
           action: 'continue',
           orderType: 'undefined',
           monitoringRequired: [],
-          orderTypeDescription: 'undefined',
+          orderTypeDescription: '',
           conditionType: '',
           startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
           endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
@@ -111,7 +111,7 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
-          pilot: 'undefined',
+          pilot: '',
         },
       })
     })
@@ -159,7 +159,7 @@ describe(MonitoringConditionsController, () => {
           action: 'continue',
           orderType: 'undefined',
           monitoringRequired: [],
-          orderTypeDescription: 'undefined',
+          orderTypeDescription: '',
           conditionType: '',
           startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
           endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
@@ -167,7 +167,7 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
-          pilot: 'undefined',
+          pilot: '',
         },
       })
     })
