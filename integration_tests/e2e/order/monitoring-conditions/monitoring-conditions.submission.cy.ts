@@ -9,7 +9,6 @@ const apiPath = '/monitoring-conditions'
 
 const validFormData = {
   orderType: 'IMMIGRATION',
-  orderTypeDescription: 'GPS Acquisitive Crime HDC',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
@@ -18,7 +17,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
-  pilot: '',
+  pilot: 'GPS Acquisitive Crime Parole',
 }
 
 const mockResponse = {
@@ -36,7 +35,7 @@ const mockResponse = {
   issp: 'YES',
   hdc: 'NO',
   prarr: 'UNKNOWN',
-  pilot: '',
+  pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
 }
 
 context('Monitoring conditions', () => {
@@ -65,7 +64,7 @@ context('Monitoring conditions', () => {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
           body: {
             orderType: 'IMMIGRATION',
-            orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
+            orderTypeDescription: 'undefined',
             conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
             curfew: true,
             exclusionZone: true,
@@ -78,15 +77,14 @@ context('Monitoring conditions', () => {
             issp: 'NO',
             hdc: 'YES',
             prarr: 'UNKNOWN',
-            pilot: 'undefined',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
           },
         }).should('be.true')
       })
 
-      it('Should got to curfew page when curfew is only condition selected', () => {
+      it('Should go to curfew page when curfew is only condition selected', () => {
         const formData = {
           orderType: 'IMMIGRATION',
-          orderTypeDescription: 'GPS Acquisitive Crime HDC',
           monitoringRequired: ['Curfew'],
           conditionType: 'License Condition of a Custodial Order',
           startDate: new Date('2024-02-27T11:02:00Z'),
@@ -100,7 +98,6 @@ context('Monitoring conditions', () => {
 
         const response = {
           orderType: 'IMMIGRATION',
-          orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
           curfew: true,
           exclusionZone: false,

@@ -15,6 +15,7 @@ export type MonitoringConditionsFormData = {
   issp?: string
   hdc?: string
   prarr?: string
+  pilot?: string
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -157,6 +158,10 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
 
     if (data.prarr) {
       this.prarrField.set(data.prarr)
+    }
+
+    if (data.pilot) {
+      this.pilotField.set(data.pilot)
     }
   }
 
