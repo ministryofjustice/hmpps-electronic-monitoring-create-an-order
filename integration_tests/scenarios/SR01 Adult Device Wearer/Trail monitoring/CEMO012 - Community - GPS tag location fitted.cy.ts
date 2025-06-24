@@ -53,7 +53,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        orderTypeDescription: 'GPS Acquisitive Crime Parole',
+        pilot: 'GPS Acquisitive Crime Parole',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Standard Determinate Sentence',
@@ -189,7 +189,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: monitoringConditions.pilot,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',

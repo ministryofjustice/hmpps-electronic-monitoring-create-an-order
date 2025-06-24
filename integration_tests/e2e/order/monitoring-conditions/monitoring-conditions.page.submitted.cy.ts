@@ -26,12 +26,12 @@ context('Monitoring conditions', () => {
               mandatoryAttendance: true,
               alcohol: true,
               conditionType: 'BAIL_ORDER',
-              orderTypeDescription: 'DAPO',
+              orderTypeDescription: null,
               sentenceType: 'IPP',
               issp: 'YES',
               hdc: 'NO',
               prarr: 'UNKNOWN',
-              pilot: '',
+              pilot: 'DAPOL',
             },
           },
         })
@@ -68,7 +68,7 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.shouldHaveValue('Mandatory attendance monitoring')
         page.form.monitoringRequiredField.shouldHaveValue('Trail monitoring')
         page.form.monitoringRequiredField.shouldHaveValue('Curfew')
-        page.form.orderTypeDescriptionField.shouldHaveValue('DAPO')
+        page.form.pilotField.shouldHaveValue('DAPOL')
         page.form.conditionTypeField.shouldHaveValue('Bail Order')
         page.form.startDateField.shouldHaveValue(new Date(2024, 5, 1))
         page.form.endDateField.shouldHaveValue(new Date(2025, 1, 1, 23, 59, 0))

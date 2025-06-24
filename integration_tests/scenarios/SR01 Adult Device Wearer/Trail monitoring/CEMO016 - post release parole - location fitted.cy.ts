@@ -92,7 +92,7 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL',
+      pilot: 'DAPOL',
       conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
       monitoringRequired: 'Trail monitoring',
       sentenceType: 'Standard Determinate Sentence',
@@ -229,7 +229,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: monitoringConditions.pilot,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',

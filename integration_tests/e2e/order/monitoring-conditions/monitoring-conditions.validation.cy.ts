@@ -20,7 +20,6 @@ const errorMessages = {
 
 const validFormData = {
   orderType: 'IMMIGRATION',
-  orderTypeDescription: 'GPS Acquisitive Crime HDC',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
@@ -29,6 +28,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
+  pilot: 'GPS Acquisitive Crime Parole',
 }
 
 context('Monitoring conditions', () => {
@@ -71,7 +71,6 @@ context('Monitoring conditions', () => {
           subPath: '/monitoring-conditions',
           response: [
             { field: 'orderType', error: 'Test error - order type' },
-            { field: 'orderTypeDescription', error: 'Test error - order type description' },
             { field: 'conditionType', error: 'Test error - condition type' },
             { field: 'updateMonitoringConditionsDto', error: 'Test error - monitoring required' },
             { field: 'startDate', error: 'Test error - start date' },
