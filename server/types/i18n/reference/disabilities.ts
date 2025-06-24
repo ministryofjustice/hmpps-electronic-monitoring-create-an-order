@@ -9,9 +9,9 @@ type Disabilities = ReferenceData<
   | 'MEMORY'
   | 'MENTAL_HEALTH'
   | 'STAMINA_OR_BREATHING_OR_FATIGUE'
-  | 'SOCIAL_BEHAVIOURAL'
+  | 'SOCIALLY_OR_BEHAVIORALLY'
   | 'OTHER'
-  | 'NONE'
+  | 'NONE_OF_THE_ABOVE'
 >
 
 type DisabilitiesDDv5 = ReferenceData<
