@@ -33,7 +33,7 @@ context('Monitoring conditions', () => {
         page.form.endDateField.shouldNotHaveValue(false)
         page.form.orderTypeField.shouldHaveValue('')
         page.form.conditionTypeField.shouldNotHaveValue()
-        page.form.orderTypeDescriptionField.shouldHaveValue('')
+        page.form.pilotField.shouldHaveValue('')
         page.form.sentenceTypeField.shouldHaveValue('')
         page.form.isspField.shouldNotHaveValue()
         page.form.hdcField.shouldNotHaveValue()
@@ -43,6 +43,19 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.element.find('input[type=checkbox][value="alcohol"]').should('be.disabled')
 
         page.form.shouldHaveAllOptions()
+      })
+
+      it('should show orderTypeDescriptionField when DDv5 is false', () => {
+        const testFlags = { DD_V5_1_ENABLED: false }
+        cy.task('setFeatureFlags', testFlags)
+
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.orderTypeDescriptionField.shouldHaveAllOptions()
+
+        cy.task('resetFeatureFlags')
       })
 
       // Test disabled because the hint text of the disabled Alcohol Monitoring order type checkbox is too low contrast to meet WCAG 2 AA accessibility standards. This is a known issue in the GOV.UK design system. This test should be enabled again when this design system issue is resolved or the Alcohol Monitoring checkbox is enabled.

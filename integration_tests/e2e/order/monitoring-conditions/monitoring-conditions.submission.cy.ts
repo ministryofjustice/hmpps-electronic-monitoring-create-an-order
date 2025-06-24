@@ -9,7 +9,6 @@ const apiPath = '/monitoring-conditions'
 
 const validFormData = {
   orderType: 'IMMIGRATION',
-  orderTypeDescription: 'GPS Acquisitive Crime HDC',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
@@ -18,7 +17,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
-  pilot: '',
+  pilot: 'GPS Acquisitive Crime Parole',
 }
 
 const mockResponse = {
@@ -36,7 +35,7 @@ const mockResponse = {
   issp: 'YES',
   hdc: 'NO',
   prarr: 'UNKNOWN',
-  pilot: '',
+  pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
 }
 
 context('Monitoring conditions', () => {
@@ -65,7 +64,7 @@ context('Monitoring conditions', () => {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
           body: {
             orderType: 'IMMIGRATION',
-            orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
+            orderTypeDescription: null,
             conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
             curfew: true,
             exclusionZone: true,
@@ -78,15 +77,14 @@ context('Monitoring conditions', () => {
             issp: 'NO',
             hdc: 'YES',
             prarr: 'UNKNOWN',
-            pilot: 'undefined',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
           },
         }).should('be.true')
       })
 
-      it('Should got to curfew page when curfew is only condition selected', () => {
+      it('Should go to curfew page when curfew is only condition selected', () => {
         const formData = {
           orderType: 'IMMIGRATION',
-          orderTypeDescription: 'GPS Acquisitive Crime HDC',
           monitoringRequired: ['Curfew'],
           conditionType: 'License Condition of a Custodial Order',
           startDate: new Date('2024-02-27T11:02:00Z'),
@@ -100,7 +98,7 @@ context('Monitoring conditions', () => {
 
         const response = {
           orderType: 'IMMIGRATION',
-          orderTypeDescription: 'DAPOL',
+          orderTypeDescription: null,
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
           curfew: true,
           exclusionZone: false,
@@ -124,6 +122,53 @@ context('Monitoring conditions', () => {
         page.form.fillInWith(formData)
         page.form.saveAndContinueButton.click()
         Page.verifyOnPage(CurfewConditionsPage)
+      })
+
+      it('should successfully submit with DDv5 set to false', () => {
+        const testFlags = { DD_V5_1_ENABLED: false }
+        cy.task('setFeatureFlags', testFlags)
+
+        const formData = {
+          orderType: 'IMMIGRATION',
+          orderTypeDescription: 'DAPO',
+          monitoringRequired: ['Curfew'],
+          conditionType: 'License Condition of a Custodial Order',
+          startDate: new Date('2024-02-27T11:02:00Z'),
+          endDate: new Date('2025-03-08T04:40:00Z'),
+          sentenceType: 'Extended Determinate Sentence',
+          issp: 'No',
+          hdc: 'Yes',
+          prarr: 'Not able to provide this information',
+        }
+
+        const response = {
+          orderType: 'IMMIGRATION',
+          orderTypeDescription: 'DAPO',
+          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          curfew: true,
+          exclusionZone: false,
+          trail: false,
+          mandatoryAttendance: false,
+          alcohol: false,
+          startDate: '2024-10-10T11:00:00.000Z',
+          endDate: '2024-10-11T11:00:00.000Z',
+          sentenceType: 'EPP',
+          issp: 'YES',
+          hdc: 'NO',
+          prarr: 'UNKNOWN',
+          pilot: null,
+        }
+
+        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.fillInWith(formData)
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(CurfewConditionsPage)
+
+        cy.task('resetFeatureFlags')
       })
     })
   })
