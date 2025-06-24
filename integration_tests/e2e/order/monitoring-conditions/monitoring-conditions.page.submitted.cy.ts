@@ -31,7 +31,7 @@ context('Monitoring conditions', () => {
               issp: 'YES',
               hdc: 'NO',
               prarr: 'UNKNOWN',
-              pilot: 'DAPOL',
+              pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
             },
           },
         })
@@ -68,7 +68,7 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.shouldHaveValue('Mandatory attendance monitoring')
         page.form.monitoringRequiredField.shouldHaveValue('Trail monitoring')
         page.form.monitoringRequiredField.shouldHaveValue('Curfew')
-        page.form.pilotField.shouldHaveValue('DAPOL')
+        page.form.pilotField.shouldHaveValue('DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL')
         page.form.conditionTypeField.shouldHaveValue('Bail Order')
         page.form.startDateField.shouldHaveValue(new Date(2024, 5, 1))
         page.form.endDateField.shouldHaveValue(new Date(2025, 1, 1, 23, 59, 0))
