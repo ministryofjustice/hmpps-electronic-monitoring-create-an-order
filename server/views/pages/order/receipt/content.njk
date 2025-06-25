@@ -2,10 +2,12 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% if showButtons%}
 {{ govukBackLink({
   text: "Back",
   href: "#"
 }) }}
+{% endif %}
 
 {{ order | dump }}
 
@@ -13,11 +15,14 @@
   <h1 class="govuk-heading-xl">
     Electronic Monitoring Order Form Summary
   </h1>
+{% if showButtons%}
   {{ govukButton({
-    text: "Download a copy of your answers",
-    href: "/order/" + orderId + "/pdf",
-    target: '_blank'
-  }) }}
+      text: "Download a copy of your answers",
+      href: "/order/" + orderId + "/pdf",
+      target: '_blank'
+    }) }}
+{% endif %}
+ 
 </div>
 
 <br><br><br>
@@ -52,10 +57,14 @@
     rows: additionalDocumentDetails
   }) }}
   
+  {% if showButtons%}
   <div class="govuk-button-group">
     {{ govukButton({
       text: "Back to your applications",
       href: "/"
     }) }}
   </div>
+{% endif %}
+ 
+  
 </div>

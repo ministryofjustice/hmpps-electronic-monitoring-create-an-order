@@ -30,7 +30,7 @@ export function setUpRenderPdf(client: GotenbergClient) {
 
         res.header('Content-Type', 'application/pdf')
         res.header('Content-Transfer-Encoding', 'binary')
-        res.header('Content-Disposition', `attachment; filename=${options.filename}`)
+        res.header('Content-Disposition', `attachment; filename=${options.filename}.pdf`)
         res.send(buffer)
       } catch (error) {
         next(error)

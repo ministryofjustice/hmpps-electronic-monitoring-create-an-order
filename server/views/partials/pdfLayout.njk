@@ -1,16 +1,18 @@
-{% extends "govuk/template.njk" %}
+{% set htmlClasses = 'govuk-template-no-backgroud-color' %}
 
+{% extends "govuk/template.njk" %}
 {% block head %}
   <link href="index.css" rel="stylesheet" />
+    <link href="{{ '/assets/css/app.css' | assetMap }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
-  {% include "./header.njk" %}
+
 {% endblock %}
 
 {% block bodyStart %}
 {% endblock %}
 
 {% block footer %}
-  {% include "./footer.njk" %}
+
 {% endblock %}
