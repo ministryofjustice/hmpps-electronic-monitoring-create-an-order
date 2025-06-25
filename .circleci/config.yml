@@ -56,11 +56,13 @@ executors:
   intgration-testing:
       - image: redis:7.2
       - image: wiremock/wiremock:latest
+        environment:
+          WIREMOCK_OPTIONS: '--port 9091 --verbose'
       - image: gotenberg/gotenberg:8
         environment:
-            GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
-            DISABLE_UNOCONV: 1
-            DEFAULT_WAIT_TIMEOUT: 30
+          GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+          DISABLE_UNOCONV: 1
+          DEFAULT_WAIT_TIMEOUT: 30
 jobs:
   build:
     executor:
@@ -124,14 +126,7 @@ jobs:
           name: Install missing OS dependency
           command: sudo apt-get install libxss1
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.3.1/wiremock-standalone-3.3.1.jar
-      - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 9091
-          background: true
+          key: dependency-cache-{{ checksum "package-lock.json" }}    
       - run:
           name: Run the node app
           command: npm run start-feature
