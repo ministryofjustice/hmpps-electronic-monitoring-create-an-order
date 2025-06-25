@@ -62,9 +62,10 @@ executors:
           WIREMOCK_OPTIONS: '--port 9091 --verbose'
       - image: gotenberg/gotenberg:8
         environment:
-          - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
-          - DISABLE_UNOCONV: 1
-          - DEFAULT_WAIT_TIMEOUT: 30
+          DEFAULT_LISTEN_PORT: 3001
+          GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+          DISABLE_UNOCONV: 1
+          DEFAULT_WAIT_TIMEOUT: 30
 jobs:
   build:
     executor:
