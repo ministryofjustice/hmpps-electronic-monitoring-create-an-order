@@ -28,9 +28,9 @@ const testOrder = {
 context('About the device wearer', () => {
   context('Device wearer', () => {
     context('DDv4', () => {
-      const testFlags = { DD_V5_1_ENABLED: false }
+      const disabledFlags = { DD_V5_1_ENABLED: false }
       beforeEach(() => {
-        cy.task('setFeatureFlags', testFlags)
+        cy.task('setFeatureFlags', disabledFlags)
       })
       afterEach(() => {
         cy.task('resetFeatureFlags')
@@ -91,9 +91,9 @@ context('About the device wearer', () => {
     })
 
     context('DDv5', () => {
-      const testFlags = { DD_V5_1_ENABLED: true }
+      const enabledFlags = { DD_V5_1_ENABLED: true }
       beforeEach(() => {
-        cy.task('setFeatureFlags', testFlags)
+        cy.task('setFeatureFlags', enabledFlags)
       })
       afterEach(() => {
         cy.task('resetFeatureFlags')
@@ -119,7 +119,7 @@ context('About the device wearer', () => {
           page.errorSummary.shouldNotExist()
           page.backButton.should('exist')
           page.checkIsAccessible()
-          page.form.shouldHaveAllOptions()
+          page.form.shouldHaveAllDDv5Options()
         })
 
         it('Should show DDv5 content', () => {
