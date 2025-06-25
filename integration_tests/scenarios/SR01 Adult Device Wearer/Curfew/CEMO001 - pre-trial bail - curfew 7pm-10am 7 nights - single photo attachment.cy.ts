@@ -85,9 +85,11 @@ context('Scenarios', () => {
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+
     const installationAndRisk = {
       offence: 'Robbery',
-      riskCategory: 'Sex offender',
+      possibleRisk: 'Sex offender',
+      riskDetails: '',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -136,11 +138,12 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: fakePrimaryAddress,
+        installationAddressDetails: undefined,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
         files,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -179,7 +182,11 @@ context('Scenarios', () => {
           risk_details: '',
           mappa: 'MAPPA 1',
           mappa_case_type: 'SOC (Serious Organised Crime)',
-          risk_categories: [],
+          risk_categories: [
+            {
+              category: 'Sexual Offences',
+            },
+          ],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',

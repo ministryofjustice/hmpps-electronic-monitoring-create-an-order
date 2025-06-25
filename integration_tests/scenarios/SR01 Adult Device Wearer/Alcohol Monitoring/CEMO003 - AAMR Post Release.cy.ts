@@ -52,6 +52,7 @@ context.skip('Scenarios', () => {
       'Birmingham Crown Court',
       'Greater Manchester',
     )
+    const probationDeliveryUnit = { unit: 'Manchester North' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -64,6 +65,10 @@ context.skip('Scenarios', () => {
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       monitoringType: 'Alcohol level',
       installLocation: `at installation address: ${fakePrimaryAddress}`,
+    }
+
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -80,11 +85,12 @@ context.skip('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
         alcoholMonitoringDetails,
         files: undefined,
+        probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -193,7 +199,7 @@ context.skip('Scenarios', () => {
             order_variation_details: '',
             order_variation_req_received_date: '',
             order_variation_type: '',
-            pdu_responsible: '',
+            pdu_responsible: 'Manchester North',
             pdu_responsible_email: '',
             planned_order_end_date: '',
             responsible_officer_details_received: '',

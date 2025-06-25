@@ -5,17 +5,19 @@ import { MonitoringConditions } from '../MonitoringConditions'
 import { ValidationResult } from '../Validation'
 import { DateTimeField, MultipleChoiceField, ViewModel } from './utils'
 import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 type MonitoringConditionsViewModel = ViewModel<
   Pick<
     MonitoringConditions,
-    'conditionType' | 'hdc' | 'issp' | 'orderType' | 'orderTypeDescription' | 'prarr' | 'sentenceType'
+    'conditionType' | 'hdc' | 'issp' | 'orderType' | 'orderTypeDescription' | 'prarr' | 'sentenceType' | 'pilot'
   >
 > & {
   startDate: DateTimeField
   endDate: DateTimeField
   monitoringRequired: MultipleChoiceField
   monitoringConditionTimes: boolean
+  DDv5: boolean
 }
 
 const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): string[] => {
@@ -68,8 +70,12 @@ const createViewModelFromMonitoringConditions = (
   startDate: {
     value: deserialiseDateTime(monitoringConditions.startDate),
   },
+  pilot: {
+    value: monitoringConditions.pilot || '',
+  },
   errorSummary: null,
   monitoringConditionTimes: config.monitoringConditionTimes.enabled,
+  DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
 })
 
 const createViewModelFromFormData = (
@@ -105,7 +111,7 @@ const createViewModelFromFormData = (
       error: getError(validationErrors, 'orderType'),
     },
     orderTypeDescription: {
-      value: formData.orderTypeDescription,
+      value: formData.orderTypeDescription || '',
       error: getError(validationErrors, 'orderTypeDescription'),
     },
     prarr: {
@@ -122,8 +128,13 @@ const createViewModelFromFormData = (
       dateError: getError(validationErrors, 'startDate_date'),
       timeError: getError(validationErrors, 'startDate_time'),
     },
+    pilot: {
+      value: formData.pilot || '',
+      error: getError(validationErrors, 'pilot'),
+    },
     errorSummary: createGovukErrorSummary(validationErrors),
     monitoringConditionTimes: config.monitoringConditionTimes.enabled,
+    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 

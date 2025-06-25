@@ -87,7 +87,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the date when all monitoring ends? (optional)',
+              text: 'What is the date when all monitoring ends?',
             },
             value: {
               text: '',
@@ -97,7 +97,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
+                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
@@ -258,28 +258,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        installationAddress: [
-          {
-            key: {
-              text: 'Where will the installation of the electronic monitoring device take place?',
-            },
-            value: {
-              html: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType(installation)',
-                    'installation',
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
-                },
-              ],
-            },
-          },
-        ],
+        installationAppointment: [],
+        installationLocation: [],
+        installationAddress: [],
         curfewReleaseDate: [],
         curfew: [],
         curfewTimetable: [],
@@ -340,6 +321,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
+          curfewAdditionalDetails: 'some additional curfew details',
         }),
         curfewTimeTable: [
           {
@@ -490,7 +472,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the date when all monitoring ends? (optional)',
+              text: 'What is the date when all monitoring ends?',
             },
             value: {
               text: '11/11/2024',
@@ -500,7 +482,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
+                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
@@ -648,7 +630,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Curfew<br/>Exlusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
+              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
             },
             actions: {
               items: [
@@ -661,28 +643,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        installationAddress: [
-          {
-            key: {
-              text: 'Where will the installation of the electronic monitoring device take place?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType(installation)',
-                    'installation',
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
-                },
-              ],
-            },
-          },
-        ],
+        installationAppointment: [],
+        installationLocation: [],
+        installationAddress: [],
         curfewReleaseDate: [
           {
             key: {
@@ -863,7 +826,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -873,7 +836,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -950,7 +913,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -960,7 +923,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -1078,7 +1041,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does mandatory attendance monitoring end? (optional)',
+                text: 'What date does mandatory attendance monitoring end?',
               },
               value: {
                 text: '11/01/2025',
@@ -1091,7 +1054,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does mandatory attendance monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does mandatory attendance monitoring end?',
                   },
                 ],
               },
@@ -1322,6 +1285,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
+          curfewAdditionalDetails: 'some additional curfew details',
         }),
         curfewTimeTable: [
           {
@@ -1455,7 +1419,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the date when all monitoring ends? (optional)',
+              text: 'What is the date when all monitoring ends?',
             },
             value: {
               text: '11/11/2024',
@@ -1465,7 +1429,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends? (optional)',
+                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
@@ -1596,7 +1560,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Curfew<br/>Exlusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
+              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
             },
             actions: {
               items: [
@@ -1609,28 +1573,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
-        installationAddress: [
-          {
-            key: {
-              text: 'Where will the installation of the electronic monitoring device take place?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType(installation)',
-                    'installation',
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the installation of the electronic monitoring device take place?',
-                },
-              ],
-            },
-          },
-        ],
+        installationAppointment: [],
+        installationLocation: [],
+        installationAddress: [],
         curfewReleaseDate: [
           {
             key: {
@@ -1811,7 +1756,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -1821,7 +1766,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -1898,7 +1843,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does exclusion zone monitoring end? (optional)',
+                text: 'What date does exclusion zone monitoring end?',
               },
               value: {
                 text: '11/12/2024',
@@ -1908,7 +1853,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   {
                     href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                   },
                 ],
               },
@@ -2026,7 +1971,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
             {
               key: {
-                text: 'What date does mandatory attendance monitoring end? (optional)',
+                text: 'What date does mandatory attendance monitoring end?',
               },
               value: {
                 text: '11/01/2025',
@@ -2039,7 +1984,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                       conditionId,
                     ),
                     text: 'Change',
-                    visuallyHiddenText: 'what date does mandatory attendance monitoring end? (optional)',
+                    visuallyHiddenText: 'what date does mandatory attendance monitoring end?',
                   },
                 ],
               },

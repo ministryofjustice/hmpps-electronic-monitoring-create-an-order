@@ -17,7 +17,7 @@ context('Variation', () => {
           status: 'SUBMITTED',
           order: {
             variationDetails: {
-              variationType: 'ADDRESS',
+              variationType: 'CHANGE_TO_ADDRESS',
               variationDate: '2025-01-01T00:00:00Z',
             },
           },
@@ -37,7 +37,7 @@ context('Variation', () => {
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
 
         // Should display the saved data
-        page.form.variationTypeField.shouldHaveValue('Change of address')
+        page.form.variationTypeField.shouldHaveValue('The device wearer’s address')
         page.form.variationDateField.shouldHaveValue(new Date('2025-01-01T00:00:00Z'))
 
         // Should have the correct buttons

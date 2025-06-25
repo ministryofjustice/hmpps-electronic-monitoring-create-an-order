@@ -22,7 +22,6 @@ context('Scenarios', () => {
       ;[, , orderId] = parts
     })
   }
-
   beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
@@ -94,6 +93,7 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
@@ -112,12 +112,16 @@ context('Scenarios', () => {
       }
 
       const variationDetails = {
-        variationType: 'Change of address',
+        variationType: 'The device wearer’s address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       }
       let fakeVariationPrimaryAddress = createKnownAddress()
       while (fakeVariationPrimaryAddress.postcode === fakePrimaryAddress.postcode) {
         fakeVariationPrimaryAddress = createKnownAddress()
+      }
+
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -134,11 +138,12 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -158,11 +163,12 @@ context('Scenarios', () => {
           primaryAddressDetails: fakeVariationPrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakeVariationPrimaryAddress,
           enforcementZoneDetails,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -271,8 +277,8 @@ context('Scenarios', () => {
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
                 order_variation_req_received_date: '',
-                order_variation_type: variationDetails.variationType,
-                pdu_responsible: '',
+                order_variation_type: 'Change to Address',
+                pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',

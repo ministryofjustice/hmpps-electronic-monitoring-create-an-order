@@ -14,6 +14,7 @@ const toOptions = (
   values: ReferenceData,
   disabled: boolean = false,
   includeEmptyOption: boolean = false,
+  type: string = '',
 ): Array<CheckboxItem | RadiosItem> => {
   const options = Object.keys(values).map(key => {
     if (typeof values[key] === 'object') {
@@ -35,10 +36,23 @@ const toOptions = (
   })
 
   if (includeEmptyOption) {
-    options.unshift({ value: '', text: 'Select', disabled })
+    if (type === 'Radio') options.push({ value: '', text: 'Not able to provide this information', disabled })
+    else options.unshift({ value: '', text: 'Select', disabled })
   }
 
   return options
+}
+
+const addDivider = (items: Array<CheckboxItem>, dividerText: string = 'or'): Array<CheckboxItem | RadiosItem> => {
+  const lenght = items.length
+  return [
+    ...items.slice(0, lenght - 1),
+    {
+      value: '',
+      divider: dividerText,
+    },
+    ...items.slice(lenght - 1),
+  ]
 }
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -78,4 +92,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
   njkEnv.addFilter('toOptions', toOptions)
+  njkEnv.addFilter('addDivider', addDivider)
 }

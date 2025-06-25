@@ -113,8 +113,10 @@ describe('EnforcementZoneController', () => {
         endDate: {
           value: {
             day: '15',
-            month: '2',
+            month: '02',
             year: '2026',
+            hours: '23',
+            minutes: '59',
           },
         },
         file: {
@@ -124,8 +126,10 @@ describe('EnforcementZoneController', () => {
         startDate: {
           value: {
             day: '15',
-            month: '2',
+            month: '02',
             year: '2025',
+            hours: '00',
+            minutes: '00',
           },
         },
       })
@@ -160,8 +164,10 @@ describe('EnforcementZoneController', () => {
           error: undefined,
           value: {
             day: '15',
-            month: '2',
+            month: '02',
             year: '2026',
+            hours: '23',
+            minutes: '59',
           },
         },
         file: {
@@ -172,8 +178,10 @@ describe('EnforcementZoneController', () => {
           error: undefined,
           value: {
             day: '15',
-            month: '2',
+            month: '02',
             year: '2025',
+            hours: '00',
+            minutes: '00',
           },
         },
         errorSummary: {
@@ -225,8 +233,10 @@ describe('EnforcementZoneController', () => {
           error: undefined,
           value: {
             day: '15',
-            month: '2',
+            month: '02',
             year: '2026',
+            hours: '23',
+            minutes: '59',
           },
         },
         file: {
@@ -239,8 +249,10 @@ describe('EnforcementZoneController', () => {
           error: undefined,
           value: {
             day: '15',
-            month: '2',
+            month: '02',
             year: '2025',
+            hours: '00',
+            minutes: '00',
           },
         },
         errorSummary: {
@@ -314,12 +326,20 @@ describe('EnforcementZoneController', () => {
 const createMockBody = (anotherZone: string = 'false', action: string = 'sumbit'): ZoneFormDataModel => {
   return {
     action,
-    startYear: '2025',
-    startMonth: '2',
-    startDay: '15',
-    endYear: '2026',
-    endMonth: '2',
-    endDay: '15',
+    startDate: {
+      day: '15',
+      month: '02',
+      year: '2025',
+      hours: '00',
+      minutes: '00',
+    },
+    endDate: {
+      day: '15',
+      month: '02',
+      year: '2026',
+      hours: '23',
+      minutes: '59',
+    },
     zoneType: EnforcementZoneTypes.EXCLUSION,
     duration: 'MockDuration',
     description: 'MockDescription',
@@ -332,8 +352,8 @@ const createMockEnforcementZone = (zoneId: number = 0): EnforcementZone => {
     zoneType: EnforcementZoneTypes.EXCLUSION,
     duration: 'MockDuration',
     description: 'MockDescription',
-    startDate: '2025-02-15',
-    endDate: '2026-02-15',
+    startDate: '2025-02-15T00:00:00',
+    endDate: '2026-02-15T23:59:00',
     zoneId,
     fileId: '',
     fileName: '',
@@ -344,12 +364,16 @@ type ZoneFormDataModel = {
   action: string
   description: string
   duration: string
-  endDay: string
-  endMonth: string
-  endYear: string
-  startDay: string
-  startMonth: string
-  startYear: string
+  startDate: DateTimeModel
+  endDate: DateTimeModel
   zoneType: string
   anotherZone: string
+}
+
+type DateTimeModel = {
+  day: string
+  month: string
+  year: string
+  hours: string
+  minutes: string
 }

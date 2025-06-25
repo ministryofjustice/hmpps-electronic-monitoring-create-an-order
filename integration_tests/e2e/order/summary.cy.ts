@@ -158,6 +158,7 @@ context('Order Summary', () => {
             riskCategory: null,
             riskDetails: null,
             offence: null,
+            offenceAdditionalDetails: null,
           },
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
@@ -240,6 +241,7 @@ context('Order Summary', () => {
             issp: null,
             hdc: null,
             prarr: null,
+            pilot: null,
             isValid: true,
           },
           monitoringConditionsTrail: { startDate: null, endDate: null },
@@ -279,6 +281,7 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
+            curfewAdditionalDetails: null,
           },
           curfewTimeTable: [
             {
@@ -289,6 +292,9 @@ context('Order Summary', () => {
               startTime: '',
             },
           ],
+          installationLocation: {
+            location: 'PRIMARY',
+          },
         },
       })
 
@@ -378,6 +384,7 @@ context('Order Summary', () => {
             riskCategory: null,
             riskDetails: null,
             offence: null,
+            offenceAdditionalDetails: null,
           },
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
@@ -460,6 +467,7 @@ context('Order Summary', () => {
             issp: null,
             hdc: null,
             prarr: null,
+            pilot: null,
             isValid: true,
           },
           monitoringConditionsTrail: { startDate: null, endDate: null },
@@ -499,6 +507,7 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
+            curfewAdditionalDetails: null,
           },
           curfewTimeTable: [
             {

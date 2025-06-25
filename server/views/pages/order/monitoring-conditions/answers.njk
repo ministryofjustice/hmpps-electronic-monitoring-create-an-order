@@ -4,11 +4,29 @@
     rows: monitoringConditions
   }) }}
 
+  {% if installationLocation | length > 0 %}
+   <h2 class="govuk-heading-m">Installation location</h2>
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: installationLocation
+  }) }}
+  {% endif %}
+
+    {% if installationAppointment | length > 0 %}
+   <h2 class="govuk-heading-m">Installation appointment</h2>
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: installationAppointment
+  }) }}
+  {% endif %}
+
+  {% if installationAddress | length > 0 %}
   <h2 class="govuk-heading-m">Installation address</h2>
   {{ govukSummaryList({
     classes: "govuk-!-margin-bottom-9",
     rows: installationAddress
   }) }}
+  {% endif %}
 
   {% if curfew | length > 0 %}
 
@@ -59,18 +77,18 @@
   
   {% if attendance | length > 0 %}
     <h2 class="govuk-heading-m">Mandatory attendance monitoring</h2>
-  {% endif %}
 
-  {% for item in attendance %}
-    {{ govukSummaryList({
-      card: {
-        title: {
-          text: "Attendance monitoring"
-        }
-      },
-      rows: item
-    }) }}
-  {% endfor %}
+    {% for item in attendance %}
+      {{ govukSummaryList({
+        card: {
+          title: {
+            text: "Attendance monitoring"
+          }
+        },
+        rows: item
+      }) }}
+    {% endfor %}
+  {% endif %}
   
 
   {% if alcohol | length > 0 %}

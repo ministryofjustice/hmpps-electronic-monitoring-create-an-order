@@ -4,11 +4,20 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
   helpText: '',
   legend: '',
   questions: {
+    civilCountyCourt: {
+      text: 'Select the name of the Civil and County Court',
+    },
     crownCourt: {
       text: 'Select the name of the Crown Court',
     },
+    familyCourt: {
+      text: 'Select the name of the Family Court',
+    },
     magistratesCourt: {
       text: 'Select the name of the Court',
+    },
+    militaryCourt: {
+      text: 'Select the name of the Military Court',
     },
     notifyingOrganisation: {
       text: 'What organisation or related organisation are you part of?',
@@ -16,6 +25,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
     notifyingOrganisationEmail: {
       text: "What is your team's contact email address?",
       hint: 'Provide the email address for a mailbox that members of your team can access. Do not provide a personal email address.',
+    },
+    notifyingOrgProbationRegion: {
+      text: 'Select the Probation Service region',
     },
     prison: {
       text: 'Select the name of the Prison',
@@ -39,8 +51,14 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
       text: "What is the Responsible Organisation's email address? (optional)",
       hint: 'Provide an email address that can be used to contact the Responsible Organisation if the Responsible Officer is unavaliable. Provide a functional mailbox not a personal email.',
     },
+    youthCustodyServiceRegion: {
+      text: 'Select the YCS region',
+    },
     yjsRegion: {
       text: 'Select the Youth Justice Service region',
+    },
+    youthCourt: {
+      text: 'Select the name of the Youth Court',
     },
   },
   section: 'Contact information',

@@ -29,9 +29,72 @@ context('Variation', () => {
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
-
+        page.form.shouldHaveAllOptions()
         // A11y
         page.checkIsAccessible()
+      })
+
+      context('With DDv5 enabled', () => {
+        const testFlags = { DD_V5_1_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should have DDv5 options only', () => {
+          Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(VariationDetailsPage)
+          page.form.variationTypeField.shouldHaveOption('The device wearer’s address')
+          page.form.variationTypeField.shouldHaveOption('The device wearer’s personal details')
+          page.form.variationTypeField.shouldHaveOption(' Change to add an exclusion zone(s)')
+          page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
+          page.form.variationTypeField.shouldHaveOption('The curfew hours')
+          page.form.variationTypeField.shouldHaveOption('I am suspending monitoring for the device wearer')
+          page.form.variationTypeField.shouldHaveOption('Change to a device type')
+          page.form.variationTypeField.shouldHaveOption('Change to an enforceable condition')
+          page.form.variationTypeField.shouldHaveOption('I am suspending monitoring for the device wearer')
+          page.form.variationTypeField.shouldHaveOption('I have changed something due to an administration error')
+          page.form.variationTypeField.shouldHaveOption('I have changed something else in the form')
+
+          page.form.variationTypeField.shouldNotHaveOption('Change of curfew hours')
+          page.form.variationTypeField.shouldNotHaveOption('Change of address')
+          page.form.variationTypeField.shouldNotHaveOption('Change to add an Exclusion Zone(s)')
+          page.form.variationTypeField.shouldNotHaveOption('Change to an existing Exclusion Zone(s).')
+        })
+      })
+
+      context('With DDv5 disabled', () => {
+        const testFlags = { DD_V5_1_ENABLED: false }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Should have DDv4 options only', () => {
+          Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+          const page = Page.verifyOnPage(VariationDetailsPage)
+
+          page.form.variationTypeField.shouldHaveOption('Change of curfew hours')
+          page.form.variationTypeField.shouldHaveOption('Change of address')
+          page.form.variationTypeField.shouldHaveOption('Change to add an Exclusion Zone(s)')
+          page.form.variationTypeField.shouldHaveOption('Change to an existing Exclusion Zone(s).')
+          page.form.variationTypeField.shouldHaveOption('Order Suspension')
+
+          page.form.variationTypeField.shouldNotHaveOption('The device wearer’s address')
+          page.form.variationTypeField.shouldNotHaveOption('The device wearer’s personal details')
+          page.form.variationTypeField.shouldNotHaveOption('Change to add an exclusion zone(s)')
+          page.form.variationTypeField.shouldNotHaveOption('Change to an existing exclusion zone(s)')
+          page.form.variationTypeField.shouldNotHaveOption('The curfew hours')
+          page.form.variationTypeField.shouldNotHaveOption('Change to a device type')
+          page.form.variationTypeField.shouldNotHaveOption('Change to an enforceable condition')
+          page.form.variationTypeField.shouldNotHaveOption('I am suspending monitoring for the device wearer')
+          page.form.variationTypeField.shouldNotHaveOption('I have changed something due to an administration error')
+          page.form.variationTypeField.shouldNotHaveOption('I have changed something else in the form')
+        })
       })
     })
   })

@@ -1,5 +1,8 @@
 import type { Request, Response } from 'express'
-import i18n from '../../server/i18n'
+import getContent from '../../server/i18n'
+import { DataDictionaryVersions } from '../../server/types/i18n/dataDictionaryVersion'
+import { Locales } from '../../server/types/i18n/locale'
+import FeatureFlags from '../../server/utils/featureFlags'
 
 export const createMockRequest = (
   overrideProperties: Partial<Request> = { params: { orderId: '123456789' } },
@@ -20,9 +23,13 @@ export const createMockRequest = (
 
 export const createMockResponse = (): Response => {
   // @ts-expect-error stubbing res.render
+
   return {
     locals: {
-      content: i18n.en,
+      content: getContent(
+        Locales.en,
+        FeatureFlags.getInstance().get('DD_V5_1_ENABLED') ? DataDictionaryVersions.DDv5 : DataDictionaryVersions.DDv4,
+      ),
       user: {
         username: 'fakeUserName',
         token: 'fakeUserToken',

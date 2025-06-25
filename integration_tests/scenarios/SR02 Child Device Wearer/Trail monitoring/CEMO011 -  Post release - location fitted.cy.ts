@@ -27,6 +27,7 @@ import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -81,6 +82,9 @@ context('Scenarios', () => {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
     }
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+    }
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -133,6 +137,7 @@ context('Scenarios', () => {
       contactInformationCheckYourAnswersPage.continueButton().click()
 
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       installationAndRiskPage.form.saveAndContinueButton.click()
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
@@ -144,6 +149,10 @@ context('Scenarios', () => {
       const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
+
+      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      installationLocationPage.form.saveAndContinueButton.click()
 
       const installationAddress = Page.verifyOnPage(InstallationAddressPage)
       installationAddress.form.fillInWith(fakePrimaryAddress)

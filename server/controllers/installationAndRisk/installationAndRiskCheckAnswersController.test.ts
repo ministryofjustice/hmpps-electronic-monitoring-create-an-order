@@ -64,6 +64,23 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
+            text: questions.possibleRisk.text,
+          },
+          value: {
+            html: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
             text: questions.riskCategory.text,
           },
           value: {
@@ -139,6 +156,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const order = getMockOrder({
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
@@ -174,10 +192,27 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.riskCategory.text,
+            text: questions.possibleRisk.text,
           },
           value: {
             html: 'Offensive towards someone because of their sex or gender',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskCategory.text,
+          },
+          value: {
+            html: '',
           },
           actions: {
             items: [
@@ -248,6 +283,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const order = getMockOrder({
       installationAndRisk: {
         offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
@@ -284,10 +320,27 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.riskCategory.text,
+            text: questions.possibleRisk.text,
           },
           value: {
             html: 'Offensive towards someone because of their sex or gender',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskCategory.text,
+          },
+          value: {
+            html: '',
           },
           actions: {
             items: [
@@ -318,5 +371,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
       ],
     })
+    config.mappa.enabled = true
   })
 })

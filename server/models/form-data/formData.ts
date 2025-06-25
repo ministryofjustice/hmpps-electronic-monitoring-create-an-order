@@ -202,7 +202,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
         }
       }
 
-      if (val.hours) {
+      if (val.hours || val.minutes) {
         if (val.hours === '' && val.minutes !== '') {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -258,7 +258,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
       return false
     })
     .transform(value => {
-      if (value.day === '' && value.month === '' && value.year === '' && value.hours === '' && value.minutes === '') {
+      if (value.day === '' && value.month === '' && value.year === '') {
         return null
       }
 

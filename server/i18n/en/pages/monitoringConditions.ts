@@ -8,7 +8,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What are the order type conditions?',
     },
     endDate: {
-      text: 'What is the date when all monitoring ends? (optional)',
+      text: 'What is the date when all monitoring ends?',
       hint: 'For example, 21 5 2029. If more than one type of monitoring is required, provide the date when all monitoring finishes.',
     },
     endTime: {
@@ -30,6 +30,9 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What is the order type?',
     },
     orderTypeDescription: {
+      text: 'What pilot project is the device wearer part of? (optional)',
+    },
+    pilot: {
       text: 'What pilot project is the device wearer part of? (optional)',
     },
     prarr: {

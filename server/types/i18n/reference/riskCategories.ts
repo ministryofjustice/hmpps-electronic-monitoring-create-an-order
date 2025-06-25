@@ -4,16 +4,26 @@ type RiskCategories = ReferenceData<
   | 'DANGEROUS_ANIMALS'
   | 'DIVERSITY_CONCERNS'
   | 'HISTORY_OF_SUBSTANCE_ABUSE'
-  | 'HOMOPHOBIC_VIEWS'
   | 'IOM'
   | 'OTHER_OCCUPANTS'
   | 'OTHER_RISKS'
-  | 'RACIAL_ABUSE_OR_THREATS'
-  | 'RISK_TO_GENDER'
   | 'SAFEGUARDING_ISSUE'
-  | 'SEXUAL_OFFENCES'
-  | 'THREATS_OF_VIOLENCE'
+  | 'UNDER_18'
+>
+
+type RiskCategoriesDDv5 = ReferenceData<
+  | 'DANGEROUS_ANIMALS'
+  | 'DIVERSITY_CONCERNS'
+  | 'HISTORY_OF_SUBSTANCE_ABUSE'
+  | 'IOM'
+  | 'OTHER_OCCUPANTS'
+  | 'OTHER_RISKS'
+  | 'SAFEGUARDING_ADULT'
+  | 'SAFEGUARDING_CHILD'
+  | 'SAFEGUARDING_DOMESTIC_ABUSE'
   | 'UNDER_18'
 >
 
 export default RiskCategories
+
+export { RiskCategoriesDDv5 }

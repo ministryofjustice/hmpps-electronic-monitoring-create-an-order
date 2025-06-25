@@ -52,6 +52,7 @@ context('Scenarios', () => {
     const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'YJS', 'Cardiff Crown Court', 'Wales')
+
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -80,6 +81,9 @@ context('Scenarios', () => {
         addresses: curfewConditionDetails.addresses,
       },
     ])
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+    }
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -95,13 +99,14 @@ context('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: fakePrimaryAddress,
+        installationAddressDetails: undefined,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
         files: undefined,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 

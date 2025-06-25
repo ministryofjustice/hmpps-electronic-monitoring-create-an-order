@@ -8,7 +8,10 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     super(heading, paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
   }
 
-  monitoringConditionsSection = (): PageElement => cy.contains('Monitoring details')
+  get monitoringConditionsSection(): SummaryListComponent {
+    const label = 'Monitoring details'
+    return new SummaryListComponent(label)
+  }
 
   installationAddressSection = (): PageElement => cy.contains('Installation address')
 
@@ -17,11 +20,24 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  curfewSection = (): PageElement => cy.contains('Curfew')
+  get curfewSection(): SummaryListComponent {
+    const label = 'Curfew'
+    return new SummaryListComponent(label)
+  }
 
   curfewTimetableSection = (): PageElement => cy.contains('Curfew Timetable')
 
   trailMonitoringConditionsSection = (): PageElement => cy.contains('Trail monitoring')
 
   alcoholMonitoringConditionsSection = (): PageElement => cy.contains('Alcohol monitoring')
+
+  installationLocationSection(): SummaryListComponent {
+    const label = 'Installation location'
+    return new SummaryListComponent(label)
+  }
+
+  installationAppointmentSection(): SummaryListComponent {
+    const label = 'Installation appointment'
+    return new SummaryListComponent(label)
+  }
 }

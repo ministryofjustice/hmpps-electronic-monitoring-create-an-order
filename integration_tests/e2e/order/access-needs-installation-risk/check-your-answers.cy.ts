@@ -52,7 +52,9 @@ context('installation and risk - check your answers', () => {
         order: {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
-            riskCategory: ['RISK_TO_GENDER'],
+            offenceAdditionalDetails: 'some offence details',
+
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -77,7 +79,12 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldHaveItems([
         { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: 'Any other information to be aware of about the offence committed? (optional)',
+          value: 'some offence details',
+        },
+
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
@@ -114,7 +121,8 @@ context('installation and risk - check your answers', () => {
         order: {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
-            riskCategory: ['RISK_TO_GENDER'],
+            offenceAdditionalDetails: 'some offence details',
+            riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -148,8 +156,21 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldHaveItems([
         { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: 'Any other information to be aware of about the offence committed? (optional)',
+          value: 'some offence details',
+        },
+
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
+        },
+        {
+          key: 'At installation what are the possible risks at the insallation address? (optional)',
+          value: 'Managed through IOM',
+        },
+        {
+          key: 'At installation what are the possible risks at the insallation address? (optional)',
+          value: 'History of substance abuse',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
@@ -185,7 +206,8 @@ context('installation and risk - check your answers', () => {
         order: {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
-            riskCategory: ['RISK_TO_GENDER'],
+            offenceAdditionalDetails: 'some offence details',
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -220,7 +242,11 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldHaveItems([
         { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
         {
-          key: 'At installation what are the possible risks? (optional)',
+          key: 'Any other information to be aware of about the offence committed? (optional)',
+          value: 'some offence details',
+        },
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
@@ -242,6 +268,56 @@ context('installation and risk - check your answers', () => {
       page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
+    })
+  })
+  context('when ddv5 is not enabled', () => {
+    const testFlags = { DD_V5_1_ENABLED: false }
+    const pageHeading = 'View answers'
+    beforeEach(() => {
+      cy.task('setFeatureFlags', testFlags)
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'ERROR',
+        order: {
+          installationAndRisk: {
+            offence: 'SEXUAL_OFFENCES',
+            offenceAdditionalDetails: 'some offence details',
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
+            riskDetails: 'some risk details',
+            mappaLevel: 'MAPPA 1',
+            mappaCaseType: 'SOC (Serious Organised Crime)',
+          },
+          fmsResultDate: new Date('2024 12 14'),
+        },
+      })
+      cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
+
+    it('shows the correct answers for checking', () => {
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Offensive towards someone because of their sex or gender',
+        },
+        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
+        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
+      ])
+      page.installationRiskSection.shouldNotHaveItem(
+        'Any other information to be aware of about the offence committed? (optional)',
+      )
     })
   })
 })

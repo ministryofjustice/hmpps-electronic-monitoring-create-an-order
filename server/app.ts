@@ -22,8 +22,11 @@ import populateContent from './middleware/populateContent'
 import { setUpRenderPdf } from './middleware/setUpRenderPdf'
 import GotenbergClient from './data/gotenbergClient'
 import config from './config'
+import FeatureFlags from './utils/featureFlags'
 
 export default function createApp(services: Services): express.Application {
+  FeatureFlags.getInstance()
+
   const app = express()
 
   app.set('json spaces', 2)

@@ -48,11 +48,12 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = kelvinCloseAddress
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
+        pilot: 'GPS Acquisitive Crime Parole',
         sentenceType: 'Standard Determinate Sentence',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
@@ -84,6 +85,10 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       }
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -98,7 +103,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
@@ -108,6 +113,7 @@ context('Scenarios', () => {
           curfewConditionDetails,
           curfewTimetable,
           files: undefined,
+          probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -216,13 +222,13 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: '',
+                pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',

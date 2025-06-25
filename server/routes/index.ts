@@ -20,6 +20,8 @@ import EnforcementZoneController from '../controllers/monitoringConditions/enfor
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
+import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
+import InstallationAppointmentController from '../controllers/monitoringConditions/installationAppointmentController'
 import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -27,6 +29,8 @@ import populateOrder from '../middleware/populateCurrentOrder'
 import type { Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
+import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
+import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,6 +41,7 @@ export default function routes({
   auditService,
   contactDetailsService,
   curfewConditionsService,
+  curfewAdditionalDetailsService,
   curfewReleaseDateService,
   curfewTimetableService,
   addressService,
@@ -50,7 +55,10 @@ export default function routes({
   taskListService,
   trailMonitoringService,
   variationService,
+  probationDeliveryUnitService,
   zoneService,
+  installationLocationService,
+  installationAppointmentService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -77,6 +85,11 @@ export default function routes({
   const curfewConditionsController = new CurfewConditionsController(
     auditService,
     curfewConditionsService,
+    taskListService,
+  )
+  const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(
+    auditService,
+    curfewAdditionalDetailsService,
     taskListService,
   )
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, taskListService)
@@ -120,6 +133,21 @@ export default function routes({
   const variationDetailsController = new VariationDetailsController(auditService, variationService, taskListService)
   const receiptController = new ReceiptController()
 
+  const probationDeliveryUnitController = new ProbationDeliveryUnitController(
+    auditService,
+    probationDeliveryUnitService,
+    taskListService,
+  )
+
+  const installationLocationController = new InstallationLocationController(
+    installationLocationService,
+    taskListService,
+  )
+
+  const installationAppointmentController = new InstallationAppointmentController(
+    installationAppointmentService,
+    taskListService,
+  )
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.search)
@@ -174,9 +202,13 @@ export default function routes({
   get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.view)
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
-  // Device wearer addresses
+  // Interested parties
   get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
   post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
+
+  // Probation delivery unit
+  get(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.view)
+  post(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.update)
 
   // Check your answers
   get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
@@ -199,6 +231,14 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
+  // Installation location page
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.update)
+
+  // Installation appointment page
+  get(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.view)
+  post(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.update)
+  // Installation address page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)
 
@@ -223,6 +263,10 @@ export default function routes({
   // Curfew conditions page
   get(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController.update)
+
+  // Curfew additional details page
+  get(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController.update)
 
   // Curfew dates page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)

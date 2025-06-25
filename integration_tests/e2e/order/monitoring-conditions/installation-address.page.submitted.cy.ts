@@ -16,36 +16,14 @@ context('Monitoring conditions', () => {
         cy.signIn()
       })
 
-      it('Should display the user name visible in header', () => {
+      it('Should display content as read only', () => {
         const page = Page.visit(InstallationAddressPage, {
           orderId: mockOrderId,
           'addressType(installation)': 'installation',
         })
         page.header.userName().should('contain.text', 'J. Smith')
-      })
-
-      it('Should display the phase banner in header', () => {
-        const page = Page.visit(InstallationAddressPage, {
-          orderId: mockOrderId,
-          'addressType(installation)': 'installation',
-        })
         page.header.phaseBanner().should('contain.text', 'dev')
-      })
-
-      it('Should display the submitted order notification', () => {
-        const page = Page.visit(InstallationAddressPage, {
-          orderId: mockOrderId,
-          'addressType(installation)': 'installation',
-        })
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      })
-
-      it('Should not allow the user to update the primary address details', () => {
-        const page = Page.visit(InstallationAddressPage, {
-          orderId: mockOrderId,
-          'addressType(installation)': 'installation',
-        })
-
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAndReturnButton.should('not.exist')
         page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)

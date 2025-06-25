@@ -28,6 +28,7 @@ const mockEmptyTrailMonitoring = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
 }
 
@@ -53,6 +54,7 @@ const mockSubmittedTrailMonitoring = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
 }
 
@@ -121,53 +123,36 @@ context('Trail monitoring', () => {
 
     context('Submitting an invalid order', () => {
       it('should show errors with an empty form submission', () => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: '/monitoring-conditions-trail',
-          response: [
-            { field: 'startDate', error: 'You must enter a valid date' },
-            { field: 'endDate', error: 'You must enter a valid date' },
-          ],
-        })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
         const page = Page.verifyOnPage(TrailMonitoringPage)
         page.form.saveAndContinueButton.click()
-        cy.get('#startDate-error').should('contain', 'You must enter a valid date')
-        cy.get('#endDate-error').should('contain', 'You must enter a valid date')
+        cy.get('#startDate-error').should('contain', 'Enter start date for trail monitoring')
+        cy.get('#endDate-error').should('contain', 'Enter end date for trail monitoring')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('You must enter a valid date')
-        page.errorSummary.shouldHaveError('You must enter a valid date')
+        page.errorSummary.shouldHaveError('Enter start date for trail monitoring')
+        page.errorSummary.shouldHaveError('Enter end date for trail monitoring')
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
         const page = Page.verifyOnPage(TrailMonitoringPage)
-        cy.get('#startDate-day').type('text')
+        cy.get('#startDate-year').type('text')
         page.form.saveAndContinueButton.click()
-        cy.get('#startDate-error').should(
-          'contain',
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        cy.get('#startDate-error').should('contain', 'Year must include 4 numbers')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.errorSummary.shouldHaveError('Year must include 4 numbers')
       })
 
       it('should show an error when endDate is provided in the wrong format', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/trail`)
         const page = Page.verifyOnPage(TrailMonitoringPage)
+        cy.get('#endDate-day').type('01')
         cy.get('#endDate-month').type('text')
+        cy.get('#endDate-year').type('2024')
         page.form.saveAndContinueButton.click()
-        cy.get('#endDate-error').should(
-          'contain',
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        cy.get('#endDate-error').should('contain', 'End date for trail monitoring must be a real date')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.errorSummary.shouldHaveError('End date for trail monitoring must be a real date')
       })
     })
 
@@ -191,7 +176,7 @@ context('Trail monitoring', () => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           startDate: '2024-03-27T00:00:00.000Z',
-          endDate: '2025-04-28T00:00:00.000Z',
+          endDate: '2025-04-28T22:59:00.000Z',
         })
       })
 

@@ -50,6 +50,7 @@ context('Alcohol monitoring', () => {
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
+      page.form.shouldHaveAllOptions()
     })
   })
 
@@ -173,16 +174,35 @@ context('Alcohol monitoring', () => {
     })
 
     context('Submitting an invalid order', () => {
+      it('should show errors when empty form is submitted', () => {
+        cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
+        const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        page.form.saveAndContinueButton.click()
+        page.form.monitoringTypeField.shouldHaveValidationMessage(
+          'Select what alcohol monitoring the device wearer needs',
+        )
+        page.form.startDateField.shouldHaveValidationMessage('Enter start date for alcohol monitoring')
+        page.form.endDateField.shouldHaveValidationMessage('Enter end date for alcohol monitoring')
+        page.form.installLocationField.shouldHaveValidationMessage('Select the address of the base station')
+
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Select what alcohol monitoring the device wearer needs')
+        page.errorSummary.shouldHaveError('Enter start date for alcohol monitoring')
+        page.errorSummary.shouldHaveError('Enter end date for alcohol monitoring')
+        page.errorSummary.shouldHaveError('Select the address of the base station')
+      })
+
+      const setBaseRequest = page => {
+        page.form.monitoringTypeField.set('Alcohol level')
+        page.form.startDateField.set(new Date(baseExpectedApiRequest.startDate), false)
+        page.form.endDateField.set(new Date(baseExpectedApiRequest.endDate), false)
+      }
       it('should show errors with probation office selected', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
           id: mockOrderId,
           subPath: '/monitoring-conditions-alcohol',
           response: [
-            { field: 'monitoringType', error: 'Monitoring type is required' },
-            { field: 'startDate', error: 'Start date is required' },
-            { field: 'endDate', error: 'End date is required' },
-            { field: 'installationLocation', error: 'Installation location is required' },
             {
               field: 'probationOfficeName',
               error: 'You must enter a probation office name if the installation location is a probation office',
@@ -191,20 +211,15 @@ context('Alcohol monitoring', () => {
         })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        setBaseRequest(page)
         cy.get('input[type="radio"][value="PROBATION_OFFICE"]').check()
         page.form.saveAndContinueButton.click()
-        page.form.monitoringTypeField.shouldHaveValidationMessage('Monitoring type is required')
-        page.form.startDateField.shouldHaveValidationMessage('Start date is required')
-        page.form.endDateField.shouldHaveValidationMessage('End date is required')
-        page.form.installLocationField.shouldHaveValidationMessage('Installation location is required')
+
         page.form.probationNameField.shouldHaveValidationMessage(
           'You must enter a probation office name if the installation location is a probation office',
         )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Monitoring type is required')
-        page.errorSummary.shouldHaveError('Start date is required')
-        page.errorSummary.shouldHaveError('End date is required')
-        page.errorSummary.shouldHaveError('Installation location is required')
+
         page.errorSummary.shouldHaveError(
           'You must enter a probation office name if the installation location is a probation office',
         )
@@ -216,66 +231,49 @@ context('Alcohol monitoring', () => {
           id: mockOrderId,
           subPath: '/monitoring-conditions-alcohol',
           response: [
-            { field: 'monitoringType', error: 'Monitoring type is required' },
-            { field: 'startDate', error: 'Start date is required' },
-            { field: 'endDate', error: 'End date is required' },
-            { field: 'installationLocation', error: 'Installation location is required' },
             { field: 'prisonName', error: 'You must enter a prison name if the installation location is a prison' },
           ],
         })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
+        setBaseRequest(page)
         cy.get('input[type="radio"][value="PRISON"]').check()
         page.form.saveAndContinueButton.click()
         page.form.saveAndContinueButton.click()
-        page.form.monitoringTypeField.shouldHaveValidationMessage('Monitoring type is required')
-        page.form.startDateField.shouldHaveValidationMessage('Start date is required')
-        page.form.endDateField.shouldHaveValidationMessage('End date is required')
-        page.form.installLocationField.shouldHaveValidationMessage('Installation location is required')
         page.form.prisonNameField.shouldHaveValidationMessage(
           'You must enter a prison name if the installation location is a prison',
         )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Monitoring type is required')
-        page.errorSummary.shouldHaveError('Start date is required')
-        page.errorSummary.shouldHaveError('End date is required')
-        page.errorSummary.shouldHaveError('Installation location is required')
         page.errorSummary.shouldHaveError('You must enter a prison name if the installation location is a prison')
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
-        cy.get('#startDate-day').type('text')
+        setBaseRequest(page)
+        page.form.startDateField.setYear('text')
         page.form.saveAndContinueButton.click()
-        page.form.startDateField.shouldHaveValidationMessage(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.form.startDateField.shouldHaveValidationMessage('Year must include 4 numbers')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.errorSummary.shouldHaveError('Year must include 4 numbers')
       })
 
       it('should show an error when endDate is provided in the wrong format', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
         const page = Page.verifyOnPage(AlcoholMonitoringPage)
-        cy.get('#endDate-year').type('text')
+        setBaseRequest(page)
+        page.form.endDateField.setYear('text')
         page.form.saveAndContinueButton.click()
-        page.form.endDateField.shouldHaveValidationMessage(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.form.endDateField.shouldHaveValidationMessage('Year must include 4 numbers')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(
-          'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
-        )
+        page.errorSummary.shouldHaveError('Year must include 4 numbers')
       })
     })
 
     const baseExpectedApiRequest = {
       monitoringType: 'ALCOHOL_ABSTINENCE',
       startDate: '2024-03-27T00:00:00.000Z',
-      endDate: '2025-04-28T00:00:00.000Z',
+      endDate: '2025-04-28T22:59:00.000Z',
       installationLocation: null,
       prisonName: null,
       probationOfficeName: null,

@@ -26,6 +26,7 @@ const paths = {
     NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
     ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType(primary|secondary|tertiary)',
     INTERESTED_PARTIES: '/order/:orderId/contact-information/interested-parties',
+    PROBATION_DELIVERY_UNIT: '/order/:orderId/contact-information/probation-delivery-unit',
   },
 
   INSTALLATION_AND_RISK: {
@@ -35,6 +36,8 @@ const paths = {
 
   MONITORING_CONDITIONS: {
     BASE_URL: '/order/:orderId/monitoring-conditions',
+    INSTALLATION_LOCATION: '/order/:orderId/monitoring-conditions/installation-location',
+    INSTALLATION_APPOINTMENT: '/order/:orderId/monitoring-conditions/installation-appointment',
     INSTALLATION_ADDRESS: '/order/:orderId/monitoring-conditions/:addressType(installation)',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
     ZONE: '/order/:orderId/monitoring-conditions/zone/:zoneId',
@@ -43,6 +46,7 @@ const paths = {
     ALCOHOL: '/order/:orderId/monitoring-conditions/alcohol',
     CURFEW_RELEASE_DATE: '/order/:orderId/monitoring-conditions/curfew/release-date',
     CURFEW_CONDITIONS: '/order/:orderId/monitoring-conditions/curfew/conditions',
+    CURFEW_ADDITIONAL_DETAILS: '/order/:orderId/monitoring-conditions/curfew/additional-details',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
     CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/check-your-answers',
   },

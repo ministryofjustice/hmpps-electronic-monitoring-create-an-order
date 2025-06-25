@@ -90,6 +90,7 @@ context('Receipt', () => {
         },
         installationAndRisk: {
           offence: 'SEXUAL_OFFENCES',
+          offenceAdditionalDetails: 'Information about offence',
           riskCategory: ['RISK_TO_GENDER'],
           riskDetails: 'Information about potential risks',
           mappaLevel: 'MAPPA 1',
@@ -121,7 +122,7 @@ context('Receipt', () => {
     page.riskInformationSection.shouldHaveItems([
       { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
       {
-        key: 'At installation what are the possible risks? (optional)',
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
         value: 'Offensive towards someone because of their sex or gender',
       },
       { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
@@ -219,6 +220,7 @@ context('Receipt when app is submitted', () => {
         },
         installationAndRisk: {
           offence: 'SEXUAL_OFFENCES',
+          offenceAdditionalDetails: 'Information about offence',
           riskCategory: ['RISK_TO_GENDER'],
           riskDetails: 'Information about potential risks',
           mappaLevel: 'MAPPA 1',
@@ -250,7 +252,7 @@ context('Receipt when app is submitted', () => {
     page.riskInformationSection.shouldHaveItems([
       { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
       {
-        key: 'At installation what are the possible risks? (optional)',
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
         value: 'Offensive towards someone because of their sex or gender',
       },
       { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },

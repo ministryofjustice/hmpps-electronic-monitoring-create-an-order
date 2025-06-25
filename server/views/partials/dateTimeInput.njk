@@ -58,10 +58,10 @@
       </div>
 
 
-{% if input.timesEnabled %}
+
 {# The time input below is much like the timeInput.njk component, with small differences such as input names in the format eg. "StartDate[hours]" for use with the node package "qs". The existing timeInput.njk component could be replaced with this component in a future refactor. #}
-      <div class="form-time govuk-form-group {% if input.errorMessages.time %} govuk-form-group--error{% endif %}">
-        <fieldset class="govuk-fieldset">
+      <div class="form-time govuk-form-group {% if input.errorMessages.time %} govuk-form-group--error{% endif %} {% if not input.timesEnabled %}  govuk-form-hidden-items{% endif %}">
+        
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">{{ input.timeLabel }}</legend>
 
           {% if input.timeHint %}
@@ -80,17 +80,19 @@
             class="govuk-form-group form-group-hours govuk-date-input__item"
             style="display: inline"
           >
+           {% set hours = input.defaultHours if input.defaultHours else input.date.hours %}
             <label
               class="govuk-label govuk-date-input__label" 
               for="{{input.id}}-hours"
             >
               Hour
             </label>
+
             <input
               class="govuk-input govuk-date-input__input govuk-input--width-2"
               id="{{input.id}}-hours"
               name="{{input.name}}[hours]"
-              value="{{input.date.hours}}"
+              value="{{hours}}"
               type="number"
               pattern="[0-9]{2}"
               min="0"
@@ -110,14 +112,16 @@
             class="govuk-form-group form-group-minutes govuk-date-input__item"
             style="display: inline"
           >
+            {% set minutes = input.defaultMinutes if input.defaultMinutes else input.date.minutes %}
             <label class="govuk-label govuk-date-input__label" for="{{input.id}}-minutes">
               Minute
             </label>
+
             <input
               class="govuk-input govuk-date-input__input govuk-input--width-2"
               id="{{input.id}}-minutes"
               name="{{input.name}}[minutes]"
-              value="{{input.date.minutes}}"
+              value="{{minutes}}"
               type="number"
               pattern="[0-9]{2}"
               min="0"
@@ -125,8 +129,7 @@
               {% if input.disabled %}disabled{% endif %}
             />
           </div>
-        </fieldset>
+       
       </div>
- {% endif %}
   </div>
 {% endmacro %}

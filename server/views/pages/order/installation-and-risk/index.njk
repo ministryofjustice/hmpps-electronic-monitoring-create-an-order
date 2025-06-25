@@ -32,23 +32,57 @@
     errorMessage: offence.error,
     disabled: not isOrderEditable
   }) }}
+
+  {% if ddVersion5 %}
+      {{ govukTextarea({
+	name: "offenceAdditionalDetails",
+	id: "offenceAdditionalDetails",
+	value: offenceAdditionalDetails.value,
+	errorMessage: offenceAdditionalDetails.error,
+	disabled: not isOrderEditable,
+	label: {
+	  text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.text,
+	  classes: "govuk-label--s"
+	},
+	hint: {
+	  text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.hint
+	}
+      }) }}
+  {% endif %}
  
-  {{ govukCheckboxes({
-    idPrefix: "riskCategory",
-    name: "riskCategory[]",
-    fieldset: {
-      legend: {
-        text: content.pages.installationAndRisk.questions.riskCategory.text,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: content.pages.installationAndRisk.questions.riskCategory.hint
-    },
-    items: content.reference.riskCategories | toOptions(not isOrderEditable),
-    errorMessage: riskCategory.error,
-    values: riskCategory.values
-  }) }}
+    {{ govukCheckboxes({
+      idPrefix: "possibleRisk",
+      name: "possibleRisk[]",
+      fieldset: {
+        legend: {
+          text: content.pages.installationAndRisk.questions.possibleRisk.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.installationAndRisk.questions.possibleRisk.hint
+      },
+      items: content.reference.possibleRisks | toOptions(not isOrderEditable) | addDivider(),
+      errorMessage: possibleRisk.error,
+      values: possibleRisk.values
+    }) }}
+
+    {{ govukCheckboxes({
+      idPrefix: "riskCategory",
+      name: "riskCategory[]",
+      fieldset: {
+        legend: {
+          text: content.pages.installationAndRisk.questions.riskCategory.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.installationAndRisk.questions.riskCategory.hint
+      },
+      items: content.reference.riskCategories | toOptions(not isOrderEditable),
+      errorMessage: riskCategory.error,
+      values: riskCategory.values
+    }) }}
 
   {{ govukTextarea({
     name: "riskDetails",

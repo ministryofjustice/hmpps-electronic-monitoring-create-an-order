@@ -1,14 +1,18 @@
-import config from '../../config'
 import { createGovukErrorSummary } from '../../utils/errors'
+import FeatureFlags from '../../utils/featureFlags'
 import { getError } from '../../utils/utils'
 import { InstallationAndRiskFormData } from '../form-data/installationAndRisk'
 import { InstallationAndRisk } from '../InstallationAndRisk'
 import { ValidationResult } from '../Validation'
 import { MultipleChoiceField, ViewModel } from './utils'
+import possibleRisks from '../../i18n/en/reference/possibleRisks'
+import riskCategories from '../../i18n/en/reference/riskCategories'
 
-type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory'>> & {
+type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk'>> & {
   riskCategory: MultipleChoiceField
+  possibleRisk: MultipleChoiceField
   mappaEnabled: boolean
+  ddVersion5: boolean
 }
 
 const constructFromFormData = (
@@ -19,6 +23,14 @@ const constructFromFormData = (
     offence: {
       value: formData.offence || '',
       error: getError(validationErrors, 'offence'),
+    },
+    offenceAdditionalDetails: {
+      value: formData.offenceAdditionalDetails || '',
+      error: getError(validationErrors, 'offenceAdditionalDetails'),
+    },
+    possibleRisk: {
+      values: formData.possibleRisk || [],
+      error: getError(validationErrors, 'possibleRisk'),
     },
     riskCategory: {
       values: formData.riskCategory || [],
@@ -37,7 +49,8 @@ const constructFromFormData = (
       error: getError(validationErrors, 'mappaCaseType'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    mappaEnabled: config.mappa.enabled,
+    mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
+    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
@@ -46,8 +59,14 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
     offence: {
       value: installationAndRisk?.offence || '',
     },
+    offenceAdditionalDetails: {
+      value: installationAndRisk?.offenceAdditionalDetails || '',
+    },
+    possibleRisk: {
+      values: installationAndRisk?.riskCategory?.filter(it => Object.keys(possibleRisks).indexOf(it) !== -1) || [],
+    },
     riskCategory: {
-      values: installationAndRisk?.riskCategory || [],
+      values: installationAndRisk?.riskCategory?.filter(it => Object.keys(riskCategories).indexOf(it) !== -1) || [],
     },
     riskDetails: {
       value: installationAndRisk?.riskDetails || '',
@@ -59,7 +78,8 @@ const createFromEntity = (installationAndRisk: InstallationAndRisk | null): Inst
       value: installationAndRisk?.mappaCaseType || '',
     },
     errorSummary: null,
-    mappaEnabled: config.mappa.enabled,
+    mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
+    ddVersion5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 

@@ -60,6 +60,9 @@ COPY --from=build --chown=appuser:appgroup \
 COPY --from=build --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
+# Create writable data directory for feature flags
+RUN mkdir /app/data && chown appuser:appgroup /app/data
+
 EXPOSE 3000
 ENV NODE_ENV='production'
 USER 2000

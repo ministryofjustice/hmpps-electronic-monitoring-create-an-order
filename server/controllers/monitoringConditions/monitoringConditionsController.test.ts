@@ -79,15 +79,15 @@ describe(MonitoringConditionsController, () => {
           day: '11',
           month: '05',
           year: '2025',
-          hours: '11',
-          minutes: '23',
+          hours: '00',
+          minutes: '00',
         },
         endDate: {
           day: '11',
           month: '06',
           year: '2025',
-          hours: '13',
-          minutes: '25',
+          hours: '23',
+          minutes: '59',
         },
       }
       const res = createMockResponse()
@@ -103,7 +103,7 @@ describe(MonitoringConditionsController, () => {
           action: 'continue',
           orderType: 'undefined',
           monitoringRequired: [],
-          orderTypeDescription: 'undefined',
+          orderTypeDescription: '',
           conditionType: '',
           startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
           endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
@@ -111,6 +111,7 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
+          pilot: '',
         },
       })
     })
@@ -134,15 +135,15 @@ describe(MonitoringConditionsController, () => {
           day: '11',
           month: '05',
           year: '2025',
-          hours: '11',
-          minutes: '23',
+          hours: '00',
+          minutes: '00',
         },
         endDate: {
           day: '11',
           month: '06',
           year: '2025',
-          hours: '13',
-          minutes: '25',
+          hours: '23',
+          minutes: '59',
         },
       }
       const res = createMockResponse()
@@ -158,14 +159,15 @@ describe(MonitoringConditionsController, () => {
           action: 'continue',
           orderType: 'undefined',
           monitoringRequired: [],
-          orderTypeDescription: 'undefined',
+          orderTypeDescription: '',
           conditionType: '',
-          startDate: { day: '11', month: '05', year: '2025', hours: '11', minutes: '23' },
-          endDate: { day: '11', month: '06', year: '2025', hours: '13', minutes: '25' },
+          startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
+          endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
           sentenceType: null,
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
+          pilot: '',
         },
       })
     })
