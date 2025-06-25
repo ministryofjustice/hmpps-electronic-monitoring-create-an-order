@@ -54,6 +54,7 @@ executors:
           HMPPS_S3_BUCKETNAME: test_bucket
 
   intgration-testing:
+     docker:
       - image: redis:7.2
       - image: wiremock/wiremock:latest
         environment:
