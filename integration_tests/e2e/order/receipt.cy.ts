@@ -2,11 +2,10 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../pages/page'
 import ReceiptPage from '../../pages/order/receipt'
 import AttachmentType from '../../../server/models/AttachmentType'
-import { mock } from 'node:test'
 
 const mockOrderId = uuidv4()
 const mockOrder = {
-  deviceWearer:{
+  deviceWearer: {
     nomisId: null,
     pncId: null,
     deliusId: null,
@@ -23,40 +22,41 @@ const mockOrder = {
     otherDisability: 'Broken arm',
     noFixedAbode: true,
     interpreterRequired: false,
-  }
+  },
 }
 context('Receipt', () => {
   context('Receipt when app is submitted', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoGetOrder', { 
-        httpStatus: 200, id: mockOrderId,
-         status: 'SUBMITTED',
-        order:mockOrder
-     })
-  
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: mockOrder,
+      })
+
       cy.signIn()
     })
-  
+
     it('Should display the page', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       const page = Page.verifyOnPage(ReceiptPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.pdfDownloadBanner().should('exist')
     })
-  
+
     it('Should have a button that opens the print window to download page as PDF', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       const page = Page.verifyOnPage(ReceiptPage)
       page.pdfDownloadButton().should('exist')
-     
+
       page.pdfDownloadButton().click()
       const date = new Date().toISOString().slice(0, 10)
       const filename = `${mockOrder.deviceWearer.firstName}-${mockOrder.deviceWearer.lastName}-${date}`
       cy.readFile(`cypress/downloads/${filename}.pdf`).should('exist')
     })
-  
+
     it('Should should show all sections', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -158,12 +158,10 @@ context('Receipt', () => {
       page.contactInformationSection.shouldExist()
       page.monitoringConditionsSection.shouldExist()
     })
-  
+
     it('should have no change links', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       cy.contains('.govuk-link', 'Change').should('not.exist')
     })
   })
-  
 })
-
