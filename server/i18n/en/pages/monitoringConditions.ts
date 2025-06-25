@@ -32,6 +32,9 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     orderTypeDescription: {
       text: 'What pilot project is the device wearer part of? (optional)',
     },
+    pilot: {
+      text: 'What pilot project is the device wearer part of? (optional)',
+    },
     prarr: {
       text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
     },

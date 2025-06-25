@@ -38,13 +38,16 @@
         "@typescript-eslint/no-use-before-define": 0,
         "class-methods-use-this": 0,
         "no-useless-constructor": 0,
+        "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": [
           1,
           {
-            "argsIgnorePattern": "res|next|^err|_",
+                  
+            "caughtErrorsIgnorePattern": "|error|e",
+            "argsIgnorePattern": "res|next",
             "ignoreRestSiblings": true
           }
-        ],
+        ],        
         "@typescript-eslint/semi": 0,
         "import/no-unresolved": "error",
         "prettier/prettier": [

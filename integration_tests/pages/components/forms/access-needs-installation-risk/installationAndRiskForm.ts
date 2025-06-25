@@ -6,6 +6,7 @@ import FormTextareaComponent from '../../formTextareaComponent'
 
 export type InstallationAndRiskFormData = {
   offence?: string
+  possibleRisk?: string
   riskCategory?: string
   riskDetails?: string
   mappaLevel?: string
@@ -39,14 +40,21 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
     return new FormTextareaComponent(this.form, label)
   }
 
-  get riskCategoryField(): FormCheckboxesComponent {
-    const label = 'At installation what are the possible risks?'
+  get possibleRiskField(): FormCheckboxesComponent {
+    const label = "At installation what are the possible risks from the device wearer's behaviour?"
     return new FormCheckboxesComponent(this.form, label, [
+      'Offensive towards someone because of their sexual orientation',
       'Violent behaviour or threats of violence',
       'Sex offender',
       'Offensive towards someone because of their sex or gender',
       'Offensive towards someone because of their race, nationality, ethnicity or national origin',
-      'Offensive towards someone because of their sexual orientation',
+      'There are no risks that the installer should be aware of',
+    ])
+  }
+
+  get riskCategoryField(): FormCheckboxesComponent {
+    const label = 'At installation what are the possible risks at the insallation address? (optional)'
+    return new FormCheckboxesComponent(this.form, label, [
       'History of substance abuse',
       'Diversity concerns (mental health issues, learning difficulties etc)',
       'Managed through IOM',
@@ -84,6 +92,10 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   fillInWith(profile: InstallationAndRiskFormData = {}): void {
     if (profile.offence) {
       this.offenceField.set(profile.offence)
+    }
+
+    if (profile.possibleRisk) {
+      this.possibleRiskField.set(profile.possibleRisk)
     }
 
     if (profile.riskCategory) {

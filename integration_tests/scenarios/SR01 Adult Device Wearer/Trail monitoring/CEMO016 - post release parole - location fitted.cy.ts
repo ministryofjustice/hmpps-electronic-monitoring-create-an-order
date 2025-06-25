@@ -92,7 +92,7 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL',
+      pilot: 'Acquisitive Crime Project',
       conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
       monitoringRequired: 'Trail monitoring',
       sentenceType: 'Standard Determinate Sentence',
@@ -100,6 +100,10 @@ context('Scenarios', () => {
     const trailMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+    }
+
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -116,7 +120,7 @@ context('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
         trailMonitoringDetails,
@@ -225,7 +229,7 @@ context('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',

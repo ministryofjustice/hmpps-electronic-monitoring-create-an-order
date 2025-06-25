@@ -107,6 +107,10 @@ context('Scenarios', () => {
         addAnother: 'No',
       }
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -158,6 +162,7 @@ context('Scenarios', () => {
         contactInformationCheckYourAnswersPage.continueButton().click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+        installationAndRiskPage.form.fillInWith(installationAndRisk)
         installationAndRiskPage.form.saveAndContinueButton.click()
 
         const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(

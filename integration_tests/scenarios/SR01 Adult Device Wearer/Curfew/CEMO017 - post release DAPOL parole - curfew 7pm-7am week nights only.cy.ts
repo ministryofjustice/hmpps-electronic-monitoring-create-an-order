@@ -53,7 +53,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        orderTypeDescription: 'DAPOL HDC',
+        pilot: 'GPS Acquisitive Crime Parole',
         sentenceType: 'Standard Determinate Sentence',
         conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
         monitoringRequired: 'Curfew',
@@ -81,6 +81,9 @@ context('Scenarios', () => {
         ]),
       ]
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+      }
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -95,7 +98,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: undefined,
           curfewReleaseDetails,
@@ -206,7 +209,7 @@ context('Scenarios', () => {
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
-                order_type_description: monitoringConditions.orderTypeDescription,
+                order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',

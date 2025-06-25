@@ -55,10 +55,18 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
   answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
   if (config.monitoringConditionTimes.enabled)
     answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
+  answers.push(createAnswer(questions.orderType.text, orderType, uri, answerOpts))
+  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    let { pilot } = order.monitoringConditions
+    if ('pilots' in content.reference) {
+      pilot = lookup(content.reference.pilots, order.monitoringConditions.pilot)
+    }
+    answers.push(createAnswer(questions.pilot.text, pilot, uri, answerOpts))
+  } else {
+    answers.push(createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts))
+  }
   answers.push(
     ...[
-      createAnswer(questions.orderType.text, orderType, uri, answerOpts),
-      createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts),
       createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
       createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
       createAnswer(questions.issp.text, issp, uri, answerOpts),

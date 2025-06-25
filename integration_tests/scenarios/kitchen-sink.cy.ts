@@ -120,7 +120,7 @@ context('The kitchen sink', () => {
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL HDC',
+      pilot: 'GPS Acquisitive Crime Parole',
       conditionType: 'Bail Order',
       monitoringRequired: [
         'Curfew',
@@ -175,6 +175,10 @@ context('The kitchen sink', () => {
       description: 'A second test description: Lorum ipsum dolar sit amet...',
       duration: 'A second test duration: one, two, three...',
       anotherZone: 'No',
+    }
+    const installationAndRisk = {
+      possibleRisk: 'Sex offender',
+      riskCategory: 'Children under the age of 18 are living at the property',
     }
     // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
     // const alcoholMonitoringOrder = {
@@ -278,10 +282,10 @@ context('The kitchen sink', () => {
 
       // no validation
       let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      // installationAndRiskPage.saveAndContinueButton().click()
+      installationAndRiskPage.form.saveAndContinueButton.click()
       installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-      // installationAndRiskPage.fillInWith()
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       if (takeScreenshots) cy.screenshot('11. installationAndRiskPage', { overwrite: true })
       installationAndRiskPage.form.saveAndContinueButton.click()
 

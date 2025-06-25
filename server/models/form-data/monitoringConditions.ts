@@ -8,7 +8,7 @@ const MonitoringConditionsFormDataParser = z.object({
   monitoringRequired: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
-  orderTypeDescription: z.coerce.string(),
+  orderTypeDescription: z.coerce.string().nullable().default(''),
   conditionType: z
     .string()
     .nullable()
@@ -48,6 +48,7 @@ const MonitoringConditionsFormDataParser = z.object({
     .nullable()
     .default(null)
     .transform(val => (val === null ? 'UNKNOWN' : val)),
+  pilot: z.coerce.string().nullable().default(''),
 })
 
 type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsFormDataParser>, 'action'>
@@ -56,7 +57,7 @@ const MonitoringConditionsFormDataValidator = z
   .object({
     orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
     monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
-    orderTypeDescription: z.string(),
+    orderTypeDescription: z.string().nullable(),
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
@@ -64,8 +65,9 @@ const MonitoringConditionsFormDataValidator = z
     issp: z.string(),
     hdc: z.string(),
     prarr: z.string(),
+    pilot: z.string().nullable(),
   })
-  .transform(({ monitoringRequired, orderType, orderTypeDescription, ...formData }) => ({
+  .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...formData }) => ({
     orderType: orderType === '' ? null : orderType,
     orderTypeDescription: orderTypeDescription === '' ? null : orderTypeDescription,
     curfew: monitoringRequired.includes('curfew'),
@@ -73,6 +75,7 @@ const MonitoringConditionsFormDataValidator = z
     trail: monitoringRequired.includes('trail'),
     mandatoryAttendance: monitoringRequired.includes('mandatoryAttendance'),
     alcohol: monitoringRequired.includes('alcohol'),
+    pilot: pilot === '' ? null : pilot,
     ...formData,
   }))
 

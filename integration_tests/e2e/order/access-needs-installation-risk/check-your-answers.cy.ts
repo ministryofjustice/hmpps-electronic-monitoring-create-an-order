@@ -53,7 +53,8 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -81,11 +82,11 @@ context('installation and risk - check your answers', () => {
           key: 'Any other information to be aware of about the offence committed? (optional)',
           value: 'some offence details',
         },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
+
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Offensive towards someone because of their sex or gender',
+        },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
@@ -121,7 +122,7 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -158,11 +159,19 @@ context('installation and risk - check your answers', () => {
           key: 'Any other information to be aware of about the offence committed? (optional)',
           value: 'some offence details',
         },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
+
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Offensive towards someone because of their sex or gender',
+        },
+        {
+          key: 'At installation what are the possible risks at the insallation address? (optional)',
+          value: 'Managed through IOM',
+        },
+        {
+          key: 'At installation what are the possible risks at the insallation address? (optional)',
+          value: 'History of substance abuse',
+        },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
@@ -198,7 +207,7 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -236,22 +245,14 @@ context('installation and risk - check your answers', () => {
           key: 'Any other information to be aware of about the offence committed? (optional)',
           value: 'some offence details',
         },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Offensive towards someone because of their sex or gender',
+        },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
-    })
-
-    // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-    it('does not show the possible risks question', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-
-      page.installationRiskSection.shouldNotHaveItem('At installation what are the possible risks? (optional)')
     })
 
     it('does not show "change" links', () => {
@@ -285,7 +286,7 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -306,11 +307,10 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
         { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Offensive towards someone because of their sex or gender',
+        },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },

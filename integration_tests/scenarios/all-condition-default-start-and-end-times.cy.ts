@@ -94,7 +94,7 @@ context('The kitchen sink', () => {
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
-      orderTypeDescription: 'DAPOL HDC',
+      pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
       conditionType: 'Bail Order',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
     }
@@ -141,6 +141,10 @@ context('The kitchen sink', () => {
       unit: 'Blackburn',
     }
 
+    const installationAndRisk = {
+      possibleRisk: 'Sex offender',
+      riskCategory: 'Children under the age of 18 are living at the property',
+    }
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
@@ -154,7 +158,7 @@ context('The kitchen sink', () => {
         primaryAddressDetails,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails,
         curfewReleaseDetails,
@@ -202,7 +206,14 @@ context('The kitchen sink', () => {
           risk_details: '',
           mappa: null,
           mappa_case_type: null,
-          risk_categories: [],
+          risk_categories: [
+            {
+              category: 'Sexual Offences',
+            },
+            {
+              category: 'Under 18 living at property',
+            },
+          ],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',
@@ -276,7 +287,7 @@ context('The kitchen sink', () => {
             order_request_type: 'New Order',
             order_start: formatAsFmsDateTime(monitoringConditions.startDate),
             order_type: monitoringConditions.orderType,
-            order_type_description: monitoringConditions.orderTypeDescription,
+            order_type_description: null,
             order_type_detail: '',
             order_variation_date: '',
             order_variation_details: '',

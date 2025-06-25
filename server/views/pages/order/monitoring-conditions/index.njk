@@ -81,6 +81,7 @@
       disabled: not isOrderEditable
     }) }}
 
+{% if not DDv5 %}
     {{ govukSelect({
       id: "orderTypeDescription",
       name: "orderTypeDescription",
@@ -100,6 +101,31 @@
       errorMessage: orderTypeDescription.error,
       disabled: not isOrderEditable
     }) }}
+{% endif %}
+    
+{% if DDv5 %}
+    {{ govukSelect({
+      id: "pilot",
+      name: "pilot",
+      label: {
+        text: questions.pilot.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      items: [
+        { text: 'Select', value: '' },
+        { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL' },
+        { text: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)', value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC' },
+        { text: 'Domestic Abuse Perpetrator on Licence Project', value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT' },
+        { text: 'GPS Acquisitive Crime Home Detention Curfew', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
+        { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
+        { text: 'Acquisitive Crime Project', value: 'AQUISITIVE_CRIME_PROJECT' },
+        { text: 'Licence Variation Project', value: 'LICENCE_VARIATION_PROJECT' }
+      ],
+      value: pilot.value,
+      errorMessage: pilot.error,
+      disabled: not isOrderEditable
+    }) }}
+{% endif %}
 
     {{ govukRadios({
       classes: "govuk-radios",

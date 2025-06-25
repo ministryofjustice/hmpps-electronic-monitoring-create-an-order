@@ -17,11 +17,12 @@ context('Check your answers', () => {
         mandatoryAttendance: true,
         alcohol: true,
         conditionType: 'BAIL_ORDER',
-        orderTypeDescription: 'DAPO',
+        orderTypeDescription: '',
         sentenceType: 'IPP',
         issp: 'YES',
         hdc: 'NO',
         prarr: 'UNKNOWN',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
       },
       curfewReleaseDateConditions: {
         curfewAddress: '',
@@ -68,7 +69,11 @@ context('Check your answers', () => {
     it('shows answers for checking', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.monitoringConditionsSection().should('exist')
+      page.monitoringConditionsSection.shouldExist()
+      page.monitoringConditionsSection.shouldHaveItem(
+        'What pilot project is the device wearer part of? (optional)',
+        'GPS Acquisitive Crime Parole',
+      )
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewOnDayOfReleaseSection.shouldHaveItems([
@@ -258,11 +263,12 @@ context('Check your answers', () => {
             mandatoryAttendance: true,
             alcohol: true,
             conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
+            orderTypeDescription: null,
             sentenceType: 'IPP',
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -301,7 +307,7 @@ context('Check your answers', () => {
     it('shows answers for checking', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.monitoringConditionsSection().should('exist')
+      page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
@@ -352,6 +358,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -391,7 +398,7 @@ context('Check your answers', () => {
     it('shows answers for checking', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.monitoringConditionsSection().should('exist')
+      page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
@@ -438,11 +445,12 @@ context('Check your answers', () => {
             mandatoryAttendance: true,
             alcohol: true,
             conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
+            orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             sentenceType: 'IPP',
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           curfewReleaseDateConditions: {
             curfewAddress: '',
@@ -473,6 +481,16 @@ context('Check your answers', () => {
       page.curfewSection.shouldNotHaveItems([
         'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
       ])
+    })
+
+    it('shows the orderTypeDescription', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.monitoringConditionsSection.shouldExist()
+      page.monitoringConditionsSection.shouldHaveItem(
+        'What pilot project is the device wearer part of? (optional)',
+        'GPS Acquisitive Crime Parole',
+      )
     })
   })
 })
