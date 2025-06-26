@@ -53,6 +53,19 @@ executors:
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
 
+  intgration-testing:
+     docker:
+      - image: cimg/node:20.18.0-browsers
+      - image: redis:7.2
+      - image: wiremock/wiremock:latest
+        environment:
+          WIREMOCK_OPTIONS: '--port 9091 --verbose'
+      - image: gotenberg/gotenberg:8
+        environment:
+          API_PORT: 3001
+          GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+          DISABLE_UNOCONV: 1
+          DEFAULT_WAIT_TIMEOUT: 30
 jobs:
   build:
     executor:
@@ -105,9 +118,7 @@ jobs:
           path: test_results/unit-test-reports.html
 
   integration_test:
-    executor:
-      name: hmpps/node
-      tag: << pipeline.parameters.node-version >>
+    executor: intgration-testing
     environment:
       TZ: Europe/London
     steps:
@@ -115,17 +126,15 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
-          name: Install missing OS dependency
-          command: sudo apt-get install libxss1
+          name: Update npm
+          command: sudo npm install -g npm@latest
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.3.1/wiremock-standalone-3.3.1.jar
+          name: Install Dependencies
+          command: npm ci --no-audit
       - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 9091
-          background: true
+          command: npm run build
       - run:
           name: Run the node app
           command: npm run start-feature

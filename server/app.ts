@@ -19,6 +19,9 @@ import setUpWebSession from './middleware/setUpWebSession'
 import routes from './routes'
 import type { Services } from './services'
 import populateContent from './middleware/populateContent'
+import { setUpRenderPdf } from './middleware/setUpRenderPdf'
+import GotenbergClient from './data/gotenbergClient'
+import config from './config'
 import FeatureFlags from './utils/featureFlags'
 
 export default function createApp(services: Services): express.Application {
@@ -41,6 +44,7 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware(cemoAuthorisedRoles()))
   app.use(multer().single('file'))
   app.use(setUpCsrf())
+  app.use(setUpRenderPdf(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(setUpCurrentUser())
   app.use(populateContent)
   app.use(routes(services))
