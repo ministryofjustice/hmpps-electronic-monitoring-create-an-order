@@ -42,12 +42,11 @@
         "@typescript-eslint/no-unused-vars": [
           1,
           {
-                  
             "caughtErrorsIgnorePattern": "|error|e",
             "argsIgnorePattern": "res|next",
             "ignoreRestSiblings": true
           }
-        ],        
+        ],
         "@typescript-eslint/semi": 0,
         "import/no-unresolved": "error",
         "prettier/prettier": [
