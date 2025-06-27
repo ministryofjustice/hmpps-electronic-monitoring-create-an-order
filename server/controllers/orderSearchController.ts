@@ -15,7 +15,6 @@ type OrderSearchViewModel = {
   }>
   variationsEnabled: boolean
   emptySearch?: boolean
-  noResults?: boolean
 }
 
 const SearchOrderFormDataParser = z.object({
@@ -74,7 +73,12 @@ export default class OrderSearchController {
     const formData = SearchOrderFormDataParser.parse(req.body)
 
     if (formData.searchTerm === '') {
-      res.render('pages/search', { orders: [], emptySearch: true })
+      const model: OrderSearchViewModel = {
+        orders: [],
+        emptySearch: true,
+        variationsEnabled: config.variations.enabled,
+      }
+      res.render('pages/search', model)
     }
 
     const orders = await this.orderSearchService.searchOrders({
