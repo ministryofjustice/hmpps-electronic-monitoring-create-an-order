@@ -166,7 +166,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's gender?", value: 'Self identify' },
         {
           key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
-          value: 'Other',
+          value: 'The device wearer has a disability or health condition not listed',
         },
         { key: "What is the device wearer's disability or health condition?", value: 'Broken arm' },
         { key: 'What language does the interpreter need to use? (optional)', value: '' },
