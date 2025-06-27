@@ -8,7 +8,7 @@ export default class IndexPage extends AppPage {
   protected elementCacheId: string = uuidv4()
 
   constructor() {
-    super('Electronic Monitoring Application forms', '/search', 'Existing application forms')
+    super('Search for a submitted form', '/search')
 
     // cy.get('#ordersList', { log: false }).as(`${this.elementCacheId}-orders`)
   }
