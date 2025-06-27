@@ -129,13 +129,63 @@ describe('OrderSearchController', () => {
     })
   })
   describe('search orders', () => {
-    it('should render orders given a search term', async () => {
+    it('should call the service with the correct search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
       req.body = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
       expect(mockOrderService.searchOrders).toHaveBeenCalledWith(expect.objectContaining({ searchTerm: 'firstName' }))
+    })
+
+    it('should render a view containing search results', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
+      req.body = { searchTerm: 'firstName' }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [
+            {
+              displayName: 'first last',
+              status: 'SUBMITTED',
+              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
+              type: 'VARIATION',
+            },
+          ],
+        }),
+      )
+    })
+
+    it('should render a view when there are no results', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([])
+      req.body = { searchTerm: 'firstName' }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [],
+        }),
+      )
+    })
+
+    it('should render a view when there is no search term', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([])
+      req.body = { searchTerm: '' }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [],
+          emptySearch: true,
+        }),
+      )
     })
   })
 })
