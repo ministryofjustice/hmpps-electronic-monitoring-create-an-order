@@ -94,7 +94,7 @@ export default class OrderSearchController {
 
     const orders = await this.orderSearchService.searchOrders({
       accessToken: res.locals.user.token,
-      searchTerm: formData.searchTerm ?? '',
+      searchTerm: formData.searchTerm,
     })
 
     res.render('pages/search', this.constructViewModel(orders))
