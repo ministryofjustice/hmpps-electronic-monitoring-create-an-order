@@ -112,7 +112,7 @@ describe('OrderSearchController', () => {
     it('should render a view containing order search results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
 
-      await orderController.search(req, res, next)
+      await orderController.list(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
@@ -138,7 +138,7 @@ describe('OrderSearchController', () => {
     it('should render a view containing no results if there is an error', async () => {
       mockOrderService.searchOrders.mockRejectedValue(mock500Error)
 
-      await orderController.search(req, res, next)
+      await orderController.list(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
