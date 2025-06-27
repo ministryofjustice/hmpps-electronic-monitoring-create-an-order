@@ -1,0 +1,35 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Search" %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "moj/components/search/macro.njk" import mojSearch %}
+
+{% block content %}
+  {{ mojPageHeaderActions({
+    heading: {
+      text: 'Electronic Monitoring Application forms'
+    } })
+  }}
+
+  {{ mojSearch({
+    action: '#',
+    method: 'get',
+    input: {
+      id: 'search',
+      name: 'searchTerm'
+    },
+    label: {
+      text: 'Find an order',
+      classes: 'govuk-!-font-weight-bold'
+    },
+    hint: {
+      text: 'Enter the device wearer\'s full name. For example Bob Smith.'
+    },
+    button: {
+      text: 'Search',
+      classes: "govuk-button--secondary"
+    }
+  }) }}
+
+{% endblock %}
+
