@@ -79,6 +79,7 @@ export default class OrderSearchController {
         variationsEnabled: config.variations.enabled,
       }
       res.render('pages/search', model)
+      return
     }
 
     const orders = await this.orderSearchService.searchOrders({
