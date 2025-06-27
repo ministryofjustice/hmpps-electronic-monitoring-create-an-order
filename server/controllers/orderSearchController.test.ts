@@ -7,6 +7,7 @@ import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
 import OrderSearchController from './orderSearchController'
+import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
@@ -72,10 +73,7 @@ describe('OrderSearchController', () => {
     mockOrderService = new OrderSearchService(mockRestClient) as jest.Mocked<OrderSearchService>
     orderController = new OrderSearchController(mockAuditService, mockOrderService)
 
-    req = {
-      // @ts-expect-error stubbing session
-      session: {},
-      query: {},
+    req = createMockRequest({
       params: {
         orderId: '123456789',
       },
@@ -84,31 +82,13 @@ describe('OrderSearchController', () => {
         token: 'fakeUserToken',
         authSource: 'auth',
       },
-    }
-    // @ts-expect-error stubbing res.render
-    res = {
-      locals: {
-        user: {
-          username: 'fakeUserName',
-          token: 'fakeUserToken',
-          authSource: 'nomis',
-          userId: 'fakeId',
-          name: 'fake user',
-          displayName: 'fuser',
-          userRoles: ['fakeRole'],
-          staffId: 123,
-        },
-      },
-      redirect: jest.fn(),
-      render: jest.fn(),
-      set: jest.fn(),
-      send: jest.fn(),
-    }
+    })
+    res = createMockResponse()
 
     next = jest.fn()
   })
 
-  describe('search orders', () => {
+  describe('list orders', () => {
     it('should render a view containing order search results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
 
@@ -146,6 +126,16 @@ describe('OrderSearchController', () => {
           orders: [],
         }),
       )
+    })
+  })
+  describe('search orders', () => {
+    it('should render orders given a search term', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
+      req.body = { searchTerm: 'firstName' }
+
+      await orderController.search(req, res, next)
+
+      expect(mockOrderService.searchOrders).toHaveBeenCalledWith(expect.objectContaining({ searchTerm: 'firstName' }))
     })
   })
 })

@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { z } from 'zod'
 import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
 import { Order } from '../models/Order'
@@ -14,6 +15,10 @@ type OrderSearchViewModel = {
   }>
   variationsEnabled: boolean
 }
+
+const SearchOrderFormDataParser = z.object({
+  searchTerm: z.string(),
+})
 
 export default class OrderSearchController {
   constructor(
@@ -60,5 +65,16 @@ export default class OrderSearchController {
     } catch (e) {
       res.render('pages/index', this.constructViewModel([]))
     }
+  }
+
+  search: RequestHandler = async (req: Request, res: Response) => {
+    const formData = SearchOrderFormDataParser.parse(req.body)
+
+    const orders = await this.orderSearchService.searchOrders({
+      accessToken: res.locals.user.token,
+      searchTerm: formData.searchTerm,
+    })
+
+    res.render('pages/search', this.constructViewModel(orders))
   }
 }
