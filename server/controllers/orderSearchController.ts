@@ -73,6 +73,10 @@ export default class OrderSearchController {
   search: RequestHandler = async (req: Request, res: Response) => {
     const formData = SearchOrderFormDataParser.parse(req.body)
 
+    if (formData.searchTerm === '') {
+      res.render('pages/search', { orders: [], emptySearch: true })
+    }
+
     const orders = await this.orderSearchService.searchOrders({
       accessToken: res.locals.user.token,
       searchTerm: formData.searchTerm,
