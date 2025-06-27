@@ -15,10 +15,11 @@ type OrderSearchViewModel = {
   }>
   variationsEnabled: boolean
   emptySearch?: boolean
+  noResults?: boolean
 }
 
 const SearchOrderFormDataParser = z.object({
-  searchTerm: z.string(),
+  searchTerm: z.string().nullable().optional(),
 })
 
 export default class OrderSearchController {
@@ -50,6 +51,7 @@ export default class OrderSearchController {
         }
       }),
       variationsEnabled: config.variations.enabled,
+      noResults: orders.length === 0,
     }
   }
 
@@ -81,9 +83,18 @@ export default class OrderSearchController {
       return
     }
 
+    if (!formData.searchTerm) {
+      const model: OrderSearchViewModel = {
+        orders: [],
+        variationsEnabled: config.variations.enabled,
+      }
+      res.render('pages/search', model)
+      return
+    }
+
     const orders = await this.orderSearchService.searchOrders({
       accessToken: res.locals.user.token,
-      searchTerm: formData.searchTerm,
+      searchTerm: formData.searchTerm ?? '',
     })
 
     res.render('pages/search', this.constructViewModel(orders))

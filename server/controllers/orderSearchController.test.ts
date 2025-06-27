@@ -169,6 +169,7 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [],
+          noResults: true,
         }),
       )
     })
@@ -186,6 +187,32 @@ describe('OrderSearchController', () => {
           emptySearch: true,
         }),
       )
+    })
+
+    it('should render a view when searchTerm is null', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([])
+      req.body = { searchTerm: null }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [],
+        }),
+      )
+    })
+
+    it('should render a view when searchTerm is undefined', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([])
+      req.body = {}
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/search', {
+        orders: [],
+        variationsEnabled: true,
+      })
     })
   })
 })
