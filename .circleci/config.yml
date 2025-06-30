@@ -3,6 +3,8 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@5
+  cypress: cypress-io/cypress@3.4.2
+  docker: circleci/docker@2.8.1
 
 parameters:
   alerts-slack-channel:
@@ -52,6 +54,21 @@ executors:
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
+      # Spin up an instance of the FE service as well as the BE. In this way, cypress-split can create separate containerised instances of the e2e service for tests to run against, to avoid race conditions.
+      # - image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order:latest
+      #   environment:
+      #     PORT: 3007
+      #     HMPPS_AUTH_URL: http://localhost:9091/auth
+      #     TOKEN_VERIFICATION_API_URL: http://localhost:9091/verification
+      #     TOKEN_VERIFICATION_ENABLED: true
+      #     REDIS_ENABLED: false
+      #     NODE_ENV: development
+      #     API_CLIENT_ID: clientid
+      #     API_CLIENT_SECRET: clientsecret
+      #     SYSTEM_CLIENT_ID: clientid
+      #     SYSTEM_CLIENT_SECRET: clientsecret
+      #     ENVIRONMENT_NAME: dev
+      #     CEMO_API_URL: http://localhost:8080
 
   intgration-testing:
      docker:
@@ -154,12 +171,16 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
+    parallelism: 4 # use 4 CircleCi machines to distribute tests
     environment:
       TZ: Europe/London
     steps:
       - checkout
       - attach_workspace:
           at: ~/app
+      - cypress/install
+      # - cypress/run-tests:
+      #     cypress-command: npm run int-test-scenarios -- --env split=true,spec=integration_tests/scenarios/**/*
       - run:
           name: Update npm
           command: sudo npm install -g npm@latest
@@ -179,7 +200,7 @@ jobs:
           command: sleep 5
       - run:
           name: Run scenario tests
-          command: npm run int-test-scenarios
+          command: npm run int-test-scenarios -- --env split=true,spec=integration_tests/scenarios/**/*
       - run:
           name: Archive screenshots
           command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
@@ -211,10 +232,15 @@ workflows:
       - scenario_test:
           requires:
             - build
+            # - build_docker
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
           name: build_docker
+          # requires:
+          # - build
+          #  persist_container_image was used in Matt's PR. I;m not sure if we need it or not. Keeping it commented here for now.
+          # persist_container_image: true
           filters:
             branches:
               only:
