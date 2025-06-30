@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { z } from 'zod'
 import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
 import { Order } from '../models/Order'
@@ -13,7 +14,13 @@ type OrderSearchViewModel = {
     summaryUri: string
   }>
   variationsEnabled: boolean
+  emptySearch?: boolean
+  noResults?: boolean
 }
+
+const SearchOrderFormDataParser = z.object({
+  searchTerm: z.string().nullable().optional(),
+})
 
 export default class OrderSearchController {
   constructor(
@@ -44,10 +51,11 @@ export default class OrderSearchController {
         }
       }),
       variationsEnabled: config.variations.enabled,
+      noResults: orders.length === 0,
     }
   }
 
-  search: RequestHandler = async (req: Request, res: Response) => {
+  list: RequestHandler = async (req: Request, res: Response) => {
     await this.auditService.logPageView(Page.ORDER_SEARCH_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
@@ -60,5 +68,35 @@ export default class OrderSearchController {
     } catch (e) {
       res.render('pages/index', this.constructViewModel([]))
     }
+  }
+
+  search: RequestHandler = async (req: Request, res: Response) => {
+    const formData = SearchOrderFormDataParser.parse(req.body)
+
+    if (formData.searchTerm === '') {
+      const model: OrderSearchViewModel = {
+        orders: [],
+        emptySearch: true,
+        variationsEnabled: config.variations.enabled,
+      }
+      res.render('pages/search', model)
+      return
+    }
+
+    if (!formData.searchTerm) {
+      const model: OrderSearchViewModel = {
+        orders: [],
+        variationsEnabled: config.variations.enabled,
+      }
+      res.render('pages/search', model)
+      return
+    }
+
+    const orders = await this.orderSearchService.searchOrders({
+      accessToken: res.locals.user.token,
+      searchTerm: formData.searchTerm ?? '',
+    })
+
+    res.render('pages/search', this.constructViewModel(orders))
   }
 }

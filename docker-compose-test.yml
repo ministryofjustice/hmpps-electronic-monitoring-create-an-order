@@ -15,5 +15,19 @@ services:
     ports:
       - "9091:8080"
 
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    networks:
+      - hmpps_int
+    container_name: gotenberg
+    ports:
+      - "3001:3000"
+    environment:
+      - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
+      - DISABLE_UNOCONV=1
+      - DEFAULT_WAIT_TIMEOUT=30
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
+
 networks:
   hmpps_int:

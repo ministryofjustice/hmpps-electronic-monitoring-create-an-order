@@ -36,7 +36,8 @@ generic-service:
     AUDIT_SERVICE_NAME: 'HMPPS529' # Your audit service name
     VARIATIONS_ENABLED: 'true'
     MAPPA_ENABLED: 'false'
-    ACTIVE_AGENCIES: 'DNI,WEI'
+    ACTIVE_AGENCIES: 'DNI,WEI,HDI,HLI,HMI,LEI,LHI,MDI'
+    GOTENBERG_API_URL: http://hmpps-electronic-monitoring-create-an-order-gotenberg
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -62,6 +63,52 @@ generic-service:
     groups:
       - digital_staff_and_mojo
       - moj_cloud_platform
+
+gotenberg:
+  nameOverride: gotenberg
+  replicaCount: 2
+
+  image:
+    repository: gotenberg/gotenberg
+    tag: 8.20.1
+    port: 3000
+
+  containerCommand: [ "gotenberg" ]
+  containerArgs:
+    [
+      "--chromium-ignore-certificate-errors",
+      "--pdfengines-merge-engines=pdftk",
+      "--libreoffice-disable-routes",
+      "--webhook-disable",
+      "--prometheus-disable-collect"
+    ]
+
+  ingress:
+    enabled: false
+
+  livenessProbe:
+    httpGet:
+      path: /health
+    periodSeconds: 30
+    initialDelaySeconds: 60
+    timeoutSeconds: 20
+    failureThreshold: 10
+
+  readinessProbe:
+    httpGet:
+      path: /health
+    periodSeconds: 20
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 15
+
+  podSecurityContext:
+    fsGroup: 1001
+
+  securityContext:
+    runAsUser: 1001
+    privileged: false
+    runAsNonRoot: true
 
 generic-prometheus-alerts:
   targetApplication: hmpps-electronic-monitoring-create-an-order

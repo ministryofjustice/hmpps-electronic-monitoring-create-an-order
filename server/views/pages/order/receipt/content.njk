@@ -1,0 +1,71 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% if showButtons%}
+{{ govukBackLink({
+  text: "Back",
+  href: "#"
+}) }}
+{% endif %}
+
+{{ order | dump }}
+
+<div id="receipt-download-banner">    
+  <h1 class="govuk-heading-xl">
+    Electronic Monitoring Order Form Summary
+  </h1>
+{% if showButtons%}
+  {{ govukButton({
+      text: "Download a copy of your answers",
+      href: "/order/" + orderId + "/pdf",
+      target: '_blank',
+      id: "download-pdf"
+    }) }}
+{% endif %}
+ 
+</div>
+
+<br><br><br>
+
+<div id="form-summary">
+  <h2 class="govuk-heading-l">Form details</h2>
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: statusDetails
+  }) }}
+
+  <h2 class="govuk-heading-l">About the device wearer</h2>
+  
+  {% include "../about-the-device-wearer/answers.njk" %}
+      
+  <h2 class="govuk-heading-l">Contact information</h2>
+  
+  {% include "../contact-information/answers.njk" %}
+
+  <h2 class="govuk-heading-l">Risk information</h2>
+  
+  {% include "../installation-and-risk/answers.njk" %}
+
+  <h2 class="govuk-heading-l">Monitoring conditions</h2>
+  
+  {% include "../monitoring-conditions/answers.njk" %}
+
+  <h2 class="govuk-heading-l">Additional documents</h2>
+  
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: additionalDocumentDetails
+  }) }}
+  
+  {% if showButtons%}
+  <div class="govuk-button-group">
+    {{ govukButton({
+      text: "Back to your applications",
+      href: "/"
+    }) }}
+  </div>
+{% endif %}
+ 
+  
+</div>
