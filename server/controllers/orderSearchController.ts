@@ -63,6 +63,11 @@ export default class OrderSearchController {
     }
   }
 
+  formatDateTime = (dateToFormat: string): string => {
+    const date = new Date(dateToFormat)
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  }
+
   private createOrderItem = (order: Order) => {
     const nameLink = `<a class="govuk-link govuk-task-list__link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} aria-describedby="company-details-1-status">${this.getDisplayName(order)}</a>`
     return [
@@ -70,7 +75,7 @@ export default class OrderSearchController {
         html: nameLink,
       },
       {
-        text: order.deviceWearer.dateOfBirth,
+        text: order.deviceWearer.dateOfBirth ? this.formatDateTime(order.deviceWearer.dateOfBirth) : undefined,
       },
       {
         text: order.deviceWearer.pncId,
@@ -79,16 +84,17 @@ export default class OrderSearchController {
         text: 'blah',
       },
       {
-        text: order.curfewConditions?.startDate,
+        text: order.curfewConditions?.startDate ? this.formatDateTime(order.curfewConditions?.startDate) : undefined,
       },
       {
-        text: order.curfewConditions?.endDate,
+        text: order.curfewConditions?.endDate ? this.formatDateTime(order.curfewConditions?.endDate) : undefined,
       },
       {
         text: order.fmsResultDate,
       },
     ]
   }
+
   private constructSearchViewModel(orders: Array<Order>): OrderSearchViewModel {
     return {
       orders: orders.map(order => this.createOrderItem(order)),

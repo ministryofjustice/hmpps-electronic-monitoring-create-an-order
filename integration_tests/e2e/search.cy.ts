@@ -57,19 +57,52 @@ context('Index', () => {
       page.ordersList.contains('Tell us about changes to a form sent by email')
     })
 
-    it('should show a orders after search', () => {
+    describe('when rendering an order', () => {
+      const mockDate = new Date(2000, 10, 20).toISOString()
       const mockOrder = {
         ...basicOrder,
         status: 'SUBMITTED',
-        deviceWearer: { ...basicOrder.deviceWearer, firstName: 'Bob', lastName: 'Builder', dateOfBirth: null },
+        deviceWearer: {
+          ...basicOrder.deviceWearer,
+          firstName: 'Bob',
+          lastName: 'Builder',
+          dateOfBirth: mockDate,
+          pncId: 'some id',
+        },
+        curfewConditions: {
+          startDate: mockDate,
+          endDate: mockDate,
+          curfewAddress: null,
+          curfewAdditionalDetails: null,
+        },
+        fmsResultDate: mockDate,
       }
-      cy.task('stubCemoListOrders', { httpStatus: 200, orders: [mockOrder] })
-      const page = Page.visit(SearchPage)
 
-      page.searchBox.type('Bob')
-      page.searchButton.click()
+      let page: SearchPage
 
-      page.ordersList.contains('Bob')
+      beforeEach(() => {
+        cy.task('stubCemoListOrders', { httpStatus: 200, orders: [mockOrder] })
+        page = Page.visit(SearchPage)
+
+        page.searchBox.type('Bob')
+        page.searchButton.click()
+      })
+
+      it('should show correct headings', () => {
+        page.ordersList.contains('Name')
+        page.ordersList.contains('Date of birth')
+        page.ordersList.contains('Personal ID number')
+        page.ordersList.contains('Start date')
+        page.ordersList.contains('End date')
+        page.ordersList.contains('Last updated')
+      })
+
+      it('should show correct order details', () => {
+        page.ordersList.contains('Bob Builder')
+        page.ordersList.contains('some id')
+        page.ordersList.contains('blah')
+        page.ordersList.contains('20/11/2000')
+      })
     })
   })
 })
