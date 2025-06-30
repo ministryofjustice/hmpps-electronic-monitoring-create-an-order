@@ -169,6 +169,7 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [],
+          searchTerm: 'firstName',
           noResults: true,
         }),
       )
