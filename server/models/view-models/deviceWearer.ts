@@ -1,4 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
+import FeatureFlags from '../../utils/featureFlags'
 import { convertBooleanToEnum, deserialiseDateTime, getError } from '../../utils/utils'
 import { DeviceWearer } from '../DeviceWearer'
 import { DeviceWearerFormData } from '../form-data/deviceWearer'
@@ -23,6 +24,7 @@ type DeviceWearerViewModel = ViewModel<
   >
 > & {
   dateOfBirth: DateField
+  DDv5: boolean
 }
 
 const constructFromFormData = (
@@ -75,6 +77,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'otherDisability'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
+    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
@@ -114,6 +117,7 @@ const createFromEntity = (deviceWearer: DeviceWearer): DeviceWearerViewModel => 
       value: deviceWearer.otherDisability || '',
     },
     errorSummary: null,
+    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }
 
