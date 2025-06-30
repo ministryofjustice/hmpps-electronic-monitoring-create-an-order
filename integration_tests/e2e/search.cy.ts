@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
 import SearchPage from '../pages/search'
 import Page from '../pages/page'
-// import { mockApiOrder } from '../mockApis/cemo'
+import { mockApiOrder } from '../mockApis/cemo'
 
 const mockOrderId = uuidv4()
+
+const basicOrder = mockApiOrder()
 
 context('Index', () => {
   context('Viewing the order list', () => {
@@ -54,9 +56,20 @@ context('Index', () => {
       )
       page.ordersList.contains('Tell us about changes to a form sent by email')
     })
-    // const mockOrder = {
-    //   ...mockApiOrder(),
-    //   deviceWearer: {firstName: BOb}
-    // }
+
+    it('should show a orders after search', () => {
+      const mockOrder = {
+        ...basicOrder,
+        status: 'SUBMITTED',
+        deviceWearer: { ...basicOrder.deviceWearer, firstName: 'Bob', lastName: 'Builder', dateOfBirth: null },
+      }
+      cy.task('stubCemoListOrders', { httpStatus: 200, orders: [mockOrder] })
+      const page = Page.visit(SearchPage)
+
+      page.searchBox.type('Bob')
+      page.searchButton.click()
+
+      page.ordersList.contains('Bob')
+    })
   })
 })
