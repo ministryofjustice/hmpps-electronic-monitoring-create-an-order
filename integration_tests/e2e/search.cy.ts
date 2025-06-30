@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import SearchPage from '../pages/search'
 import Page from '../pages/page'
+// import { mockApiOrder } from '../mockApis/cemo'
 
 const mockOrderId = uuidv4()
 
@@ -16,7 +17,6 @@ context('Index', () => {
     })
 
     it('Should render the correct elements ', () => {
-      // Visit the home page
       const page = Page.visit(SearchPage)
 
       // Header
@@ -27,5 +27,29 @@ context('Index', () => {
       page.searchButton.should('exist')
       page.searchBox.should('exist')
     })
+
+    it('should show a message when the search button is clicked without input', () => {
+      const page = Page.visit(SearchPage)
+
+      page.searchButton.click()
+
+      page.ordersList.contains('You have not entered any search terms')
+      page.ordersList.contains("Try searching using the device wearer's")
+      page.ordersList.contains('first name and surname')
+    })
+
+    it('should show a message when there are no results', () => {
+      cy.task('stubCemoListOrders', { httpStatus: 200, orders: [] })
+      const page = Page.visit(SearchPage)
+
+      page.searchBox.type('Unknown name')
+      page.searchButton.click()
+
+      page.ordersList.contains("No results found for 'Unknown name'")
+    })
+    // const mockOrder = {
+    //   ...mockApiOrder(),
+    //   deviceWearer: {firstName: BOb}
+    // }
   })
 })
