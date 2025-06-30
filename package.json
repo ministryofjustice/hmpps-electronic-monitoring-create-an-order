@@ -27,6 +27,7 @@
     "int-test": "npm run cy:run -- --spec 'integration_tests/e2e/**/*'",
     "int-test:parallel": "cypress-parallel -s cy:run -t 4 -d 'integration_tests/e2e/**/*' -a '\"--spec 'integration_tests/e2e/**/*'\"'",
     "int-test-scenarios": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*'",
+    "int-test-scenarios:parallel": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*' --env split=true,spec=integration_tests/scenarios/**/*",
     "int-test-ui": "npm run cy:open",
     "clean": "rm -rf dist node_modules",
     "rebuild": "npm run clean && npm i && npm run build"

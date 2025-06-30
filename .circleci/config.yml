@@ -162,7 +162,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/app
-      # - cypress/install
       - run:
           name: Update npm
           command: sudo npm install -g npm@latest
@@ -182,7 +181,7 @@ jobs:
           command: sleep 5
       - run:
           name: Run scenario tests
-          command: npm run int-test-scenarios -- --env split=true,spec=integration_tests/scenarios/**/*
+          command: npm run int-test-scenarios:parallel
       - run:
           name: Archive screenshots
           command: |
