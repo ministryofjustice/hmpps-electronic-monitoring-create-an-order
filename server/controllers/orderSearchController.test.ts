@@ -131,7 +131,7 @@ describe('OrderSearchController', () => {
   describe('search orders', () => {
     it('should call the service with the correct search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
-      req.query = { searchTerm: 'firstName' }
+      req.body = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -140,7 +140,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view containing search results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
-      req.query = { searchTerm: 'firstName' }
+      req.body = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -161,7 +161,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when there are no results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.query = { searchTerm: 'firstName' }
+      req.body = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -177,7 +177,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when there is no search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.query = { searchTerm: '' }
+      req.body = { searchTerm: '' }
 
       await orderController.search(req, res, next)
 
@@ -192,7 +192,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when searchTerm is undefined', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.query = {}
+      req.body = {}
 
       await orderController.search(req, res, next)
 

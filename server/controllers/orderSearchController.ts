@@ -6,13 +6,21 @@ import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import config from '../config'
 
-type OrderSearchViewModel = {
+type OrderListViewModel = {
   orders: Array<{
     displayName: string
     status: string
     type: string
     summaryUri: string
   }>
+  variationsEnabled: boolean
+}
+
+type OrderSearchViewModel = {
+  orders: {
+    text?: string | null | undefined
+    html?: string
+  }[][]
   variationsEnabled: boolean
   emptySearch?: boolean
   noResults?: boolean
@@ -41,7 +49,7 @@ export default class OrderSearchController {
     return `${order.deviceWearer.firstName || ''} ${order.deviceWearer.lastName || ''}`
   }
 
-  private constructViewModel(orders: Array<Order>): OrderSearchViewModel {
+  private constructListViewModel(orders: Array<Order>): OrderListViewModel {
     return {
       orders: orders.map(order => {
         return {
@@ -55,6 +63,39 @@ export default class OrderSearchController {
     }
   }
 
+  private createOrderItem = (order: Order) => {
+    const nameLink = `<a class="govuk-link govuk-task-list__link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} aria-describedby="company-details-1-status">${this.getDisplayName(order)}</a>`
+    return [
+      {
+        html: nameLink,
+      },
+      {
+        text: order.deviceWearer.dateOfBirth,
+      },
+      {
+        text: order.deviceWearer.pncId,
+      },
+      {
+        text: 'blah',
+      },
+      {
+        text: order.curfewConditions?.startDate,
+      },
+      {
+        text: order.curfewConditions?.endDate,
+      },
+      {
+        text: order.fmsResultDate,
+      },
+    ]
+  }
+  private constructSearchViewModel(orders: Array<Order>): OrderSearchViewModel {
+    return {
+      orders: orders.map(order => this.createOrderItem(order)),
+      variationsEnabled: config.variations.enabled,
+    }
+  }
+
   list: RequestHandler = async (req: Request, res: Response) => {
     await this.auditService.logPageView(Page.ORDER_SEARCH_PAGE, {
       who: res.locals.user.username,
@@ -64,14 +105,14 @@ export default class OrderSearchController {
     try {
       const orders = await this.orderSearchService.searchOrders({ accessToken: res.locals.user.token, searchTerm: '' })
 
-      res.render('pages/index', this.constructViewModel(orders))
+      res.render('pages/index', this.constructListViewModel(orders))
     } catch (e) {
-      res.render('pages/index', this.constructViewModel([]))
+      res.render('pages/index', this.constructListViewModel([]))
     }
   }
 
   search: RequestHandler = async (req: Request, res: Response) => {
-    const formData = SearchOrderFormDataParser.parse(req.query)
+    const formData = SearchOrderFormDataParser.parse(req.body)
 
     if (formData.searchTerm === '') {
       const model: OrderSearchViewModel = {
@@ -108,6 +149,6 @@ export default class OrderSearchController {
       return
     }
 
-    res.render('pages/search', this.constructViewModel(orders))
+    res.render('pages/search', this.constructListViewModel(orders))
   }
 }
