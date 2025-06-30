@@ -14,20 +14,21 @@ jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
 const mockDraftOrder = getMockOrder()
+const mockDate = new Date().toISOString()
 
 const mockSubmittedOrder = getMockOrder({
   status: OrderStatusEnum.Enum.SUBMITTED,
   type: OrderTypeEnum.Enum.VARIATION,
   deviceWearer: {
     nomisId: null,
-    pncId: null,
+    pncId: 'some id number',
     deliusId: null,
     prisonNumber: null,
     homeOfficeReferenceNumber: null,
     firstName: 'first',
     lastName: 'last',
     alias: null,
-    dateOfBirth: null,
+    dateOfBirth: mockDate,
     adultAtTimeOfInstallation: false,
     sex: null,
     gender: null,
@@ -38,6 +39,13 @@ const mockSubmittedOrder = getMockOrder({
   },
   enforcementZoneConditions: [],
   additionalDocuments: [],
+  curfewConditions: {
+    curfewAddress: null,
+    endDate: mockDate,
+    startDate: mockDate,
+    curfewAdditionalDetails: null,
+  },
+  fmsResultDate: mockDate,
 })
 
 const mock500Error: SanitisedError = {
@@ -148,12 +156,17 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [
-            {
-              displayName: 'first last',
-              status: 'SUBMITTED',
-              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
-              type: 'VARIATION',
-            },
+            [
+              {
+                html: `<a class="govuk-link govuk-task-list__link" href=/order/${mockSubmittedOrder.id}/summary aria-describedby="company-details-1-status">first last</a>`,
+              },
+              { text: mockDate },
+              { text: 'some id number' },
+              { text: 'blah' },
+              { text: mockDate },
+              { text: mockDate },
+              { text: mockDate },
+            ],
           ],
         }),
       )

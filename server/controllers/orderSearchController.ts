@@ -149,6 +149,6 @@ export default class OrderSearchController {
       return
     }
 
-    res.render('pages/search', this.constructListViewModel(orders))
+    res.render('pages/search', this.constructSearchViewModel(orders))
   }
 }
