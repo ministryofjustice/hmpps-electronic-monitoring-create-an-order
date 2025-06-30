@@ -57,7 +57,7 @@ describe('Device wearer service', () => {
           adultAtTimeOfInstallation: 'true',
           sex: 'MALE',
           gender: 'Male',
-          disabilities: ['MOBILITY', 'LEARNING_UNDERSTANDING_OR_CONCENTRATING'] as Array<Disability>,
+          disabilities: ['MOBILITY', 'LEARNING_UNDERSTANDING_CONCENTRATING'] as Array<Disability>,
           otherDisability: '',
         },
       }
@@ -75,7 +75,7 @@ describe('Device wearer service', () => {
           adultAtTimeOfInstallation: true,
           sex: 'MALE',
           gender: 'Male',
-          disabilities: 'MOBILITY,LEARNING_UNDERSTANDING_OR_CONCENTRATING',
+          disabilities: 'MOBILITY,LEARNING_UNDERSTANDING_CONCENTRATING',
           otherDisability: '',
         },
         path: '/api/orders/mockUid/device-wearer',

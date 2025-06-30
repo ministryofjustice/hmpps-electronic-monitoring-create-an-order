@@ -205,7 +205,7 @@
         disabilityOptions
       ) %}
 
-    {% elif disability.value == 'NONE_OF_THE_ABOVE' %}
+    {% elif disability.value == 'NONE' %}
       {% set disabilityOptions = (
         disabilityOptions.push({divider: "or"}),
         disabilityOptions.push(disability), disabilityOptions

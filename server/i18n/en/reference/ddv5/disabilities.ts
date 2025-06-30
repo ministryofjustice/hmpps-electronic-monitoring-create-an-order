@@ -6,14 +6,14 @@ const disabilitiesDDv5: DisabilitiesDDv5 = {
   MOBILITY: 'Physical disability or mobility issue',
   DEXTERITY: 'Fine motor or dexterity impairment',
   SKIN_CONDITION: 'Skin condition',
-  LEARNING_UNDERSTANDING_OR_CONCENTRATING:
+  LEARNING_UNDERSTANDING_CONCENTRATING:
     'Neurodiversity including conditions affecting learning, understanding or concentration',
   MEMORY: 'Condition affecting the memory or retaining information',
   MENTAL_HEALTH: 'Mental health condition',
-  STAMINA_OR_BREATHING_OR_FATIGUE: 'Health condition affecting stamina, breathing or causing fatigue',
-  SOCIALLY_OR_BEHAVIORALLY: 'Conditions affecting social skills and behaviour',
+  STAMINA_BREATHING_FATIGUE: 'Health condition affecting stamina, breathing or causing fatigue',
+  SOCIAL_BEHAVIOURAL: 'Conditions affecting social skills and behaviour',
   OTHER: 'The device wearer has a disability or health condition not listed',
-  NONE_OF_THE_ABOVE: 'Not able to provide this information',
+  NONE: 'Not able to provide this information',
 }
 
 export default disabilitiesDDv5
