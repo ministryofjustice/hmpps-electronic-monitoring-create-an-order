@@ -71,7 +71,7 @@ export default class OrderSearchController {
   }
 
   search: RequestHandler = async (req: Request, res: Response) => {
-    const formData = SearchOrderFormDataParser.parse(req.body)
+    const formData = SearchOrderFormDataParser.parse(req.query)
 
     if (formData.searchTerm === '') {
       const model: OrderSearchViewModel = {

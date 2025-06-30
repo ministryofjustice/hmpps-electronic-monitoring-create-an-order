@@ -131,7 +131,7 @@ describe('OrderSearchController', () => {
   describe('search orders', () => {
     it('should call the service with the correct search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
-      req.body = { searchTerm: 'firstName' }
+      req.query = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -140,7 +140,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view containing search results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
-      req.body = { searchTerm: 'firstName' }
+      req.query = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -161,7 +161,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when there are no results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = { searchTerm: 'firstName' }
+      req.query = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -176,7 +176,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when there is no search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = { searchTerm: '' }
+      req.query = { searchTerm: '' }
 
       await orderController.search(req, res, next)
 
@@ -189,23 +189,9 @@ describe('OrderSearchController', () => {
       )
     })
 
-    it('should render a view when searchTerm is null', async () => {
-      mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = { searchTerm: null }
-
-      await orderController.search(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/search',
-        expect.objectContaining({
-          orders: [],
-        }),
-      )
-    })
-
     it('should render a view when searchTerm is undefined', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = {}
+      req.query = {}
 
       await orderController.search(req, res, next)
 
