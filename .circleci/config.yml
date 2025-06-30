@@ -202,8 +202,13 @@ jobs:
           name: Run scenario tests
           command: npm run int-test-scenarios -- --env split=true,spec=integration_tests/scenarios/**/*
       - run:
-          name: Archive screenshots
-          command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+          name: Archive screenshots (if any)
+          command: |
+            if [ -d integration_tests/screenshots ]; then
+                tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+            else
+              echo "No screenshots to archive"
+            fi
       - run:
           name: Archive requests
           command: tar -czf integration_tests/requests.tar.gz integration_tests/requests
