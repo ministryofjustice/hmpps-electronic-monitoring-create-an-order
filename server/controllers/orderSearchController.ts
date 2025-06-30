@@ -90,7 +90,7 @@ export default class OrderSearchController {
         text: order.curfewConditions?.endDate ? this.formatDateTime(order.curfewConditions?.endDate) : undefined,
       },
       {
-        text: order.fmsResultDate,
+        text: order.fmsResultDate ? this.formatDateTime(order.fmsResultDate) : undefined,
       },
     ]
   }

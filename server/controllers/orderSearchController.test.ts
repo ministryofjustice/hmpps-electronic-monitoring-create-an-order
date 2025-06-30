@@ -14,7 +14,7 @@ jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
 const mockDraftOrder = getMockOrder()
-const mockDate = new Date().toISOString()
+const mockDate = new Date(2000, 10, 20).toISOString()
 
 const mockSubmittedOrder = getMockOrder({
   status: OrderStatusEnum.Enum.SUBMITTED,
@@ -160,12 +160,12 @@ describe('OrderSearchController', () => {
               {
                 html: `<a class="govuk-link govuk-task-list__link" href=/order/${mockSubmittedOrder.id}/summary aria-describedby="company-details-1-status">first last</a>`,
               },
-              { text: mockDate },
+              { text: '20/11/2000' },
               { text: 'some id number' },
               { text: 'blah' },
-              { text: mockDate },
-              { text: mockDate },
-              { text: mockDate },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
             ],
           ],
         }),
