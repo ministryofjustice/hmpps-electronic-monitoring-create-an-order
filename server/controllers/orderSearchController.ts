@@ -57,17 +57,12 @@ export default class OrderSearchController {
       searchTerm: formData.searchTerm,
     })
 
+    const model = constructSearchViewModel(orders)
     if (orders.length === 0) {
-      const model: OrderSearchViewModel = {
-        orders: [],
-        searchTerm: formData.searchTerm,
-        variationsEnabled: config.variations.enabled,
-        noResults: true,
-      }
-      res.render('pages/search', model)
-      return
+      model.searchTerm = formData.searchTerm
+      model.noResults = true
     }
 
-    res.render('pages/search', constructSearchViewModel(orders))
+    res.render('pages/search', model)
   }
 }
