@@ -46,6 +46,13 @@ context('Index', () => {
       page.searchButton.click()
 
       page.ordersList.contains("No results found for 'Unknown name'")
+      page.ordersList.contains('Check spelling is correct.')
+      page.ordersList.contains("Try searching using the device wearer's full name")
+      page.ordersList.contains("Can't find what you are looking for?")
+      page.ordersList.contains(
+        'If the form is not listed in the search results, it may be an emailed form so not available online.',
+      )
+      page.ordersList.contains('Tell us about changes to a form sent by email')
     })
     // const mockOrder = {
     //   ...mockApiOrder(),
