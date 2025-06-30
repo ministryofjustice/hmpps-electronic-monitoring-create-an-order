@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@5
+  cypress: cypress-io/cypress@3.4.2
 
 parameters:
   alerts-slack-channel:
@@ -154,12 +155,14 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
+    parallelism: 4
     environment:
       TZ: Europe/London
     steps:
       - checkout
       - attach_workspace:
           at: ~/app
+      # - cypress/install
       - run:
           name: Update npm
           command: sudo npm install -g npm@latest
@@ -179,10 +182,15 @@ jobs:
           command: sleep 5
       - run:
           name: Run scenario tests
-          command: npm run int-test-scenarios
+          command: npm run int-test-scenarios -- --env split=true,spec=integration_tests/scenarios/**/*
       - run:
           name: Archive screenshots
-          command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+          command: |
+            if [ -d integration_tests/screenshots ]; then
+              tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+            else
+              echo "No screenshots to archive"
+            fi
       - run:
           name: Archive requests
           command: tar -czf integration_tests/requests.tar.gz integration_tests/requests
