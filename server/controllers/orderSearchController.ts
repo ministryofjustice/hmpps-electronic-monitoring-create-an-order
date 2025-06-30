@@ -2,30 +2,8 @@ import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
-import { Order } from '../models/Order'
-import paths from '../constants/paths'
 import config from '../config'
-
-type OrderListViewModel = {
-  orders: Array<{
-    displayName: string
-    status: string
-    type: string
-    summaryUri: string
-  }>
-  variationsEnabled: boolean
-}
-
-type OrderSearchViewModel = {
-  orders: {
-    text?: string | null | undefined
-    html?: string
-  }[][]
-  variationsEnabled: boolean
-  emptySearch?: boolean
-  noResults?: boolean
-  searchTerm?: string
-}
+import { constructSearchViewModel, constructListViewModel, OrderSearchViewModel } from '../models/form-data/search'
 
 const SearchOrderFormDataParser = z.object({
   searchTerm: z.string().nullable().optional(),
@@ -37,71 +15,6 @@ export default class OrderSearchController {
     private readonly orderSearchService: OrderSearchService,
   ) {}
 
-  private getDisplayName(order: Order): string {
-    if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
-      if (order.type === 'VARIATION') {
-        return 'New variation'
-      }
-
-      return 'New form'
-    }
-
-    return `${order.deviceWearer.firstName || ''} ${order.deviceWearer.lastName || ''}`
-  }
-
-  private constructListViewModel(orders: Array<Order>): OrderListViewModel {
-    return {
-      orders: orders.map(order => {
-        return {
-          displayName: this.getDisplayName(order),
-          status: order.status,
-          type: order.type,
-          summaryUri: paths.ORDER.SUMMARY.replace(':orderId', order.id),
-        }
-      }),
-      variationsEnabled: config.variations.enabled,
-    }
-  }
-
-  formatDateTime = (dateToFormat: string): string => {
-    const date = new Date(dateToFormat)
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-  }
-
-  private createOrderItem = (order: Order) => {
-    const nameLink = `<a class="govuk-link govuk-task-list__link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} aria-describedby="company-details-1-status">${this.getDisplayName(order)}</a>`
-    return [
-      {
-        html: nameLink,
-      },
-      {
-        text: order.deviceWearer.dateOfBirth ? this.formatDateTime(order.deviceWearer.dateOfBirth) : undefined,
-      },
-      {
-        text: order.deviceWearer.pncId,
-      },
-      {
-        text: 'blah',
-      },
-      {
-        text: order.curfewConditions?.startDate ? this.formatDateTime(order.curfewConditions?.startDate) : undefined,
-      },
-      {
-        text: order.curfewConditions?.endDate ? this.formatDateTime(order.curfewConditions?.endDate) : undefined,
-      },
-      {
-        text: order.fmsResultDate ? this.formatDateTime(order.fmsResultDate) : undefined,
-      },
-    ]
-  }
-
-  private constructSearchViewModel(orders: Array<Order>): OrderSearchViewModel {
-    return {
-      orders: orders.map(order => this.createOrderItem(order)),
-      variationsEnabled: config.variations.enabled,
-    }
-  }
-
   list: RequestHandler = async (req: Request, res: Response) => {
     await this.auditService.logPageView(Page.ORDER_SEARCH_PAGE, {
       who: res.locals.user.username,
@@ -111,9 +24,9 @@ export default class OrderSearchController {
     try {
       const orders = await this.orderSearchService.searchOrders({ accessToken: res.locals.user.token, searchTerm: '' })
 
-      res.render('pages/index', this.constructListViewModel(orders))
+      res.render('pages/index', constructListViewModel(orders))
     } catch (e) {
-      res.render('pages/index', this.constructListViewModel([]))
+      res.render('pages/index', constructListViewModel([]))
     }
   }
 
@@ -155,6 +68,6 @@ export default class OrderSearchController {
       return
     }
 
-    res.render('pages/search', this.constructSearchViewModel(orders))
+    res.render('pages/search', constructSearchViewModel(orders))
   }
 }
