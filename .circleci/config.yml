@@ -239,8 +239,8 @@ workflows:
           name: build_docker
           # requires:
           # - build
-          #  persist_container_image was used in Matt's PR. I;m not sure if we need it or not. Keeping it commented here for now.
-          # persist_container_image: true
+          #  persist_container_image was used in Matt's PR. I;m not sure if we need it or not. Enabling it as it may be required to ensure that the container image isn't dismanted after a first set of parallel tests finishes .
+          persist_container_image: true
           filters:
             branches:
               only:
