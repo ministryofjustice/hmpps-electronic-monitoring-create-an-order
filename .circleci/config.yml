@@ -179,7 +179,14 @@ jobs:
           command: sleep 5
       - run:
           name: Run scenario tests
-          command: npm run int-test-scenarios
+          command: |
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+              echo "Pull Request detected. Running the kitchen-sink test only."
+              npm run int-test-scenarios -- --spec "integration_tests/scenarios/kitchen-sink.cy.ts"
+            else
+              echo "Merge to main branch detected. Running the full scenario suite."
+              npm run int-test-scenarios
+            fi
       - run:
           name: Archive screenshots
           command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
