@@ -27,6 +27,7 @@
     "int-test": "npm run cy:run -- --spec 'integration_tests/e2e/**/*'",
     "int-test:parallel": "cypress-parallel -s cy:run -t 4 -d 'integration_tests/e2e/**/*' -a '\"--spec 'integration_tests/e2e/**/*'\"'",
     "int-test-scenarios": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*'",
+    "int-test-scenarios:parallel": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*' --env split=true,spec=integration_tests/scenarios/**/*",
     "int-test-ui": "npm run cy:open",
     "clean": "rm -rf dist node_modules",
     "rebuild": "npm run clean && npm i && npm run build"
@@ -100,6 +101,7 @@
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.1.0",
     "csrf-sync": "^4.2.1",
+    "cypress-split": "^1.24.18",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "govuk-frontend": "^5.10.2",
