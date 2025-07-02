@@ -192,7 +192,13 @@ jobs:
           command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
       - run:
           name: Archive requests
-          command: tar -czf integration_tests/requests.tar.gz integration_tests/requests
+          command: |
+            if [ -d "integration_tests/requests" ]; then
+              echo "Requests directory found, archiving..."
+              tar -czf integration_tests/requests.tar.gz integration_tests/requests
+            else
+              echo "Requests directory not found. Skipping archive."
+            fi
       - store_test_results:
           path: test_results
       - store_artifacts:
