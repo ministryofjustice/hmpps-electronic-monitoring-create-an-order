@@ -58,12 +58,12 @@ context('The kitchen sink', () => {
       type: 'LICENCE',
     },
   }
-  let orderId: string
 
   const cacheOrderId = () => {
     cy.url().then((url: string) => {
       const parts = url.replace(Cypress.config().baseUrl, '').split('/')
-      ;[, , orderId] = parts
+      const orderId = parts[2]
+      cy.wrap(orderId).as('orderId')
     })
   }
 
