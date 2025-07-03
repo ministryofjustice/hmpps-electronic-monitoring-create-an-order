@@ -12,7 +12,7 @@ context('Index', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoListOrders')
+      cy.task('stubCemoSearchOrders')
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
@@ -41,7 +41,7 @@ context('Index', () => {
     })
 
     it('should show a message when there are no results', () => {
-      cy.task('stubCemoListOrders', { httpStatus: 200, orders: [] })
+      cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
       const page = Page.visit(SearchPage)
 
       page.searchBox.type('Unknown name')
@@ -54,7 +54,6 @@ context('Index', () => {
       page.ordersList.contains(
         'If the form is not listed in the search results, it may be an emailed form so not available online.',
       )
-      page.ordersList.contains('Tell us about changes to a form sent by email')
     })
 
     describe('when rendering an order', () => {
@@ -81,7 +80,7 @@ context('Index', () => {
       let page: SearchPage
 
       beforeEach(() => {
-        cy.task('stubCemoListOrders', { httpStatus: 200, orders: [mockOrder] })
+        cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
         page = Page.visit(SearchPage)
 
         page.searchBox.type('Bob')
