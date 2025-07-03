@@ -40,6 +40,12 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
+const getIdList = (order: Order) => {
+  const { nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber } = order.deviceWearer
+  const idList = [nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber].filter(id => id && id?.length > 0)
+  return idList.join('\n')
+}
+
 const createOrderItem = (order: Order) => {
   const nameLink = `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} >${getDisplayName(order)}</a>`
   return [
@@ -50,7 +56,7 @@ const createOrderItem = (order: Order) => {
       text: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : undefined,
     },
     {
-      text: order.deviceWearer.pncId,
+      text: getIdList(order),
     },
     {
       text: 'blah',

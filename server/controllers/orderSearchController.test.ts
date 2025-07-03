@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { OrderStatusEnum, OrderTypeEnum } from '../models/Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
@@ -15,38 +15,6 @@ jest.mock('../data/hmppsAuditClient')
 
 const mockDraftOrder = getMockOrder()
 const mockDate = new Date(2000, 10, 20).toISOString()
-
-const mockSubmittedOrder = getMockOrder({
-  status: OrderStatusEnum.Enum.SUBMITTED,
-  type: OrderTypeEnum.Enum.VARIATION,
-  deviceWearer: {
-    nomisId: null,
-    pncId: 'some id number',
-    deliusId: null,
-    prisonNumber: null,
-    homeOfficeReferenceNumber: null,
-    firstName: 'first',
-    lastName: 'last',
-    alias: null,
-    dateOfBirth: mockDate,
-    adultAtTimeOfInstallation: false,
-    sex: null,
-    gender: null,
-    disabilities: [],
-    noFixedAbode: null,
-    language: null,
-    interpreterRequired: null,
-  },
-  enforcementZoneConditions: [],
-  additionalDocuments: [],
-  curfewConditions: {
-    curfewAddress: null,
-    endDate: mockDate,
-    startDate: mockDate,
-    curfewAdditionalDetails: null,
-  },
-  fmsResultDate: mockDate,
-})
 
 const mock500Error: SanitisedError = {
   message: 'Internal Server Error',
@@ -64,8 +32,41 @@ describe('OrderSearchController', () => {
   let req: Request
   let res: Response
   let next: NextFunction
+  let mockSubmittedOrder: Order
 
   beforeEach(() => {
+    mockSubmittedOrder = getMockOrder({
+      status: OrderStatusEnum.Enum.SUBMITTED,
+      type: OrderTypeEnum.Enum.VARIATION,
+      deviceWearer: {
+        nomisId: null,
+        pncId: 'some id number',
+        deliusId: null,
+        prisonNumber: null,
+        homeOfficeReferenceNumber: null,
+        firstName: 'first',
+        lastName: 'last',
+        alias: null,
+        dateOfBirth: mockDate,
+        adultAtTimeOfInstallation: false,
+        sex: null,
+        gender: null,
+        disabilities: [],
+        noFixedAbode: null,
+        language: null,
+        interpreterRequired: null,
+      },
+      enforcementZoneConditions: [],
+      additionalDocuments: [],
+      curfewConditions: {
+        curfewAddress: null,
+        endDate: mockDate,
+        startDate: mockDate,
+        curfewAdditionalDetails: null,
+      },
+      fmsResultDate: mockDate,
+    })
+
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
       enabled: true,
@@ -162,6 +163,37 @@ describe('OrderSearchController', () => {
               },
               { text: '20/11/2000' },
               { text: 'some id number' },
+              { text: 'blah' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+            ],
+          ],
+        }),
+      )
+    })
+
+    it('should render all id numbers', async () => {
+      mockSubmittedOrder.deviceWearer.nomisId = 'nomisId'
+      mockSubmittedOrder.deviceWearer.pncId = 'pncId'
+      mockSubmittedOrder.deviceWearer.deliusId = 'deliusId'
+      mockSubmittedOrder.deviceWearer.homeOfficeReferenceNumber = 'hoRefNum'
+      mockSubmittedOrder.deviceWearer.prisonNumber = 'prisNum'
+      mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
+      req.query = { searchTerm: 'firstName' }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [
+            [
+              {
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+              },
+              { text: '20/11/2000' },
+              { text: 'nomisId\npncId\ndeliusId\nhoRefNum\nprisNum' },
               { text: 'blah' },
               { text: '20/11/2000' },
               { text: '20/11/2000' },
