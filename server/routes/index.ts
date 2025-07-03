@@ -152,7 +152,6 @@ export default function routes({
 
   get('/', orderSearchController.list)
   get('/search', orderSearchController.search)
-  post('/search', orderSearchController.search)
 
   // Order
   post(paths.ORDER.CREATE, orderController.create)

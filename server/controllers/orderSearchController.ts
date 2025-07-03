@@ -22,7 +22,7 @@ export default class OrderSearchController {
     })
 
     try {
-      const orders = await this.orderSearchService.searchOrders({ accessToken: res.locals.user.token, searchTerm: '' })
+      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token })
 
       res.render('pages/index', constructListViewModel(orders))
     } catch (e) {
@@ -31,7 +31,7 @@ export default class OrderSearchController {
   }
 
   search: RequestHandler = async (req: Request, res: Response) => {
-    const formData = SearchOrderFormDataParser.parse(req.body)
+    const formData = SearchOrderFormDataParser.parse(req.query)
 
     if (formData.searchTerm === '') {
       const model: OrderSearchViewModel = {
@@ -57,7 +57,7 @@ export default class OrderSearchController {
       searchTerm: formData.searchTerm,
     })
 
-    const model = constructSearchViewModel(orders)
+    const model = constructSearchViewModel(orders, formData.searchTerm)
     if (orders.length === 0) {
       model.searchTerm = formData.searchTerm
       model.noResults = true

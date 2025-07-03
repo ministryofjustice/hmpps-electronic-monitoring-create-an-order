@@ -41,7 +41,7 @@ const formatDateTime = (dateToFormat: string): string => {
 }
 
 const createOrderItem = (order: Order) => {
-  const nameLink = `<a class="govuk-link govuk-task-list__link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} aria-describedby="company-details-1-status">${getDisplayName(order)}</a>`
+  const nameLink = `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} >${getDisplayName(order)}</a>`
   return [
     {
       html: nameLink,
@@ -67,10 +67,11 @@ const createOrderItem = (order: Order) => {
   ]
 }
 
-export const constructSearchViewModel = (orders: Array<Order>): OrderSearchViewModel => {
+export const constructSearchViewModel = (orders: Array<Order>, searchTerm: string): OrderSearchViewModel => {
   return {
     orders: orders.map(order => createOrderItem(order)),
     variationsEnabled: config.variations.enabled,
+    searchTerm,
   }
 }
 

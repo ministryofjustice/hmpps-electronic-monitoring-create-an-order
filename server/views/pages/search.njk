@@ -5,11 +5,14 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block content %}
+
+
   <h1 class="govuk-heading-m">Search for a submitted form</h1>
+
 
   {{ mojSearch({
     action: '#',
-    method: 'post',
+    method: 'get',
     input: {
       id: 'search',
       name: 'searchTerm'
@@ -46,8 +49,6 @@
             <h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
             If the form is not listed in the search results, it may be an emailed form so not available online.
             <br>
-            
-            <a href="new-form?section-1-complete=false&amp;section-2-complete=false&amp;section-3-complete=false&amp;section-4-complete=false&amp;section-5-complete=false&amp;section-6-complete=false&amp;view=none&amp;newform=false">Tell us about changes to a form sent by email</a>.
           </strong>
         </div>
     {% elif orders.length > 0 %}
