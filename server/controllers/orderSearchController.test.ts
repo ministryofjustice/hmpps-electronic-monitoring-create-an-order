@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
-import { OrderStatusEnum, OrderTypeEnum } from '../models/Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
@@ -14,31 +14,7 @@ jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
 const mockDraftOrder = getMockOrder()
-
-const mockSubmittedOrder = getMockOrder({
-  status: OrderStatusEnum.Enum.SUBMITTED,
-  type: OrderTypeEnum.Enum.VARIATION,
-  deviceWearer: {
-    nomisId: null,
-    pncId: null,
-    deliusId: null,
-    prisonNumber: null,
-    homeOfficeReferenceNumber: null,
-    firstName: 'first',
-    lastName: 'last',
-    alias: null,
-    dateOfBirth: null,
-    adultAtTimeOfInstallation: false,
-    sex: null,
-    gender: null,
-    disabilities: [],
-    noFixedAbode: null,
-    language: null,
-    interpreterRequired: null,
-  },
-  enforcementZoneConditions: [],
-  additionalDocuments: [],
-})
+const mockDate = new Date(2000, 10, 20).toISOString()
 
 const mock500Error: SanitisedError = {
   message: 'Internal Server Error',
@@ -56,8 +32,51 @@ describe('OrderSearchController', () => {
   let req: Request
   let res: Response
   let next: NextFunction
+  let mockSubmittedOrder: Order
 
   beforeEach(() => {
+    mockSubmittedOrder = getMockOrder({
+      status: OrderStatusEnum.Enum.SUBMITTED,
+      type: OrderTypeEnum.Enum.VARIATION,
+      deviceWearer: {
+        nomisId: null,
+        pncId: 'some id number',
+        deliusId: null,
+        prisonNumber: null,
+        homeOfficeReferenceNumber: null,
+        firstName: 'first',
+        lastName: 'last',
+        alias: null,
+        dateOfBirth: mockDate,
+        adultAtTimeOfInstallation: false,
+        sex: null,
+        gender: null,
+        disabilities: [],
+        noFixedAbode: null,
+        language: null,
+        interpreterRequired: null,
+      },
+      enforcementZoneConditions: [],
+      additionalDocuments: [],
+      curfewConditions: {
+        curfewAddress: null,
+        endDate: mockDate,
+        startDate: mockDate,
+        curfewAdditionalDetails: null,
+      },
+      fmsResultDate: mockDate,
+      addresses: [
+        {
+          addressType: 'PRIMARY',
+          addressLine1: '',
+          addressLine2: '',
+          addressLine3: 'Glossop',
+          addressLine4: '',
+          postcode: '',
+        },
+      ],
+    })
+
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
       enabled: true,
@@ -90,7 +109,7 @@ describe('OrderSearchController', () => {
 
   describe('list orders', () => {
     it('should render a view containing order search results', async () => {
-      mockOrderService.searchOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
+      mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
 
       await orderController.list(req, res, next)
 
@@ -116,7 +135,7 @@ describe('OrderSearchController', () => {
     })
 
     it('should render a view containing no results if there is an error', async () => {
-      mockOrderService.searchOrders.mockRejectedValue(mock500Error)
+      mockOrderService.listOrders.mockRejectedValue(mock500Error)
 
       await orderController.list(req, res, next)
 
@@ -131,7 +150,7 @@ describe('OrderSearchController', () => {
   describe('search orders', () => {
     it('should call the service with the correct search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
-      req.body = { searchTerm: 'firstName' }
+      req.query = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -140,7 +159,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view containing search results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
-      req.body = { searchTerm: 'firstName' }
+      req.query = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -148,12 +167,48 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [
-            {
-              displayName: 'first last',
-              status: 'SUBMITTED',
-              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
-              type: 'VARIATION',
-            },
+            [
+              {
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+              },
+              { text: '20/11/2000' },
+              { text: 'some id number' },
+              { text: 'Glossop' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+            ],
+          ],
+        }),
+      )
+    })
+
+    it('should render all id numbers', async () => {
+      mockSubmittedOrder.deviceWearer.nomisId = 'nomisId'
+      mockSubmittedOrder.deviceWearer.pncId = 'pncId'
+      mockSubmittedOrder.deviceWearer.deliusId = 'deliusId'
+      mockSubmittedOrder.deviceWearer.homeOfficeReferenceNumber = 'hoRefNum'
+      mockSubmittedOrder.deviceWearer.prisonNumber = 'prisNum'
+      mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
+      req.query = { searchTerm: 'firstName' }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [
+            [
+              {
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+              },
+              { text: '20/11/2000' },
+              { text: 'nomisId\npncId\ndeliusId\nhoRefNum\nprisNum' },
+              { text: 'Glossop' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+              { text: '20/11/2000' },
+            ],
           ],
         }),
       )
@@ -161,7 +216,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when there are no results', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = { searchTerm: 'firstName' }
+      req.query = { searchTerm: 'firstName' }
 
       await orderController.search(req, res, next)
 
@@ -169,6 +224,7 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [],
+          searchTerm: 'firstName',
           noResults: true,
         }),
       )
@@ -176,7 +232,7 @@ describe('OrderSearchController', () => {
 
     it('should render a view when there is no search term', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = { searchTerm: '' }
+      req.query = { searchTerm: '' }
 
       await orderController.search(req, res, next)
 
@@ -189,23 +245,9 @@ describe('OrderSearchController', () => {
       )
     })
 
-    it('should render a view when searchTerm is null', async () => {
-      mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = { searchTerm: null }
-
-      await orderController.search(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/search',
-        expect.objectContaining({
-          orders: [],
-        }),
-      )
-    })
-
     it('should render a view when searchTerm is undefined', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
-      req.body = {}
+      req.query = {}
 
       await orderController.search(req, res, next)
 
