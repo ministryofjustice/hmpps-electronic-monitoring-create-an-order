@@ -143,6 +143,19 @@ const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): 
     },
   })
 
+const searchOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/cemo/api/orders/search',
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? options.orders : null,
+    },
+  })
+
 type GetOrderStubOptions = {
   httpStatus: number
   id?: string
@@ -610,6 +623,7 @@ export default {
   stubCemoGetOrder: getOrder,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
+  stubCemoSearchOrders: searchOrders,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
