@@ -4,7 +4,7 @@ import AppPage from './appPage'
 
 import { PageElement } from './page'
 
-export default class IndexPage extends AppPage {
+export default class SearchPage extends AppPage {
   protected elementCacheId: string = uuidv4()
 
   constructor() {
