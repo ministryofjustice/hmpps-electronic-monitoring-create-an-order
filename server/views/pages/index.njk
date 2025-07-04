@@ -27,34 +27,18 @@
           {{ govukButton({
               text: "Change submitted form",
               name: "type",
-              value: "VARIATION"
+              value: "VARIATION",
+	      classes: "govuk-button--secondary"
           }) }}
         {% endif %}
+        {{ govukButton({
+            text: "Search submitted form",
+            name: "type",
+            href: "/search",
+	    classes: "govuk-button--secondary"
+        }) }}
     </div>
   </form>
-
-{# {{ mojSearch({
-    action: '#',
-    method: 'get',
-    input: {
-      id: 'keyword',
-      name: 'keyword'
-    },
-    label: {
-      text: 'Find an order',
-      classes: 'govuk-!-font-weight-bold'
-    },
-    hint: {
-      text: 'You can search by subject name'
-    },
-    button: {
-      text: 'Search'
-    }
-  }) }}
-
- {% if previous != 0 %}
-  {% set previousButton = { text: 'Previous', href:'' } %}
-{% endif %} #}
 
   {% if next != 0 %}
     {% set nextButton = { text: 'Next', href: ''} %}

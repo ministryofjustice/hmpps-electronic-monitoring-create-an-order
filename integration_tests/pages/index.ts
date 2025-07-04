@@ -21,6 +21,10 @@ export default class IndexPage extends AppPage {
     return cy.contains('Change submitted form')
   }
 
+  get searchFormButton(): PageElement {
+    return cy.contains('Search submitted form')
+  }
+
   get ordersList(): PageElement {
     return cy.get(`@${this.elementCacheId}-orders`)
   }
