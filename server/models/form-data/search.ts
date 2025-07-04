@@ -1,5 +1,6 @@
 import config from '../../config'
 import paths from '../../constants/paths'
+import { AddressTypeEnum } from '../Address'
 import { Order } from '../Order'
 
 type OrderListViewModel = {
@@ -48,6 +49,7 @@ const getIdList = (order: Order) => {
 
 const createOrderItem = (order: Order) => {
   const nameLink = `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} >${getDisplayName(order)}</a>`
+  const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
   return [
     {
       html: nameLink,
@@ -59,7 +61,7 @@ const createOrderItem = (order: Order) => {
       text: getIdList(order),
     },
     {
-      text: 'blah',
+      text: currentAddress?.addressLine3 ?? '',
     },
     {
       text: order.curfewConditions?.startDate ? formatDateTime(order.curfewConditions?.startDate) : undefined,

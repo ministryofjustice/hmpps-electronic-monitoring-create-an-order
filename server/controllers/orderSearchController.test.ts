@@ -65,6 +65,16 @@ describe('OrderSearchController', () => {
         curfewAdditionalDetails: null,
       },
       fmsResultDate: mockDate,
+      addresses: [
+        {
+          addressType: 'PRIMARY',
+          addressLine1: '',
+          addressLine2: '',
+          addressLine3: 'Glossop',
+          addressLine4: '',
+          postcode: '',
+        },
+      ],
     })
 
     mockAuditClient = new HmppsAuditClient({
@@ -163,7 +173,7 @@ describe('OrderSearchController', () => {
               },
               { text: '20/11/2000' },
               { text: 'some id number' },
-              { text: 'blah' },
+              { text: 'Glossop' },
               { text: '20/11/2000' },
               { text: '20/11/2000' },
               { text: '20/11/2000' },
@@ -194,7 +204,7 @@ describe('OrderSearchController', () => {
               },
               { text: '20/11/2000' },
               { text: 'nomisId\npncId\ndeliusId\nhoRefNum\nprisNum' },
-              { text: 'blah' },
+              { text: 'Glossop' },
               { text: '20/11/2000' },
               { text: '20/11/2000' },
               { text: '20/11/2000' },

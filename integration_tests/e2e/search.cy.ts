@@ -7,8 +7,8 @@ const mockOrderId = uuidv4()
 
 const basicOrder = mockApiOrder()
 
-context('Index', () => {
-  context('Viewing the order list', () => {
+context('Search', () => {
+  context('Searching for sumitted orders', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -75,6 +75,16 @@ context('Index', () => {
           curfewAdditionalDetails: null,
         },
         fmsResultDate: mockDate,
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '',
+            addressLine2: '',
+            addressLine3: 'Glossop',
+            addressLine4: '',
+            postcode: '',
+          },
+        ],
       }
 
       let page: SearchPage
@@ -99,7 +109,7 @@ context('Index', () => {
       it('should show correct order details', () => {
         page.ordersList.contains('Bob Builder')
         page.ordersList.contains('some id')
-        page.ordersList.contains('blah')
+        page.ordersList.contains('Glossop')
         page.ordersList.contains('20/11/2000')
       })
     })
