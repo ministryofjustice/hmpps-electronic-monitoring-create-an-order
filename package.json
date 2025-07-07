@@ -25,7 +25,7 @@
     "cy:run": "cypress run --config video=false",
     "cy:open": "cypress open --e2e --browser chrome",
     "int-test": "npm run cy:run -- --spec 'integration_tests/e2e/**/*'",
-    "int-test:parallel": "cypress-parallel -s cy:run -t 4 -d 'integration_tests/e2e/**/*' -a '\"--spec 'integration_tests/e2e/**/*'\"'",
+    "int-test:parallel": "npm run cy:run -- --spec 'integration_tests/e2e/**/*' --env split=true,spec=integration_tests/e2e/**/*",
     "int-test-scenarios": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*'",
     "int-test-scenarios:parallel": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*' --env split=true,spec=integration_tests/scenarios/**/*",
     "int-test-ui": "npm run cy:open",
