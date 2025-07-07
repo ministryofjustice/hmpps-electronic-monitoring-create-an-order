@@ -3,13 +3,13 @@ import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 
 import VariationDetailsPage from '../../../pages/order/variation/variationDetails'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 
 const mockOrderId = uuidv4()
 const apiPath = '/variation'
 const sampleFormData = {
   variationType: 'The curfew hours',
   variationDate: new Date(2024, 0, 1),
+  variationDetails: 'Change to curfew hours',
 }
 
 context('Variation', () => {
@@ -32,6 +32,7 @@ context('Variation', () => {
           response: {
             variationType: 'CHANGE_TO_CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
+            variationDetails: 'Change to curfew hours',
           },
         })
 
@@ -42,24 +43,16 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndContinueButton.click()
+        page.form.saveAndReturnButton.click()
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             variationType: 'CHANGE_TO_CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
+            variationDetails: 'Change to curfew hours',
           },
         }).should('be.true')
-      })
-
-      it('should continue to collect device wearer details', () => {
-        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
-
-        page.form.fillInWith(sampleFormData)
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(AboutDeviceWearerPage)
       })
 
       it('should return to the summary page', () => {

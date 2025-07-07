@@ -213,7 +213,9 @@ export default class OrderTasksPage extends AppPage {
 
     const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
     variationDetailsPage.form.fillInWith(variationDetails)
-    variationDetailsPage.form.saveAndContinueButton.click()
+    variationDetailsPage.form.saveAndReturnButton.click()
+
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -296,7 +298,7 @@ export default class OrderTasksPage extends AppPage {
 
     const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
     variationDetailsPage.form.fillInWith(variationDetails)
-    variationDetailsPage.form.saveAndContinueButton.click()
+    variationDetailsPage.form.saveAndReturnButton.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -377,7 +379,7 @@ export default class OrderTasksPage extends AppPage {
 
     const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
     variationDetailsPage.form.fillInWith(variationDetails)
-    variationDetailsPage.form.saveAndContinueButton.click()
+    variationDetailsPage.form.saveAndReturnButton.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,

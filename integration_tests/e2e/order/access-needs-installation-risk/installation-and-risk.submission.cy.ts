@@ -97,7 +97,7 @@ context('Access needs and installation risk information', () => {
         }
 
         page.form.fillInWith(validFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

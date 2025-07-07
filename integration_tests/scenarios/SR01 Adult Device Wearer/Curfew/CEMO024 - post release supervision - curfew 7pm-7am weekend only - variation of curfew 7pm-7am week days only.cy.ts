@@ -98,6 +98,7 @@ context('Scenarios', () => {
       const variationDetails = {
         variationType: 'The curfew hours',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDescrption: 'Change to curfew hours',
       }
       const variationCurfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
