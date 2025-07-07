@@ -94,7 +94,7 @@ context('Search', () => {
         cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
         page = Page.visit(SearchPage)
 
-        page.searchBox.type('Bob')
+        page.searchBox.type('Bob Builder')
         page.searchButton.click()
       })
 
