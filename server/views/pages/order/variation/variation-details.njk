@@ -3,6 +3,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set isDisabled = {} if isOrderEditable else { disabled: true } %}
 
@@ -67,5 +68,20 @@
     errorMessage: variationType.error,
     items: content.reference.variationTypes | toOptions(not isOrderEditable)
   }) }}
+
+
+{{ govukCharacterCount({
+  name: "variationReason",
+  id: "variationReason",
+  maxlength: 200,
+  label: {
+    text: "Enter information on what you have changed",
+    classes: "govuk-label--s",
+    isPageHeading: false
+  },
+  hint: {
+    text: "This text will be sent with your changes to help the installer quickly understand what has changed and what they need to do."
+  }
+}) }}
 
 {% endblock %}
