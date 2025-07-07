@@ -44,7 +44,7 @@ const formatDateTime = (dateToFormat: string): string => {
 const getIdList = (order: Order) => {
   const { nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber } = order.deviceWearer
   const idList = [nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber].filter(id => id && id?.length > 0)
-  return idList.join('\n')
+  return idList.join('</br>')
 }
 
 const createOrderItem = (order: Order) => {
@@ -58,7 +58,7 @@ const createOrderItem = (order: Order) => {
       text: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : undefined,
     },
     {
-      text: getIdList(order),
+      html: getIdList(order),
     },
     {
       text: currentAddress?.addressLine3 ?? '',

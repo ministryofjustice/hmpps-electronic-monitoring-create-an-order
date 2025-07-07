@@ -67,6 +67,7 @@ context('Search', () => {
           lastName: 'Builder',
           dateOfBirth: mockDate,
           pncId: 'some id',
+          nomisId: 'some other id',
         },
         curfewConditions: {
           startDate: mockDate,
