@@ -14,38 +14,40 @@
 {% endif %}
 
 {% block content %}
-  <div class="govuk-grid-column-two-thirds">
-    <br/>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <br/>
 
-    {{ govukPanel({
-      titleText: titleText,
-      attributes: {
-        "data-qa": "confirmation-panel"
-      }
-    }) }}
+      {{ govukPanel({
+        titleText: titleText,
+        attributes: {
+          "data-qa": "confirmation-panel"
+        }
+      }) }}
 
-    <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+      <img src="{{ formDownloadIcon }}" alt="Icon of a form">
 
-    {{ govukButton({
-      text: "View and download completed application form",
-      href: "/order/" + orderId + "/receipt",
-      classes: "govuk-button--secondary",
-      id: "receipt-button"
-    }) }}
+      {{ govukButton({
+        text: "View and download completed application form",
+        href: "/order/" + orderId + "/receipt",
+        classes: "govuk-button--secondary",
+        id: "receipt-button"
+      }) }}
 
-    <br/>
+      <br/>
 
-    {{ govukButton({
-      text: "Back to start",
-      href: "/",
-      id: "back-to-applications-button"
-    }) }}
+      {{ govukButton({
+        text: "Back to start",
+        href: "/",
+        id: "back-to-applications-button"
+      }) }}
 
-    <p  class="govuk-body">
-      <a href="https://forms.office.com/e/khDZBF1tCS">
-        What did you think of this service? (takes 30 seconds)
-      </a>
-    </p>
+      <p  class="govuk-body">
+        <a href="https://forms.office.com/e/khDZBF1tCS">
+          What did you think of this service? (takes 30 seconds)
+        </a>
+      </p>
 
+    </div>
   </div>
 {% endblock %}
