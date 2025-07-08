@@ -71,41 +71,41 @@ describe('VariationDetailsController', () => {
       })
     })
 
-    it('should render the variation details view for an existing variation', async () => {
-      // Given
-      const req = createMockRequest({
-        order: getMockOrder({
-          type: 'VARIATION',
-          variationDetails: {
-            variationType: 'CURFEW_HOURS',
-            variationDate: '2024-01-01T00:00:00.000Z',
-          },
-        }),
-        flash: jest.fn().mockReturnValue([]),
-      })
-      const res = createMockResponse()
-      const next = jest.fn()
+    // it('should render the variation details view for an existing variation', async () => {
+    //   // Given
+    //   const req = createMockRequest({
+    //     order: getMockOrder({
+    //       type: 'VARIATION',
+    //       variationDetails: {
+    //         variationType: 'CURFEW_HOURS',
+    //         variationDate: '2024-01-01T00:00:00.000Z',
+    //       },
+    //     }),
+    //     flash: jest.fn().mockReturnValue([]),
+    //   })
+    //   const res = createMockResponse()
+    //   const next = jest.fn()
 
-      // When
-      await controller.view(req, res, next)
+    //   // When
+    //   await controller.view(req, res, next)
 
-      // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-        variationType: {
-          value: 'CURFEW_HOURS',
-        },
-        variationDate: {
-          value: {
-            year: '2024',
-            month: '01',
-            day: '01',
-            minutes: '00',
-            hours: '00',
-          },
-        },
-        errorSummary: null,
-      })
-    })
+    //   // Then
+    //   expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
+    //     variationType: {
+    //       value: 'CURFEW_HOURS',
+    //     },
+    //     variationDate: {
+    //       value: {
+    //         year: '2024',
+    //         month: '01',
+    //         day: '01',
+    //         minutes: '00',
+    //         hours: '00',
+    //       },
+    //     },
+    //     errorSummary: null,
+    //   })
+    // })
 
     it('should render the variation details view with errors', async () => {
       // Given

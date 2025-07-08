@@ -56,6 +56,7 @@ interface ValidationErrors {
   variationDetails: {
     variationDate: DateErrorMessages
     variationTypeRequired: string
+    variationReasonRequired: string
   }
   installationLocation: {
     locationRequired: string
@@ -203,6 +204,7 @@ const validationErrors: ValidationErrors = {
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
     variationTypeRequired: 'Variation type is required',
+    variationReasonRequired: 'Variation reason is required',
   },
   installationLocation: {
     locationRequired: 'Select where will installation of the electronic monitoring device take place',

@@ -22,6 +22,10 @@ const createViewModelFromFormData = (
       value: formData.variationDate,
       error: getError(validationErrors, 'variationDate'),
     },
+    variationReason: {
+      value: formData.variationReason,
+      error: getError(validationErrors, 'variationReason'),
+    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -33,6 +37,9 @@ const createViewModelFromEntity = (variationDetails: VariationDetails | null): V
     },
     variationDate: {
       value: deserialiseDateTime(variationDetails?.variationDate ?? null),
+    },
+    variationReason: {
+      value: variationDetails?.variationReason ?? '',
     },
     errorSummary: null,
   }
