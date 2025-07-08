@@ -7,12 +7,18 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% if orderType == 'VARIATION' %}
+  {% set titleText = "Changes to the form successfully submitted" %}
+{% else %}
+  {% set titleText = "Application form successfully submitted" %}
+{% endif %}
+
 {% block content %}
   <div class="govuk-grid-column-two-thirds">
     <br/>
 
     {{ govukPanel({
-      titleText: "Application form successfully submitted",
+      titleText: titleText,
       attributes: {
         "data-qa": "confirmation-panel"
       }
