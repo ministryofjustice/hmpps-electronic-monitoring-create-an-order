@@ -5,7 +5,7 @@ import ReceiptPage from '../../pages/order/receipt'
 
 const mockOrderId = uuidv4()
 
-context('Submit success', () => {
+context('Successful new order submission', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
