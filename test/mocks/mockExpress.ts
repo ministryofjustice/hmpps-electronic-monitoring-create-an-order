@@ -3,6 +3,7 @@ import getContent from '../../server/i18n'
 import { DataDictionaryVersions } from '../../server/types/i18n/dataDictionaryVersion'
 import { Locales } from '../../server/types/i18n/locale'
 import FeatureFlags from '../../server/utils/featureFlags'
+import { Order } from '../../server/models/Order'
 
 export const createMockRequest = (
   overrideProperties: Partial<Request> = { params: { orderId: '123456789' } },
@@ -21,14 +22,14 @@ export const createMockRequest = (
   }
 }
 
-export const createMockResponse = (): Response => {
+export const createMockResponse = (order?:Order): Response => {
   // @ts-expect-error stubbing res.render
 
   return {
     locals: {
       content: getContent(
         Locales.en,
-        FeatureFlags.getInstance().get('DD_V5_1_ENABLED') ? DataDictionaryVersions.DDv5 : DataDictionaryVersions.DDv4,
+        order?.dataDictionaryVersion??"DDV4",
       ),
       user: {
         username: 'fakeUserName',
