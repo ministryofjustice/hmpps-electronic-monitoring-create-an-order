@@ -24,7 +24,6 @@ export default class FeatureFlags {
 
   private loadFlagsFromEnv(): FeatureFlagMap {
     return {
-      DD_V5_1_ENABLED: process.env.DD_V5_1_ENABLED === 'true',
       MAPPA_ENABLED: process.env.MAPPA_ENABLED === 'true',
       MONITORING_CONDITION_TIMES_ENABLED: process.env.MONITORING_CONDITION_TIMES_ENABLED === 'true',
       VARIATIONS_ENABLED: process.env.VARIATIONS_ENABLED === 'true',
