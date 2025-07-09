@@ -9,7 +9,7 @@ const apiPath = '/monitoring-conditions'
 
 const validFormData = {
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
-  conditionType: 'License Condition of a Custodial Order',
+  conditionType: 'Licence condition',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
   sentenceType: 'Extended Determinate Sentence',
@@ -22,7 +22,7 @@ const validFormData = {
 const mockResponse = {
   orderType: 'POST_RELEASE',
   orderTypeDescription: 'DAPOL',
-  conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+  conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
   curfew: true,
   exclusionZone: true,
   trail: true,
@@ -84,7 +84,7 @@ context('Monitoring conditions', () => {
       it('Should go to curfew page when curfew is only condition selected', () => {
         const formData = {
           monitoringRequired: ['Curfew'],
-          conditionType: 'License Condition of a Custodial Order',
+          conditionType: 'Licence condition',
           startDate: new Date('2024-02-27T11:02:00Z'),
           endDate: new Date('2025-03-08T04:40:00Z'),
           sentenceType: 'Extended Determinate Sentence',
@@ -97,7 +97,7 @@ context('Monitoring conditions', () => {
         const response = {
           orderType: 'POST_RELEASE',
           orderTypeDescription: null,
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           exclusionZone: false,
           trail: false,
@@ -126,7 +126,7 @@ context('Monitoring conditions', () => {
         const response = {
           orderType: 'IMMIGRATION',
           orderTypeDescription: 'DAPOL',
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           exclusionZone: false,
           trail: false,
@@ -152,7 +152,7 @@ context('Monitoring conditions', () => {
           const formData = {
             orderTypeDescription: 'DAPOL',
             monitoringRequired: ['Curfew'],
-            conditionType: 'License Condition of a Custodial Order',
+            conditionType: 'Licence condition',
             startDate: new Date('2024-02-27T11:02:00Z'),
             endDate: new Date('2025-03-08T04:40:00Z'),
             sentenceType: 'Extended Determinate Sentence',

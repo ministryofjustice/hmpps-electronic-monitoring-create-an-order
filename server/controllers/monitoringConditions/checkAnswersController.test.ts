@@ -297,7 +297,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         monitoringConditions: createMonitoringConditions({
           alcohol: true,
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           endDate: '2024-11-11T01:01:00Z',
           exclusionZone: true,
@@ -543,7 +543,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What are the order type conditions?',
             },
             value: {
-              text: 'Requirement of a Community Order',
+              text: 'Licence condition',
             },
             actions: {
               items: [
@@ -1261,7 +1261,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         monitoringConditions: createMonitoringConditions({
           alcohol: true,
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           endDate: '2024-11-11T01:01:00Z',
           exclusionZone: true,
@@ -1473,7 +1473,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What are the order type conditions?',
             },
             value: {
-              text: 'Requirement of a Community Order',
+              text: 'Licence condition',
             },
             actions: {
               items: [

@@ -20,7 +20,7 @@ const errorMessages = {
 
 const validFormData = {
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
-  conditionType: 'License Condition of a Custodial Order',
+  conditionType: 'Licence condition',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
   sentenceType: 'Extended Determinate Sentence',
