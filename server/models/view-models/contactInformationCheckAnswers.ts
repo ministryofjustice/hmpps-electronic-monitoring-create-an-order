@@ -4,7 +4,6 @@ import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
-import FeatureFlags from '../../utils/featureFlags'
 
 const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
@@ -60,7 +59,6 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 }
 
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
-
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
   const { questions } = content.pages.interestedParties
 
@@ -97,7 +95,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     ]
   }
 
-  if (order.dataDictionaryVersion=="DDV5") {
+  if (order.dataDictionaryVersion === 'DDV5') {
     if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
       return [
         createAnswer(
@@ -254,10 +252,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
 
   const { questions } = content.pages.probationDeliveryUnit
   const result = []
-  if (
-    order.dataDictionaryVersion=="DDV5" &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
+  if (order.dataDictionaryVersion === 'DDV5' && order.interestedParties?.responsibleOrganisation === 'PROBATION') {
     result.push(
       createAnswer(
         questions.unit.text,

@@ -19,7 +19,7 @@ type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCat
 const constructFromFormData = (
   formData: InstallationAndRiskFormData,
   validationErrors: ValidationResult,
-  order:Order
+  order: Order,
 ): InstallationAndRiskViewModel => {
   return {
     offence: {
@@ -52,12 +52,12 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: order.dataDictionaryVersion=="DDV5",
+    ddVersion5: order.dataDictionaryVersion === 'DDV5',
   }
 }
 
-const createFromEntity = (order:Order): InstallationAndRiskViewModel => {
-  const installationAndRisk = order.installationAndRisk
+const createFromEntity = (order: Order): InstallationAndRiskViewModel => {
+  const { installationAndRisk } = order
   return {
     offence: {
       value: installationAndRisk?.offence || '',
@@ -82,12 +82,12 @@ const createFromEntity = (order:Order): InstallationAndRiskViewModel => {
     },
     errorSummary: null,
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: order.dataDictionaryVersion=="DDV5",
+    ddVersion5: order.dataDictionaryVersion === 'DDV5',
   }
 }
 
 const construct = (
-  order:Order,
+  order: Order,
   formData: InstallationAndRiskFormData,
   errors: ValidationResult,
 ): InstallationAndRiskViewModel => {

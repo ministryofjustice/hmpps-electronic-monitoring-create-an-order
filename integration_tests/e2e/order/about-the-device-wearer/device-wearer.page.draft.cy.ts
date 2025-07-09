@@ -28,14 +28,17 @@ const testOrder = {
 context('About the device wearer', () => {
   context('Device wearer', () => {
     context('DDv4', () => {
-     
-
       context('Viewing a draft order with no data', () => {
         beforeEach(() => {
           cy.task('reset')
           cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', dataDictionaryVersion:"DDV4" })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            dataDictionaryVersion: 'DDV4',
+          })
 
           cy.signIn()
         })
@@ -84,14 +87,18 @@ context('About the device wearer', () => {
       })
     })
 
-    context('DDv5', () => {      
-
+    context('DDv5', () => {
       context('Viewing a draft order with no data', () => {
         beforeEach(() => {
           cy.task('reset')
           cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS',order: {...testOrder, dataDictionaryVersion:"DDV5"} })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { ...testOrder, dataDictionaryVersion: 'DDV5' },
+          })
 
           cy.signIn()
         })
@@ -124,8 +131,7 @@ context('About the device wearer', () => {
             httpStatus: 200,
             id: mockOrderId,
             status: 'IN_PROGRESS',
-            order: {...testOrder, dataDictionaryVersion:"DDV5"}
-           
+            order: { ...testOrder, dataDictionaryVersion: 'DDV5' },
           })
 
           cy.signIn()

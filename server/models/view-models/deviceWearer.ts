@@ -1,5 +1,4 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import FeatureFlags from '../../utils/featureFlags'
 import { convertBooleanToEnum, deserialiseDateTime, getError } from '../../utils/utils'
 import { DeviceWearer } from '../DeviceWearer'
 import { DeviceWearerFormData } from '../form-data/deviceWearer'

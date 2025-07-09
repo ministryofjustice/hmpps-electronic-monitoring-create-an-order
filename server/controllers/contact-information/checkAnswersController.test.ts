@@ -31,13 +31,12 @@ describe('ContactDetailsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService)  
+    controller = new CheckAnswersController(mockAuditService, taskListService)
   })
 
   it('should render the check answers page without any answers completed', async () => {
     // Given
-    const order = getMockOrder({dataDictionaryVersion: "DDV5"})
-    console.log(order)
+    const order = getMockOrder({ dataDictionaryVersion: 'DDV5' })
     const req = createMockRequest({ order })
     const res = createMockResponse()
     const next = jest.fn()
@@ -218,7 +217,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           postcode: 'Postcode',
         }),
       ],
-      dataDictionaryVersion: "DDV5"
+      dataDictionaryVersion: 'DDV5',
     })
     const req = createMockRequest({ order })
     const res = createMockResponse()
@@ -380,7 +379,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   it('should render the check answers page using saved data for an device wearer with a fixed abode', async () => {
     // Given
     const order = getMockOrder({
-      dataDictionaryVersion:"DDV5",
+      dataDictionaryVersion: 'DDV5',
       deviceWearer: createDeviceWearer({ noFixedAbode: false }),
       contactDetails: { contactNumber: '01234567890' },
       interestedParties: {

@@ -13,7 +13,6 @@ import setUpWebSession from '../../middleware/setUpWebSession'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import authorisationMiddleware, { cemoAuthorisedRoles } from '../../middleware/authorisationMiddleware'
 
-
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
 
