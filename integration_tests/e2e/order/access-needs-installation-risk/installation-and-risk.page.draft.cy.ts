@@ -64,14 +64,10 @@ context('Access needs and installation risk information', () => {
       })
 
       context('With DDv5 enabled', () => {
-        const testFlags = { DD_V5_1_ENABLED: true }
+       
         beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
-        })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-
+          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order:{dataDictionaryVersion: "DDV5"} })
+        })    
         it('Should have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(InstallationAndRiskPage)
@@ -89,13 +85,11 @@ context('Access needs and installation risk information', () => {
       })
 
       context('With DDv5 disabled', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
+       
         beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
+          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order:{dataDictionaryVersion: "DDV4"} })
         })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
+       
 
         it('Should not have additional safeguarding options', () => {
           Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
