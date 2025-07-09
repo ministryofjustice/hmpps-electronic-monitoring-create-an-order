@@ -56,8 +56,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
 
   get conditionTypeField(): FormRadiosComponent {
     return new FormRadiosComponent(this.form, 'What condition is the monitoring part of?', [
-      'License Condition of a Custodial Order',
-      'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+      'Licence condition',
+      'Post-Sentence Supervision Requirement',
     ])
   }
 
@@ -79,8 +79,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     return new FormDateTimeComponent(this.form, 'endDate')
   }
 
-  get sentenceTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What type of sentence has the device wearer been given? (optional)', [
+  get sentenceTypeField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What type of sentence has the device wearer been given?', [
       'Extended Determinate Sentence',
       'Imprisonment for Public Protection (IPP)',
       'Life Sentence',
@@ -88,6 +88,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Section 227/228 Extended Sentence for Public Protection (EPP)',
       'Section 85 Extended Sentences',
       'Standard Determinate Sentence',
+      'Detention and Training Order (DTO)',
     ])
   }
 

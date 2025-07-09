@@ -35,7 +35,7 @@ context('Monitoring conditions', () => {
         page.form.orderTypeField.element.should('be.hidden')
         page.form.conditionTypeField.shouldNotHaveValue()
         page.form.pilotField.shouldHaveValue('')
-        page.form.sentenceTypeField.shouldHaveValue('')
+        page.form.sentenceTypeField.shouldNotHaveValue()
         page.form.isspField.shouldNotHaveValue()
         page.form.hdcField.shouldNotHaveValue()
         page.form.prarrField.shouldNotHaveValue()

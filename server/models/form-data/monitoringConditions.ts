@@ -64,7 +64,7 @@ const MonitoringConditionsFormDataValidator = z
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
-    sentenceType: z.string().nullable(),
+    sentenceType: z.string({ message: validationErrors.monitoringConditions.sentenceTypeRequired }),
     issp: z.string(),
     hdc: z.string(),
     prarr: z.string(),

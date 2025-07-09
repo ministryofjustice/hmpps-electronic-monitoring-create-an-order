@@ -172,7 +172,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What type of sentence has the device wearer been given? (optional)',
+              text: 'What type of sentence has the device wearer been given?',
             },
             value: {
               text: '',
@@ -182,7 +182,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
                 },
               ],
             },
@@ -557,7 +557,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What type of sentence has the device wearer been given? (optional)',
+              text: 'What type of sentence has the device wearer been given?',
             },
             value: {
               text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
@@ -567,7 +567,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
                 },
               ],
             },
@@ -1487,7 +1487,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What type of sentence has the device wearer been given? (optional)',
+              text: 'What type of sentence has the device wearer been given?',
             },
             value: {
               text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
@@ -1497,7 +1497,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
                 },
               ],
             },

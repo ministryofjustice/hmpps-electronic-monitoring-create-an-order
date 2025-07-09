@@ -148,6 +148,10 @@ context('Monitoring conditions', () => {
           cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
         })
 
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
         it('should successfully submit with DDv5 set to false', () => {
           const formData = {
             orderTypeDescription: 'DAPOL',
@@ -168,8 +172,6 @@ context('Monitoring conditions', () => {
           page.form.fillInWith(formData)
           page.form.saveAndContinueButton.click()
           Page.verifyOnPage(CurfewConditionsPage)
-
-          cy.task('resetFeatureFlags')
         })
       })
     })

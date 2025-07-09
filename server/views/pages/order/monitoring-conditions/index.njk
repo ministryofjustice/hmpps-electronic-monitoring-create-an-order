@@ -165,14 +165,16 @@
       errorMessage: conditionType.error
     }) }}
 
-    {{ govukSelect({
-      id: "sentenceType",
+    {{ govukRadios({
       name: "sentenceType",
-      label: {
-        text: questions.sentenceType.text,
-        classes: "govuk-fieldset__legend--s"
+      fieldset: {
+        legend: {
+          text: questions.sentenceType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
       },
-      items: content.reference.sentenceTypes | toOptions(false, true),
+      items: content.reference.sentenceTypes | toOptions(false, false),
       value: sentenceType.value,
       errorMessage: sentenceType.error,
       disabled: not isOrderEditable

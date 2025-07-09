@@ -16,6 +16,7 @@ const errorMessages = {
   startDateRequired: 'Enter start date for monitoring',
   endDateRequired: 'Enter end date for monitoring',
   yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+  sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
 }
 
 const validFormData = {
@@ -54,11 +55,13 @@ context('Monitoring conditions', () => {
         page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
         page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
         page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
+        page.form.sentenceTypeField.shouldHaveValidationMessage(errorMessages.sentenceTypeRequired)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
         page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
+        page.errorSummary.shouldHaveError(errorMessages.sentenceTypeRequired)
       })
 
       it('should show errors from API response if frontend validation passes', () => {

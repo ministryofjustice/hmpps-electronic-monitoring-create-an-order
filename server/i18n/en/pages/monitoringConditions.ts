@@ -40,7 +40,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
     },
     sentenceType: {
-      text: 'What type of sentence has the device wearer been given? (optional)',
+      text: 'What type of sentence has the device wearer been given?',
     },
     startDate: {
       text: 'What is the date for the first day of all monitoring?',

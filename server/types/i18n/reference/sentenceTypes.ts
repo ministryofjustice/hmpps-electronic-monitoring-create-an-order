@@ -8,6 +8,7 @@ type SentenceTypes = ReferenceData<
   | 'EPP'
   | 'SECTION_85_EXTENDED_SENTENCES'
   | 'STANDARD_DETERMINATE_SENTENCE'
+  | 'DTO'
 >
 
 export default SentenceTypes
