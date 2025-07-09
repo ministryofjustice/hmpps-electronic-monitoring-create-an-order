@@ -72,7 +72,12 @@
         {% endblock %}
 
         <div class="govuk-button-group">
-          {% if isOrderEditable %}
+          {% if isOrderEditable and returnToSummaryButton %}
+            {{ govukButton({
+                text: "Save and return to main form menu",
+                href: orderSummaryUri
+              }) }}
+          {% elseif isOrderEditable %}
             {{ govukButton({
                 text: "Save and continue",
                 name: "action",
@@ -84,7 +89,7 @@
                 classes: "govuk-button--secondary",
                 name: "action",
                 value: "back"
-            }) }}
+            }) }}            
           {% else %}
             <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">
                 Return back to form section menu

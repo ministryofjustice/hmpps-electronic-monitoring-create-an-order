@@ -6,6 +6,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set isDisabled = {} if isOrderEditable else { disabled: true } %}
+{% set returnToSummaryButton = true %}
 
 {% set section = content.pages.variationDetails.section %}
 {% set heading = content.pages.variationDetails.title %}
