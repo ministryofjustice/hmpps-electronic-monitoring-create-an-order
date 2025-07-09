@@ -45,7 +45,12 @@ context('Monitoring conditions', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: mockResponse })
 
         cy.signIn()
@@ -124,9 +129,13 @@ context('Monitoring conditions', () => {
         Page.verifyOnPage(CurfewConditionsPage)
       })
 
-      it('should successfully submit with DDv5 set to false', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
-        cy.task('setFeatureFlags', testFlags)
+      it('should successfully submit with order with data dictionary version DDV4', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV4' },
+        })
 
         const formData = {
           orderType: 'IMMIGRATION',
@@ -167,8 +176,6 @@ context('Monitoring conditions', () => {
         page.form.fillInWith(formData)
         page.form.saveAndContinueButton.click()
         Page.verifyOnPage(CurfewConditionsPage)
-
-        cy.task('resetFeatureFlags')
       })
     })
   })
