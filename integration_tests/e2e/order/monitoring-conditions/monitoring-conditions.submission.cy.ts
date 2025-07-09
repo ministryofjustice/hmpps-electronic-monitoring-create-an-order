@@ -8,7 +8,6 @@ const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions'
 
 const validFormData = {
-  orderType: 'IMMIGRATION',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
@@ -21,7 +20,7 @@ const validFormData = {
 }
 
 const mockResponse = {
-  orderType: 'IMMIGRATION',
+  orderType: 'POST_RELEASE',
   orderTypeDescription: 'DAPOL',
   conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
   curfew: true,
@@ -63,7 +62,7 @@ context('Monitoring conditions', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
           body: {
-            orderType: 'IMMIGRATION',
+            orderType: 'POST_RELEASE',
             orderTypeDescription: null,
             conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
             curfew: true,
@@ -84,7 +83,6 @@ context('Monitoring conditions', () => {
 
       it('Should go to curfew page when curfew is only condition selected', () => {
         const formData = {
-          orderType: 'IMMIGRATION',
           monitoringRequired: ['Curfew'],
           conditionType: 'License Condition of a Custodial Order',
           startDate: new Date('2024-02-27T11:02:00Z'),
@@ -93,11 +91,11 @@ context('Monitoring conditions', () => {
           issp: 'No',
           hdc: 'Yes',
           prarr: 'Not able to provide this information',
-          pilot: '',
+          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
         }
 
         const response = {
-          orderType: 'IMMIGRATION',
+          orderType: 'POST_RELEASE',
           orderTypeDescription: null,
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
           curfew: true,
@@ -152,7 +150,6 @@ context('Monitoring conditions', () => {
 
         it('should successfully submit with DDv5 set to false', () => {
           const formData = {
-            orderType: 'IMMIGRATION',
             orderTypeDescription: 'DAPOL',
             monitoringRequired: ['Curfew'],
             conditionType: 'License Condition of a Custodial Order',

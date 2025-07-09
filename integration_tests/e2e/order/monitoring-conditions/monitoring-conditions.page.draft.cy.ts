@@ -31,7 +31,8 @@ context('Monitoring conditions', () => {
 
         page.form.startDateField.shouldNotHaveValue(false)
         page.form.endDateField.shouldNotHaveValue(false)
-        page.form.orderTypeField.shouldHaveValue('')
+        page.form.orderTypeField.shouldHaveValue('POST_RELEASE')
+        page.form.orderTypeField.element.should('be.hidden')
         page.form.conditionTypeField.shouldNotHaveValue()
         page.form.pilotField.shouldHaveValue('')
         page.form.sentenceTypeField.shouldHaveValue('')

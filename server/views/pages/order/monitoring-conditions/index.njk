@@ -60,26 +60,28 @@
       isPageHeading: false
     }
   }) %}
+  <div class="govuk-form-hidden-items">
     {{ govukSelect({
       id: "orderType",
       name: "orderType",
       label: {
-        text: questions.orderType.text,
-        classes: "govuk-fieldset__legend--s"
+	text: questions.orderType.text,
+	classes: "govuk-fieldset__legend--s"
       },
       items: [
-        { text: 'Select', value: '' },
-        { text: 'Civil', value: 'CIVIL' },
-        { text: 'Community', value: 'COMMUNITY' },
-        { text: 'Immigration', value: 'IMMIGRATION' },
-        { text: 'Post Release', value: 'POST_RELEASE' },
-        { text: 'Pre-Trial', value: 'PRE_TRIAL' },
-        { text: 'Special', value: 'SPECIAL' }
+	{ text: 'Select', value: '' },
+	{ text: 'Civil', value: 'CIVIL' },
+	{ text: 'Community', value: 'COMMUNITY' },
+	{ text: 'Immigration', value: 'IMMIGRATION' },
+	{ text: 'Post Release', value: 'POST_RELEASE' },
+	{ text: 'Pre-Trial', value: 'PRE_TRIAL' },
+	{ text: 'Special', value: 'SPECIAL' }
       ],
-      value: orderType.value,
+      value: orderType.value if orderType.value else 'POST_RELEASE',
       errorMessage: orderType.error,
       disabled: not isOrderEditable
     }) }}
+  </div>
 
 {% if not DDv5 %}
     {{ govukRadios({
