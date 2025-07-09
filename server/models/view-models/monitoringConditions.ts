@@ -17,6 +17,7 @@ type MonitoringConditionsViewModel = ViewModel<
   endDate: DateTimeField
   monitoringRequired: MultipleChoiceField
   monitoringConditionTimes: boolean
+  orderTypeEnabled: boolean
   DDv5: boolean
 }
 
@@ -75,6 +76,7 @@ const createViewModelFromMonitoringConditions = (
   },
   errorSummary: null,
   monitoringConditionTimes: config.monitoringConditionTimes.enabled,
+  orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
   DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
 })
 
@@ -134,6 +136,7 @@ const createViewModelFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     monitoringConditionTimes: config.monitoringConditionTimes.enabled,
+    orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
     DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
   }
 }

@@ -13,6 +13,7 @@ const mockFlags = {
   MAPPA_ENABLED: true,
   MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATIONS_ENABLED: true,
+  ORDER_TYPE_ENABLED: false,
 }
 
 jest.mock('fs')

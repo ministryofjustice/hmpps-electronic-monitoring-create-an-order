@@ -60,7 +60,7 @@
       isPageHeading: false
     }
   }) %}
-  <div class="govuk-form-hidden-items">
+  <div class="{% if not orderTypeEnabled %} govuk-form-hidden-items {% endif %}">
     {{ govukSelect({
       id: "orderType",
       name: "orderType",
