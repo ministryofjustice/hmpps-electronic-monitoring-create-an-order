@@ -75,7 +75,8 @@
           {% if isOrderEditable and returnToSummaryButton %}
             {{ govukButton({
                 text: "Save and return to main form menu",
-                href: orderSummaryUri
+                name: "action",
+                value: "returnToSummary"
               }) }}
           {% elseif isOrderEditable %}
             {{ govukButton({

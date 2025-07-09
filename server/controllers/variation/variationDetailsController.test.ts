@@ -68,7 +68,7 @@ describe('VariationDetailsController', () => {
         variationType: {
           value: '',
         },
-        variationReason: {
+        variationDescription: {
           value: '',
         },
       })
@@ -81,7 +81,7 @@ describe('VariationDetailsController', () => {
             variationDetails: {
               variationType: 'CURFEW_HOURS',
               variationDate: '2024-01-01T00:00:00.000Z',
-              variationReason: 'Change curfew hours',
+              variationDescription: 'Change curfew hours',
             },
           }),
           flash: jest.fn().mockReturnValue([]),
@@ -106,7 +106,7 @@ describe('VariationDetailsController', () => {
               hours: '00',
             },
           },
-          variationReason: {
+          variationDescription: {
             value: 'Change curfew hours',
           },
           errorSummary: null,
@@ -134,7 +134,7 @@ describe('VariationDetailsController', () => {
                   month: '',
                   day: '',
                 },
-                variationReason: '',
+                variationDescription: '',
               },
             ]),
         })
@@ -162,7 +162,7 @@ describe('VariationDetailsController', () => {
               text: 'Variation date is required',
             },
           },
-          variationReason: {
+          variationDescription: {
             value: '',
             error: {
               text: 'Variation reason is required',
@@ -173,7 +173,7 @@ describe('VariationDetailsController', () => {
             errorList: [
               { href: '#variationType', text: 'Variation type is required' },
               { href: '#variationDate', text: 'Variation date is required' },
-              { href: '#variationReason', text: 'Variation reason is required' },
+              { href: '#variationDescription', text: 'Variation reason is required' },
             ],
           },
         })
@@ -194,7 +194,7 @@ describe('VariationDetailsController', () => {
               month: '01',
               day: '01',
             },
-            variationReason: 'Change curfew hours',
+            variationDescription: 'Change curfew hours',
           },
           params: {
             orderId: order.id,
@@ -206,7 +206,7 @@ describe('VariationDetailsController', () => {
         restClient.put.mockResolvedValue({
           variationType: 'CURFEW_HOURS',
           variationDate: '2024-01-01T00:00:00.000Z',
-          variationReason: 'Change curfew hours',
+          variationDescription: 'Change curfew hours',
         })
 
         // When
@@ -221,7 +221,7 @@ describe('VariationDetailsController', () => {
           data: {
             variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
-            variationReason: 'Change curfew hours',
+            variationDescription: 'Change curfew hours',
           },
           token: 'fakeUserToken',
         })
@@ -240,7 +240,7 @@ describe('VariationDetailsController', () => {
               month: '',
               day: '',
             },
-            variationReason: '',
+            variationDescription: '',
           },
           params: {
             orderId: order.id,
@@ -262,12 +262,12 @@ describe('VariationDetailsController', () => {
             month: '',
             day: '',
           },
-          variationReason: '',
+          variationDescription: '',
         })
         expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
           { error: 'Enter Variation date', field: 'variationDate' },
           { error: 'Variation type is required', field: 'variationType' },
-          { error: 'Variation reason is required', field: 'variationReason' },
+          { error: 'Variation reason is required', field: 'variationDescription' },
         ])
         expect(taskListService.getNextPage).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id))
