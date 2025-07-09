@@ -124,26 +124,10 @@ context('Monitoring conditions', () => {
         Page.verifyOnPage(CurfewConditionsPage)
       })
 
-      it('should successfully submit with DDv5 set to false', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
-        cy.task('setFeatureFlags', testFlags)
-
-        const formData = {
-          orderType: 'IMMIGRATION',
-          orderTypeDescription: 'DAPO',
-          monitoringRequired: ['Curfew'],
-          conditionType: 'License Condition of a Custodial Order',
-          startDate: new Date('2024-02-27T11:02:00Z'),
-          endDate: new Date('2025-03-08T04:40:00Z'),
-          sentenceType: 'Extended Determinate Sentence',
-          issp: 'No',
-          hdc: 'Yes',
-          prarr: 'Not able to provide this information',
-        }
-
+      describe('when DDv5 is set to false', () => {
         const response = {
           orderType: 'IMMIGRATION',
-          orderTypeDescription: 'DAPO',
+          orderTypeDescription: 'DAPOL',
           conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
           curfew: true,
           exclusionZone: false,
@@ -159,16 +143,37 @@ context('Monitoring conditions', () => {
           pilot: null,
         }
 
-        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
-        const page = Page.visit(MonitoringConditionsPage, {
-          orderId: mockOrderId,
+        beforeEach(() => {
+          const testFlags = { DD_V5_1_ENABLED: false }
+          cy.task('setFeatureFlags', testFlags)
+
+          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
         })
 
-        page.form.fillInWith(formData)
-        page.form.saveAndContinueButton.click()
-        Page.verifyOnPage(CurfewConditionsPage)
+        it('should successfully submit with DDv5 set to false', () => {
+          const formData = {
+            orderType: 'IMMIGRATION',
+            orderTypeDescription: 'DAPOL',
+            monitoringRequired: ['Curfew'],
+            conditionType: 'License Condition of a Custodial Order',
+            startDate: new Date('2024-02-27T11:02:00Z'),
+            endDate: new Date('2025-03-08T04:40:00Z'),
+            sentenceType: 'Extended Determinate Sentence',
+            issp: 'No',
+            hdc: 'Yes',
+            prarr: 'Not able to provide this information',
+          }
 
-        cy.task('resetFeatureFlags')
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          page.form.fillInWith(formData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(CurfewConditionsPage)
+
+          cy.task('resetFeatureFlags')
+        })
       })
     })
   })

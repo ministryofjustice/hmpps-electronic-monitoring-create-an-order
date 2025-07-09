@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { DateTimeInputModel } from './formData'
 import { validationErrors } from '../../constants/validationErrors'
+import FeatureFlags from '../../utils/featureFlags'
 
 const MonitoringConditionsFormDataParser = z.object({
   action: z.string().default('continue'),
@@ -57,7 +58,9 @@ const MonitoringConditionsFormDataValidator = z
   .object({
     orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
     monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
-    orderTypeDescription: z.string().nullable(),
+    orderTypeDescription: z.string().refine(val => val !== '' || FeatureFlags.getInstance().get('DD_V5_1_ENABLED'), {
+      message: validationErrors.monitoringConditions.orderTypeDescriptionRequired,
+    }),
     conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
@@ -65,7 +68,9 @@ const MonitoringConditionsFormDataValidator = z
     issp: z.string(),
     hdc: z.string(),
     prarr: z.string(),
-    pilot: z.string().nullable(),
+    pilot: z.string().refine(val => val !== '' || !FeatureFlags.getInstance().get('DD_V5_1_ENABLED'), {
+      message: validationErrors.monitoringConditions.pilotRequired,
+    }),
   })
   .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...formData }) => ({
     orderType: orderType === '' ? null : orderType,

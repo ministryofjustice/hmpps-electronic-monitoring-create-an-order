@@ -138,7 +138,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of? (optional)',
+              text: 'What pilot project is the device wearer part of?',
             },
             value: {
               text: '',
@@ -148,7 +148,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
@@ -523,7 +523,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of? (optional)',
+              text: 'What pilot project is the device wearer part of?',
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -533,7 +533,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
@@ -1453,7 +1453,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of? (optional)',
+              text: 'What pilot project is the device wearer part of?',
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -1463,7 +1463,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },

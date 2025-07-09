@@ -30,7 +30,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What is the order type?',
     },
     orderTypeDescription: {
-      text: 'What pilot project is the device wearer part of? (optional)',
+      text: 'What pilot project is the device wearer part of?',
     },
     pilot: {
       text: 'What pilot project is the device wearer part of? (optional)',

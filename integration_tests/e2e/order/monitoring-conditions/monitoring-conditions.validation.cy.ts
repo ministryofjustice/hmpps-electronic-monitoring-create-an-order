@@ -8,6 +8,7 @@ const apiPath = '/monitoring-conditions'
 const errorMessages = {
   conditionTypeRequired: 'Select order type condition',
   monitoringTypeRequired: 'Select monitoring required',
+  pilotRequired: 'Select the type of pilot the device wearer is part of',
   orderTypeRequired: 'Select order type',
   startDateMustBeReal: 'Start date for monitoring must be a real date',
   startDateMustIncludeDay: 'Start date for monitoring must include a day',
@@ -92,6 +93,36 @@ context('Monitoring conditions', () => {
         page.errorSummary.shouldHaveError('Test error - monitoring required')
         page.errorSummary.shouldHaveError('Test error - start date')
         page.errorSummary.shouldHaveError('Test error - end date')
+      })
+
+      context('ddv5 is disabled', () => {
+        beforeEach(() => {
+          const testFlags = { DD_V5_1_ENABLED: false }
+          cy.task('setFeatureFlags', testFlags)
+        })
+
+        it('Should show the user validation errors', () => {
+          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: [] })
+
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          page.form.saveAndContinueButton.click()
+
+          page.form.orderTypeField.shouldHaveValidationMessage(errorMessages.orderTypeRequired)
+          page.form.orderTypeDescriptionField.shouldHaveValidationMessage(errorMessages.pilotRequired)
+          page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
+          page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
+          page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
+          page.errorSummary.shouldExist()
+          page.errorSummary.shouldHaveError(errorMessages.orderTypeRequired)
+          page.errorSummary.shouldHaveError(errorMessages.pilotRequired)
+          page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
+          page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
+          page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
+          page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
+        })
       })
     })
   })

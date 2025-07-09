@@ -16,7 +16,9 @@ interface ValidationErrors {
   monitoringConditions: {
     conditionTypeRequired: string
     monitoringTypeRequired: string
+    orderTypeDescriptionRequired: string
     orderTypeRequired: string
+    pilotRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -156,6 +158,8 @@ const validationErrors: ValidationErrors = {
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',
     monitoringTypeRequired: 'Select monitoring required',
+    orderTypeDescriptionRequired: 'Select the type of pilot the device wearer is part of',
+    pilotRequired: 'Select the type of pilot the device wearer is part of',
     orderTypeRequired: 'Select order type',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
