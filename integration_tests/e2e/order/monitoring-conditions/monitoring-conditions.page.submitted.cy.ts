@@ -80,6 +80,25 @@ context('Monitoring conditions', () => {
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
       })
+
+      describe('when ddv5 is false', () => {
+        beforeEach(() => {
+          const testFlags = { DD_V5_1_ENABLED: false }
+          cy.task('setFeatureFlags', testFlags)
+        })
+
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('should have orderTypeDescription disabled', () => {
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          page.form.orderTypeDescriptionField.shouldBeDisabled()
+        })
+      })
     })
   })
 })

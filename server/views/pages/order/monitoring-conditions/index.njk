@@ -93,12 +93,12 @@
 	}
       },
       items: [
-        { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'DAPOL' },
-        { text: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)', value: 'DAPOL_HDC' },
-        { text: 'GPS Acquisitive Crime Home Detention Curfew', value: 'GPS_ACQUISITIVE_CRIME_HDC' },
-        { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
-	{ divider: "or" },
-        { text: 'They are not part of any of these pilots', value: '' }
+        { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'DAPOL', disabled: not isOrderEditable },
+        { text: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)', value: 'DAPOL_HDC', disabled: not isOrderEditable },
+        { text: 'GPS Acquisitive Crime Home Detention Curfew', value: 'GPS_ACQUISITIVE_CRIME_HDC', disabled: not isOrderEditable },
+        { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE', disabled: not isOrderEditable },
+	{ divider: "or", disabled: not isOrderEditable },
+        { text: 'They are not part of any of these pilots', value: '', disabled: not isOrderEditable}
       ],
       value: orderTypeDescription.value,
       errorMessage: orderTypeDescription.error,
@@ -174,10 +174,9 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
-      items: content.reference.sentenceTypes | toOptions(false, false),
+      items: content.reference.sentenceTypes | toOptions(not isOrderEditable, false),
       value: sentenceType.value,
-      errorMessage: sentenceType.error,
-      disabled: not isOrderEditable
+      errorMessage: sentenceType.error
     }) }}
 
     {{ govukRadios({
