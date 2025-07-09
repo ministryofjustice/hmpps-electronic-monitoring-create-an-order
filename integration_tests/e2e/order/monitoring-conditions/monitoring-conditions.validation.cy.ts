@@ -9,7 +9,6 @@ const errorMessages = {
   conditionTypeRequired: 'Select order type condition',
   monitoringTypeRequired: 'Select monitoring required',
   pilotRequired: 'Select the type of pilot the device wearer is part of',
-  orderTypeRequired: 'Select order type',
   startDateMustBeReal: 'Start date for monitoring must be a real date',
   startDateMustIncludeDay: 'Start date for monitoring must include a day',
   startDateMustIncludeMonth: 'Start date for monitoring must include a month',
@@ -20,7 +19,6 @@ const errorMessages = {
 }
 
 const validFormData = {
-  orderType: 'IMMIGRATION',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'License Condition of a Custodial Order',
   startDate: new Date('2024-02-27T11:02:00Z'),
@@ -53,12 +51,10 @@ context('Monitoring conditions', () => {
 
         page.form.saveAndContinueButton.click()
 
-        page.form.orderTypeField.shouldHaveValidationMessage(errorMessages.orderTypeRequired)
         page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
         page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
         page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(errorMessages.orderTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
@@ -71,7 +67,6 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           subPath: '/monitoring-conditions',
           response: [
-            { field: 'orderType', error: 'Test error - order type' },
             { field: 'conditionType', error: 'Test error - condition type' },
             { field: 'updateMonitoringConditionsDto', error: 'Test error - monitoring required' },
             { field: 'startDate', error: 'Test error - start date' },
@@ -82,13 +77,11 @@ context('Monitoring conditions', () => {
         const page = Page.verifyOnPage(MonitoringConditionsPage)
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
-        page.form.orderTypeField.shouldHaveValidationMessage('Test error - order type')
         page.form.conditionTypeField.shouldHaveValidationMessage('Test error - condition type')
         page.form.monitoringRequiredField.shouldHaveValidationMessage('Test error - monitoring required')
         page.form.startDateField.shouldHaveValidationMessage('Test error - start date')
         page.form.endDateField.shouldHaveValidationMessage('Test error - end date')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Test error - order type')
         page.errorSummary.shouldHaveError('Test error - condition type')
         page.errorSummary.shouldHaveError('Test error - monitoring required')
         page.errorSummary.shouldHaveError('Test error - start date')
@@ -110,13 +103,11 @@ context('Monitoring conditions', () => {
 
           page.form.saveAndContinueButton.click()
 
-          page.form.orderTypeField.shouldHaveValidationMessage(errorMessages.orderTypeRequired)
           page.form.orderTypeDescriptionField.shouldHaveValidationMessage(errorMessages.pilotRequired)
           page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
           page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
           page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
           page.errorSummary.shouldExist()
-          page.errorSummary.shouldHaveError(errorMessages.orderTypeRequired)
           page.errorSummary.shouldHaveError(errorMessages.pilotRequired)
           page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
           page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
