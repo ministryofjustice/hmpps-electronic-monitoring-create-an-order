@@ -68,9 +68,7 @@ const MonitoringConditionsFormDataValidator = z
     issp: z.string(),
     hdc: z.string(),
     prarr: z.string(),
-    pilot: z.string().refine(val => val !== '' || !FeatureFlags.getInstance().get('DD_V5_1_ENABLED'), {
-      message: validationErrors.monitoringConditions.pilotRequired,
-    }),
+    pilot: z.string().nullable(),
   })
   .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...formData }) => ({
     orderType: orderType === '' ? null : orderType,

@@ -77,7 +77,7 @@
 	{ text: 'Pre-Trial', value: 'PRE_TRIAL' },
 	{ text: 'Special', value: 'SPECIAL' }
       ],
-      value: orderType.value if orderType.value else 'POST_RELEASE',
+      value: orderType.value if orderType.value or orderTypeEnabled else 'POST_RELEASE',
       errorMessage: orderType.error,
       disabled: not isOrderEditable
     }) }}

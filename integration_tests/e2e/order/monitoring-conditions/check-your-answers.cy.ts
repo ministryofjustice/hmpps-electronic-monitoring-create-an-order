@@ -71,7 +71,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
-        'What pilot project is the device wearer part of?',
+        'What pilot project is the device wearer part of? (optional)',
         'GPS Acquisitive Crime Parole',
       )
       page.installationAddressSection().should('exist')
