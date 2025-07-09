@@ -71,7 +71,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
-        'What pilot project is the device wearer part of? (optional)',
+        'What pilot project is the device wearer part of?',
         'GPS Acquisitive Crime Parole',
       )
       page.installationAddressSection().should('exist')
@@ -488,7 +488,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
-        'What pilot project is the device wearer part of? (optional)',
+        'What pilot project is the device wearer part of?',
         'GPS Acquisitive Crime Parole',
       )
     })
