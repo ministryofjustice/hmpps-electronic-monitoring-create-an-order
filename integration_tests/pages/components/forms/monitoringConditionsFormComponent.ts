@@ -55,7 +55,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get conditionTypeField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What are the order type conditions?', [
+    return new FormRadiosComponent(this.form, 'What condition is the monitoring part of?', [
       'License Condition of a Custodial Order',
       'Post-Sentence Supervision Requirement following on from an Adult Custody order',
     ])

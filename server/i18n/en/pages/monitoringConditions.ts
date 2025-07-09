@@ -5,7 +5,8 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
   legend: '',
   questions: {
     conditionType: {
-      text: 'What are the order type conditions?',
+      text: 'What condition is the monitoring part of?',
+      hint: "This is on the device wearer's licence",
     },
     endDate: {
       text: 'What is the date when all monitoring ends?',

@@ -155,7 +155,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What are the order type conditions?',
+              text: 'What condition is the monitoring part of?',
             },
             value: {
               text: '',
@@ -165,7 +165,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what are the order type conditions?',
+                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
@@ -540,7 +540,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What are the order type conditions?',
+              text: 'What condition is the monitoring part of?',
             },
             value: {
               text: 'Licence condition',
@@ -550,7 +550,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what are the order type conditions?',
+                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
@@ -1470,7 +1470,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What are the order type conditions?',
+              text: 'What condition is the monitoring part of?',
             },
             value: {
               text: 'Licence condition',
@@ -1480,7 +1480,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what are the order type conditions?',
+                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
