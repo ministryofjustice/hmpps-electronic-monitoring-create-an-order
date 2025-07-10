@@ -2,7 +2,6 @@ import type { Request, Response } from 'express'
 import getContent from '../../server/i18n'
 import { Locales } from '../../server/types/i18n/locale'
 import { Order } from '../../server/models/Order'
-import FeatureFlags from '../../server/utils/featureFlags'
 import { getMockOrder } from './mockOrder'
 
 export const createMockRequest = (
