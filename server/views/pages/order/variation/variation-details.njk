@@ -44,7 +44,7 @@
         value: variationDate.value.month,
         attributes: isDisabled
       },
-      {
+    {
         id: "variationDate-year",
         name: "variationDate[year]",
         label: "Year",
@@ -76,15 +76,16 @@
     id: "variationDescription",
     maxlength: 200,
     label: {
-      text: "Enter information on what you have changed",
+      text: content.pages.variationDetails.questions.variationDescription.text,
       classes: "govuk-label--s",
       isPageHeading: false
     },
     hint: {
-      text: "This text will be sent with your changes to help the installer quickly understand what has changed and what they need to do."
+      text: content.pages.variationDetails.questions.variationDescription.hint
     },
     value: variationDescription.value,
-    errorMessage: variationDescription.error
+    errorMessage: variationDescription.error,
+    attributes: isDisabled
   }) }}
 
 {% endblock %}

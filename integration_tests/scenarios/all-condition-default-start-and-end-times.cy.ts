@@ -290,7 +290,7 @@ context('The kitchen sink', () => {
             order_type_description: null,
             order_type_detail: '',
             order_variation_date: '',
-            order_variation_details: '',
+            order_variation_description: '',
             order_variation_req_received_date: '',
             order_variation_type: '',
             pdu_responsible: 'Blackburn',

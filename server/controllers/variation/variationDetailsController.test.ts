@@ -125,7 +125,7 @@ describe('VariationDetailsController', () => {
           .mockReturnValueOnce([
             { error: 'Select what you have changed', field: 'variationType' },
             { error: 'Variation date is required', field: 'variationDate' },
-            { error: 'Variation description is required', field: 'variationDescription' },
+            { error: 'Enter information on what you have changed', field: 'variationDescription' },
           ])
           .mockReturnValueOnce([
             {
@@ -166,7 +166,7 @@ describe('VariationDetailsController', () => {
         variationDescription: {
           value: '',
           error: {
-            text: 'Variation description is required',
+            text: 'Enter information on what you have changed',
           },
         },
         errorSummary: {
@@ -174,7 +174,7 @@ describe('VariationDetailsController', () => {
           errorList: [
             { href: '#variationType', text: 'Select what you have changed' },
             { href: '#variationDate', text: 'Variation date is required' },
-            { href: '#variationDescription', text: 'Variation description is required' },
+            { href: '#variationDescription', text: 'Enter information on what you have changed' },
           ],
         },
       })

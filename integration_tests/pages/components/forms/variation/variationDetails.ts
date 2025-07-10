@@ -39,23 +39,26 @@ export default class VariationDetailsFormComponent extends FormComponent {
     }
 
     if (profile.variationDescription) {
-      this.variationTypeField.set(profile.variationDescription)
+      this.variationDescriptionField.set(profile.variationDescription)
     }
   }
 
   shouldBeValid(): void {
     this.variationTypeField.shouldNotHaveValidationMessage()
     this.variationDateField.shouldNotHaveValidationMessage()
+    this.variationDescriptionField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.variationDateField.shouldBeDisabled()
     this.variationTypeField.shouldBeDisabled()
+    this.variationDescriptionField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
     this.variationDateField.shouldNotBeDisabled()
     this.variationTypeField.shouldNotBeDisabled()
+    this.variationDescriptionField.shouldNotBeDisabled()
   }
 
   shouldHaveAllOptions(): void {
