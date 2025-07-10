@@ -4,7 +4,6 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import config from '../../config'
-import FeatureFlags from '../../utils/featureFlags'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -19,7 +18,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
   )
-  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+  if (order.dataDictionaryVersion === 'DDV5') {
     answers.push(
       createAnswer(
         questions.offenceAdditionalDetails.text,

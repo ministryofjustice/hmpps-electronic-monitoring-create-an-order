@@ -21,7 +21,7 @@ import InstallationAppointmentModel from './InstallationAppointment'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 export const OrderTypeEnum = z.enum(['REQUEST', 'VARIATION'])
-
+export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5'])
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
@@ -47,9 +47,10 @@ const OrderModel = z.object({
   fmsResultDate: z.string().datetime().optional().nullable(),
   installationLocation: InstallationLocationModel.nullable().optional(),
   installationAppointment: InstallationAppointmentModel.nullable().optional(),
+  dataDictionaryVersion: DataDictionaryVersionEnum,
 })
 
 export type Order = z.infer<typeof OrderModel>
 export type OrderStatus = z.infer<typeof OrderStatusEnum>
-
+export type DataDictionaryVersion = z.infer<typeof DataDictionaryVersionEnum>
 export default OrderModel

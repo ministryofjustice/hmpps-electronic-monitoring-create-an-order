@@ -16,6 +16,7 @@ context('Variation', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
+            dataDictionaryVersion: 'DDV5',
             variationDetails: {
               variationType: 'CHANGE_TO_ADDRESS',
               variationDate: '2025-01-01T00:00:00Z',

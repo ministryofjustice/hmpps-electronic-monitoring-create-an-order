@@ -26,6 +26,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   type: 'REQUEST',
+  dataDictionaryVersion: 'DDV4',
   deviceWearer: {
     nomisId: null,
     pncId: null,
