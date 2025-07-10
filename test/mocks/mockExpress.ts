@@ -2,9 +2,15 @@ import type { Request, Response } from 'express'
 import getContent from '../../server/i18n'
 import { Locales } from '../../server/types/i18n/locale'
 import { Order } from '../../server/models/Order'
+import FeatureFlags from '../../server/utils/featureFlags'
+import { getMockOrder } from './mockOrder'
 
 export const createMockRequest = (
-  overrideProperties: Partial<Request> = { params: { orderId: '123456789' } },
+  overrideProperties: Partial<Request> = {
+    params: {
+      orderId: '123456789',
+    },
+  },
 ): Request => {
   return {
     // @ts-expect-error stubbing session
@@ -16,6 +22,7 @@ export const createMockRequest = (
       token: '',
       authSource: '',
     },
+    order: getMockOrder(),
     ...overrideProperties,
   }
 }
