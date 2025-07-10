@@ -61,7 +61,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

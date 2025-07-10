@@ -6,13 +6,16 @@ const mockOrderId = uuidv4()
 
 const expectedValidationErrors = {
   variationType: {
-    required: 'Variation type is required',
+    required: 'Select what you have changed',
   },
   variationDate: {
     required: 'Enter Variation date',
     mustBeRealDate: 'Variation date must be a real date',
     malformed:
       'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
+  },
+  variationDescription: {
+    required: 'Enter information on what you have changed',
   },
 }
 
@@ -35,9 +38,13 @@ context('Variation', () => {
 
         page.form.variationTypeField.shouldHaveValidationMessage(expectedValidationErrors.variationType.required)
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.required)
+        page.form.variationDescriptionField.shouldHaveValidationMessage(
+          expectedValidationErrors.variationDescription.required,
+        )
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationType.required)
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.required)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDescription.required)
       })
 
       it('Should display validation error messages when the form has not been filled in incorrectly', () => {
@@ -46,6 +53,7 @@ context('Variation', () => {
         page.form.fillInWith({
           variationType: 'The curfew hours',
           variationDate: new Date(2024, 1, 1),
+          variationDescription: 'Change to curfew hours',
         })
         page.form.variationDateField.setDay('q')
         page.form.saveAndContinueButton.click()

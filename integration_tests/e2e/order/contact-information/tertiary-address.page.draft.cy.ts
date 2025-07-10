@@ -25,7 +25,7 @@ context('Contact information', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
 
         // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way
@@ -118,7 +118,7 @@ context('Contact information', () => {
         })
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
 
         // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way

@@ -203,8 +203,8 @@ const validationErrors: ValidationErrors = {
       required: 'Enter Variation date',
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
-    variationTypeRequired: 'Variation type is required',
-    variationDescriptionRequired: 'Variation reason is required',
+    variationTypeRequired: 'Select what you have changed',
+    variationDescriptionRequired: 'Enter information on what you have changed',
   },
   installationLocation: {
     locationRequired: 'Select where will installation of the electronic monitoring device take place',

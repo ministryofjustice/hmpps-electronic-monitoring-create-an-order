@@ -46,10 +46,7 @@ export default class VariationDetailsController {
       res.redirect(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
       res.redirect(this.taskListService.getNextPage('VARIATION_DETAILS', req.order!))
-    } else if (action === 'returnToSummary') {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
-    }
-    else {
+    } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }

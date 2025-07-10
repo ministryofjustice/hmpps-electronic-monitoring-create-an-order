@@ -140,7 +140,7 @@ context('Attendance monitoring', () => {
       })
       page.form.shouldBeDisabled()
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist').should('have.attr', 'href', '#')
     })
@@ -174,7 +174,7 @@ context('Attendance monitoring', () => {
         postcode: 'LV3 4DG',
       })
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
       page.form.shouldNotBeDisabled()
       page.errorSummary.shouldNotExist()
     })

@@ -50,7 +50,7 @@ context('Contact information', () => {
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable

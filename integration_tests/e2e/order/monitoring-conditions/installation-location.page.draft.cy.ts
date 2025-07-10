@@ -78,7 +78,7 @@ context('Monitoring conditions', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
 
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')

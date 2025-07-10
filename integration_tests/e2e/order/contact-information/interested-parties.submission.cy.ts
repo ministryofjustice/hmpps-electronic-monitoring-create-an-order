@@ -135,7 +135,7 @@ context('Contact information', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

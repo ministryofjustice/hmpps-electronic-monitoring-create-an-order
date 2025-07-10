@@ -96,7 +96,7 @@ context('About the device wearer', () => {
         }
 
         page.form.fillInWith(validFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

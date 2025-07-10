@@ -72,190 +72,169 @@ describe('VariationDetailsController', () => {
           value: '',
         },
       })
+    })
 
-      it('should render the variation details view for an existing variation', async () => {
-        // Given
-        const req = createMockRequest({
-          order: getMockOrder({
-            type: 'VARIATION',
-            variationDetails: {
-              variationType: 'CURFEW_HOURS',
-              variationDate: '2024-01-01T00:00:00.000Z',
-              variationDescription: 'Change curfew hours',
-            },
-          }),
-          flash: jest.fn().mockReturnValue([]),
-        })
-        const res = createMockResponse()
-        const next = jest.fn()
-
-        // When
-        await controller.view(req, res, next)
-
-        // Then
-        expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-          variationType: {
-            value: 'CURFEW_HOURS',
+    it('should render the variation details view for an existing variation', async () => {
+      // Given
+      const req = createMockRequest({
+        order: getMockOrder({
+          type: 'VARIATION',
+          variationDetails: {
+            variationType: 'CURFEW_HOURS',
+            variationDate: '2024-01-01T00:00:00.000Z',
+            variationDescription: 'Change to curfew hours',
           },
-          variationDate: {
-            value: {
-              year: '2024',
-              month: '01',
-              day: '01',
-              minutes: '00',
-              hours: '00',
-            },
-          },
-          variationDescription: {
-            value: 'Change curfew hours',
-          },
-          errorSummary: null,
-        })
+        }),
+        flash: jest.fn().mockReturnValue([]),
       })
+      const res = createMockResponse()
+      const next = jest.fn()
 
-      it('should render the variation details view with errors', async () => {
-        // Given
-        const req = createMockRequest({
-          order: getMockOrder({
-            type: 'VARIATION',
-          }),
-          flash: jest
-            .fn()
-            .mockReturnValueOnce([
-              { error: 'Variation type is required', field: 'variationType' },
-              { error: 'Variation date is required', field: 'variationDate' },
-              { error: 'Variation reason is required', field: 'variationDate' },
-            ])
-            .mockReturnValueOnce([
-              {
-                variationType: '',
-                variationDate: {
-                  year: '',
-                  month: '',
-                  day: '',
-                },
-                variationDescription: '',
-              },
-            ]),
-        })
-        const res = createMockResponse()
-        const next = jest.fn()
+      // When
+      await controller.view(req, res, next)
 
-        // When
-        await controller.view(req, res, next)
-
-        // Then
-        expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-          variationType: {
-            value: '',
-            error: {
-              text: 'Variation type is required',
-            },
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
+        variationType: {
+          value: 'CURFEW_HOURS',
+        },
+        variationDate: {
+          value: {
+            year: '2024',
+            month: '01',
+            day: '01',
+            minutes: '00',
+            hours: '00',
           },
-          variationDate: {
-            value: {
-              year: '',
-              month: '',
-              day: '',
-            },
-            error: {
-              text: 'Variation date is required',
-            },
-          },
-          variationDescription: {
-            value: '',
-            error: {
-              text: 'Variation reason is required',
-            },
-          },
-          errorSummary: {
-            titleText: 'There is a problem',
-            errorList: [
-              { href: '#variationType', text: 'Variation type is required' },
-              { href: '#variationDate', text: 'Variation date is required' },
-              { href: '#variationDescription', text: 'Variation reason is required' },
-            ],
-          },
-        })
+        },
+        variationDescription: {
+          value: 'Change to curfew hours',
+        },
+        errorSummary: null,
       })
     })
 
-    describe('update', () => {
-      it('should send a valid payload to the api when the user submits valid data', async () => {
-        // Given
-        const order = getMockOrder({ type: 'VARIATION' })
-        const req = createMockRequest({
-          order,
-          body: {
-            action: 'continue',
-            variationType: 'CURFEW_HOURS',
-            variationDate: {
-              year: '2024',
-              month: '01',
-              day: '01',
+    it('should render the variation details view with errors', async () => {
+      // Given
+      const req = createMockRequest({
+        order: getMockOrder({
+          type: 'VARIATION',
+        }),
+        flash: jest
+          .fn()
+          .mockReturnValueOnce([
+            { error: 'Select what you have changed', field: 'variationType' },
+            { error: 'Variation date is required', field: 'variationDate' },
+            { error: 'Variation description is required', field: 'variationDescription' },
+          ])
+          .mockReturnValueOnce([
+            {
+              variationType: '',
+              variationDate: {
+                year: '',
+                month: '',
+                day: '',
+              },
+              variationDescription: '',
             },
-            variationDescription: 'Change curfew hours',
+          ]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await controller.view(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
+        variationType: {
+          value: '',
+          error: {
+            text: 'Select what you have changed',
           },
-          params: {
-            orderId: order.id,
+        },
+        variationDate: {
+          value: {
+            year: '',
+            month: '',
+            day: '',
           },
-          flash: jest.fn(),
-        })
-        const res = createMockResponse()
-        const next = jest.fn()
-        restClient.put.mockResolvedValue({
+          error: {
+            text: 'Variation date is required',
+          },
+        },
+        variationDescription: {
+          value: '',
+          error: {
+            text: 'Variation description is required',
+          },
+        },
+        errorSummary: {
+          titleText: 'There is a problem',
+          errorList: [
+            { href: '#variationType', text: 'Select what you have changed' },
+            { href: '#variationDate', text: 'Variation date is required' },
+            { href: '#variationDescription', text: 'Variation description is required' },
+          ],
+        },
+      })
+    })
+  })
+
+  describe('update', () => {
+    it('should send a valid payload to the api when the user submits valid data', async () => {
+      // Given
+      const order = getMockOrder({ type: 'VARIATION' })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
           variationType: 'CURFEW_HOURS',
-          variationDate: '2024-01-01T00:00:00.000Z',
-          variationDescription: 'Change curfew hours',
-        })
-
-        // When
-        await controller.update(req, res, next)
-
-        // Then
-        expect(req.flash).not.toHaveBeenCalled()
-        expect(taskListService.getNextPage).toHaveBeenCalledWith('VARIATION_DETAILS', order)
-        expect(res.redirect).toHaveBeenCalled()
-        expect(restClient.put).toHaveBeenCalledWith({
-          path: `/api/orders/${order.id}/variation`,
-          data: {
-            variationType: 'CURFEW_HOURS',
-            variationDate: '2024-01-01T00:00:00.000Z',
-            variationDescription: 'Change curfew hours',
+          variationDate: {
+            year: '2024',
+            month: '01',
+            day: '01',
           },
-          token: 'fakeUserToken',
-        })
+          variationDescription: 'Change to curfew hours',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+      restClient.put.mockResolvedValue({
+        variationType: 'CURFEW_HOURS',
+        variationDate: '2024-01-01T00:00:00.000Z',
+        variationDescription: 'Change to curfew hours',
       })
 
-      it('should generate errors when the user submits invalid data', async () => {
-        // Given
-        const order = getMockOrder({ type: 'VARIATION' })
-        const req = createMockRequest({
-          order,
-          body: {
-            action: 'continue',
-            variationType: '',
-            variationDate: {
-              year: '',
-              month: '',
-              day: '',
-            },
-            variationDescription: '',
-          },
-          params: {
-            orderId: order.id,
-          },
-          flash: jest.fn(),
-        })
-        const res = createMockResponse()
-        const next = jest.fn()
+      // When
+      await controller.update(req, res, next)
 
-        // When
-        await controller.update(req, res, next)
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(taskListService.getNextPage).toHaveBeenCalledWith('VARIATION_DETAILS', order)
+      expect(res.redirect).toHaveBeenCalled()
+      expect(restClient.put).toHaveBeenCalledWith({
+        path: `/api/orders/${order.id}/variation`,
+        data: {
+          variationType: 'CURFEW_HOURS',
+          variationDate: '2024-01-01T00:00:00.000Z',
+          variationDescription: 'Change to curfew hours',
+        },
+        token: 'fakeUserToken',
+      })
+    })
 
-        // Then
-        expect(req.flash).toHaveBeenCalledTimes(2)
-        expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {
+    it('should generate errors when the user submits invalid data', async () => {
+      // Given
+      const order = getMockOrder({ type: 'VARIATION' })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
           variationType: '',
           variationDate: {
             year: '',
@@ -263,16 +242,37 @@ describe('VariationDetailsController', () => {
             day: '',
           },
           variationDescription: '',
-        })
-        expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
-          { error: 'Enter Variation date', field: 'variationDate' },
-          { error: 'Variation type is required', field: 'variationType' },
-          { error: 'Variation reason is required', field: 'variationDescription' },
-        ])
-        expect(taskListService.getNextPage).not.toHaveBeenCalled()
-        expect(res.redirect).toHaveBeenCalledWith(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id))
-        expect(restClient.put).not.toHaveBeenCalled()
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
       })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await controller.update(req, res, next)
+
+      // Then
+      expect(req.flash).toHaveBeenCalledTimes(2)
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {
+        variationType: '',
+        variationDate: {
+          year: '',
+          month: '',
+          day: '',
+        },
+        variationDescription: '',
+      })
+      expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
+        { error: 'Enter Variation date', field: 'variationDate' },
+        { error: 'Select what you have changed', field: 'variationType' },
+        { error: 'Enter information on what you have changed', field: 'variationDescription' },
+      ])
+      expect(taskListService.getNextPage).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id))
+      expect(restClient.put).not.toHaveBeenCalled()
     })
   })
 })
