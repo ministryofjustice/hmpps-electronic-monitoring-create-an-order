@@ -22,7 +22,6 @@ import Answer, {
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
 import config from '../../config'
-import FeatureFlags from '../../utils/featureFlags'
 
 const getSelectedMonitoringTypes = (order: Order) => {
   return [
@@ -56,7 +55,7 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
   if (config.monitoringConditionTimes.enabled)
     answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
   answers.push(createAnswer(questions.orderType.text, orderType, uri, answerOpts))
-  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+  if (order.dataDictionaryVersion === 'DDV5') {
     let { pilot } = order.monitoringConditions
     if ('pilots' in content.reference) {
       pilot = lookup(content.reference.pilots, order.monitoringConditions.pilot)
@@ -200,7 +199,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
     ),
   ]
 
-  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+  if (order.dataDictionaryVersion === 'DDV5') {
     answers.push(
       createAnswer(
         curfewAdditionalDetailsQuestions.provideDetails.text,

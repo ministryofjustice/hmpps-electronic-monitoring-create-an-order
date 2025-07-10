@@ -53,6 +53,7 @@ executors:
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
+          SETTINGS_DATA_DICTIONARY_VERSION: DDV5
 
   intgration-testing:
      docker:

@@ -13,17 +13,12 @@ export default class MonitoringConditionsController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
     res.render(
       `pages/order/monitoring-conditions/index`,
-      createViewModel(
-        monitoringConditions,
-        formData.length > 0 ? (formData[0] as never) : ({} as never),
-        errors as never,
-      ),
+      createViewModel(req.order!, formData.length > 0 ? (formData[0] as never) : ({} as never), errors as never),
     )
   }
 

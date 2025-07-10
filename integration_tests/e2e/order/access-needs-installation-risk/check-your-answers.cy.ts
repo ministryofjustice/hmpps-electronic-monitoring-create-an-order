@@ -10,7 +10,12 @@ context('installation and risk - check your answers', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { dataDictionaryVersion: 'DDV5' },
+      })
 
       cy.signIn()
     })
@@ -50,6 +55,7 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
@@ -119,6 +125,7 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
+          dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
@@ -204,6 +211,7 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'ERROR',
         order: {
+          dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
@@ -270,11 +278,9 @@ context('installation and risk - check your answers', () => {
       page.returnButton().contains('Return to main form menu')
     })
   })
-  context('when ddv5 is not enabled', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
+  context('DDV4', () => {
     const pageHeading = 'View answers'
     beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -292,6 +298,7 @@ context('installation and risk - check your answers', () => {
             mappaCaseType: 'SOC (Serious Organised Crime)',
           },
           fmsResultDate: new Date('2024 12 14'),
+          dataDictionaryVersion: 'DDV4',
         },
       })
       cy.signIn()

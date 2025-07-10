@@ -9,7 +9,6 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  DD_V5_1_ENABLED: false,
   MAPPA_ENABLED: true,
   MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATIONS_ENABLED: true,
@@ -51,10 +50,8 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const dataDictionaryFlag = FeatureFlags.getInstance().get('DD_V5_1_ENABLED')
     const mappaFlag = FeatureFlags.getInstance().get('MAPPA_ENABLED')
 
-    expect(dataDictionaryFlag).toBe(false)
     expect(mappaFlag).toBe(true)
   })
 

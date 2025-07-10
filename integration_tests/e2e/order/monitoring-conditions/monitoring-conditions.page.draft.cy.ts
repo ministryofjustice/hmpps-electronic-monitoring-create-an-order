@@ -11,7 +11,12 @@ context('Monitoring conditions', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
 
         cy.signIn()
       })
@@ -45,17 +50,19 @@ context('Monitoring conditions', () => {
         page.form.shouldHaveAllOptions()
       })
 
-      it('should show orderTypeDescriptionField when DDv5 is false', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
-        cy.task('setFeatureFlags', testFlags)
+      it('should show orderTypeDescriptionField when order data dictionary version is DDv4', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV4' },
+        })
 
         const page = Page.visit(MonitoringConditionsPage, {
           orderId: mockOrderId,
         })
 
         page.form.orderTypeDescriptionField.shouldHaveAllOptions()
-
-        cy.task('resetFeatureFlags')
       })
 
       // Test disabled because the hint text of the disabled Alcohol Monitoring order type checkbox is too low contrast to meet WCAG 2 AA accessibility standards. This is a known issue in the GOV.UK design system. This test should be enabled again when this design system issue is resolved or the Alcohol Monitoring checkbox is enabled.

@@ -16,6 +16,7 @@ context('Access needs and installation risk information', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
+            dataDictionaryVersion: 'DDV5',
             installationAndRisk: {
               offence: 'SEXUAL_OFFENCES',
               offenceAdditionalDetails: 'Information about offence',

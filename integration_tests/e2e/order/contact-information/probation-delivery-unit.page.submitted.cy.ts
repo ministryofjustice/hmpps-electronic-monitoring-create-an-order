@@ -16,6 +16,7 @@ context('Contact information', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
+            dataDictionaryVersion: 'DDV5',
             interestedParties: {
               notifyingOrganisation: 'PRISON',
               notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
