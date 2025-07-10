@@ -37,7 +37,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndContinueButton.click()
+        page.form.saveAndReturnButton.click()
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
@@ -52,7 +52,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndContinueButton.click()
+        page.form.saveAndReturnButton.click()
 
         Page.verifyOnPage(AboutDeviceWearerPage)
       })
@@ -61,7 +61,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAsDraftButton.click()
+        page.form.saveAndReturnButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

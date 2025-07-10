@@ -32,7 +32,7 @@ context('Variation', () => {
       it('Should display validation error messages when the form has not been filled in', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
-        page.form.saveAndContinueButton.click()
+        page.form.saveAndReturnButton.click()
 
         Page.verifyOnPage(VariationDetailsPage)
 
@@ -56,7 +56,7 @@ context('Variation', () => {
           variationDescription: 'Change to curfew hours',
         })
         page.form.variationDateField.setDay('q')
-        page.form.saveAndContinueButton.click()
+        page.form.saveAndReturnButton.click()
 
         Page.verifyOnPage(VariationDetailsPage)
 
