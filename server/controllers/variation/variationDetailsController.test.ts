@@ -68,7 +68,7 @@ describe('VariationDetailsController', () => {
         variationType: {
           value: '',
         },
-        variationDescription: {
+        variationDetails: {
           value: '',
         },
       })
@@ -82,7 +82,7 @@ describe('VariationDetailsController', () => {
           variationDetails: {
             variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
-            variationDescription: 'Change to curfew hours',
+            variationDetails: 'Change to curfew hours',
           },
         }),
         flash: jest.fn().mockReturnValue([]),
@@ -107,7 +107,7 @@ describe('VariationDetailsController', () => {
             hours: '00',
           },
         },
-        variationDescription: {
+        variationDetails: {
           value: 'Change to curfew hours',
         },
         errorSummary: null,
@@ -125,7 +125,7 @@ describe('VariationDetailsController', () => {
           .mockReturnValueOnce([
             { error: 'Select what you have changed', field: 'variationType' },
             { error: 'Variation date is required', field: 'variationDate' },
-            { error: 'Enter information on what you have changed', field: 'variationDescription' },
+            { error: 'Enter information on what you have changed', field: 'variationDetails' },
           ])
           .mockReturnValueOnce([
             {
@@ -135,7 +135,7 @@ describe('VariationDetailsController', () => {
                 month: '',
                 day: '',
               },
-              variationDescription: '',
+              variationDetails: '',
             },
           ]),
       })
@@ -163,7 +163,7 @@ describe('VariationDetailsController', () => {
             text: 'Variation date is required',
           },
         },
-        variationDescription: {
+        variationDetails: {
           value: '',
           error: {
             text: 'Enter information on what you have changed',
@@ -174,7 +174,7 @@ describe('VariationDetailsController', () => {
           errorList: [
             { href: '#variationType', text: 'Select what you have changed' },
             { href: '#variationDate', text: 'Variation date is required' },
-            { href: '#variationDescription', text: 'Enter information on what you have changed' },
+            { href: '#variationDetails', text: 'Enter information on what you have changed' },
           ],
         },
       })
@@ -195,7 +195,7 @@ describe('VariationDetailsController', () => {
             month: '01',
             day: '01',
           },
-          variationDescription: 'Change to curfew hours',
+          variationDetails: 'Change to curfew hours',
         },
         params: {
           orderId: order.id,
@@ -207,7 +207,7 @@ describe('VariationDetailsController', () => {
       restClient.put.mockResolvedValue({
         variationType: 'CURFEW_HOURS',
         variationDate: '2024-01-01T00:00:00.000Z',
-        variationDescription: 'Change to curfew hours',
+        variationDetails: 'Change to curfew hours',
       })
 
       // When
@@ -222,7 +222,7 @@ describe('VariationDetailsController', () => {
         data: {
           variationType: 'CURFEW_HOURS',
           variationDate: '2024-01-01T00:00:00.000Z',
-          variationDescription: 'Change to curfew hours',
+          variationDetails: 'Change to curfew hours',
         },
         token: 'fakeUserToken',
       })
@@ -241,7 +241,7 @@ describe('VariationDetailsController', () => {
             month: '',
             day: '',
           },
-          variationDescription: '',
+          variationDetails: '',
         },
         params: {
           orderId: order.id,
@@ -263,12 +263,12 @@ describe('VariationDetailsController', () => {
           month: '',
           day: '',
         },
-        variationDescription: '',
+        variationDetails: '',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         { error: 'Enter Variation date', field: 'variationDate' },
         { error: 'Select what you have changed', field: 'variationType' },
-        { error: 'Enter information on what you have changed', field: 'variationDescription' },
+        { error: 'Enter information on what you have changed', field: 'variationDetails' },
       ])
       expect(taskListService.getNextPage).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id))

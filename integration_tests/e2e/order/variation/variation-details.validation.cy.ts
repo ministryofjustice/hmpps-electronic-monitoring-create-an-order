@@ -14,7 +14,7 @@ const expectedValidationErrors = {
     malformed:
       'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
   },
-  variationDescription: {
+  variationDetails: {
     required: 'Enter information on what you have changed',
   },
 }
@@ -38,13 +38,11 @@ context('Variation', () => {
 
         page.form.variationTypeField.shouldHaveValidationMessage(expectedValidationErrors.variationType.required)
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.required)
-        page.form.variationDescriptionField.shouldHaveValidationMessage(
-          expectedValidationErrors.variationDescription.required,
-        )
+        page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationType.required)
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.required)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDescription.required)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetails.required)
       })
 
       it('Should display date validation error message when the form date has not been filled in incorrectly', () => {
@@ -53,7 +51,7 @@ context('Variation', () => {
         page.form.fillInWith({
           variationType: 'The curfew hours',
           variationDate: new Date(2024, 1, 1),
-          variationDescription: 'Change to curfew hours',
+          variationDetails: 'Change to curfew hours',
         })
         page.form.variationDateField.setDay('q')
         page.form.saveAndReturnButton.click()
@@ -77,11 +75,9 @@ context('Variation', () => {
 
         Page.verifyOnPage(VariationDetailsPage)
 
-        page.form.variationDescriptionField.shouldHaveValidationMessage(
-          expectedValidationErrors.variationDescription.required,
-        )
+        page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDescription.required)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetails.required)
       })
     })
   })

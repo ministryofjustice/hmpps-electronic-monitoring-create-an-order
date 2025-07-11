@@ -23,7 +23,7 @@ const VariationTypeEnum = z.enum([
 const VariationDetailsModel = z.object({
   variationType: VariationTypeEnum,
   variationDate: z.string().datetime(),
-  variationDescription: z.string(),
+  variationDetails: z.string(),
 })
 
 export type VariationDetails = z.infer<typeof VariationDetailsModel>

@@ -72,19 +72,19 @@
 
 
   {{ govukCharacterCount({
-    name: "variationDescription",
-    id: "variationDescription",
+    name: "variationDetails",
+    id: "variationDetails",
     maxlength: 200,
     label: {
-      text: content.pages.variationDetails.questions.variationDescription.text,
+      text: content.pages.variationDetails.questions.variationDetails.text,
       classes: "govuk-label--s",
       isPageHeading: false
     },
     hint: {
-      text: content.pages.variationDetails.questions.variationDescription.hint
+      text: content.pages.variationDetails.questions.variationDetails.hint
     },
-    value: variationDescription.value,
-    errorMessage: variationDescription.error,
+    value: variationDetails.value,
+    errorMessage: variationDetails.error,
     attributes: isDisabled
   }) }}
 

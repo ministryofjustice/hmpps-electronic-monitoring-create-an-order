@@ -6,7 +6,7 @@ import FormTextareaComponent from '../../formTextareaComponent'
 export type VariationDetailsFormData = {
   variationType?: string
   variationDate?: Date
-  variationDescription?: string
+  variationDetails?: string
 }
 
 export default class VariationDetailsFormComponent extends FormComponent {
@@ -22,7 +22,7 @@ export default class VariationDetailsFormComponent extends FormComponent {
     return new FormDateComponent(this.form, label)
   }
 
-  get variationDescriptionField(): FormTextareaComponent {
+  get variationDetailsField(): FormTextareaComponent {
     const label = 'Enter information on what you have changed'
     return new FormTextareaComponent(this.form, label)
   }
@@ -38,27 +38,27 @@ export default class VariationDetailsFormComponent extends FormComponent {
       this.variationTypeField.set(profile.variationType)
     }
 
-    if (profile.variationDescription) {
-      this.variationDescriptionField.set(profile.variationDescription)
+    if (profile.variationDetails) {
+      this.variationDetailsField.set(profile.variationDetails)
     }
   }
 
   shouldBeValid(): void {
     this.variationTypeField.shouldNotHaveValidationMessage()
     this.variationDateField.shouldNotHaveValidationMessage()
-    this.variationDescriptionField.shouldNotHaveValidationMessage()
+    this.variationDetailsField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.variationDateField.shouldBeDisabled()
     this.variationTypeField.shouldBeDisabled()
-    this.variationDescriptionField.shouldBeDisabled()
+    this.variationDetailsField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
     this.variationDateField.shouldNotBeDisabled()
     this.variationTypeField.shouldNotBeDisabled()
-    this.variationDescriptionField.shouldNotBeDisabled()
+    this.variationDetailsField.shouldNotBeDisabled()
   }
 
   shouldHaveAllOptions(): void {
