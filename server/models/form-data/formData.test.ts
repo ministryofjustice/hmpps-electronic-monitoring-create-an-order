@@ -76,7 +76,7 @@ describe('DateInputModel', () => {
           code: 'custom',
           fatal: true,
           message: 'Start date for monitoring must be a real date',
-          path: [],
+          path: ['day'],
         },
       ])
     },
@@ -99,7 +99,7 @@ describe('DateInputModel', () => {
         code: 'custom',
         fatal: true,
         message: 'Start date for monitoring must include a day',
-        path: [],
+        path: ['day'],
       },
     ])
   })
@@ -120,7 +120,7 @@ describe('DateInputModel', () => {
         code: 'custom',
         fatal: true,
         message: 'Start date for monitoring must include a month',
-        path: [],
+        path: ['month'],
       },
     ])
   })
@@ -138,7 +138,7 @@ describe('DateInputModel', () => {
         code: 'custom',
         fatal: true,
         message: 'Start date for monitoring must include a year',
-        path: [],
+        path: ['year'],
       },
     ])
   })
@@ -199,7 +199,7 @@ describe('DateTimeInputModel', () => {
           code: 'custom',
           fatal: true,
           message: 'Start date for monitoring must be a real date',
-          path: [],
+          path: ['day'],
         },
       ])
     },
@@ -226,7 +226,7 @@ describe('DateTimeInputModel', () => {
           code: 'custom',
           fatal: true,
           message: 'Start date for monitoring must include a day',
-          path: [],
+          path: ['day'],
         },
       ])
     },
@@ -252,7 +252,7 @@ describe('DateTimeInputModel', () => {
           code: 'custom',
           fatal: true,
           message: 'Start date for monitoring must include a month',
-          path: [],
+          path: ['month'],
         },
       ])
     },
@@ -275,7 +275,7 @@ describe('DateTimeInputModel', () => {
           code: 'custom',
           fatal: true,
           message: 'Start date for monitoring must include a year',
-          path: [],
+          path: ['year'],
         },
       ])
     },
@@ -324,7 +324,7 @@ describe('DateTimeInputModel', () => {
           code: 'custom',
           fatal: true,
           message: 'Start date for monitoring must be a real date',
-          path: [],
+          path: ['day'],
         },
       ])
     },
