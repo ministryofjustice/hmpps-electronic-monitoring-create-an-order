@@ -93,7 +93,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
       pilot: 'Acquisitive Crime Project',
-      conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+      conditionType: 'Post-Sentence Supervision Requirement',
       monitoringRequired: 'Trail monitoring',
       sentenceType: 'Standard Determinate Sentence',
     }
@@ -194,7 +194,7 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
               court: '',
               court_order_email: '',
               device_type: '',

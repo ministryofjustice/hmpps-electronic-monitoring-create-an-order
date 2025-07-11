@@ -90,10 +90,10 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        conditionType: 'Bail Order',
+        conditionType: 'Licence condition',
         monitoringRequired: 'Curfew',
         pilot: 'GPS Acquisitive Crime Parole',
-        // sentenceType: 'DAPO'
+        sentenceType: 'Life Sentence',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -209,7 +209,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -268,8 +268,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
-                // sentence_type: 'DAPO',
+                sentence_type: 'Life Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

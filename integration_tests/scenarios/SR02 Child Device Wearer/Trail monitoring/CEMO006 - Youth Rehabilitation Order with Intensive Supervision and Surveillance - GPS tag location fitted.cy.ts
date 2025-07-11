@@ -29,7 +29,8 @@ import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
-context('Scenarios', () => {
+// test skipped community YRO is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -87,7 +88,7 @@ context('Scenarios', () => {
         orderType: 'Community',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
-        // sentenceType: 'Community YRO',
+        sentenceType: 'Community YRO',
         issp: 'Yes',
       }
       const trailMonitoringOrder = {

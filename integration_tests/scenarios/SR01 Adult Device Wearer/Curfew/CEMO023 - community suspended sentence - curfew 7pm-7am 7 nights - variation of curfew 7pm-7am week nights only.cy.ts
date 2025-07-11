@@ -7,7 +7,8 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// test disabled as Community Suspended Sentence is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 

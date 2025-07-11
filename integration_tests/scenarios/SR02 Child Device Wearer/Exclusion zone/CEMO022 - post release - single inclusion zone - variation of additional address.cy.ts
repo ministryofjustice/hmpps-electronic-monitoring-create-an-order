@@ -110,8 +110,9 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        conditionType: 'License Condition of a Custodial Order',
+        conditionType: 'Licence condition',
         monitoringRequired: 'Exclusion zone monitoring',
+        sentenceType: 'Detention and Training Order',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
@@ -251,7 +252,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -310,7 +311,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Detention & Training Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
