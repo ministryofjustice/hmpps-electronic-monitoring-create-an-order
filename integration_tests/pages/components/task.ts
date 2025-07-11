@@ -5,9 +5,9 @@ export default class Task {
   private elementCacheId: string = uuidv4()
 
   constructor(private readonly name: string) {
-    cy.get('.govuk-task-list__item')
-      .contains('.govuk-task-list__name-and-hint', this.name)
-      .parent()
+    const nameToSearch = this.name.trim()
+    cy.contains('a.govuk-link.govuk-task-list__link', nameToSearch, { log: false })
+      .parents('li.govuk-task-list__item.govuk-task-list__item--with-link')
       .as(`${this.elementCacheId}-element`)
     this.element.should('exist')
   }

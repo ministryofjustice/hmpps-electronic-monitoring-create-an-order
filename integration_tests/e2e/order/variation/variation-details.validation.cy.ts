@@ -65,20 +65,21 @@ context('Variation', () => {
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.mustBeRealDate)
       })
 
-      it('Should display description validation error message when the form description has not been filled in incorrectly', () => {
+      it('Should display description validation error message when the form description has not been filled in', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
           variationType: 'The curfew hours',
           variationDate: new Date(2024, 1, 1),
-          variationDescription: '',
         })
 
         page.form.saveAndReturnButton.click()
 
         Page.verifyOnPage(VariationDetailsPage)
 
-        page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDescription.required)
+        page.form.variationDescriptionField.shouldHaveValidationMessage(
+          expectedValidationErrors.variationDescription.required,
+        )
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDescription.required)
       })

@@ -58,6 +58,17 @@ context('Variation', () => {
 
         Page.verifyOnPage(OrderSummaryPage)
       })
+
+      it('should mark About the changes in this version of the form as Complete', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+
+        page.form.fillInWith(sampleFormData)
+        page.form.saveAndReturnButton.click()
+
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+        orderSummaryPage.variationDetailsTask.shouldHaveStatus('Complete')
+      })
     })
   })
 })
