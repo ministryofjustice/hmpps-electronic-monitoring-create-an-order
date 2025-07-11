@@ -44,7 +44,12 @@ context('Monitoring conditions', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: mockResponse })
 
         cy.signIn()
@@ -122,7 +127,27 @@ context('Monitoring conditions', () => {
         Page.verifyOnPage(CurfewConditionsPage)
       })
 
-      describe('when DDv5 is set to false', () => {
+      it('should successfully submit with order with data dictionary version DDV4', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV4' },
+        })
+
+        const formData = {
+          orderType: 'IMMIGRATION',
+          orderTypeDescription: 'DAPO',
+          monitoringRequired: ['Curfew'],
+          conditionType: 'License Condition of a Custodial Order',
+          startDate: new Date('2024-02-27T11:02:00Z'),
+          endDate: new Date('2025-03-08T04:40:00Z'),
+          sentenceType: 'Extended Determinate Sentence',
+          issp: 'No',
+          hdc: 'Yes',
+          prarr: 'Not able to provide this information',
+        }
+
         const response = {
           orderType: 'IMMIGRATION',
           orderTypeDescription: 'DAPOL',
@@ -153,18 +178,6 @@ context('Monitoring conditions', () => {
         })
 
         it('should successfully submit with DDv5 set to false', () => {
-          const formData = {
-            orderTypeDescription: 'DAPOL',
-            monitoringRequired: ['Curfew'],
-            conditionType: 'Licence condition',
-            startDate: new Date('2024-02-27T11:02:00Z'),
-            endDate: new Date('2025-03-08T04:40:00Z'),
-            sentenceType: 'Extended Determinate Sentence',
-            issp: 'No',
-            hdc: 'Yes',
-            prarr: 'Not able to provide this information',
-          }
-
           const page = Page.visit(MonitoringConditionsPage, {
             orderId: mockOrderId,
           })

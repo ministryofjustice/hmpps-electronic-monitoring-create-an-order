@@ -5,6 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
+import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 // test disabled as 'Parole' is not currently a valid sentence type
@@ -149,7 +150,7 @@ context.skip('Scenarios', () => {
         })
         orderSummaryPage.submitOrderButton.click()
 
-        let submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
@@ -351,8 +352,8 @@ context.skip('Scenarios', () => {
           })
         })
 
-        submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-        submitSuccessPage.backToYourApplications.click()
+        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
+        variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')

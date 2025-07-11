@@ -5,6 +5,7 @@ import { MonitoringConditions } from '../MonitoringConditions'
 import { ValidationResult } from '../Validation'
 import { DateTimeField, MultipleChoiceField, ViewModel } from './utils'
 import config from '../../config'
+import { Order } from '../Order'
 import FeatureFlags from '../../utils/featureFlags'
 
 type MonitoringConditionsViewModel = ViewModel<
@@ -38,51 +39,50 @@ const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): st
   }, [])
 }
 
-const createViewModelFromMonitoringConditions = (
-  monitoringConditions: MonitoringConditions,
-): MonitoringConditionsViewModel => ({
+const createViewModelFromMonitoringConditions = (order: Order): MonitoringConditionsViewModel => ({
   conditionType: {
-    value: monitoringConditions.conditionType || '',
+    value: order.monitoringConditions.conditionType || '',
   },
   endDate: {
-    value: deserialiseDateTime(monitoringConditions.endDate),
+    value: deserialiseDateTime(order.monitoringConditions.endDate),
   },
   hdc: {
-    value: monitoringConditions.hdc || '',
+    value: order.monitoringConditions.hdc || '',
   },
   issp: {
-    value: monitoringConditions.issp || '',
+    value: order.monitoringConditions.issp || '',
   },
   monitoringRequired: {
-    values: parseMonitoringRequired(monitoringConditions),
+    values: parseMonitoringRequired(order.monitoringConditions),
   },
   orderType: {
-    value: monitoringConditions.orderType || '',
+    value: order.monitoringConditions.orderType || '',
   },
   orderTypeDescription: {
-    value: monitoringConditions.orderTypeDescription || '',
+    value: order.monitoringConditions.orderTypeDescription || '',
   },
   prarr: {
-    value: monitoringConditions.prarr || '',
+    value: order.monitoringConditions.prarr || '',
   },
   sentenceType: {
-    value: monitoringConditions.sentenceType || '',
+    value: order.monitoringConditions.sentenceType || '',
   },
   startDate: {
-    value: deserialiseDateTime(monitoringConditions.startDate),
+    value: deserialiseDateTime(order.monitoringConditions.startDate),
   },
   pilot: {
-    value: monitoringConditions.pilot || '',
+    value: order.monitoringConditions.pilot || '',
   },
   errorSummary: null,
   monitoringConditionTimes: config.monitoringConditionTimes.enabled,
   orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
-  DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+  DDv5: order.dataDictionaryVersion === 'DDV5',
 })
 
 const createViewModelFromFormData = (
   formData: MonitoringConditionsFormData,
   validationErrors: ValidationResult,
+  order: Order,
 ): MonitoringConditionsViewModel => {
   return {
     conditionType: {
@@ -137,20 +137,20 @@ const createViewModelFromFormData = (
     errorSummary: createGovukErrorSummary(validationErrors),
     monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
-    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    DDv5: order.dataDictionaryVersion === 'DDV5',
   }
 }
 
 const createViewModel = (
-  monitoringConditions: MonitoringConditions,
+  order: Order,
   formData: MonitoringConditionsFormData,
   errors: ValidationResult,
 ): MonitoringConditionsViewModel => {
   if (errors.length > 0) {
-    return createViewModelFromFormData(formData, errors)
+    return createViewModelFromFormData(formData, errors, order)
   }
 
-  return createViewModelFromMonitoringConditions(monitoringConditions)
+  return createViewModelFromMonitoringConditions(order)
 }
 
 export default createViewModel

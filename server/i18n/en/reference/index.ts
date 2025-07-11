@@ -103,7 +103,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
-  if (ddVersion === DataDictionaryVersions.DDv5) {
+  if (ddVersion === DataDictionaryVersions.DDV5) {
     return referenceCatalogDDv5
   }
   return referenceCatalogDDv4

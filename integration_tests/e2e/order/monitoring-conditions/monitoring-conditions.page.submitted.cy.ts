@@ -33,6 +33,7 @@ context('Monitoring conditions', () => {
               prarr: 'UNKNOWN',
               pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
             },
+            dataDictionaryVersion: 'DDV5',
           },
         })
 
