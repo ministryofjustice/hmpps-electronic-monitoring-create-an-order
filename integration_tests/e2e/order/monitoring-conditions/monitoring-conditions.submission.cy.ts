@@ -10,6 +10,7 @@ const apiPath = '/monitoring-conditions'
 const validFormData = {
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
   conditionType: 'Licence condition',
+  orderTypeDescription: null,
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
   sentenceType: 'Extended Determinate Sentence',
@@ -68,7 +69,7 @@ context('Monitoring conditions', () => {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
           body: {
             orderType: 'POST_RELEASE',
-            orderTypeDescription: null,
+            orderTypeDescription: 'undefined',
             conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
             curfew: true,
             exclusionZone: true,
@@ -127,19 +128,11 @@ context('Monitoring conditions', () => {
         Page.verifyOnPage(CurfewConditionsPage)
       })
 
-      it('should successfully submit with order with data dictionary version DDV4', () => {
-        cy.task('stubCemoGetOrder', {
-          httpStatus: 200,
-          id: mockOrderId,
-          status: 'IN_PROGRESS',
-          order: { dataDictionaryVersion: 'DDV4' },
-        })
-
+      context('should successfully submit with order with data dictionary version DDV4', () => {
         const formData = {
-          orderType: 'IMMIGRATION',
-          orderTypeDescription: 'DAPO',
+          orderTypeDescription: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
           monitoringRequired: ['Curfew'],
-          conditionType: 'License Condition of a Custodial Order',
+          conditionType: 'Licence condition',
           startDate: new Date('2024-02-27T11:02:00Z'),
           endDate: new Date('2025-03-08T04:40:00Z'),
           sentenceType: 'Extended Determinate Sentence',
@@ -166,19 +159,40 @@ context('Monitoring conditions', () => {
           pilot: null,
         }
 
-        cy.task('stubCemoGetOrder', {
-          httpStatus: 200,
-          id: mockOrderId,
-          status: 'IN_PROGRESS',
-          order: { dataDictionaryVersion: 'DDV4' },
-        })
-        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
-
         it('should successfully submit', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
+
+          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
+
           const page = Page.visit(MonitoringConditionsPage, {
             orderId: mockOrderId,
           })
 
+          page.form.fillInWith(formData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(CurfewConditionsPage)
+        })
+
+        it('should successfully submit when They are not part of any of these pilots is selected', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
+
+          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
+
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          formData.orderTypeDescription = 'They are not part of any of these pilots'
           page.form.fillInWith(formData)
           page.form.saveAndContinueButton.click()
           Page.verifyOnPage(CurfewConditionsPage)
