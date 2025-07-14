@@ -53,9 +53,9 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        conditionType: 'Post-Sentence Supervision Requirement',
         monitoringRequired: 'Curfew',
-        // sentenceType: 'HDC',
+        sentenceType: 'Life Sentence',
         hdc: 'Yes',
       }
       const curfewReleaseDetails = {
@@ -175,7 +175,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -234,8 +234,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
-                // sentence_type: 'HDC',
+                sentence_type: 'Life Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

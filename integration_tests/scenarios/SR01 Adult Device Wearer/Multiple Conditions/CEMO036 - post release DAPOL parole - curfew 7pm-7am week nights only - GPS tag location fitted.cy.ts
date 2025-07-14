@@ -55,7 +55,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         pilot: 'GPS Acquisitive Crime Parole',
         sentenceType: 'Standard Determinate Sentence',
-        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        conditionType: 'Post-Sentence Supervision Requirement',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
       }
       const curfewReleaseDetails = {
@@ -183,7 +183,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
                 court: '',
                 court_order_email: '',
                 device_type: '',

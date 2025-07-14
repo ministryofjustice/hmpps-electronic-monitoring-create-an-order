@@ -98,7 +98,8 @@ context('Mandatory fields only', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
       pilot: 'GPS Acquisitive Crime Parole',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
+      sentenceType: 'Life Sentence',
       monitoringRequired: [
         'Curfew',
         'Exclusion zone monitoring',
@@ -387,7 +388,8 @@ context('Mandatory fields only', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 11), // 11 days
       orderType: 'Post Release',
       pilot: 'GPS Acquisitive Crime Parole',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
+      sentenceType: 'Life Sentence',
       monitoringRequired: [
         'Curfew',
         'Exclusion zone monitoring',

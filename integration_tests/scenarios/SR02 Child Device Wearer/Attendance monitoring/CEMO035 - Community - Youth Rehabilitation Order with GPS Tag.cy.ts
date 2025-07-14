@@ -29,7 +29,8 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
-context('Scenarios', () => {
+// test disabled as community YRO is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 

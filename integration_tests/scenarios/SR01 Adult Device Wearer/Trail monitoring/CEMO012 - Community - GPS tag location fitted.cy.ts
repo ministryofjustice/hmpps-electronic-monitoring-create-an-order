@@ -54,7 +54,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
         pilot: 'GPS Acquisitive Crime Parole',
-        conditionType: 'Requirement of a Community Order',
+        conditionType: 'Licence condition',
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Standard Determinate Sentence',
       }
@@ -155,7 +155,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
