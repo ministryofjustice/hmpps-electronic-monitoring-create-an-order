@@ -8,7 +8,7 @@ const MonitoringConditionsFormDataParser = z.object({
   monitoringRequired: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
-  orderTypeDescription: z.coerce.string().nullable().default(''),
+  orderTypeDescription: z.coerce.string(),
   conditionType: z
     .string()
     .nullable()
@@ -60,7 +60,7 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
     .object({
       orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
       monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
-      orderTypeDescription: z.string().refine(val => val !== '' || dataDictionaryVersion !== 'DDV4', {
+      orderTypeDescription: z.string().refine(val => val !== 'undefined' || dataDictionaryVersion !== 'DDV4', {
         message: validationErrors.monitoringConditions.orderTypeDescriptionRequired,
       }),
       conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
@@ -74,7 +74,7 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
     })
     .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...data }) => ({
       orderType: orderType === '' ? null : orderType,
-      orderTypeDescription: orderTypeDescription === '' ? null : orderTypeDescription,
+      orderTypeDescription: orderTypeDescription === 'undefined' || '' ? null : orderTypeDescription,
       curfew: monitoringRequired.includes('curfew'),
       exclusionZone: monitoringRequired.includes('exclusionZone'),
       trail: monitoringRequired.includes('trail'),
