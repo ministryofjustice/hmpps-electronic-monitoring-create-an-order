@@ -99,11 +99,12 @@ describe('Monitoring conditions service', () => {
       expect(result).toEqual(mockApiResponse)
     })
 
-    it('does error if orderTypeDescription is empty', async () => {
+    it('does error if orderTypeDescription is empty and order is ddv4', async () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
       const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
       const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({
         orderTypeDescription: '',
+        dataDictionaryVersion: 'DDV4',
       })
 
       const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)
@@ -111,6 +112,19 @@ describe('Monitoring conditions service', () => {
       expect(result).toEqual([
         { error: 'Select the type of pilot the device wearer is part of', field: 'orderTypeDescription' },
       ])
+    })
+
+    it('does not error if orderTypeDescription is empty and order is ddv5', async () => {
+      mockRestClient.put.mockResolvedValue(mockApiResponse)
+      const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
+      const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({
+        orderTypeDescription: '',
+        dataDictionaryVersion: 'DDV5',
+      })
+
+      const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)
+
+      expect(result).toEqual(mockApiResponse)
     })
   })
 })
