@@ -138,7 +138,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of? (optional)',
+              text: 'What pilot project is the device wearer part of?',
             },
             value: {
               text: '',
@@ -148,14 +148,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What are the order type conditions?',
+              text: 'What condition is the monitoring part of?',
             },
             value: {
               text: '',
@@ -165,14 +165,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what are the order type conditions?',
+                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What type of sentence has the device wearer been given? (optional)',
+              text: 'What type of sentence has the device wearer been given?',
             },
             value: {
               text: '',
@@ -182,7 +182,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
                 },
               ],
             },
@@ -297,7 +297,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         monitoringConditions: createMonitoringConditions({
           alcohol: true,
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           endDate: '2024-11-11T01:01:00Z',
           exclusionZone: true,
@@ -523,7 +523,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of? (optional)',
+              text: 'What pilot project is the device wearer part of?',
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -533,31 +533,31 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What are the order type conditions?',
+              text: 'What condition is the monitoring part of?',
             },
             value: {
-              text: 'Requirement of a Community Order',
+              text: 'Licence condition',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what are the order type conditions?',
+                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What type of sentence has the device wearer been given? (optional)',
+              text: 'What type of sentence has the device wearer been given?',
             },
             value: {
               text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
@@ -567,7 +567,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
                 },
               ],
             },
@@ -1261,7 +1261,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         monitoringConditions: createMonitoringConditions({
           alcohol: true,
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           endDate: '2024-11-11T01:01:00Z',
           exclusionZone: true,
@@ -1453,7 +1453,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of? (optional)',
+              text: 'What pilot project is the device wearer part of?',
             },
             value: {
               text: 'GPS Acquisitive Crime HDC',
@@ -1463,31 +1463,31 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of? (optional)',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What are the order type conditions?',
+              text: 'What condition is the monitoring part of?',
             },
             value: {
-              text: 'Requirement of a Community Order',
+              text: 'Licence condition',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what are the order type conditions?',
+                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'What type of sentence has the device wearer been given? (optional)',
+              text: 'What type of sentence has the device wearer been given?',
             },
             value: {
               text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
@@ -1497,7 +1497,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given? (optional)',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
                 },
               ],
             },

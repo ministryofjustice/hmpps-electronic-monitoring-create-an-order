@@ -49,41 +49,48 @@ const MonitoringConditionsFormDataParser = z.object({
     .default(null)
     .transform(val => (val === null ? 'UNKNOWN' : val)),
   pilot: z.coerce.string().nullable().default(''),
+  dataDictionaryVersion: z.string().optional(),
 })
 
 type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsFormDataParser>, 'action'>
 
-const MonitoringConditionsFormDataValidator = z
-  .object({
-    orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
-    monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
-    orderTypeDescription: z.string().nullable(),
-    conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
-    startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
-    endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
-    sentenceType: z.string().nullable(),
-    issp: z.string(),
-    hdc: z.string(),
-    prarr: z.string(),
-    pilot: z.string().nullable(),
-  })
-  .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...formData }) => ({
-    orderType: orderType === '' ? null : orderType,
-    orderTypeDescription: orderTypeDescription === '' ? null : orderTypeDescription,
-    curfew: monitoringRequired.includes('curfew'),
-    exclusionZone: monitoringRequired.includes('exclusionZone'),
-    trail: monitoringRequired.includes('trail'),
-    mandatoryAttendance: monitoringRequired.includes('mandatoryAttendance'),
-    alcohol: monitoringRequired.includes('alcohol'),
-    pilot: pilot === '' ? null : pilot,
-    ...formData,
-  }))
+const validateMonitoringConditionsFormData = (formData: MonitoringConditionsFormData) => {
+  const { dataDictionaryVersion } = formData
+  return z
+    .object({
+      orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
+      monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
+      orderTypeDescription: z.string().refine(val => val !== '' || dataDictionaryVersion !== 'DDV4', {
+        message: validationErrors.monitoringConditions.orderTypeDescriptionRequired,
+      }),
+      conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
+      startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
+      endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
+      sentenceType: z.string({ message: validationErrors.monitoringConditions.sentenceTypeRequired }),
+      issp: z.string(),
+      hdc: z.string(),
+      prarr: z.string(),
+      pilot: z.string().nullable(),
+    })
+    .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...data }) => ({
+      orderType: orderType === '' ? null : orderType,
+      orderTypeDescription: orderTypeDescription === '' ? null : orderTypeDescription,
+      curfew: monitoringRequired.includes('curfew'),
+      exclusionZone: monitoringRequired.includes('exclusionZone'),
+      trail: monitoringRequired.includes('trail'),
+      mandatoryAttendance: monitoringRequired.includes('mandatoryAttendance'),
+      alcohol: monitoringRequired.includes('alcohol'),
+      pilot: pilot === '' ? null : pilot,
+      ...data,
+    }))
+    .parse(formData)
+}
 
-type MonitoringConditionsApiRequestBody = z.infer<typeof MonitoringConditionsFormDataValidator>
+type MonitoringConditionsApiRequestBody = ReturnType<typeof validateMonitoringConditionsFormData>
 
 export {
   MonitoringConditionsFormData,
   MonitoringConditionsFormDataParser,
   MonitoringConditionsApiRequestBody,
-  MonitoringConditionsFormDataValidator,
+  validateMonitoringConditionsFormData,
 }

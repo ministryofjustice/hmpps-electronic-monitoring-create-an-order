@@ -7,7 +7,8 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// test skipped as Bail is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -97,9 +98,9 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Pre-Trial',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
       monitoringRequired: 'Curfew',
-      // sentenceType: 'Bail'
+      sentenceType: 'Bail',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
