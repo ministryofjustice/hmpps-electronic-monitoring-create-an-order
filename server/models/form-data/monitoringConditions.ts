@@ -74,7 +74,8 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
     })
     .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...data }) => ({
       orderType: orderType === '' ? null : orderType,
-      orderTypeDescription: orderTypeDescription === 'undefined' || '' ? null : orderTypeDescription,
+      orderTypeDescription:
+        orderTypeDescription === 'undefined' || orderTypeDescription === '' ? null : orderTypeDescription,
       curfew: monitoringRequired.includes('curfew'),
       exclusionZone: monitoringRequired.includes('exclusionZone'),
       trail: monitoringRequired.includes('trail'),
