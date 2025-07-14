@@ -179,6 +179,7 @@ context('The kitchen sink', () => {
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
+      riskDetails: 'No risk',
     }
     // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
     // const alcoholMonitoringOrder = {

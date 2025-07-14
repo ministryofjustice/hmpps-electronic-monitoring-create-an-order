@@ -91,6 +91,7 @@ context('Scenarios', () => {
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -150,7 +151,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],

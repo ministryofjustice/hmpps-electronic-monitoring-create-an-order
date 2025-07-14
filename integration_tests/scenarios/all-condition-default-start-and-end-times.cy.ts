@@ -144,6 +144,7 @@ context('The kitchen sink', () => {
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
+      riskDetails: 'No risk',
     }
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
@@ -203,17 +204,10 @@ context('The kitchen sink', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
-          risk_categories: [
-            {
-              category: 'Sexual Offences',
-            },
-            {
-              category: 'Under 18 living at property',
-            },
-          ],
+          risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',

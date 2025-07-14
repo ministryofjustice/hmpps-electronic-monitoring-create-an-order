@@ -89,7 +89,7 @@ context('Scenarios', () => {
     const installationAndRisk = {
       offence: 'Robbery',
       possibleRisk: 'Sex offender',
-      riskDetails: '',
+      riskDetails: 'No risk',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -179,14 +179,10 @@ context('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: 'MAPPA 1',
           mappa_case_type: 'SOC (Serious Organised Crime)',
-          risk_categories: [
-            {
-              category: 'Sexual Offences',
-            },
-          ],
+          risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',

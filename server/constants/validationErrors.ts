@@ -66,6 +66,7 @@ interface ValidationErrors {
   }
   installationAndRisk: {
     possibleRiskRequired: string
+    riskDetailsRequired: string
   }
 }
 
@@ -228,6 +229,7 @@ const validationErrors: ValidationErrors = {
   },
   installationAndRisk: {
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
+    riskDetailsRequired: 'Enter any other risks to be aware of',
   },
 }
 
