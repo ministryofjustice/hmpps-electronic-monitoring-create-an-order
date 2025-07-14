@@ -439,6 +439,7 @@ context('Mandatory fields only', () => {
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
+      riskDetails: 'No risk',
     }
 
     it('Should successfully submit the order to the FMS API', () => {
