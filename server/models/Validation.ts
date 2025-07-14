@@ -1,8 +1,9 @@
 import z from 'zod'
 
 export const ValidationErrorModel = z.object({
-  field: z.string(),
   error: z.string(),
+  field: z.string(),
+  focusTarget: z.string().optional(),
 })
 
 export const ListItemValidationErrorModel = z.object({
