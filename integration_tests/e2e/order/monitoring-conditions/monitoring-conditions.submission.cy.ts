@@ -69,7 +69,7 @@ context('Monitoring conditions', () => {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
           body: {
             orderType: 'POST_RELEASE',
-            orderTypeDescription: 'undefined',
+            orderTypeDescription: null,
             conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
             curfew: true,
             exclusionZone: true,
