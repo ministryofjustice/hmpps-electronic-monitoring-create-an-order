@@ -12,7 +12,8 @@ import {
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// Test case is disabled as 'Community YRO' sentence type is not possible
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 

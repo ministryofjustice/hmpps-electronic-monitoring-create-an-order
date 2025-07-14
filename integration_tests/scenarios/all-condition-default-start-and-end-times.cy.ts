@@ -95,7 +95,8 @@ context('The kitchen sink', () => {
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
       pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
+      sentenceType: 'Life Sentence',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
     }
     const curfewReleaseDetails = {
@@ -242,7 +243,7 @@ context('The kitchen sink', () => {
             case_id: fmsCaseId,
             allday_lockdown: '',
             atv_allowance: '',
-            condition_type: monitoringConditions.conditionType,
+            condition_type: 'License Condition of a Custodial Order',
             court: '',
             court_order_email: '',
             device_type: '',
@@ -311,7 +312,7 @@ context('The kitchen sink', () => {
             ro_region: interestedParties.responsibleOrganisationRegion,
             sentence_date: '',
             sentence_expiry: '',
-            sentence_type: '',
+            sentence_type: 'Life Sentence',
             tag_at_source: '',
             tag_at_source_details: '',
             technical_bail: '',
