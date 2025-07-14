@@ -196,6 +196,27 @@ context('Monitoring conditions', () => {
           page.form.fillInWith(formData)
           page.form.saveAndContinueButton.click()
           Page.verifyOnPage(CurfewConditionsPage)
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}/monitoring-conditions`,
+            body: {
+              orderType: 'POST_RELEASE',
+              orderTypeDescription: null,
+              conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+              curfew: true,
+              exclusionZone: false,
+              trail: false,
+              mandatoryAttendance: false,
+              alcohol: false,
+              startDate: '2024-02-27T11:02:00.000Z',
+              endDate: '2025-03-08T04:40:00.000Z',
+              sentenceType: 'EXTENDED_DETERMINATE_SENTENCE',
+              issp: 'NO',
+              hdc: 'YES',
+              prarr: 'UNKNOWN',
+              pilot: null,
+            },
+          }).should('be.true')
         })
       })
     })
