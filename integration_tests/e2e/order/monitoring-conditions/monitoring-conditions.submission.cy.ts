@@ -8,9 +8,8 @@ const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions'
 
 const validFormData = {
-  orderType: 'IMMIGRATION',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
-  conditionType: 'License Condition of a Custodial Order',
+  conditionType: 'Licence condition',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
   sentenceType: 'Extended Determinate Sentence',
@@ -21,9 +20,9 @@ const validFormData = {
 }
 
 const mockResponse = {
-  orderType: 'IMMIGRATION',
+  orderType: 'POST_RELEASE',
   orderTypeDescription: 'DAPOL',
-  conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+  conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
   curfew: true,
   exclusionZone: true,
   trail: true,
@@ -68,7 +67,7 @@ context('Monitoring conditions', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/monitoring-conditions`,
           body: {
-            orderType: 'IMMIGRATION',
+            orderType: 'POST_RELEASE',
             orderTypeDescription: null,
             conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
             curfew: true,
@@ -89,22 +88,21 @@ context('Monitoring conditions', () => {
 
       it('Should go to curfew page when curfew is only condition selected', () => {
         const formData = {
-          orderType: 'IMMIGRATION',
           monitoringRequired: ['Curfew'],
-          conditionType: 'License Condition of a Custodial Order',
+          conditionType: 'Licence condition',
           startDate: new Date('2024-02-27T11:02:00Z'),
           endDate: new Date('2025-03-08T04:40:00Z'),
           sentenceType: 'Extended Determinate Sentence',
           issp: 'No',
           hdc: 'Yes',
           prarr: 'Not able to provide this information',
-          pilot: '',
+          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
         }
 
         const response = {
-          orderType: 'IMMIGRATION',
+          orderType: 'POST_RELEASE',
           orderTypeDescription: null,
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           exclusionZone: false,
           trail: false,
@@ -152,8 +150,8 @@ context('Monitoring conditions', () => {
 
         const response = {
           orderType: 'IMMIGRATION',
-          orderTypeDescription: 'DAPO',
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+          orderTypeDescription: 'DAPOL',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: true,
           exclusionZone: false,
           trail: false,
@@ -168,14 +166,23 @@ context('Monitoring conditions', () => {
           pilot: null,
         }
 
-        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
-        const page = Page.visit(MonitoringConditionsPage, {
-          orderId: mockOrderId,
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV4' },
         })
+        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
 
-        page.form.fillInWith(formData)
-        page.form.saveAndContinueButton.click()
-        Page.verifyOnPage(CurfewConditionsPage)
+        it('should successfully submit', () => {
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          page.form.fillInWith(formData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(CurfewConditionsPage)
+        })
       })
     })
   })

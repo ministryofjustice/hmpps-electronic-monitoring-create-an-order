@@ -8,7 +8,8 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// test disabled as 'Parole' is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const uploadFile = {
@@ -99,8 +100,9 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        conditionType: 'License Condition of a Custodial Order',
+        conditionType: 'License condition',
         monitoringRequired: 'Exclusion zone monitoring',
+        sentenceType: 'Parole',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',

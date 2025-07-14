@@ -23,7 +23,8 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
-context('Scenarios', () => {
+// Test case disabled as Immigation Bail sentence type is disabled
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
