@@ -166,18 +166,15 @@ context('Monitoring conditions', () => {
           pilot: null,
         }
 
-        beforeEach(() => {
-          const testFlags = { DD_V5_1_ENABLED: false }
-          cy.task('setFeatureFlags', testFlags)
-
-          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV4' },
         })
+        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
 
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-
-        it('should successfully submit with DDv5 set to false', () => {
+        it('should successfully submit', () => {
           const page = Page.visit(MonitoringConditionsPage, {
             orderId: mockOrderId,
           })

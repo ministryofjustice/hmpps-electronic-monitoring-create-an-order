@@ -82,17 +82,15 @@ context('Monitoring conditions', () => {
         page.backButton.should('exist')
       })
 
-      describe('when ddv5 is false', () => {
-        beforeEach(() => {
-          const testFlags = { DD_V5_1_ENABLED: false }
-          cy.task('setFeatureFlags', testFlags)
-        })
-
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-
+      describe('when order is ddv4', () => {
         it('should have orderTypeDescription disabled', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'SUBMITTED',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
+
           const page = Page.visit(MonitoringConditionsPage, {
             orderId: mockOrderId,
           })

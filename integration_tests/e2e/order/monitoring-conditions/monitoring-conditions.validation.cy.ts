@@ -38,7 +38,12 @@ context('Monitoring conditions', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
 
         cy.signIn()
       })
@@ -91,13 +96,14 @@ context('Monitoring conditions', () => {
         page.errorSummary.shouldHaveError('Test error - end date')
       })
 
-      context('ddv5 is disabled', () => {
-        beforeEach(() => {
-          const testFlags = { DD_V5_1_ENABLED: false }
-          cy.task('setFeatureFlags', testFlags)
-        })
-
+      context('order is ddv4', () => {
         it('Should show the user validation errors', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
           cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: [] })
 
           const page = Page.visit(MonitoringConditionsPage, {
