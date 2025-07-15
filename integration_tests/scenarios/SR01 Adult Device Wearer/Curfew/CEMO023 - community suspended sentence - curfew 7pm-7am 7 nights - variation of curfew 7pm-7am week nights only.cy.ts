@@ -92,6 +92,7 @@ context.skip('Scenarios', () => {
       const variationDetails = {
         variationType: 'The curfew hours',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDetails: 'Change to curfew hours',
       }
       const variationCurfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
@@ -110,6 +111,7 @@ context.skip('Scenarios', () => {
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -196,7 +198,7 @@ context.skip('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],

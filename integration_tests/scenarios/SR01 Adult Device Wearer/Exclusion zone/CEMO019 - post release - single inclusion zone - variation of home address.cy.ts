@@ -117,6 +117,7 @@ context.skip('Scenarios', () => {
       const variationDetails = {
         variationType: 'The device wearer’s address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDetails: 'Change to address',
       }
       let fakeVariationPrimaryAddress = createKnownAddress()
       while (fakeVariationPrimaryAddress.postcode === fakePrimaryAddress.postcode) {
@@ -125,6 +126,7 @@ context.skip('Scenarios', () => {
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -207,7 +209,7 @@ context.skip('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],

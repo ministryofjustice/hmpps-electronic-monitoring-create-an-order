@@ -60,7 +60,7 @@ context('Monitoring conditions', () => {
         })
 
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.form.shouldBeDisabled()
 
         page.form.orderTypeField.shouldHaveValue('CIVIL')

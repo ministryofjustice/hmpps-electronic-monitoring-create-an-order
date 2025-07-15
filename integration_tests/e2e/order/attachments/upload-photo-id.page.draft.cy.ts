@@ -30,7 +30,7 @@ context('Attachments', () => {
 
         // Buttons
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.backButton.should('exist')
       })
 
