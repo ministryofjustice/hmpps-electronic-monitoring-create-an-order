@@ -117,6 +117,7 @@ context.skip('Scenarios', () => {
       const variationDetails = {
         variationType: 'The device wearer’s address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDetails: 'Change to address',
       }
       let fakeVariationPrimaryAddress = createKnownAddress()
       while (fakeVariationPrimaryAddress.postcode === fakePrimaryAddress.postcode) {

@@ -31,7 +31,7 @@ context('Monitoring conditions', () => {
         page.form.shouldNotBeDisabled()
         page.backButton.should('exist')
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.errorSummary.shouldNotExist()
 
         page.form.startDateField.shouldNotHaveValue(false)
