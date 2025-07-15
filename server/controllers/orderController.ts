@@ -104,9 +104,11 @@ export default class OrderController {
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
+    const orderType = req.order!.type
 
     res.render('pages/order/submit-success', {
       orderId,
+      orderType,
     })
   }
 }

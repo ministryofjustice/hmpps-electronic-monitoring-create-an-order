@@ -24,7 +24,7 @@ context('Variation', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         // Verify form elements present and editable
-        page.form.saveAndContinueButton.should('exist')
+        page.form.variationDetailsField.element.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
@@ -34,13 +34,14 @@ context('Variation', () => {
         page.checkIsAccessible()
       })
 
-      context('With DDv5 enabled', () => {
-        const testFlags = { DD_V5_1_ENABLED: true }
+      context('DDv5', () => {
         beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
-        })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV5' },
+          })
         })
 
         it('Should have DDv5 options only', () => {
@@ -65,15 +66,15 @@ context('Variation', () => {
         })
       })
 
-      context('With DDv5 disabled', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
+      context('DDv4', () => {
         beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
         })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-
         it('Should have DDv4 options only', () => {
           Page.visit(VariationDetailsPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(VariationDetailsPage)

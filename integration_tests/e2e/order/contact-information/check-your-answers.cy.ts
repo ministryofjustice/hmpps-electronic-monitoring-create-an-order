@@ -13,7 +13,12 @@ context('Contact Information - check your answers', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { dataDictionaryVersion: 'DDV5' },
+      })
 
       cy.signIn()
     })
@@ -42,16 +47,12 @@ context('Contact Information - check your answers', () => {
   })
 
   context('Device Wearer has no fixed address', () => {
-    const testFlags = { DD_V5_1_ENABLED: true }
     beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
     })
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
-    })
+
     const pageHeading = 'Check your answers'
 
     it('should not show addresses section', () => {
@@ -60,6 +61,7 @@ context('Contact Information - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
           },
@@ -133,6 +135,7 @@ context('Contact Information - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
           },
@@ -185,6 +188,7 @@ context('Contact Information - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
           },
@@ -237,6 +241,7 @@ context('Contact Information - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
           },
@@ -289,6 +294,7 @@ context('Contact Information - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
           },
@@ -343,23 +349,14 @@ context('Contact Information - check your answers', () => {
       ])
     })
 
-    context('With DDv5 disabled', () => {
-      const disabledFlags = { DD_V5_1_ENABLED: false }
-
-      beforeEach(() => {
-        cy.task('setFeatureFlags', disabledFlags)
-      })
-
-      afterEach(() => {
-        cy.task('resetFeatureFlags')
-      })
-
+    context('DDV4 order', () => {
       it('Should show probation delivery unit', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV4',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -401,23 +398,14 @@ context('Contact Information - check your answers', () => {
       })
     })
 
-    context('With DDv5 enabled', () => {
-      const enabledFlags = { DD_V5_1_ENABLED: true }
-
-      beforeEach(() => {
-        cy.task('setFeatureFlags', enabledFlags)
-      })
-
-      afterEach(() => {
-        cy.task('resetFeatureFlags')
-      })
-
+    context('DDv5 order', () => {
       it('Should show the civil & county court name', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -480,6 +468,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -539,6 +528,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -598,6 +588,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -657,6 +648,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -716,6 +708,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -775,6 +768,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -834,6 +828,7 @@ context('Contact Information - check your answers', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
             },
@@ -894,6 +889,7 @@ context('Contact Information - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV4',
           contactDetails: {
             contactNumber: '01234567890',
           },

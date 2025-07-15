@@ -16,6 +16,7 @@ context('Access needs and installation risk information', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
+            dataDictionaryVersion: 'DDV5',
             installationAndRisk: {
               offence: 'SEXUAL_OFFENCES',
               offenceAdditionalDetails: 'Information about offence',
@@ -51,7 +52,7 @@ context('Access needs and installation risk information', () => {
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable

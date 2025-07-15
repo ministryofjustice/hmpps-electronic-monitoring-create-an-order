@@ -29,10 +29,10 @@ export default class InstallationAndRiskController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { installationAndRisk } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = installationAndRiskViewModel.construct(installationAndRisk, formData as never, errors as never)
+    const viewModel = installationAndRiskViewModel.construct(order, formData as never, errors as never)
 
     res.render(`pages/order/installation-and-risk/index`, viewModel)
   }

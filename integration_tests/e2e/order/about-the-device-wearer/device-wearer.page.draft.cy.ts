@@ -28,20 +28,17 @@ const testOrder = {
 context('About the device wearer', () => {
   context('Device wearer', () => {
     context('DDv4', () => {
-      const disabledFlags = { DD_V5_1_ENABLED: false }
-      beforeEach(() => {
-        cy.task('setFeatureFlags', disabledFlags)
-      })
-      afterEach(() => {
-        cy.task('resetFeatureFlags')
-      })
-
       context('Viewing a draft order with no data', () => {
         beforeEach(() => {
           cy.task('reset')
           cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            dataDictionaryVersion: 'DDV4',
+          })
 
           cy.signIn()
         })
@@ -51,7 +48,7 @@ context('About the device wearer', () => {
           page.header.userName().should('contain.text', 'J. Smith')
           page.header.phaseBanner().should('contain.text', 'dev')
           page.form.saveAndContinueButton.should('exist')
-          page.form.saveAndReturnButton.should('exist')
+          page.form.saveAsDraftButton.should('exist')
           page.form.shouldNotBeDisabled()
           page.errorSummary.shouldNotExist()
           page.backButton.should('exist')
@@ -91,20 +88,17 @@ context('About the device wearer', () => {
     })
 
     context('DDv5', () => {
-      const enabledFlags = { DD_V5_1_ENABLED: true }
-      beforeEach(() => {
-        cy.task('setFeatureFlags', enabledFlags)
-      })
-      afterEach(() => {
-        cy.task('resetFeatureFlags')
-      })
-
       context('Viewing a draft order with no data', () => {
         beforeEach(() => {
           cy.task('reset')
           cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { ...testOrder, dataDictionaryVersion: 'DDV5' },
+          })
 
           cy.signIn()
         })
@@ -114,7 +108,7 @@ context('About the device wearer', () => {
           page.header.userName().should('contain.text', 'J. Smith')
           page.header.phaseBanner().should('contain.text', 'dev')
           page.form.saveAndContinueButton.should('exist')
-          page.form.saveAndReturnButton.should('exist')
+          page.form.saveAsDraftButton.should('exist')
           page.form.shouldNotBeDisabled()
           page.errorSummary.shouldNotExist()
           page.backButton.should('exist')
@@ -137,7 +131,7 @@ context('About the device wearer', () => {
             httpStatus: 200,
             id: mockOrderId,
             status: 'IN_PROGRESS',
-            order: testOrder,
+            order: { ...testOrder, dataDictionaryVersion: 'DDV5' },
           })
 
           cy.signIn()

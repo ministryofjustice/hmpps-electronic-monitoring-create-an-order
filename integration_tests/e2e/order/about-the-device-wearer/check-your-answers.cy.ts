@@ -113,7 +113,6 @@ context('Device wearer - check your answers', () => {
   })
 
   context('Device wearer has an unlisted disability and gender', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -142,11 +141,10 @@ context('Device wearer - check your answers', () => {
             interpreterRequired: false,
           },
           DeviceWearerResponsibleAdult: null,
+          dataDictionaryVersion: 'DDV4',
         },
       })
-
       cy.signIn()
-      cy.task('setFeatureFlags', testFlags)
     })
     afterEach(() => {
       cy.task('resetFeatureFlags')
