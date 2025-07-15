@@ -5,7 +5,7 @@ import paths from '../../../server/constants/paths'
 
 export default class SubmitSuccessPage extends AppPage {
   constructor() {
-    super('Application successfully submitted', paths.ORDER.SUBMIT_SUCCESS)
+    super('Application form successfully submitted', paths.ORDER.SUBMIT_SUCCESS)
   }
 
   receiptButton = (): PageElement => cy.get('#receipt-button')

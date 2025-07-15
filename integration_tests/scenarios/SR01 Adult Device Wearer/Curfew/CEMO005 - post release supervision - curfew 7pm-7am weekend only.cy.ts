@@ -53,9 +53,9 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        conditionType: 'Post-Sentence Supervision Requirement',
         monitoringRequired: 'Curfew',
-        // sentenceType: 'HDC',
+        sentenceType: 'Life Sentence',
         hdc: 'Yes',
       }
       const curfewReleaseDetails = {
@@ -80,6 +80,10 @@ context('Scenarios', () => {
           },
         ]),
       ]
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
+      }
 
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
@@ -95,7 +99,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: undefined,
           curfewReleaseDetails,
@@ -138,7 +142,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
@@ -171,7 +175,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -230,8 +234,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
-                // sentence_type: 'HDC',
+                sentence_type: 'Life Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',

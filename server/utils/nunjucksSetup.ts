@@ -43,6 +43,18 @@ const toOptions = (
   return options
 }
 
+const addDivider = (items: Array<CheckboxItem>, dividerText: string = 'or'): Array<CheckboxItem | RadiosItem> => {
+  const lenght = items.length
+  return [
+    ...items.slice(0, lenght - 1),
+    {
+      value: '',
+      divider: dividerText,
+    },
+    ...items.slice(lenght - 1),
+  ]
+}
+
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
@@ -80,4 +92,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('isEmpty', isEmpty)
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
   njkEnv.addFilter('toOptions', toOptions)
+  njkEnv.addFilter('addDivider', addDivider)
 }

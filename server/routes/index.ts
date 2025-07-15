@@ -31,6 +31,7 @@ import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
+import ReceiptController from '../controllers/receiptController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -130,6 +131,7 @@ export default function routes({
     taskListService,
   )
   const variationDetailsController = new VariationDetailsController(auditService, variationService, taskListService)
+  const receiptController = new ReceiptController()
 
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     auditService,
@@ -148,7 +150,8 @@ export default function routes({
   )
   router.param('orderId', populateOrder(orderService))
 
-  get('/', orderSearchController.search)
+  get('/', orderSearchController.list)
+  get('/search', orderSearchController.search)
 
   // Order
   post(paths.ORDER.CREATE, orderController.create)
@@ -161,7 +164,8 @@ export default function routes({
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
   get(paths.ORDER.SUBMIT_PATIAL_SUCCESS, orderController.submitPartialSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
-  get(paths.ORDER.RECEIPT, orderController.getReceipt)
+  get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
+  get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
 
   /**
    * ABOUT THE DEVICE WEARER
