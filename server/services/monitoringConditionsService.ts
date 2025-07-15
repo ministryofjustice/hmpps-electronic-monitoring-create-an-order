@@ -9,6 +9,7 @@ import {
   MonitoringConditionsFormData,
   validateMonitoringConditionsFormData,
 } from '../models/form-data/monitoringConditions'
+import processBackendValidationErrors from '../utils/validators/processBackendValidationErrors'
 
 export type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string
@@ -34,9 +35,9 @@ export default class MonitoringConditionsService {
       }
 
       const sanitisedError = e as SanitisedError
-
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        const parsedErrors = ValidationResultModel.parse((e as SanitisedError).data)
+        return processBackendValidationErrors(parsedErrors)
       }
 
       throw e
