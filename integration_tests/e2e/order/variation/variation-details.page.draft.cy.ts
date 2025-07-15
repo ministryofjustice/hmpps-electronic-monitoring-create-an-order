@@ -24,6 +24,7 @@ context('Variation', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         // Verify form elements present and editable
+        page.form.variationDetailsField.element.should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()

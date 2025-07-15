@@ -55,6 +55,15 @@ context('Variation', () => {
         }).should('be.true')
       })
 
+      it('should continue to collect device wearer details', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+
+        page.form.fillInWith(sampleFormData)
+        page.form.saveAndReturnButton.click()
+
+        Page.verifyOnPage(OrderSummaryPage)
+      })
+
       it('should return to the summary page', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
