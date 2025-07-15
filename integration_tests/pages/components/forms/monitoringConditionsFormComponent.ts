@@ -37,7 +37,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Domestic Abuse Perpetrator on Licence (DAPOL)',
       'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
       'GPS Acquisitive Crime Home Detention Curfew',
-      'GPS Acquisitive Crime Parole',
+      'GPS Acquisitive Crime',
       'They are not part of any of these pilots',
     ])
   }
