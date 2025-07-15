@@ -5,9 +5,11 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
+import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// test disabled as Community Suspended Sentence is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -90,6 +92,7 @@ context('Scenarios', () => {
       const variationDetails = {
         variationType: 'The curfew hours',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDetails: 'Change to curfew hours',
       }
       const variationCurfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
@@ -106,6 +109,11 @@ context('Scenarios', () => {
         },
       ])
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -120,7 +128,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: undefined,
           curfewReleaseDetails,
@@ -131,7 +139,7 @@ context('Scenarios', () => {
         })
         orderSummaryPage.submitOrderButton.click()
 
-        let submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
@@ -147,7 +155,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           curfewReleaseDetails,
@@ -190,7 +198,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
@@ -351,8 +359,8 @@ context('Scenarios', () => {
             .should('be.true')
         })
 
-        submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-        submitSuccessPage.backToYourApplications.click()
+        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
+        variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.SubmittedVariationFor(deviceWearerDetails.fullName).should('exist')

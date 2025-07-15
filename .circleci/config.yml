@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@5
+  cypress: cypress-io/cypress@3.4.2
 
 parameters:
   alerts-slack-channel:
@@ -52,7 +53,21 @@ executors:
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
+          SETTINGS_DATA_DICTIONARY_VERSION: DDV5
 
+  intgration-testing:
+     docker:
+      - image: cimg/node:20.18.0-browsers
+      - image: redis:7.2
+      - image: wiremock/wiremock:latest
+        environment:
+          WIREMOCK_OPTIONS: '--port 9091 --verbose'
+      - image: gotenberg/gotenberg:8
+        environment:
+          API_PORT: 3001
+          GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+          DISABLE_UNOCONV: 1
+          DEFAULT_WAIT_TIMEOUT: 30
 jobs:
   build:
     executor:
@@ -105,9 +120,8 @@ jobs:
           path: test_results/unit-test-reports.html
 
   integration_test:
-    executor:
-      name: hmpps/node
-      tag: << pipeline.parameters.node-version >>
+    executor: intgration-testing
+    parallelism: 4
     environment:
       TZ: Europe/London
     steps:
@@ -115,17 +129,15 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
-          name: Install missing OS dependency
-          command: sudo apt-get install libxss1
+          name: Update npm
+          command: sudo npm install -g npm@latest
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.3.1/wiremock-standalone-3.3.1.jar
+          name: Install Dependencies
+          command: npm ci --no-audit
       - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 9091
-          background: true
+          command: npm run build
       - run:
           name: Run the node app
           command: npm run start-feature
@@ -135,7 +147,7 @@ jobs:
           command: sleep 5
       - run:
           name: integration tests
-          command: npm run int-test
+          command: npm run int-test:parallel
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -145,6 +157,7 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
+    parallelism: 4
     environment:
       TZ: Europe/London
     steps:
@@ -170,10 +183,15 @@ jobs:
           command: sleep 5
       - run:
           name: Run scenario tests
-          command: npm run int-test-scenarios
+          command: npm run int-test-scenarios:parallel
       - run:
           name: Archive screenshots
-          command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+          command: |
+            if [ -d integration_tests/screenshots ]; then
+              tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+            else
+              echo "No screenshots to archive"
+            fi
       - run:
           name: Archive requests
           command: tar -czf integration_tests/requests.tar.gz integration_tests/requests

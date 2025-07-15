@@ -26,6 +26,10 @@ export declare global {
       order?: Order
     }
 
+    interface Response {
+      renderPdf(pageView: string, pageData: PdfPageData, options: { filename: string; pdfMargins: PdfMargins }): void
+    }
+
     interface Locals {
       user: HmppsUser
       isOrderEditable?: boolean

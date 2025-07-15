@@ -55,7 +55,7 @@ context('Monitoring conditions', () => {
         })
 
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
 
         page.form.curfewRadios.shouldBeDisabled()
         page.form.curfewRadios.element.getByLabel('Yes').should('be.checked')
@@ -63,7 +63,7 @@ context('Monitoring conditions', () => {
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not have errors

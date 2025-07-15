@@ -16,7 +16,6 @@ export const createGovukErrorSummary = (validationErrors: ValidationResult): Err
   if (validationErrors.length === 0) {
     return null
   }
-
   return {
     titleText: 'There is a problem',
     errorList: validationErrors.map(error => {

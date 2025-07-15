@@ -3,7 +3,6 @@ import { AuditService, OrderService } from '../services'
 import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
-import createViewModel from '../models/view-models/receipt'
 
 export default class OrderController {
   constructor(
@@ -105,14 +104,11 @@ export default class OrderController {
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
+    const orderType = req.order!.type
 
     res.render('pages/order/submit-success', {
       orderId,
+      orderType,
     })
-  }
-
-  getReceipt: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
-    res.render(`pages/order/receipt`, createViewModel(order, res.locals.content!))
   }
 }
