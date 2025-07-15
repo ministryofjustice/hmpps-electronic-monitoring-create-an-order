@@ -73,7 +73,7 @@ context('Contact information', () => {
         const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

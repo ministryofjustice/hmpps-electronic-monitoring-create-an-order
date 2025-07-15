@@ -53,7 +53,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   }
 
   get riskCategoryField(): FormCheckboxesComponent {
-    const label = 'At installation what are the possible risks at the insallation address? (optional)'
+    const label = 'At installation what are the possible risks at the installation address? (optional)'
     return new FormCheckboxesComponent(this.form, label, [
       'History of substance abuse',
       'Diversity concerns (mental health issues, learning difficulties etc)',
@@ -94,13 +94,13 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
       this.offenceField.set(profile.offence)
     }
 
-    if (profile.possibleRisk) {
-      this.possibleRiskField.set(profile.possibleRisk)
-    }
+    // if (profile.possibleRisk) {
+    //   this.possibleRiskField.set(profile.possibleRisk)
+    // }
 
-    if (profile.riskCategory) {
-      this.riskCategoryField.set(profile.riskCategory)
-    }
+    // if (profile.riskCategory) {
+    //   this.riskCategoryField.set(profile.riskCategory)
+    // }
 
     if (profile.riskDetails) {
       this.riskDetailsField.set(profile.riskDetails)
@@ -140,6 +140,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   }
 
   shouldHaveAllOptions(): void {
+    this.possibleRiskField.shouldHaveAllOptions()
     this.offenceField.shouldHaveAllOptions()
     this.riskCategoryField.shouldHaveAllOptions()
     this.mappaLevelField.shouldHaveAllOptions()

@@ -25,7 +25,7 @@ context('Contact information', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.form.hasAnotherAddressField.shouldExist()
         page.form.hasAnotherAddressField.shouldNotHaveValue()
@@ -106,7 +106,7 @@ context('Contact information', () => {
         })
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.form.hasAnotherAddressField.shouldExist()
         page.form.hasAnotherAddressField.shouldHaveValue('No')
@@ -194,7 +194,7 @@ context('Contact information', () => {
         })
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.form.hasAnotherAddressField.shouldExist()
         page.form.hasAnotherAddressField.shouldHaveValue('Yes')

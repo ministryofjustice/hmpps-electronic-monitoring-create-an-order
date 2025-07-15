@@ -60,42 +60,45 @@
       isPageHeading: false
     }
   }) %}
+  <div class="{% if not orderTypeEnabled %} govuk-form-hidden-items {% endif %}">
     {{ govukSelect({
       id: "orderType",
       name: "orderType",
       label: {
-        text: questions.orderType.text,
-        classes: "govuk-fieldset__legend--s"
+	text: questions.orderType.text,
+	classes: "govuk-fieldset__legend--s"
       },
       items: [
-        { text: 'Select', value: '' },
-        { text: 'Civil', value: 'CIVIL' },
-        { text: 'Community', value: 'COMMUNITY' },
-        { text: 'Immigration', value: 'IMMIGRATION' },
-        { text: 'Post Release', value: 'POST_RELEASE' },
-        { text: 'Pre-Trial', value: 'PRE_TRIAL' },
-        { text: 'Special', value: 'SPECIAL' }
+	{ text: 'Select', value: '' },
+	{ text: 'Civil', value: 'CIVIL' },
+	{ text: 'Community', value: 'COMMUNITY' },
+	{ text: 'Immigration', value: 'IMMIGRATION' },
+	{ text: 'Post Release', value: 'POST_RELEASE' },
+	{ text: 'Pre-Trial', value: 'PRE_TRIAL' },
+	{ text: 'Special', value: 'SPECIAL' }
       ],
-      value: orderType.value,
+      value: orderType.value if orderType.value or orderTypeEnabled else 'POST_RELEASE',
       errorMessage: orderType.error,
       disabled: not isOrderEditable
     }) }}
+  </div>
 
 {% if not DDv5 %}
-    {{ govukSelect({
-      id: "orderTypeDescription",
+    {{ govukRadios({
       name: "orderTypeDescription",
-      label: {
-        text: questions.orderTypeDescription.text,
-        classes: "govuk-fieldset__legend--s"
+      fieldset: {
+	legend: {
+	  text: questions.orderTypeDescription.text,
+	  classes: "govuk-fieldset__legend--s"
+	}
       },
       items: [
-        { text: 'Select', value: '' },
-        { text: 'DAPO', value: 'DAPO' },
-        { text: 'DAPOL', value: 'DAPOL' },
-        { text: 'DAPOL HDC', value: 'DAPOL_HDC' },
-        { text: 'GPS Acquisitive Crime HDC', value: 'GPS_ACQUISITIVE_CRIME_HDC' },
-        { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' }
+        { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'DAPOL', disabled: not isOrderEditable },
+        { text: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)', value: 'DAPOL_HDC', disabled: not isOrderEditable },
+        { text: 'GPS Acquisitive Crime Home Detention Curfew', value: 'GPS_ACQUISITIVE_CRIME_HDC', disabled: not isOrderEditable },
+        { text: 'GPS Acquisitive Crime Parole', value: 'GPS_ACQUISITIVE_CRIME_PAROLE', disabled: not isOrderEditable },
+	{ divider: "or", disabled: not isOrderEditable },
+        { text: 'They are not part of any of these pilots', value: '', disabled: not isOrderEditable}
       ],
       value: orderTypeDescription.value,
       errorMessage: orderTypeDescription.error,
@@ -137,18 +140,13 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
+      hint: {
+	text: questions.conditionType.hint
+      },
       items: [
         {
-          value: "REQUIREMENT_OF_A_COMMUNITY_ORDER",
-          text: "Requirement of a Community Order",
-          hint: {
-            text: "Monitoring conditions are part of a Community Order, a Suspended Sentence Order, or a Youth Rehabilitation Order."
-          },
-          disabled: not isOrderEditable
-        },
-        {
           value: "LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER",
-          text: "License Condition of a Custodial Order",
+          text: "Licence condition",
           hint: {
             text: "Device wearer is being released from prison before their sentence is complete. They are subject to specific licence conditions that include monitoring conditions."
           },
@@ -156,17 +154,9 @@
         },
         {
           value: "POST_SENTENCE_SUPERVISION_REQUIREMENT",
-          text: "Post-Sentence Supervision Requirement following on from an Adult Custody order",
+          text: "Post-Sentence Supervision Requirement",
           hint: {
             text: "Device wearer licence period is complete. They are being released from a standard determinate custodial sentence of less than 2 years. They are subject to post-sentence supervision requirements that include monitoring conditions."
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "BAIL_ORDER",
-          text: "Bail Order",
-          hint: {
-            text: "Monitoring conditions are being imposed on the device wearer prior to trial."
           },
           disabled: not isOrderEditable
         }
@@ -175,17 +165,18 @@
       errorMessage: conditionType.error
     }) }}
 
-    {{ govukSelect({
-      id: "sentenceType",
+    {{ govukRadios({
       name: "sentenceType",
-      label: {
-        text: questions.sentenceType.text,
-        classes: "govuk-fieldset__legend--s"
+      fieldset: {
+        legend: {
+          text: questions.sentenceType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
       },
-      items: content.reference.sentenceTypes | toOptions(false, true),
+      items: content.reference.sentenceTypes | toOptions(not isOrderEditable, false),
       value: sentenceType.value,
-      errorMessage: sentenceType.error,
-      disabled: not isOrderEditable
+      errorMessage: sentenceType.error
     }) }}
 
     {{ govukRadios({

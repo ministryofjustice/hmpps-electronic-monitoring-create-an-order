@@ -11,6 +11,7 @@ export const SentenceTypeEnum = z.enum([
   'EPP',
   'SECTION_85_EXTENDED_SENTENCES',
   'STANDARD_DETERMINATE_SENTENCE',
+  'DTO',
 ])
 
 const MonitoringConditionsModel = z.object({

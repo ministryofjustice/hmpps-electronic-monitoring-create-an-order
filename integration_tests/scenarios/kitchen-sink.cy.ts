@@ -121,7 +121,8 @@ context('The kitchen sink', () => {
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
       pilot: 'GPS Acquisitive Crime Parole',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
+      sentenceType: 'Life Sentence',
       monitoringRequired: [
         'Curfew',
         'Exclusion zone monitoring',
@@ -179,6 +180,7 @@ context('The kitchen sink', () => {
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
+      riskDetails: 'No risk',
     }
     // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
     // const alcoholMonitoringOrder = {

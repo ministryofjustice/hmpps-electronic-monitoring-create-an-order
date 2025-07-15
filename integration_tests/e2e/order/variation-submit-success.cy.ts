@@ -19,6 +19,7 @@ context('Successful variation submission', () => {
         variationDetails: {
           variationType: 'CHANGE_TO_ADDRESS',
           variationDate: '2025-01-01T00:00:00Z',
+          variationDetails: 'Change to address',
         },
       },
     })

@@ -23,7 +23,7 @@ context('Contact details - Contact information', () => {
       page.header.phaseBanner().should('contain.text', 'dev')
 
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
 
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
@@ -51,7 +51,7 @@ context('Contact details - Contact information', () => {
 
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist').should('have.attr', 'href', '#')
 

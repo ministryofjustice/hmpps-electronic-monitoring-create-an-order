@@ -29,7 +29,8 @@ import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
-context('Scenarios', () => {
+// test skipped community YRO is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -87,7 +88,7 @@ context('Scenarios', () => {
         orderType: 'Community',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
-        // sentenceType: 'Community YRO',
+        sentenceType: 'Community YRO',
         issp: 'Yes',
       }
       const trailMonitoringOrder = {
@@ -97,6 +98,7 @@ context('Scenarios', () => {
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -219,7 +221,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],

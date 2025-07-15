@@ -103,7 +103,7 @@ describe(MonitoringConditionsController, () => {
           action: 'continue',
           orderType: 'undefined',
           monitoringRequired: [],
-          orderTypeDescription: '',
+          orderTypeDescription: 'undefined',
           conditionType: '',
           startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
           endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
@@ -112,6 +112,7 @@ describe(MonitoringConditionsController, () => {
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
           pilot: '',
+          dataDictionaryVersion: 'DDV4',
         },
       })
     })
@@ -159,7 +160,7 @@ describe(MonitoringConditionsController, () => {
           action: 'continue',
           orderType: 'undefined',
           monitoringRequired: [],
-          orderTypeDescription: '',
+          orderTypeDescription: 'undefined',
           conditionType: '',
           startDate: { day: '11', month: '05', year: '2025', hours: '00', minutes: '00' },
           endDate: { day: '11', month: '06', year: '2025', hours: '23', minutes: '59' },
@@ -168,6 +169,7 @@ describe(MonitoringConditionsController, () => {
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
           pilot: '',
+          dataDictionaryVersion: 'DDV4',
         },
       })
     })

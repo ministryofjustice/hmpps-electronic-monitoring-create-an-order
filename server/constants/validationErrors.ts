@@ -16,7 +16,10 @@ interface ValidationErrors {
   monitoringConditions: {
     conditionTypeRequired: string
     monitoringTypeRequired: string
+    orderTypeDescriptionRequired: string
     orderTypeRequired: string
+    sentenceTypeRequired: string
+    pilotRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -56,6 +59,7 @@ interface ValidationErrors {
   variationDetails: {
     variationDate: DateErrorMessages
     variationTypeRequired: string
+    variationDetailsRequired: string
   }
   installationLocation: {
     locationRequired: string
@@ -66,6 +70,7 @@ interface ValidationErrors {
   }
   installationAndRisk: {
     possibleRiskRequired: string
+    riskDetailsRequired: string
   }
 }
 
@@ -156,7 +161,10 @@ const validationErrors: ValidationErrors = {
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',
     monitoringTypeRequired: 'Select monitoring required',
+    orderTypeDescriptionRequired: 'Select the type of pilot the device wearer is part of',
+    pilotRequired: 'Select the type of pilot the device wearer is part of',
     orderTypeRequired: 'Select order type',
+    sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
   },
@@ -202,7 +210,8 @@ const validationErrors: ValidationErrors = {
       required: 'Enter Variation date',
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
-    variationTypeRequired: 'Variation type is required',
+    variationTypeRequired: 'Select what you have changed',
+    variationDetailsRequired: 'Enter information on what you have changed',
   },
   installationLocation: {
     locationRequired: 'Select where will installation of the electronic monitoring device take place',
@@ -228,6 +237,7 @@ const validationErrors: ValidationErrors = {
   },
   installationAndRisk: {
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
+    riskDetailsRequired: 'Enter any other risks to be aware of',
   },
 }
 

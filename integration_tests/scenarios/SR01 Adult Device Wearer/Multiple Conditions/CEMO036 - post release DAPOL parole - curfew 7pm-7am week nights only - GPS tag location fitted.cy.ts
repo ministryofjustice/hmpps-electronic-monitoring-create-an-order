@@ -55,7 +55,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         pilot: 'GPS Acquisitive Crime Parole',
         sentenceType: 'Standard Determinate Sentence',
-        conditionType: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+        conditionType: 'Post-Sentence Supervision Requirement',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
       }
       const curfewReleaseDetails = {
@@ -87,6 +87,7 @@ context('Scenarios', () => {
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -149,7 +150,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
@@ -182,7 +183,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
                 court: '',
                 court_order_email: '',
                 device_type: '',

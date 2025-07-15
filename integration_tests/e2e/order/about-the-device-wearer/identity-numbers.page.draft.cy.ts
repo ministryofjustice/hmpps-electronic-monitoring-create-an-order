@@ -21,7 +21,7 @@ context('About the device wearer', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.backButton.should('exist')
         page.errorSummary.shouldNotExist()

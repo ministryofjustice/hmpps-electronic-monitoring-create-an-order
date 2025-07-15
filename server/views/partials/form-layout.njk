@@ -72,7 +72,13 @@
         {% endblock %}
 
         <div class="govuk-button-group">
-          {% if isOrderEditable %}
+          {% if isOrderEditable and returnToSummaryButton %}
+            {{ govukButton({
+                text: "Save and return to main form menu",
+                name: "action",
+                value: "returnToSummary"
+              }) }}
+          {% elseif isOrderEditable %}
             {{ govukButton({
                 text: "Save and continue",
                 name: "action",

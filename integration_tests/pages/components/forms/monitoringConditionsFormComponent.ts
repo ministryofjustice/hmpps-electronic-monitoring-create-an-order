@@ -32,13 +32,13 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
-  get orderTypeDescriptionField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What pilot project is the device wearer part of? (optional)', [
-      'DAPO',
-      'DAPOL',
-      'DAPOL HDC',
-      'GPS Acquisitive Crime HDC',
+  get orderTypeDescriptionField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What pilot project is the device wearer part of?', [
+      'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
+      'GPS Acquisitive Crime Home Detention Curfew',
       'GPS Acquisitive Crime Parole',
+      'They are not part of any of these pilots',
     ])
   }
 
@@ -55,11 +55,9 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   }
 
   get conditionTypeField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What are the order type conditions?', [
-      'Requirement of a Community Order',
-      'License Condition of a Custodial Order',
-      'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-      'Bail Order',
+    return new FormRadiosComponent(this.form, 'What condition is the monitoring part of?', [
+      'Licence condition',
+      'Post-Sentence Supervision Requirement',
     ])
   }
 
@@ -81,8 +79,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     return new FormDateTimeComponent(this.form, 'endDate')
   }
 
-  get sentenceTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What type of sentence has the device wearer been given? (optional)', [
+  get sentenceTypeField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What type of sentence has the device wearer been given?', [
       'Extended Determinate Sentence',
       'Imprisonment for Public Protection (IPP)',
       'Life Sentence',
@@ -90,6 +88,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Section 227/228 Extended Sentence for Public Protection (EPP)',
       'Section 85 Extended Sentences',
       'Standard Determinate Sentence',
+      'Detention and Training Order (DTO)',
     ])
   }
 

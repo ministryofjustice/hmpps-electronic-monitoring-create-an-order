@@ -8,7 +8,7 @@ const apiPath = '/monitoring-conditions'
 const errorMessages = {
   conditionTypeRequired: 'Select order type condition',
   monitoringTypeRequired: 'Select monitoring required',
-  orderTypeRequired: 'Select order type',
+  pilotRequired: 'Select the type of pilot the device wearer is part of',
   startDateMustBeReal: 'Start date for monitoring must be a real date',
   startDateMustIncludeDay: 'Start date for monitoring must include a day',
   startDateMustIncludeMonth: 'Start date for monitoring must include a month',
@@ -16,12 +16,12 @@ const errorMessages = {
   startDateRequired: 'Enter start date for monitoring',
   endDateRequired: 'Enter end date for monitoring',
   yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+  sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
 }
 
 const validFormData = {
-  orderType: 'IMMIGRATION',
   monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring', 'Mandatory attendance monitoring'],
-  conditionType: 'License Condition of a Custodial Order',
+  conditionType: 'Licence condition',
   startDate: new Date('2024-02-27T11:02:00Z'),
   endDate: new Date('2025-03-08T04:40:00Z'),
   sentenceType: 'Extended Determinate Sentence',
@@ -38,7 +38,12 @@ context('Monitoring conditions', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
 
         cy.signIn()
       })
@@ -52,16 +57,16 @@ context('Monitoring conditions', () => {
 
         page.form.saveAndContinueButton.click()
 
-        page.form.orderTypeField.shouldHaveValidationMessage(errorMessages.orderTypeRequired)
         page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
         page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
         page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
+        page.form.sentenceTypeField.shouldHaveValidationMessage(errorMessages.sentenceTypeRequired)
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(errorMessages.orderTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
         page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
+        page.errorSummary.shouldHaveError(errorMessages.sentenceTypeRequired)
       })
 
       it('should show errors from API response if frontend validation passes', () => {
@@ -70,7 +75,6 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           subPath: '/monitoring-conditions',
           response: [
-            { field: 'orderType', error: 'Test error - order type' },
             { field: 'conditionType', error: 'Test error - condition type' },
             { field: 'updateMonitoringConditionsDto', error: 'Test error - monitoring required' },
             { field: 'startDate', error: 'Test error - start date' },
@@ -81,17 +85,44 @@ context('Monitoring conditions', () => {
         const page = Page.verifyOnPage(MonitoringConditionsPage)
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
-        page.form.orderTypeField.shouldHaveValidationMessage('Test error - order type')
         page.form.conditionTypeField.shouldHaveValidationMessage('Test error - condition type')
         page.form.monitoringRequiredField.shouldHaveValidationMessage('Test error - monitoring required')
         page.form.startDateField.shouldHaveValidationMessage('Test error - start date')
         page.form.endDateField.shouldHaveValidationMessage('Test error - end date')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Test error - order type')
         page.errorSummary.shouldHaveError('Test error - condition type')
         page.errorSummary.shouldHaveError('Test error - monitoring required')
         page.errorSummary.shouldHaveError('Test error - start date')
         page.errorSummary.shouldHaveError('Test error - end date')
+      })
+
+      context('order is ddv4', () => {
+        it('Should show the user validation errors', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
+          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: [] })
+
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          page.form.saveAndContinueButton.click()
+
+          page.form.orderTypeDescriptionField.shouldHaveValidationMessage(errorMessages.pilotRequired)
+          page.form.conditionTypeField.shouldHaveValidationMessage(errorMessages.conditionTypeRequired)
+          page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
+          page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
+          page.errorSummary.shouldExist()
+          page.errorSummary.shouldHaveError(errorMessages.pilotRequired)
+          page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
+          page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
+          page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
+          page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
+        })
       })
     })
   })
