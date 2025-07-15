@@ -470,7 +470,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           },
           value: {
-            html: 'Vision<br/>Mobility',
+            html: 'Visual impairment or blindness not corrected by wearing glasses<br/>Physical disability or mobility issue',
           },
           actions: {
             items: [
@@ -746,7 +746,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
           },
           value: {
-            html: 'Vision<br/>Mobility',
+            html: 'Visual impairment or blindness not corrected by wearing glasses<br/>Physical disability or mobility issue',
           },
           actions: {
             items: [

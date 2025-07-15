@@ -34,6 +34,7 @@ services:
       - SERCO_USERNAME=serco
       - SERCO_PASSWORD=serco
       - SERCO_URL=http://cemo-wiremock:8080/fms
+      - SETTINGS_DATA_DICTIONARY_VERSION=DDV5
 
       - CEMO_FMS_INTEGRATION_ENABLED=true
 
@@ -73,6 +74,26 @@ services:
       - hmpps_integration
     ports:
       - '9091:8080'
+
+  gotenberg:
+    image: gotenberg/gotenberg:8.21
+    networks:
+      - hmpps_integration
+    container_name: gotenberg
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "3001:3000"
+    command:
+      - "gotenberg"
+      - "--chromium-ignore-certificate-errors"
+      - "--pdfengines-merge-engines=pdftk"
+      - "--libreoffice-disable-routes"
+      - "--webhook-disable"
+      - "--prometheus-disable-collect"
+    restart: always
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
 networks:
   hmpps_integration:

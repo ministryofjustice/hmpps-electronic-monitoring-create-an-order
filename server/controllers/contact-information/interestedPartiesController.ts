@@ -15,10 +15,10 @@ export default class InterestedPartiesController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { interestedParties } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = interestedPartiesViewModel.construct(interestedParties, formData[0] as never, errors as never)
+    const viewModel = interestedPartiesViewModel.construct(order, formData[0] as never, errors as never)
 
     res.render('pages/order/contact-information/interested-parties', viewModel)
   }

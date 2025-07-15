@@ -9,6 +9,7 @@ type MonitoringConditionsPageContent = PageContent<
   | 'monitoringRequired'
   | 'orderType'
   | 'orderTypeDescription'
+  | 'pilot'
   | 'prarr'
   | 'sentenceType'
   | 'startDate'

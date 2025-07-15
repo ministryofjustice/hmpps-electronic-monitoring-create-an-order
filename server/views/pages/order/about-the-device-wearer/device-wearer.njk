@@ -13,7 +13,7 @@
 {% set helpText = content.pages.deviceWearer.helpText %}
 
 {% block formInputs %}
-    {{ govukInput({
+  {{ govukInput({
       label: {
         text: content.pages.deviceWearer.questions.firstName.text,
         classes: "govuk-fieldset__legend--s"
@@ -26,7 +26,7 @@
       disabled: not isOrderEditable
     }) }}
 
-    {{ govukInput({
+  {{ govukInput({
       label: {
         text: content.pages.deviceWearer.questions.lastName.text,
         classes: "govuk-fieldset__legend--s"
@@ -39,7 +39,7 @@
       disabled: not isOrderEditable
     }) }}
 
-    {{ govukInput({
+  {{ govukInput({
       label: {
         text: content.pages.deviceWearer.questions.alias.text,
         classes: "govuk-fieldset__legend--s"
@@ -186,10 +186,41 @@
       errorMessage: otherDisability.error,
       disabled: not isOrderEditable,
       value: otherDisability.value
-      })
-    }}
+      }) }}
   {% endset %}
 
+  {% set disabilityOptions = [] %}
+  {% for disability in content.reference.disabilities | toOptions(not isOrderEditable) %}
+
+    {% if disability.value == 'OTHER' %}
+      {% set disabilityOptions = (
+        disabilityOptions.push({divider: "or"}),
+        disabilityOptions.push({
+          value: disability.value,
+          text: disability.text,
+          conditional: {
+            html: otherDisabilityHtml
+          }
+        }),
+        disabilityOptions
+      ) %}
+
+    {% elif disability.value == 'NONE' %}
+      {% set disabilityOptions = (
+        disabilityOptions.push({divider: "or"}),
+        disabilityOptions.push(disability), disabilityOptions
+      ) %}
+
+    {% elif disability.value == 'PREFER_NOT_TO_SAY' %}
+      {# This option is not shown in the UI #}
+      
+    {% else %}
+      {% set disabilityOptions = (
+        disabilityOptions.push(disability), disabilityOptions
+      ) %}
+    {% endif %}
+  {% endfor %}
+  
   {{ govukCheckboxes({
     name: "disabilities",
     classes: "govuk-checkboxes--small",
@@ -203,61 +234,7 @@
     hint: {
       text: content.pages.deviceWearer.questions.disabilities.hint
     },
-    items: [
-      {
-        value: "VISION",
-        text: "Visual impairment or blindness not corrected by wearing glasses"
-      },
-      {
-        value: "HEARING",
-        text: "Deafness or serious hearing impairment"
-      },
-      {
-        value: "MOBILITY",
-        text: "Physical disability or mobility issue"
-      },
-      {
-        value: "DEXTERITY",
-        text: "Fine motor or dexterity impairment"
-      },
-      {
-        value: "LEARNING_UNDERSTANDING_CONCENTRATING",
-        text: "Neurodiversity including conditions affecting learning, understanding or concentration"
-      },
-      {
-        value: "MEMORY",
-        text: "Condition affecting the memory or retaining information"
-      },
-      {
-        value: "MENTAL_HEALTH",
-        text: "Mental health condition"
-      },
-      {
-        value: "STAMINA_BREATHING_FATIGUE",
-        text: "Health condition affecting stamina, breathing or causing fatigue"
-      },
-      {
-        value: "SOCIAL_BEHAVIOURAL",
-        text: "Conditions affecting social skills and behaviour"
-      },
-      {
-        divider: "Or"
-      },
-      {
-        value: "OTHER",
-        text: "The device wearer has a disability or health condition not listed",
-        conditional: {
-          html: otherDisabilityHtml
-        }
-      },
-      {
-        divider: "Or"
-      },
-      {
-        value: "NONE",
-        text: "Not able to provide this information"
-      }
-    ],
+    items:disabilityOptions,
     values: disabilities.values,
     errorMessage: disabilities.error,
     disabled: not isOrderEditable
@@ -270,7 +247,7 @@
       isPageHeading: false
     }
   }) %}
-   {{ govukRadios({
+  {{ govukRadios({
       name: "interpreterRequired",
       classes: "govuk-radios--inline",
       fieldset:{
@@ -298,7 +275,7 @@
       errorMessage: interpreterRequired.error,
       disabled: not isOrderEditable
     }) }}
-    {{ govukSelect({
+  {{ govukSelect({
       id: "language",
       name: "language",
       label: {
