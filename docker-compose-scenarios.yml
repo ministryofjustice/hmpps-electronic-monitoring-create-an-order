@@ -76,7 +76,7 @@ services:
       - '9091:8080'
 
   gotenberg:
-    image: gotenberg/gotenberg:8.17
+    image: gotenberg/gotenberg:8.21
     networks:
       - hmpps_integration
     container_name: gotenberg
