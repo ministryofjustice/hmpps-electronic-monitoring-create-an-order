@@ -45,7 +45,7 @@ context('Access needs and installation risk information', () => {
           offenceAdditionalDetails: '',
           possibleRisk: 'Sex offender',
           riskCategory: 'History of substance abuse',
-          riskDetails: '',
+          riskDetails: 'Mock risk',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
         }
@@ -58,8 +58,8 @@ context('Access needs and installation risk information', () => {
           body: {
             offence: 'ROBBERY',
             offenceAdditionalDetails: '',
-            riskCategory: ['SEXUAL_OFFENCES', 'HISTORY_OF_SUBSTANCE_ABUSE'],
-            riskDetails: '',
+            riskCategory: [],
+            riskDetails: 'Mock risk',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
           },
@@ -73,7 +73,7 @@ context('Access needs and installation risk information', () => {
           offence: 'Robbery',
           possibleRisk: 'Sex offender',
           riskCategory: 'History of substance abuse',
-          riskDetails: '',
+          riskDetails: 'Mock risk',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
         }
@@ -91,7 +91,7 @@ context('Access needs and installation risk information', () => {
           offence: 'Robbery',
           possibleRisk: 'Sex offender',
           riskCategory: 'History of substance abuse',
-          riskDetails: '',
+          riskDetails: 'Mock risk',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
         }
