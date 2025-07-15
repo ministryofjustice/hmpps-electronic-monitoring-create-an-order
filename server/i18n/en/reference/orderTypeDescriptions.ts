@@ -5,6 +5,7 @@ const orderTypeDescriptions: OrderTypeDescriptions = {
   DAPOL_HDC: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
   GPS_ACQUISITIVE_CRIME_HDC: 'GPS Acquisitive Crime Home Detention Curfew',
   GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime',
+  UNKNOWN: 'They are not part of any of these pilots',
 }
 
 export default orderTypeDescriptions

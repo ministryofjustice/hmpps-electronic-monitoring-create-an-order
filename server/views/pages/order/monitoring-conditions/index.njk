@@ -98,7 +98,7 @@
         { text: content.reference.orderTypeDescriptions.GPS_ACQUISITIVE_CRIME_HDC, value: 'GPS_ACQUISITIVE_CRIME_HDC', disabled: not isOrderEditable },
         { text: content.reference.orderTypeDescriptions.GPS_ACQUISITIVE_CRIME_PAROLE, value: 'GPS_ACQUISITIVE_CRIME_PAROLE', disabled: not isOrderEditable },
 	{ divider: "or", disabled: not isOrderEditable },
-        { text: 'They are not part of any of these pilots', value: '', disabled: not isOrderEditable}
+        { text: content.reference.orderTypeDescriptions.UNKNOWN, value: 'UNKNOWN', disabled: not isOrderEditable}
       ],
       value: orderTypeDescription.value,
       errorMessage: orderTypeDescription.error,
