@@ -2,7 +2,6 @@ import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
-import FeatureFlags from '../utils/featureFlags'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -227,7 +226,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.interestedParties),
     })
 
-    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    if (order.dataDictionaryVersion === 'DDV5') {
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.probationDeliveryUnit,
@@ -342,7 +341,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.curfewConditions),
     })
 
-    if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+    if (order.dataDictionaryVersion === 'DDV5') {
       tasks.push({
         section: SECTIONS.electronicMonitoringCondition,
         name: PAGES.curfewAdditionalDetails,

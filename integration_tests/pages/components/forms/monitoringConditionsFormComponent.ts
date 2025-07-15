@@ -15,6 +15,7 @@ export type MonitoringConditionsFormData = {
   issp?: string
   hdc?: string
   prarr?: string
+  pilot?: string
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -31,22 +32,32 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
-  get orderTypeDescriptionField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What pilot project is the device wearer part of? (optional)', [
-      'DAPO',
-      'DAPOL',
-      'DAPOL HDC',
-      'GPS Acquisitive Crime HDC',
+  get orderTypeDescriptionField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What pilot project is the device wearer part of?', [
+      'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
+      'GPS Acquisitive Crime Home Detention Curfew',
       'GPS Acquisitive Crime Parole',
+      'They are not part of any of these pilots',
+    ])
+  }
+
+  get pilotField(): FormSelectComponent {
+    return new FormSelectComponent(this.form, 'What pilot project is the device wearer part of? (optional)', [
+      'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
+      'Domestic Abuse Perpetrator on Licence Project',
+      'GPS Acquisitive Crime Home Detention Curfew',
+      'GPS Acquisitive Crime Parole',
+      'Acquisitive Crime Project',
+      'Licence Variation Project',
     ])
   }
 
   get conditionTypeField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What are the order type conditions?', [
-      'Requirement of a Community Order',
-      'License Condition of a Custodial Order',
-      'Post-Sentence Supervision Requirement following on from an Adult Custody order',
-      'Bail Order',
+    return new FormRadiosComponent(this.form, 'What condition is the monitoring part of?', [
+      'Licence condition',
+      'Post-Sentence Supervision Requirement',
     ])
   }
 
@@ -68,8 +79,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     return new FormDateTimeComponent(this.form, 'endDate')
   }
 
-  get sentenceTypeField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What type of sentence has the device wearer been given? (optional)', [
+  get sentenceTypeField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What type of sentence has the device wearer been given?', [
       'Extended Determinate Sentence',
       'Imprisonment for Public Protection (IPP)',
       'Life Sentence',
@@ -77,6 +88,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Section 227/228 Extended Sentence for Public Protection (EPP)',
       'Section 85 Extended Sentences',
       'Standard Determinate Sentence',
+      'Detention and Training Order (DTO)',
     ])
   }
 
@@ -146,12 +158,16 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     if (data.prarr) {
       this.prarrField.set(data.prarr)
     }
+
+    if (data.pilot) {
+      this.pilotField.set(data.pilot)
+    }
   }
 
   shouldBeValid(): void {
     this.orderTypeField.shouldNotHaveValidationMessage()
     this.monitoringRequiredField.shouldNotHaveValidationMessage()
-    this.orderTypeDescriptionField.shouldNotHaveValidationMessage()
+    this.pilotField.shouldNotHaveValidationMessage()
     this.conditionTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
@@ -164,7 +180,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   shouldBeDisabled(): void {
     this.orderTypeField.shouldBeDisabled()
     this.monitoringRequiredField.shouldBeDisabled()
-    this.orderTypeDescriptionField.shouldBeDisabled()
+    this.pilotField.shouldBeDisabled()
     this.conditionTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
@@ -177,7 +193,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   shouldNotBeDisabled(): void {
     this.orderTypeField.shouldNotBeDisabled()
     this.monitoringRequiredField.shouldNotBeDisabledWithException('value', 'alcohol')
-    this.orderTypeDescriptionField.shouldNotBeDisabled()
+    this.pilotField.shouldNotBeDisabled()
     this.conditionTypeField.shouldNotBeDisabled()
     this.startDateField.shouldNotBeDisabled()
     this.endDateField.shouldNotBeDisabled()
@@ -189,7 +205,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
 
   shouldHaveAllOptions(): void {
     this.orderTypeField.shouldHaveAllOptions()
-    this.orderTypeDescriptionField.shouldHaveAllOptions()
+    this.pilotField.shouldHaveAllOptions()
     this.conditionTypeField.shouldHaveAllOptions()
     this.monitoringRequiredField.shouldHaveAllOptions()
     this.sentenceTypeField.shouldHaveAllOptions()

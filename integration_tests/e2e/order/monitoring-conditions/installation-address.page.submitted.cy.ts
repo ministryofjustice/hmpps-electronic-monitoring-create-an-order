@@ -25,7 +25,7 @@ context('Monitoring conditions', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backToSummaryButton.should('exist').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
         page.form.shouldBeDisabled()
         page.errorSummary.shouldNotExist()

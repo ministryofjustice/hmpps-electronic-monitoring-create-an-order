@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires, global-require */
+/* eslint-disable @typescript-eslint/no-var-requires, global-require, @typescript-eslint/no-require-imports */
 
 // NB: Intead of importing FeatureFlags at top of file, it's is imorted with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
 
@@ -9,10 +9,10 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  DD_V5_1_ENABLED: false,
   MAPPA_ENABLED: true,
   MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATIONS_ENABLED: true,
+  ORDER_TYPE_ENABLED: false,
 }
 
 jest.mock('fs')
@@ -51,10 +51,8 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const dataDictionaryFlag = FeatureFlags.getInstance().get('DD_V5_1_ENABLED')
     const mappaFlag = FeatureFlags.getInstance().get('MAPPA_ENABLED')
 
-    expect(dataDictionaryFlag).toBe(false)
     expect(mappaFlag).toBe(true)
   })
 

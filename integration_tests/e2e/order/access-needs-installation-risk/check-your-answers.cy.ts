@@ -10,7 +10,12 @@ context('installation and risk - check your answers', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { dataDictionaryVersion: 'DDV5' },
+      })
 
       cy.signIn()
     })
@@ -50,10 +55,12 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -81,12 +88,8 @@ context('installation and risk - check your answers', () => {
           key: 'Any other information to be aware of about the offence committed? (optional)',
           value: 'some offence details',
         },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+
+        { key: 'Any other risks to be aware of?', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
@@ -118,10 +121,11 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
+          dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -158,12 +162,7 @@ context('installation and risk - check your answers', () => {
           key: 'Any other information to be aware of about the offence committed? (optional)',
           value: 'some offence details',
         },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: 'Any other risks to be aware of?', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
@@ -195,10 +194,11 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         status: 'ERROR',
         order: {
+          dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
@@ -231,27 +231,14 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
         {
           key: 'Any other information to be aware of about the offence committed? (optional)',
           value: 'some offence details',
         },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: 'Any other risks to be aware of?', value: 'some risk details' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
-    })
-
-    // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-    it('does not show the possible risks question', () => {
-      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-
-      page.installationRiskSection.shouldNotHaveItem('At installation what are the possible risks? (optional)')
     })
 
     it('does not show "change" links', () => {
@@ -269,11 +256,9 @@ context('installation and risk - check your answers', () => {
       page.returnButton().contains('Return to main form menu')
     })
   })
-  context('when ddv5 is not enabled', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
+  context('DDV4', () => {
     const pageHeading = 'View answers'
     beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -285,12 +270,13 @@ context('installation and risk - check your answers', () => {
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             offenceAdditionalDetails: 'some offence details',
-            riskCategory: ['RISK_TO_GENDER'],
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
           },
           fmsResultDate: new Date('2024 12 14'),
+          dataDictionaryVersion: 'DDV4',
         },
       })
       cy.signIn()
@@ -306,12 +292,7 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
         { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
-        // Temporary change until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
-        // {
-        //   key: 'At installation what are the possible risks? (optional)',
-        //   value: 'Offensive towards someone because of their sex or gender',
-        // },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])

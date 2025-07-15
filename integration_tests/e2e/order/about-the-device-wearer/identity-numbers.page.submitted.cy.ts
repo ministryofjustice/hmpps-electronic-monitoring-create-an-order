@@ -35,7 +35,7 @@ context('About the device wearer', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
         page.form.shouldBeDisabled()
         page.errorSummary.shouldNotExist()

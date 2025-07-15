@@ -1,12 +1,10 @@
-import { z } from 'zod'
-
 import { deserialiseTime, getErrors, getError } from '../../utils/utils'
 import { MultipleChoiceField, TimeSpanField, ViewModel, AddressViews, getAddressViews } from './utils'
 
 import { CurfewTimetable } from '../CurfewTimetable'
 import { CurfewTimetableFormData, curfewTimetableFormDataItem } from '../form-data/curfewTimetable'
 
-import { ValidationErrorModel, ValidationResult } from '../Validation'
+import { ValidationResult, ValidationError } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { Address } from '../Address'
 
@@ -28,15 +26,13 @@ export type CurfewTimetableViewModel = ViewModel<unknown> & {
   addressViews: AddressViews
 }
 
-const curfewTimetableApiDto = z.object({
-  dayOfWeek: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
-  curfewAddress: z.string(),
-  errors: z.array(ValidationErrorModel),
-})
-
-type CurfewTimetableApiDto = z.infer<typeof curfewTimetableApiDto>
+export type CurfewTimetableApiDto = {
+  dayOfWeek: string
+  startTime: string
+  endTime: string
+  curfewAddress: string
+  errors: ValidationError[]
+}
 
 const createViewModelFromApiDto = (
   validationErrors: CurfewTimetableApiDto[],

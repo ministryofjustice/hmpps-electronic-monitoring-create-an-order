@@ -7,7 +7,8 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// test skipped as Bail is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -75,6 +76,11 @@ context('Scenarios', () => {
       },
     ])
 
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+      riskDetails: 'No risk',
+    }
+
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
@@ -89,7 +95,7 @@ context('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: fakeSecondaryAddress,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails: undefined,
         curfewReleaseDetails,
@@ -132,7 +138,7 @@ context('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],

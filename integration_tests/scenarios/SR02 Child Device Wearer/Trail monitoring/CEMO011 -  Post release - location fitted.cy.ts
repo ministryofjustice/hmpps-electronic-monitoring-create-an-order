@@ -75,12 +75,17 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
-      conditionType: 'License Condition of a Custodial Order',
+      conditionType: 'Licence condition',
       monitoringRequired: 'Trail monitoring',
+      sentenceType: 'Detention and Training Order (DTO)',
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+    }
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+      riskDetails: 'No risk',
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -134,6 +139,7 @@ context('Scenarios', () => {
       contactInformationCheckYourAnswersPage.continueButton().click()
 
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       installationAndRiskPage.form.saveAndContinueButton.click()
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
@@ -202,7 +208,7 @@ context('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],
@@ -235,7 +241,7 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
 
@@ -295,7 +301,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: '',
+              sentence_type: 'Detention & Training Order',
               tag_at_source: '',
               tag_at_source_details: '',
               technical_bail: '',
