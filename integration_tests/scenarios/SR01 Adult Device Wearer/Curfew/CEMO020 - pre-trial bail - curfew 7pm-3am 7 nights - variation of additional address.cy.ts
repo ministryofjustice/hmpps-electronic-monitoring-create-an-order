@@ -5,6 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
+import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
@@ -63,9 +64,10 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        conditionType: 'Bail Order',
+        conditionType: 'Licence condition',
         monitoringRequired: 'Curfew',
         hdc: 'Yes',
+        sentenceType: 'Life Sentence',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -91,6 +93,7 @@ context('Scenarios', () => {
       const variationDetails = {
         variationType: 'The device wearer’s address',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDetails: 'Change to address',
       }
       let fakeVariationSecondaryAddress = createKnownAddress()
       while (fakeVariationSecondaryAddress.postcode === fakePrimaryAddress.postcode) {
@@ -110,6 +113,11 @@ context('Scenarios', () => {
         },
       ])
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -124,7 +132,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: undefined,
           curfewReleaseDetails,
@@ -135,7 +143,7 @@ context('Scenarios', () => {
         })
         orderSummaryPage.submitOrderButton.click()
 
-        let submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
@@ -151,7 +159,7 @@ context('Scenarios', () => {
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: fakeVariationSecondaryAddress,
           interestedParties,
-          installationAndRisk: undefined,
+          installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           curfewReleaseDetails,
@@ -196,7 +204,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
@@ -229,7 +237,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -267,7 +275,7 @@ context('Scenarios', () => {
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
-                order_variation_details: '',
+                order_variation_details: variationDetails.variationDetails,
                 order_variation_req_received_date: '',
                 order_variation_type: 'Change to Address',
                 pdu_responsible: 'Blackburn',
@@ -288,7 +296,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Life Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 technical_bail: '',
@@ -408,8 +416,8 @@ context('Scenarios', () => {
             .should('be.true')
         })
 
-        submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-        submitSuccessPage.backToYourApplications.click()
+        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
+        variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.SubmittedVariationFor(deviceWearerDetails.fullName).should('exist')

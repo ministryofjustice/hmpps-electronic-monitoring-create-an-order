@@ -75,7 +75,7 @@ describe('authorised user', () => {
   describe('GET /', () => {
     it('should render order search page', () => {
       auditService.logPageView.mockResolvedValue()
-      orderSearchService.searchOrders.mockResolvedValue([])
+      orderSearchService.listOrders.mockResolvedValue([])
 
       return request(app)
         .get('/')
@@ -91,7 +91,7 @@ describe('authorised user', () => {
 
     it('should render the order search page with no results if there is an error', () => {
       auditService.logPageView.mockResolvedValue()
-      orderSearchService.searchOrders.mockRejectedValue(mock500Error)
+      orderSearchService.listOrders.mockRejectedValue(mock500Error)
 
       return request(app)
         .get('/')
@@ -103,6 +103,20 @@ describe('authorised user', () => {
             who: user.username,
             correlationId: expect.any(String),
           })
+        })
+    })
+  })
+
+  describe('GET /search', () => {
+    it('should render order search page', () => {
+      auditService.logPageView.mockResolvedValue()
+      orderSearchService.searchOrders.mockResolvedValue([mockSubmittedOrder])
+
+      return request(app)
+        .get(`/search`)
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Search for a submitted form')
         })
     })
   })

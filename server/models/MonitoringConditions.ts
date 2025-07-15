@@ -11,6 +11,7 @@ export const SentenceTypeEnum = z.enum([
   'EPP',
   'SECTION_85_EXTENDED_SENTENCES',
   'STANDARD_DETERMINATE_SENTENCE',
+  'DTO',
 ])
 
 const MonitoringConditionsModel = z.object({
@@ -28,6 +29,7 @@ const MonitoringConditionsModel = z.object({
   issp: YesNoUnknownEnum.nullable(),
   hdc: YesNoUnknownEnum.nullable(),
   prarr: YesNoUnknownEnum.nullable(),
+  pilot: z.string().nullable(),
   isValid: z.boolean().default(false),
 })
 

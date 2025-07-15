@@ -9,48 +9,49 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <br/>
 
-  {{ govukBackLink({
-  text: "Back",
-  href: "#"
-  }) }}
-
-  {{ govukPanel({
-  titleText: "Failed to submit attachments",
-  classes: "govuk-panel--error"
-  }) }}
-
-  <br>
-
-  {{ govukWarningText({
-  text: "You need to apply a different way"
-  }) }}
-
-  <p class="govuk-body">Your attachments failed to submit with your application form due to a technical problem.</p>
-
-  <p class="govuk-body">Download and submit your application form and attachments by email to:</p>
-
-  <ul class="govuk-list govuk-list--bullet">
-    <li><a href="mailto:hoieorders@ems.co.uk">hoieorders@ems.co.uk</a> if you work at the Home Office </li>
-    <li><a href="mailto:EMNotifications@ems.co.uk">EMNotifications@ems.co.uk</a> if you work in any other service or department</li>
-  </ul>
-
- 
-
-  <img src="{{ formDownloadIcon }}" alt="Icon of a form">
-
-  {{ govukButton({
-          text: "View and download completed application form",
-          href: "/order/" + orderId + "/receipt",
-          classes: "govuk-button--secondary",
-          id: "receipt-button"
+      {{ govukPanel({
+        titleText: "Failed to submit attachments",
+        classes: "govuk-panel--error"
       }) }}
-  <br><br>
 
-    {{ govukButton({
-      text: "Back to start",
-      href: "/",
-      id: "back-to-applications-button"
-    }) }}
-<p  class="govuk-body"><a href="https://forms.office.com/e/khDZBF1tCS">What did you think of this service? (takes 30 seconds)</a></p>
+      <p class="govuk-heading-s">You need to apply a different way</p>
+
+      <p class="govuk-body">Your attachments failed to submit with your application form due to a technical problem.</p>
+
+      <p class="govuk-body">Download and submit your application form and attachments by email to:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li><a href="mailto:hoieorders@ems.co.uk">hoieorders@ems.co.uk</a> if you work at the Home Office </li>
+        <li><a href="mailto:EMNotifications@ems.co.uk">EMNotifications@ems.co.uk</a> if you work in any other service or department</li>
+      </ul>
+
+      <img src="{{ formDownloadIcon }}" alt="Icon of a form">
+
+      {{ govukButton({
+        text: "View and download completed application form",
+        href: "/order/" + orderId + "/receipt",
+        classes: "govuk-button--secondary",
+        id: "receipt-button"
+      }) }}
+
+      <br>
+
+      {{ govukButton({
+        text: "Back to start",
+        href: "/",
+        id: "back-to-applications-button"
+      }) }}
+
+      <p  class="govuk-body">
+        <a href="https://forms.office.com/e/khDZBF1tCS">
+          What did you think of this service? (takes 30 seconds)
+        </a>
+      </p>
+
+    </div>
+  </div>
 {% endblock %}

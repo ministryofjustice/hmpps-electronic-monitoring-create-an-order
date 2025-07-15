@@ -14,7 +14,12 @@ context('Access needs and installation risk information', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -38,8 +43,9 @@ context('Access needs and installation risk information', () => {
         const validFormData = {
           offence: 'Robbery',
           offenceAdditionalDetails: '',
-          riskCategory: 'Sex offender',
-          riskDetails: '',
+          possibleRisk: 'Sex offender',
+          riskCategory: 'History of substance abuse',
+          riskDetails: 'Mock risk',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
         }
@@ -52,8 +58,8 @@ context('Access needs and installation risk information', () => {
           body: {
             offence: 'ROBBERY',
             offenceAdditionalDetails: '',
-            riskCategory: ['SEXUAL_OFFENCES'],
-            riskDetails: '',
+            riskCategory: [],
+            riskDetails: 'Mock risk',
             mappaLevel: 'MAPPA 1',
             mappaCaseType: 'SOC (Serious Organised Crime)',
           },
@@ -65,8 +71,9 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sex offender',
-          riskDetails: '',
+          possibleRisk: 'Sex offender',
+          riskCategory: 'History of substance abuse',
+          riskDetails: 'Mock risk',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
         }
@@ -82,14 +89,15 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           offence: 'Robbery',
-          riskCategory: 'Sex offender',
-          riskDetails: '',
+          possibleRisk: 'Sex offender',
+          riskCategory: 'History of substance abuse',
+          riskDetails: 'Mock risk',
           mappaLevel: 'MAPPA 1',
           mappaCaseType: 'Serious Organised Crime',
         }
 
         page.form.fillInWith(validFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

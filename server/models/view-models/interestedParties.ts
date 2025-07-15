@@ -1,9 +1,9 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import FeatureFlags from '../../utils/featureFlags'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
 import { InterestedParties } from '../InterestedParties'
 import { NotifyingOrganisation } from '../NotifyingOrganisation'
+import { Order } from '../Order'
 import { ValidationResult } from '../Validation'
 import { ViewModel } from './utils'
 
@@ -45,6 +45,7 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
 const constructFromFormData = (
   formData: InterestedPartiesFormData,
   validationErrors: ValidationResult,
+  order: Order,
 ): InterestedPartiesViewModel => {
   return {
     notifyingOrganisation: {
@@ -80,11 +81,12 @@ const constructFromFormData = (
       error: getError(validationErrors, 'responsibleOrganisationEmail'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    DDv5: order.dataDictionaryVersion === 'DDV5',
   }
 }
 
-const constructFromEntity = (interestedParties: InterestedParties | null): InterestedPartiesViewModel => {
+const constructFromEntity = (order: Order): InterestedPartiesViewModel => {
+  const { interestedParties } = order
   return {
     notifyingOrganisation: {
       value: interestedParties?.notifyingOrganisation ?? '',
@@ -111,20 +113,20 @@ const constructFromEntity = (interestedParties: InterestedParties | null): Inter
       value: interestedParties?.responsibleOrganisationEmail ?? '',
     },
     errorSummary: null,
-    DDv5: FeatureFlags.getInstance().get('DD_V5_1_ENABLED'),
+    DDv5: order.dataDictionaryVersion === 'DDV5',
   }
 }
 
 const construct = (
-  interestedParties: InterestedParties | null,
+  order: Order,
   formData: InterestedPartiesFormData,
   validationErrors: ValidationResult,
 ): InterestedPartiesViewModel => {
   if (validationErrors.length > 0) {
-    return constructFromFormData(formData, validationErrors)
+    return constructFromFormData(formData, validationErrors, order)
   }
 
-  return constructFromEntity(interestedParties)
+  return constructFromEntity(order)
 }
 
 export default {
