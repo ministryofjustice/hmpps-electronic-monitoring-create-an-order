@@ -526,7 +526,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What pilot project is the device wearer part of?',
             },
             value: {
-              text: 'GPS Acquisitive Crime HDC',
+              text: 'GPS Acquisitive Crime Home Detention Curfew',
             },
             actions: {
               items: [
@@ -1456,7 +1456,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What pilot project is the device wearer part of?',
             },
             value: {
-              text: 'GPS Acquisitive Crime HDC',
+              text: 'GPS Acquisitive Crime Home Detention Curfew',
             },
             actions: {
               items: [
