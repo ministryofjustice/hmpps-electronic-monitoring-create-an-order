@@ -101,6 +101,7 @@ describe('populateCurrentOrder', () => {
     expect(req.order).toEqual(mockOrder)
     expect(res.locals.isOrderEditable).toEqual(false)
     expect(res.locals.orderId).toEqual(mockOrder.id)
+    expect(res.locals.content).not.toBeUndefined()
   })
 
   it('should hydrate the req/res correctly when the order is a draft', async () => {
@@ -119,5 +120,6 @@ describe('populateCurrentOrder', () => {
     expect(req.order).toEqual(mockOrder)
     expect(res.locals.isOrderEditable).toEqual(true)
     expect(res.locals.orderId).toEqual(mockOrder.id)
+    expect(res.locals.content).not.toBeUndefined()
   })
 })

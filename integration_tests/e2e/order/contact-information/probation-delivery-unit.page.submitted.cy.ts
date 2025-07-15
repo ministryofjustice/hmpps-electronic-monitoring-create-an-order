@@ -16,6 +16,7 @@ context('Contact information', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
+            dataDictionaryVersion: 'DDV5',
             interestedParties: {
               notifyingOrganisation: 'PRISON',
               notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
@@ -50,7 +51,7 @@ context('Contact information', () => {
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable

@@ -8,7 +8,10 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     super(heading, paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
   }
 
-  monitoringConditionsSection = (): PageElement => cy.contains('Monitoring details')
+  get monitoringConditionsSection(): SummaryListComponent {
+    const label = 'Monitoring details'
+    return new SummaryListComponent(label)
+  }
 
   installationAddressSection = (): PageElement => cy.contains('Installation address')
 

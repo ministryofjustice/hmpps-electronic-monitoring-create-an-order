@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { Order, OrderStatusEnum, OrderTypeEnum } from '../../server/models/Order'
+import { DataDictionaryVersionEnum, Order, OrderStatusEnum, OrderTypeEnum } from '../../server/models/Order'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { MonitoringConditions } from '../../server/models/MonitoringConditions'
 import { Address } from '../../server/models/Address'
@@ -111,6 +111,7 @@ export const createMonitoringConditions = (
   hdc: null,
   prarr: null,
   isValid: false,
+  pilot: null,
   ...overrideProperties,
 })
 
@@ -181,6 +182,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
   status: OrderStatusEnum.Enum.IN_PROGRESS,
   type: OrderTypeEnum.Enum.REQUEST,
+  dataDictionaryVersion: DataDictionaryVersionEnum.Enum.DDV4,
   deviceWearer: createDeviceWearer(),
   deviceWearerResponsibleAdult: null,
   contactDetails: null,
@@ -203,6 +205,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   id: randomUUID(),
   status: OrderStatusEnum.Enum.IN_PROGRESS,
   type: OrderTypeEnum.Enum.REQUEST,
+  dataDictionaryVersion: DataDictionaryVersionEnum.Enum.DDV4,
   deviceWearer: {
     nomisId: '',
     pncId: null,

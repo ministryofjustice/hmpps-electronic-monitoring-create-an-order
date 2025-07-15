@@ -111,6 +111,8 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
+          pilot: '',
+          dataDictionaryVersion: 'DDV4',
         },
       })
     })
@@ -166,6 +168,8 @@ describe(MonitoringConditionsController, () => {
           issp: 'UNKNOWN',
           hdc: 'UNKNOWN',
           prarr: 'UNKNOWN',
+          pilot: '',
+          dataDictionaryVersion: 'DDV4',
         },
       })
     })

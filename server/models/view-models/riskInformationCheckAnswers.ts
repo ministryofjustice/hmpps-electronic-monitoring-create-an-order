@@ -4,7 +4,6 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import config from '../../config'
-import FeatureFlags from '../../utils/featureFlags'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -19,7 +18,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
   )
-  if (FeatureFlags.getInstance().get('DD_V5_1_ENABLED')) {
+  if (order.dataDictionaryVersion === 'DDV5') {
     answers.push(
       createAnswer(
         questions.offenceAdditionalDetails.text,
@@ -29,12 +28,26 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       ),
     )
   }
-  // Temporarily disabled until Serco fix their issue: https://dsdmoj.atlassian.net/browse/ELM-3765
+
+  // const possibleRisks = order.installationAndRisk?.riskCategory?.filter(
+  //   it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
+  // )
+
+  // answers.push(
+  //   createMultipleChoiceAnswer(
+  //     questions.possibleRisk.text,
+  //     possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
+  //     uri,
+  //     answerOpts,
+  //   ),
+  // )
+  // const riskCategories = order.installationAndRisk?.riskCategory?.filter(
+  //   it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
+  // )
   // answers.push(
   //   createMultipleChoiceAnswer(
   //     questions.riskCategory.text,
-  //     order.installationAndRisk?.riskCategory?.map(category => lookup(content.reference.riskCategories, category)) ??
-  //       [],
+  //     riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
   //     uri,
   //     answerOpts,
   //   ),

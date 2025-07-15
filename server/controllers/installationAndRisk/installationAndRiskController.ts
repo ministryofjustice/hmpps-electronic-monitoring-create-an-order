@@ -29,10 +29,10 @@ export default class InstallationAndRiskController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { installationAndRisk } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = installationAndRiskViewModel.construct(installationAndRisk, errors as never, formData as never)
+    const viewModel = installationAndRiskViewModel.construct(order, formData as never, errors as never)
 
     res.render(`pages/order/installation-and-risk/index`, viewModel)
   }
@@ -40,11 +40,10 @@ export default class InstallationAndRiskController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = InstallationAndRiskFormDataModel.parse(req.body)
-
     const updateResult = await this.installationAndRiskService.update({
       accessToken: res.locals.user.token,
       orderId,
-      data: this.createApiModelFromFormData(formData),
+      data: formData,
     })
 
     if (isValidationResult(updateResult)) {

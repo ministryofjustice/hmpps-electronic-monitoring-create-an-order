@@ -12,7 +12,6 @@ type Disabilities = ReferenceData<
   | 'SOCIAL_BEHAVIOURAL'
   | 'OTHER'
   | 'NONE'
-  | 'PREFER_NOT_TO_SAY'
 >
 
 type DisabilitiesDDv5 = ReferenceData<
@@ -20,14 +19,14 @@ type DisabilitiesDDv5 = ReferenceData<
   | 'HEARING'
   | 'MOBILITY'
   | 'DEXTERITY'
-  | 'LEARNING_UNDERSTANDING_OR_CONCENTRATING'
+  | 'LEARNING_UNDERSTANDING_CONCENTRATING'
   | 'MEMORY'
   | 'MENTAL_HEALTH'
-  | 'STAMINA_OR_BREATHING_OR_FATIGUE'
-  | 'SOCIALLY_OR_BEHAVIORALLY'
+  | 'STAMINA_BREATHING_FATIGUE'
+  | 'SOCIAL_BEHAVIOURAL'
   | 'SKIN_CONDITION'
   | 'OTHER'
-  | 'NONE_OF_THE_ABOVE'
+  | 'NONE'
 >
 
 export default Disabilities

@@ -17,7 +17,7 @@ context('Submit failed', () => {
   it('Should display the page', () => {
     cy.visit(`/order/${mockOrderId}/submit/failed`)
     const page = Page.verifyOnPage(SubmitFailedPage)
-    page.warningText().should('exist')
+    page.heading().should('exist')
     page.header.userName().should('contain.text', 'J. Smith')
   })
 

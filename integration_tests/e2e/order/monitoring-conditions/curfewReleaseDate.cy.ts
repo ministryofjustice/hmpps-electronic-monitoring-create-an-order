@@ -69,6 +69,7 @@ const mockEmptyCurfewReleaseDate = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
   curfewReleaseDateConditions: {
     curfewAddress: null,
@@ -162,7 +163,7 @@ context('Curfew monitoring - release date', () => {
       })
       checkFormFields()
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.errorSummary.shouldNotExist()
     })
   })
@@ -189,7 +190,7 @@ context('Curfew monitoring - release date', () => {
       })
       checkFormFields()
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
       page.errorSummary.shouldNotExist()
     })
   })

@@ -37,6 +37,7 @@ const mockDefaultOrder = {
     issp: 'YES',
     hdc: 'NO',
     prarr: 'UNKNOWN',
+    pilot: '',
   },
 }
 const stubGetOrder = order => {
@@ -77,7 +78,7 @@ context('Monitoring conditions', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
 
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
@@ -142,6 +143,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
         })
         const page = Page.visit(InstallationLocationPage, {
@@ -170,6 +172,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
         })
         const page = Page.visit(InstallationLocationPage, {

@@ -8,18 +8,16 @@ context('Contact information', () => {
   context('Interested parties', () => {
     context('Viewing a draft order', () => {
       context('DDv4', () => {
-        const testFlags = { DD_V5_1_ENABLED: false }
-
         beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
           cy.task('reset')
           cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV4' },
+          })
           cy.signIn()
-        })
-
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
         })
 
         it('Should display DDv4 content', () => {
@@ -28,7 +26,7 @@ context('Contact information', () => {
           page.header.phaseBanner().should('contain.text', 'dev')
 
           page.form.saveAndContinueButton.should('exist')
-          page.form.saveAndReturnButton.should('exist')
+          page.form.saveAsDraftButton.should('exist')
           page.form.shouldNotBeDisabled()
           page.errorSummary.shouldNotExist()
           page.backButton.should('exist')
@@ -49,18 +47,16 @@ context('Contact information', () => {
       })
 
       context('DDv5', () => {
-        const testFlags = { DD_V5_1_ENABLED: true }
-
         beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
           cy.task('reset')
           cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-          cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV5' },
+          })
           cy.signIn()
-        })
-
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
         })
 
         it('Should display DDV5 content', () => {
@@ -69,7 +65,7 @@ context('Contact information', () => {
           page.header.phaseBanner().should('contain.text', 'dev')
 
           page.form.saveAndContinueButton.should('exist')
-          page.form.saveAndReturnButton.should('exist')
+          page.form.saveAsDraftButton.should('exist')
           page.form.shouldNotBeDisabled()
           page.errorSummary.shouldNotExist()
           page.backButton.should('exist')

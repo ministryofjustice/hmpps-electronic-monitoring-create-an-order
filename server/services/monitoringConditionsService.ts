@@ -7,10 +7,10 @@ import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError } from '../utils/errors'
 import {
   MonitoringConditionsFormData,
-  MonitoringConditionsFormDataValidator,
+  validateMonitoringConditionsFormData,
 } from '../models/form-data/monitoringConditions'
 
-type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
+export type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string
   data: MonitoringConditionsFormData
 }
@@ -21,7 +21,7 @@ export default class MonitoringConditionsService {
     input: UpdateMonitoringConditionsInput,
   ): Promise<MonitoringConditions | ValidationResult> {
     try {
-      const requestBody = MonitoringConditionsFormDataValidator.parse(input.data)
+      const requestBody = validateMonitoringConditionsFormData(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions`,
         data: requestBody,

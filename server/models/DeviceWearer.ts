@@ -5,6 +5,7 @@ export const DisabilityEnum = z.enum([
   'HEARING',
   'MOBILITY',
   'DEXTERITY',
+  'SKIN_CONDITION',
   'LEARNING_UNDERSTANDING_CONCENTRATING',
   'MEMORY',
   'MENTAL_HEALTH',

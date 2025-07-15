@@ -12,7 +12,7 @@ context('Variation', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 404 })
+        cy.task('stubCemoGetOrder', { httpStatus: 404, order: { dataDictionaryVersion: 'DDV5' } })
       })
 
       it('Should indicate to the user that there was an error', () => {

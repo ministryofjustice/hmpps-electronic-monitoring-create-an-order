@@ -317,7 +317,10 @@ describe('OrderController', () => {
       await orderController.submitSuccess(req, res, next)
 
       // Then
-      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', { orderId: '123456789' })
+      expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', {
+        orderId: '123456789',
+        orderType: 'REQUEST',
+      })
     })
   })
 

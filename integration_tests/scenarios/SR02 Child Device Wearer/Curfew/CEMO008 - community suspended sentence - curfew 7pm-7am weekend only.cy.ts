@@ -12,7 +12,8 @@ import {
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// Test case is disabled as 'Community YRO' sentence type is not possible
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -81,6 +82,10 @@ context('Scenarios', () => {
         addresses: curfewConditionDetails.addresses,
       },
     ])
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+      riskDetails: 'No risk',
+    }
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -96,7 +101,7 @@ context('Scenarios', () => {
         primaryAddressDetails: fakePrimaryAddress,
         secondaryAddressDetails: undefined,
         interestedParties,
-        installationAndRisk: undefined,
+        installationAndRisk,
         monitoringConditions,
         installationAddressDetails: undefined,
         curfewReleaseDetails,
@@ -139,7 +144,7 @@ context('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],

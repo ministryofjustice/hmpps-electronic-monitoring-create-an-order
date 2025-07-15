@@ -209,11 +209,9 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.variationDetailsTask.click()
+    this.fillInVariationsDetails({ variationDetails })
 
-    const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
-    variationDetailsPage.form.fillInWith(variationDetails)
-    variationDetailsPage.form.saveAndContinueButton.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -292,11 +290,9 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.variationDetailsTask.click()
+    this.fillInVariationsDetails({ variationDetails })
 
-    const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
-    variationDetailsPage.form.fillInWith(variationDetails)
-    variationDetailsPage.form.saveAndContinueButton.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -373,11 +369,9 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.variationDetailsTask.click()
+    this.fillInVariationsDetails({ variationDetails })
 
-    const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
-    variationDetailsPage.form.fillInWith(variationDetails)
-    variationDetailsPage.form.saveAndContinueButton.click()
+    this.aboutTheDeviceWearerTask.click()
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -438,6 +432,14 @@ export default class OrderTasksPage extends AppPage {
     })
 
     return Page.verifyOnPage(OrderTasksPage)
+  }
+
+  fillInVariationsDetails({ variationDetails }): void {
+    this.variationDetailsTask.click()
+    const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
+    variationDetailsPage.form.fillInWith(variationDetails)
+    variationDetailsPage.form.saveAndReturnButton.click()
+    Page.verifyOnPage(OrderTasksPage)
   }
 
   fillInGeneralOrderDetailsWith({

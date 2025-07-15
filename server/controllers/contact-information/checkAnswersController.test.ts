@@ -20,7 +20,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-  const content = getContent(Locales.en, DataDictionaryVersions.DDv5)
+  const content = getContent(Locales.en, DataDictionaryVersions.DDV5)
   const { questions } = content.pages.interestedParties
 
   beforeEach(() => {
@@ -32,12 +32,11 @@ describe('ContactDetailsCheckAnswersController', () => {
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     controller = new CheckAnswersController(mockAuditService, taskListService)
-    process.env.DD_V5_1_ENABLED = 'true'
   })
 
   it('should render the check answers page without any answers completed', async () => {
     // Given
-    const order = getMockOrder()
+    const order = getMockOrder({ dataDictionaryVersion: 'DDV5' })
     const req = createMockRequest({ order })
     const res = createMockResponse()
     const next = jest.fn()
@@ -218,6 +217,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           postcode: 'Postcode',
         }),
       ],
+      dataDictionaryVersion: 'DDV5',
     })
     const req = createMockRequest({ order })
     const res = createMockResponse()
@@ -379,6 +379,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   it('should render the check answers page using saved data for an device wearer with a fixed abode', async () => {
     // Given
     const order = getMockOrder({
+      dataDictionaryVersion: 'DDV5',
       deviceWearer: createDeviceWearer({ noFixedAbode: false }),
       contactDetails: { contactNumber: '01234567890' },
       interestedParties: {
@@ -421,7 +422,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       ],
     })
     const req = createMockRequest({ order })
-    const res = createMockResponse()
+    const res = createMockResponse(order)
     const next = jest.fn()
 
     // When

@@ -29,7 +29,8 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
-context('Scenarios', () => {
+// test disabled as community YRO is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -107,6 +108,11 @@ context('Scenarios', () => {
         addAnother: 'No',
       }
 
+      const installationAndRisk = {
+        possibleRisk: 'There are no risks that the installer should be aware of',
+        riskDetails: 'No risk',
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -158,6 +164,7 @@ context('Scenarios', () => {
         contactInformationCheckYourAnswersPage.continueButton().click()
 
         const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+        installationAndRiskPage.form.fillInWith(installationAndRisk)
         installationAndRiskPage.form.saveAndContinueButton.click()
 
         const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
@@ -226,7 +233,7 @@ context('Scenarios', () => {
             phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
             risk_serious_harm: '',
             risk_self_harm: '',
-            risk_details: '',
+            risk_details: 'No risk',
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],

@@ -9,12 +9,14 @@ const VariationDetailsFormDataParser = FormDataModel.extend({
     year: z.string(),
   }),
   variationType: z.string().default(''),
+  variationDetails: z.string().default(''),
 })
 
 const VariationDetailsFormDataValidator = z.object({
   // This might need error messages passing
   variationDate: DateInputModel(validationErrors.variationDetails.variationDate),
   variationType: z.string().min(1, validationErrors.variationDetails.variationTypeRequired),
+  variationDetails: z.string().min(1, validationErrors.variationDetails.variationDetailsRequired),
 })
 
 type VariationDetailsFormData = Omit<z.infer<typeof VariationDetailsFormDataParser>, 'action'>

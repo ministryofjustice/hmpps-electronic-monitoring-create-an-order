@@ -47,6 +47,7 @@ context('Monitoring conditions', () => {
         issp: 'YES',
         hdc: 'NO',
         prarr: 'UNKNOWN',
+        pilot: '',
       },
       addresses: [
         {
@@ -90,6 +91,7 @@ context('Monitoring conditions', () => {
           issp: 'YES',
           hdc: 'NO',
           prarr: 'UNKNOWN',
+          pilot: '',
         })
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
@@ -178,6 +180,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -204,6 +207,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -230,6 +234,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -256,6 +261,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -282,6 +288,7 @@ context('Monitoring conditions', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {

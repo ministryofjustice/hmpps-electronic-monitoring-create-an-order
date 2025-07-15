@@ -16,9 +16,11 @@ context('Variation', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
+            dataDictionaryVersion: 'DDV5',
             variationDetails: {
               variationType: 'CHANGE_TO_ADDRESS',
               variationDate: '2025-01-01T00:00:00Z',
+              variationDetails: 'Change to address',
             },
           },
         })
@@ -39,10 +41,11 @@ context('Variation', () => {
         // Should display the saved data
         page.form.variationTypeField.shouldHaveValue('The device wearer’s address')
         page.form.variationDateField.shouldHaveValue(new Date('2025-01-01T00:00:00Z'))
+        page.form.variationDetailsField.shouldHaveValue('Change to address')
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
 
         // Should not be editable

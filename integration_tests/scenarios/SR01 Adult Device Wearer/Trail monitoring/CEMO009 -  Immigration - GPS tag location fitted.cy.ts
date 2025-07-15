@@ -23,7 +23,8 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
-context('Scenarios', () => {
+// Test case disabled as Immigation Bail sentence type is disabled
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -75,6 +76,11 @@ context('Scenarios', () => {
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
     }
 
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+      riskDetails: 'No risk',
+    }
+
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
@@ -122,6 +128,7 @@ context('Scenarios', () => {
       contactInformationCheckYourAnswersPage.continueButton().click()
 
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       installationAndRiskPage.form.saveAndContinueButton.click()
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
@@ -190,7 +197,7 @@ context('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],

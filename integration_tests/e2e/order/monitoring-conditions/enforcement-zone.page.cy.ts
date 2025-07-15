@@ -23,7 +23,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.header.phaseBanner().should('contain.text', 'dev')
 
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
       page.form.shouldHaveAllOptions()
@@ -47,7 +47,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.backButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled

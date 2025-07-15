@@ -40,6 +40,7 @@ context('Monitoring conditions', () => {
               issp: null,
               hdc: null,
               prarr: null,
+              pilot: null,
             },
           },
         })
@@ -125,7 +126,7 @@ context('Monitoring conditions', () => {
         }
 
         page.form.fillInWith(validFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })
@@ -158,6 +159,7 @@ context('Monitoring conditions', () => {
               issp: null,
               hdc: null,
               prarr: null,
+              pilot: null,
             },
           },
         })
@@ -227,6 +229,7 @@ context('Monitoring conditions', () => {
               issp: null,
               hdc: null,
               prarr: null,
+              pilot: null,
             },
           },
         })
@@ -296,6 +299,7 @@ context('Monitoring conditions', () => {
               issp: null,
               hdc: null,
               prarr: null,
+              pilot: null,
             },
           },
         })
@@ -365,6 +369,7 @@ context('Monitoring conditions', () => {
               issp: null,
               hdc: null,
               prarr: null,
+              pilot: null,
             },
           },
         })

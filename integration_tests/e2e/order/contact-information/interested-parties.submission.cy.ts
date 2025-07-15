@@ -74,13 +74,6 @@ context('Contact information', () => {
       })
 
       context('DDv5 feature set to true', () => {
-        const testFlags = { MAPPA_ENABLED: true }
-        beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
-        })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
         it('should continue to probation delivery unit page', () => {
           cy.task('stubCemoSubmitOrder', {
             httpStatus: 200,
@@ -114,6 +107,7 @@ context('Contact information', () => {
                 responsibleOfficerName: 'name',
                 responsibleOfficerPhoneNumber: '01234567891',
               },
+              dataDictionaryVersion: 'DDV5',
             },
           })
           page.form.fillInWith({
@@ -124,10 +118,11 @@ context('Contact information', () => {
 
           page.form.saveAndContinueButton.click()
 
-          Page.verifyOnPage(
+          const pduPage = Page.verifyOnPage(
             ProbationDeliveryUnitPage,
             "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
           )
+          pduPage.form.unitField.shouldExist()
         })
       })
 
@@ -135,7 +130,7 @@ context('Contact information', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

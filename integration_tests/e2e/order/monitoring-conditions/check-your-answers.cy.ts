@@ -17,11 +17,12 @@ context('Check your answers', () => {
         mandatoryAttendance: true,
         alcohol: true,
         conditionType: 'BAIL_ORDER',
-        orderTypeDescription: 'DAPO',
+        orderTypeDescription: '',
         sentenceType: 'IPP',
         issp: 'YES',
         hdc: 'NO',
         prarr: 'UNKNOWN',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
       },
       curfewReleaseDateConditions: {
         curfewAddress: '',
@@ -48,6 +49,7 @@ context('Check your answers', () => {
         startDate: '2024-11-11T00:00:00Z',
         curfewAdditionalDetails: 'some additional details',
       },
+      dataDictionaryVersion: 'DDV5',
     }
     beforeEach(() => {
       cy.task('reset')
@@ -68,7 +70,11 @@ context('Check your answers', () => {
     it('shows answers for checking', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.monitoringConditionsSection().should('exist')
+      page.monitoringConditionsSection.shouldExist()
+      page.monitoringConditionsSection.shouldHaveItem(
+        'What pilot project is the device wearer part of? (optional)',
+        'GPS Acquisitive Crime Parole',
+      )
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewOnDayOfReleaseSection.shouldHaveItems([
@@ -258,11 +264,12 @@ context('Check your answers', () => {
             mandatoryAttendance: true,
             alcohol: true,
             conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
+            orderTypeDescription: null,
             sentenceType: 'IPP',
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -301,7 +308,7 @@ context('Check your answers', () => {
     it('shows answers for checking', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.monitoringConditionsSection().should('exist')
+      page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
@@ -352,6 +359,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -391,7 +399,7 @@ context('Check your answers', () => {
     it('shows answers for checking', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.monitoringConditionsSection().should('exist')
+      page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().should('exist')
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
@@ -415,11 +423,9 @@ context('Check your answers', () => {
       page.returnButton().contains('Return to main form menu')
     })
   })
-  context('when ddv5 is not enabled', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
+  context('when ddv4 order', () => {
     const pageHeading = 'Check your answers'
     beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -428,6 +434,7 @@ context('Check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          dataDictionaryVersion: 'DDV4',
           monitoringConditions: {
             startDate: '2025-01-01T00:00:00Z',
             endDate: '2025-02-01T00:00:00Z',
@@ -438,11 +445,12 @@ context('Check your answers', () => {
             mandatoryAttendance: true,
             alcohol: true,
             conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
+            orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             sentenceType: 'IPP',
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
+            pilot: '',
           },
           curfewReleaseDateConditions: {
             curfewAddress: '',
@@ -473,6 +481,16 @@ context('Check your answers', () => {
       page.curfewSection.shouldNotHaveItems([
         'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
       ])
+    })
+
+    it('shows the orderTypeDescription', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.monitoringConditionsSection.shouldExist()
+      page.monitoringConditionsSection.shouldHaveItem(
+        'What pilot project is the device wearer part of?',
+        'GPS Acquisitive Crime Parole',
+      )
     })
   })
 })

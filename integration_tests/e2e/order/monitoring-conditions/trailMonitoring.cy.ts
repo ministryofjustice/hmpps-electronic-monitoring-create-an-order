@@ -28,6 +28,7 @@ const mockEmptyTrailMonitoring = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
 }
 
@@ -53,6 +54,7 @@ const mockSubmittedTrailMonitoring = {
     issp: null,
     hdc: null,
     prarr: null,
+    pilot: null,
   },
 }
 
@@ -103,7 +105,7 @@ context('Trail monitoring', () => {
       cy.get('#endDate-month').invoke('val').should('equal', '04')
       cy.get('#endDate-year').invoke('val').should('equal', '2025')
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.backButton.should('exist').should('have.attr', 'href', '#')
       page.errorSummary.shouldNotExist()
     })

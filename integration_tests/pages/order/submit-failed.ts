@@ -8,7 +8,7 @@ export default class SubmitFailedsPage extends AppPage {
     super('Failed to submit application', paths.ORDER.SUBMIT_FAILED)
   }
 
-  warningText = (): PageElement => cy.get('.govuk-warning-text')
+  heading = (): PageElement => cy.contains('.govuk-heading-s', 'You need to apply a different way')
 
   receiptButton = (): PageElement => cy.get('#receipt-button')
 

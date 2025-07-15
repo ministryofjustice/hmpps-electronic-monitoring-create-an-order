@@ -17,7 +17,7 @@ context('Submit partial success', () => {
   it('Should display the page', () => {
     cy.visit(`/order/${mockOrderId}/submit/partial-success`)
     const page = Page.verifyOnPage(SubmitPartialSuccessPage)
-    page.warningText().should('exist')
+    page.heading().should('exist')
     page.header.userName().should('contain.text', 'J. Smith')
   })
 

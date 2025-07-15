@@ -23,7 +23,7 @@ context('Monitoring conditions', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
 
         page.form.curfewRadios.shouldHaveOption('Yes')
         page.form.curfewRadios.shouldHaveOption('No')
@@ -97,7 +97,7 @@ context('Monitoring conditions', () => {
         })
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
 
         page.form.curfewRadios.element.getByLabel('Yes').should('be.checked')
         page.errorSummary.shouldNotExist()

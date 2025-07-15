@@ -14,6 +14,7 @@ context('Contact information', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             interestedParties: {
               notifyingOrganisation: 'PRISON',
               notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
@@ -46,7 +47,7 @@ context('Contact information', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         page.form.saveAndContinueButton.should('exist')
-        page.form.saveAndReturnButton.should('exist')
+        page.form.saveAsDraftButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')

@@ -66,7 +66,7 @@ context.skip('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Immigration',
-      orderTypeDescription: 'DAPOL',
+      pilot: 'Acquisitive Crime Project',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
     }
@@ -74,7 +74,10 @@ context.skip('Scenarios', () => {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
     }
-
+    const installationAndRisk = {
+      possibleRisk: 'There are no risks that the installer should be aware of',
+      riskDetails: 'No risk',
+    }
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
@@ -122,6 +125,7 @@ context.skip('Scenarios', () => {
       contactInformationCheckYourAnswersPage.continueButton().click()
 
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
       installationAndRiskPage.form.saveAndContinueButton.click()
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
@@ -190,7 +194,7 @@ context.skip('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],
@@ -259,7 +263,7 @@ context.skip('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
               order_type: monitoringConditions.orderType,
-              order_type_description: monitoringConditions.orderTypeDescription,
+              order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',

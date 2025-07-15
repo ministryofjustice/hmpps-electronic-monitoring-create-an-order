@@ -5,7 +5,8 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
   legend: '',
   questions: {
     conditionType: {
-      text: 'What are the order type conditions?',
+      text: 'What condition is the monitoring part of?',
+      hint: "This is on the device wearer's licence",
     },
     endDate: {
       text: 'What is the date when all monitoring ends?',
@@ -30,13 +31,16 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What is the order type?',
     },
     orderTypeDescription: {
+      text: 'What pilot project is the device wearer part of?',
+    },
+    pilot: {
       text: 'What pilot project is the device wearer part of? (optional)',
     },
     prarr: {
       text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
     },
     sentenceType: {
-      text: 'What type of sentence has the device wearer been given? (optional)',
+      text: 'What type of sentence has the device wearer been given?',
     },
     startDate: {
       text: 'What is the date for the first day of all monitoring?',
