@@ -1,15 +1,22 @@
 import { ValidationResult } from '../../models/Validation'
 
 const focusTargetMap: Record<string, string> = {
-  'End date must be after start date': 'day',
-  'End date of monitoring must be in the future': 'day',
+  appointmentDate: 'day',
+  dateOfBirth: 'day',
+  endDate: 'day',
+  releaseDate: 'day',
+  startDate: 'day',
+  variationDate: 'day',
+
+  endTime: 'seconds',
+  startTime: 'seconds',
 }
 
 export default function processBackendValidationErrors(errors: ValidationResult): ValidationResult {
   return errors.map(error => {
-    const focusTarget = focusTargetMap[error.error]
+    const focusTarget = focusTargetMap[error.field]
 
-    return focusTargetMap[error.error]
+    return focusTarget
       ? {
           ...error,
           focusTarget: `${error.field}-${focusTarget}`,
