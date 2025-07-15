@@ -103,7 +103,7 @@ describe('Monitoring conditions service', () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
       const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
       const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({
-        orderTypeDescription: '',
+        orderTypeDescription: 'undefined',
         dataDictionaryVersion: 'DDV4',
       })
 
