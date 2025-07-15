@@ -22,7 +22,7 @@ context('About the device wearer - Responsible Adult', () => {
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
       page.form.shouldHaveAllOptions()
@@ -240,7 +240,7 @@ context('About the device wearer - Responsible Adult', () => {
       const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.backButton.should('exist').should('have.attr', 'href', '#')
     })
   })

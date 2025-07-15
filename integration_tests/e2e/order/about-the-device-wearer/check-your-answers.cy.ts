@@ -113,7 +113,6 @@ context('Device wearer - check your answers', () => {
   })
 
   context('Device wearer has an unlisted disability and gender', () => {
-    const testFlags = { DD_V5_1_ENABLED: false }
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -142,11 +141,10 @@ context('Device wearer - check your answers', () => {
             interpreterRequired: false,
           },
           DeviceWearerResponsibleAdult: null,
+          dataDictionaryVersion: 'DDV4',
         },
       })
-
       cy.signIn()
-      cy.task('setFeatureFlags', testFlags)
     })
     afterEach(() => {
       cy.task('resetFeatureFlags')
@@ -166,7 +164,7 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's gender?", value: 'Self identify' },
         {
           key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
-          value: 'Other',
+          value: 'The device wearer has a disability or health condition not listed',
         },
         { key: "What is the device wearer's disability or health condition?", value: 'Broken arm' },
         { key: 'What language does the interpreter need to use? (optional)', value: '' },

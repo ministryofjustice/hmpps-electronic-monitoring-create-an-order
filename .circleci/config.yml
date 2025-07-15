@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@5
+  cypress: cypress-io/cypress@3.4.2
 
 parameters:
   alerts-slack-channel:
@@ -52,6 +53,7 @@ executors:
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
+          SETTINGS_DATA_DICTIONARY_VERSION: DDV5
 
   intgration-testing:
      docker:
@@ -119,6 +121,7 @@ jobs:
 
   integration_test:
     executor: intgration-testing
+    parallelism: 4
     environment:
       TZ: Europe/London
     steps:
@@ -144,7 +147,7 @@ jobs:
           command: sleep 5
       - run:
           name: integration tests
-          command: npm run int-test
+          command: npm run int-test:parallel
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -154,6 +157,7 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
+    parallelism: 4
     environment:
       TZ: Europe/London
     steps:
@@ -179,10 +183,15 @@ jobs:
           command: sleep 5
       - run:
           name: Run scenario tests
-          command: npm run int-test-scenarios
+          command: npm run int-test-scenarios:parallel
       - run:
           name: Archive screenshots
-          command: tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+          command: |
+            if [ -d integration_tests/screenshots ]; then
+              tar -czf integration_tests/screenshots.tar.gz integration_tests/screenshots
+            else
+              echo "No screenshots to archive"
+            fi
       - run:
           name: Archive requests
           command: tar -czf integration_tests/requests.tar.gz integration_tests/requests

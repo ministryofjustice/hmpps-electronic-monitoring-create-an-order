@@ -31,11 +31,11 @@ describe('Order Search Service', () => {
     }) as jest.Mocked<RestClient>
   })
 
-  describe('searchOrders', () => {
+  describe('listOrders', () => {
     it('should get orders from the api', async () => {
       mockRestClient.get.mockResolvedValue([mockApiResponse])
       const orderService = new OrderSearchService(mockRestClient)
-      const orders = await orderService.searchOrders({ accessToken: '', searchTerm: '' })
+      const orders = await orderService.listOrders({ accessToken: '' })
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/orders',
         token: '',
@@ -53,7 +53,7 @@ describe('Order Search Service', () => {
 
       try {
         const orderService = new OrderSearchService(mockRestClient)
-        await orderService.searchOrders({ accessToken: '', searchTerm: '' })
+        await orderService.listOrders({ accessToken: '' })
       } catch (e) {
         expect((e as Error).name).toEqual('ZodError')
       }
@@ -64,7 +64,7 @@ describe('Order Search Service', () => {
 
       try {
         const orderService = new OrderSearchService(mockRestClient)
-        await orderService.searchOrders({ accessToken: '', searchTerm: '' })
+        await orderService.listOrders({ accessToken: '' })
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(500)
         expect((e as SanitisedError).message).toEqual('Internal Server Error')

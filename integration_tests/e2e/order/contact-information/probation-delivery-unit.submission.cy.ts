@@ -21,6 +21,7 @@ context('Contact information', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            dataDictionaryVersion: 'DDV5',
             interestedParties: {
               notifyingOrganisation: 'PRISON',
               notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
@@ -72,7 +73,7 @@ context('Contact information', () => {
         const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
-        page.form.saveAndReturnButton.click()
+        page.form.saveAsDraftButton.click()
 
         Page.verifyOnPage(OrderSummaryPage)
       })

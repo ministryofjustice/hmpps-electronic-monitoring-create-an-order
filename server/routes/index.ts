@@ -150,7 +150,8 @@ export default function routes({
   )
   router.param('orderId', populateOrder(orderService))
 
-  get('/', orderSearchController.search)
+  get('/', orderSearchController.list)
+  get('/search', orderSearchController.search)
 
   // Order
   post(paths.ORDER.CREATE, orderController.create)

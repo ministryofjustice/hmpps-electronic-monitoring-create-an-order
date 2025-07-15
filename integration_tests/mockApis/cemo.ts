@@ -26,6 +26,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   id: uuidv4(),
   status,
   type: 'REQUEST',
+  dataDictionaryVersion: 'DDV4',
   deviceWearer: {
     nomisId: null,
     pncId: null,
@@ -135,6 +136,19 @@ const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): 
     request: {
       method: 'GET',
       urlPattern: '/cemo/api/orders',
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? options.orders : null,
+    },
+  })
+
+const searchOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/cemo/api/orders/search',
     },
     response: {
       status: options.httpStatus,
@@ -610,6 +624,7 @@ export default {
   stubCemoGetOrder: getOrder,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
+  stubCemoSearchOrders: searchOrders,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
