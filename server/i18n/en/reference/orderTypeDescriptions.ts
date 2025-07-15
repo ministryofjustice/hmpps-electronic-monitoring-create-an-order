@@ -1,11 +1,11 @@
 import OrderTypeDescriptions from '../../../types/i18n/reference/orderTypeDescriptions'
 
 const orderTypeDescriptions: OrderTypeDescriptions = {
-  DAPO: 'DAPO',
-  DAPOL: 'DAPOL',
-  DAPOL_HDC: 'DAPOL HDC',
-  GPS_ACQUISITIVE_CRIME_HDC: 'GPS Acquisitive Crime HDC',
-  GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime Parole',
+  DAPOL: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+  DAPOL_HDC: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
+  GPS_ACQUISITIVE_CRIME_HDC: 'GPS Acquisitive Crime Home Detention Curfew',
+  GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime',
+  UNKNOWN: 'They are not part of any of these pilots',
 }
 
 export default orderTypeDescriptions
