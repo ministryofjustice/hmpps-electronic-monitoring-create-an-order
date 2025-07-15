@@ -98,7 +98,7 @@ context('Scenarios', () => {
       const variationDetails = {
         variationType: 'The curfew hours',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
-        variationDescrption: 'Change to curfew hours',
+        variationDetails: 'Change to curfew hours',
       }
       const variationCurfewConditionDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
@@ -273,7 +273,7 @@ context('Scenarios', () => {
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
-                order_variation_details: '',
+                order_variation_details: variationDetails.variationDetails,
                 order_variation_req_received_date: '',
                 order_variation_type: 'Change to Curfew Hours',
                 pdu_responsible: 'Surrey',
