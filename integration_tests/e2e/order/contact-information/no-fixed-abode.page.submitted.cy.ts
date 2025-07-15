@@ -35,7 +35,7 @@ context('Contact information', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
         page.form.saveAndContinueButton.should('not.exist')
-        page.form.saveAndReturnButton.should('not.exist')
+        page.form.saveAsDraftButton.should('not.exist')
         page.backButton.should('exist').should('have.attr', 'href', '#')
         page.errorSummary.shouldNotExist()
         page.form.shouldBeDisabled()
