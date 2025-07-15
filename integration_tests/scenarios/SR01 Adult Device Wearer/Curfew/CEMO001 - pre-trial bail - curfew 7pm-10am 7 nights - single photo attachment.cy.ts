@@ -7,7 +7,8 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-context('Scenarios', () => {
+// test skipped as Bail is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -89,7 +90,7 @@ context('Scenarios', () => {
     const installationAndRisk = {
       offence: 'Robbery',
       possibleRisk: 'Sex offender',
-      riskDetails: '',
+      riskDetails: 'No risk',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
@@ -97,9 +98,9 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Pre-Trial',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
       monitoringRequired: 'Curfew',
-      // sentenceType: 'Bail'
+      sentenceType: 'Bail',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -179,14 +180,10 @@ context('Scenarios', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: 'MAPPA 1',
           mappa_case_type: 'SOC (Serious Organised Crime)',
-          risk_categories: [
-            {
-              category: 'Sexual Offences',
-            },
-          ],
+          risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',

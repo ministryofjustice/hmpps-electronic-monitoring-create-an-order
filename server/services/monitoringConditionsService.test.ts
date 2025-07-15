@@ -14,7 +14,7 @@ const mockApiResponse = {
   issp: 'YES',
   mandatoryAttendance: false,
   orderType: 'CIVIL',
-  orderTypeDescription: null,
+  orderTypeDescription: 'some pilot',
   prarr: 'YES',
   sentenceType: 'LIFE_SENTENCE',
   startDate: '2005-03-31T23:00:00.000Z',
@@ -30,7 +30,7 @@ const createInput = (overrideData: Partial<MonitoringConditionsFormData> = {}): 
     data: {
       orderType: 'CIVIL',
       monitoringRequired: ['someMonitoring'],
-      orderTypeDescription: '',
+      orderTypeDescription: 'some pilot',
       conditionType: 'condition',
       startDate: { day: '01', month: '4', year: '2005', hours: '00', minutes: '00' },
       endDate: { day: '01', month: '4', year: '2005', hours: '00', minutes: '00' },
@@ -75,7 +75,7 @@ describe('Monitoring conditions service', () => {
           issp: 'YES',
           mandatoryAttendance: false,
           orderType: 'CIVIL',
-          orderTypeDescription: null,
+          orderTypeDescription: 'some pilot',
           prarr: 'YES',
           sentenceType: 'LIFE_SENTENCE',
           startDate: '2005-03-31T23:00:00.000Z',
@@ -89,21 +89,37 @@ describe('Monitoring conditions service', () => {
       expect(result).toEqual(mockApiResponse)
     })
 
-    it('does not error if pilot is null', async () => {
+    it('does not error if pilot is empty', async () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
       const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
-      const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({ pilot: null })
+      const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({ pilot: '' })
 
       const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)
 
       expect(result).toEqual(mockApiResponse)
     })
 
-    it('does not error if orderTypeDescription is null', async () => {
+    it('does error if orderTypeDescription is empty and order is ddv4', async () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
       const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
       const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({
-        orderTypeDescription: null,
+        orderTypeDescription: 'undefined',
+        dataDictionaryVersion: 'DDV4',
+      })
+
+      const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)
+
+      expect(result).toEqual([
+        { error: 'Select the type of pilot the device wearer is part of', field: 'orderTypeDescription' },
+      ])
+    })
+
+    it('does not error if orderTypeDescription is empty and order is ddv5', async () => {
+      mockRestClient.put.mockResolvedValue(mockApiResponse)
+      const monitoringConditionsService = new MonitoringConditionsService(mockRestClient)
+      const updateMonitoringConditionsInput: UpdateMonitoringConditionsInput = createInput({
+        orderTypeDescription: '',
+        dataDictionaryVersion: 'DDV5',
       })
 
       const result = await monitoringConditionsService.updateMonitoringConditions(updateMonitoringConditionsInput)

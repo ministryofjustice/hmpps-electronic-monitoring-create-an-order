@@ -95,7 +95,8 @@ context('The kitchen sink', () => {
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
       pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
+      sentenceType: 'Life Sentence',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
     }
     const curfewReleaseDetails = {
@@ -144,6 +145,7 @@ context('The kitchen sink', () => {
     const installationAndRisk = {
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
+      riskDetails: 'No risk',
     }
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
@@ -203,17 +205,10 @@ context('The kitchen sink', () => {
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
-          risk_details: '',
+          risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
-          risk_categories: [
-            {
-              category: 'Sexual Offences',
-            },
-            {
-              category: 'Under 18 living at property',
-            },
-          ],
+          risk_categories: [],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',
@@ -242,7 +237,7 @@ context('The kitchen sink', () => {
             case_id: fmsCaseId,
             allday_lockdown: '',
             atv_allowance: '',
-            condition_type: monitoringConditions.conditionType,
+            condition_type: 'License Condition of a Custodial Order',
             court: '',
             court_order_email: '',
             device_type: '',
@@ -311,7 +306,7 @@ context('The kitchen sink', () => {
             ro_region: interestedParties.responsibleOrganisationRegion,
             sentence_date: '',
             sentence_expiry: '',
-            sentence_type: '',
+            sentence_type: 'Life Sentence',
             tag_at_source: '',
             tag_at_source_details: '',
             technical_bail: '',

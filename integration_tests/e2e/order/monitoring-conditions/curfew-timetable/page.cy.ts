@@ -26,7 +26,7 @@ context('Monitoring conditions - Curfew timetable', () => {
       page.submittedBanner.should('not.exist')
 
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
       page.backButton.should('exist').should('have.attr', 'href', '#')
 
       page.form.shouldBeDisplayed()
@@ -78,7 +78,7 @@ context('Monitoring conditions - Curfew timetable', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.should('exist')
-      page.form.saveAndReturnButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
       page.backButton.should('exist').should('have.attr', 'href', '#')
     })
 
@@ -171,7 +171,7 @@ context('Monitoring conditions - Curfew timetable', () => {
 
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')
-      page.form.saveAndReturnButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
       page.backButton.should('exist').should('have.attr', 'href', '#')
 
       // Verify all form elements are disabled

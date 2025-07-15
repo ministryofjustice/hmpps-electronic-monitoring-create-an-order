@@ -124,7 +124,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       }
 
       page.form.fillInWith(validFormData)
-      page.form.saveAndReturnButton.click()
+      page.form.saveAsDraftButton.click()
 
       Page.verifyOnPage(OrderSummaryPage)
     })
@@ -263,7 +263,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       }
 
       page.form.fillInWith(validFormData)
-      page.form.saveAndReturnButton.click()
+      page.form.saveAsDraftButton.click()
 
       Page.verifyOnPage(OrderSummaryPage)
     })
