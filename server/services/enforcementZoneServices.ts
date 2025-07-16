@@ -6,6 +6,7 @@ import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import { EnforcementZoneFormData, EnforcementZoneFormDataValidator } from '../models/form-data/enforcementZone'
 import { convertZodErrorToValidationError } from '../utils/errors'
+import processBackendValidationErrors from '../utils/validators/processBackendValidationErrors'
 
 type UpdateZoneRequestInpput = AuthenticatedRequestInput & {
   orderId: string
@@ -37,7 +38,8 @@ export default class EnforcementZoneService {
       const sanitisedError = e as SanitisedError
 
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        const parsedErrors = ValidationResultModel.parse((e as SanitisedError).data)
+        return processBackendValidationErrors(parsedErrors)
       }
 
       throw e
