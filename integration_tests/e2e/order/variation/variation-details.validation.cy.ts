@@ -9,7 +9,7 @@ const expectedValidationErrors = {
     required: 'Select what you have changed',
   },
   variationDate: {
-    required: 'Enter Variation date',
+    required: 'Enter the date you want the changes to take effect',
     mustBeRealDate: 'Variation date must be a real date',
     malformed:
       'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
