@@ -21,11 +21,7 @@ export default class VariationDetailsController {
 
     res.render(
       'pages/order/variation/variation-details',
-      createViewModel(
-        order.variationDetails,
-        formData.length > 0 ? (formData[0] as never) : ({} as never),
-        errors as never,
-      ),
+      createViewModel(order, formData.length > 0 ? (formData[0] as never) : ({} as never), errors as never),
     )
   }
 

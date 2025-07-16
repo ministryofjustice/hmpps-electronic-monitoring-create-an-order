@@ -55,7 +55,7 @@
     ],
     errorMessage: variationDate.error
   }) }}
-
+  <div class="govuk-form-hidden-items">
   {{ govukRadios({
     name: "variationType",
     fieldset: {
@@ -69,7 +69,7 @@
     errorMessage: variationType.error,
     items: content.reference.variationTypes | toOptions(not isOrderEditable)
   }) }}
-
+</div>
 
   {{ govukCharacterCount({
     name: "variationDetails",

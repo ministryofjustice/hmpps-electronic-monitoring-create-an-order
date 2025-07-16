@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { fakerEN_GB as faker } from '@faker-js/faker'
 import Page from '../../../pages/page'
 import VariationDetailsPage from '../../../pages/order/variation/variationDetails'
 
@@ -29,7 +30,7 @@ context('Variation', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
-          order: { dataDictionaryVersion: 'DDV5' },
+          order: { dataDictionaryVersion: 'DDV4' },
         })
         cy.signIn()
       })
@@ -41,11 +42,9 @@ context('Variation', () => {
 
         Page.verifyOnPage(VariationDetailsPage)
 
-        page.form.variationTypeField.shouldHaveValidationMessage(expectedValidationErrors.variationType.required)
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.required)
         page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.variationType.required)
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.required)
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetails.required)
       })
@@ -54,7 +53,6 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
-          variationType: 'The curfew hours',
           variationDate: new Date(2024, 1, 1),
           variationDetails: 'Change to curfew hours',
         })
@@ -72,7 +70,6 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
-          variationType: 'The curfew hours',
           variationDate: new Date(2024, 1, 1),
         })
 
@@ -83,6 +80,28 @@ context('Variation', () => {
         page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetails.required)
+      })
+
+      it('Should display description validation error message when the form description is longer than 200 characters', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          variationDetails: faker.string.fromCharacters(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            201,
+          ),
+          variationDate: new Date(2024, 1, 1),
+        })
+        page.form.variationDetailsField.shouldHaveValidationMessage('You have 1 character too many')
+        page.form.saveAndReturnButton.click()
+
+        Page.verifyOnPage(VariationDetailsPage)
+
+        page.form.variationDetailsField.shouldHaveValidationMessage(
+          'Information on what you have changed must be 200 characters or less',
+        )
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Information on what you have changed must be 200 characters or less')
       })
     })
   })

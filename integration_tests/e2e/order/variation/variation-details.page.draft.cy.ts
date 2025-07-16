@@ -44,7 +44,8 @@ context('Variation', () => {
           })
         })
 
-        it('Should have DDv5 options only', () => {
+        // Hide variation type question based on ticket https://dsdmoj.atlassian.net/browse/ELM-3923
+        it.skip('Should have DDv5 options only', () => {
           Page.visit(VariationDetailsPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(VariationDetailsPage)
           page.form.variationTypeField.shouldHaveOption('The device wearer’s address')
@@ -75,7 +76,8 @@ context('Variation', () => {
             order: { dataDictionaryVersion: 'DDV4' },
           })
         })
-        it('Should have DDv4 options only', () => {
+        // Hide variation type question based on ticket https://dsdmoj.atlassian.net/browse/ELM-3923
+        it.skip('Should have DDv4 options only', () => {
           Page.visit(VariationDetailsPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(VariationDetailsPage)
 
