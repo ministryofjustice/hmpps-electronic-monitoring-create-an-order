@@ -22,7 +22,10 @@ const InstallationAndRiskFormDataValidator = z
     offence: z.string().nullable(),
     offenceAdditionalDetails: z.string(),
     riskCategory: z.array(z.string()),
-    riskDetails: z.string().min(1, validationErrors.installationAndRisk.riskDetailsRequired),
+    riskDetails: z
+      .string()
+      .min(1, validationErrors.installationAndRisk.riskDetailsRequired)
+      .max(200, validationErrors.installationAndRisk.riskDetailsTooLong),
     mappaLevel: z.string().nullable(),
     mappaCaseType: z.string().nullable(),
   })
