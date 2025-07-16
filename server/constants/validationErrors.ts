@@ -209,7 +209,7 @@ const validationErrors: ValidationErrors = {
       mustIncludeDay: 'Variation date must include a day',
       mustIncludeMonth: 'Variation date must include a month',
       mustIncludeYear: 'Variation date must include a year',
-      required: 'Enter Variation date',
+      required: 'Enter the date you want the changes to take effect',
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
     variationTypeRequired: 'Select what you have changed',
