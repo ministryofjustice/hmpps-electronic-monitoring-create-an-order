@@ -6,6 +6,7 @@ import { AlcoholMonitoringFormData, AlcoholMonitoringFormDataValidator } from '.
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError } from '../utils/errors'
+import processBackendValidationErrors from '../utils/validators/processBackendValidationErrors'
 
 type AlcoholMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
@@ -31,7 +32,8 @@ export default class AlcoholMonitoringService {
       const sanitisedError = e as SanitisedError
 
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        const parsedErrors = ValidationResultModel.parse((e as SanitisedError).data)
+        return processBackendValidationErrors(parsedErrors)
       }
 
       throw e
