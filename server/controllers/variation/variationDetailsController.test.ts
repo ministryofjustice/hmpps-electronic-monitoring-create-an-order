@@ -66,7 +66,7 @@ describe('VariationDetailsController', () => {
           },
         },
         variationType: {
-          value: '',
+          value: 'ADDRESS',
         },
         variationDetails: {
           value: '',
@@ -96,7 +96,7 @@ describe('VariationDetailsController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
         variationType: {
-          value: 'CURFEW_HOURS',
+          value: 'ADDRESS',
         },
         variationDate: {
           value: {

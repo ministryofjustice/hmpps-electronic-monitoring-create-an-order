@@ -271,7 +271,7 @@ context.skip('Scenarios', () => {
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
                 order_variation_details: '',
                 order_variation_req_received_date: '',
-                order_variation_type: 'Change to Curfew Hours',
+                order_variation_type: 'Change to Address',
                 pdu_responsible: 'Gwent',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
