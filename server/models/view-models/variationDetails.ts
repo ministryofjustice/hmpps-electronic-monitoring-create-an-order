@@ -4,6 +4,7 @@ import { VariationDetailsFormData } from '../form-data/variationDetails'
 import { ValidationResult } from '../Validation'
 import { DateField, ViewModel } from './utils'
 import { createGovukErrorSummary } from '../../utils/errors'
+import { Order } from '../Order'
 
 type VariationDetailsViewModel = ViewModel<Omit<VariationDetails, 'variationDate'>> & {
   variationDate: DateField
@@ -30,23 +31,26 @@ const createViewModelFromFormData = (
   }
 }
 
-const createViewModelFromEntity = (variationDetails: VariationDetails | null): VariationDetailsViewModel => {
+const createViewModelFromEntity = (order: Order): VariationDetailsViewModel => {
   return {
     variationType: {
-      value: variationDetails?.variationType ?? '',
+      value:
+        (order.variationDetails?.variationType ?? order.dataDictionaryVersion === 'DDV4')
+          ? 'ADDRESS'
+          : 'CHANGE_TO_ADDRESS',
     },
     variationDate: {
-      value: deserialiseDateTime(variationDetails?.variationDate ?? null),
+      value: deserialiseDateTime(order.variationDetails?.variationDate ?? null),
     },
     variationDetails: {
-      value: variationDetails?.variationDetails ?? '',
+      value: order.variationDetails?.variationDetails ?? '',
     },
     errorSummary: null,
   }
 }
 
 const createViewModel = (
-  variationDetails: VariationDetails | null,
+  order: Order,
   formData: VariationDetailsFormData,
   errors: ValidationResult,
 ): VariationDetailsViewModel => {
@@ -54,7 +58,7 @@ const createViewModel = (
     return createViewModelFromFormData(formData, errors)
   }
 
-  return createViewModelFromEntity(variationDetails)
+  return createViewModelFromEntity(order)
 }
 
 export default createViewModel

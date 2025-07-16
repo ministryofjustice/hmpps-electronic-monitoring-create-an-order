@@ -83,7 +83,7 @@ context('Access needs and installation risk information', () => {
         page.errorSummary.shouldHaveError('Enter any other risks to be aware of')
       })
 
-      it('should display error message when risk details is longer than 200 charactger', () => {
+      it('should display error message when risk details is longer than 200 characters', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
 
         const validFormData = {

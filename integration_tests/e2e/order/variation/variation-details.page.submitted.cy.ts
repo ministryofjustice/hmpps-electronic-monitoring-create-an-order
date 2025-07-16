@@ -39,7 +39,8 @@ context('Variation', () => {
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
 
         // Should display the saved data
-        page.form.variationTypeField.shouldHaveValue('The device wearer’s address')
+        // Hide variation type question based on ticket https://dsdmoj.atlassian.net/browse/ELM-3923
+        // page.form.variationTypeField.shouldHaveValue('The device wearer’s address')
         page.form.variationDateField.shouldHaveValue(new Date('2025-01-01T00:00:00Z'))
         page.form.variationDetailsField.shouldHaveValue('Change to address')
 
