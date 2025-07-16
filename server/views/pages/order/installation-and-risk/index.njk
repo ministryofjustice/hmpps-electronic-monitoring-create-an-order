@@ -7,6 +7,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% set section = content.pages.installationAndRisk.section %}
@@ -85,19 +86,23 @@
       values: riskCategory.values
     }) }}
 </div>
-  {{ govukTextarea({
+ 
+{% set isDisabled = {} if isOrderEditable else { disabled: true } %}
+  {{ govukCharacterCount({
     name: "riskDetails",
     id: "riskDetails",
-    value: riskDetails.value,
-    errorMessage: riskDetails.error,
-    disabled: not isOrderEditable,
+    maxlength: 200,
     label: {
       text: content.pages.installationAndRisk.questions.riskDetails.text,
-      classes: "govuk-label--s"
+      classes: "govuk-label--s",
+      isPageHeading: false
     },
     hint: {
       text: content.pages.installationAndRisk.questions.riskDetails.hint
-    }
+    },
+    value: riskDetails.value,
+    errorMessage: riskDetails.error,
+    attributes: isDisabled
   }) }}
 
   {% if mappaEnabled %}
