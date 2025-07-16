@@ -104,9 +104,9 @@ context('Access needs and installation risk information', () => {
 
         Page.verifyOnPage(InstallationAndRiskPage)
         page.form.riskDetailsField.shouldHaveValidationMessage(
-          'Any other risks to be aware of must be 350 characters or less',
+          'Any other risks to be aware of must be 200 characters or less',
         )
-        page.errorSummary.shouldHaveError('Any other risks to be aware of must be 350 characters or less')
+        page.errorSummary.shouldHaveError('Any other risks to be aware of must be 200 characters or less')
       })
     })
   })
