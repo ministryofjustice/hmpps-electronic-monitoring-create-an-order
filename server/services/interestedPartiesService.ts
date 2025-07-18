@@ -3,8 +3,9 @@ import { AuthenticatedRequestInput } from '../interfaces/request'
 import { InterestedPartiesFormData } from '../models/form-data/interestedParties'
 import InterestedPartiesModel, { InterestedParties } from '../models/InterestedParties'
 import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
+import { convertBackendErrorToValidationError } from '../utils/errors'
 
 type UpdateInterestedPartiesRequest = AuthenticatedRequestInput & {
   orderId: string
@@ -78,9 +79,8 @@ export default class InterestedPartiesService {
       return InterestedPartiesModel.parse(result)
     } catch (e) {
       const sanitisedError = e as SanitisedError
-
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e
