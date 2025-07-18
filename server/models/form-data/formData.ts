@@ -18,6 +18,9 @@ const DateInputModel = (messages: DateErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.required,
           fatal: true,
+          params: {
+            focusPath: 'day',
+          },
         })
 
         return z.NEVER
@@ -28,6 +31,9 @@ const DateInputModel = (messages: DateErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.yearMustIncludeFourNumbers,
           fatal: true,
+          params: {
+            focusPath: 'year',
+          },
         })
 
         return z.NEVER
@@ -38,6 +44,9 @@ const DateInputModel = (messages: DateErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.mustIncludeDay,
           fatal: true,
+          params: {
+            focusPath: 'day',
+          },
         })
 
         return z.NEVER
@@ -48,6 +57,9 @@ const DateInputModel = (messages: DateErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.mustIncludeMonth,
           fatal: true,
+          params: {
+            focusPath: 'month',
+          },
         })
 
         return z.NEVER
@@ -58,6 +70,9 @@ const DateInputModel = (messages: DateErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.mustIncludeYear,
           fatal: true,
+          params: {
+            focusPath: 'year',
+          },
         })
 
         return z.NEVER
@@ -76,17 +91,24 @@ const DateInputModel = (messages: DateErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.mustBeReal,
           fatal: true,
+          params: {
+            focusPath: 'day',
+          },
         })
 
         return z.NEVER
       }
 
       const inputDate = new Date(Number(val.year), Number(val.month), Number(val.day))
+
       if (messages.mustBeInPast && inputDate > new Date()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: messages.mustBeInPast,
           fatal: true,
+          params: {
+            focusPath: 'day',
+          },
         })
 
         return z.NEVER
@@ -126,6 +148,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.date.required,
           fatal: true,
+          params: {
+            focusPath: 'day',
+          },
         })
 
         return z.NEVER
@@ -137,6 +162,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             code: z.ZodIssueCode.custom,
             message: messages.date.yearMustIncludeFourNumbers,
             fatal: true,
+            params: {
+              focusPath: 'year',
+            },
           })
 
           return z.NEVER
@@ -147,6 +175,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             code: z.ZodIssueCode.custom,
             message: messages.date.mustIncludeDay,
             fatal: true,
+            params: {
+              focusPath: 'day',
+            },
           })
 
           return z.NEVER
@@ -157,6 +188,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             code: z.ZodIssueCode.custom,
             message: messages.date.mustIncludeMonth,
             fatal: true,
+            params: {
+              focusPath: 'month',
+            },
           })
 
           return z.NEVER
@@ -167,6 +201,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             code: z.ZodIssueCode.custom,
             message: messages.date.mustIncludeYear,
             fatal: true,
+            params: {
+              focusPath: 'year',
+            },
           })
 
           return z.NEVER
@@ -178,6 +215,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             code: z.ZodIssueCode.custom,
             message: messages.date.mustBeInPast,
             fatal: true,
+            params: {
+              focusPath: 'day',
+            },
           })
 
           return z.NEVER
@@ -196,6 +236,9 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             code: z.ZodIssueCode.custom,
             message: messages.date.mustBeReal,
             fatal: true,
+            params: {
+              focusPath: 'day',
+            },
           })
 
           return z.NEVER
