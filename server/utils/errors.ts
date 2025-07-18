@@ -1,6 +1,7 @@
 import { ZodError, ZodIssue } from 'zod'
-import { ValidationError, ValidationResult } from '../models/Validation'
+import { ValidationError, ValidationResult, ValidationResultModel } from '../models/Validation'
 import { ErrorSummary } from './govukFrontEndTypes/errorSummary'
+import { SanitisedError } from '../sanitisedError'
 
 export const convertZodErrorToValidationError = (error: ZodError): ValidationResult => {
   type ZodIssueWithParams = ZodIssue & {
@@ -25,6 +26,29 @@ export const convertZodErrorToValidationError = (error: ZodError): ValidationRes
     acc.push(validationError)
     return acc
   }, [] as ValidationResult)
+}
+
+export const convertBackendErrorToValidationError = (sanitisedError: SanitisedError): ValidationResult => {
+  const focusTargetMap: Record<string, string> = {
+    appointmentDate: 'day',
+    dateOfBirth: 'day',
+    endDate: 'day',
+    releaseDate: 'day',
+    startDate: 'day',
+    variationDate: 'day',
+  }
+
+  const parsedErrors = ValidationResultModel.parse(sanitisedError.data)
+  return parsedErrors.map(error => {
+    const focusTarget = focusTargetMap[error.field]
+
+    return focusTarget
+      ? {
+          ...error,
+          focusTarget: `${error.field}-${focusTarget}`,
+        }
+      : error
+  })
 }
 
 export const createGovukErrorSummary = (validationErrors: ValidationResult): ErrorSummary | null => {

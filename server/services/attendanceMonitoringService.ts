@@ -2,14 +2,13 @@ import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import AttendanceMonitoringModel, { AttendanceMonitoring } from '../models/AttendanceMonitoring'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import {
   AttendanceMonitoringFormDataValidator,
   AttendanceMonitoringFormData,
 } from '../models/form-data/attendanceMonitoring'
-import { convertZodErrorToValidationError } from '../utils/errors'
-import processBackendValidationErrors from '../utils/validators/processBackendValidationErrors'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
 
 type AttendanceMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
@@ -32,11 +31,10 @@ export default class AttendanceMonitoringService {
       if (e instanceof ZodError) {
         return convertZodErrorToValidationError(e)
       }
-      const sanitisedError = e as SanitisedError
 
+      const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
-        const parsedErrors = ValidationResultModel.parse((e as SanitisedError).data)
-        return processBackendValidationErrors(parsedErrors)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e
