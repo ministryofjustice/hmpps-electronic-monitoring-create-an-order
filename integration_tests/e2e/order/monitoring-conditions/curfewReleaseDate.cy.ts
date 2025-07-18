@@ -113,9 +113,9 @@ const mockEmptyCurfewReleaseDateWithAddresses = {
 }
 
 const checkFormFields = () => {
-  cy.get('#releaseDateDay').should('have.value', '27')
-  cy.get('#releaseDateMonth').should('have.value', '03')
-  cy.get('#releaseDateYear').should('have.value', '2026')
+  cy.get('#releaseDate-day').should('have.value', '27')
+  cy.get('#releaseDate-month').should('have.value', '03')
+  cy.get('#releaseDate-year').should('have.value', '2026')
   cy.get('#curfewTimes-start-hours').should('have.value', '09')
   cy.get('#curfewTimes-start-minutes').should('have.value', '15')
   cy.get('#curfewTimes-end-hours').should('have.value', '17')
@@ -234,7 +234,7 @@ context('Curfew monitoring - release date', () => {
       it('should show an error when releaseDate is provided in the wrong format', () => {
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
         const page = Page.verifyOnPage(CurfewReleaseDatePage)
-        cy.get('#releaseDateDay').type('text')
+        cy.get('#releaseDate-day').type('text')
         page.form.saveAndContinueButton.click()
         cy.get('#releaseDate-error').should(
           'contain',
