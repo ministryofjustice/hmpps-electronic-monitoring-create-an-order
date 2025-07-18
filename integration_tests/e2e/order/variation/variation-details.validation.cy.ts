@@ -11,7 +11,7 @@ const expectedValidationErrors = {
   },
   variationDate: {
     required: 'Enter the date you want the changes to take effect',
-    mustBeRealDate: 'Enter a real date',
+    mustBeRealDate: 'Date you want changes to take effect must be a real date',
     malformed:
       'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
   },
