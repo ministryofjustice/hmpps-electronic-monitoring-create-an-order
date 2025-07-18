@@ -4,6 +4,7 @@ import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../models/form-data/curfewReleaseDate'
 import { ValidationResult, ValidationResultModel } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
+import { convertBackendErrorToValidationError } from '../utils/errors'
 import { serialiseDate, serialiseTime } from '../utils/utils'
 import DateValidator from '../utils/validators/dateValidator'
 
@@ -35,9 +36,8 @@ export default class CurfewReleaseDateService {
       return undefined
     } catch (e) {
       const sanitisedError = e as SanitisedError
-
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e
