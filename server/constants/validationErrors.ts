@@ -205,10 +205,10 @@ const validationErrors: ValidationErrors = {
   },
   variationDetails: {
     variationDate: {
-      mustBeReal: 'Enter a real date',
-      mustIncludeDay: 'Enter a full date',
-      mustIncludeMonth: 'Enter a full date',
-      mustIncludeYear: 'Enter a full date',
+      mustBeReal: 'Date you want changes to take effect must be a real date',
+      mustIncludeDay: 'Date you want changes to take effect must include a day',
+      mustIncludeMonth: 'Date you want changes to take effect must include a month',
+      mustIncludeYear: 'Date you want changes to take effect must include a year',
       required: 'Enter the date you want the changes to take effect',
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
