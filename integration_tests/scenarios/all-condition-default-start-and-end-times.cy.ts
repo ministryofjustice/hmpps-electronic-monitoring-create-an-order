@@ -208,7 +208,14 @@ context('The kitchen sink', () => {
           risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
-          risk_categories: [],
+          risk_categories: [
+            {
+              category: 'Sexual Offences',
+            },
+            {
+              category: 'Under 18 living at property',
+            },
+          ],
           responsible_adult_required: 'false',
           parent: '',
           guardian: '',
