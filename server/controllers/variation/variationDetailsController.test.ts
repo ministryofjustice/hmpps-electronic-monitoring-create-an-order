@@ -266,7 +266,11 @@ describe('VariationDetailsController', () => {
         variationDetails: '',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
-        { error: 'Enter the date you want the changes to take effect', field: 'variationDate' },
+        {
+          error: 'Enter the date you want the changes to take effect',
+          field: 'variationDate',
+          focusTarget: 'variationDate-day',
+        },
         { error: 'Select what you have changed', field: 'variationType' },
         { error: 'Enter information on what you have changed', field: 'variationDetails' },
       ])

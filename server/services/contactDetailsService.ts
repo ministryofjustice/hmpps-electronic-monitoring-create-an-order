@@ -1,8 +1,9 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import DeviceWearerContactDetailsModel, { ContactDetails } from '../models/ContactDetails'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
+import { convertBackendErrorToValidationError } from '../utils/errors'
 
 type UpdateContactDetailsRequest = AuthenticatedRequestInput & {
   orderId: string
@@ -25,9 +26,8 @@ export default class ContactDetailsService {
       return DeviceWearerContactDetailsModel.parse(result)
     } catch (e) {
       const sanitisedError = e as SanitisedError
-
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e

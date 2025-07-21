@@ -2,10 +2,10 @@ import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import CurfewConditionsModel, { CurfewConditions } from '../models/CurfewConditions'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { CurfewConditionsFormData, CurfewConditionsFormDataValidator } from '../models/form-data/curfewConditions'
-import { convertZodErrorToValidationError } from '../utils/errors'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
 
 type CurfewConditionsInput = AuthenticatedRequestInput & {
   orderId: string
@@ -28,10 +28,10 @@ export default class CurfewConditionsService {
       if (e instanceof ZodError) {
         return convertZodErrorToValidationError(e)
       }
-      const sanitisedError = e as SanitisedError
 
+      const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e
