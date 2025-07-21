@@ -1,4 +1,4 @@
-import { createAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
@@ -29,29 +29,29 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
     )
   }
 
-  // const possibleRisks = order.installationAndRisk?.riskCategory?.filter(
-  //   it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
-  // )
+  const possibleRisks = order.installationAndRisk?.riskCategory?.filter(
+    it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
+  )
 
-  // answers.push(
-  //   createMultipleChoiceAnswer(
-  //     questions.possibleRisk.text,
-  //     possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
-  //     uri,
-  //     answerOpts,
-  //   ),
-  // )
-  // const riskCategories = order.installationAndRisk?.riskCategory?.filter(
-  //   it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
-  // )
-  // answers.push(
-  //   createMultipleChoiceAnswer(
-  //     questions.riskCategory.text,
-  //     riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
-  //     uri,
-  //     answerOpts,
-  //   ),
-  // )
+  answers.push(
+    createMultipleChoiceAnswer(
+      questions.possibleRisk.text,
+      possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
+      uri,
+      answerOpts,
+    ),
+  )
+  const riskCategories = order.installationAndRisk?.riskCategory?.filter(
+    it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
+  )
+  answers.push(
+    createMultipleChoiceAnswer(
+      questions.riskCategory.text,
+      riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
+      uri,
+      answerOpts,
+    ),
+  )
 
   answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
 

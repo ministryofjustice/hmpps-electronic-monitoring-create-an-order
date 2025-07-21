@@ -3,9 +3,9 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { TrailMonitoringFormData, TrailMonitoringFormDataValidator } from '../models/form-data/trailMonitoring'
 import TrailMonitoringModel, { TrailMonitoring } from '../models/TrailMonitoring'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
-import { convertZodErrorToValidationError } from '../utils/errors'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
 
 type TrailMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
@@ -28,10 +28,12 @@ export default class TrailMonitoringService {
       if (e instanceof ZodError) {
         return convertZodErrorToValidationError(e)
       }
+
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
+
       throw e
     }
   }

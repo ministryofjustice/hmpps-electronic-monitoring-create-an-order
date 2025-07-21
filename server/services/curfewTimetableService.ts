@@ -22,9 +22,8 @@ export default class CurfewTimetableService {
       return CurfewTimetableModel.parse(result)
     } catch (e) {
       const sanitisedError = e as SanitisedError
-
       if (sanitisedError.status === 400) {
-        return ListValidationResultModel.parse((e as SanitisedError).data)
+        return ListValidationResultModel.parse(sanitisedError.data)
       }
 
       throw e
