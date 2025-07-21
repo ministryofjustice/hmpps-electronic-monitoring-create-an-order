@@ -94,13 +94,13 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
       this.offenceField.set(profile.offence)
     }
 
-    // if (profile.possibleRisk) {
-    //   this.possibleRiskField.set(profile.possibleRisk)
-    // }
+    if (profile.possibleRisk) {
+      this.possibleRiskField.set(profile.possibleRisk)
+    }
 
-    // if (profile.riskCategory) {
-    //   this.riskCategoryField.set(profile.riskCategory)
-    // }
+    if (profile.riskCategory) {
+      this.riskCategoryField.set(profile.riskCategory)
+    }
 
     if (profile.riskDetails) {
       this.riskDetailsField.set(profile.riskDetails)

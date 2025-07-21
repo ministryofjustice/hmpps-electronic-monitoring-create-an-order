@@ -1,8 +1,9 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import ProbationDeliveryUnitModel, { ProbationDeliveryUnit } from '../models/ProbationDeliveryUnit'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
+import { convertBackendErrorToValidationError } from '../utils/errors'
 
 type UpdateProbationDeliveryUnitInput = AuthenticatedRequestInput & {
   orderId: string
@@ -24,9 +25,8 @@ export default class ProbationDeliveryUnitService {
       return ProbationDeliveryUnitModel.parse(result)
     } catch (e) {
       const sanitisedError = e as SanitisedError
-
       if (sanitisedError.status === 400) {
-        return ValidationResultModel.parse((e as SanitisedError).data)
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e

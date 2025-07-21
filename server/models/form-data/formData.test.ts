@@ -77,6 +77,9 @@ describe('DateInputModel', () => {
           fatal: true,
           message: 'Start date for monitoring must be a real date',
           path: [],
+          params: {
+            focusPath: 'day',
+          },
         },
       ])
     },
@@ -100,6 +103,9 @@ describe('DateInputModel', () => {
         fatal: true,
         message: 'Start date for monitoring must include a day',
         path: [],
+        params: {
+          focusPath: 'day',
+        },
       },
     ])
   })
@@ -121,6 +127,9 @@ describe('DateInputModel', () => {
         fatal: true,
         message: 'Start date for monitoring must include a month',
         path: [],
+        params: {
+          focusPath: 'month',
+        },
       },
     ])
   })
@@ -139,6 +148,9 @@ describe('DateInputModel', () => {
         fatal: true,
         message: 'Start date for monitoring must include a year',
         path: [],
+        params: {
+          focusPath: 'year',
+        },
       },
     ])
   })
@@ -200,6 +212,9 @@ describe('DateTimeInputModel', () => {
           fatal: true,
           message: 'Start date for monitoring must be a real date',
           path: [],
+          params: {
+            focusPath: 'day',
+          },
         },
       ])
     },
@@ -227,6 +242,9 @@ describe('DateTimeInputModel', () => {
           fatal: true,
           message: 'Start date for monitoring must include a day',
           path: [],
+          params: {
+            focusPath: 'day',
+          },
         },
       ])
     },
@@ -253,6 +271,9 @@ describe('DateTimeInputModel', () => {
           fatal: true,
           message: 'Start date for monitoring must include a month',
           path: [],
+          params: {
+            focusPath: 'month',
+          },
         },
       ])
     },
@@ -276,6 +297,9 @@ describe('DateTimeInputModel', () => {
           fatal: true,
           message: 'Start date for monitoring must include a year',
           path: [],
+          params: {
+            focusPath: 'year',
+          },
         },
       ])
     },
@@ -325,6 +349,9 @@ describe('DateTimeInputModel', () => {
           fatal: true,
           message: 'Start date for monitoring must be a real date',
           path: [],
+          params: {
+            focusPath: 'day',
+          },
         },
       ])
     },

@@ -18,7 +18,7 @@ const InstallationAndRiskFormDataModel = z.object({
 
 const InstallationAndRiskFormDataValidator = z
   .object({
-    possibleRisk: z.array(z.string()),
+    possibleRisk: z.array(z.string()).min(1, validationErrors.installationAndRisk.possibleRiskRequired),
     offence: z.string().nullable(),
     offenceAdditionalDetails: z.string(),
     riskCategory: z.array(z.string()),
