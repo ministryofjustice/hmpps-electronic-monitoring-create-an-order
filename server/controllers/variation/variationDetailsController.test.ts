@@ -124,7 +124,7 @@ describe('VariationDetailsController', () => {
           .fn()
           .mockReturnValueOnce([
             { error: 'Select what you have changed', field: 'variationType' },
-            { error: 'Variation date is required', field: 'variationDate' },
+            { error: 'Enter the date you want the changes to take effect', field: 'variationDate' },
             { error: 'Enter information on what you have changed', field: 'variationDetails' },
           ])
           .mockReturnValueOnce([
@@ -160,7 +160,7 @@ describe('VariationDetailsController', () => {
             day: '',
           },
           error: {
-            text: 'Variation date is required',
+            text: 'Enter the date you want the changes to take effect',
           },
         },
         variationDetails: {
@@ -173,7 +173,7 @@ describe('VariationDetailsController', () => {
           titleText: 'There is a problem',
           errorList: [
             { href: '#variationType', text: 'Select what you have changed' },
-            { href: '#variationDate', text: 'Variation date is required' },
+            { href: '#variationDate', text: 'Enter the date you want the changes to take effect' },
             { href: '#variationDetails', text: 'Enter information on what you have changed' },
           ],
         },
