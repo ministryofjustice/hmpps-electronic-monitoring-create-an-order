@@ -6,7 +6,7 @@ const uploadLicencePageContent: UploadDocumentPageContent = {
   questions: {
     file: {
       text: 'Upload a copy of the licence',
-      hint: 'Upload a scanned copy or photo of the original licence document. The file must be a PDF, PNG, JPEG or JPG and under 10MB in size.',
+      hint: 'Upload a scanned copy or photo of the original licence document. The file must be a PDF or Word document and under 25MB in size.',
     },
   },
   section: 'Additional documents',
