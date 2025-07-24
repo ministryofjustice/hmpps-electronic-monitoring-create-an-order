@@ -17,7 +17,7 @@ type PageContent<T extends string> = {
   legend: string
 
   // General help text to aid the user in filling in the form.
-  helpText: string
+  helpText: string | string[]
 
   // Describes the inputs on the page.
   questions: Record<T, Question>

@@ -8,15 +8,6 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      {% set notificationBannerHtml %}
-        <p class="govuk-notification-banner__heading">This service is currently invite only</p>
-        <p> It is being trialed by a limited number of users before it will be rolled out to all users. You must continue to send EMO application forms by email until you receive an invite.</p>
-      {% endset %}
-
-      {{ govukNotificationBanner({
-        html: notificationBannerHtml
-      }) }}
-
       <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO)</h1>
 
       <form class="form" method="post">
