@@ -44,7 +44,9 @@ interface ValidationErrors {
   }
   enforcementZone: {
     descriptionRequired: string
+    descriptionTooLong: string
     durationRequired: string
+    durationTooLong: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -193,7 +195,9 @@ const validationErrors: ValidationErrors = {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('enforcement zone'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('enforcement zone', true),
     descriptionRequired: 'Enforcement zone description is required',
+    descriptionTooLong: 'Where is the exclusion zone must be 200 characters or less',
     durationRequired: 'Enforcement zone duration is required',
+    durationTooLong: 'When must the exclusion zone be followed must be 200 characters or less',
   },
   trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
