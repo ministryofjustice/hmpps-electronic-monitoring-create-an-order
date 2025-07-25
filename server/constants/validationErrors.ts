@@ -16,6 +16,10 @@ interface ValidationErrors {
     responsibleAdultRequired: string
     sexRequired: string
   }
+  responsibleAdult: {
+    relationshipRequired: string
+    fullNameMaxLength: string
+  }
   monitoringConditions: {
     conditionTypeRequired: string
     monitoringTypeRequired: string
@@ -167,6 +171,10 @@ const validationErrors: ValidationErrors = {
     preferredNameMaxLength: 'Preferred name must be 200 characters or less',
     responsibleAdultRequired: 'Select yes if a responsible adult is required',
     sexRequired: "Select the device wearer's sex, or select 'Not able to provide this information'",
+  },
+  responsibleAdult: {
+    relationshipRequired: 'Select their relationship to the device wearer',
+    fullNameMaxLength: 'Full name must be 200 characters or less',
   },
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',

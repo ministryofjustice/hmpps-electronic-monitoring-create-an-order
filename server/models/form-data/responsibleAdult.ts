@@ -1,15 +1,28 @@
 import z from 'zod'
+import { validationErrors } from '../../constants/validationErrors'
+import { FormDataModel } from './formData'
 
-const DeviceWearerResponsibleAdultFormDataModel = z.object({
-  action: z.string(),
+const DeviceWearerResponsibleAdultFormDataModel = FormDataModel.extend({
   relationship: z.string().default(''),
   otherRelationshipDetails: z.string(),
   fullName: z.string(),
-  contactNumber: z.string().transform(val => (val === '' ? null : val)),
+  contactNumber: z
+    .string()
+    .nullable()
+    .transform(val => (val === '' ? null : val)),
 })
 
-type DeviceWearerResponsibleAdultFormData = z.infer<typeof DeviceWearerResponsibleAdultFormDataModel>
+type DeviceWearerResponsibleAdultFormData = Omit<z.infer<typeof DeviceWearerResponsibleAdultFormDataModel>, 'action'>
+
+const DeviceWearerResponsibleAdultFormDataValidator = z.object({
+  relationship: z.string().min(1, validationErrors.responsibleAdult.relationshipRequired),
+  fullName: z.string().max(200, validationErrors.responsibleAdult.fullNameMaxLength),
+  contactNumber: z
+    .string()
+    .nullable()
+    .transform(val => (val === '' ? null : val)),
+})
 
 export default DeviceWearerResponsibleAdultFormDataModel
 
-export { DeviceWearerResponsibleAdultFormData }
+export { DeviceWearerResponsibleAdultFormData, DeviceWearerResponsibleAdultFormDataValidator }
