@@ -63,11 +63,21 @@ const createDatePreview = (value: Optional<string>) =>
 const createTimePreview = (value: Optional<string>) =>
   isNullOrUndefined(value) ? '' : trimSeconds(new Date(value).toLocaleTimeString('en-GB'))
 
+const createDateTimePreview = (value: Optional<string>) =>
+  isNullOrUndefined(value) ? '' : trimSeconds(new Date(value).toLocaleString('en-GB'))
+
 export const createDateAnswer = (key: string, value: Optional<string>, uri: string, opts: AnswerOptions = {}): Answer =>
   createAnswer(key, createDatePreview(value), uri, opts)
 
 export const createTimeAnswer = (key: string, value: Optional<string>, uri: string, opts: AnswerOptions = {}): Answer =>
   createAnswer(key, createTimePreview(value), uri, opts)
+
+export const createDateTimeAnswer = (
+  key: string,
+  value: Optional<string>,
+  uri: string,
+  opts: AnswerOptions = {},
+): Answer => createAnswer(key, createDateTimePreview(value), uri, opts)
 
 export const createBooleanAnswer = (
   key: string,
