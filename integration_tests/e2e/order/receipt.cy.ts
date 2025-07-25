@@ -152,7 +152,7 @@ context('Receipt', () => {
           key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
-        { key: 'Any other risks to be aware of?', value: 'Information about potential risks' },
+        { key: 'Any other risks to be aware of?(optional)', value: 'Information about potential risks' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Terrorism Act, Counter Terrorism' },
       ])

@@ -27,8 +27,8 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
       hint: "Risks relate to the device wearer's behaviour and installation address. Select all that apply",
     },
     riskDetails: {
-      text: 'Any other risks to be aware of?',
-      hint: "Provide additional risk information about the device wearer's behaviour or the installation address. If there is no risk to be aware of enter 'No risk'.",
+      text: 'Any other risks to be aware of?(optional)',
+      hint: "Provide additional risk information about the device wearer's behaviour or the installation address.",
     },
   },
   section: 'Risk information',
