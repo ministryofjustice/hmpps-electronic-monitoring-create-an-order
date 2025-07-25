@@ -63,7 +63,7 @@
       hint: {
         text: content.pages.installationAndRisk.questions.possibleRisk.hint
       },
-      items: content.reference.possibleRisks | toOptions(not isOrderEditable) | addDivider(),
+      items: content.reference.possibleRisks | toOptions(not isOrderEditable, false, '', true) | addDivider(),
       errorMessage: possibleRisk.error,
       values: possibleRisk.values
     }) }}

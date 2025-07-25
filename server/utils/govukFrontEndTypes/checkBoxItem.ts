@@ -57,6 +57,11 @@ export type CheckboxItem = {
       HTML attributes (for example data attributes) to add to the checkbox input tag.
     */
   attributes?: Record<string, unknown>
+
+  /*
+     	If set to "exclusive", implements a ‘None of these’ type behaviour via JavaScript when checkboxes are clicked.
+    */
+  behaviour?: string
 }
 
 export type CheckboxItemConditional = {

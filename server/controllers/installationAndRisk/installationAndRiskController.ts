@@ -1,13 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
-import { InstallationAndRisk } from '../../models/InstallationAndRisk'
 import { isValidationResult } from '../../models/Validation'
 import { AuditService } from '../../services'
 import InstallationAndRiskService from '../../services/installationAndRiskService'
 import TaskListService from '../../services/taskListService'
-import InstallationAndRiskFormDataModel, {
-  InstallationAndRiskFormData,
-} from '../../models/form-data/installationAndRisk'
+import InstallationAndRiskFormDataModel from '../../models/form-data/installationAndRisk'
 import installationAndRiskViewModel from '../../models/view-models/installationAndRisk'
 
 export default class InstallationAndRiskController {
@@ -17,23 +14,11 @@ export default class InstallationAndRiskController {
     private readonly taskListService: TaskListService,
   ) {}
 
-  private createApiModelFromFormData(formData: InstallationAndRiskFormData): InstallationAndRisk {
-    return {
-      offence: formData.offence ?? null,
-      offenceAdditionalDetails: formData.offenceAdditionalDetails ?? null,
-      riskCategory: formData.riskCategory ?? null,
-      riskDetails: formData.riskDetails ?? null,
-      mappaLevel: formData.mappaLevel ?? null,
-      mappaCaseType: formData.mappaCaseType ?? null,
-    }
-  }
-
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = installationAndRiskViewModel.construct(order, formData as never, errors as never)
-
     res.render(`pages/order/installation-and-risk/index`, viewModel)
   }
 

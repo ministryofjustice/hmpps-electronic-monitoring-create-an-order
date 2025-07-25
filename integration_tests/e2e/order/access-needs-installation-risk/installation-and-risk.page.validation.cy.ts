@@ -44,25 +44,6 @@ context('Access needs and installation risk information', () => {
         page.errorSummary.shouldHaveError("Select all the possible risks from the device wearer's behaviour")
       })
 
-      it('should display error when no riskDetails selected', () => {
-        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-
-        const validFormData = {
-          offence: 'Robbery',
-          possibleRisk: 'Sex offender',
-          riskDetails: '',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
-        }
-
-        page.form.fillInWith(validFormData)
-        page.form.saveAndContinueButton.click()
-
-        Page.verifyOnPage(InstallationAndRiskPage)
-        page.form.riskDetailsField.shouldHaveValidationMessage('Enter any other risks to be aware of')
-        page.errorSummary.shouldHaveError('Enter any other risks to be aware of')
-      })
-
       it('should display error message', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
 

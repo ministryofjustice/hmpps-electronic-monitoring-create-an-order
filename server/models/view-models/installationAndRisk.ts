@@ -88,11 +88,11 @@ const createFromEntity = (order: Order): InstallationAndRiskViewModel => {
 
 const construct = (
   order: Order,
-  formData: InstallationAndRiskFormData,
+  formData: [InstallationAndRiskFormData],
   errors: ValidationResult,
 ): InstallationAndRiskViewModel => {
   if (errors.length > 0) {
-    return constructFromFormData(formData, errors, order)
+    return constructFromFormData(formData[0], errors, order)
   }
 
   return createFromEntity(order)
