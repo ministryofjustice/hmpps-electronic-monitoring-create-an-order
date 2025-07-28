@@ -66,7 +66,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   }
 
   get riskDetailsField(): FormTextareaComponent {
-    const label = 'Any other risks to be aware of?'
+    const label = 'Any other risks to be aware of? (optional)'
     return new FormTextareaComponent(this.form, label)
   }
 
