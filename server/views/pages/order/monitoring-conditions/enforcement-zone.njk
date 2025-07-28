@@ -94,14 +94,14 @@
     maxlength: 200,
     value: description.value,
     errorMessage: description.error,
-    disabled: not isOrderEditable,
     label: {
       text: questions.description.text,
       classes: "govuk-label--s"
     },
     hint: {
       html: questions.description.hint
-    }
+    },
+    attributes: attributes
   }) }}
 
   {{ govukCharacterCount({
@@ -110,14 +110,14 @@
     maxlength: 200,
     value: duration.value,
     errorMessage: duration.error,
-    disabled: not isOrderEditable,
     label: {
       text: questions.duration.text,
       classes: "govuk-label--s"
     },
     hint: {
       text: questions.duration.hint
-    }
+    },
+    attributes: attributes
   }) }}
 
   {% if isOrderEditable %}
