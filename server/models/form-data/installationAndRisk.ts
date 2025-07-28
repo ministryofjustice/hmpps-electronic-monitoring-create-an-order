@@ -11,7 +11,7 @@ const InstallationAndRiskFormDataModel = z.object({
   riskCategory: z
     .union([z.string(), z.array(z.string()).default([])])
     .transform(val => (Array.isArray(val) ? val : [val])),
-  riskDetails: z.string().nullable().default(null),
+  riskDetails: z.string().nullable().default(''),
   mappaLevel: z.string().nullable().default(null),
   mappaCaseType: z.string().nullable().default(null),
 })
@@ -22,10 +22,7 @@ const InstallationAndRiskFormDataValidator = z
     offence: z.string().nullable(),
     offenceAdditionalDetails: z.string(),
     riskCategory: z.array(z.string()),
-    riskDetails: z
-      .string()
-      .min(1, validationErrors.installationAndRisk.riskDetailsRequired)
-      .max(200, validationErrors.installationAndRisk.riskDetailsTooLong),
+    riskDetails: z.string().max(200, validationErrors.installationAndRisk.riskDetailsTooLong),
     mappaLevel: z.string().nullable(),
     mappaCaseType: z.string().nullable(),
   })
