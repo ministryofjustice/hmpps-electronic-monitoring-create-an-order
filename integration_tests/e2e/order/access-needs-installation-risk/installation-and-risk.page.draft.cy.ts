@@ -29,6 +29,27 @@ context('Access needs and installation risk information', () => {
         page.form.shouldHaveAllOptions()
       })
 
+      it('Should uncheck other options when no risk options is selected for possible risk ', () => {
+        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          possibleRisk: 'Sex offender',
+        })
+        page.form.possibleRiskField.shouldHaveValue('Sex offender')
+        page.form.fillInWith({
+          possibleRisk: 'Violent behaviour or threats of violence',
+        })
+        page.form.possibleRiskField.shouldHaveValue('Sex offender')
+        page.form.possibleRiskField.shouldHaveValue('Violent behaviour or threats of violence')
+
+        page.form.fillInWith({
+          possibleRisk: 'There are no risks that the installer should be aware of',
+        })
+        page.form.possibleRiskField.shouldHaveValue('There are no risks that the installer should be aware of')
+        page.form.possibleRiskField.shouldNotHaveValueChekced('Sex offender')
+        page.form.possibleRiskField.shouldNotHaveValueChekced('Violent behaviour or threats of violence')
+      })
+
       context('With MAPPA disabled', () => {
         const testFlags = { MAPPA_ENABLED: false }
         beforeEach(() => {

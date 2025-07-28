@@ -60,9 +60,13 @@
       }) }}
 
       {% if helpText %}
-        <p>
-          {{ helpText }}
-        </p>
+        {% if helpText|checkType() === 'array' %}
+          {% for paragraph in helpText %}
+            <p>{{ paragraph }}</p>
+          {% endfor %}
+        {% else %}
+          <p>{{ helpText }}</p>
+        {% endif %}
       {% endif %}
 
       <form action="" method="post" {{ formEncoding }}>

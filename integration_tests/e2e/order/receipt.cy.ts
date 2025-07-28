@@ -128,6 +128,7 @@ context('Receipt', () => {
               fileName: 'Mock Licence',
             },
           ],
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
         },
       })
       cy.visit(`/order/${mockOrderId}/receipt`)
@@ -142,6 +143,7 @@ context('Receipt', () => {
         { key: 'Status', value: 'IN_PROGRESS' },
         { key: 'Type', value: 'REQUEST' },
         { key: 'Reference number', value: mockOrderId },
+        { key: 'Date submitted', value: '01/01/2025, 10:30' },
       ])
       page.riskInformationSection.shouldExist()
       page.riskInformationSection.shouldHaveItems([
@@ -150,7 +152,7 @@ context('Receipt', () => {
           key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
-        { key: 'Any other risks to be aware of?', value: 'Information about potential risks' },
+        { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
         { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
         { key: 'What is the MAPPA case type? (optional)', value: 'Terrorism Act, Counter Terrorism' },
       ])
