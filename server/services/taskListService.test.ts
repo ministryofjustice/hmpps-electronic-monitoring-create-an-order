@@ -1,5 +1,6 @@
 import {
   createAddress,
+  createAttatchment,
   createContactDetails,
   createCurfewConditions,
   createCurfewReleaseDateConditions,
@@ -878,6 +879,7 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
+        additionalDocuments: [createAttatchment()],
       })
       const taskListService = new TaskListService()
 
@@ -907,7 +909,7 @@ describe('TaskListService', () => {
           path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
-          completed: false,
+          completed: true,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
         },

@@ -437,7 +437,7 @@ export default class TaskListService {
       name: PAGES.attachments,
       path: paths.ATTACHMENT.ATTACHMENTS,
       state: STATES.optional,
-      completed: false,
+      completed: isNotNullOrUndefined(order.additionalDocuments) && order.additionalDocuments.length > 0,
     })
 
     return tasks
