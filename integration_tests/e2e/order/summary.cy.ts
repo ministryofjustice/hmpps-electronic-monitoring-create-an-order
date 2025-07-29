@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderTasksPage from '../../pages/order/summary'
 import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
+import AttachmentType from '../../../server/models/AttachmentType'
 
 const mockOrderId = uuidv4()
 
@@ -44,7 +45,7 @@ context('Order Summary', () => {
       page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
 
       page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
-      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments/licence`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
 
@@ -96,7 +97,7 @@ context('Order Summary', () => {
       page.variationDetailsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/variation/details`)
 
       page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
-      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+      page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments/licence`)
 
       page.submitOrderButton.should('be.disabled')
     })
@@ -217,7 +218,7 @@ context('Order Summary', () => {
               postcode: '',
             },
           ],
-          additionalDocuments: [],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
           monitoringConditions: {
             orderType: null,
             curfew: true,
@@ -324,7 +325,7 @@ context('Order Summary', () => {
         `/order/${mockOrderId}/monitoring-conditions/check-your-answers`,
       )
 
-      // page.additionalDocuments.shouldHaveStatus('Complete')
+      page.additionalDocumentsTask.shouldHaveStatus('Complete')
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
