@@ -247,7 +247,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
       postcode: '',
     },
   ],
-  additionalDocuments: [],
+  additionalDocuments: [createAttatchment()],
   monitoringConditions: createMonitoringConditions(),
   monitoringConditionsTrail: null,
   mandatoryAttendanceConditions: [],

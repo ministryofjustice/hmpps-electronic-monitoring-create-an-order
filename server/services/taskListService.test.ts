@@ -784,7 +784,9 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      expect(nextPage).toBe(
+        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(':fileType(photo_Id|licence)', 'licence'),
+      )
     })
 
     it.each([
@@ -847,7 +849,10 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
-          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+            ':fileType(photo_Id|licence)',
+            'licence',
+          ),
         },
       ])
     })
@@ -962,7 +967,10 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
-          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+            ':fileType(photo_Id|licence)',
+            'licence',
+          ),
         },
       ])
     })
@@ -1019,7 +1027,10 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
-          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+            ':fileType(photo_Id|licence)',
+            'licence',
+          ),
         },
       ])
     })

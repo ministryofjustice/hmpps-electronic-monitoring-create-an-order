@@ -2,6 +2,7 @@ import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import AttachmentType from '../models/AttachmentType'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -100,6 +101,14 @@ const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === 
 
 const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
   return order.addresses.find(address => address.addressType === addressType) !== undefined
+}
+
+const doesOrderHaveLicence = (order: Order): boolean => {
+  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.LICENCE) !== undefined
+}
+
+const doesOrderHavePhotoId = (order: Order): boolean => {
+  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
 }
 
 const isCurfewOnly = (order: Order): boolean => {
@@ -435,9 +444,25 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.attachments,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
+      state: STATES.required,
+      completed: doesOrderHaveLicence(order),
+    })
+
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.attachments,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_id'),
+      state: STATES.notRequired,
+      completed: doesOrderHavePhotoId(order),
+    })
+
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.attachments,
       path: paths.ATTACHMENT.ATTACHMENTS,
-      state: STATES.optional,
-      completed: isNotNullOrUndefined(order.additionalDocuments) && order.additionalDocuments.length > 0,
+      state: STATES.hidden,
+      completed: true,
     })
 
     return tasks
@@ -552,6 +577,9 @@ export default class TaskListService {
   }
 
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
+    if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
+      return sectionTasks[2].path
+    }
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 }
