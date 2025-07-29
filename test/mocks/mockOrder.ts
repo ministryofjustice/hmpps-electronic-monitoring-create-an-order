@@ -14,6 +14,8 @@ import { AttendanceMonitoring } from '../../server/models/AttendanceMonitoring'
 import { CurfewReleaseDate } from '../../server/models/CurfewReleaseDate'
 import { CurfewConditions } from '../../server/models/CurfewConditions'
 import { CurfewTimetable } from '../../server/models/CurfewTimetable'
+import { Attachment } from '../../server/models/Attachment'
+import AttachmentType from '../../server/models/AttachmentType'
 
 export const createDeviceWearer = (overrideProperties?: Partial<DeviceWearer>): DeviceWearer => ({
   nomisId: null,
@@ -177,6 +179,10 @@ export const createCurfewTimeTable = (overrideProperties?: Partial<CurfewTimetab
     ...overrideProperties,
   },
 ]
+
+export const createAttatchment = (overrideProperties?: Partial<Attachment>): Attachment => {
+  return { id: '', fileName: '', fileType: AttachmentType.LICENCE, ...overrideProperties }
+}
 
 export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
