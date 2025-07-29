@@ -11,6 +11,7 @@ import AuditService from '../../services/auditService'
 import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
 import { createMockRequest } from '../../../test/mocks/mockExpress'
+import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -25,6 +26,7 @@ describe('AttachmentController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let mockAttachmentService: jest.Mocked<AttachmentService>
+  let mockTaskListService: jest.Mocked<TaskListService>
   let controller: AttachmentController
   let req: Request
   let res: Response
@@ -45,7 +47,13 @@ describe('AttachmentController', () => {
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
-    controller = new AttachmentController(mockAuditService, mockOrderService, mockAttachmentService)
+    mockTaskListService = new TaskListService() as jest.Mocked<TaskListService>
+    controller = new AttachmentController(
+      mockAuditService,
+      mockOrderService,
+      mockAttachmentService,
+      mockTaskListService,
+    )
 
     req = {
       // @ts-expect-error stubbing session
@@ -170,7 +178,7 @@ describe('AttachmentController', () => {
       )
     })
 
-    it('Upload successful, log audit redirect to attachment sumary page', async () => {
+    it('Licence upload successful, log audit redirect to photo id upload page', async () => {
       req.file = {
         filename: 'mockfile.jpeg',
         originalname: '',
@@ -189,7 +197,7 @@ describe('AttachmentController', () => {
 
       req.params.fileType = 'licence'
       await controller.uploadFile(req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments/photo_id`)
       expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
         who: 'fakeUserName',
         correlationId: req.order?.id,
