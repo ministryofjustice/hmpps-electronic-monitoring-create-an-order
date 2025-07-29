@@ -64,6 +64,14 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
 
 type IdentityNumbersFormData = z.infer<typeof IdentityNumbersFormDataModel>
 
+const IdentityNumbersFormDataValidator = FormDataModel.extend({
+  nomisId: z.string().max(200, validationErrors.identityNumbers.nomisIdMaxLength),
+  pncId: z.string().max(200, validationErrors.identityNumbers.pncIdMaxLength),
+  deliusId: z.string().max(200, validationErrors.identityNumbers.deliusIdMaxLength),
+  prisonNumber: z.string().max(200, validationErrors.identityNumbers.prisonNumberMaxLength),
+  homeOfficeReferenceNumber: z.string().max(200, validationErrors.identityNumbers.homeOfficeRefMaxLength),
+})
+
 export {
   DeviceWearerFormData,
   DeviceWearerFormDataParser,
@@ -71,4 +79,5 @@ export {
   DeviceWearerFormDataValidator,
   IdentityNumbersFormData,
   IdentityNumbersFormDataModel,
+  IdentityNumbersFormDataValidator,
 }
