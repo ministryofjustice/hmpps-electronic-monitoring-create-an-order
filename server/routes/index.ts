@@ -70,7 +70,12 @@ export default function routes({
     alcoholMonitoringService,
     taskListService,
   )
-  const attachmentsController = new AttachmentsController(auditService, orderService, attachmentService)
+  const attachmentsController = new AttachmentsController(
+    auditService,
+    orderService,
+    attachmentService,
+    taskListService,
+  )
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
     taskListService,

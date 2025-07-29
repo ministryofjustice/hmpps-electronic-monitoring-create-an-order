@@ -43,7 +43,9 @@ const PAGES = {
   attendanceMonitoring: 'ATTENDANCE_MONITORING',
   alcoholMonitoring: 'ALCOHOL_MONITORING',
   checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
-  attachments: 'ATTACHMENTS',
+  licenceUpload: 'LICENCE_ATTACHMENT',
+  photoUpload: 'PHOTO_ATTACHMENT',
+  attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
   installationAppointment: 'INSTALLATION_APPOINTMENT',
@@ -443,7 +445,7 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
-      name: PAGES.attachments,
+      name: PAGES.licenceUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
       state: STATES.required,
       completed: doesOrderHaveLicence(order),
@@ -451,9 +453,9 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
-      name: PAGES.attachments,
+      name: PAGES.photoUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_id'),
-      state: STATES.notRequired,
+      state: STATES.optional,
       completed: doesOrderHavePhotoId(order),
     })
 
@@ -553,7 +555,7 @@ export default class TaskListService {
   }
 
   isSectionComplete(tasks: Task[]): boolean {
-    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true) || task.state === STATES.optional)
   }
 
   incompleteTask(task: Task): boolean {

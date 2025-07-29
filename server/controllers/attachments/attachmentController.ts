@@ -2,17 +2,23 @@ import { Request, RequestHandler, Response } from 'express'
 import { AttachmentService, AuditService, OrderService } from '../../services'
 import AttachmentType from '../../models/AttachmentType'
 import paths from '../../constants/paths'
+import TaskListService from '../../services/taskListService'
 
 export default class AttachmentsController {
   constructor(
     private readonly auditService: AuditService,
     private readonly orderService: OrderService,
     private readonly attachmentService: AttachmentService,
+    private readonly taskListService: TaskListService,
   ) {}
 
   uploadFile: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, fileType } = req.params
     const attachment = req.file as Express.Multer.File
+    if (attachment === undefined && fileType.toUpperCase() === AttachmentType.PHOTO_ID) {
+      res.redirect(this.taskListService.getNextPage('PHOTO_ATTACHMENT', req.order!))
+      return
+    }
     const error = await this.attachmentService.uploadAttachment({
       accessToken: res.locals.user.token,
       orderId,
@@ -26,7 +32,8 @@ export default class AttachmentsController {
         error: { text: error.userMessage },
       })
     } else {
-      res.redirect(`/order/${orderId}/attachments`)
+      const currentPage = fileType.toUpperCase() === AttachmentType.LICENCE ? 'LICENCE_ATTACHMENT' : 'PHOTO_ATTACHMENT'
+      res.redirect(this.taskListService.getNextPage(currentPage, req.order!))
       this.auditService.logAuditEvent({
         who: res.locals.user.username,
         correlationId: orderId,
