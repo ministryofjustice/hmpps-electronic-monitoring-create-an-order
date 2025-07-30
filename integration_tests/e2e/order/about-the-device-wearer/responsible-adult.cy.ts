@@ -103,15 +103,8 @@ context('About the device wearer - Responsible Adult', () => {
 
         page.form.saveAndContinueButton.click()
 
-        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
-          expect(requests).to.have.lengthOf(1)
-          expect(requests[0]).to.deep.equal({
-            fullName: '',
-            contactNumber: null,
-            relationship: '',
-            otherRelationshipDetails: '',
-          })
-        })
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
+
         cy.get('#relationship-error').should('contain', 'Relationship is required')
         cy.get('#fullName-error').should('contain', 'Full name is required')
         page.errorSummary.shouldExist()
@@ -126,10 +119,7 @@ context('About the device wearer - Responsible Adult', () => {
           httpStatus: 400,
           id: mockOrderId,
           subPath: '/device-wearer-responsible-adult',
-          response: [
-            { field: 'fullName', error: 'Full name is required' },
-            { field: 'contactNumber', error: 'Phone number is in an incorrect format' },
-          ],
+          response: [{ field: 'fullName', error: 'Full name is required' }],
         })
 
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
@@ -138,19 +128,9 @@ context('About the device wearer - Responsible Adult', () => {
         page.form.relationshipField.set('Guardian')
         page.form.saveAndContinueButton.click()
 
-        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
-          expect(requests).to.have.lengthOf(1)
-          expect(requests[0]).to.deep.equal({
-            fullName: '',
-            contactNumber: null,
-            relationship: 'guardian',
-            otherRelationshipDetails: '',
-          })
-        })
-        cy.get('#contactNumber-error').should('contain', 'Phone number is in an incorrect format')
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
         cy.get('#fullName-error').should('contain', 'Full name is required')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Phone number is in an incorrect format')
         page.errorSummary.shouldHaveError('Full name is required')
       })
     })
@@ -173,19 +153,9 @@ context('About the device wearer - Responsible Adult', () => {
         page.form.fullNameField.set('Martha Steward')
         page.form.saveAndContinueButton.click()
 
-        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
-          expect(requests).to.have.lengthOf(1)
-          expect(requests[0]).to.deep.equal({
-            fullName: 'Martha Steward',
-            contactNumber: null,
-            relationship: '',
-            otherRelationshipDetails: '',
-          })
-        })
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
         cy.get('#relationship-error').should('contain', 'Relationship is required')
-        cy.get('#contactNumber-error').should('contain', 'Phone number is in an incorrect format')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Phone number is in an incorrect format')
         page.errorSummary.shouldHaveError('Relationship is required')
       })
     })
@@ -208,20 +178,42 @@ context('About the device wearer - Responsible Adult', () => {
         page.form.contactNumberField.set('999999')
         page.form.saveAndContinueButton.click()
 
-        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`).then(requests => {
-          expect(requests).to.have.lengthOf(1)
-          expect(requests[0]).to.deep.equal({
-            fullName: '',
-            contactNumber: '999999',
-            relationship: '',
-            otherRelationshipDetails: '',
-          })
-        })
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
         cy.get('#relationship-error').should('contain', 'Relationship is required')
         cy.get('#fullName-error').should('contain', 'Full name is required')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('Full name is required')
         page.errorSummary.shouldHaveError('Relationship is required')
+      })
+    })
+
+    context('Entering an invalid contact number', () => {
+      it('should not continue to collect the responsible officer details', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: '/device-wearer-responsible-adult',
+          response: [{ field: 'contactNumber', error: 'Phone number is in an incorrect format' }],
+        })
+
+        cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
+        const page = Page.verifyOnPage(ResponsibleAdultPage)
+
+        const invalidContactNumberData = {
+          relationship: 'Other',
+          otherRelationshipDetails: 'Partner',
+          fullName: 'Audrey Taylor',
+          contactNumber: '123',
+        }
+
+        page.form.fillInWith(invalidContactNumberData)
+        page.form.saveAndContinueButton.click()
+
+        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
+
+        cy.get('#contactNumber-error').should('contain', 'Phone number is in an incorrect format')
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Phone number is in an incorrect format')
       })
     })
   })

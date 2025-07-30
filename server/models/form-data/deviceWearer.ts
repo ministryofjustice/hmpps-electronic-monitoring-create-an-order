@@ -34,7 +34,7 @@ const DeviceWearerFormDataValidator = z.object({
     .string()
     .min(1, validationErrors.deviceWearer.lastNameRequired)
     .max(200, validationErrors.deviceWearer.lastNameMaxLength),
-  alias: z.string().max(200, validationErrors.deviceWearer.lastNameMaxLength),
+  alias: z.string().max(200, validationErrors.deviceWearer.preferredNameMaxLength),
   dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth),
   language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO ELM-3376 this needs changing to be conditional on interpreter needed
   interpreterRequired: BooleanInputModel.pipe(
@@ -62,9 +62,9 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
   homeOfficeReferenceNumber: z.string(),
 })
 
-type IdentityNumbersFormData = z.infer<typeof IdentityNumbersFormDataModel>
+type IdentityNumbersFormData = Omit<z.infer<typeof IdentityNumbersFormDataModel>, 'action'>
 
-const IdentityNumbersFormDataValidator = FormDataModel.extend({
+const IdentityNumbersFormDataValidator = IdentityNumbersFormDataModel.omit({ action: true }).extend({
   nomisId: z.string().max(200, validationErrors.identityNumbers.nomisIdMaxLength),
   pncId: z.string().max(200, validationErrors.identityNumbers.pncIdMaxLength),
   deliusId: z.string().max(200, validationErrors.identityNumbers.deliusIdMaxLength),

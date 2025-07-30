@@ -16,7 +16,11 @@ type DeviceWearerResponsibleAdultFormData = Omit<z.infer<typeof DeviceWearerResp
 
 const DeviceWearerResponsibleAdultFormDataValidator = z.object({
   relationship: z.string().min(1, validationErrors.responsibleAdult.relationshipRequired),
-  fullName: z.string().max(200, validationErrors.responsibleAdult.fullNameMaxLength),
+  otherRelationshipDetails: z.string().max(200, validationErrors.responsibleAdult.otherRelationshipMaxLength),
+  fullName: z
+    .string()
+    .min(1, validationErrors.responsibleAdult.fullNameRequired)
+    .max(200, validationErrors.responsibleAdult.fullNameMaxLength),
   contactNumber: z
     .string()
     .nullable()

@@ -25,7 +25,10 @@ interface ValidationErrors {
   }
   responsibleAdult: {
     relationshipRequired: string
+    otherRelationshipMaxLength: string
+    fullNameRequired: string
     fullNameMaxLength: string
+    telephoneNumberMaxLength: string
   }
   monitoringConditions: {
     conditionTypeRequired: string
@@ -187,8 +190,11 @@ const validationErrors: ValidationErrors = {
     homeOfficeRefMaxLength: 'Home Office Reference Number must be 200 characters or less',
   },
   responsibleAdult: {
-    relationshipRequired: 'Select their relationship to the device wearer',
+    relationshipRequired: 'Relationship is required',
+    otherRelationshipMaxLength: 'Relationship description must be 200 characters or less',
+    fullNameRequired: 'Full name is required',
     fullNameMaxLength: 'Full name must be 200 characters or less',
+    telephoneNumberMaxLength: 'Telephone number must be 200 characters or less',
   },
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',
