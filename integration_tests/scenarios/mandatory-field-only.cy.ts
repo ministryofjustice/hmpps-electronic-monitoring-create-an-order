@@ -370,7 +370,7 @@ context('Mandatory fields only', () => {
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const licencePage = Page.verifyOnPage(UploadLicencePage)
-      licencePage.form.uploadField.uploadFile({ fileName: 'test.pdf', contents: 'some contents' })
+      licencePage.form.uploadField.uploadFile({ fileName: files.map.fileName, contents: files.map.contents })
       if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
       licencePage.form.saveAndContinueButton.click()
 
