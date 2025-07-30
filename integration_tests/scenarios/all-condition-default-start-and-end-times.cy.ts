@@ -147,6 +147,11 @@ context('The kitchen sink', () => {
       riskCategory: 'Children under the age of 18 are living at the property',
       riskDetails: 'No risk',
     }
+
+    const attachmentFiles = {
+      licence: { fileName: 'test.pdf', contents: 'some contents' },
+    }
+
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
@@ -169,7 +174,7 @@ context('The kitchen sink', () => {
         enforcementZoneDetails: primaryEnforcementZoneDetails,
         alcoholMonitoringDetails: undefined,
         trailMonitoringDetails: trailMonitoringOrder,
-        files: undefined,
+        files: attachmentFiles,
         probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()

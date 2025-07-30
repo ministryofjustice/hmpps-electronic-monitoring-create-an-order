@@ -605,27 +605,24 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInAttachmentDetailsWith({ files }): void {
-    let attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+    const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
+    uploadLicencePage.form.fillInWith({
+      file: files.licence,
+    })
+    uploadLicencePage.form.saveAndContinueButton.click()
 
     if (files && files.photoId !== undefined) {
-      attachmentPage.photoIdTask.addAction.click()
       const uploadPhotoIdPage = Page.verifyOnPage(UploadPhotoIdPage)
       uploadPhotoIdPage.form.fillInWith({
         file: files.photoId,
       })
       uploadPhotoIdPage.form.saveAndContinueButton.click()
-      attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
+    } else {
+      const uploadPhotoIdPage = Page.verifyOnPage(UploadPhotoIdPage)
+      uploadPhotoIdPage.form.saveAndContinueButton.click()
     }
 
-    if (files && files.licence !== undefined) {
-      attachmentPage.licenceTask.addAction.click()
-      const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
-      uploadLicencePage.form.fillInWith({
-        file: files.licence,
-      })
-      uploadLicencePage.form.saveAndContinueButton.click()
-      attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-    }
+    const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
 
     attachmentPage.backToSummaryButton.click()
   }

@@ -43,6 +43,13 @@ import UploadPhotoIdPage from '../pages/order/attachments/uploadPhotoId'
 context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    map: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
+  }
 
   beforeEach(() => {
     cy.task('resetDB')
@@ -61,6 +68,37 @@ context('Mandatory fields only', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.map.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.map.fileName,
+        filename: files.map.fileName,
+        fileExtension: files.map.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.readFile(files.map.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -332,7 +370,7 @@ context('Mandatory fields only', () => {
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const licencePage = Page.verifyOnPage(UploadLicencePage)
-      licencePage.form.uploadField.uploadFile({ fileName: 'testFile.pdf', contents: 'some contents' })
+      licencePage.form.uploadField.uploadFile({ fileName: 'test.pdf', contents: 'some contents' })
       if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
       licencePage.form.saveAndContinueButton.click()
 
@@ -641,7 +679,7 @@ context('Mandatory fields only', () => {
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const licencePage = Page.verifyOnPage(UploadLicencePage)
-      licencePage.form.uploadField.uploadFile({ fileName: 'testFile.pdf', contents: 'some contents' })
+      licencePage.form.uploadField.uploadFile({ fileName: 'test.pdf', contents: 'some contents' })
       if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
       licencePage.form.saveAndContinueButton.click()
 
@@ -650,18 +688,18 @@ context('Mandatory fields only', () => {
       photoPage.form.saveAndContinueButton.click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      if (takeScreenshots) cy.screenshot('22. attachmentPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('24. attachmentPage', { overwrite: true })
       attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('23. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('25. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('24. indexPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
       indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
