@@ -40,6 +40,10 @@ export default class UploadAttachmentFormComponent extends FormComponent {
     this.uploadField.shouldNotBeDisabled()
   }
 
+  get saveAndContinueButton(): PageElement {
+    return this.form.contains('Save and continue')
+  }
+
   get saveAsDraftButton(): PageElement {
     return this.form.contains('Save as draft')
   }
