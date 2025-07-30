@@ -11,6 +11,13 @@ import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '..
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    map: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
+  }
 
   const cacheOrderId = () => {
     cy.url().then((url: string) => {
@@ -46,6 +53,37 @@ context('Scenarios', () => {
     cy.task('stubFMSUpdateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.map.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.map.fileName,
+        filename: files.map.fileName,
+        fileExtension: files.map.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.readFile(files.map.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -118,6 +156,10 @@ context('Scenarios', () => {
         riskDetails: 'No risk',
       }
 
+      const attachmentFiles = {
+        licence: { fileName: files.map.fileName, contents: files.map.contents },
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -138,7 +180,7 @@ context('Scenarios', () => {
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
-          files: undefined,
+          files: attachmentFiles,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -165,7 +207,7 @@ context('Scenarios', () => {
           curfewReleaseDetails,
           curfewConditionDetails: variationCurfewConditionDetails,
           curfewTimetable: variationCurfewTimetable,
-          files: undefined,
+          files: attachmentFiles,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()

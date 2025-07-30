@@ -149,7 +149,7 @@ context('The kitchen sink', () => {
     }
 
     const attachmentFiles = {
-      licence: { fileName: 'test.pdf', contents: 'some contents' },
+      licence: { fileName: files.map.fileName, contents: files.map.contents },
     }
 
     it('With default start time and end time, british time is send to FMS', () => {
