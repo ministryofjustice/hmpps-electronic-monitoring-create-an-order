@@ -13,7 +13,7 @@ context('Scenarios', () => {
   let orderId: string
   const hmppsDocumentId: string = uuidv4()
   const files = {
-    map: {
+    licence: {
       contents: 'cypress/fixtures/test.pdf',
       fileName: 'test.pdf',
     },
@@ -57,7 +57,7 @@ context('Scenarios', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.map.fileName,
+      fileName: files.licence.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -70,14 +70,14 @@ context('Scenarios', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: files.map.fileName,
-        filename: files.map.fileName,
-        fileExtension: files.map.fileName.split('.')[1],
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
-    cy.readFile(files.map.contents, 'base64').then(content => {
+    cy.readFile(files.licence.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         id: '(.*)',
         httpStatus: 200,
@@ -156,10 +156,6 @@ context('Scenarios', () => {
         riskDetails: 'No risk',
       }
 
-      const attachmentFiles = {
-        licence: { fileName: files.map.fileName, contents: files.map.contents },
-      }
-
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -180,7 +176,7 @@ context('Scenarios', () => {
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
-          files: attachmentFiles,
+          files,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -207,7 +203,7 @@ context('Scenarios', () => {
           curfewReleaseDetails,
           curfewConditionDetails: variationCurfewConditionDetails,
           curfewTimetable: variationCurfewTimetable,
-          files: attachmentFiles,
+          files,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
