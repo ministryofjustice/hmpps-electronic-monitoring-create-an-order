@@ -12,6 +12,10 @@ context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
     photoId: {
       contents: 'cypress/fixtures/profile.jpeg',
       fileName: 'profile.jpeg',
@@ -55,6 +59,16 @@ context.skip('Scenarios', () => {
       },
     })
 
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.licence.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
     cy.task('stubUploadDocument', {
       id: '(.*)',
       httpStatus: 200,
@@ -67,11 +81,32 @@ context.skip('Scenarios', () => {
       },
     })
 
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
     cy.readFile(files.photoId.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         id: '(.*)',
         httpStatus: 200,
         contextType: 'image/jpeg',
+        fileBase64Body: content,
+      })
+    })
+
+    cy.readFile(files.licence.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
         fileBase64Body: content,
       })
     })

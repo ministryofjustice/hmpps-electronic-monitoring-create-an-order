@@ -17,8 +17,24 @@ type DocumentStubOptions = {
   response: Record<string, unknown>
 }
 
-const stubUploadDocument = (options: DocumentStubOptions) =>
-  stubFor({
+const stubUploadDocument = (options: DocumentStubOptions) => {
+  if (options.scenario) {
+    return stubFor({
+      scenarioName: options.scenario.name,
+      requiredScenarioState: options.scenario.requiredState,
+      newScenarioState: options.scenario.nextState,
+      request: {
+        method: 'POST',
+        urlPattern: `/hmpps/documents/CEMO_ATTACHMENT/${options.id}`,
+      },
+      response: {
+        status: options.httpStatus,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        body: options?.response ? JSON.stringify(options?.response, null, 2) : '',
+      },
+    })
+  }
+  return stubFor({
     request: {
       method: 'POST',
       urlPattern: `/hmpps/documents/CEMO_ATTACHMENT/${options.id}`,
@@ -29,6 +45,7 @@ const stubUploadDocument = (options: DocumentStubOptions) =>
       body: options?.response ? JSON.stringify(options?.response, null, 2) : '',
     },
   })
+}
 
 const stubGetDocument = (options: DocumentStubOptions) => {
   if (options.scenario) {
