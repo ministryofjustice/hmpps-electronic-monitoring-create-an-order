@@ -97,7 +97,7 @@ describe('attendanceMonitoringController', () => {
     addressLine2: 'add 2',
     addressLine3: 'add 3',
     addressLine4: '',
-    addressPostcode: 'PC13DE',
+    postcode: 'PC13DE',
     addAnother: 'false',
   }
 
@@ -127,7 +127,7 @@ describe('attendanceMonitoringController', () => {
     addressLine2: 'add 2',
     addressLine3: 'add 3',
     addressLine4: '',
-    addressPostcode: 'PC13DE',
+    postcode: 'PC13DE',
     addAnother: 'false',
   }
 
@@ -213,7 +213,7 @@ describe('attendanceMonitoringController', () => {
               addressLine2: '',
               addressLine3: '',
               addressLine4: '',
-              addressPostcode: '',
+              postcode: '',
               appointmentDay: '',
               startDate: {
                 day: '',
