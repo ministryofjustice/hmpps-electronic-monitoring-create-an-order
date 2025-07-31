@@ -56,6 +56,19 @@ context('Search', () => {
       )
     })
 
+    it('should show "Tell us about a change.." button when there are no results', () => {
+      cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
+
+      const page = Page.visit(SearchPage)
+
+      page.searchButton.click()
+
+      page.searchBox.type('Unknown name')
+      page.searchButton.click()
+
+      page.variationFormButton.should('exist').should('contain.text', 'Tell us about a change to a form sent by email')
+    })
+
     describe('when rendering an order', () => {
       const mockDate = new Date(2000, 10, 20).toISOString()
       const mockOrder = {
