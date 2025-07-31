@@ -2,11 +2,7 @@ import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import DeviceWearerModel, { DeviceWearer } from '../models/DeviceWearer'
-import {
-  DeviceWearerFormDataValidator,
-  DeviceWearerFormData,
-  IdentityNumbersFormDataValidator,
-} from '../models/form-data/deviceWearer'
+import { DeviceWearerFormDataValidator, DeviceWearerFormData } from '../models/form-data/deviceWearer'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
@@ -56,10 +52,9 @@ export default class DeviceWearerService {
 
   async updateIdentityNumbers(input: UpdateIdentityNumbersRequest): Promise<DeviceWearer | ValidationResult> {
     try {
-      const requestBody = IdentityNumbersFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/device-wearer/identity-numbers`,
-        data: requestBody,
+        data: input.data,
         token: input.accessToken,
       })
 

@@ -16,13 +16,6 @@ interface ValidationErrors {
     responsibleAdultRequired: string
     sexRequired: string
   }
-  identityNumbers: {
-    nomisIdMaxLength: string
-    pncIdMaxLength: string
-    deliusIdMaxLength: string
-    prisonNumberMaxLength: string
-    homeOfficeRefMaxLength: string
-  }
   monitoringConditions: {
     conditionTypeRequired: string
     monitoringTypeRequired: string
@@ -174,13 +167,6 @@ const validationErrors: ValidationErrors = {
     preferredNameMaxLength: 'Preferred name must be 200 characters or less',
     responsibleAdultRequired: 'Select yes if a responsible adult is required',
     sexRequired: "Select the device wearer's sex, or select 'Not able to provide this information'",
-  },
-  identityNumbers: {
-    nomisIdMaxLength: 'NOMIS ID must be 200 characters or less',
-    pncIdMaxLength: 'PNC ID must be 200 characters or less',
-    deliusIdMaxLength: 'Delius ID must be 200 characters or less',
-    prisonNumberMaxLength: 'Prison number must be 200 characters or less',
-    homeOfficeRefMaxLength: 'Home Office Reference Number must be 200 characters or less',
   },
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',
