@@ -26,9 +26,15 @@ type DeviceWearerFormData = Omit<z.infer<typeof DeviceWearerFormDataParser>, 'ac
 
 // Validate form data on the client to ensure creation of successful api requests
 const DeviceWearerFormDataValidator = z.object({
-  firstName: z.string().min(1, validationErrors.deviceWearer.firstNameRequired),
-  lastName: z.string().min(1, validationErrors.deviceWearer.lastNameRequired),
-  alias: z.string(),
+  firstName: z
+    .string()
+    .min(1, validationErrors.deviceWearer.firstNameRequired)
+    .max(200, validationErrors.deviceWearer.firstNameMaxLength),
+  lastName: z
+    .string()
+    .min(1, validationErrors.deviceWearer.lastNameRequired)
+    .max(200, validationErrors.deviceWearer.lastNameMaxLength),
+  alias: z.string().max(200, validationErrors.deviceWearer.preferredNameMaxLength),
   dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth),
   language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO ELM-3376 this needs changing to be conditional on interpreter needed
   interpreterRequired: BooleanInputModel.pipe(
@@ -56,7 +62,7 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
   homeOfficeReferenceNumber: z.string(),
 })
 
-type IdentityNumbersFormData = z.infer<typeof IdentityNumbersFormDataModel>
+type IdentityNumbersFormData = Omit<z.infer<typeof IdentityNumbersFormDataModel>, 'action'>
 
 export {
   DeviceWearerFormData,

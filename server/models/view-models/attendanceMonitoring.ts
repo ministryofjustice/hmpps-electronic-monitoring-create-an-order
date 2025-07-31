@@ -24,7 +24,7 @@ const constructFromFormData = (
         line2: formData.addressLine2,
         line3: formData.addressLine3,
         line4: formData.addressLine4,
-        postcode: formData.addressPostcode,
+        postcode: formData.postcode,
       },
       error: getError(validationErrors, 'address'),
     },

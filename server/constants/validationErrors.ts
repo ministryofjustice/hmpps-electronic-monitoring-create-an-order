@@ -5,11 +5,14 @@ interface ValidationErrors {
   }
   deviceWearer: {
     dateOfBirth: DateErrorMessages
+    firstNameMaxLength: string
     firstNameRequired: string
     genderRequired: string
     interpreterRequired: string
     languageRequired: string
+    lastNameMaxLength: string
     lastNameRequired: string
+    preferredNameMaxLength: string
     responsibleAdultRequired: string
     sexRequired: string
   }
@@ -154,11 +157,14 @@ const validationErrors: ValidationErrors = {
       required: 'Enter date of birth',
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
+    firstNameMaxLength: 'First name must be 200 characters or less',
     firstNameRequired: "Enter device wearer's first name",
     genderRequired: "Select the device wearer's gender, or select 'Not able to provide this information'",
     interpreterRequired: 'Select yes if the device wearer requires an interpreter',
     languageRequired: 'Select the language required',
+    lastNameMaxLength: 'Last name must be 200 characters or less',
     lastNameRequired: "Enter device wearer's last name",
+    preferredNameMaxLength: 'Preferred name must be 200 characters or less',
     responsibleAdultRequired: 'Select yes if a responsible adult is required',
     sexRequired: "Select the device wearer's sex, or select 'Not able to provide this information'",
   },

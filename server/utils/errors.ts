@@ -36,6 +36,8 @@ export const convertBackendErrorToValidationError = (sanitisedError: SanitisedEr
     releaseDate: 'day',
     startDate: 'day',
     variationDate: 'day',
+    startTime: 'hours',
+    endTime: 'hours',
   }
 
   const parsedErrors = ValidationResultModel.parse(sanitisedError.data)
