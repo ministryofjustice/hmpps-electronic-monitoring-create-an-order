@@ -28,6 +28,8 @@ import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
+import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
+import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -222,8 +224,15 @@ context('Scenarios', () => {
         )
         monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
+        const licencePage = Page.verifyOnPage(UploadLicencePage)
+        licencePage.form.uploadField.uploadFile({ fileName: uploadFile.fileName, contents: uploadFile.contents })
+        licencePage.form.saveAndContinueButton.click()
+
+        const photoPage = Page.verifyOnPage(UploadPhotoIdPage)
+        photoPage.form.saveAndContinueButton.click()
+
         const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-        attachmentPage.backToSummaryButton.click()
+        attachmentPage.saveAndReturnButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         orderSummaryPage.submitOrderButton.click()
