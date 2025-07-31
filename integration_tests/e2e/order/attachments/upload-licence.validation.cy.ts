@@ -31,6 +31,14 @@ context('Attachments', () => {
 
         page.form.uploadField.shouldHaveValidationMessage('Mock Error')
       })
+
+      it('Should show an error if no file is added', () => {
+        const page = Page.visit(UploadLicencePage, { orderId: mockOrderId })
+
+        page.form.saveAndContinueButton.click()
+
+        page.form.uploadField.shouldHaveValidationMessage('Upload a licence or court document')
+      })
     })
   })
 })
