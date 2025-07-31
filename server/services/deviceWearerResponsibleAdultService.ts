@@ -2,7 +2,6 @@ import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import DeviceWearerResponsibleAdultModel, { DeviceWearerResponsibleAdult } from '../models/DeviceWearerResponsibleAdult'
-import { DeviceWearerResponsibleAdultFormDataValidator } from '../models/form-data/responsibleAdult'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../utils/errors'
@@ -23,11 +22,9 @@ export default class DeviceWearerResponsibleAdultService {
     input: UpdateDeviceWearerResponsibleAdultRequestInput,
   ): Promise<DeviceWearerResponsibleAdult | ValidationResult> {
     try {
-      const requestBody = DeviceWearerResponsibleAdultFormDataValidator.parse(input.data)
-
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/device-wearer-responsible-adult`,
-        data: requestBody,
+        data: input.data,
         token: input.accessToken,
       })
 

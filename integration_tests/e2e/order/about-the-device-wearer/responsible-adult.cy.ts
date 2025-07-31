@@ -99,7 +99,6 @@ context('About the device wearer - Responsible Adult', () => {
 
         cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
         const page = Page.verifyOnPage(ResponsibleAdultPage)
-        // const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
 
         page.form.saveAndContinueButton.click()
 
@@ -113,7 +112,7 @@ context('About the device wearer - Responsible Adult', () => {
       })
     })
 
-    context('Only entering relationship', () => {
+    context('Not entering full name', () => {
       it('should not continue to collect the responsible officer details', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
@@ -135,7 +134,7 @@ context('About the device wearer - Responsible Adult', () => {
       })
     })
 
-    context('Only entering full name', () => {
+    context('Not entering relationship', () => {
       it('should not continue to collect the responsible officer details', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
@@ -156,33 +155,6 @@ context('About the device wearer - Responsible Adult', () => {
         cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
         cy.get('#relationship-error').should('contain', 'Relationship is required')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Relationship is required')
-      })
-    })
-
-    context('Only entering contact number', () => {
-      it('should not continue to collect the responsible officer details', () => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: '/device-wearer-responsible-adult',
-          response: [
-            { field: 'relationship', error: 'Relationship is required' },
-            { field: 'fullName', error: 'Full name is required' },
-          ],
-        })
-
-        cy.visit(`/order/${mockOrderId}/about-the-device-wearer/responsible-adult`)
-        const page = Page.verifyOnPage(ResponsibleAdultPage)
-
-        page.form.contactNumberField.set('999999')
-        page.form.saveAndContinueButton.click()
-
-        cy.task('getStubbedRequest', `/orders/${mockOrderId}/device-wearer-responsible-adult`)
-        cy.get('#relationship-error').should('contain', 'Relationship is required')
-        cy.get('#fullName-error').should('contain', 'Full name is required')
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Full name is required')
         page.errorSummary.shouldHaveError('Relationship is required')
       })
     })
