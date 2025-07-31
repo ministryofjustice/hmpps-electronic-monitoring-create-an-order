@@ -125,7 +125,7 @@ context('Scenarios', () => {
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
         trailMonitoringDetails,
-        files: undefined,
+        files: { licence: uploadFile },
         probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()

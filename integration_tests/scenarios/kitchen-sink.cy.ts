@@ -40,7 +40,7 @@ context('The kitchen sink', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
-    map: {
+    licence: {
       contents: 'cypress/fixtures/test.pdf',
       fileName: 'test.pdf',
     },
@@ -67,7 +67,7 @@ context('The kitchen sink', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.map.fileName,
+      fileName: files.licence.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -80,14 +80,14 @@ context('The kitchen sink', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: files.map.fileName,
-        filename: files.map.fileName,
-        fileExtension: files.map.fileName.split('.')[1],
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
-    cy.readFile(files.map.contents, 'base64').then(content => {
+    cy.readFile(files.licence.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         id: '(.*)',
         httpStatus: 200,
@@ -165,7 +165,7 @@ context('The kitchen sink', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-      uploadFile: files.map,
+      uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'Yes',
@@ -174,7 +174,7 @@ context('The kitchen sink', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 200), // 200 days
-      uploadFile: files.map,
+      uploadFile: files.licence,
       description: 'A second test description: Lorum ipsum dolar sit amet...',
       duration: 'A second test duration: one, two, three...',
       anotherZone: 'No',
@@ -399,7 +399,7 @@ context('The kitchen sink', () => {
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
       const licencePage = Page.verifyOnPage(UploadLicencePage)
-      licencePage.form.uploadField.uploadFile({ fileName: files.map.fileName, contents: files.map.contents })
+      licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
       if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
       licencePage.form.saveAndContinueButton.click()
 
