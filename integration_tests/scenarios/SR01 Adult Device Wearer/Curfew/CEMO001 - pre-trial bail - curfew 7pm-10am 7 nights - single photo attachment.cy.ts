@@ -82,6 +82,11 @@ context.skip('Scenarios', () => {
     })
 
     cy.task('stubUploadDocument', {
+      scenario: {
+        name: 'CEMO001',
+        requiredState: 'Started',
+        nextState: 'second',
+      },
       id: '(.*)',
       httpStatus: 200,
       response: {
@@ -90,6 +95,23 @@ context.skip('Scenarios', () => {
         filename: files.licence.fileName,
         fileExtension: files.licence.fileName.split('.')[1],
         mimeType: 'application/pdf',
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      scenario: {
+        name: 'CEMO001',
+        requiredState: 'second',
+        nextState: 'Started',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.photoId.fileName,
+        filename: files.photoId.fileName,
+        fileExtension: files.photoId.fileName.split('.')[1],
+        mimeType: 'image/jpeg',
       },
     })
 
