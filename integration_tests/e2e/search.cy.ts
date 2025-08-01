@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import SearchPage from '../pages/search'
 import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
+import OrderTasksPage from '../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -13,7 +14,7 @@ context('Search', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.task('stubCemoSearchOrders')
-      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
     })
@@ -54,6 +55,37 @@ context('Search', () => {
       page.ordersList.contains(
         'If the form is not listed in the search results, it may be an emailed form so not available online.',
       )
+    })
+
+    it('should show "Tell us about a change.." button when there are no results', () => {
+      cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
+
+      const page = Page.visit(SearchPage)
+
+      page.searchBox.type('Unknown name')
+      page.searchButton.click()
+
+      page.variationFormButton.should('exist').should('contain.text', 'Tell us about a change to a form sent by email')
+    })
+
+    it('should create a new variation order when the "Tell us about.." button is clicked', () => {
+      cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
+      const page = Page.visit(SearchPage)
+
+      page.searchBox.type('Unknown name')
+      page.searchButton.click()
+
+      page.variationFormButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders`,
+        method: 'POST',
+        body: {
+          type: 'VARIATION',
+        },
+      }).should('be.true')
+
+      Page.verifyOnPage(OrderTasksPage)
     })
 
     describe('when rendering an order', () => {

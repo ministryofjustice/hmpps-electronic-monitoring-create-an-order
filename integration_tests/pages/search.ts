@@ -22,4 +22,8 @@ export default class SearchPage extends AppPage {
   get ordersList(): PageElement {
     return cy.get('#ordersList')
   }
+
+  get variationFormButton(): PageElement {
+    return cy.contains('Tell us about a change to a form sent by email')
+  }
 }
