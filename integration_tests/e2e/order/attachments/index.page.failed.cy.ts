@@ -51,8 +51,7 @@ context('Attachments', () => {
           .should('have.attr', 'href', `/order/${mockOrderId}/attachments/photo_Id/photo.jpeg`)
 
         // Buttons
-        page.saveAndReturnButton.should('not.exist')
-        page.returnBackToFormSectionMenuButton.should('exist')
+        page.backToSummaryButton.should('exist')
       })
     })
   })
