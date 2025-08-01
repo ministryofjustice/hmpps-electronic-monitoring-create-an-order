@@ -44,6 +44,14 @@ context('Attachments', () => {
           ],
         }).should('be.true')
       })
+
+      it('Should allow the user to skip the question', () => {
+        const page = Page.visit(UploadPhotoIdPage, { orderId: mockOrderId })
+
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(AttachmentSummaryPage)
+      })
     })
   })
 })

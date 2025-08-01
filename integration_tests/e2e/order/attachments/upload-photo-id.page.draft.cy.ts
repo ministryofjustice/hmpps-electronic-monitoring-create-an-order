@@ -27,6 +27,10 @@ context('Attachments', () => {
         // Form
         page.form.shouldHaveEncType('multipart/form-data')
         page.form.shouldNotBeDisabled()
+        page.form.uploadField.shouldHaveLabel('Upload a photo of the device wearer (optional)')
+        page.form.uploadField.shouldHaveHint(
+          "If the licence or court order doesn't include a photo, upload one that clearly shows the device wearer. The file must be a PDF, PNG, JPEG, or JPG and under 10MB.",
+        )
 
         // Buttons
         page.form.saveAndContinueButton.should('exist')
