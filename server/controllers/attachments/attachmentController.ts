@@ -5,6 +5,8 @@ import paths from '../../constants/paths'
 import TaskListService from '../../services/taskListService'
 import { createAnswer } from '../../utils/checkYourAnswers'
 import { Attachment } from '../../models/Attachment'
+import { formatDateTime } from '../../utils/utils'
+import { Order } from '../../models/Order'
 
 export default class AttachmentsController {
   constructor(
@@ -118,24 +120,28 @@ export default class AttachmentsController {
         licence,
         res.locals.content?.pages.uploadLicense.questions.file.text || '',
         paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
-        order.id,
+        order,
       ),
       this.createAttachmentAnswer(
         photo,
         res.locals.content?.pages.uploadPhotoId.questions.file.text || '',
         paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id').replace(':orderId', order.id),
-        order.id,
+        order,
       ),
     ]
 
     res.render(`pages/order/attachments/view`, {
       answers,
       error: error && error.length > 0 ? error[0] : undefined,
+      submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     })
   }
 
-  private createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, orderId: string) {
-    return createAnswer(text, this.createFileNameLink(attachment, orderId), uri, { valueType: 'html' })
+  private createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, order: Order) {
+    return createAnswer(text, this.createFileNameLink(attachment, order.id), uri, {
+      valueType: 'html',
+      ignoreActions: order.status === 'SUBMITTED',
+    })
   }
 
   private createFileNameLink(attachment: Attachment | undefined, orderId: string) {

@@ -27,48 +27,52 @@ context('Attachments', () => {
       })
 
       it('Should render the attachment summary page for a new draft order', () => {
-        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
         // Header
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        // Licence Task
-        page.licenceTask.changeAction.should('exist')
-        page.licenceTask.downloadAction.should('not.exist')
+        // Attachments
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Upload a copy of the licence or court order document', value: '' },
+          { key: 'Upload a photo of the device wearer (optional)', value: '' },
+        ])
 
-        // Photo ID Task
-        page.photoIdTask.changeAction.should('exist')
-        page.photoIdTask.downloadAction.should('not.exist')
+        page.changeLinks.should('exist')
 
         // Buttons
         page.saveAndReturnButton.should('exist')
       })
 
       it('Should render the attachment summary page for a draft order with uploaded attachments', () => {
-        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderIdWithAttachments })
+        const page = Page.visit(
+          AttachmentSummaryPage,
+          { orderId: mockOrderIdWithAttachments },
+          {},
+          'Check your answers',
+        )
 
         // Header
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        // Licence Task
-        page.licenceTask.status.should('contain', 'Licence.jpeg')
-        page.licenceTask.changeAction
-          .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence`)
-        page.licenceTask.downloadAction
-          .should('exist')
+        // Attachments
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Upload a copy of the licence or court order document', value: 'Licence.jpeg' },
+          { key: 'Upload a photo of the device wearer (optional)', value: 'photo.jpeg' },
+        ])
+        page.attachmentsSection.element
+          .find('.govuk-summary-list__value')
+          .contains('Licence.jpeg')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence/Licence.jpeg`)
 
-        // Photo ID Task
-        page.photoIdTask.status.should('contain', 'photo.jpeg')
-        page.photoIdTask.changeAction
-          .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id`)
-        page.photoIdTask.downloadAction
-          .should('exist')
+        page.attachmentsSection.element
+          .find('.govuk-summary-list__value')
+          .contains('photo.jpeg')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/photo.jpeg`)
+
+        page.changeLinks.should('exist')
 
         // Buttons
         page.saveAndReturnButton.should('exist')
@@ -76,7 +80,7 @@ context('Attachments', () => {
       })
 
       it('Should be accessible', () => {
-        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'Check your answers')
         page.checkIsAccessible()
       })
     })
