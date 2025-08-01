@@ -20,7 +20,7 @@ context('Attachments', () => {
       it('Should redirect to the attachments summary when trying to upload a photo id to a submitted order', () => {
         cy.visit(`/order/${mockOrderId}/attachments/licence`)
 
-        Page.verifyOnPage(AttachmentSummaryPage)
+        Page.verifyOnPage(AttachmentSummaryPage, 'View answers')
       })
     })
   })
