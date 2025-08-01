@@ -3,6 +3,8 @@ import { AttachmentService, AuditService, OrderService } from '../../services'
 import AttachmentType from '../../models/AttachmentType'
 import paths from '../../constants/paths'
 import TaskListService from '../../services/taskListService'
+import { createAnswer } from '../../utils/checkYourAnswers'
+import { Attachment } from '../../models/Attachment'
 
 export default class AttachmentsController {
   constructor(
@@ -111,11 +113,37 @@ export default class AttachmentsController {
     const photo = order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID)
     const error = req.flash('attachmentDeletionErrors')
 
+    const answers = [
+      this.createAttachmentAnswer(
+        licence,
+        res.locals.content?.pages.uploadLicense.questions.file.text || '',
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
+        order.id,
+      ),
+      this.createAttachmentAnswer(
+        photo,
+        res.locals.content?.pages.uploadPhotoId.questions.file.text || '',
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id').replace(':orderId', order.id),
+        order.id,
+      ),
+    ]
+
     res.render(`pages/order/attachments/view`, {
-      order: { id: order.id, status: order.status },
-      licenceFileName: licence?.fileName,
-      photoFileName: photo?.fileName,
+      answers,
       error: error && error.length > 0 ? error[0] : undefined,
     })
+  }
+
+  private createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, orderId: string) {
+    return createAnswer(text, this.createFileNameLink(attachment, orderId), uri, { valueType: 'html' })
+  }
+
+  private createFileNameLink(attachment: Attachment | undefined, orderId: string) {
+    if (!attachment) {
+      return ''
+    }
+    const { fileName, fileType } = attachment
+    const fileTypeString = fileType === AttachmentType.LICENCE ? 'licence' : 'photo_Id'
+    return `<a href="/order/${orderId}/attachments/${fileTypeString}/${fileName}" class="govuk-link">${fileName}</a>`
   }
 }

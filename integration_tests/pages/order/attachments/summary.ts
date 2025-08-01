@@ -11,11 +11,11 @@ export default class AttachmentSummaryPage extends AppFormPage {
   }
 
   get licenceTask(): AttachmentTask {
-    return new AttachmentTask('Licence')
+    return new AttachmentTask('Upload a copy of the licence or court order document')
   }
 
   get photoIdTask(): AttachmentTask {
-    return new AttachmentTask('Photo identification')
+    return new AttachmentTask('Upload a photo of the device wearer (optional)')
   }
 
   // ACTIONS
