@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Page from '../../../pages/page'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -55,8 +56,16 @@ context('Attachments', () => {
         page.changeLinks.should('not.exist')
 
         // Buttons
-        page.saveAndReturnButton.should('not.exist')
+        page.backToSummaryButton.should('exist')
         page.backButton.should('exist')
+      })
+
+      it('should go to main page when I click the return button', () => {
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'View answers')
+
+        page.backToSummaryButton.click()
+
+        Page.verifyOnPage(OrderTasksPage)
       })
     })
   })

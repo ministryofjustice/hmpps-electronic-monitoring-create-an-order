@@ -62,14 +62,10 @@
 	{% endif %}
 
 	<div class="govuk-button-group">
-	  {% if isOrderEditable %}
 	    {{ govukButton({
 	      text: "Save and return to main form menu",
-	      href: "/order/" + order.id + "/summary"
+	      href: "/order/" + orderId + "/summary"
 	    }) }}
-	  {% else %}
-	    <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-	  {% endif %}
 	</div>
       </form>
     </div>

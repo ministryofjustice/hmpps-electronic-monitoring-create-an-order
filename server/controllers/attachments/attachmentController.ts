@@ -134,6 +134,7 @@ export default class AttachmentsController {
       answers,
       error: error && error.length > 0 ? error[0] : undefined,
       submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+      orderId: order.id,
     })
   }
 
