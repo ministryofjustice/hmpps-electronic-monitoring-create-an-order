@@ -120,8 +120,39 @@ describe('AttachmentController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/attachments/view',
         expect.objectContaining({
-          licenceFileName: 'mockLicenceFile.jpeg',
-          photoFileName: 'mockPhotoFile.jpeg',
+          answers: [
+            {
+              actions: {
+                items: [
+                  {
+                    href: `/order/${mockId}/attachments/licence`,
+                    text: 'Change',
+                    visuallyHiddenText: '',
+                  },
+                ],
+              },
+              key: { text: '' },
+              value: {
+                html: `<a href="/order/${mockId}/attachments/licence/mockLicenceFile.jpeg" class="govuk-link">mockLicenceFile.jpeg</a>`,
+              },
+            },
+            {
+              actions: {
+                items: [
+                  {
+                    href: `/order/${mockId}/attachments/photo_Id`,
+                    text: 'Change',
+                    visuallyHiddenText: '',
+                  },
+                ],
+              },
+              key: { text: '' },
+              value: {
+                html: `<a href="/order/${mockId}/attachments/photo_Id/mockPhotoFile.jpeg" class="govuk-link">mockPhotoFile.jpeg</a>`,
+              },
+            },
+          ],
+          error: undefined,
         }),
       )
     })

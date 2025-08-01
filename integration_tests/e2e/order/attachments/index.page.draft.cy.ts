@@ -34,17 +34,11 @@ context('Attachments', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         // Licence Task
-        page.licenceTask.status.should('contain', 'No licence document uploaded')
-        page.licenceTask.addAction.should('exist')
-        page.licenceTask.changeAction.should('not.exist')
-        page.licenceTask.deleteAction.should('not.exist')
+        page.licenceTask.changeAction.should('exist')
         page.licenceTask.downloadAction.should('not.exist')
 
         // Photo ID Task
-        page.photoIdTask.status.should('contain', 'No photo ID document uploaded')
-        page.photoIdTask.addAction.should('exist')
-        page.photoIdTask.changeAction.should('not.exist')
-        page.photoIdTask.deleteAction.should('not.exist')
+        page.photoIdTask.changeAction.should('exist')
         page.photoIdTask.downloadAction.should('not.exist')
 
         // Buttons
@@ -60,26 +54,18 @@ context('Attachments', () => {
 
         // Licence Task
         page.licenceTask.status.should('contain', 'Licence.jpeg')
-        page.licenceTask.addAction.should('not.exist')
         page.licenceTask.changeAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence`)
-        page.licenceTask.deleteAction
-          .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence/delete`)
         page.licenceTask.downloadAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/licence/Licence.jpeg`)
 
         // Photo ID Task
         page.photoIdTask.status.should('contain', 'photo.jpeg')
-        page.photoIdTask.addAction.should('not.exist')
         page.photoIdTask.changeAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id`)
-        page.photoIdTask.deleteAction
-          .should('exist')
-          .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/delete`)
         page.photoIdTask.downloadAction
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderIdWithAttachments}/attachments/photo_Id/photo.jpeg`)

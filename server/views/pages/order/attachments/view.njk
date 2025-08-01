@@ -7,6 +7,7 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block content %}
   {{ govukBackLink({
@@ -14,111 +15,65 @@
     href: "#"
   }) }}
 
-  {% if order.status === "SUBMITTED" %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-        You are viewing a submitted order.
-      </p>
-    {% endset %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if not isOrderEditable %}
+	{% set submittedDate = submittedDate %}
+        {% set html %}
+          <p class="govuk-notification-banner__heading">
+            {% if orderStatus === 'ERROR' %}
+              This form failed to submit. This was due to a technical problem. For more information <a href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/index.html">view the guidance (opens in a new tab)</a> .
+            {% else %}
+              You are viewing a submitted form. This form was submitted on the {{ submittedDate }}.
+            {% endif %}           
+          </p>
+        {% endset %}
 
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
-
-   {% if order.status === "ERROR" %}
-    {% set html %}
-      <p class="govuk-notification-banner__heading">
-         This form failed to submit. This was due to a technical problem. For more information <a href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/index.html">view the guidance (opens in a new tab)</a> .
-      </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-      html: html
-    }) }}
-  {% endif %}
-
-    {% if error %}
-    {{ govukErrorSummary({
-      titleText: "Error deleting attachment",
-      errorList: [
-        {
-          text: error
-
-        }
-      ]
-    }) }}
-  {% endif %}
-
-  <h1 class="govuk-heading-l">
-    <span class="govuk-caption-l">Additional documents</span>
-    Check your answers
-  </h1>
-
-  {% if order.status == "SUBMITTED" %}
-    <h2 class="govuk-heading-l">Check your answers before clicking continue</h2>
-  {% endif %}
-
-  <dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Licence
-      </dt>
-      {% if licenceFileName %}
-        <dd class="govuk-summary-list__value">
-          <a href="/order/{{order.id}}/attachments/licence/{{licenceFileName}}" class="govuk-link">{{licenceFileName}}</a>
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        {% if isOrderEditable %}
-          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Change<span class="govuk-visually-hidden"> licence</span></a>
-          <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence/delete">Delete<span class="govuk-visually-hidden"> licence</span></a>
-        {% endif %}
-      </dd>
-      {% else %}
-        <dd class="govuk-summary-list__value">
-          No licence document uploaded
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        <a class="govuk-link"  href="/order/{{order.id}}/attachments/licence">Add<span class="govuk-visually-hidden"> licence</span></a>
-      </dd>
-      {% endif %}
-    </div>
-
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Photo identification (optional)
-      </dt>
-      {% if photoFileName %}
-        <dd class="govuk-summary-list__value">
-          <a href="/order/{{order.id}}/attachments/photo_Id/{{photoFileName}}" class="govuk-link">{{photoFileName}}</a>
-        </dd>
-        <dd class="govuk-summary-list__actions">
-            {% if isOrderEditable %}
-              <a class="govuk-link" href="/order/{{order.id}}/attachments/photo_Id">Change<span class="govuk-visually-hidden"> photo ID</span></a>
-              <a class="govuk-link"  href="/order/{{order.id}}/attachments/photo_Id/delete">Delete<span class="govuk-visually-hidden"> photo ID</span></a>
-            {% endif %}
-
-        </dd>
-      {% else %}
-        <dd class="govuk-summary-list__value">
-          No photo ID document uploaded
-        </dd>
-         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="/order/{{order.id}}/attachments/photo_Id">Add<span class="govuk-visually-hidden"> photo ID</span></a>
-        </dd>
+        {{ govukNotificationBanner({
+          html: html
+        }) }}
       {% endif %}
 
+      <h1 class="govuk-heading-l">
+	{% if not isOrderEditable %}
+	    {% set caption = "View answers" %}
+	{% else %}
+	    {% set caption = "Check your answers" %}
+	{% endif %}
+	{% set section = "Additional documents" %}
+        <span class="govuk-caption-l">{{ section }}</span>
+	{{ caption }}
+      </h1>
+
+      {% block answers %}
+
+         {% include "./answers.njk" %}
+
+      {% endblock %}
+
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+	{% if not isOrderEditable %}
+	    {% set continueButton = "Go to next section" %}
+	    {% set secondaryButton = "Return to main form menu" %}
+	{% else %}
+	    {% set continueButton = "Save and go to next section" %}
+	    {% set secondaryButton = "Save as draft" %}
+	{% endif %}
+
+	<div class="govuk-button-group">
+	  {% if isOrderEditable %}
+	    {{ govukButton({
+	      text: "Save and return to main form menu",
+	      href: "/order/" + order.id + "/summary"
+	    }) }}
+	  {% else %}
+	    <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
+	  {% endif %}
+	</div>
+      </form>
     </div>
-  </dl>
-  <div class="govuk-button-group">
-    {% if isOrderEditable %}
-      {{ govukButton({
-        text: "Save and return to main form menu",
-        classes: "govuk-button--secondary",
-        href: "/order/" + order.id + "/summary"
-      }) }}
-    {% else %}
-      <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">Return back to form section menu</a>
-    {% endif %}
   </div>
+
 {% endblock %}
+
