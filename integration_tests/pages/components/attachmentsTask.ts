@@ -25,16 +25,8 @@ export default class AttachmentTask {
     return this.element.find('.govuk-summary-list__value')
   }
 
-  get addAction(): PageElement {
-    return this.actions.contains('.govuk-link', 'Add')
-  }
-
   get changeAction(): PageElement {
     return this.actions.contains('.govuk-link', 'Change')
-  }
-
-  get deleteAction(): PageElement {
-    return this.actions.contains('.govuk-link', 'Delete')
   }
 
   get downloadAction(): PageElement {

@@ -228,6 +228,7 @@ type GetOrderWithAttachmentStubOptions = {
   id?: string
   status?: string
   attachments?: Attachment
+  fmsResultDate?: string
 }
 type Attachment = {
   id?: string
@@ -253,6 +254,7 @@ const getOrderWithAttachments = (
               id: options.id,
               status: options.status,
               additionalDocuments: options.attachments,
+              fmsResultDate: options.fmsResultDate,
             }
           : null,
     },
