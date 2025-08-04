@@ -8,6 +8,9 @@
 
   {{ govukRadios({
   classes: "govuk-radios--inline",
+  name: "havePhoto",
+  errorMessage: havePhoto.error,
+  value: havePhoto.value,
   fieldset: {
     legend: {
       text: questions.havePhoto.text,

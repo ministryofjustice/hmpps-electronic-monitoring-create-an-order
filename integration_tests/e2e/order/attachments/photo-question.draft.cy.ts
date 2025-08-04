@@ -20,9 +20,16 @@ context('Attachments', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
 
         page.form.photoQuestionField.shouldNotBeDisabled()
+        page.form.photoQuestionField.element.contains(
+          'We need a photo to help identify the device wearer if there is not one on the licence.',
+        )
+        page.form.photoQuestionField.shouldHaveOption('Yes')
+        page.form.photoQuestionField.shouldHaveOption('No')
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAsDraftButton.should('exist')
+
+        page.checkIsAccessible()
       })
     })
   })

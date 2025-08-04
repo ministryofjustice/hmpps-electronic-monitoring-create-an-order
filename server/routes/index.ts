@@ -77,7 +77,7 @@ export default function routes({
     attachmentService,
     taskListService,
   )
-  const attachmentsPhotoQuestionController = new AttachmentPhotoQuestionController()
+  const attachmentsPhotoQuestionController = new AttachmentPhotoQuestionController(attachmentService)
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
     taskListService,
@@ -298,6 +298,7 @@ export default function routes({
   post(paths.ATTACHMENT.DELETE_FILE, attachmentsController.deleteFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
   get(paths.ATTACHMENT.PHOTO_QUESTION, attachmentsPhotoQuestionController.view)
+  post(paths.ATTACHMENT.PHOTO_QUESTION, attachmentsPhotoQuestionController.update)
 
   /**
    * VARIATIONS
