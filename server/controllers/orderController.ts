@@ -3,6 +3,7 @@ import { AuditService, OrderService } from '../services'
 import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
+import config from '../config'
 
 export default class OrderController {
   constructor(
@@ -21,13 +22,27 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const sections = await this.taskListService.getSections(req.order!)
     const error = req.flash('submissionError')
+    const variationsEnabled = config.variations.enabled
 
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
+      variationsEnabled,
     })
   }
+
+  // confirmEdit: RequestHandler = async (req: Request, res: Response) => {
+  //   const order = req.order!
+
+  //   res.render('pages/order/edit-confirm', {
+  //     order,
+  //   })
+  // }
+
+  // edit: RequestHandler = async (req: Request, res: Response) => {
+  //   const order = req.order!
+  // }
 
   confirmDelete: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!

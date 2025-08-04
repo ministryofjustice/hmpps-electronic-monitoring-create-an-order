@@ -105,6 +105,16 @@
           classes: "govuk-button--secondary"
         }) }}
       {% endif %}
+
+      {% if order.status == "SUBMITTED" and variationsEnabled%}
+        <div class="govuk-!-margin-top-5">
+        {{ govukButton({
+          text: "Make changes to this form",
+          href: "/order/" + order.id + "/edit-confirm"
+        }) }}
+        </div>
+      {% endif %}
+      
     </div>
   </div>
 {% endblock %}
