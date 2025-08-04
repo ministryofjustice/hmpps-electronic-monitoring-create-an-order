@@ -248,6 +248,7 @@ export const createFakeInterestedParties = (
   return {
     notifyingOrganisation,
     notifyingOrganisationName,
+    notifyingOrganisationEmailAddress: orgEmailAddress,
     prison,
     magistratesCourt,
     crownCourt,
