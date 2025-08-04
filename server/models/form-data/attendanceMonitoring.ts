@@ -30,7 +30,7 @@ const AttendanceMonitoringFormDataModel = z.object({
   addressLine2: z.string(),
   addressLine3: z.string(),
   addressLine4: z.string(),
-  addressPostcode: z.string(),
+  postcode: z.string(),
   addAnother: z.string().default('false'),
 })
 
@@ -49,16 +49,16 @@ const AttendanceMonitoringFormDataValidator = z
     addressLine2: z.string(),
     addressLine3: z.string(),
     addressLine4: z.string(),
-    addressPostcode: z.string(),
+    postcode: z.string(),
     startTimeHours: z.string(),
     startTimeMinutes: z.string(),
     endTimeHours: z.string(),
     endTimeMinutes: z.string(),
   })
-  .transform(({ startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, addressPostcode, ...formData }) => ({
+  .transform(({ startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, postcode, ...formData }) => ({
     startTime: serialiseTime(startTimeHours, startTimeMinutes),
     endTime: serialiseTime(endTimeHours, endTimeMinutes),
-    postcode: addressPostcode === '' ? null : addressPostcode,
+    postcode: postcode === '' ? null : postcode,
     ...formData,
   }))
 
