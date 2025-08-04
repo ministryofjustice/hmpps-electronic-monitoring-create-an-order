@@ -60,6 +60,10 @@ export default class DeviceWearerService {
 
       return DeviceWearerModel.parse(result)
     } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
+
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
         return convertBackendErrorToValidationError(sanitisedError)
