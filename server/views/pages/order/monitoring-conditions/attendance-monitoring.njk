@@ -108,6 +108,13 @@
       name: "address",
       value: address.value,
       errorMessage: address.error,
+      errors: {
+        line1: addressLine1.error,
+        line2: addressLine2.error,
+        line3: addressLine3.error,
+        line4: addressLine4.error,
+        postcode: postcode.error
+      },
       disabled: not isOrderEditable
     }) }}
 
