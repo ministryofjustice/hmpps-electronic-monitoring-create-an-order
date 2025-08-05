@@ -175,7 +175,8 @@ export const createFakeInterestedParties = (
   const sexType = faker.person.sexType()
   const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
   const officerContactNumber = createFakeUkPhoneNumber()
-  const orgEmailAddress = `${responsibleOrganisation.toLowerCase().replace(/\s/g, '-')}@example.com`
+  const responsibleOrganisationEmailAddress = 'responsible-org@example.com'
+  const notifyingOrganisationEmailAddress = 'notifying-org@example.com'
   let notifyingOrganisationName = ''
   let responsibleOrganisationRegion = ''
   let civilCountyCourt = ''
@@ -248,7 +249,7 @@ export const createFakeInterestedParties = (
   return {
     notifyingOrganisation,
     notifyingOrganisationName,
-    notifyingOrganisationEmailAddress: orgEmailAddress,
+    notifyingOrganisationEmailAddress,
     prison,
     magistratesCourt,
     crownCourt,
@@ -262,7 +263,7 @@ export const createFakeInterestedParties = (
     responsibleOfficerContactNumber: officerContactNumber,
     responsibleOrganisation,
     responsibleOrganisationRegion,
-    responsibleOrganisationEmailAddress: orgEmailAddress,
+    responsibleOrganisationEmailAddress,
     probationRegion,
     yjsRegion,
   }
