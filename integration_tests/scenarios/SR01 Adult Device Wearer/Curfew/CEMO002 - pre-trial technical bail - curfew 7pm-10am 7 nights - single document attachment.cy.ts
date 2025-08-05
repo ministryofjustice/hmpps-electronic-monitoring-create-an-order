@@ -92,8 +92,7 @@ context('Scenarios', () => {
         orderType: 'Pre-Trial',
         conditionType: 'Licence condition',
         monitoringRequired: 'Curfew',
-        // pilot: 'GPS Acquisitive Crime Parole',
-        orderTypeDescription: 'GPS Acquisitive Crime',
+        pilot: 'GPS Acquisitive Crime Parole',
         sentenceType: 'Life Sentence',
       }
       const curfewReleaseDetails = {
