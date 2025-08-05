@@ -228,7 +228,7 @@ describe('AttachmentController', () => {
 
       req.params.fileType = 'licence'
       await controller.uploadFile(req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments/photo_id`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments/photo_Id`)
       expect(mockAuditService.logAuditEvent).toHaveBeenCalledWith({
         who: 'fakeUserName',
         correlationId: req.order?.id,

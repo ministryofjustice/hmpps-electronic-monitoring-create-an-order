@@ -45,6 +45,7 @@ const PAGES = {
   checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
   licenceUpload: 'LICENCE_ATTACHMENT',
   photoUpload: 'PHOTO_ATTACHMENT',
+  havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -453,9 +454,17 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
+      name: PAGES.havePhoto,
+      path: paths.ATTACHMENT.PHOTO_QUESTION,
+      state: STATES.required,
+      completed: true, // TODO: update to use flag value from order
+    })
+
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_id'),
-      state: STATES.optional,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
+      state: convertBooleanToEnum<State>(true, STATES.cantBeStarted, STATES.required, STATES.notRequired), // TODO: update to use flag value from order
       completed: doesOrderHavePhotoId(order),
     })
 
@@ -580,7 +589,7 @@ export default class TaskListService {
 
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
-      return sectionTasks[2].path
+      return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
     }
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }

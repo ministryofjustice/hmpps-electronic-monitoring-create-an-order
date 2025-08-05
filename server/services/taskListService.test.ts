@@ -20,6 +20,7 @@ import {
 import paths from '../constants/paths'
 import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
+import AttachmentType from '../models/AttachmentType'
 
 describe('TaskListService', () => {
   describe('getNextPage', () => {
@@ -884,7 +885,7 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
-        additionalDocuments: [createAttatchment()],
+        additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
       })
       const taskListService = new TaskListService()
 
