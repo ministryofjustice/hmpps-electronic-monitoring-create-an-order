@@ -32,13 +32,13 @@ export default class OrderController {
     })
   }
 
-  // confirmEdit: RequestHandler = async (req: Request, res: Response) => {
-  //   const order = req.order!
+  confirmEdit: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
 
-  //   res.render('pages/order/edit-confirm', {
-  //     order,
-  //   })
-  // }
+    res.render('pages/order/edit-confirm', {
+      order,
+    })
+  }
 
   // edit: RequestHandler = async (req: Request, res: Response) => {
   //   const order = req.order!
