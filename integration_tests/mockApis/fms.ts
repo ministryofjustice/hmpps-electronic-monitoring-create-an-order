@@ -99,6 +99,30 @@ const stubFmsUploadAttachment = (options: UploadAttachmentStubOptions) =>
     },
   })
 
+const stubFmsUploadVariationAttachment = (options: UploadAttachmentStubOptions) =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPath: `/fms/now/v1/attachment_csm/file`,
+      queryParameters: {
+        table_name: {
+          equalTo: 'x_serg2_ems_csm_sr_mo_existing',
+        },
+        table_sys_id: {
+          equalTo: options.deviceWearerId,
+        },
+        file_name: {
+          equalTo: options.fileName,
+        },
+      },
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.response || '',
+    },
+  })
+
 type VerifyStubbedRequestParams = {
   index: number
   responseRecordFilename?: string
@@ -214,6 +238,7 @@ export default {
   stubFMSUpdateDeviceWearer,
   stubFMSUpdateMonitoringOrder,
   stubFmsUploadAttachment,
+  stubFmsUploadVariationAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,
   verifyFMSCreateMonitoringOrderRequestReceived,
   verifyFMSUpdateDeviceWearerRequestReceived,
