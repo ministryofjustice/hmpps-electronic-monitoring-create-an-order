@@ -60,7 +60,7 @@ services:
 
   cemo-redis:
     container_name: cemo-redis
-    image: redis:8.0
+    image: redis:8.2
     networks:
       - hmpps_integration
     ports:
