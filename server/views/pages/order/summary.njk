@@ -106,11 +106,11 @@
         }) }}
       {% endif %}
 
-      {% if order.status == "SUBMITTED" and variationsEnabled%}
+      {% if order.status == "SUBMITTED" and variationsEnabled %}
         <div class="govuk-!-margin-top-5">
         {{ govukButton({
           text: "Make changes to this form",
-          href: "/order/" + order.id + "/edit-confirm"
+          href: "/order/" + order.id + "/edit"
         }) }}
         </div>
       {% endif %}

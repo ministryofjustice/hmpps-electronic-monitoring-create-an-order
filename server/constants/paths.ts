@@ -11,6 +11,7 @@ const paths = {
     SUBMIT_SUCCESS: '/order/:orderId/submit/success',
     RECEIPT: '/order/:orderId/receipt',
     RECEIPT_DOWNLOAD: '/order/:orderId/pdf',
+    EDIT: '/order/:orderId/edit',
   },
 
   ABOUT_THE_DEVICE_WEARER: {
