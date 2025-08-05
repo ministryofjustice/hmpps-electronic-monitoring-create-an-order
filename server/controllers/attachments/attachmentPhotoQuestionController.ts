@@ -1,30 +1,23 @@
 import { Request, RequestHandler, Response } from 'express'
-import { z } from 'zod'
 import { AttachmentService } from '../../services'
 import { isValidationResult } from '../../models/Validation'
 import paths from '../../constants/paths'
-import { getError } from '../../utils/utils'
-import { createGovukErrorSummary } from '../../utils/errors'
+import { HavePhotoFormDataModel, HavePhotoModelService } from '../../models/view-models/havePhoto'
 
 export default class AttachmentPhotoQuestionController {
-  constructor(private readonly attachmentService: AttachmentService) {}
+  constructor(
+    private readonly attachmentService: AttachmentService,
+    private readonly modelService: HavePhotoModelService = new HavePhotoModelService(),
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const errors = req.flash('validationErrors')
-    const formData = req.flash('formData')
-    const model = {
-      havePhoto: {
-        value: (formData[0] as any)?.havePhoto || null,
-        error: getError(errors as any, 'havePhoto'),
-      },
-      errorSummary: createGovukErrorSummary(errors as any),
-    }
+    const model = this.modelService.buildHavePhotoModel(req)
     res.render('pages/order/attachments/photo-question', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-    const formData = HavePhotoDataModel.parse(req.body)
+    const formData = HavePhotoFormDataModel.parse(req.body)
 
     const result = await this.attachmentService.havePhoto({
       accessToken: res.locals.user.token,
@@ -38,10 +31,3 @@ export default class AttachmentPhotoQuestionController {
     }
   }
 }
-
-const HavePhotoDataModel = z.object({
-  action: z.string(),
-  havePhoto: z.enum(['yes', 'no']).optional(),
-})
-
-export type HavePhotoFormData = z.infer<typeof HavePhotoDataModel>

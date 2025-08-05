@@ -6,7 +6,7 @@ import { SanitisedError } from '../sanitisedError'
 import Result from '../interfaces/result'
 import { validationErrors } from '../constants/validationErrors'
 import { convertBackendErrorToValidationError } from '../utils/errors'
-import { HavePhotoFormData } from '../controllers/attachments/attachmentPhotoQuestionController'
+import { HavePhotoFormData } from '../models/view-models/havePhoto'
 
 type AttachmentRequestInput = AuthenticatedRequestInput & {
   orderId: string
