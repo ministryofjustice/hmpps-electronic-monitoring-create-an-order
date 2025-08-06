@@ -40,10 +40,6 @@ export default class OrderController {
     })
   }
 
-  // edit: RequestHandler = async (req: Request, res: Response) => {
-  //   const order = req.order!
-  // }
-
   confirmDelete: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 

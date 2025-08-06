@@ -3,12 +3,14 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "#"
+    href: "/order/" + order.id + "/summary"
   }) }}
 {% endblock %}
+
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -19,16 +21,22 @@
       <p class="govuk-body">Check and update the licence or court order before making changes to the EMO application form.</p>
       <p class="govuk-body">You can make changes to the EMO application form now if the information you are changing isn't
         included in the licence or court order.</p>
+
       <form action="/order/create" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
           <div class="govuk-button-group">
             {{ govukButton({
             text: "Yes, make changes",
             classes: "govuk-button--warning",
-            name: "action",
-            value: "continue",
-            id: "confirm-edit-button"
-      }) }}
+            name: "type",
+            value: "VARIATION"
+          }) }}
+          {{ govukButton({
+            text: "Cancel and return back to form",
+            classes: "govuk-button--secondary",
+            href: "/order/" + order.id + "/summary"
+          })}}
           </div>
         </form>
       </div>
