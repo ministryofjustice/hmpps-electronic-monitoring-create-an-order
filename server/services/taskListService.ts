@@ -457,7 +457,7 @@ export default class TaskListService {
       name: PAGES.havePhoto,
       path: paths.ATTACHMENT.PHOTO_QUESTION,
       state: STATES.required,
-      completed: order.orderParameters?.havePhoto || false,
+      completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
     })
 
     tasks.push({
@@ -470,7 +470,7 @@ export default class TaskListService {
         STATES.required,
         STATES.notRequired,
       ),
-      completed: doesOrderHavePhotoId(order),
+      completed: doesOrderHavePhotoId(order) || order.orderParameters?.havePhoto === false,
     })
 
     tasks.push({

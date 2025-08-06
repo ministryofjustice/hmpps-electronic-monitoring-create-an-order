@@ -219,6 +219,7 @@ context('Order Summary', () => {
             },
           ],
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
           monitoringConditions: {
             orderType: null,
             curfew: true,
