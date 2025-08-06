@@ -98,6 +98,7 @@
         }) }}
       {% endif %}
 
+  {# Hide behind feature flag for now #}
       {% if order.status == "SUBMITTED" and variationsEnabled %}
         <div class="govuk-!-margin-top-5">
         {{ govukButton({
@@ -106,7 +107,8 @@
         }) }}
         </div>
       {% endif %}
-      
+  {# Hide behind feature flag for now #}
+  
     </div>
   </div>
 {% endblock %}

@@ -69,6 +69,10 @@ export default class OrderTasksPage extends AppPage {
     return cy.contains('a', 'Back')
   }
 
+  get makeChangesButton(): PageElement {
+    return cy.contains('a', 'Make changes to this form')
+  }
+
   fillInNewCurfewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails,
