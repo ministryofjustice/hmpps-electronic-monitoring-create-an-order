@@ -77,7 +77,11 @@ export default function routes({
     attachmentService,
     taskListService,
   )
-  const attachmentsPhotoQuestionController = new AttachmentPhotoQuestionController(attachmentService, taskListService)
+  const attachmentsPhotoQuestionController = new AttachmentPhotoQuestionController(
+    attachmentService,
+    taskListService,
+    orderService,
+  )
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
     taskListService,

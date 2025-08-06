@@ -886,6 +886,7 @@ describe('TaskListService', () => {
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
+        orderParameters: { havePhoto: true },
       })
       const taskListService = new TaskListService()
 

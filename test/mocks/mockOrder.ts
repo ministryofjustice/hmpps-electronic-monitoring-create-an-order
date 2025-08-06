@@ -204,6 +204,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   variationDetails: null,
   isValid: false,
   probationDeliveryUnit: null,
+  orderParameters: null,
   ...overrideProperties,
 })
 
@@ -257,6 +258,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   installationLocation: {
     location: 'INSTALLATION',
   },
+  orderParameters: null,
   ...overrideProperties,
 })
 

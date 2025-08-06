@@ -24,9 +24,9 @@ export const HavePhotoFormDataModel = z.object({
         return true
       }
       if (val === 'no') {
-        return true
+        return false
       }
-      return undefined
+      return null
     }),
 })
 

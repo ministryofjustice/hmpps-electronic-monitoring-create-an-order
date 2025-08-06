@@ -457,14 +457,19 @@ export default class TaskListService {
       name: PAGES.havePhoto,
       path: paths.ATTACHMENT.PHOTO_QUESTION,
       state: STATES.required,
-      completed: true, // TODO: update to use flag value from order
+      completed: order.orderParameters?.havePhoto || false,
     })
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
-      state: convertBooleanToEnum<State>(true, STATES.cantBeStarted, STATES.required, STATES.notRequired), // TODO: update to use flag value from order
+      state: convertBooleanToEnum<State>(
+        order.orderParameters?.havePhoto || null,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
       completed: doesOrderHavePhotoId(order),
     })
 

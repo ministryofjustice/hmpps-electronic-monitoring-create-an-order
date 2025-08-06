@@ -76,6 +76,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   mandatoryAttendanceConditions: [],
   variationDetails: null,
   isValid: false,
+  orderParameters: null,
 })
 
 type ListOrdersStubOptions = {

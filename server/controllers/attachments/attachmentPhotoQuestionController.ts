@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AttachmentService } from '../../services'
+import { AttachmentService, OrderService } from '../../services'
 import { isValidationResult } from '../../models/Validation'
 import paths from '../../constants/paths'
 import { HavePhotoFormDataModel, HavePhotoModelService } from '../../models/view-models/havePhoto'
@@ -9,6 +9,7 @@ export default class AttachmentPhotoQuestionController {
   constructor(
     private readonly attachmentService: AttachmentService,
     private readonly taskListService: TaskListService,
+    private readonly orderService: OrderService,
     private readonly modelService: HavePhotoModelService = new HavePhotoModelService(),
   ) {}
 
@@ -26,16 +27,18 @@ export default class AttachmentPhotoQuestionController {
       orderId,
       data: formData,
     })
+
     if (isValidationResult(result)) {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
       res.redirect(paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', orderId))
-    }
-    if (formData.action === 'back') {
+    } else if (formData.action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    } else {
+      // get updated order so we can check if we want to show the photo upload page or not
+      const order = await this.orderService.getOrder({ accessToken: res.locals.user.token, orderId })
+      const nextPage = this.taskListService.getNextPage('ATTACHMENTS_HAVE_PHOTO', order)
+      res.redirect(nextPage)
     }
-
-    const nextPage = this.taskListService.getNextPage('ATTACHMENTS_HAVE_PHOTO', req.order!)
-    res.redirect(nextPage)
   }
 }

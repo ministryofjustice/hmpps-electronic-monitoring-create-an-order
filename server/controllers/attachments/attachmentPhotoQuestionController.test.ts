@@ -5,15 +5,19 @@ import { createMockRequest, createMockResponse } from '../../../test/mocks/mockE
 import { HavePhotoModelService } from '../../models/view-models/havePhoto'
 import { ValidationError } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
+import OrderService from '../../services/orderService'
+import { getMockOrder } from '../../../test/mocks/mockOrder'
 
 jest.mock('../../services/attachmentService')
 jest.mock('../../data/restClient')
+jest.mock('../../services/orderService')
 
 describe('attachment have photo controller', () => {
   let mockAttachmentService: jest.Mocked<AttachmentService>
   let mockModelService: jest.Mocked<HavePhotoModelService>
   let mockRestClient: jest.Mocked<RestClient>
   let mockTaskListService: jest.Mocked<TaskListService>
+  let mockOrderService: jest.Mocked<OrderService>
 
   beforeEach(() => {
     mockRestClient = new RestClient('cemoApi', {
@@ -24,6 +28,7 @@ describe('attachment have photo controller', () => {
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
     mockModelService = new HavePhotoModelService() as jest.Mocked<HavePhotoModelService>
     mockTaskListService = new TaskListService() as jest.Mocked<TaskListService>
+    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
   })
 
   describe('when we call view', () => {
@@ -35,6 +40,7 @@ describe('attachment have photo controller', () => {
       const controller = new AttachmentPhotoQuestionController(
         mockAttachmentService,
         mockTaskListService,
+        mockOrderService,
         mockModelService,
       )
 
@@ -60,13 +66,14 @@ describe('attachment have photo controller', () => {
       const controller = new AttachmentPhotoQuestionController(
         mockAttachmentService,
         mockTaskListService,
+        mockOrderService,
         mockModelService,
       )
 
       await controller.update(req, res, jest.fn())
 
       expect(res.redirect).toHaveBeenCalledWith('/order/1234/attachments/have-photo')
-      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', { action: 'continue' })
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', { action: 'continue', havePhoto: null })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [{ error: 'test error', field: 'havePhoto' }])
     })
 
@@ -84,6 +91,7 @@ describe('attachment have photo controller', () => {
       const controller = new AttachmentPhotoQuestionController(
         mockAttachmentService,
         mockTaskListService,
+        mockOrderService,
         mockModelService,
       )
 
@@ -103,9 +111,14 @@ describe('attachment have photo controller', () => {
         },
       })
       const res = createMockResponse()
+      mockOrderService.getOrder.mockResolvedValue(
+        getMockOrder({ id: req.order!.id, orderParameters: { havePhoto: true } }),
+      )
+
       const controller = new AttachmentPhotoQuestionController(
         mockAttachmentService,
         mockTaskListService,
+        mockOrderService,
         mockModelService,
       )
 
