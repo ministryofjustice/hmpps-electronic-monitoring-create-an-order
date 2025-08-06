@@ -69,6 +69,16 @@ context('Scenarios', () => {
       },
     })
 
+    cy.task('stubFmsUploadVariationAttachment', {
+      httpStatus: 200,
+      fileName: uploadFile.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
     cy.task('stubUploadDocument', {
       id: '(.*)',
       httpStatus: 200,
@@ -281,7 +291,7 @@ context('Scenarios', () => {
                 no_address_2: '',
                 no_address_3: '',
                 no_address_4: '',
-                no_email: '',
+                no_email: interestedParties.notifyingOrganisationEmailAddress,
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: '',
