@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderTasksPage from '../../pages/order/summary'
 import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
+import EditConfirmPage from '../../pages/order/edit-confirm'
 
 const mockOrderId = uuidv4()
 
@@ -568,6 +569,22 @@ context('Order Summary', () => {
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
 
       page.submitOrderButton.should('not.exist')
+    })
+
+    it('should display the "Make changes" button when variations are enabled', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.makeChangesButton.should('be.visible')
+
+      page.makeChangesButton.should('have.attr', 'href', `/order/${mockOrderId}/edit`)
+    })
+
+    it('should navigate to the confirmation page when the "Make changes" button is clicked', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.makeChangesButton.click()
+
+      Page.verifyOnPage(EditConfirmPage)
     })
   })
 
