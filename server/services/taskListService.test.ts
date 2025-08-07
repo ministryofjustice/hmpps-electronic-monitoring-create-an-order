@@ -792,12 +792,16 @@ describe('TaskListService', () => {
       ['INSTALLATION_AND_RISK', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS],
       ['MONITORING_CONDITIONS', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS],
     ])(
-      'should return check your answers if all other pages have been completed for that section',
+      'should return check your answers if all pages have been completed for that section',
       (page: string, url: string) => {
         // Given
         const currentPage = page as Page
         const taskListService = new TaskListService()
-        const order = getFilledMockOrder()
+        const order = getFilledMockOrder({
+          monitoringConditions: createMonitoringConditions({
+            isValid: true,
+          }),
+        })
 
         // When
         const nextPage = taskListService.getNextPage(currentPage, order)
@@ -1134,7 +1138,7 @@ describe('TaskListService', () => {
 
       const taskListService = new TaskListService()
 
-      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+      const result = taskListService.getCheckYourAnswersPathForSection(tasks)
 
       expect(result).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
     })
@@ -1158,7 +1162,7 @@ describe('TaskListService', () => {
 
       const taskListService = new TaskListService()
 
-      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+      const result = taskListService.getCheckYourAnswersPathForSection(tasks)
 
       expect(result).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS)
     })
@@ -1175,7 +1179,7 @@ describe('TaskListService', () => {
 
       const taskListService = new TaskListService()
 
-      const result = taskListService.getCheckYourAnswerPathForSection(tasks)
+      const result = taskListService.getCheckYourAnswersPathForSection(tasks)
 
       expect(result).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK)
     })
