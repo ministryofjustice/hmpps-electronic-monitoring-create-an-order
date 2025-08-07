@@ -444,33 +444,60 @@ export default class TaskListService {
   }
 
   getNextPage(currentPage: Page, order: Order, formData: FormData = {}): string {
-    const tasks = this.getTasks(order)
-    const section = this.getCurrentSection(tasks, currentPage)
-    const sectionTasks = tasks.filter(task => task.section === section)
+    const availableTasks = this.getAvailableTasks(this.getTasks(order), formData, currentPage)
+    const availableCurrentSectionTasks = this.getCurrentSectionTasks(availableTasks, currentPage)
+    const availableNextSectionTasks = this.getNextSectionTasks(availableTasks, currentPage)
+    const currentTaskIndex = this.getCurrentTaskIndex(availableTasks, currentPage)
+    const nextCheckYourAnswersPageIndex = this.getNextCheckYourAnswersPageIndex(availableTasks, currentPage)
 
-    if (currentPage.startsWith(CYA_PREFIX) || currentPage === PAGES.variationDetails) {
-      const availableTasks = tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
-      const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
-      return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
-    }
-    const availableTasks = sectionTasks.filter(
-      task => (canBeCompleted(task, formData) && this.incompleteTask(task)) || isCurrentPage(task, currentPage),
-    )
-    const currentTaskIndex = availableTasks.findIndex(({ name }) => name === currentPage)
-
-    if (currentTaskIndex === -1 || currentTaskIndex + 1 >= availableTasks.length) {
-      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    // If on a CYA page or the variation details page, and the next section is complete, navigate to the next section's CYA page
+    if (
+      (currentPage.startsWith(CYA_PREFIX) || currentPage === PAGES.variationDetails) &&
+      availableNextSectionTasks.every(task => task.completed)
+    ) {
+      return availableTasks[nextCheckYourAnswersPageIndex].path.replace(':orderId', order.id)
     }
 
+    // If not on a CYA page or the variation details page, and the current section is complete, navigate to the current section's CYA page
+    if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
+      return this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
+    }
+
+    // Otherwise, navigate to the next page in the task list.
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
 
-  getSectionCheckAnswers(sectionTasks: Task[]): Task {
-    return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
+  getCurrentTaskIndex(tasks: Task[], currentPage: Page): number {
+    return tasks.findIndex(task => task.name === currentPage)
   }
 
   getCurrentSection(tasks: Task[], currentPage: Page): Section {
     return tasks.find(task => task.name === currentPage)!.section
+  }
+
+  getNextSection(tasks: Task[], currentPage: Page): Section | undefined {
+    const currentSection = this.getCurrentSection(tasks, currentPage)
+    const currentTaskIndex = this.getCurrentTaskIndex(tasks, currentPage)
+
+    if (currentTaskIndex === -1) return undefined
+
+    return tasks.slice(currentTaskIndex + 1).find(task => task.section !== currentSection)?.section
+  }
+
+  getAvailableTasks = (tasks: Task[], formData: FormData, currentPage: Page) => {
+    return tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
+  }
+
+  getCurrentSectionTasks(tasks: Task[], currentPage: Page): Task[] {
+    return tasks.filter(task => task.section === this.getCurrentSection(tasks, currentPage))
+  }
+
+  getNextSectionTasks(tasks: Task[], currentPage: Page): Task[] {
+    return tasks.filter(task => task.section === this.getNextSection(tasks, currentPage))
+  }
+
+  getSectionCheckYourAnswersPage(sectionTasks: Task[]): Task {
+    return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
   }
 
   getNextCheckYourAnswersPage(currentPage: Page, order: Order) {
@@ -480,13 +507,20 @@ export default class TaskListService {
       task => canBeCompleted(task, {}) && task.path.includes('check-your-answers'),
     )
 
-    const currentTaskIndex = checkYourAnswersTasks.findIndex(task => task.name === currentPage)
+    const currentTaskIndex = this.getCurrentTaskIndex(checkYourAnswersTasks, currentPage)
 
     if (currentTaskIndex === -1 || currentTaskIndex + 1 >= checkYourAnswersTasks.length) {
       return paths.ORDER.SUMMARY.replace(':orderId', order.id)
     }
 
     return checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+  }
+
+  getNextCheckYourAnswersPageIndex(tasks: Task[], currentPage: Page): number {
+    const nextCheckYourAnswersPage = tasks
+      .slice(this.getCurrentTaskIndex(tasks, currentPage) + 1)
+      .find(item => item.name.startsWith('CHECK_ANSWERS'))
+    return nextCheckYourAnswersPage ? tasks.findIndex(({ name }) => name === nextCheckYourAnswersPage.name) : -1
   }
 
   findTaskBySection(tasks: Task[], section: Section): Task[] {
@@ -511,13 +545,13 @@ export default class TaskListService {
         const completed = this.isSectionComplete(sectionsTasks)
         let { path } = sectionsTasks[0]
         if (order.status === 'SUBMITTED' || completed) {
-          path = this.getCheckYourAnswerPathForSection(sectionsTasks)
+          path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         }
         return { name: section, completed, path: path.replace(':orderId', order.id) }
       })
   }
 
-  getCheckYourAnswerPathForSection = (sectionTasks: Task[]) => {
+  getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 }
