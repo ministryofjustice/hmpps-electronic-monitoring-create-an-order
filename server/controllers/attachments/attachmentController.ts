@@ -124,6 +124,9 @@ export default class AttachmentsController {
         res.locals.content?.pages.photoQuestion.questions.havePhoto.text || '',
         order.orderParameters?.havePhoto ? 'Yes' : 'No',
         paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', order.id),
+        {
+          ignoreActions: order.status === 'SUBMITTED',
+        },
       ),
     ]
 

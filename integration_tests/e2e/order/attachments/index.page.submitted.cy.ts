@@ -22,6 +22,7 @@ context('Attachments', () => {
             { id: uuidv4(), orderId: mockOrderId, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
           ],
           fmsResultDate: new Date('2024 12 14'),
+          orderParameters: { havePhoto: true },
         })
         cy.signIn()
       })
@@ -40,7 +41,8 @@ context('Attachments', () => {
         // Licence Task
         page.attachmentsSection.shouldHaveItems([
           { key: 'Upload a copy of the licence or court order document', value: 'Licence.jpeg' },
-          { key: 'Upload a photo of the device wearer (optional)', value: 'photo.jpeg' },
+          { key: 'Do you have a photo to upload?', value: 'Yes' },
+          { key: 'Upload a photo of the device wearer', value: 'photo.jpeg' },
         ])
 
         page.attachmentsSection.element
