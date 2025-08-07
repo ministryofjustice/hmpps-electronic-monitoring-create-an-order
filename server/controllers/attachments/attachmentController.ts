@@ -3,10 +3,8 @@ import { AttachmentService, AuditService, OrderService } from '../../services'
 import AttachmentType from '../../models/AttachmentType'
 import paths from '../../constants/paths'
 import TaskListService from '../../services/taskListService'
-import { createAnswer } from '../../utils/checkYourAnswers'
-import { Attachment } from '../../models/Attachment'
 import { formatDateTime } from '../../utils/utils'
-import { Order } from '../../models/Order'
+import createViewModel from '../../models/view-models/additionalDocumentsCheckAnswers'
 
 export default class AttachmentsController {
   constructor(
@@ -109,37 +107,9 @@ export default class AttachmentsController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const licence = order.additionalDocuments.find(doc => doc.fileType === AttachmentType.LICENCE)
-    const photo = order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID)
     const error = req.flash('attachmentDeletionErrors')
 
-    const answers = [
-      this.createAttachmentAnswer(
-        licence,
-        res.locals.content?.pages.uploadLicense.questions.file.text || '',
-        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
-        order,
-      ),
-      createAnswer(
-        res.locals.content?.pages.photoQuestion.questions.havePhoto.text || '',
-        order.orderParameters?.havePhoto ? 'Yes' : 'No',
-        paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', order.id),
-        {
-          ignoreActions: order.status === 'SUBMITTED',
-        },
-      ),
-    ]
-
-    if (order.orderParameters?.havePhoto) {
-      answers.push(
-        this.createAttachmentAnswer(
-          photo,
-          res.locals.content?.pages.uploadPhotoId.questions.file.text || '',
-          paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id').replace(':orderId', order.id),
-          order,
-        ),
-      )
-    }
+    const answers = createViewModel(order, res.locals.content)
 
     res.render(`pages/order/attachments/view`, {
       answers,
@@ -147,21 +117,5 @@ export default class AttachmentsController {
       submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
       orderId: order.id,
     })
-  }
-
-  private createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, order: Order) {
-    return createAnswer(text, this.createFileNameLink(attachment, order.id), uri, {
-      valueType: 'html',
-      ignoreActions: order.status === 'SUBMITTED',
-    })
-  }
-
-  private createFileNameLink(attachment: Attachment | undefined, orderId: string) {
-    if (!attachment) {
-      return ''
-    }
-    const { fileName, fileType } = attachment
-    const fileTypeString = fileType === AttachmentType.LICENCE ? 'licence' : 'photo_Id'
-    return `<a href="/order/${orderId}/attachments/${fileTypeString}/${fileName}" class="govuk-link">${fileName}</a>`
   }
 }
