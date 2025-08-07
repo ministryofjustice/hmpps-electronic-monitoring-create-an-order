@@ -115,6 +115,10 @@ describe('AttachmentController', () => {
         fileName: 'mockPhotoFile.jpeg',
         fileType: AttachmentType.PHOTO_ID,
       })
+      req.order!.orderParameters = {
+        havePhoto: true,
+      }
+
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -147,7 +151,7 @@ describe('AttachmentController', () => {
                 ],
               },
               key: { text: '' },
-              value: { text: 'No' },
+              value: { text: 'Yes' },
             },
             {
               actions: {

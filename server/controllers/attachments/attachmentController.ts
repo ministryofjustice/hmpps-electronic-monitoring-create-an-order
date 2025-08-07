@@ -125,13 +125,18 @@ export default class AttachmentsController {
         order.orderParameters?.havePhoto ? 'Yes' : 'No',
         paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', order.id),
       ),
-      this.createAttachmentAnswer(
-        photo,
-        res.locals.content?.pages.uploadPhotoId.questions.file.text || '',
-        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id').replace(':orderId', order.id),
-        order,
-      ),
     ]
+
+    if (order.orderParameters?.havePhoto) {
+      answers.push(
+        this.createAttachmentAnswer(
+          photo,
+          res.locals.content?.pages.uploadPhotoId.questions.file.text || '',
+          paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id').replace(':orderId', order.id),
+          order,
+        ),
+      )
+    }
 
     res.render(`pages/order/attachments/view`, {
       answers,

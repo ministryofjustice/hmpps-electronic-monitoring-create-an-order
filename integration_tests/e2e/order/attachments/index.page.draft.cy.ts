@@ -40,7 +40,6 @@ context('Attachments', () => {
         page.attachmentsSection.shouldHaveItems([
           { key: 'Upload a copy of the licence or court order document', value: '' },
           { key: 'Do you have a photo to upload?', value: 'No' },
-          { key: 'Upload a photo of the device wearer', value: '' },
         ])
 
         page.changeLinks.should('exist')
