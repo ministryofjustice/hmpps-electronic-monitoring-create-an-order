@@ -49,7 +49,7 @@ const OrderModel = z.object({
   installationLocation: InstallationLocationModel.nullable().optional(),
   installationAppointment: InstallationAppointmentModel.nullable().optional(),
   dataDictionaryVersion: DataDictionaryVersionEnum,
-  orderParameters: OrderParametersModel.nullable(),
+  orderParameters: OrderParametersModel.nullable().optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>
