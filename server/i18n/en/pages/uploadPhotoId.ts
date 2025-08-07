@@ -5,7 +5,7 @@ const uploadPhotoIdPageContent: UploadDocumentPageContent = {
   legend: '',
   questions: {
     file: {
-      text: 'Upload a photo of the device wearer (optional)',
+      text: 'Upload a photo of the device wearer',
       hint: "If the licence or court order doesn't include a photo, upload one that clearly shows the device wearer. The file must be a PDF, PNG, JPEG, or JPG and under 10MB.",
     },
   },

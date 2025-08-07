@@ -74,7 +74,7 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should display all tasks except Additional Documents as incomplete or unable to start for a new variation', () => {
+    it('should display all tasks as incomplete or unable to start for a new variation', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')

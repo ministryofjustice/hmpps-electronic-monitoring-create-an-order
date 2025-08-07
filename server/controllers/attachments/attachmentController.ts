@@ -19,16 +19,14 @@ export default class AttachmentsController {
   uploadFile: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, fileType } = req.params
     const attachment = req.file as Express.Multer.File
-    if (attachment === undefined && fileType.toUpperCase() === AttachmentType.PHOTO_ID) {
-      res.redirect(this.taskListService.getNextPage('PHOTO_ATTACHMENT', req.order!))
-      return
-    }
+
     const error = await this.attachmentService.uploadAttachment({
       accessToken: res.locals.user.token,
       orderId,
       fileType: fileType.toUpperCase(),
       file: attachment,
     })
+
     if (error.userMessage != null) {
       res.render(`pages/order/attachments/edit`, {
         orderId,
