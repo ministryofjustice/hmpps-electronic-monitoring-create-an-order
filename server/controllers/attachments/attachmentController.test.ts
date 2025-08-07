@@ -140,6 +140,19 @@ describe('AttachmentController', () => {
               actions: {
                 items: [
                   {
+                    href: `/order/${mockId}/attachments/have-photo`,
+                    text: 'Change',
+                    visuallyHiddenText: '',
+                  },
+                ],
+              },
+              key: { text: '' },
+              value: { text: 'No' },
+            },
+            {
+              actions: {
+                items: [
+                  {
                     href: `/order/${mockId}/attachments/photo_Id`,
                     text: 'Change',
                     visuallyHiddenText: '',

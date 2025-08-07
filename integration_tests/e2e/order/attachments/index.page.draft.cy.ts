@@ -22,6 +22,9 @@ context('Attachments', () => {
             { id: uuidv4(), orderId: mockOrderIdWithAttachments, fileName: 'Licence.jpeg', fileType: 'LICENCE' },
             { id: uuidv4(), orderId: mockOrderIdWithAttachments, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
           ],
+          orderParameters: {
+            havePhoto: true,
+          },
         })
         cy.signIn()
       })
@@ -36,7 +39,8 @@ context('Attachments', () => {
         // Attachments
         page.attachmentsSection.shouldHaveItems([
           { key: 'Upload a copy of the licence or court order document', value: '' },
-          { key: 'Upload a photo of the device wearer (optional)', value: '' },
+          { key: 'Do you have a photo to upload?', value: 'No' },
+          { key: 'Upload a photo of the device wearer', value: '' },
         ])
 
         page.changeLinks.should('exist')
@@ -60,7 +64,8 @@ context('Attachments', () => {
         // Attachments
         page.attachmentsSection.shouldHaveItems([
           { key: 'Upload a copy of the licence or court order document', value: 'Licence.jpeg' },
-          { key: 'Upload a photo of the device wearer (optional)', value: 'photo.jpeg' },
+          { key: 'Do you have a photo to upload?', value: 'Yes' },
+          { key: 'Upload a photo of the device wearer', value: 'photo.jpeg' },
         ])
         page.attachmentsSection.element
           .find('.govuk-summary-list__value')

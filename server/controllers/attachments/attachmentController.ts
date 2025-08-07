@@ -120,6 +120,11 @@ export default class AttachmentsController {
         paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
         order,
       ),
+      createAnswer(
+        res.locals.content?.pages.photoQuestion.questions.havePhoto.text || '',
+        order.orderParameters?.havePhoto ? 'Yes' : 'No',
+        paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', order.id),
+      ),
       this.createAttachmentAnswer(
         photo,
         res.locals.content?.pages.uploadPhotoId.questions.file.text || '',
