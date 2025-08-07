@@ -29,7 +29,7 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
-import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
+import PhotoQuestionPage from '../../../pages/order/attachments/photoQuestion'
 
 // test disabled as community YRO is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -239,8 +239,9 @@ context.skip('Scenarios', () => {
         licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
         licencePage.form.saveAndContinueButton.click()
 
-        const photoPage = Page.verifyOnPage(UploadPhotoIdPage)
-        photoPage.form.saveAndContinueButton.click()
+        const havePhotoPage = Page.verifyOnPage(PhotoQuestionPage)
+        havePhotoPage.form.photoQuestionField.set('No')
+        havePhotoPage.form.saveAndContinueButton.click()
 
         const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
         attachmentPage.saveAndReturnButton.click()

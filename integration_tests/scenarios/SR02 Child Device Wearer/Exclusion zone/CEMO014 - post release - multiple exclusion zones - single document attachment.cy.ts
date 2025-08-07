@@ -29,7 +29,7 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
-import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
+import PhotoQuestionPage from '../../../pages/order/attachments/photoQuestion'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -228,8 +228,9 @@ context('Scenarios', () => {
         licencePage.form.uploadField.uploadFile({ fileName: uploadFile.fileName, contents: uploadFile.contents })
         licencePage.form.saveAndContinueButton.click()
 
-        const photoPage = Page.verifyOnPage(UploadPhotoIdPage)
-        photoPage.form.saveAndContinueButton.click()
+        const havePhotoPage = Page.verifyOnPage(PhotoQuestionPage)
+        havePhotoPage.form.photoQuestionField.set('No')
+        havePhotoPage.form.saveAndContinueButton.click()
 
         const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
         attachmentPage.saveAndReturnButton.click()

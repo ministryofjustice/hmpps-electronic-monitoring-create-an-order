@@ -33,7 +33,7 @@ import ProbationDeliveryUnitPage from '../pages/order/contact-information/probat
 import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
 import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../pages/order/attachments/uploadLicence'
-import UploadPhotoIdPage from '../pages/order/attachments/uploadPhotoId'
+import PhotoQuestionPage from '../pages/order/attachments/photoQuestion'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -403,9 +403,10 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
       licencePage.form.saveAndContinueButton.click()
 
-      const photoPage = Page.verifyOnPage(UploadPhotoIdPage)
-      if (takeScreenshots) cy.screenshot('23. photoIdPage', { overwrite: true })
-      photoPage.form.saveAndContinueButton.click()
+      const havePhotoPage = Page.verifyOnPage(PhotoQuestionPage)
+      if (takeScreenshots) cy.screenshot('23. havePhotoPage', { overwrite: true })
+      havePhotoPage.form.photoQuestionField.set('No')
+      havePhotoPage.form.saveAndContinueButton.click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
       if (takeScreenshots) cy.screenshot('24. attachmentPage', { overwrite: true })
