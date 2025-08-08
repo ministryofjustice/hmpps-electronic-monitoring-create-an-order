@@ -24,7 +24,6 @@
 {% set formEncoding = 'encType=multipart/form-data' %}
 
 {% block formInputs %}
-  {% set questionHtml = '<label>' ~ pageContent.questions.file.text ~ '</label>' %}
   {{ govukFileUpload({
     id: "file-to-upload",
     name: "file",
