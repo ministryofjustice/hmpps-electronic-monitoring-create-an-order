@@ -22,15 +22,16 @@
       <p class="govuk-body">You can make changes to the EMO application form now if the information you are changing isn't
         included in the licence or court order.</p>
 
-      <form action="/order/create" method="post">
+      <form action="/order/{{ order.id }}/variation" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
           <div class="govuk-button-group">
             {{ govukButton({
             text: "Yes, make changes",
             classes: "govuk-button--warning",
-            name: "type",
-            value: "VARIATION"
+            name: "action",
+            value: "continue",
+            type: "submit"
           }) }}
           {{ govukButton({
             text: "Cancel and return back to form",
