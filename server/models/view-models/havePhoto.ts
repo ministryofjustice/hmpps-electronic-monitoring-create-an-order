@@ -45,12 +45,14 @@ export class HavePhotoModelService {
 
     if (formData.length && formData[0].havePhoto) {
       model.havePhoto.value = this.convertHavePhotoBoolToString(formData[0].havePhoto)
+    } else {
+      model.havePhoto.value = this.convertHavePhotoBoolToString(req.order?.orderParameters?.havePhoto)
     }
 
     return model
   }
 
-  private convertHavePhotoBoolToString(havePhoto: boolean | undefined): string {
+  private convertHavePhotoBoolToString(havePhoto: boolean | undefined | null): string {
     if (havePhoto === true) return 'yes'
     if (havePhoto === false) return 'no'
     return ''

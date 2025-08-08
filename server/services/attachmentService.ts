@@ -88,7 +88,7 @@ export default class AttachmentService {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/attachments/have-photo`,
-        data: input.data,
+        data: { havePhoto: input.data.havePhoto },
         token: input.accessToken,
       })
       return result
