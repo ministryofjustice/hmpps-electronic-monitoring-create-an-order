@@ -298,8 +298,6 @@ export default function routes({
   get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
-  // get(paths.ATTACHMENT.DELETE_FILE, attachmentsController.confirmDeleteView)
-  // post(paths.ATTACHMENT.DELETE_FILE, attachmentsController.deleteFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
   get(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.view)
   post(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.update)
