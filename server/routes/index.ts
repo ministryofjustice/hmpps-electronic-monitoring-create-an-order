@@ -184,6 +184,7 @@ export default function routes({
   get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
   get(paths.ORDER.SUMMARY, orderController.summary)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
+  post(paths.ORDER.VARIATION, orderController.createVariation)
   get(paths.ORDER.DELETE, orderController.confirmDelete)
   post(paths.ORDER.DELETE, orderController.delete)
   post(paths.ORDER.SUBMIT, orderController.submit)

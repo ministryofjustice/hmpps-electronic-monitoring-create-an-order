@@ -19,6 +19,22 @@ export default class OrderController {
     res.redirect(`/order/${order.id}/summary`)
   }
 
+  createVariation: RequestHandler = async (req: Request, res: Response) => {
+    const { action } = req.body
+    const { orderId } = req.params
+
+    if (action === 'continue') {
+      const newVariationOrder = await this.orderService.createVariationFromExisting({
+        orderId,
+        accessToken: res.locals.user.token,
+      })
+
+      res.redirect(`/order/${newVariationOrder.id}/summary`)
+    } else {
+      res.redirect(`/order/${orderId}/summary`)
+    }
+  }
+
   summary: RequestHandler = async (req: Request, res: Response) => {
     const sections = await this.taskListService.getSections(req.order!)
     const error = req.flash('submissionError')
