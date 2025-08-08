@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import PhotoQuestionPage from '../../../pages/order/attachments/photoQuestion'
+import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
@@ -14,17 +14,17 @@ context('Attachments', () => {
         cy.signIn()
       })
       it('should render the photo question page', () => {
-        const page = Page.visit(PhotoQuestionPage, { orderId: mockOrderId })
+        const page = Page.visit(HavePhotoPage, { orderId: mockOrderId })
 
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        page.form.photoQuestionField.shouldNotBeDisabled()
-        page.form.photoQuestionField.element.contains(
+        page.form.havePhotoField.shouldNotBeDisabled()
+        page.form.havePhotoField.element.contains(
           'We need a photo to help identify the device wearer if there is not one on the licence.',
         )
-        page.form.photoQuestionField.shouldHaveOption('Yes')
-        page.form.photoQuestionField.shouldHaveOption('No')
+        page.form.havePhotoField.shouldHaveOption('Yes')
+        page.form.havePhotoField.shouldHaveOption('No')
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAsDraftButton.should('exist')

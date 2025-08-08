@@ -1,6 +1,6 @@
-import PhotoQuestionPageContent from '../../../types/i18n/pages/photoQuestion'
+import HavePhotoPageContent from '../../../types/i18n/pages/havePhoto'
 
-const photoQuestionPageContent: PhotoQuestionPageContent = {
+const havePhotoPageContent: HavePhotoPageContent = {
   helpText: '',
   legend: '',
   questions: {
@@ -13,4 +13,4 @@ const photoQuestionPageContent: PhotoQuestionPageContent = {
   title: '',
 }
 
-export default photoQuestionPageContent
+export default havePhotoPageContent

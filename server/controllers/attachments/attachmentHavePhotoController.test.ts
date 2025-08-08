@@ -1,6 +1,6 @@
 import RestClient from '../../data/restClient'
 import AttachmentService from '../../services/attachmentService'
-import AttachmentPhotoQuestionController from './attachmentPhotoQuestionController'
+import AttachmentPhotoQuestionController from './attachmentHavePhotoController'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { HavePhotoModelService } from '../../models/view-models/havePhoto'
 import { ValidationError } from '../../models/Validation'

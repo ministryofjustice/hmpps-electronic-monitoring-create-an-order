@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
-import PhotoQuestionPage from '../../../pages/order/attachments/photoQuestion'
+import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
 const mockOrderId = uuidv4()
 const apiPath = '/attachments/have-photo'
@@ -29,15 +29,15 @@ context('Attachments - have photo', () => {
       })
 
       it('Should display validation error messages', () => {
-        const page = Page.visit(PhotoQuestionPage, { orderId: mockOrderId })
+        const page = Page.visit(HavePhotoPage, { orderId: mockOrderId })
 
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(PhotoQuestionPage)
+        Page.verifyOnPage(HavePhotoPage)
 
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrorMessage)
-        page.form.photoQuestionField.shouldHaveValidationMessage(expectedValidationErrorMessage)
+        page.form.havePhotoField.shouldHaveValidationMessage(expectedValidationErrorMessage)
       })
     })
   })

@@ -30,7 +30,7 @@ import SecondaryAddressPage from './contact-information/secondary-address'
 import ProbationDeliveryUnitPage from './contact-information/probation-delivery-unit'
 import CurfewAdditionalDetailsPage from './monitoring-conditions/curfew-additional-details'
 import InstallationLocationPage from './monitoring-conditions/installation-location'
-import PhotoQuestionPage from './attachments/photoQuestion'
+import HavePhotoPage from './attachments/havePhoto'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -613,8 +613,8 @@ export default class OrderTasksPage extends AppPage {
     uploadLicencePage.form.saveAndContinueButton.click()
 
     if (files && files.photoId !== undefined) {
-      const havePhotoPage = Page.verifyOnPage(PhotoQuestionPage)
-      havePhotoPage.form.photoQuestionField.set('Yes')
+      const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
+      havePhotoPage.form.havePhotoField.set('Yes')
       havePhotoPage.form.saveAndContinueButton.click()
 
       const uploadPhotoIdPage = Page.verifyOnPage(UploadPhotoIdPage)
@@ -623,8 +623,8 @@ export default class OrderTasksPage extends AppPage {
       })
       uploadPhotoIdPage.form.saveAndContinueButton.click()
     } else {
-      const havePhotoPage = Page.verifyOnPage(PhotoQuestionPage)
-      havePhotoPage.form.photoQuestionField.set('No')
+      const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
+      havePhotoPage.form.havePhotoField.set('No')
       havePhotoPage.form.saveAndContinueButton.click()
     }
 

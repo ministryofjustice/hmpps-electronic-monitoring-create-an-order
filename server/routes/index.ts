@@ -32,7 +32,7 @@ import VariationDetailsController from '../controllers/variation/variationDetail
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
-import AttachmentPhotoQuestionController from '../controllers/attachments/attachmentPhotoQuestionController'
+import AttachmentPhotoQuestionController from '../controllers/attachments/attachmentHavePhotoController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({

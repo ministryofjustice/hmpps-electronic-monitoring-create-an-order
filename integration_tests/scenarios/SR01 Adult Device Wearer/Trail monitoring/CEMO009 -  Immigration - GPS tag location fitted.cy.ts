@@ -23,7 +23,7 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
-import PhotoQuestionPage from '../../../pages/order/attachments/photoQuestion'
+import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
 // Test case disabled as Immigation Bail sentence type is disabled
 context.skip('Scenarios', () => {
@@ -204,8 +204,8 @@ context.skip('Scenarios', () => {
       licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
       licencePage.form.saveAndContinueButton.click()
 
-      const havePhotoPage = Page.verifyOnPage(PhotoQuestionPage)
-      havePhotoPage.form.photoQuestionField.set('No')
+      const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
+      havePhotoPage.form.havePhotoField.set('No')
       havePhotoPage.form.saveAndContinueButton.click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)

@@ -22,12 +22,12 @@ import tertiaryAddressPageContent from './pages/tertiaryAddress'
 import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
-import photoQuestionContent from './pages/photoQuestion'
 import variationDetailsPageContent from './pages/variationDetails'
 import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
 import installationLocationPageContent from './pages/installationLocation'
 import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
+import havePhotoPageContent from './pages/havePhoto'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -54,7 +54,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       trailMonitoring: trailMonitoringPageContent,
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
-      photoQuestion: photoQuestionContent,
+      havePhoto: havePhotoPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       installationLocation: installationLocationPageContent,
