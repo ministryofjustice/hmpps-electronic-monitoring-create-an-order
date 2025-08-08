@@ -569,7 +569,7 @@ export default class TaskListService {
   }
 
   isSectionComplete(tasks: Task[]): boolean {
-    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true) || task.state === STATES.optional)
+    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
   }
 
   incompleteTask(task: Task): boolean {
