@@ -7,6 +7,6 @@ export default class HavePhotoPage extends AppFormPage {
   public form = new HavePhotoFormComponent()
 
   constructor() {
-    super('', paths.ATTACHMENT.PHOTO_QUESTION)
+    super('', paths.ATTACHMENT.HAVE_PHOTO)
   }
 }

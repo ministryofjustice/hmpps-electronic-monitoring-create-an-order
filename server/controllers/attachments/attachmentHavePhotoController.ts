@@ -5,7 +5,7 @@ import paths from '../../constants/paths'
 import { HavePhotoFormDataModel, HavePhotoModelService } from '../../models/view-models/havePhoto'
 import TaskListService from '../../services/taskListService'
 
-export default class AttachmentPhotoQuestionController {
+export default class AttachmentHavePhotoController {
   constructor(
     private readonly attachmentService: AttachmentService,
     private readonly taskListService: TaskListService,
@@ -15,7 +15,7 @@ export default class AttachmentPhotoQuestionController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const model = this.modelService.buildHavePhotoModel(req)
-    res.render('pages/order/attachments/photo-question', model)
+    res.render('pages/order/attachments/have-photo', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ export default class AttachmentPhotoQuestionController {
     if (isValidationResult(result)) {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
-      res.redirect(paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', orderId))
+      res.redirect(paths.ATTACHMENT.HAVE_PHOTO.replace(':orderId', orderId))
     } else if (formData.action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     } else {

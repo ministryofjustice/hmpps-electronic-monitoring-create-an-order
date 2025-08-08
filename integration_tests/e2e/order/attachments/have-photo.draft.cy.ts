@@ -4,7 +4,7 @@ import Page from '../../../pages/page'
 
 const mockOrderId = uuidv4()
 context('Attachments', () => {
-  context('Photo Question', () => {
+  context('Have Photo', () => {
     context('when viewing a draft order', () => {
       beforeEach(() => {
         cy.task('reset')
@@ -13,7 +13,7 @@ context('Attachments', () => {
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
         cy.signIn()
       })
-      it('should render the photo question page', () => {
+      it('should render the have photo page', () => {
         const page = Page.visit(HavePhotoPage, { orderId: mockOrderId })
 
         page.header.userName().should('contain.text', 'J. Smith')

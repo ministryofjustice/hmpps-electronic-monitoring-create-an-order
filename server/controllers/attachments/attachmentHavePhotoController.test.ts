@@ -1,6 +1,6 @@
 import RestClient from '../../data/restClient'
 import AttachmentService from '../../services/attachmentService'
-import AttachmentPhotoQuestionController from './attachmentHavePhotoController'
+import AttachmentHavePhotoController from './attachmentHavePhotoController'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { HavePhotoModelService } from '../../models/view-models/havePhoto'
 import { ValidationError } from '../../models/Validation'
@@ -37,7 +37,7 @@ describe('attachment have photo controller', () => {
         flash: jest.fn().mockReturnValue([]),
       })
       const res = createMockResponse()
-      const controller = new AttachmentPhotoQuestionController(
+      const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
         mockTaskListService,
         mockOrderService,
@@ -46,7 +46,7 @@ describe('attachment have photo controller', () => {
 
       controller.view(req, res, jest.fn())
 
-      expect(res.render).toHaveBeenCalledWith('pages/order/attachments/photo-question', expect.anything())
+      expect(res.render).toHaveBeenCalledWith('pages/order/attachments/have-photo', expect.anything())
     })
   })
   describe('when we call update', () => {
@@ -63,7 +63,7 @@ describe('attachment have photo controller', () => {
         },
       })
       const res = createMockResponse()
-      const controller = new AttachmentPhotoQuestionController(
+      const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
         mockTaskListService,
         mockOrderService,
@@ -88,7 +88,7 @@ describe('attachment have photo controller', () => {
         },
       })
       const res = createMockResponse()
-      const controller = new AttachmentPhotoQuestionController(
+      const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
         mockTaskListService,
         mockOrderService,
@@ -115,7 +115,7 @@ describe('attachment have photo controller', () => {
         getMockOrder({ id: req.order!.id, orderParameters: { havePhoto: true } }),
       )
 
-      const controller = new AttachmentPhotoQuestionController(
+      const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
         mockTaskListService,
         mockOrderService,

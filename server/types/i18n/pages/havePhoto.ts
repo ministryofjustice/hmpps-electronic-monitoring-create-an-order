@@ -1,5 +1,5 @@
 import PageContent from './page'
 
-type havePhotoPageContent = PageContent<'havePhoto'>
+type HavePhotoPageContent = PageContent<'havePhoto'>
 
-export default havePhotoPageContent
+export default HavePhotoPageContent

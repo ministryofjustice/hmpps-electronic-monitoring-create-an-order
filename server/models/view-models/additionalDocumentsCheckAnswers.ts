@@ -20,7 +20,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
     createAnswer(
       content?.pages.havePhoto.questions.havePhoto.text || '',
       order.orderParameters?.havePhoto ? 'Yes' : 'No',
-      paths.ATTACHMENT.PHOTO_QUESTION.replace(':orderId', order.id),
+      paths.ATTACHMENT.HAVE_PHOTO.replace(':orderId', order.id),
       answerOpts,
     ),
   ]

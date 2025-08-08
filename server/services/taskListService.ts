@@ -455,7 +455,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.havePhoto,
-      path: paths.ATTACHMENT.PHOTO_QUESTION,
+      path: paths.ATTACHMENT.HAVE_PHOTO,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
     })

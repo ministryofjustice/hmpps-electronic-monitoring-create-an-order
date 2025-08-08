@@ -32,7 +32,7 @@ import VariationDetailsController from '../controllers/variation/variationDetail
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
-import AttachmentPhotoQuestionController from '../controllers/attachments/attachmentHavePhotoController'
+import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -77,7 +77,7 @@ export default function routes({
     attachmentService,
     taskListService,
   )
-  const attachmentsPhotoQuestionController = new AttachmentPhotoQuestionController(
+  const attachmentsHavePhotoController = new AttachmentHavePhotoController(
     attachmentService,
     taskListService,
     orderService,
@@ -301,8 +301,8 @@ export default function routes({
   // get(paths.ATTACHMENT.DELETE_FILE, attachmentsController.confirmDeleteView)
   // post(paths.ATTACHMENT.DELETE_FILE, attachmentsController.deleteFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
-  get(paths.ATTACHMENT.PHOTO_QUESTION, attachmentsPhotoQuestionController.view)
-  post(paths.ATTACHMENT.PHOTO_QUESTION, attachmentsPhotoQuestionController.update)
+  get(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.view)
+  post(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.update)
 
   /**
    * VARIATIONS
