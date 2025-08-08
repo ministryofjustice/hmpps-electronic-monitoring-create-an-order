@@ -143,7 +143,7 @@ const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: 
 
 const validationErrors: ValidationErrors = {
   attachments: {
-    licenceRequired: 'Select the licence document',
+    licenceRequired: 'Upload a licence or court document',
     photoIdentityRequired: 'Select the photo identification document',
   },
   deviceWearer: {

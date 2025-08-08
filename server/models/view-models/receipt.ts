@@ -25,7 +25,7 @@ const createViewModel = (order: Order, content: I18n) => {
   const devicewearer = DeviceWearerCheckAnswers.default(order, content)
   const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
   const riskDetails = RiskInformationCheckAnswers.default(order, content)
-  const additionalDocumentDetails = AdditionalDocumentsCheckAnswers.default(order)
+  const additionalDocumentDetails = AdditionalDocumentsCheckAnswers.default(order, content)
 
   return {
     statusDetails,

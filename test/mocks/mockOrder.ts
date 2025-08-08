@@ -14,6 +14,8 @@ import { AttendanceMonitoring } from '../../server/models/AttendanceMonitoring'
 import { CurfewReleaseDate } from '../../server/models/CurfewReleaseDate'
 import { CurfewConditions } from '../../server/models/CurfewConditions'
 import { CurfewTimetable } from '../../server/models/CurfewTimetable'
+import { Attachment } from '../../server/models/Attachment'
+import AttachmentType from '../../server/models/AttachmentType'
 
 export const createDeviceWearer = (overrideProperties?: Partial<DeviceWearer>): DeviceWearer => ({
   nomisId: null,
@@ -178,6 +180,10 @@ export const createCurfewTimeTable = (overrideProperties?: Partial<CurfewTimetab
   },
 ]
 
+export const createAttatchment = (overrideProperties?: Partial<Attachment>): Attachment => {
+  return { id: '', fileName: '', fileType: AttachmentType.LICENCE, ...overrideProperties }
+}
+
 export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
   status: OrderStatusEnum.Enum.IN_PROGRESS,
@@ -198,6 +204,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   variationDetails: null,
   isValid: false,
   probationDeliveryUnit: null,
+  orderParameters: null,
   ...overrideProperties,
 })
 
@@ -241,7 +248,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
       postcode: '',
     },
   ],
-  additionalDocuments: [],
+  additionalDocuments: [createAttatchment()],
   monitoringConditions: createMonitoringConditions(),
   monitoringConditionsTrail: null,
   mandatoryAttendanceConditions: [],
@@ -251,6 +258,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   installationLocation: {
     location: 'INSTALLATION',
   },
+  orderParameters: null,
   ...overrideProperties,
 })
 

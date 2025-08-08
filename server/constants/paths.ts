@@ -56,6 +56,7 @@ const paths = {
     FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence)',
     DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/:filename',
     DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/delete',
+    HAVE_PHOTO: '/order/:orderId/attachments/have-photo',
   },
 
   VARIATION: {

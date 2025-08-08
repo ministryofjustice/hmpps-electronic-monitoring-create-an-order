@@ -128,6 +128,9 @@ context('Receipt', () => {
               fileName: 'Mock Licence',
             },
           ],
+          orderParameters: {
+            havePhoto: false,
+          },
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
         },
       })
@@ -135,8 +138,8 @@ context('Receipt', () => {
       const page = Page.verifyOnPage(ReceiptPage)
       page.additionalDocumentsSection.shouldExist()
       page.additionalDocumentsSection.shouldHaveItems([
-        { key: 'Licence', value: 'Mock Licence' },
-        { key: 'Photo identification (optional)', value: 'No photo ID document uploaded' },
+        { key: 'Upload a copy of the licence or court order document', value: 'Mock Licence' },
+        { key: 'Do you have a photo to upload?', value: 'No' },
       ])
       page.orderStatusSection.shouldExist()
       page.orderStatusSection.shouldHaveItems([

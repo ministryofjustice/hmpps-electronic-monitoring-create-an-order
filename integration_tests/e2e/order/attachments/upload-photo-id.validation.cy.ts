@@ -28,9 +28,15 @@ context('Attachments', () => {
           },
         })
         page.form.saveAndContinueButton.click()
-        page.form.uploadField.shouldHaveLabel('Upload a copy of photo identification')
-        page.form.uploadField.shouldHaveHint('Upload a scanned copy or photo of the original photo identification.')
         page.form.uploadField.shouldHaveValidationMessage('Mock Error')
+      })
+
+      it('Should show an error if no file is added', () => {
+        const page = Page.visit(UploadPhotoIdPage, { orderId: mockOrderId })
+
+        page.form.saveAndContinueButton.click()
+
+        page.form.uploadField.shouldHaveValidationMessage('Upload a licence or court document')
       })
     })
   })

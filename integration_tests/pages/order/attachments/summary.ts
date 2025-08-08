@@ -1,21 +1,21 @@
-import AppFormPage from '../../appFormPage'
-
 import { PageElement } from '../../page'
 
 import paths from '../../../../server/constants/paths'
-import AttachmentTask from '../../components/attachmentsTask'
+import SummaryListComponentWithoutHeading from '../../components/SummaryListComponentWithoutHeading'
+import CheckYourAnswersPage from '../../checkYourAnswersPage'
+import ErrorSummaryComponent from '../../components/errorSummaryComponent'
 
-export default class AttachmentSummaryPage extends AppFormPage {
-  constructor() {
-    super('Check your answers', paths.ATTACHMENT.ATTACHMENTS, 'Additional documents')
+export default class AttachmentSummaryPage extends CheckYourAnswersPage {
+  constructor(heading: string = 'Check your answers') {
+    super(heading, paths.ATTACHMENT.ATTACHMENTS, 'Additional documents')
   }
 
-  get licenceTask(): AttachmentTask {
-    return new AttachmentTask('Licence')
+  get errorSummary(): ErrorSummaryComponent {
+    return new ErrorSummaryComponent()
   }
 
-  get photoIdTask(): AttachmentTask {
-    return new AttachmentTask('Photo identification')
+  get attachmentsSection(): SummaryListComponentWithoutHeading {
+    return new SummaryListComponentWithoutHeading()
   }
 
   // ACTIONS

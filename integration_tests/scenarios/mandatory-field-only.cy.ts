@@ -37,10 +37,19 @@ import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation
 import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
 import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
 import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
+import UploadLicencePage from '../pages/order/attachments/uploadLicence'
+import HavePhotoPage from '../pages/order/attachments/havePhoto'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
+  }
 
   beforeEach(() => {
     cy.task('resetDB')
@@ -59,6 +68,37 @@ context('Mandatory fields only', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.licence.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.readFile(files.licence.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -329,19 +369,29 @@ context('Mandatory fields only', () => {
       )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
+      const licencePage = Page.verifyOnPage(UploadLicencePage)
+      licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
+      if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
+      licencePage.form.saveAndContinueButton.click()
+
+      const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
+      if (takeScreenshots) cy.screenshot('23. havePhotoPage', { overwrite: true })
+      havePhotoPage.form.havePhotoField.set('No')
+      havePhotoPage.form.saveAndContinueButton.click()
+
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      if (takeScreenshots) cy.screenshot('22. attachmentPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('24. attachmentPage', { overwrite: true })
       attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('23. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('25. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('24. indexPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
       indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
@@ -629,19 +679,29 @@ context('Mandatory fields only', () => {
       )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
+      const licencePage = Page.verifyOnPage(UploadLicencePage)
+      licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
+      if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
+      licencePage.form.saveAndContinueButton.click()
+
+      const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
+      if (takeScreenshots) cy.screenshot('23. havePhotoPage', { overwrite: true })
+      havePhotoPage.form.havePhotoField.set('No')
+      havePhotoPage.form.saveAndContinueButton.click()
+
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      if (takeScreenshots) cy.screenshot('22. attachmentPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('24. attachmentPage', { overwrite: true })
       attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('23. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('25. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('24. indexPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
       indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })

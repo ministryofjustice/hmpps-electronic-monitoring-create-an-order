@@ -11,6 +11,10 @@ context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
     photoId: {
       contents: 'cypress/fixtures/profile.jpeg',
       fileName: 'profile.jpeg',
@@ -46,6 +50,16 @@ context('Scenarios', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
+      fileName: files.licence.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
       fileName: files.photoId.fileName,
       deviceWearerId: fmsCaseId,
       response: {
@@ -55,6 +69,28 @@ context('Scenarios', () => {
     })
 
     cy.task('stubUploadDocument', {
+      scenario: {
+        name: 'CEMO002',
+        requiredState: 'Started',
+        nextState: 'second',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      scenario: {
+        name: 'CEMO002',
+        requiredState: 'second',
+        nextState: 'Started',
+      },
       id: '(.*)',
       httpStatus: 200,
       response: {
@@ -62,12 +98,31 @@ context('Scenarios', () => {
         documentFilename: files.photoId.fileName,
         filename: files.photoId.fileName,
         fileExtension: files.photoId.fileName.split('.')[1],
-        mimeType: 'application/pdf',
+        mimeType: 'image/jpeg',
       },
+    })
+
+    cy.readFile(files.licence.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        scenario: {
+          name: 'CEMO002',
+          requiredState: 'Started',
+          nextState: 'second',
+        },
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
     })
 
     cy.readFile(files.photoId.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
+        scenario: {
+          name: 'CEMO002',
+          requiredState: 'second',
+          nextState: 'Started',
+        },
         id: '(.*)',
         httpStatus: 200,
         contextType: 'image/jpeg',
@@ -349,9 +404,18 @@ context('Scenarios', () => {
         })
 
         // Verify the attachments were sent to the FMS API
-        cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
+        cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
             index: 0,
+            responseRecordFilename: 'CEMO001',
+            httpStatus: 200,
+            fileContents: contentAsBase64,
+          })
+        })
+
+        cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
+          cy.task('verifyFMSAttachmentRequestReceived', {
+            index: 1,
             responseRecordFilename: 'CEMO001',
             httpStatus: 200,
             fileContents: contentAsBase64,

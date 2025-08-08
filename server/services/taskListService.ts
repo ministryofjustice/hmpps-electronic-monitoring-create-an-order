@@ -2,6 +2,7 @@ import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import AttachmentType from '../models/AttachmentType'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -42,7 +43,10 @@ const PAGES = {
   attendanceMonitoring: 'ATTENDANCE_MONITORING',
   alcoholMonitoring: 'ALCOHOL_MONITORING',
   checkAnswersMonitoringConditions: 'CHECK_ANSWERS_MONITORING_CONDITIONS',
-  attachments: 'ATTACHMENTS',
+  licenceUpload: 'LICENCE_ATTACHMENT',
+  photoUpload: 'PHOTO_ATTACHMENT',
+  havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
+  attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
   installationAppointment: 'INSTALLATION_APPOINTMENT',
@@ -100,6 +104,14 @@ const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === 
 
 const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
   return order.addresses.find(address => address.addressType === addressType) !== undefined
+}
+
+const doesOrderHaveLicence = (order: Order): boolean => {
+  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.LICENCE) !== undefined
+}
+
+const doesOrderHavePhotoId = (order: Order): boolean => {
+  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
 }
 
 const isCurfewOnly = (order: Order): boolean => {
@@ -434,10 +446,39 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
+      name: PAGES.licenceUpload,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
+      state: STATES.required,
+      completed: doesOrderHaveLicence(order),
+    })
+
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.havePhoto,
+      path: paths.ATTACHMENT.HAVE_PHOTO,
+      state: STATES.required,
+      completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
+    })
+
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.photoUpload,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
+      state: convertBooleanToEnum<State>(
+        order.orderParameters?.havePhoto || null,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: doesOrderHavePhotoId(order) || order.orderParameters?.havePhoto === false,
+    })
+
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
       name: PAGES.attachments,
       path: paths.ATTACHMENT.ATTACHMENTS,
-      state: STATES.optional,
-      completed: false,
+      state: STATES.hidden,
+      completed: true,
     })
 
     return tasks
@@ -552,6 +593,9 @@ export default class TaskListService {
   }
 
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
+    if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
+      return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
+    }
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 }

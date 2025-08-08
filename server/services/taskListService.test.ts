@@ -1,5 +1,6 @@
 import {
   createAddress,
+  createAttatchment,
   createContactDetails,
   createCurfewConditions,
   createCurfewReleaseDateConditions,
@@ -19,6 +20,7 @@ import {
 import paths from '../constants/paths'
 import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
+import AttachmentType from '../models/AttachmentType'
 
 describe('TaskListService', () => {
   describe('getNextPage', () => {
@@ -783,7 +785,9 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+      expect(nextPage).toBe(
+        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(':fileType(photo_Id|licence)', 'licence'),
+      )
     })
 
     it.each([
@@ -846,7 +850,10 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
-          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+            ':fileType(photo_Id|licence)',
+            'licence',
+          ),
         },
       ])
     })
@@ -878,6 +885,8 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
+        additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
+        orderParameters: { havePhoto: true },
       })
       const taskListService = new TaskListService()
 
@@ -907,7 +916,7 @@ describe('TaskListService', () => {
           path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         },
         {
-          completed: false,
+          completed: true,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
         },
@@ -960,7 +969,10 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
-          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+            ':fileType(photo_Id|licence)',
+            'licence',
+          ),
         },
       ])
     })
@@ -1017,7 +1029,10 @@ describe('TaskListService', () => {
         {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
-          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+            ':fileType(photo_Id|licence)',
+            'licence',
+          ),
         },
       ])
     })

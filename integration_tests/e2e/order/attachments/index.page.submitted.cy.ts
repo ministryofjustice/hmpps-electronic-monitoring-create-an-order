@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Page from '../../../pages/page'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -20,39 +21,53 @@ context('Attachments', () => {
             { id: uuidv4(), orderId: mockOrderId, fileName: 'Licence.jpeg', fileType: 'LICENCE' },
             { id: uuidv4(), orderId: mockOrderId, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
           ],
+          fmsResultDate: new Date('2024 12 14'),
+          orderParameters: { havePhoto: true },
         })
         cy.signIn()
       })
 
       it('Should render summary page with no download links and no delete links', () => {
-        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'View answers')
 
         // Header
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should(
+          'contain',
+          'You are viewing a submitted form. This form was submitted on the 14 December 2024',
+        )
 
         // Licence Task
-        page.licenceTask.status.should('contain', 'Licence.jpeg')
-        page.licenceTask.addAction.should('not.exist')
-        page.licenceTask.changeAction.should('not.exist')
-        page.licenceTask.deleteAction.should('not.exist')
-        page.licenceTask.downloadAction
-          .should('exist')
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Upload a copy of the licence or court order document', value: 'Licence.jpeg' },
+          { key: 'Do you have a photo to upload?', value: 'Yes' },
+          { key: 'Upload a photo of the device wearer', value: 'photo.jpeg' },
+        ])
+
+        page.attachmentsSection.element
+          .find('.govuk-summary-list__value')
+          .contains('Licence.jpeg')
           .should('have.attr', 'href', `/order/${mockOrderId}/attachments/licence/Licence.jpeg`)
 
-        // Photo ID Task
-        page.photoIdTask.status.should('contain', 'photo.jpeg')
-        page.photoIdTask.addAction.should('not.exist')
-        page.photoIdTask.changeAction.should('not.exist')
-        page.photoIdTask.deleteAction.should('not.exist')
-        page.photoIdTask.downloadAction
-          .should('exist')
+        page.attachmentsSection.element
+          .find('.govuk-summary-list__value')
+          .contains('photo.jpeg')
           .should('have.attr', 'href', `/order/${mockOrderId}/attachments/photo_Id/photo.jpeg`)
 
+        page.changeLinks.should('not.exist')
+
         // Buttons
-        page.saveAndReturnButton.should('not.exist')
+        page.backToSummaryButton.should('exist')
         page.backButton.should('exist')
+      })
+
+      it('should go to main page when I click the return button', () => {
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'View answers')
+
+        page.backToSummaryButton.click()
+
+        Page.verifyOnPage(OrderTasksPage)
       })
     })
   })

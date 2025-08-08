@@ -10,7 +10,7 @@ context('The kitchen sink', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
-    map: {
+    licence: {
       contents: 'cypress/fixtures/test.pdf',
       fileName: 'test.pdf',
     },
@@ -44,7 +44,7 @@ context('The kitchen sink', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.map.fileName,
+      fileName: files.licence.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -57,14 +57,14 @@ context('The kitchen sink', () => {
       httpStatus: 200,
       response: {
         documentUuid: hmppsDocumentId,
-        documentFilename: files.map.fileName,
-        filename: files.map.fileName,
-        fileExtension: files.map.fileName.split('.')[1],
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
         mimeType: 'application/pdf',
       },
     })
 
-    cy.readFile(files.map.contents, 'base64').then(content => {
+    cy.readFile(files.licence.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         id: '(.*)',
         httpStatus: 200,
@@ -129,7 +129,7 @@ context('The kitchen sink', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(currenDate.getFullYear(), 4, 1),
       endDate: new Date(currenDate.getFullYear() + 1, 4, 1, 23, 59, 0),
-      uploadFile: files.map,
+      uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
@@ -147,6 +147,11 @@ context('The kitchen sink', () => {
       riskCategory: 'Children under the age of 18 are living at the property',
       riskDetails: 'No risk',
     }
+
+    const attachmentFiles = {
+      licence: { fileName: files.licence.fileName, contents: files.licence.contents },
+    }
+
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
@@ -169,7 +174,7 @@ context('The kitchen sink', () => {
         enforcementZoneDetails: primaryEnforcementZoneDetails,
         alcoholMonitoringDetails: undefined,
         trailMonitoringDetails: trailMonitoringOrder,
-        files: undefined,
+        files: attachmentFiles,
         probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()

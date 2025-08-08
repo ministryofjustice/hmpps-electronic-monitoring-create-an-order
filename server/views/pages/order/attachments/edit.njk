@@ -24,12 +24,12 @@
 {% set formEncoding = 'encType=multipart/form-data' %}
 
 {% block formInputs %}
-
   {{ govukFileUpload({
     id: "file-to-upload",
     name: "file",
     label: {
-      text: pageContent.questions.file.text
+      text: pageContent.questions.file.text,
+      classes: "govuk-label govuk-label--l"
     },
     hint: {
       text: pageContent.questions.file.hint

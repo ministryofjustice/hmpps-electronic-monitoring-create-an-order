@@ -5,13 +5,19 @@ import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import Result from '../interfaces/result'
 import { validationErrors } from '../constants/validationErrors'
+import { convertBackendErrorToValidationError } from '../utils/errors'
+import { HavePhotoFormData } from '../models/view-models/havePhoto'
 
-type AttachmentRequestInpput = AuthenticatedRequestInput & {
+type AttachmentRequestInput = AuthenticatedRequestInput & {
   orderId: string
   fileType: string
 }
-type UploadAttachmentRequestInput = AttachmentRequestInpput & {
+type UploadAttachmentRequestInput = AttachmentRequestInput & {
   file: Express.Multer.File | undefined
+}
+type AttachmentHavePhotoInput = AuthenticatedRequestInput & {
+  orderId: string
+  data: HavePhotoFormData
 }
 
 export default class AttachmentService {
@@ -47,14 +53,14 @@ export default class AttachmentService {
     }
   }
 
-  async downloadAttachment(input: AttachmentRequestInpput): Promise<Readable> {
+  async downloadAttachment(input: AttachmentRequestInput): Promise<Readable> {
     return this.apiClient.stream({
       path: `/api/orders/${input.orderId}/document-type/${input.fileType}/raw`,
       token: input.accessToken,
     })
   }
 
-  async deleteAttachment(input: AttachmentRequestInpput): Promise<Result<void, string>> {
+  async deleteAttachment(input: AttachmentRequestInput): Promise<Result<void, string>> {
     try {
       await this.apiClient.delete({
         path: `/api/orders/${input.orderId}/document-type/${input.fileType}`,
@@ -72,6 +78,24 @@ export default class AttachmentService {
           ok: false,
           error: apiError.userMessage || '',
         }
+      }
+
+      throw e
+    }
+  }
+
+  async havePhoto(input: AttachmentHavePhotoInput) {
+    try {
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/attachments/have-photo`,
+        data: { havePhoto: input.data.havePhoto },
+        token: input.accessToken,
+      })
+      return result
+    } catch (e) {
+      const sanitisedError = e as SanitisedError
+      if (sanitisedError.status === 400) {
+        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e

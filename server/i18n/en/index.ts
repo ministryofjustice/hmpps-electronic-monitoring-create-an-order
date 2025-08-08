@@ -27,6 +27,7 @@ import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
 import installationLocationPageContent from './pages/installationLocation'
 import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
+import havePhotoPageContent from './pages/havePhoto'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -53,6 +54,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       trailMonitoring: trailMonitoringPageContent,
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
+      havePhoto: havePhotoPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       installationLocation: installationLocationPageContent,
