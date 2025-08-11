@@ -5,14 +5,16 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
-  const uploadFile = {
-    contents: 'cypress/fixtures/test.pdf',
-    fileName: 'test.pdf',
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
   }
   let orderId: string
 
@@ -42,36 +44,7 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: uploadFile.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: uploadFile.fileName,
-        filename: uploadFile.fileName,
-        fileExtension: uploadFile.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.readFile(uploadFile.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'application/pdf',
-        fileBase64Body: content,
-      })
-    })
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context('Location Monitoring(Post Release) with GPS Tag (Location - Fitted) ', () => {
@@ -125,7 +98,7 @@ context('Scenarios', () => {
         monitoringConditions,
         installationAddressDetails: fakePrimaryAddress,
         trailMonitoringDetails,
-        files: { licence: uploadFile },
+        files,
         probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()

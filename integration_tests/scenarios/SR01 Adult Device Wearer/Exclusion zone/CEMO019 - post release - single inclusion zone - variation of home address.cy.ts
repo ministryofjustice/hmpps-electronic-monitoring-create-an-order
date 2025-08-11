@@ -6,15 +6,17 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
 // test disabled as 'Parole' is not currently a valid sentence type
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
-  const uploadFile = {
-    contents: 'cypress/fixtures/test.pdf',
-    fileName: 'test.pdf',
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
   }
   let orderId: string
 
@@ -53,36 +55,7 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: uploadFile.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: uploadFile.fileName,
-        filename: uploadFile.fileName,
-        fileExtension: uploadFile.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.readFile(uploadFile.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'application/pdf',
-        fileBase64Body: content,
-      })
-    })
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context(
@@ -108,7 +81,7 @@ context.skip('Scenarios', () => {
         zoneType: 'Exclusion zone',
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-        uploadFile,
+        uploadFile: files.licence,
         description: 'Excluded from Football Grounds',
         duration: '90 days',
         anotherZone: 'No',
@@ -147,7 +120,7 @@ context.skip('Scenarios', () => {
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
-          files: undefined,
+          files,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -172,7 +145,7 @@ context.skip('Scenarios', () => {
           monitoringConditions,
           installationAddressDetails: fakeVariationPrimaryAddress,
           enforcementZoneDetails,
-          files: undefined,
+          files,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -346,7 +319,7 @@ context.skip('Scenarios', () => {
         })
 
         // Verify the attachments were sent to the FMS API
-        cy.readFile(uploadFile.contents, 'base64').then(contentAsBase64 => {
+        cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
             responseRecordFilename: 'CEMO001',
             httpStatus: 200,
