@@ -87,6 +87,28 @@ describe('OrderController', () => {
     })
   })
 
+  describe('confirmEdit', () => {
+    it('should render the confirm edit view', async () => {
+      // Given
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
+
+      // When
+      await orderController.confirmEdit(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/edit-confirm',
+        expect.objectContaining({
+          order: mockOrder,
+        }),
+      )
+    })
+  })
+
   describe('createVariation', () => {
     it('should create a variation order and redirect to its summary page', async () => {
       // Given
