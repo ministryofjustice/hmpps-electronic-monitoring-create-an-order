@@ -8,6 +8,7 @@ import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
+import { OrderParameters } from '../../server/models/OrderParametersModel'
 
 const ping = (httpStatus = 200) =>
   stubFor({
@@ -76,6 +77,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   mandatoryAttendanceConditions: [],
   variationDetails: null,
   isValid: false,
+  orderParameters: null,
 })
 
 type ListOrdersStubOptions = {
@@ -228,6 +230,8 @@ type GetOrderWithAttachmentStubOptions = {
   id?: string
   status?: string
   attachments?: Attachment
+  orderParameters?: OrderParameters
+  fmsResultDate?: string
 }
 type Attachment = {
   id?: string
@@ -253,6 +257,8 @@ const getOrderWithAttachments = (
               id: options.id,
               status: options.status,
               additionalDocuments: options.attachments,
+              orderParameters: options.orderParameters,
+              fmsResultDate: options.fmsResultDate,
             }
           : null,
     },

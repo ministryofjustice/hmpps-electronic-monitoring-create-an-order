@@ -1,0 +1,38 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.havePhoto.section %}
+{% set questions = content.pages.havePhoto.questions %}
+
+{% block formInputs %}
+
+  {{ govukRadios({
+  classes: "govuk-radios--inline",
+  name: "havePhoto",
+  errorMessage: havePhoto.error,
+  value: havePhoto.value,
+  fieldset: {
+    legend: {
+      text: questions.havePhoto.text,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: questions.havePhoto.hint
+  },
+  items: [
+    {
+      value: "yes",
+      text: "Yes",
+      disabled: not isOrderEditable
+    },
+    {
+      value: "no",
+      text: "No",
+      disabled: not isOrderEditable
+    }
+  ]
+}) }}
+
+{% endblock %}
