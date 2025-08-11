@@ -98,15 +98,14 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            location: 'INSTALLATION',
+            location: 'PRISON',
           },
         })
         cy.signIn()
       })
 
       context('Should submit a correctly formatted installation location', () => {
-        const locationMap = new Map<string, string>([
-          ['At another address', 'INSTALLATION'],
+        const locationMap = new Map<string, string>([        
           ['10 Downing Street, London, SW1A 2AB', 'PRIMARY'],
           ['At a prison', 'PRISON'],
           ['At a probation office', 'PROBATION_OFFICE'],
@@ -138,19 +137,7 @@ context('Monitoring conditions', () => {
             }).should('be.true')
           }),
         )
-      })
-
-      context('Shoud continue to Installation address page', () => {
-        it(`Should continue to Installaion address page`, () => {
-          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
-          const validFormData = {
-            location: 'At another address',
-          }
-          page.form.fillInWith(validFormData)
-          page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(InstallationAddressPage)
-        })
-      })
+      })     
 
       context('Should continue to monitoring types when primary address is selected', () => {
         beforeEach(() => {
