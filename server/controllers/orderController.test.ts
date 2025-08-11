@@ -87,6 +87,34 @@ describe('OrderController', () => {
     })
   })
 
+  describe('createVariation', () => {
+    it('should create a variation order and redirect to its summary page', async () => {
+      // Given
+      const req = createMockRequest({
+        body: {
+          action: 'continue',
+        },
+        params: {
+          orderId: '123456',
+        },
+      })
+      const res = createMockResponse()
+      const mockOrder = getMockOrder()
+      mockOrderService.createVariationFromExisting.mockResolvedValue(mockOrder)
+      const next = jest.fn()
+
+      // When
+      await orderController.createVariation(req, res, next)
+
+      // Then
+      expect(mockOrderService.createVariationFromExisting).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: '123456',
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+    })
+  })
+
   describe('confirmDelete', () => {
     it('should render a confirmation page for an order', async () => {
       // Given
