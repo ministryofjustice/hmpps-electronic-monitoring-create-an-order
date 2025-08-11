@@ -6,7 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
 // test disabled as Community Suspended Sentence is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -56,36 +56,7 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFmsUploadAttachment', {
-      httpStatus: 200,
-      fileName: files.licence.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: files.licence.fileName,
-        filename: files.licence.fileName,
-        fileExtension: files.licence.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.readFile(files.licence.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'image/pdf',
-        fileBase64Body: content,
-      })
-    })
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context(
