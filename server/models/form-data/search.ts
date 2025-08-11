@@ -64,10 +64,10 @@ const createOrderItem = (order: Order) => {
       text: currentAddress?.addressLine3 ?? '',
     },
     {
-      text: order.curfewConditions?.startDate ? formatDateTime(order.curfewConditions?.startDate) : undefined,
+      text: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : undefined,
     },
     {
-      text: order.curfewConditions?.endDate ? formatDateTime(order.curfewConditions?.endDate) : undefined,
+      text: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : undefined,
     },
     {
       text: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
