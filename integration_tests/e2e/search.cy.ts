@@ -101,11 +101,10 @@ context('Search', () => {
           pncId: 'some id',
           nomisId: 'some other id',
         },
-        curfewConditions: {
+        monitoringConditions: {
+          ...basicOrder.monitoringConditions,
           startDate: mockDate,
           endDate: mockDate,
-          curfewAddress: null,
-          curfewAdditionalDetails: null,
         },
         fmsResultDate: mockDate,
         addresses: [
