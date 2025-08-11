@@ -311,22 +311,6 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
-      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      installationLocationPage.form.saveAndContinueButton.click()
-      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
-      installationLocationPage.form.fillInWith({ location: 'At another address' })
-      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
-      installationLocationPage.form.saveAndContinueButton.click()
-
-      let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
-      installationAddressPage.form.saveAndContinueButton.click()
-      installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
-      if (takeScreenshots) cy.screenshot('13. installationAddressPage - validation', { overwrite: true })
-      installationAddressPage.form.fillInWith(installationAddressDetails)
-      if (takeScreenshots) cy.screenshot('13. installationAddressPage', { overwrite: true })
-      installationAddressPage.form.saveAndContinueButton.click()
-
       let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
       curfewReleaseDatePage.form.saveAndContinueButton.click()
       curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)

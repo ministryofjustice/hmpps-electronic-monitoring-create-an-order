@@ -182,14 +182,6 @@ context.skip('Scenarios', () => {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
-      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      installationLocationPage.form.fillInWith({ location: 'At another address' })
-      installationLocationPage.form.saveAndContinueButton.click()
-
-      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(fakePrimaryAddress)
-      installationAddress.form.saveAndContinueButton.click()
-
       const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
       trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
       trailMonitoringPage.form.saveAndContinueButton.click()
@@ -361,11 +353,11 @@ context.skip('Scenarios', () => {
               checkin_schedule: [],
               revocation_date: '',
               revocation_type: '',
-              installation_address_1: fakePrimaryAddress.line1,
-              installation_address_2: fakePrimaryAddress.line2,
-              installation_address_3: fakePrimaryAddress.line3 ?? '',
-              installation_address_4: fakePrimaryAddress.line4 ?? '',
-              installation_address_post_code: fakePrimaryAddress.postcode,
+              installation_address_1: '',
+              installation_address_2: '',
+              installation_address_3: '',
+              installation_address_4: '',
+              installation_address_post_code: '',
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               issp: 'No',
