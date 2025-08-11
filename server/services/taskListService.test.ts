@@ -288,12 +288,12 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id))
     })
 
-    it('should return installation location if current page is monitoring conditions', () => {
+    it('should return installation location if current page is monitoring conditions and selected conditions include alcohol', () => {
       // Given
       const currentPage = 'MONITORING_CONDITIONS'
       const taskListService = new TaskListService()
       const order = getMockOrder()
-
+      order.monitoringConditions.alcohol=true
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
@@ -306,7 +306,7 @@ describe('TaskListService', () => {
       const currentPage = 'INSTALLATION_LOCATION'
       const taskListService = new TaskListService()
       const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
-
+     
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
@@ -329,7 +329,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id))
     })
 
-    it('should return exclusion zone page if current page is installation location and location is PRIMARY', () => {
+    it('should return exclusion zone page ', () => {
       // Given
       const currentPage = 'INSTALLATION_LOCATION'
       const taskListService = new TaskListService()
@@ -340,8 +340,7 @@ describe('TaskListService', () => {
           alcohol: false,
           exclusionZone: true,
           mandatoryAttendance: false,
-        }),
-        installationLocation: { location: 'PRIMARY' },
+        })       
       })
 
       // When
@@ -351,12 +350,12 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id).replace(':zoneId', '0'))
     })
 
-    it('should return installation address if current page is installation location', () => {
+    it('should return installation address if current page is installation appointment', () => {
       // Given
-      const currentPage = 'INSTALLATION_LOCATION'
+      const currentPage = 'INSTALLATION_APPOINTMENT'
       const taskListService = new TaskListService()
-      const order = getMockOrder({ installationLocation: { location: 'INSTALLATION' } })
-
+      const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
+      
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
