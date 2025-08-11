@@ -28,6 +28,8 @@ import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
+import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
+import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
 // test disabled as community YRO is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -39,6 +41,13 @@ context.skip('Scenarios', () => {
       const parts = url.replace(Cypress.config().baseUrl, '').split('/')
       ;[, , orderId] = parts
     })
+  }
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
   }
 
   beforeEach(() => {
@@ -58,6 +67,37 @@ context.skip('Scenarios', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.licence.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.readFile(files.licence.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
     })
   })
 
@@ -195,8 +235,16 @@ context.skip('Scenarios', () => {
         )
         monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
+        const licencePage = Page.verifyOnPage(UploadLicencePage)
+        licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
+        licencePage.form.saveAndContinueButton.click()
+
+        const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
+        havePhotoPage.form.havePhotoField.set('No')
+        havePhotoPage.form.saveAndContinueButton.click()
+
         const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-        attachmentPage.backToSummaryButton.click()
+        attachmentPage.saveAndReturnButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         orderSummaryPage.submitOrderButton.click()

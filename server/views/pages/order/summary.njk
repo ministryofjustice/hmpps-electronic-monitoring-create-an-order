@@ -54,13 +54,6 @@
 
         {% if not isOrderEditable %}
           {% set statusArgs = {} %}
-        {% elif section.name == 'ADDITIONAL_DOCUMENTS' %}
-          {% set statusArgs = { 
-            tag: {
-              text: 'Optional',
-              classes: 'govuk-tag--green'
-            }
-          } %}
         {% elif section.completed %}
           {% set statusArgs = { 
             text: 'Complete'

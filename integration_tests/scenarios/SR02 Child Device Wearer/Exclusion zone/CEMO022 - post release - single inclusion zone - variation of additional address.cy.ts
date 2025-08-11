@@ -169,7 +169,7 @@ context('Scenarios', () => {
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           enforcementZoneDetails,
-          files: undefined,
+          files: { licence: uploadFile },
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -194,7 +194,7 @@ context('Scenarios', () => {
           monitoringConditions,
           installationAddressDetails: fakeVariationSecondaryAddress,
           enforcementZoneDetails,
-          files: undefined,
+          files: { licence: uploadFile },
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()

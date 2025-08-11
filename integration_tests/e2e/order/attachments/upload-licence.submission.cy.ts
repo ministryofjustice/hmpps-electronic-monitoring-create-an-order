@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Page from '../../../pages/page'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
 
 const mockOrderId = uuidv4()
 const fileContent = 'This is an image'
@@ -30,7 +30,7 @@ context('Attachments', () => {
         })
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(AttachmentSummaryPage)
+        Page.verifyOnPage(UploadPhotoIdPage)
 
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}/document-type/LICENCE`,
