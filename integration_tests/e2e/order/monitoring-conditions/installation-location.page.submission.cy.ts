@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
@@ -105,7 +104,7 @@ context('Monitoring conditions', () => {
       })
 
       context('Should submit a correctly formatted installation location', () => {
-        const locationMap = new Map<string, string>([        
+        const locationMap = new Map<string, string>([
           ['10 Downing Street, London, SW1A 2AB', 'PRIMARY'],
           ['At a prison', 'PRISON'],
           ['At a probation office', 'PROBATION_OFFICE'],
@@ -137,7 +136,7 @@ context('Monitoring conditions', () => {
             }).should('be.true')
           }),
         )
-      })     
+      })
 
       context('Should continue to monitoring types when primary address is selected', () => {
         beforeEach(() => {

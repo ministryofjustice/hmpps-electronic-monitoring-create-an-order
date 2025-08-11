@@ -20,7 +20,6 @@ import MonitoringConditionsPage from '../pages/order/monitoring-conditions'
 // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
 // import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../pages/order/submit-success'
-import InstallationAddressPage from '../pages/order/monitoring-conditions/installation-address'
 import CurfewReleaseDatePage from '../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewTimetablePage from '../pages/order/monitoring-conditions/curfew-timetable'
 import InstallationAndRiskPage from '../pages/order/installationAndRisk'
@@ -36,7 +35,6 @@ import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
 import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
-import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../pages/order/attachments/havePhoto'
 
@@ -130,7 +128,7 @@ context('Mandatory fields only', () => {
       line4: undefined,
       hasAnotherAddress: 'No',
     }
-    const installationAddressDetails = fakeAddress
+
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
@@ -414,7 +412,6 @@ context('Mandatory fields only', () => {
       line4: undefined,
       hasAnotherAddress: 'No',
     }
-    const installationAddressDetails = fakeAddress
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {

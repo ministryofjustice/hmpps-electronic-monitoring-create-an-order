@@ -16,7 +16,6 @@ import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
@@ -27,7 +26,6 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
@@ -112,7 +110,7 @@ context('Scenarios', () => {
         ...fakePrimaryAddress,
         hasAnotherAddress: 'No',
       }
-      const installationAddressDetails = fakePrimaryAddress
+
       const interestedParties = createFakeInterestedParties(
         'Prison',
         'YJS',

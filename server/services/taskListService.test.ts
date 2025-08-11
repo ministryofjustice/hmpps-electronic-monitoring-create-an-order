@@ -293,7 +293,7 @@ describe('TaskListService', () => {
       const currentPage = 'MONITORING_CONDITIONS'
       const taskListService = new TaskListService()
       const order = getMockOrder()
-      order.monitoringConditions.alcohol=true
+      order.monitoringConditions.alcohol = true
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
@@ -306,7 +306,7 @@ describe('TaskListService', () => {
       const currentPage = 'INSTALLATION_LOCATION'
       const taskListService = new TaskListService()
       const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
-     
+
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
@@ -340,7 +340,7 @@ describe('TaskListService', () => {
           alcohol: false,
           exclusionZone: true,
           mandatoryAttendance: false,
-        })       
+        }),
       })
 
       // When
@@ -355,7 +355,7 @@ describe('TaskListService', () => {
       const currentPage = 'INSTALLATION_APPOINTMENT'
       const taskListService = new TaskListService()
       const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
-      
+
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
