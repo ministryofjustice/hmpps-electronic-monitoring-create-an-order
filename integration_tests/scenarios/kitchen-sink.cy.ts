@@ -16,7 +16,6 @@ import MonitoringConditionsPage from '../pages/order/monitoring-conditions'
 // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
 // import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../pages/order/submit-success'
-import InstallationAddressPage from '../pages/order/monitoring-conditions/installation-address'
 import CurfewReleaseDatePage from '../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewTimetablePage from '../pages/order/monitoring-conditions/curfew-timetable'
 import InstallationAndRiskPage from '../pages/order/installationAndRisk'
@@ -31,7 +30,6 @@ import IdentityNumbersPage from '../pages/order/about-the-device-wearer/identity
 import InstallationAndRiskCheckYourAnswersPage from '../pages/order/installation-and-risk/check-your-answers'
 import ProbationDeliveryUnitPage from '../pages/order/contact-information/probation-delivery-unit'
 import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
-import InstallationLocationPage from '../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../pages/order/attachments/havePhoto'
 import { stubAttachments } from './utils'
@@ -85,7 +83,6 @@ context('The kitchen sink', () => {
       hasAnotherAddress: 'Yes',
     }
     const tertiaryAddressDetails = createFakeAddress()
-    const installationAddressDetails = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
@@ -282,22 +279,6 @@ context('The kitchen sink', () => {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      let installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      installationLocationPage.form.saveAndContinueButton.click()
-      installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      if (takeScreenshots) cy.screenshot(' InstallationLocationPage - validation', { overwrite: true })
-      installationLocationPage.form.fillInWith({ location: 'At another address' })
-      if (takeScreenshots) cy.screenshot(' InstallationLocationPage', { overwrite: true })
-      installationLocationPage.form.saveAndContinueButton.click()
-
-      let installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
-      installationAddressPage.form.saveAndContinueButton.click()
-      installationAddressPage = Page.verifyOnPage(InstallationAddressPage)
-      if (takeScreenshots) cy.screenshot('13. installationAddressPage - validation', { overwrite: true })
-      installationAddressPage.form.fillInWith(installationAddressDetails)
-      if (takeScreenshots) cy.screenshot('13. installationAddressPage', { overwrite: true })
-      installationAddressPage.form.saveAndContinueButton.click()
 
       let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
       curfewReleaseDatePage.form.saveAndContinueButton.click()

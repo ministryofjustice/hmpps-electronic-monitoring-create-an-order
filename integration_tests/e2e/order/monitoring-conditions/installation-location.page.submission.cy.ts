@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
@@ -98,7 +97,7 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            location: 'INSTALLATION',
+            location: 'PRISON',
           },
         })
         cy.signIn()
@@ -106,7 +105,6 @@ context('Monitoring conditions', () => {
 
       context('Should submit a correctly formatted installation location', () => {
         const locationMap = new Map<string, string>([
-          ['At another address', 'INSTALLATION'],
           ['10 Downing Street, London, SW1A 2AB', 'PRIMARY'],
           ['At a prison', 'PRISON'],
           ['At a probation office', 'PROBATION_OFFICE'],
@@ -138,18 +136,6 @@ context('Monitoring conditions', () => {
             }).should('be.true')
           }),
         )
-      })
-
-      context('Shoud continue to Installation address page', () => {
-        it(`Should continue to Installaion address page`, () => {
-          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
-          const validFormData = {
-            location: 'At another address',
-          }
-          page.form.fillInWith(validFormData)
-          page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(InstallationAddressPage)
-        })
       })
 
       context('Should continue to monitoring types when primary address is selected', () => {

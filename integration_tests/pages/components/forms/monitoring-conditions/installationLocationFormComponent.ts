@@ -12,7 +12,7 @@ export default class InstallationLocationFormComponent extends FormComponent {
     return new FormRadiosComponent(
       this.form,
       'Where will installation of the electronic monitoring device take place?',
-      ['At another address'],
+      ['At a prison', 'At a probation office'],
     )
   }
 

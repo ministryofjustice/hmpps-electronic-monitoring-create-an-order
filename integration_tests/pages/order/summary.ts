@@ -523,9 +523,12 @@ export default class OrderTasksPage extends AppPage {
     monitoringConditionsPage.form.fillInWith(monitoringConditions)
     monitoringConditionsPage.form.saveAndContinueButton.click()
 
-    if (monitoringConditions.monitoringRequired !== 'Curfew') {
+    if (
+      monitoringConditions.monitoringRequired === 'Alcohol' ||
+      (monitoringConditions.monitoringRequired as Array<string>).indexOf('Alcohol') !== -1
+    ) {
       const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      installationLocationPage.form.fillInWith({ location: 'At another address' })
+      installationLocationPage.form.fillInWith({ location: 'At a prison' })
       installationLocationPage.form.saveAndContinueButton.click()
 
       const installationAddress = Page.verifyOnPage(InstallationAddressPage)

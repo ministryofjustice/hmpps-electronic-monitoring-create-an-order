@@ -114,14 +114,8 @@ const doesOrderHavePhotoId = (order: Order): boolean => {
   return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
 }
 
-const isCurfewOnly = (order: Order): boolean => {
-  return (
-    order.monitoringConditions.alcohol === false &&
-    order.monitoringConditions.curfew === true &&
-    order.monitoringConditions.exclusionZone === false &&
-    order.monitoringConditions.mandatoryAttendance === false &&
-    order.monitoringConditions.trail === false
-  )
+const isTagAtSourceAvailable = (order: Order): boolean => {
+  return order.monitoringConditions.alcohol === true
 }
 
 export default class TaskListService {
@@ -290,10 +284,10 @@ export default class TaskListService {
       name: PAGES.installationLocation,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
       state: convertBooleanToEnum<State>(
-        isCurfewOnly(order),
+        isTagAtSourceAvailable(order),
         STATES.cantBeStarted,
-        STATES.notRequired,
         STATES.required,
+        STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.installationLocation),
     })
@@ -317,8 +311,7 @@ export default class TaskListService {
       name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: convertBooleanToEnum<State>(
-        order.installationLocation?.location === 'INSTALLATION' ||
-          order.installationLocation?.location === 'PRISON' ||
+        order.installationLocation?.location === 'PRISON' ||
           order.installationLocation?.location === 'PROBATION_OFFICE',
         STATES.cantBeStarted,
         STATES.required,

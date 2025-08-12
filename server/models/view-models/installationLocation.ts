@@ -57,13 +57,7 @@ const construct = (
   validationErrors: ValidationResult,
 ): InstallationLocationViewModel => {
   let showTagAtSourceOptions = false
-  if (
-    order.monitoringConditions.alcohol === true &&
-    order.monitoringConditions.curfew === false &&
-    order.monitoringConditions.exclusionZone === false &&
-    order.monitoringConditions.mandatoryAttendance === false &&
-    order.monitoringConditions.trail === false
-  ) {
+  if (order.monitoringConditions.alcohol === true) {
     showTagAtSourceOptions = true
   }
 
