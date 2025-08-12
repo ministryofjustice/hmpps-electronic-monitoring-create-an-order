@@ -15,7 +15,24 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           status: 'SUBMITTED',
           order: {
-            installationLocation: { location: 'INSTALLATION' },
+            monitoringConditions: {
+              startDate: '2024-06-01T00:00:00Z',
+              endDate: '2025-02-01T00:00:00Z',
+              orderType: 'CIVIL',
+              curfew: true,
+              exclusionZone: true,
+              trail: true,
+              mandatoryAttendance: true,
+              alcohol: true,
+              conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+              orderTypeDescription: null,
+              sentenceType: 'IPP',
+              issp: 'YES',
+              hdc: 'NO',
+              prarr: 'UNKNOWN',
+              pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+            },
+            installationLocation: { location: 'PRISON' },
           },
         })
 
@@ -32,7 +49,7 @@ context('Monitoring conditions', () => {
         page.returnBackToFormSectionMenuButton
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderId}/summary`)
-        page.form.locationField.shouldHaveValue('At another address')
+        page.form.locationField.shouldHaveValue('At a prison')
         page.form.shouldBeDisabled()
         page.errorSummary.shouldNotExist()
       })

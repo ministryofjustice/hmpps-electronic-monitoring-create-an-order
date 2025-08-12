@@ -1,9 +1,8 @@
 import AddressPageContent from '../../../types/i18n/pages/address'
 
 const installationAddressPageContent: AddressPageContent = {
-  helpText:
-    'This is the address where the electronic monitoring device will be fitted on to the body of the device wearer.',
-  legend: 'Where will the installation of the electronic monitoring device take place?',
+  helpText: '',
+  legend: '',
   questions: {
     hasAnotherAddress: {
       text: '',
@@ -26,7 +25,7 @@ const installationAddressPageContent: AddressPageContent = {
     },
   },
   section: 'Electronic monitoring required',
-  title: 'Installation address',
+  title: 'Where will the installation of the electronic monitoring device take place?',
 }
 
 export default installationAddressPageContent

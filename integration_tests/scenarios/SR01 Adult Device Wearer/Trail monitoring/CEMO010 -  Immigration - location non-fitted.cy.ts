@@ -11,7 +11,6 @@ import PrimaryAddressPage from '../../../pages/order/contact-information/primary
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
@@ -21,7 +20,6 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -146,14 +144,6 @@ context.skip('Scenarios', () => {
       const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      installationLocationPage.form.fillInWith({ location: 'At another address' })
-      installationLocationPage.form.saveAndContinueButton.click()
-
-      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(fakePrimaryAddress)
-      installationAddress.form.saveAndContinueButton.click()
 
       const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
       trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
@@ -318,11 +308,11 @@ context.skip('Scenarios', () => {
               checkin_schedule: [],
               revocation_date: '',
               revocation_type: '',
-              installation_address_1: fakePrimaryAddress.line1,
-              installation_address_2: fakePrimaryAddress.line2,
-              installation_address_3: fakePrimaryAddress.line3 ?? '',
-              installation_address_4: fakePrimaryAddress.line4 ?? '',
-              installation_address_post_code: fakePrimaryAddress.postcode,
+              installation_address_1: '',
+              installation_address_2: '',
+              installation_address_3: '',
+              installation_address_4: '',
+              installation_address_post_code: '',
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               issp: 'No',

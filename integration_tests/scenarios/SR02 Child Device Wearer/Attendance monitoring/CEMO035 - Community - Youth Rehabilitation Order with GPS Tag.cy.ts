@@ -16,7 +16,6 @@ import PrimaryAddressPage from '../../../pages/order/contact-information/primary
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
@@ -27,7 +26,6 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
-import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
@@ -86,7 +84,6 @@ context.skip('Scenarios', () => {
         ...fakePrimaryAddress,
         hasAnotherAddress: 'No',
       }
-      const installationAddressDetails = fakePrimaryAddress
       const interestedParties = createFakeInterestedParties(
         'Magistrates Court',
         'YJS',
@@ -187,14 +184,6 @@ context.skip('Scenarios', () => {
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
         monitoringConditionsPage.form.saveAndContinueButton.click()
-
-        const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-        installationLocationPage.form.fillInWith({ location: 'At another address' })
-        installationLocationPage.form.saveAndContinueButton.click()
-
-        const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-        installationAddress.form.fillInWith(installationAddressDetails)
-        installationAddress.form.saveAndContinueButton.click()
 
         const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
         attendanceMonitoringPage.form.fillInWith(attendanceMonitoringOrder)
@@ -381,11 +370,11 @@ ${attendanceMonitoringOrder.address.postcode}
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: installationAddressDetails.line1,
-                installation_address_2: installationAddressDetails.line2,
-                installation_address_3: installationAddressDetails.line3 ?? '',
-                installation_address_4: installationAddressDetails.line4 ?? '',
-                installation_address_post_code: installationAddressDetails.postcode,
+                installation_address_1: '',
+                installation_address_2: '',
+                installation_address_3: '',
+                installation_address_4: '',
+                installation_address_post_code: '',
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
