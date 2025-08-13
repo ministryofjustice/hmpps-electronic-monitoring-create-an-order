@@ -131,6 +131,7 @@ context('Receipt', () => {
           orderParameters: {
             havePhoto: false,
           },
+          submittedBy: 'test name',
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
         },
       })
@@ -147,6 +148,7 @@ context('Receipt', () => {
         { key: 'Type', value: 'REQUEST' },
         { key: 'Reference number', value: mockOrderId },
         { key: 'Date submitted', value: '01/01/2025, 10:30' },
+        { key: 'Submitted by', value: 'test name' },
       ])
       page.riskInformationSection.shouldExist()
       page.riskInformationSection.shouldHaveItems([
