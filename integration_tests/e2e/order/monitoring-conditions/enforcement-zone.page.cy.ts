@@ -7,13 +7,25 @@ const mockOrderId = uuidv4()
 const pagePath = '/monitoring-conditions/enforcement-zone'
 
 context('Monitoring conditions - Enforcement Zone', () => {
+  context('Page content', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.signIn()
+    })
+
+    it('Map tool should open in a new tab', () => {
+      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
+      page.mapToolOpensInNewTab()
+    })
+  })
+
   context('Draft order', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-
       cy.signIn()
     })
 
