@@ -15,6 +15,7 @@ const createOrderStatusAnswers = (order: Order) => {
     createAnswer('Type', order.type, '', answerOpts),
     createAnswer('Reference number', order.id, '', answerOpts),
     createDateTimeAnswer('Date submitted', order.fmsResultDate, '', answerOpts),
+    createAnswer('Submitted by', order.submittedBy, '', answerOpts),
   ]
   return answers
 }
