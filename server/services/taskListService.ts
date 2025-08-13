@@ -297,8 +297,9 @@ export default class TaskListService {
       name: PAGES.installationAppointment,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
       state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order)&&(order.installationLocation?.location === 'PRISON' ||
-          order.installationLocation?.location === 'PROBATION_OFFICE'),
+        isTagAtSourceAvailable(order) &&
+          (order.installationLocation?.location === 'PRISON' ||
+            order.installationLocation?.location === 'PROBATION_OFFICE'),
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -311,8 +312,9 @@ export default class TaskListService {
       name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order)&&( order.installationLocation?.location === 'PRISON' ||
-          order.installationLocation?.location === 'PROBATION_OFFICE'),
+        isTagAtSourceAvailable(order) &&
+          (order.installationLocation?.location === 'PRISON' ||
+            order.installationLocation?.location === 'PROBATION_OFFICE'),
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
