@@ -50,6 +50,7 @@ const OrderModel = z.object({
   installationAppointment: InstallationAppointmentModel.nullable().optional(),
   dataDictionaryVersion: DataDictionaryVersionEnum,
   orderParameters: OrderParametersModel.nullable().optional(),
+  submittedBy: z.string().optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>
