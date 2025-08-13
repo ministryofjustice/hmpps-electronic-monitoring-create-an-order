@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import { getMockOrder } from '../../test/mocks/mockOrder'
+import { createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
@@ -58,12 +58,10 @@ describe('OrderSearchController', () => {
       },
       enforcementZoneConditions: [],
       additionalDocuments: [],
-      curfewConditions: {
-        curfewAddress: null,
-        endDate: mockDate,
+      monitoringConditions: createMonitoringConditions({
         startDate: mockDate,
-        curfewAdditionalDetails: null,
-      },
+        endDate: mockDate,
+      }),
       fmsResultDate: mockDate,
       addresses: [
         {
