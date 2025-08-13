@@ -29,6 +29,7 @@
             {{ govukButton({
             text: "Yes, make changes",
             classes: "govuk-button--warning",
+            id: "confirm-button",
             name: "action",
             value: "continue",
             type: "submit"
@@ -36,6 +37,7 @@
           {{ govukButton({
             text: "Cancel and return back to form",
             classes: "govuk-button--secondary",
+            id: "cancel-button",
             href: "/order/" + order.id + "/summary"
           })}}
           </div>
