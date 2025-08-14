@@ -13,9 +13,6 @@ const mockSubmittedAlcoholMonitoring = {
     monitoringType: 'ALCOHOL_ABSTINENCE',
     startDate: '2024-03-27T00:00:00.000Z',
     endDate: '2025-04-28T00:00:00.000Z',
-    installationLocation: 'INSTALLATION',
-    probationOfficeName: null,
-    prisonName: null,
   },
   id: mockOrderId,
 }
@@ -26,9 +23,6 @@ const mockEmptyAlcoholMonitoring = {
     monitoringType: null,
     startDate: null,
     endDate: null,
-    installationLocation: null,
-    prisonName: null,
-    probationOfficeName: null,
   },
   id: mockOrderId,
 }
@@ -70,11 +64,7 @@ context('Alcohol monitoring', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
-          monitoringConditionsAlcohol: {
-            ...mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
-            installationLocation: 'PROBATION_OFFICE',
-            probationOfficeName: 'Probation Office',
-          },
+          monitoringConditionsAlcohol: mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
         },
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
@@ -93,10 +83,7 @@ context('Alcohol monitoring', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
-          monitoringConditionsAlcohol: {
-            ...mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
-            installationLocation: 'PRISON',
-          },
+          monitoringConditionsAlcohol: mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
         },
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
@@ -117,11 +104,7 @@ context('Alcohol monitoring', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          monitoringConditionsAlcohol: {
-            ...mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
-            installationLocation: 'PROBATION_OFFICE',
-            probationOfficeName: 'Probation Office',
-          },
+          monitoringConditionsAlcohol: mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
         },
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
@@ -138,11 +121,7 @@ context('Alcohol monitoring', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          monitoringConditionsAlcohol: {
-            ...mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
-            installationLocation: 'PRISON',
-            prisonName: 'Prison Name',
-          },
+          monitoringConditionsAlcohol: mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
         },
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
