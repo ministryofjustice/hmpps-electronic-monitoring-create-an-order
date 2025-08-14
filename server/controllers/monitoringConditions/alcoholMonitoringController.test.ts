@@ -120,7 +120,6 @@ describe('AlcoholMonitoringController', () => {
             error: { text: 'Start date is required' },
           },
           endDate: { value: { day: '30', month: '12', year: '2027', hours: '00', minutes: '00' }, error: undefined },
-          tertiaryAddressView: { value: '' },
         }),
       )
     })

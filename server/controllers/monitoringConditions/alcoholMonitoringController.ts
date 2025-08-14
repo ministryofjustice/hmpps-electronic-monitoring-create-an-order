@@ -14,7 +14,7 @@ export default class AlcoholMonitoringController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsAlcohol, addresses } = req.order!
+    const { monitoringConditionsAlcohol } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = alcoholMonitoringViewModel.construct(
@@ -23,7 +23,6 @@ export default class AlcoholMonitoringController {
         startDate: null,
         endDate: null,
       },
-      addresses,
       errors as never,
       formData as never,
     )
