@@ -75,35 +75,4 @@
       defaultMinutes: 59
     })}}
  
-
-  {% set probationHtml %}
-    {{ govukInput({
-      id: "probationOfficeName",
-      name: "probationOfficeName",
-      type: "text",
-      classes: "govuk-!-width-one-third",
-      label: {
-        text: content.pages.alcohol.questions.probationOfficeName.text
-      },
-      disabled: not isOrderEditable,
-      value: probationOfficeName.value,
-      errorMessage: probationOfficeName.error
-    }) }}
-  {% endset -%}
-
-  {% set prisonHtml %}
-    {{ govukInput({
-      id: "prisonName",
-      name: "prisonName",
-      type: "text",
-      classes: "govuk-!-width-one-third",
-      label: {
-        text: content.pages.alcohol.questions.prisonName.text
-      },
-      disabled: not isOrderEditable,
-      value: prisonName.value,
-      errorMessage: prisonName.error
-    }) }}
-  {% endset -%}
-
 {% endblock %}

@@ -6,9 +6,7 @@ import { AlcoholMonitoringFormData } from '../form-data/alcoholMonitoring'
 import { ValidationResult } from '../Validation'
 import { DateTimeField, TextField, ViewModel } from './utils'
 
-type AlcoholMonitoringViewModel = ViewModel<
-  Pick<AlcoholMonitoring, 'installationLocation' | 'monitoringType' | 'prisonName' | 'probationOfficeName'>
-> & {
+type AlcoholMonitoringViewModel = ViewModel<Pick<AlcoholMonitoring, 'monitoringType'>> & {
   startDate: DateTimeField
   endDate: DateTimeField
   primaryAddressView: TextField
@@ -35,9 +33,6 @@ const createViewModelFromAlcoholMonitoring = (
     monitoringType: { value: monitoringConditionsAlcohol?.monitoringType ?? '' },
     startDate: { value: startDate },
     endDate: { value: endDate },
-    installationLocation: { value: monitoringConditionsAlcohol?.installationLocation ?? '' },
-    probationOfficeName: { value: monitoringConditionsAlcohol?.probationOfficeName ?? '' },
-    prisonName: { value: monitoringConditionsAlcohol?.prisonName ?? '' },
     primaryAddressView: { value: addressViews.primaryAddressView },
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
@@ -73,15 +68,6 @@ const createViewModelFromFormData = (
       },
       error: getError(validationErrors, 'endDate'),
     },
-    installationLocation: {
-      value: formData.installationLocation ?? '',
-      error: getError(validationErrors, 'installationLocation'),
-    },
-    probationOfficeName: {
-      value: formData.probationOfficeName ?? '',
-      error: getError(validationErrors, 'probationOfficeName'),
-    },
-    prisonName: { value: formData.prisonName ?? '', error: getError(validationErrors, 'prisonName') },
     primaryAddressView: { value: addressViews.primaryAddressView },
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },

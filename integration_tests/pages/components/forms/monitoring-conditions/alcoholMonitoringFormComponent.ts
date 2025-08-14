@@ -1,6 +1,5 @@
 import FormComponent from '../../formComponent'
 import FormDateTimeComponent from '../../formDateTimeComponent'
-import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
 
 export type AlcoholMonitoringFormData = {
@@ -31,25 +30,6 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
     return new FormDateTimeComponent(this.form, 'endDate')
   }
 
-  get installLocationField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What is the address of the base station?', [
-      /at installation address/,
-      /at main address/,
-      /at second address/,
-      /at third address/,
-      'at the probation office',
-      'at prison',
-    ])
-  }
-
-  get probationNameField(): FormInputComponent {
-    return new FormInputComponent(this.form, 'Enter probation office name')
-  }
-
-  get prisonNameField(): FormInputComponent {
-    return new FormInputComponent(this.form, 'Enter prison name')
-  }
-
   // FORM HELPERS
 
   fillInWith(data: AlcoholMonitoringFormData): void {
@@ -65,10 +45,6 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
       this.endDateField.set(data.endDate, false)
     }
 
-    if (data.installLocation) {
-      this.installLocationField.set(data.installLocation)
-    }
-
     // agreed address
 
     // probation office name
@@ -80,25 +56,21 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
     this.monitoringTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
-    this.installLocationField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.monitoringTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
-    this.installLocationField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
     this.monitoringTypeField.shouldNotBeDisabled()
     this.startDateField.shouldNotBeDisabled()
     this.endDateField.shouldNotBeDisabled()
-    this.installLocationField.shouldNotBeDisabled()
   }
 
   shouldHaveAllOptions(): void {
     this.monitoringTypeField.shouldHaveAllOptions()
-    this.installLocationField.shouldHaveAllOptions()
   }
 }

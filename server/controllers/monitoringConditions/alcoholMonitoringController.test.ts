@@ -5,7 +5,6 @@ import AlcoholMonitoringController from './alcoholMonitoringController'
 import RestClient from '../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import { AddressTypeEnum } from '../../models/Address'
 import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
@@ -14,26 +13,13 @@ jest.mock('../../services/alcoholMonitoringService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 
-const createMockOrder = (startDate: string | null = null, prisonName = null, probationOfficeName = null) =>
+const createMockOrder = (startDate: string | null = null) =>
   getMockOrder({
     monitoringConditionsAlcohol: {
       monitoringType: 'ALCOHOL_ABSTINENCE',
       startDate,
       endDate: '2027-02-15',
-      prisonName,
-      probationOfficeName,
-      installationLocation: 'PRIMARY',
     },
-    addresses: [
-      {
-        addressType: AddressTypeEnum.Enum.PRIMARY,
-        addressLine1: '1 Mock Street',
-        addressLine2: 'Mock City',
-        addressLine3: '',
-        addressLine4: '',
-        postcode: 'Mock Postcode',
-      },
-    ],
   })
 
 describe('AlcoholMonitoringController', () => {
@@ -84,13 +70,6 @@ describe('AlcoholMonitoringController', () => {
           monitoringType: { value: 'ALCOHOL_ABSTINENCE' },
           startDate: { value: { day: '15', month: '02', year: '2026', hours: '00', minutes: '00' } },
           endDate: { value: { day: '15', month: '02', year: '2027', hours: '00', minutes: '00' } },
-          prisonName: { value: '' },
-          probationOfficeName: { value: '' },
-          installationLocation: { value: 'PRIMARY' },
-          primaryAddressView: { value: '1 Mock Street, Mock City, Mock Postcode' },
-          secondaryAddressView: { value: '' },
-          tertiaryAddressView: { value: '' },
-          installationAddressView: { value: '' },
         }),
       )
     })
@@ -121,9 +100,6 @@ describe('AlcoholMonitoringController', () => {
               hours: '00',
               minutes: '00',
             },
-            prisonName: '',
-            probationOfficeName: '',
-            installationLocation: 'PRIMARY',
             primaryAddressView: '1 Mock Street, Mock City, Mock Postcode',
             secondaryAddressView: '',
             tertiaryAddressView: '',
@@ -144,13 +120,7 @@ describe('AlcoholMonitoringController', () => {
             error: { text: 'Start date is required' },
           },
           endDate: { value: { day: '30', month: '12', year: '2027', hours: '00', minutes: '00' }, error: undefined },
-          prisonName: { value: '' },
-          probationOfficeName: { value: '' },
-          primaryAddressView: { value: '1 Mock Street, Mock City, Mock Postcode' },
-          secondaryAddressView: { value: '' },
           tertiaryAddressView: { value: '' },
-          installationAddressView: { value: '' },
-          installationLocation: { value: 'PRIMARY' },
         }),
       )
     })
@@ -180,9 +150,6 @@ describe('AlcoholMonitoringController', () => {
           hours: '00',
           minutes: '00',
         },
-        installationLocation: 'PRIMARY',
-        prisonName: '',
-        probationOfficeName: '',
       }
       mockAlcoholMonitoringService.update.mockResolvedValue([
         { error: 'Monitoring type is required', field: 'monitoringType' },
@@ -210,9 +177,6 @@ describe('AlcoholMonitoringController', () => {
           hours: '00',
           minutes: '00',
         },
-        installationLocation: 'PRIMARY',
-        prisonName: '',
-        probationOfficeName: '',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
@@ -247,17 +211,11 @@ describe('AlcoholMonitoringController', () => {
           hours: '00',
           minutes: '00',
         },
-        installationLocation: 'PRIMARY',
-        prisonName: '',
-        probationOfficeName: '',
       }
       mockAlcoholMonitoringService.update.mockResolvedValue({
         monitoringType: 'ALCOHOL_ABSTINENCE',
         startDate: '2026-12-30',
         endDate: '2027-12-30',
-        installationLocation: 'PRIMARY',
-        prisonName: '',
-        probationOfficeName: '',
       })
 
       // When
@@ -292,17 +250,11 @@ describe('AlcoholMonitoringController', () => {
         hours: '00',
         minutes: '00',
       },
-      installationLocation: 'PRIMARY',
-      prisonName: '',
-      probationOfficeName: '',
     }
     mockAlcoholMonitoringService.update.mockResolvedValue({
       monitoringType: 'ALCOHOL_ABSTINENCE',
       startDate: '2026-12-30',
       endDate: '2027-12-30',
-      installationLocation: 'PRIMARY',
-      prisonName: '',
-      probationOfficeName: '',
     })
 
     // When
