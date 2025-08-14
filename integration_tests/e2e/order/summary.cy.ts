@@ -8,7 +8,7 @@ import ContactInformationCheckYourAnswersPage from '../../pages/order/contact-in
 import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installation-and-risk/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../pages/order/attachments/summary'
-import EditConfirmPage from '../../pages/order/edit-confirm'
+import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 
 let mockOrderId = uuidv4()
 
@@ -697,7 +697,7 @@ context('Order Summary', () => {
 
       page.makeChangesButton.click()
 
-      Page.verifyOnPage(EditConfirmPage)
+      Page.verifyOnPage(ConfirmVariationPage)
     })
   })
 

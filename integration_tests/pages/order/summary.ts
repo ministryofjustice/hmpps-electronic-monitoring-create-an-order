@@ -70,7 +70,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   get makeChangesButton(): PageElement {
-    return cy.contains('a', 'Make changes to this form')
+    return cy.get('#make-changes-button')
   }
 
   fillInNewCurfewOrderWith({
