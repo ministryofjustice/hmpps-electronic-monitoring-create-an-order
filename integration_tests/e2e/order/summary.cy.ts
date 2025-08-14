@@ -3,7 +3,7 @@ import OrderTasksPage from '../../pages/order/summary'
 import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
 import AttachmentType from '../../../server/models/AttachmentType'
-import EditConfirmPage from '../../pages/order/edit-confirm'
+import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 
 const mockOrderId = uuidv4()
 
@@ -578,7 +578,7 @@ context('Order Summary', () => {
 
       page.makeChangesButton.click()
 
-      Page.verifyOnPage(EditConfirmPage)
+      Page.verifyOnPage(ConfirmVariationPage)
     })
   })
 
