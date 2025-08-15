@@ -301,23 +301,6 @@ const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
     createAnswer(questions.monitoringType.text, monitoringType, uri, answerOpts),
     createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri, answerOpts),
     createDateAnswer(questions.endDate.text, order.monitoringConditionsAlcohol?.endDate, uri, answerOpts),
-    ['PRIMARY', 'SECONDARY', 'TERTIARY', 'INSTALLATION'].includes(
-      order.monitoringConditionsAlcohol?.installationLocation || '',
-    )
-      ? createAddressAnswer(
-          questions.installationLocation.text,
-          order.addresses.find(
-            ({ addressType }) => addressType === order.monitoringConditionsAlcohol?.installationLocation,
-          ),
-          uri,
-          answerOpts,
-        )
-      : createAnswer(
-          questions.installationLocation.text,
-          order.monitoringConditionsAlcohol?.prisonName || order.monitoringConditionsAlcohol?.probationOfficeName,
-          uri,
-          answerOpts,
-        ),
   ]
 }
 
