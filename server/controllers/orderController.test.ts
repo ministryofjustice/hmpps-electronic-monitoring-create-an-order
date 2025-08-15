@@ -3,6 +3,7 @@ import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpr
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { OrderStatusEnum } from '../models/Order'
+import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
@@ -89,6 +90,7 @@ describe('OrderController', () => {
     it('should render the confirm edit view', async () => {
       // Given
       const mockOrder = getMockOrder()
+      const mockViewModel = ConfirmationPageViewModel.construct(mockOrder)
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -101,7 +103,7 @@ describe('OrderController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/edit-confirm',
         expect.objectContaining({
-          order: mockOrder,
+          ...mockViewModel,
         }),
       )
     })
