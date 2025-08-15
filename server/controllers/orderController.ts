@@ -3,6 +3,7 @@ import { AuditService, OrderService } from '../services'
 import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
+import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import config from '../config'
 import FeatureFlags from '../utils/featureFlags'
 
@@ -52,10 +53,10 @@ export default class OrderController {
   }
 
   confirmEdit: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
+    const viewModel = ConfirmationPageViewModel.construct(req.order!)
 
     res.render('pages/order/edit-confirm', {
-      order,
+      ...viewModel,
     })
   }
 

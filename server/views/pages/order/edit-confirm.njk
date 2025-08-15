@@ -14,7 +14,7 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {% set heading = 'Are you sure that you want to make changes to the EMO application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName + '?' %}
+      {% set heading = 'Are you sure that you want to make changes to the EMO application form for ' + deviceWearer.firstName + ' ' + deviceWearer.lastName + '?' %}
       <h1 class="govuk-heading-l">
         {{ heading }}
       </h1>
