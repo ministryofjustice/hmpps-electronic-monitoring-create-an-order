@@ -33,6 +33,7 @@ type I18n = {
     curfewAdditionalDetails: CurfewAdditionalDetailsPageContent
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
+    deleteConfirm: ConfirmationPageContent
     deviceWearer: DeviceWearerPageContent
     editConfirm: ConfirmationPageContent
     exclusionZone: ExclusionZonePageContent

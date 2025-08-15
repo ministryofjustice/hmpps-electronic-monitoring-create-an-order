@@ -9,7 +9,7 @@ const editConfirmPageContent: ConfirmationPageContent = {
   ],
   buttons: {
     confirm: 'Yes, make changes',
-    cancel: 'Cancel and return back to form',
+    cancel: 'Cancel and return to form',
   },
 }
 

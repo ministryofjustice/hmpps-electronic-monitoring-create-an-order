@@ -30,23 +30,23 @@
 
       <form action="/order/{{ order.id }}/variation" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-          <div class="govuk-button-group">
-            {{ govukButton({
-            text: confirmButtonText,
-            classes: "govuk-button--warning",
-            id: "confirm-button",
-            name: "action",
-            value: "continue",
-            type: "submit"
-          }) }}
-
+        <div class="govuk-button-group">
           {{ govukButton({
-            text: cancelButtonText,
-            classes: "govuk-button--secondary",
-            id: "cancel-button",
-            href: "/order/" + order.id + "/summary"
-          })}}
-          </div>
+          text: confirmButtonText,
+          classes: "govuk-button--warning",
+          id: "confirm-button",
+          name: "action",
+          value: "continue",
+          type: "submit"
+        }) }}
+
+        {{ govukButton({
+          text: cancelButtonText,
+          classes: "govuk-button--secondary",
+          id: "cancel-button",
+          href: "/order/" + order.id + "/summary"
+        })}}
+        </div>
         </form>
       </div>
     </div>
