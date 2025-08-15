@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type HavePhotoPageContent = PageContent<'havePhoto'>
+type HavePhotoPageContent = QuestionPageContent<'havePhoto'>
 
 export default HavePhotoPageContent

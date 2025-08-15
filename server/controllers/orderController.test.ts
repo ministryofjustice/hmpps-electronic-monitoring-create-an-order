@@ -3,6 +3,7 @@ import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpr
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { OrderStatusEnum } from '../models/Order'
+import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
@@ -80,6 +81,57 @@ describe('OrderController', () => {
       expect(mockOrderService.createOrder).toHaveBeenCalledWith({
         accessToken: 'fakeUserToken',
         data: { type: 'REQUEST' },
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+    })
+  })
+
+  describe('confirmEdit', () => {
+    it('should render the confirm edit view', async () => {
+      // Given
+      const mockOrder = getMockOrder()
+      const mockViewModel = ConfirmationPageViewModel.construct(mockOrder)
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
+
+      // When
+      await orderController.confirmEdit(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/edit-confirm',
+        expect.objectContaining({
+          ...mockViewModel,
+        }),
+      )
+    })
+  })
+
+  describe('createVariation', () => {
+    it('should create a variation order and redirect to its summary page', async () => {
+      // Given
+      const req = createMockRequest({
+        body: {
+          action: 'continue',
+        },
+        params: {
+          orderId: '123456',
+        },
+      })
+      const res = createMockResponse()
+      const mockOrder = getMockOrder()
+      mockOrderService.createVariationFromExisting.mockResolvedValue(mockOrder)
+      const next = jest.fn()
+
+      // When
+      await orderController.createVariation(req, res, next)
+
+      // Then
+      expect(mockOrderService.createVariationFromExisting).toHaveBeenCalledWith({
+        accessToken: 'fakeUserToken',
+        orderId: '123456',
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
     })

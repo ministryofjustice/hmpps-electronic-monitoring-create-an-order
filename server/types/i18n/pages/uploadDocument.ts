@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type UploadDocumentPageContent = PageContent<'file'>
+type UploadDocumentPageContent = QuestionPageContent<'file'>
 
 export default UploadDocumentPageContent

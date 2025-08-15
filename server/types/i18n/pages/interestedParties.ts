@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type InterestedPartiesPageContent = PageContent<
+type InterestedPartiesPageContent = QuestionPageContent<
   | 'civilCountyCourt'
   | 'crownCourt'
   | 'familyCourt'

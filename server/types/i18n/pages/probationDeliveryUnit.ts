@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type ProbationDeliveryUnit = PageContent<'unit'>
+type ProbationDeliveryUnit = QuestionPageContent<'unit'>
 
 export default ProbationDeliveryUnit

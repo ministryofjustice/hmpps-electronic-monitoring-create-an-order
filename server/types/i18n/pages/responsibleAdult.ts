@@ -1,5 +1,7 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type ResponsibleAdultPageContent = PageContent<'contactNumber' | 'fullName' | 'otherRelationship' | 'relationship'>
+type ResponsibleAdultPageContent = QuestionPageContent<
+  'contactNumber' | 'fullName' | 'otherRelationship' | 'relationship'
+>
 
 export default ResponsibleAdultPageContent
