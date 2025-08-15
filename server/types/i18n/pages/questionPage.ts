@@ -6,7 +6,7 @@ type Question = {
   hint?: string
 }
 
-type PageContent<T extends string> = {
+type QuestionPageContent<T extends string> = {
   // The section the page belongs to. Used as a subheading.
   section: string
 
@@ -23,4 +23,4 @@ type PageContent<T extends string> = {
   questions: Record<T, Question>
 }
 
-export default PageContent
+export default QuestionPageContent

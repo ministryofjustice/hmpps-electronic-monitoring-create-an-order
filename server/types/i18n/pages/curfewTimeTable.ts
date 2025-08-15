@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type CurfewTimeTablePageContent = PageContent<'timetable'>
+type CurfewTimeTablePageContent = QuestionPageContent<'timetable'>
 
 export default CurfewTimeTablePageContent
