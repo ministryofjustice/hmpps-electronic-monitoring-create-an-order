@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type IdentityNumbersPageContent = PageContent<
+type IdentityNumbersPageContent = QuestionPageContent<
   'deliusId' | 'homeOfficeReferenceNumber' | 'nomisId' | 'pncId' | 'prisonNumber'
 >
 

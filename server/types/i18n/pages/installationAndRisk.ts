@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type InstallationAndRiskPageContent = PageContent<
+type InstallationAndRiskPageContent = QuestionPageContent<
   | 'mappaLevel'
   | 'mappaCaseType'
   | 'offence'

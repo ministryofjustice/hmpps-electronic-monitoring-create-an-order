@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type ContactDetailsPageContent = PageContent<'contactNumber'>
+type ContactDetailsPageContent = QuestionPageContent<'contactNumber'>
 
 export default ContactDetailsPageContent

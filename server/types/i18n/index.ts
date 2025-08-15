@@ -1,6 +1,7 @@
 import AddressPageContent from './pages/address'
 import AlcoholPageContent from './pages/alcohol'
 import AttendancePageContent from './pages/attendance'
+import ConfirmationPageContent from './pages/confirmationPage'
 import ContactDetailsPageContent from './pages/contactDetails'
 import CurfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import CurfewConditionsPageContent from './pages/curfewConditions'
@@ -8,8 +9,11 @@ import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
 import DeviceWearerPageContent from './pages/deviceWearer'
 import ExclusionZonePageContent from './pages/exclusionZone'
+import HavePhotoPageContent from './pages/havePhoto'
 import IdentityNumbersPageContent from './pages/identityNumbers'
 import InstallationAndRiskPageContent from './pages/installationAndRisk'
+import InstallationAppointmentPageContent from './pages/installationAppointment'
+import InstallationLocationPageContent from './pages/installationLocation'
 import InterestedPartiesPageContent from './pages/interestedParties'
 import ProbationDeliveryUnit from './pages/probationDeliveryUnit'
 import MonitoringConditionsPageContent from './pages/monitoringConditions'
@@ -18,10 +22,7 @@ import ResponsibleAdultPageContent from './pages/responsibleAdult'
 import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
 import VariationDetailsPageContent from './pages/variationDetails'
-import InstallationLocationPageContent from './pages/installationLocation'
-import InstallationAppointmentPageContent from './pages/installationAppointment'
 import ReferenceData from './reference'
-import HavePhotoPageContent from './pages/havePhoto'
 
 type I18n = {
   pages: {
@@ -33,10 +34,14 @@ type I18n = {
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
     deviceWearer: DeviceWearerPageContent
+    editConfirm: ConfirmationPageContent
     exclusionZone: ExclusionZonePageContent
+    havePhoto: HavePhotoPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
+    installationAppointment: InstallationAppointmentPageContent
+    installationLocation: InstallationLocationPageContent
     interestedParties: InterestedPartiesPageContent
     probationDeliveryUnit: ProbationDeliveryUnit
     monitoringConditions: MonitoringConditionsPageContent
@@ -48,10 +53,7 @@ type I18n = {
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
-    havePhoto: HavePhotoPageContent
     variationDetails: VariationDetailsPageContent
-    installationLocation: InstallationLocationPageContent
-    installationAppointment: InstallationAppointmentPageContent
   }
   reference: ReferenceData
 }

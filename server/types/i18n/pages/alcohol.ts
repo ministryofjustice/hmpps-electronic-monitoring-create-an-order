@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type AlcoholPageContent = PageContent<
+type AlcoholPageContent = QuestionPageContent<
   'endDate' | 'installationLocation' | 'monitoringType' | 'probationOfficeName' | 'prisonName' | 'startDate'
 >
 
