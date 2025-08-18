@@ -1,4 +1,4 @@
-import OrderChecklistStore from '../data/cache/OrderChecklistStore'
+import OrderChecklistStore from '../data/orderChecklistStore/OrderChecklistStore'
 import OrderChecklistModel from '../models/OrderChecklist'
 
 export default class OrderChecklistService {
@@ -14,10 +14,20 @@ export default class OrderChecklistService {
       | 'ADDITIONAL_DOCUMENTS',
   ) {
     let checklist = await this.dataStore.getSectionCheckStatus(orderId)
-    if (checklist == null) checklist = OrderChecklistModel.parse({})
-
+    if (checklist == null) {
+      checklist = OrderChecklistModel.parse({})
+    }
     checklist[section] = true
 
     await this.dataStore.setSectionCheckStatus(orderId, checklist, 60 * 60)
+  }
+
+  public async getChecklist(orderId: string) {
+    let checklist = await this.dataStore.getSectionCheckStatus(orderId)
+    if (checklist == null) {
+      checklist = OrderChecklistModel.parse({})
+    }
+    await this.dataStore.setSectionCheckStatus(orderId, checklist, 60 * 60)
+    return checklist
   }
 }

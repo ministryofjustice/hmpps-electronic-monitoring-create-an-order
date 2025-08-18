@@ -17,9 +17,9 @@ describe('attachment have photo controller', () => {
   let mockModelService: jest.Mocked<HavePhotoModelService>
   let mockRestClient: jest.Mocked<RestClient>
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let mockOrderService: jest.Mocked<OrderService>
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('attachment have photo controller', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
-    mockModelService = new HavePhotoModelService() as jest.Mocked<HavePhotoModelService>   
+    mockModelService = new HavePhotoModelService() as jest.Mocked<HavePhotoModelService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
   })
 

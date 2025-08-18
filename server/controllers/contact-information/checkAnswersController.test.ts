@@ -17,9 +17,9 @@ jest.mock('../../data/restClient')
 
 describe('ContactDetailsCheckAnswersController', () => {
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>

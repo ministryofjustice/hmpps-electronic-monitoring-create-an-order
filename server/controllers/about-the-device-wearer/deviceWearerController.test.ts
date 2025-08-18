@@ -41,9 +41,9 @@ describe('DeviceWearerController', () => {
   let mockDeviceWearerService: jest.Mocked<DeviceWearerService>
   let deviceWearerController: DeviceWearerController
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -329,7 +329,9 @@ describe('DeviceWearerController', () => {
         interpreterRequired: true,
         language: 'British Sign',
       })
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
 
       // When
       await deviceWearerController.updateDeviceWearer(req, res, next)
@@ -388,7 +390,9 @@ describe('DeviceWearerController', () => {
         interpreterRequired: true,
         language: 'British Sign',
       })
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer/responsible-adult`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/responsible-adult`)
 
       // When
       await deviceWearerController.updateDeviceWearer(req, res, next)
@@ -545,7 +549,9 @@ describe('DeviceWearerController', () => {
         interpreterRequired: true,
         language: 'British Sign',
       })
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer/check-your-answers`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/check-your-answers`)
 
       // When
       await deviceWearerController.updateIdentityNumbers(req, res, next)

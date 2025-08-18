@@ -20,9 +20,9 @@ describe('ContactDetailsController', () => {
   let mockContactDetailsService: jest.Mocked<ContactDetailsService>
   let contactDetailsController: ContactDetailsController
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -167,7 +167,9 @@ describe('ContactDetailsController', () => {
       mockContactDetailsService.updateContactDetails.mockResolvedValue({
         contactNumber: '01234567890',
       })
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
       // When
       await contactDetailsController.update(req, res, next)
 

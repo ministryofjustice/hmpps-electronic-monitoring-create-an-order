@@ -42,9 +42,9 @@ const responsibleAdult = createResponsibleAdult({
 
 describe('DeviceWearerCheckAnswersController', () => {
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: DeviceWearerCheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>

@@ -12,6 +12,7 @@ import OrderService from '../services/orderService'
 import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
 import TaskListService from '../services/taskListService'
 import OrderChecklistService from '../services/orderChecklistService'
+import OrderChecklistModel from '../models/OrderChecklist'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -35,8 +36,9 @@ const auditService = new AuditService(hmppsAuditClient) as jest.Mocked<AuditServ
 const orderSearchService = new OrderSearchService(restClient) as jest.Mocked<OrderSearchService>
 const orderService = new OrderService(restClient) as jest.Mocked<OrderService>
 const deviceWearerService = new DeviceWearerService(restClient) as jest.Mocked<DeviceWearerService>
-const  mockOrderChecklistService= {
-  setSectionCheckStatus: jest.fn()
+const mockOrderChecklistService = {
+  setSectionCheckStatus: jest.fn(),
+  getChecklist: jest.fn(),
 } as unknown as jest.Mocked<OrderChecklistService>
 const taskListService = new TaskListService(mockOrderChecklistService)
 const mockSubmittedOrder = getMockSubmittedOrder()
@@ -126,10 +128,10 @@ describe('authorised user', () => {
   })
 
   describe('GET /order/:orderId/summary', () => {
-    it('should render order summary page', () => {
+    it('should render order summary page', async () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
-
+      mockOrderChecklistService.getChecklist.mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({})))
       return request(app)
         .get(`/order/${mockSubmittedOrder.id}/summary`)
         .expect('Content-Type', /html/)

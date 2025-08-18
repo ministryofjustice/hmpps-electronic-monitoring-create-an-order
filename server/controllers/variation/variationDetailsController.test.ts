@@ -37,12 +37,11 @@ describe('VariationDetailsController', () => {
     }) as jest.Mocked<RestClient>
     auditService = new AuditService(auditClient) as jest.Mocked<AuditService>
     variationService = new VariationService(restClient)
-    let  mockOrderChecklistService= {
-      setSectionCheckStatus: jest.fn()
+    const mockOrderChecklistService = {
+      setSectionCheckStatus: jest.fn(),
     } as unknown as jest.Mocked<OrderChecklistService>
     taskListService = new TaskListService(mockOrderChecklistService)
-   
-    
+
     controller = new VariationDetailsController(auditService, variationService, taskListService)
   })
 

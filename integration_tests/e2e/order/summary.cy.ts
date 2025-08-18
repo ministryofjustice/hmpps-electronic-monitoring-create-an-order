@@ -295,44 +295,83 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should display all tasks as complete', () => {
+    it('should display all tasks as To check', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
       page.aboutTheDeviceWearerTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
       )
 
-      page.contactInformationTask.shouldHaveStatus('Complete')
+      page.contactInformationTask.shouldHaveStatus('To check')
       page.contactInformationTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/contact-information/check-your-answers`,
       )
 
-      page.riskInformationTask.shouldHaveStatus('Complete')
+      page.riskInformationTask.shouldHaveStatus('To check')
       page.riskInformationTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/installation-and-risk/check-your-answers`,
       )
 
-      page.electronicMonitoringTask.shouldHaveStatus('Complete')
+      page.electronicMonitoringTask.shouldHaveStatus('To check')
       page.electronicMonitoringTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/monitoring-conditions/check-your-answers`,
       )
 
-      page.additionalDocumentsTask.shouldHaveStatus('Complete')
+      page.additionalDocumentsTask.shouldHaveStatus('To check')
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
 
       page.submitOrderButton.should('not.be.disabled')
     })
+
+    // it('should display all tasks as Complete', () => {
+    //   const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+    //   page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+    //   page.aboutTheDeviceWearerTask.link.should(
+    //     'have.attr',
+    //     'href',
+    //     `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
+    //   )
+
+    //   page.contactInformationTask.shouldHaveStatus('Complete')
+    //   page.contactInformationTask.link.should(
+    //     'have.attr',
+    //     'href',
+    //     `/order/${mockOrderId}/contact-information/check-your-answers`,
+    //   )
+
+    //   page.riskInformationTask.shouldHaveStatus('Complete')
+    //   page.riskInformationTask.link.should(
+    //     'have.attr',
+    //     'href',
+    //     `/order/${mockOrderId}/installation-and-risk/check-your-answers`,
+    //   )
+
+    //   page.electronicMonitoringTask.shouldHaveStatus('Complete')
+    //   page.electronicMonitoringTask.link.should(
+    //     'have.attr',
+    //     'href',
+    //     `/order/${mockOrderId}/monitoring-conditions/check-your-answers`,
+    //   )
+
+    //   page.additionalDocumentsTask.shouldHaveStatus('Complete')
+    //   page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
+
+    //   cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
+
+    //   page.submitOrderButton.should('not.be.disabled')
+    // })
   })
 
   context('Complete order, submitted', () => {

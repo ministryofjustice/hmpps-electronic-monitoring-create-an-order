@@ -1,9 +1,9 @@
+import OrderChecklistStore from './OrderChecklistStore'
 import type { RedisClient } from '../redisClient'
-
 import logger from '../../../logger'
 import { OrderChecklist } from '../../models/OrderChecklist'
 
-export default class OrderChecklistStore {
+export default class RedisOrderChecklistStore implements OrderChecklistStore {
   private readonly prefix = 'orderCheckList:'
 
   constructor(private readonly client: RedisClient) {

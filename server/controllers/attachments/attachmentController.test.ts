@@ -27,9 +27,9 @@ describe('AttachmentController', () => {
   let mockOrderService: jest.Mocked<OrderService>
   let mockAttachmentService: jest.Mocked<AttachmentService>
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: AttachmentController
   let req: Request
   let res: Response
@@ -50,13 +50,8 @@ describe('AttachmentController', () => {
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
-  
-    controller = new AttachmentController(
-      mockAuditService,
-      mockOrderService,
-      mockAttachmentService,
-      taskListService,
-    )
+
+    controller = new AttachmentController(mockAuditService, mockOrderService, mockAttachmentService, taskListService)
 
     req = {
       // @ts-expect-error stubbing session
@@ -246,7 +241,7 @@ describe('AttachmentController', () => {
       mockAttachmentService.uploadAttachment = jest
         .fn()
         .mockReturnValueOnce({ status: null, userMessage: null, developerMessage: null })
-        
+
       req.params.fileType = 'licence'
       await controller.uploadFile(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments/have-photo`)

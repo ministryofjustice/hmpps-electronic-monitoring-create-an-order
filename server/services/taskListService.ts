@@ -569,16 +569,13 @@ export default class TaskListService {
     return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
   }
 
-  isSectionChecked(sectionName: string): boolean {
-    return false
-  }
-
   incompleteTask(task: Task): boolean {
     return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
 
-  getSections(order: Order): SectionBlock[] {
+  async getSections(order: Order): Promise<SectionBlock[]> {
     const tasks = this.getTasks(order)
+    const checkList = await this.checklistService.getChecklist(order.id)
 
     return Object.values(SECTIONS)
       .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
@@ -592,7 +589,7 @@ export default class TaskListService {
         return {
           name: section,
           completed,
-          checked: this.isSectionChecked(section),
+          checked: checkList[section],
           path: path.replace(':orderId', order.id),
         }
       })

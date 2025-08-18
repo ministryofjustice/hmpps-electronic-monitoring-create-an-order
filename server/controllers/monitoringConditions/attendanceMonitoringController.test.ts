@@ -19,11 +19,10 @@ describe('attendanceMonitoringController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockAttendanceMonitoringService: jest.Mocked<AttendanceMonitoringService>
   let attendanceMonitoringController: AttendanceMonitoringController
-  const mockOrderChecklistService= {
-    setSectionCheckStatus: jest.fn()
+  const mockOrderChecklistService = {
+    setSectionCheckStatus: jest.fn(),
   } as unknown as jest.Mocked<OrderChecklistService>
   const taskListService = new TaskListService(mockOrderChecklistService)
- 
 
   beforeEach(() => {
     mockRestClient = new RestClient('cemoApi', {

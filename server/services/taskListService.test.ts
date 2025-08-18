@@ -22,10 +22,12 @@ import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
+import OrderChecklistModel from '../models/OrderChecklist'
 
 describe('TaskListService', () => {
-  const mockOrderChecklistService= {
-    setSectionCheckStatus: jest.fn()
+  const mockOrderChecklistService = {
+    setSectionCheckStatus: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({}))),
   } as unknown as jest.Mocked<OrderChecklistService>
   describe('getNextPage', () => {
     it('should return idenity numbers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
@@ -820,13 +822,13 @@ describe('TaskListService', () => {
   })
 
   describe('getSections', () => {
-    it('should return all tasks grouped by section and marked as incomplete', () => {
+    it('should return all tasks grouped by section and marked as incomplete', async () => {
       // Given
       const order = getMockOrder()
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       // When
-      const sections = taskListService.getSections(order)
+      const sections = await taskListService.getSections(order)
 
       // Then
       expect(sections).toEqual([
@@ -866,7 +868,7 @@ describe('TaskListService', () => {
       ])
     })
 
-    it('should return all tasks grouped by section and marked as complete', () => {
+    it('should return all tasks grouped by section and marked as complete', async () => {
       // Given
       const order = getMockOrder({
         deviceWearer: createDeviceWearer({
@@ -899,7 +901,7 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       // When
-      const sections = taskListService.getSections(order)
+      const sections = await taskListService.getSections(order)
 
       // Then
       expect(sections).toEqual([
@@ -936,7 +938,7 @@ describe('TaskListService', () => {
       ])
     })
 
-    it('should return all tasks grouped by section and ready to start', () => {
+    it('should return all tasks grouped by section and ready to start', async () => {
       // Given
       const order = getMockOrder({
         deviceWearer: createDeviceWearer({
@@ -955,7 +957,7 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       // When
-      const sections = taskListService.getSections(order)
+      const sections = await taskListService.getSections(order)
 
       // Then
       expect(sections).toEqual([
@@ -995,7 +997,7 @@ describe('TaskListService', () => {
       ])
     })
 
-    it('should return all tasks grouped by section and ready to start for a variation', () => {
+    it('should return all tasks grouped by section and ready to start for a variation', async () => {
       // Given
       const order = getMockOrder({
         type: 'VARIATION',
@@ -1015,12 +1017,12 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       // When
-      const sections = taskListService.getSections(order)
+      const sections = await taskListService.getSections(order)
 
       // Then
       expect(sections).toEqual([
         {
-          checked:false,
+          checked: false,
           completed: false,
           name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
           path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
@@ -1060,7 +1062,7 @@ describe('TaskListService', () => {
         },
       ])
     })
-    it('should return links to the check your answers pages if the order has been submitted', () => {
+    it('should return links to the check your answers pages if the order has been submitted', async () => {
       // Given
       const order = getMockOrder({
         status: 'SUBMITTED',
@@ -1080,7 +1082,7 @@ describe('TaskListService', () => {
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       // When
-      const sections = taskListService.getSections(order)
+      const sections = await taskListService.getSections(order)
 
       expect(sections).toEqual([
         {

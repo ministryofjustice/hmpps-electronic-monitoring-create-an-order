@@ -21,9 +21,9 @@ describe('CurfewConditionsController', () => {
   let mockCurfewAdditionalDetailsService: jest.Mocked<CurfewAdditionalDetailsService>
   let controller: CurfewAdditionalDetailsController
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let req: Request
   let res: Response
   let next: NextFunction

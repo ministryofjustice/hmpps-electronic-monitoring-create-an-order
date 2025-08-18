@@ -21,8 +21,8 @@ describe('CurfewReleaseDateController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewReleaseDateService: jest.Mocked<CurfewReleaseDateService>
   let controller: CurfewReleaseDateController
-  const mockOrderChecklistService= {
-    setSectionCheckStatus: jest.fn()
+  const mockOrderChecklistService = {
+    setSectionCheckStatus: jest.fn(),
   } as unknown as jest.Mocked<OrderChecklistService>
   const taskListService = new TaskListService(mockOrderChecklistService)
   let req: Request
@@ -270,7 +270,9 @@ describe('CurfewReleaseDateController', () => {
         curfewTimesEndMinutes: '59',
       }
       mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/curfew/conditions`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${mockId}/monitoring-conditions/curfew/conditions`)
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/conditions`)

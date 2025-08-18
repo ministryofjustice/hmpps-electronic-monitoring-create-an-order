@@ -24,8 +24,8 @@ describe('EnforcementZoneController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockEnforcementZoneService: jest.Mocked<EnforcementZoneService>
   let controller: EnforcementZoneController
-  const mockOrderChecklistService= {
-    setSectionCheckStatus: jest.fn()
+  const mockOrderChecklistService = {
+    setSectionCheckStatus: jest.fn(),
   } as unknown as jest.Mocked<OrderChecklistService>
   const taskListService = new TaskListService(mockOrderChecklistService)
   let req: Request

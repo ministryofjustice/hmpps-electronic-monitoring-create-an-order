@@ -21,8 +21,8 @@ describe('CurfewTimetableController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
-  const mockOrderChecklistService= {
-    setSectionCheckStatus: jest.fn()
+  const mockOrderChecklistService = {
+    setSectionCheckStatus: jest.fn(),
   } as unknown as jest.Mocked<OrderChecklistService>
   const taskListService = new TaskListService(mockOrderChecklistService)
   let req: Request
@@ -854,8 +854,9 @@ describe('CurfewTimetableController', () => {
 
       mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
 
-      
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/check-your-answers`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${mockId}/monitoring-conditions/check-your-answers`)
 
       await controller.update(req, res, next)
 

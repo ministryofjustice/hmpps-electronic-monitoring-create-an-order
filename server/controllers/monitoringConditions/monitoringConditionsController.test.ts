@@ -15,9 +15,9 @@ const mockId = uuidv4()
 describe(MonitoringConditionsController, () => {
   let mockMonitoringConditionsService: jest.Mocked<MonitoringConditionsService>
   const taskListService = {
-    getNextCheckYourAnswersPage:jest.fn(),
-    getNextPage: jest.fn()
-  }as unknown as jest.Mocked<TaskListService>
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: MonitoringConditionsController
   let mockRestClient: jest.Mocked<RestClient>
 

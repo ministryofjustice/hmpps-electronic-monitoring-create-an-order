@@ -57,7 +57,8 @@
         {% elif section.completed %}
              {% if not section.checked %}
                 {% set statusArgs = { 
-                  text: 'To check'
+                 
+                  html: '<strong class="govuk-tag">To check</strong>'
                 } %}
               {% else %}
                 {% set statusArgs = { 
