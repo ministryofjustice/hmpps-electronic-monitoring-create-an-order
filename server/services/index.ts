@@ -85,6 +85,7 @@ export const services = () => {
     probationDeliveryUnitService,
     installationLocationService,
     installationAppointmentService,
+    orderChecklistService,
   }
 }
 
@@ -108,4 +109,5 @@ export {
   TrailMonitoringService,
   ProbationDeliveryUnitService,
   InstallationLocationService,
+  OrderChecklistService,
 }
