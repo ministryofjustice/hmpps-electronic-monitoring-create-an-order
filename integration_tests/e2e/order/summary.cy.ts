@@ -416,7 +416,7 @@ context('Order Summary', () => {
       page.aboutTheDeviceWearerTask.link.click()
       const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
       dwCYApage.continueButton().click()
-     
+
       const contactInformationCyaPage = Page.verifyOnPage(
         ContactInformationCheckYourAnswersPage,
         { orderId: mockOrderId },
@@ -424,7 +424,7 @@ context('Order Summary', () => {
         'Check your answers',
       )
       contactInformationCyaPage.continueButton().click()
-     
+
       const riskInformationCyaPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
         { orderId: mockOrderId },
@@ -432,7 +432,7 @@ context('Order Summary', () => {
         'Check your answers',
       )
       riskInformationCyaPage.continueButton().click()
-     
+
       const monitoringConditionCyaPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
         { orderId: mockOrderId },
@@ -440,7 +440,7 @@ context('Order Summary', () => {
         'Check your answers',
       )
       monitoringConditionCyaPage.continueButton().click()
-    
+
       const attachmentSummaryPage = Page.verifyOnPage(
         AttachmentSummaryPage,
         { orderId: mockOrderId },
