@@ -337,7 +337,7 @@ context('Order Summary', () => {
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
 
-      page.submitOrderButton.should('not.be.disabled')
+      page.submitOrderButton.should('be.disabled')
     })
 
     it('should display status as Complete after view Device Wearer check your answer page', () => {
@@ -408,6 +408,49 @@ context('Order Summary', () => {
       attachmentSummaryPage.backToSummaryButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.additionalDocumentsTask.shouldHaveStatus('Complete')
+    })
+
+    it('should enable submit button when all section completed and checked', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.aboutTheDeviceWearerTask.link.click()
+      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      dwCYApage.continueButton().click()
+     
+      const contactInformationCyaPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      contactInformationCyaPage.continueButton().click()
+     
+      const riskInformationCyaPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      riskInformationCyaPage.continueButton().click()
+     
+      const monitoringConditionCyaPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      monitoringConditionCyaPage.continueButton().click()
+    
+      const attachmentSummaryPage = Page.verifyOnPage(
+        AttachmentSummaryPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      attachmentSummaryPage.backToSummaryButton.click()
+      page = Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
+
+      page.submitOrderButton.should('not.be.disabled')
     })
   })
 
