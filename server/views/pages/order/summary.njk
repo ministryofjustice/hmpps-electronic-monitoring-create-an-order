@@ -49,6 +49,7 @@
       {% endif %}
 
       {% set items = [] %}
+      {% set allChecked = true %}
       {% for section in sections %}
         {% set name = section.name | replace("_", " ") | capitalize %}
 
@@ -56,10 +57,10 @@
           {% set statusArgs = {} %}
         {% elif section.completed %}
              {% if not section.checked %}
-                {% set statusArgs = { 
-                 
+                {% set statusArgs = {                  
                   html: '<strong class="govuk-tag">To check</strong>'
                 } %}
+                 {% set allChecked = false %}
               {% else %}
                 {% set statusArgs = { 
                   text: 'Complete'
@@ -85,12 +86,12 @@
       {{ govukTaskList({ idPrefix: "sections", items: items }) }}
 
       {% if order.status == "IN_PROGRESS" %}
-        <form action="/order/{{ order.id }}/submit" method="post" data-module="form-spinner" data->
+        <form action="/order/{{ order.id }}/submit" method="post" data-module="form-spinner" data->       
           <input type="hidden" name="_csrf" value="{{ csrfToken }}">
           <div class="govuk-button-group">
             {{ govukButton({
                 text: "Submit form",
-                disabled: not order.isValid,
+                disabled: not order.isValid or not allChecked,
                 preventDoubleClick: true
             }) }}
             <a href="/order/{{ orderId }}/delete" class="govuk-link">Delete form</a>
