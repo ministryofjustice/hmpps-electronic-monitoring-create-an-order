@@ -425,10 +425,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         monitoringConditionsAlcohol: {
           endDate: '2024-11-11T00:00:00Z',
-          installationLocation: 'PRIMARY',
           monitoringType: 'ALCOHOL_LEVEL',
-          prisonName: null,
-          probationOfficeName: null,
           startDate: '2024-11-11T00:00:00Z',
         },
       })
@@ -1222,23 +1219,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'What is the address of the base station?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the address of the base station?',
-                },
-              ],
-            },
-          },
         ],
       })
     })
@@ -1389,10 +1369,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         monitoringConditionsAlcohol: {
           endDate: '2024-11-11T00:00:00Z',
-          installationLocation: 'PRIMARY',
           monitoringType: 'ALCOHOL_LEVEL',
-          prisonName: null,
-          probationOfficeName: null,
           startDate: '2024-11-11T00:00:00Z',
         },
       })
@@ -2148,23 +2125,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what date does alcohol monitoring end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the address of the base station?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the address of the base station?',
                 },
               ],
             },

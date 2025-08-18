@@ -127,10 +127,7 @@ export const createMonitoringConditionsAlcohol = (
   overrideProperties?: Partial<AlcoholMonitoring>,
 ): AlcoholMonitoring => ({
   endDate: null,
-  installationLocation: null,
   monitoringType: null,
-  prisonName: null,
-  probationOfficeName: null,
   startDate: null,
   ...overrideProperties,
 })
