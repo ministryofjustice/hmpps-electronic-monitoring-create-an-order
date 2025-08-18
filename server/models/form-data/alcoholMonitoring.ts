@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { DateTimeInputModel } from './formData'
 import { validationErrors } from '../../constants/validationErrors'
-import { AlcoholMonitoringType, InstallationLocationType } from '../AlcoholMonitoring'
+import { AlcoholMonitoringType } from '../AlcoholMonitoring'
 
 const AlcoholMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -20,9 +20,6 @@ const AlcoholMonitoringFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  installationLocation: z.string().default(''),
-  prisonName: z.string().nullable().default(null),
-  probationOfficeName: z.string().nullable().default(null),
 })
 
 export type AlcoholMonitoringFormData = z.infer<typeof AlcoholMonitoringFormDataModel>
@@ -32,15 +29,9 @@ const AlcoholMonitoringFormDataValidator = z
     monitoringType: z.string().min(1, validationErrors.monitoringConditionsAlcohol.monitoringTypeRequired),
     startDate: DateTimeInputModel(validationErrors.monitoringConditionsAlcohol.startDateTime),
     endDate: DateTimeInputModel(validationErrors.monitoringConditionsAlcohol.endDateTime),
-    installationLocation: z.string().min(1, validationErrors.monitoringConditionsAlcohol.installationLocationRequired),
-    prisonName: z.string(),
-    probationOfficeName: z.string(),
   })
-  .transform(({ monitoringType, installationLocation, probationOfficeName, prisonName, ...formData }) => ({
+  .transform(({ monitoringType, ...formData }) => ({
     monitoringType: (monitoringType as AlcoholMonitoringType) ?? null,
-    installationLocation: (installationLocation as InstallationLocationType) ?? null,
-    probationOfficeName: probationOfficeName || null,
-    prisonName: prisonName || null,
     ...formData,
   }))
 
