@@ -26,7 +26,10 @@ describe('AttachmentController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let mockAttachmentService: jest.Mocked<AttachmentService>
-  let mockTaskListService: jest.Mocked<TaskListService>
+  const taskListService = {
+    getNextCheckYourAnswersPage:jest.fn(),
+    getNextPage: jest.fn()
+  }as unknown as jest.Mocked<TaskListService>
   let controller: AttachmentController
   let req: Request
   let res: Response
@@ -47,12 +50,12 @@ describe('AttachmentController', () => {
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
-    mockTaskListService = new TaskListService() as jest.Mocked<TaskListService>
+  
     controller = new AttachmentController(
       mockAuditService,
       mockOrderService,
       mockAttachmentService,
-      mockTaskListService,
+      taskListService,
     )
 
     req = {
@@ -239,10 +242,11 @@ describe('AttachmentController', () => {
         path: '',
         buffer: Buffer.from(''),
       }
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${req.order?.id}/attachments/have-photo`)
       mockAttachmentService.uploadAttachment = jest
         .fn()
         .mockReturnValueOnce({ status: null, userMessage: null, developerMessage: null })
-
+        
       req.params.fileType = 'licence'
       await controller.uploadFile(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order?.id}/attachments/have-photo`)

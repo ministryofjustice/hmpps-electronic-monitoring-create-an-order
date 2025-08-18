@@ -3,6 +3,7 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
+import OrderChecklistService from './orderChecklistService'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -78,6 +79,7 @@ export type Task = {
 type SectionBlock = {
   name: Section
   completed: boolean
+  checked: boolean
   path: string
 }
 
@@ -119,7 +121,7 @@ const isTagAtSourceAvailable = (order: Order): boolean => {
 }
 
 export default class TaskListService {
-  constructor() {}
+  constructor(private readonly checklistService: OrderChecklistService) {}
 
   getTasks(order: Order): Array<Task> {
     const tasks: Array<Task> = []
@@ -567,6 +569,10 @@ export default class TaskListService {
     return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
   }
 
+  isSectionChecked(sectionName: string): boolean {
+    return false
+  }
+
   incompleteTask(task: Task): boolean {
     return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
@@ -583,7 +589,12 @@ export default class TaskListService {
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         }
-        return { name: section, completed, path: path.replace(':orderId', order.id) }
+        return {
+          name: section,
+          completed,
+          checked: this.isSectionChecked(section),
+          path: path.replace(':orderId', order.id),
+        }
       })
   }
 

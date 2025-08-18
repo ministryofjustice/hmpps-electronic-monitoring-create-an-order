@@ -10,6 +10,7 @@ import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import EnforcementZoneController from './enforcementZoneController'
 import { EnforcementZone } from '../../models/EnforcementZone'
 import TaskListService from '../../services/taskListService'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -23,7 +24,10 @@ describe('EnforcementZoneController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockEnforcementZoneService: jest.Mocked<EnforcementZoneService>
   let controller: EnforcementZoneController
-  const taskListService = new TaskListService()
+  const mockOrderChecklistService= {
+    setSectionCheckStatus: jest.fn()
+  } as unknown as jest.Mocked<OrderChecklistService>
+  const taskListService = new TaskListService(mockOrderChecklistService)
   let req: Request
   let res: Response
   let next: NextFunction
@@ -292,6 +296,7 @@ describe('EnforcementZoneController', () => {
       req.body = createMockBody('false', 'continue')
       req.order?.enforcementZoneConditions.push(createMockEnforcementZone())
       mockEnforcementZoneService.updateZone = jest.fn().mockReturnValueOnce(null)
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/attendance`)
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/attendance`)

@@ -42,7 +42,10 @@ describe('AlcoholMonitoringController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockAlcoholMonitoringService: jest.Mocked<AlcoholMonitoringService>
   let alcoholMonitoringController: AlcoholMonitoringController
-  const taskListService = new TaskListService()
+  const taskListService = {
+    getNextCheckYourAnswersPage:jest.fn(),
+    getNextPage: jest.fn()
+  }as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -259,7 +262,7 @@ describe('AlcoholMonitoringController', () => {
         prisonName: '',
         probationOfficeName: '',
       })
-
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockOrder.id}/monitoring-conditions/check-your-answers`)
       // When
       await alcoholMonitoringController.update(req, res, next)
 

@@ -7,6 +7,7 @@ import VariationDetailsController from './variationDetailsController'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -15,7 +16,7 @@ jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 
 describe('VariationDetailsController', () => {
-  let taskListService: jest.Mocked<TaskListService>
+  let taskListService: TaskListService
   let auditClient: jest.Mocked<HmppsAuditClient>
   let auditService: jest.Mocked<AuditService>
   let restClient: jest.Mocked<RestClient>
@@ -36,7 +37,12 @@ describe('VariationDetailsController', () => {
     }) as jest.Mocked<RestClient>
     auditService = new AuditService(auditClient) as jest.Mocked<AuditService>
     variationService = new VariationService(restClient)
-    taskListService = new TaskListService() as jest.Mocked<TaskListService>
+    let  mockOrderChecklistService= {
+      setSectionCheckStatus: jest.fn()
+    } as unknown as jest.Mocked<OrderChecklistService>
+    taskListService = new TaskListService(mockOrderChecklistService)
+   
+    
     controller = new VariationDetailsController(auditService, variationService, taskListService)
   })
 

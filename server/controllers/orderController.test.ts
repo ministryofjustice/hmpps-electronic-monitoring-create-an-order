@@ -18,8 +18,8 @@ describe('OrderController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
-  let orderController: OrderController
-  const taskListService = new TaskListService()
+  let orderController: OrderController 
+  let taskListService: jest.Mocked<TaskListService>   
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -35,7 +35,9 @@ describe('OrderController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
+    taskListService = {getSections:jest.fn()}as unknown as jest.Mocked<TaskListService>
     orderController = new OrderController(mockAuditService, mockOrderService, taskListService)
+   
   })
 
   describe('summary', () => {
@@ -46,6 +48,7 @@ describe('OrderController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
+      taskListService.getSections = jest.fn().mockReturnValue([])
 
       // When
       await orderController.summary(req, res, next)

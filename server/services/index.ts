@@ -23,6 +23,9 @@ import ProbationDeliveryUnitService from './probationDeliveryUnitService'
 import CurfewAdditionalDetailsService from './curfewAdditionalDetailsService'
 import InstallationLocationService from './installationLocationService'
 import InstallationAppointmentService from './installationAppointmentService'
+import OrderChecklistService from './orderChecklistService'
+import OrderChecklistStore from '../data/cache/OrderChecklistStore'
+import { createRedisClient } from '../data/redisClient'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -44,7 +47,8 @@ export const services = () => {
   const zoneService = new EnforcementZoneService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
-  const taskListService = new TaskListService()
+  const orderChecklistService = new OrderChecklistService( new OrderChecklistStore(createRedisClient()))
+  const taskListService = new TaskListService(orderChecklistService)
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
   const variationService = new VariationService(cemoApiClient)
   const probationDeliveryUnitService = new ProbationDeliveryUnitService(cemoApiClient)

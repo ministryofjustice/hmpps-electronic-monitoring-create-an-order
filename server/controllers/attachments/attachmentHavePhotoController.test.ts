@@ -16,7 +16,10 @@ describe('attachment have photo controller', () => {
   let mockAttachmentService: jest.Mocked<AttachmentService>
   let mockModelService: jest.Mocked<HavePhotoModelService>
   let mockRestClient: jest.Mocked<RestClient>
-  let mockTaskListService: jest.Mocked<TaskListService>
+  const taskListService = {
+    getNextCheckYourAnswersPage:jest.fn(),
+    getNextPage: jest.fn()
+  }as unknown as jest.Mocked<TaskListService>
   let mockOrderService: jest.Mocked<OrderService>
 
   beforeEach(() => {
@@ -26,8 +29,7 @@ describe('attachment have photo controller', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
-    mockModelService = new HavePhotoModelService() as jest.Mocked<HavePhotoModelService>
-    mockTaskListService = new TaskListService() as jest.Mocked<TaskListService>
+    mockModelService = new HavePhotoModelService() as jest.Mocked<HavePhotoModelService>   
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
   })
 
@@ -39,7 +41,7 @@ describe('attachment have photo controller', () => {
       const res = createMockResponse()
       const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
-        mockTaskListService,
+        taskListService,
         mockOrderService,
         mockModelService,
       )
@@ -65,7 +67,7 @@ describe('attachment have photo controller', () => {
       const res = createMockResponse()
       const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
-        mockTaskListService,
+        taskListService,
         mockOrderService,
         mockModelService,
       )
@@ -90,7 +92,7 @@ describe('attachment have photo controller', () => {
       const res = createMockResponse()
       const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
-        mockTaskListService,
+        taskListService,
         mockOrderService,
         mockModelService,
       )
@@ -115,9 +117,11 @@ describe('attachment have photo controller', () => {
         getMockOrder({ id: req.order!.id, orderParameters: { havePhoto: true } }),
       )
 
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${req.order?.id}/attachments/photo_Id`)
+
       const controller = new AttachmentHavePhotoController(
         mockAttachmentService,
-        mockTaskListService,
+        taskListService,
         mockOrderService,
         mockModelService,
       )

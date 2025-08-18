@@ -55,9 +55,15 @@
         {% if not isOrderEditable %}
           {% set statusArgs = {} %}
         {% elif section.completed %}
-          {% set statusArgs = { 
-            text: 'Complete'
-          } %}
+             {% if not section.checked %}
+                {% set statusArgs = { 
+                  text: 'To check'
+                } %}
+              {% else %}
+                {% set statusArgs = { 
+                  text: 'Complete'
+                } %}
+               {% endif %}
         {% else %}
           {% set statusArgs = { 
             tag: {

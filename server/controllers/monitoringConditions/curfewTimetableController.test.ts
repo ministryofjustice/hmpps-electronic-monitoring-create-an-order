@@ -8,6 +8,7 @@ import CurfewTimetableService from '../../services/curfewTimetableService'
 import CurfewTimetableController from './curfewTimetableController'
 import paths from '../../constants/paths'
 import TaskListService from '../../services/taskListService'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -20,7 +21,10 @@ describe('CurfewTimetableController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
-  const taskListService = new TaskListService()
+  const mockOrderChecklistService= {
+    setSectionCheckStatus: jest.fn()
+  } as unknown as jest.Mocked<OrderChecklistService>
+  const taskListService = new TaskListService(mockOrderChecklistService)
   let req: Request
   let res: Response
   let next: NextFunction
@@ -849,6 +853,9 @@ describe('CurfewTimetableController', () => {
       req.body = formData
 
       mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
+
+      
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/check-your-answers`)
 
       await controller.update(req, res, next)
 
