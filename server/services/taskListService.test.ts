@@ -27,7 +27,7 @@ import OrderChecklistModel from '../models/OrderChecklist'
 describe('TaskListService', () => {
   const mockOrderChecklistService = {
     setSectionCheckStatus: jest.fn(),
-    getChecklist: jest.fn().mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({}))),
+    getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
   describe('getNextPage', () => {
     it('should return idenity numbers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {

@@ -29,7 +29,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   const { questions } = content.pages.interestedParties
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
-    getChecklist: jest.fn().mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({}))),
+    getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({

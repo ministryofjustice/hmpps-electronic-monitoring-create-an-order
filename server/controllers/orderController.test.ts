@@ -49,8 +49,6 @@ describe('OrderController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
-      taskListService.getSections = jest.fn().mockReturnValue(Promise.resolve([]))
-
       // When
       await orderController.summary(req, res, next)
 
