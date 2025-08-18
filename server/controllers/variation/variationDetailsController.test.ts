@@ -22,7 +22,10 @@ describe('VariationDetailsController', () => {
   let restClient: jest.Mocked<RestClient>
   let variationService: VariationService
   let controller: VariationDetailsController
-
+  const mockOrderChecklistService = {
+    setSectionCheckStatus: jest.fn(),
+    updateChecklist: jest.fn(),
+  } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     auditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -37,12 +40,15 @@ describe('VariationDetailsController', () => {
     }) as jest.Mocked<RestClient>
     auditService = new AuditService(auditClient) as jest.Mocked<AuditService>
     variationService = new VariationService(restClient)
-    const mockOrderChecklistService = {
-      setSectionCheckStatus: jest.fn(),
-    } as unknown as jest.Mocked<OrderChecklistService>
+
     taskListService = new TaskListService(mockOrderChecklistService)
 
-    controller = new VariationDetailsController(auditService, variationService, taskListService)
+    controller = new VariationDetailsController(
+      auditService,
+      variationService,
+      taskListService,
+      mockOrderChecklistService,
+    )
   })
 
   describe('view', () => {
@@ -231,6 +237,44 @@ describe('VariationDetailsController', () => {
         },
         token: 'fakeUserToken',
       })
+    })
+
+    it('should update check list', async () => {
+      // Given
+      const order = getMockOrder({ type: 'VARIATION' })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          variationType: 'CURFEW_HOURS',
+          variationDate: {
+            year: '2024',
+            month: '01',
+            day: '01',
+          },
+          variationDetails: 'Change to curfew hours',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+      restClient.put.mockResolvedValue({
+        variationType: 'CURFEW_HOURS',
+        variationDate: '2024-01-01T00:00:00.000Z',
+        variationDetails: 'Change to curfew hours',
+      })
+
+      // When
+      await controller.update(req, res, next)
+
+      // Then
+      expect(mockOrderChecklistService.updateChecklist).toHaveBeenCalledWith(
+        req.order?.id,
+        'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+      )
     })
 
     it('should generate errors when the user submits invalid data', async () => {

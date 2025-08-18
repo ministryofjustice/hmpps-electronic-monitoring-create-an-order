@@ -5,6 +5,8 @@ import DeviceWearerCheckAnswersController from './deviceWearerCheckAnswersContro
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
+import OrderChecklistModel from '../../models/OrderChecklist'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -48,7 +50,10 @@ describe('DeviceWearerCheckAnswersController', () => {
   let controller: DeviceWearerCheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-
+  const mockOrderChecklistService = {
+    updateChecklist: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({}))),
+  } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -57,7 +62,7 @@ describe('DeviceWearerCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new DeviceWearerCheckAnswersController(mockAuditService, taskListService)
+    controller = new DeviceWearerCheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
   })
 
   it('should render the check answers page without any answers completed', async () => {

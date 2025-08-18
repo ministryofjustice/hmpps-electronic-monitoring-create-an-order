@@ -12,6 +12,8 @@ import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
 import { createMockRequest } from '../../../test/mocks/mockExpress'
 import TaskListService from '../../services/taskListService'
+import OrderChecklistService from '../../services/orderChecklistService'
+import OrderChecklistModel from '../../models/OrderChecklist'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -34,7 +36,10 @@ describe('AttachmentController', () => {
   let req: Request
   let res: Response
   let next: NextFunction
-
+  const mockOrderChecklistService = {
+    updateChecklist: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({}))),
+  } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -51,7 +56,13 @@ describe('AttachmentController', () => {
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
 
-    controller = new AttachmentController(mockAuditService, mockOrderService, mockAttachmentService, taskListService)
+    controller = new AttachmentController(
+      mockAuditService,
+      mockOrderService,
+      mockAttachmentService,
+      taskListService,
+      mockOrderChecklistService,
+    )
 
     req = {
       // @ts-expect-error stubbing session
@@ -170,6 +181,26 @@ describe('AttachmentController', () => {
           error: undefined,
         }),
       )
+    })
+
+    it('should update checklist status', async () => {
+      req.order?.additionalDocuments.push({
+        id: '',
+        fileName: 'mockLicenceFile.jpeg',
+        fileType: AttachmentType.LICENCE,
+      })
+      req.order?.additionalDocuments.push({
+        id: '',
+        fileName: 'mockPhotoFile.jpeg',
+        fileType: AttachmentType.PHOTO_ID,
+      })
+      req.order!.orderParameters = {
+        havePhoto: true,
+      }
+
+      await controller.view(req, res, next)
+
+      expect(mockOrderChecklistService.updateChecklist).toHaveBeenCalledWith(req.order?.id, 'ADDITIONAL_DOCUMENTS')
     })
   })
 

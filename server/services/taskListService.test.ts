@@ -938,6 +938,86 @@ describe('TaskListService', () => {
       ])
     })
 
+    it('should return all tasks grouped by section and checked marked as true', async () => {
+      // Given
+      const order = getMockOrder({
+        deviceWearer: createDeviceWearer({
+          nomisId: '',
+          firstName: '',
+          noFixedAbode: true,
+        }),
+        deviceWearerResponsibleAdult: createResponsibleAdult(),
+        contactDetails: createContactDetails(),
+        installationAndRisk: createInstallationAndRisk(),
+        interestedParties: createInterestedParties(),
+        enforcementZoneConditions: [createEnforcementZoneCondition()],
+        addresses: [
+          createAddress({ addressType: 'PRIMARY' }),
+          createAddress({ addressType: 'SECONDARY' }),
+          createAddress({ addressType: 'TERTIARY' }),
+          createAddress({ addressType: 'INSTALLATION' }),
+        ],
+        monitoringConditions: createMonitoringConditions({ isValid: true }),
+        monitoringConditionsTrail: createMonitoringConditionsTrail(),
+        monitoringConditionsAlcohol: createMonitoringConditionsAlcohol(),
+        mandatoryAttendanceConditions: [createMonitoringConditionsAttendance()],
+        curfewReleaseDateConditions: createCurfewReleaseDateConditions(),
+        curfewConditions: createCurfewConditions(),
+        curfewTimeTable: createCurfewTimeTable(),
+        installationLocation: { location: 'INSTALLATION' },
+        additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
+        orderParameters: { havePhoto: true },
+      })
+      mockOrderChecklistService.getChecklist.mockReturnValueOnce(
+        Promise.resolve({
+          ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM: true,
+          ABOUT_THE_DEVICE_WEARER: true,
+          CONTACT_INFORMATION: true,
+          RISK_INFORMATION: true,
+          ELECTRONIC_MONITORING_CONDITIONS: true,
+          ADDITIONAL_DOCUMENTS: true,
+        }),
+      )
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      expect(sections).toEqual([
+        {
+          checked: true,
+          completed: true,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          checked: true,
+          completed: true,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          checked: true,
+          completed: true,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          checked: true,
+          completed: true,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        },
+        {
+          checked: true,
+          completed: true,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
+        },
+      ])
+    })
+
     it('should return all tasks grouped by section and ready to start', async () => {
       // Given
       const order = getMockOrder({

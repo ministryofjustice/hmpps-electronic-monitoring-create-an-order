@@ -13,6 +13,8 @@ import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import CheckAnswersController from './checkAnswersController'
 import config from '../../config'
+import OrderChecklistModel from '../../models/OrderChecklist'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../services/auditService')
@@ -25,7 +27,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let controller: CheckAnswersController
-
+  const mockOrderChecklistService = {
+    updateChecklist: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(Promise.resolve(OrderChecklistModel.parse({}))),
+  } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -34,7 +39,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService)
+    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
   })
 
   describe('view', () => {

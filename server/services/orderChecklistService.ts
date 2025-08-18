@@ -7,6 +7,7 @@ export default class OrderChecklistService {
   public async updateChecklist(
     orderId: string,
     section:
+      | 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM'
       | 'ABOUT_THE_DEVICE_WEARER'
       | 'CONTACT_INFORMATION'
       | 'RISK_INFORMATION'
