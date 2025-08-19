@@ -40,7 +40,10 @@ describe('NoFixedAbodeController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerService: jest.Mocked<DeviceWearerService>
   let controller: NoFixedAbodeController
-  const taskListService = new TaskListService()
+  const taskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -200,7 +203,9 @@ describe('NoFixedAbodeController', () => {
         noFixedAbode: false,
         interpreterRequired: null,
       })
-
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/contact-information/addresses/primary`)
       // When
       await controller.update(req, res, next)
 
@@ -243,6 +248,9 @@ describe('NoFixedAbodeController', () => {
         noFixedAbode: true,
         interpreterRequired: null,
       })
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/contact-information/interested-parties`)
 
       // When
       await controller.update(req, res, next)

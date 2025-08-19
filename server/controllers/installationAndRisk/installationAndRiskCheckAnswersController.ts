@@ -4,6 +4,7 @@ import { AuditService } from '../../services'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import createViewModel from '../../models/view-models/riskInformationCheckAnswers'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
@@ -13,6 +14,7 @@ export default class CheckAnswersController {
   constructor(
     private readonly auditService: AuditService,
     private readonly taskListService: TaskListService,
+    private readonly checklistService: OrderChecklistService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -25,6 +27,8 @@ export default class CheckAnswersController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const { action } = CheckYourAnswersFormModel.parse(req.body)
+
+    this.checklistService.updateChecklist(order.id, 'RISK_INFORMATION')
 
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {

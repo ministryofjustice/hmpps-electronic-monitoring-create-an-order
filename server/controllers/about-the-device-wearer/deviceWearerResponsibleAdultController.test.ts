@@ -29,7 +29,10 @@ describe('DeviceWearerResponsibleAdultController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerResponsibleAdultService: jest.Mocked<DeviceWearerResponsibleAdultService>
   let deviceWearerResponsibleAdultController: DeviceWearerResponsibleAdultController
-  const taskListService = new TaskListService()
+  const taskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -179,6 +182,9 @@ describe('DeviceWearerResponsibleAdultController', () => {
         fullName: 'Parent Name',
         contactNumber: '01234567890',
       })
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
 
       // When
       await deviceWearerResponsibleAdultController.update(req, res, next)
@@ -247,6 +253,9 @@ describe('DeviceWearerResponsibleAdultController', () => {
         fullName: 'Parent Name',
         contactNumber: null,
       })
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
 
       // When
       await deviceWearerResponsibleAdultController.update(req, res, next)

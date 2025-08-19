@@ -8,6 +8,8 @@ import { createMockRequest, createMockResponse } from '../../../test/mocks/mockE
 import getContent from '../../i18n'
 import { Locales } from '../../types/i18n/locale'
 import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
+import OrderChecklistModel from '../../models/OrderChecklist'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -16,13 +18,19 @@ jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 
 describe('ContactDetailsCheckAnswersController', () => {
-  const taskListService = new TaskListService()
+  const taskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   const content = getContent(Locales.en, DataDictionaryVersions.DDV5)
   const { questions } = content.pages.interestedParties
-
+  const mockOrderChecklistService = {
+    updateChecklist: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
+  } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -31,7 +39,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService)
+    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
   })
 
   it('should render the check answers page without any answers completed', async () => {

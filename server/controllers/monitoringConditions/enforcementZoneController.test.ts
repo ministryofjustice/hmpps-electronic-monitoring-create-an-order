@@ -23,7 +23,10 @@ describe('EnforcementZoneController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockEnforcementZoneService: jest.Mocked<EnforcementZoneService>
   let controller: EnforcementZoneController
-  const taskListService = new TaskListService()
+
+  const taskListService = {
+    getSections: jest.fn().mockReturnValue(Promise.resolve([])),
+  } as unknown as jest.Mocked<TaskListService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -292,6 +295,7 @@ describe('EnforcementZoneController', () => {
       req.body = createMockBody('false', 'continue')
       req.order?.enforcementZoneConditions.push(createMockEnforcementZone())
       mockEnforcementZoneService.updateZone = jest.fn().mockReturnValueOnce(null)
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/attendance`)
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/attendance`)

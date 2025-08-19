@@ -3,8 +3,13 @@ import OrderTasksPage from '../../pages/order/summary'
 import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
 import AttachmentType from '../../../server/models/AttachmentType'
+import CheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
+import ContactInformationCheckYourAnswersPage from '../../pages/order/contact-information/check-your-answers'
+import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installation-and-risk/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
+import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 
-const mockOrderId = uuidv4()
+let mockOrderId = uuidv4()
 
 context('Order Summary', () => {
   context('New Order', () => {
@@ -110,6 +115,7 @@ context('Order Summary', () => {
 
   context('Complete order, not submitted', () => {
     beforeEach(() => {
+      mockOrderId = uuidv4()
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -295,41 +301,154 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should display all tasks as complete', () => {
+    it('should display all tasks as To check', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
       page.aboutTheDeviceWearerTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
       )
 
-      page.contactInformationTask.shouldHaveStatus('Complete')
+      page.contactInformationTask.shouldHaveStatus('To check')
       page.contactInformationTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/contact-information/check-your-answers`,
       )
 
-      page.riskInformationTask.shouldHaveStatus('Complete')
+      page.riskInformationTask.shouldHaveStatus('To check')
       page.riskInformationTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/installation-and-risk/check-your-answers`,
       )
 
-      page.electronicMonitoringTask.shouldHaveStatus('Complete')
+      page.electronicMonitoringTask.shouldHaveStatus('To check')
       page.electronicMonitoringTask.link.should(
         'have.attr',
         'href',
         `/order/${mockOrderId}/monitoring-conditions/check-your-answers`,
       )
 
-      page.additionalDocumentsTask.shouldHaveStatus('Complete')
+      page.additionalDocumentsTask.shouldHaveStatus('To check')
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments`)
 
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
+
+      page.submitOrderButton.should('be.disabled')
+    })
+
+    it('should display status as Complete after view Device Wearer check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
+      page.aboutTheDeviceWearerTask.link.click()
+      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      dwCYApage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view Contact Information check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.contactInformationTask.shouldHaveStatus('To check')
+      page.contactInformationTask.link.click()
+      const contactInformationCyaPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      contactInformationCyaPage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.contactInformationTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view Risk Information check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.riskInformationTask.shouldHaveStatus('To check')
+      page.riskInformationTask.link.click()
+      const riskInformationCyaPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      riskInformationCyaPage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.riskInformationTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view Electonic Monitoring check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.electronicMonitoringTask.shouldHaveStatus('To check')
+      page.electronicMonitoringTask.link.click()
+      const monitoringConditionCyaPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      monitoringConditionCyaPage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.electronicMonitoringTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view attachement check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.additionalDocumentsTask.shouldHaveStatus('To check')
+      page.additionalDocumentsTask.link.click()
+      const attachmentSummaryPage = Page.verifyOnPage(
+        AttachmentSummaryPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      attachmentSummaryPage.backToSummaryButton.click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.additionalDocumentsTask.shouldHaveStatus('Complete')
+    })
+
+    it('should enable submit button when all section completed and checked', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.aboutTheDeviceWearerTask.link.click()
+      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      dwCYApage.continueButton().click()
+
+      const contactInformationCyaPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      contactInformationCyaPage.continueButton().click()
+
+      const riskInformationCyaPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      riskInformationCyaPage.continueButton().click()
+
+      const monitoringConditionCyaPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      monitoringConditionCyaPage.continueButton().click()
+
+      const attachmentSummaryPage = Page.verifyOnPage(
+        AttachmentSummaryPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      attachmentSummaryPage.backToSummaryButton.click()
+      page = Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
 
       page.submitOrderButton.should('not.be.disabled')
     })

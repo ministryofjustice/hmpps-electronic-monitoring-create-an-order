@@ -61,7 +61,10 @@ describe('AddressController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockAddressService: jest.Mocked<AddressService>
   let addressController: AddressController
-  let taskListService: TaskListService
+  const taskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -77,7 +80,6 @@ describe('AddressController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAddressService = new AddressService(mockRestClient) as jest.Mocked<AddressService>
-    taskListService = new TaskListService()
     addressController = new AddressController(mockAuditService, mockAddressService, taskListService)
   })
 
@@ -343,7 +345,7 @@ describe('AddressController', () => {
           addressLine4: 'd',
           postcode: 'e',
         })
-
+        taskListService.getNextPage = jest.fn().mockReturnValue(expectedLocation)
         // When
         await addressController.update(req, res, next)
 
@@ -388,7 +390,7 @@ describe('AddressController', () => {
           addressLine4: 'd',
           postcode: 'e',
         })
-
+        taskListService.getNextPage = jest.fn().mockReturnValue(expectedLocation)
         // When
         await addressController.update(req, res, next)
 
@@ -428,6 +430,9 @@ describe('AddressController', () => {
         addressLine4: 'd',
         postcode: 'e',
       })
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${mockOrder.id}/contact-information/interested-parties`)
 
       // When
       await addressController.update(req, res, next)

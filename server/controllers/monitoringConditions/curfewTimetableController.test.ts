@@ -20,7 +20,10 @@ describe('CurfewTimetableController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
-  const taskListService = new TaskListService()
+
+  const taskListService = {
+    getSections: jest.fn().mockReturnValue(Promise.resolve([])),
+  } as unknown as jest.Mocked<TaskListService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -849,6 +852,10 @@ describe('CurfewTimetableController', () => {
       req.body = formData
 
       mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
+
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${mockId}/monitoring-conditions/check-your-answers`)
 
       await controller.update(req, res, next)
 
