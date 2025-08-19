@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import HmppsAuditClient from '../data/hmppsAuditClient'
@@ -113,17 +114,19 @@ describe('OrderController', () => {
 
   describe('createVariation', () => {
     it('should create a variation order and redirect to its summary page', async () => {
+      const orderId = randomUUID()
+
       // Given
       const req = createMockRequest({
         body: {
           action: 'continue',
         },
         params: {
-          orderId: '123456',
+          orderId,
         },
       })
       const res = createMockResponse()
-      const mockOrder = getMockOrder()
+      const mockOrder = getMockOrder({ id: orderId })
       mockOrderService.createVariationFromExisting.mockResolvedValue(mockOrder)
       const next = jest.fn()
 
@@ -133,9 +136,9 @@ describe('OrderController', () => {
       // Then
       expect(mockOrderService.createVariationFromExisting).toHaveBeenCalledWith({
         accessToken: 'fakeUserToken',
-        orderId: '123456',
+        orderId,
       })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
   })
 
