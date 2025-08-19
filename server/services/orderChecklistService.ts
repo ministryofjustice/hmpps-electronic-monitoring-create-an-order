@@ -27,7 +27,7 @@ export default class OrderChecklistService {
     if (checklist == null) {
       checklist = OrderChecklistModel.parse({})
     }
-    await this.dataStore.setSectionCheckStatus(orderId, checklist, 60 * 60)
+    await this.dataStore.setSectionCheckStatus(orderId, checklist, 24 * 60 * 60)
     return checklist
   }
 }
