@@ -60,6 +60,7 @@ export default function routes({
   zoneService,
   installationLocationService,
   installationAppointmentService,
+  orderChecklistService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -76,6 +77,7 @@ export default function routes({
     orderService,
     attachmentService,
     taskListService,
+    orderChecklistService,
   )
   const attachmentsHavePhotoController = new AttachmentHavePhotoController(
     attachmentService,
@@ -104,7 +106,11 @@ export default function routes({
     taskListService,
   )
   const deviceWearerController = new DeviceWearerController(auditService, deviceWearerService, taskListService)
-  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(auditService, taskListService)
+  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(
+    auditService,
+    taskListService,
+    orderChecklistService,
+  )
   const installationAndRiskController = new InstallationAndRiskController(
     auditService,
     installationAndRiskService,
@@ -113,6 +119,7 @@ export default function routes({
   const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
     auditService,
     taskListService,
+    orderChecklistService,
   )
   const monitoringConditionsController = new MonitoringConditionsController(
     monitoringConditionsService,
@@ -136,12 +143,19 @@ export default function routes({
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
     taskListService,
+    orderChecklistService,
   )
   const contactInformationCheckAnswersController = new ContactInformationCheckAnswersController(
     auditService,
     taskListService,
+    orderChecklistService,
   )
-  const variationDetailsController = new VariationDetailsController(auditService, variationService, taskListService)
+  const variationDetailsController = new VariationDetailsController(
+    auditService,
+    variationService,
+    taskListService,
+    orderChecklistService,
+  )
   const receiptController = new ReceiptController()
 
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(

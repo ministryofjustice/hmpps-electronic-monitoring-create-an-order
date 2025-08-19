@@ -12,6 +12,8 @@ import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
 import { createMockRequest } from '../../../test/mocks/mockExpress'
 import TaskListService from '../../services/taskListService'
+import OrderChecklistService from '../../services/orderChecklistService'
+import OrderChecklistModel from '../../models/OrderChecklist'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -26,12 +28,18 @@ describe('AttachmentController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let mockAttachmentService: jest.Mocked<AttachmentService>
-  let mockTaskListService: jest.Mocked<TaskListService>
+  const taskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: AttachmentController
   let req: Request
   let res: Response
   let next: NextFunction
-
+  const mockOrderChecklistService = {
+    updateChecklist: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
+  } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
@@ -47,12 +55,13 @@ describe('AttachmentController', () => {
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
-    mockTaskListService = new TaskListService() as jest.Mocked<TaskListService>
+
     controller = new AttachmentController(
       mockAuditService,
       mockOrderService,
       mockAttachmentService,
-      mockTaskListService,
+      taskListService,
+      mockOrderChecklistService,
     )
 
     req = {
@@ -173,6 +182,26 @@ describe('AttachmentController', () => {
         }),
       )
     })
+
+    it('should update checklist status', async () => {
+      req.order?.additionalDocuments.push({
+        id: '',
+        fileName: 'mockLicenceFile.jpeg',
+        fileType: AttachmentType.LICENCE,
+      })
+      req.order?.additionalDocuments.push({
+        id: '',
+        fileName: 'mockPhotoFile.jpeg',
+        fileType: AttachmentType.PHOTO_ID,
+      })
+      req.order!.orderParameters = {
+        havePhoto: true,
+      }
+
+      await controller.view(req, res, next)
+
+      expect(mockOrderChecklistService.updateChecklist).toHaveBeenCalledWith(req.order?.id, 'ADDITIONAL_DOCUMENTS')
+    })
   })
 
   describe('view upload file page', () => {
@@ -239,6 +268,7 @@ describe('AttachmentController', () => {
         path: '',
         buffer: Buffer.from(''),
       }
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${req.order?.id}/attachments/have-photo`)
       mockAttachmentService.uploadAttachment = jest
         .fn()
         .mockReturnValueOnce({ status: null, userMessage: null, developerMessage: null })

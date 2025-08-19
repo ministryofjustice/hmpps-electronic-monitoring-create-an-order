@@ -4,6 +4,7 @@ import { AuditService } from '../../services'
 import createViewModel from '../../models/view-models/deviceWearerCheckAnswers'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
@@ -13,6 +14,7 @@ export default class DeviceWearerCheckAnswersController {
   constructor(
     private readonly auditService: AuditService,
     private readonly taskListService: TaskListService,
+    private readonly checklistService: OrderChecklistService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -25,6 +27,7 @@ export default class DeviceWearerCheckAnswersController {
     const order = req.order!
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
+    await this.checklistService.updateChecklist(order.id, 'ABOUT_THE_DEVICE_WEARER')
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
         res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order))

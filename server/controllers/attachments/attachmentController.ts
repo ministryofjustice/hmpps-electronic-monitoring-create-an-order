@@ -5,6 +5,7 @@ import paths from '../../constants/paths'
 import TaskListService from '../../services/taskListService'
 import { formatDateTime } from '../../utils/utils'
 import createViewModel from '../../models/view-models/additionalDocumentsCheckAnswers'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 export default class AttachmentsController {
   constructor(
@@ -12,6 +13,7 @@ export default class AttachmentsController {
     private readonly orderService: OrderService,
     private readonly attachmentService: AttachmentService,
     private readonly taskListService: TaskListService,
+    private readonly checklistService: OrderChecklistService,
   ) {}
 
   uploadFile: RequestHandler = async (req: Request, res: Response) => {
@@ -110,7 +112,7 @@ export default class AttachmentsController {
     const error = req.flash('attachmentDeletionErrors')
 
     const answers = createViewModel(order, res.locals.content)
-
+    this.checklistService.updateChecklist(order.id, 'ADDITIONAL_DOCUMENTS')
     res.render(`pages/order/attachments/view`, {
       answers,
       error: error && error.length > 0 ? error[0] : undefined,

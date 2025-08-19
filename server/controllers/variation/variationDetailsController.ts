@@ -6,12 +6,14 @@ import { VariationDetailsFormDataParser } from '../../models/form-data/variation
 import { isValidationResult } from '../../models/Validation'
 import createViewModel from '../../models/view-models/variationDetails'
 import paths from '../../constants/paths'
+import OrderChecklistService from '../../services/orderChecklistService'
 
 export default class VariationDetailsController {
   constructor(
     private readonly auditService: AuditService,
     private readonly variationDetailsService: VariationService,
     private readonly taskListService: TaskListService,
+    private readonly checklistService: OrderChecklistService,
   ) {}
 
   view: RequestHandler = async (req, res) => {
@@ -38,11 +40,12 @@ export default class VariationDetailsController {
     if (isValidationResult(result)) {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
-
       res.redirect(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
+      this.checklistService.updateChecklist(orderId, 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM')
       res.redirect(this.taskListService.getNextPage('VARIATION_DETAILS', req.order!))
     } else {
+      this.checklistService.updateChecklist(orderId, 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM')
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }
