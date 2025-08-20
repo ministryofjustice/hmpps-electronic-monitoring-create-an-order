@@ -26,7 +26,7 @@ export default class FeatureFlags {
     return {
       MAPPA_ENABLED: process.env.MAPPA_ENABLED === 'true',
       MONITORING_CONDITION_TIMES_ENABLED: process.env.MONITORING_CONDITION_TIMES_ENABLED === 'true',
-      VARIATIONS_ENABLED: process.env.VARIATIONS_ENABLED === 'true',
+      VARIATION_AS_NEW_ORDER_ENABLED: process.env.VARIATION_AS_NEW_ORDER_ENABLED === 'true',
       ORDER_TYPE_ENABLED: process.env.ORDER_TYPE_ENABLED === 'true',
       CREATE_NEW_ORDER_VERSION_ENABLED: process.env.CREATE_NEW_ORDER_VERSION_ENABLED === 'true',
     }

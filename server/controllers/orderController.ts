@@ -4,7 +4,6 @@ import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
-import config from '../config'
 import FeatureFlags from '../utils/featureFlags'
 
 export default class OrderController {
@@ -37,14 +36,12 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const sections = await this.taskListService.getSections(req.order!)
     const error = req.flash('submissionError')
-    const variationsEnabled = config.variations.enabled
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
 
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
-      variationsEnabled,
       createNewOrderVersionEnabled,
     })
   }

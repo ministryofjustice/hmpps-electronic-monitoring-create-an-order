@@ -54,7 +54,7 @@
 			<h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
 			If the form is not listed in the search results, it may be an emailed form so not available online.
 			<br>
-			{% if variationsEnabled %}
+			{% if variationAsNewOrderEnabled %}
 			<form action="/order/create" method="post" class="govuk-!-margin-top-3">
 			<input type="hidden" name="_csrf" value="{{ csrfToken }}">
 				{{ govukButton({
