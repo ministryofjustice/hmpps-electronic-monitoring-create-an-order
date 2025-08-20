@@ -25,7 +25,7 @@ export default class OrderController {
     const { orderId } = req.params
 
     if (action === 'continue') {
-      this.orderService.createVariationFromExisting({
+      await this.orderService.createVariationFromExisting({
         orderId,
         accessToken: res.locals.user.token,
       })
