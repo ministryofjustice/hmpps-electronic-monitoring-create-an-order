@@ -106,7 +106,7 @@
         }) }}
       {% endif %}
 
-      {% if variationsFromExistingOrderEnabled and order.status == "SUBMITTED" and variationsEnabled %}
+      {% if createNewOrderVersionEnabled and order.status == "SUBMITTED" and variationsEnabled %}
         <div class="govuk-!-margin-top-5">
         {{ govukButton({
           text: "Make changes to this form",
