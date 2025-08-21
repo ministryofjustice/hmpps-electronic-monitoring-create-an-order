@@ -98,6 +98,7 @@ context.skip('Scenarios', () => {
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Community YRO',
         issp: 'Yes',
+        pilot: 'They are not part of any of these pilots',
       }
       const trailMonitoringOrder = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -353,6 +354,7 @@ context.skip('Scenarios', () => {
                 issp: 'Yes',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')

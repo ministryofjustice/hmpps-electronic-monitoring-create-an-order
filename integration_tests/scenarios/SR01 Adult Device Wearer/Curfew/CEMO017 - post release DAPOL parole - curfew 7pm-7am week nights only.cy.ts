@@ -63,7 +63,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime Parole',
+        pilot: 'GPS Acquisitive Crime',
         sentenceType: 'Standard Determinate Sentence',
         conditionType: 'Post-Sentence Supervision Requirement',
         monitoringRequired: 'Curfew',
@@ -308,6 +308,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: 'GPS Acquisitive Crime Parole',
               },
             })
             .should('be.true')

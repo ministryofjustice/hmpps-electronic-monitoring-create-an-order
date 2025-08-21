@@ -65,7 +65,7 @@ context('The kitchen sink', () => {
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
-      pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+      pilot: 'GPS Acquisitive Crime',
       conditionType: 'Licence condition',
       sentenceType: 'Life Sentence',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
@@ -345,6 +345,7 @@ context('The kitchen sink', () => {
             issp: 'No',
             hdc: 'No',
             order_status: 'Not Started',
+            pilot: 'GPS Acquisitive Crime Parole',
           },
         }).should('be.true')
       })

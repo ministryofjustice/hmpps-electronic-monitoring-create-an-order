@@ -318,6 +318,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: 'GPS Acquisitive Crime Parole',
             },
           })
           .should('be.true')

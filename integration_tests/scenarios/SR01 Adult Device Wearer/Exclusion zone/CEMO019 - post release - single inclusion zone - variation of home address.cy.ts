@@ -76,6 +76,7 @@ context.skip('Scenarios', () => {
         conditionType: 'License condition',
         monitoringRequired: 'Exclusion zone monitoring',
         sentenceType: 'Parole',
+        pilot: 'They are not part of any of these pilots',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
@@ -313,6 +314,7 @@ context.skip('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')

@@ -87,6 +87,7 @@ context('Scenarios', () => {
       conditionType: 'Licence condition',
       monitoringRequired: 'Trail monitoring',
       sentenceType: 'Detention and Training Order (DTO)',
+      pilot: 'They are not part of any of these pilots',
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -342,6 +343,7 @@ context('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: '',
             },
           })
           .should('be.true')
