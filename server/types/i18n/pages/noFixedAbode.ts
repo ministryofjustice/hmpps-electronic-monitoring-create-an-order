@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type NoFixedAbodePageContent = PageContent<'noFixedAbode'> & {
+type NoFixedAbodePageContent = QuestionPageContent<'noFixedAbode'> & {
   warning: string
 }
 

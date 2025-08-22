@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type InstallationLocationPageContent = PageContent<'location'>
+type InstallationLocationPageContent = QuestionPageContent<'location'>
 
 export default InstallationLocationPageContent

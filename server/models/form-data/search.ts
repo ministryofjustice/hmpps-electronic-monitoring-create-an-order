@@ -10,7 +10,7 @@ type OrderListViewModel = {
     type: string
     summaryUri: string
   }>
-  variationsEnabled: boolean
+  variationAsNewOrderEnabled: boolean
 }
 
 export type OrderSearchViewModel = {
@@ -18,7 +18,7 @@ export type OrderSearchViewModel = {
     text?: string | null | undefined
     html?: string
   }[][]
-  variationsEnabled: boolean
+  variationAsNewOrderEnabled: boolean
   emptySearch?: boolean
   noResults?: boolean
   searchTerm?: string
@@ -78,7 +78,7 @@ const createOrderItem = (order: Order) => {
 export const constructSearchViewModel = (orders: Array<Order>, searchTerm: string): OrderSearchViewModel => {
   return {
     orders: orders.map(order => createOrderItem(order)),
-    variationsEnabled: config.variations.enabled,
+    variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
     searchTerm,
   }
 }
@@ -93,6 +93,6 @@ export function constructListViewModel(orders: Array<Order>): OrderListViewModel
         summaryUri: paths.ORDER.SUMMARY.replace(':orderId', order.id),
       }
     }),
-    variationsEnabled: config.variations.enabled,
+    variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
   }
 }

@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type InstallationAppointmentPageContent = PageContent<'placeName' | 'appointmentDate' | 'appointmentTime'>
+type InstallationAppointmentPageContent = QuestionPageContent<'placeName' | 'appointmentDate' | 'appointmentTime'>
 
 export default InstallationAppointmentPageContent

@@ -135,4 +135,59 @@ describe('Order Service', () => {
       }
     })
   })
+
+  describe('createVariationFromExisting', () => {
+    const mockAccessToken = 'ABC'
+    const mockOrderId = '123456'
+
+    it('should post a "create variation from existing order" request to the api', async () => {
+      mockRestClient.post.mockResolvedValue(mockApiResponse)
+
+      const orderService = new OrderService(mockRestClient)
+      const order = await orderService.createVariationFromExisting({
+        accessToken: mockAccessToken,
+        orderId: mockOrderId,
+      })
+
+      expect(mockRestClient.post).toHaveBeenCalledWith({
+        path: `/api/orders/${mockOrderId}/copy-as-variation`,
+        token: mockAccessToken,
+      })
+      expect(order).toEqual(mockNewOrder)
+    })
+
+    it('should throw an error if the api returns an invalid object', async () => {
+      expect.assertions(1)
+
+      mockRestClient.get.mockResolvedValue({
+        ...mockNewOrder,
+        status: 'INVALID_STATUS',
+      })
+
+      try {
+        const orderService = new OrderService(mockRestClient)
+        await orderService.createVariationFromExisting({
+          accessToken: mockAccessToken,
+          orderId: mockOrderId,
+        })
+      } catch (e) {
+        expect((e as Error).name).toEqual('ZodError')
+      }
+    })
+
+    it('should propagate errors from the api', async () => {
+      mockRestClient.post.mockRejectedValue(mock404Error)
+
+      try {
+        const orderService = new OrderService(mockRestClient)
+        await orderService.createVariationFromExisting({
+          accessToken: mockAccessToken,
+          orderId: mockOrderId,
+        })
+      } catch (e) {
+        expect((e as SanitisedError).status).toEqual(404)
+        expect((e as SanitisedError).message).toEqual('Not Found')
+      }
+    })
+  })
 })

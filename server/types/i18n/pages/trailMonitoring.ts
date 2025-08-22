@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type TrailMonitoringPageContent = PageContent<'endDate' | 'startDate'>
+type TrailMonitoringPageContent = QuestionPageContent<'endDate' | 'startDate'>
 
 export default TrailMonitoringPageContent

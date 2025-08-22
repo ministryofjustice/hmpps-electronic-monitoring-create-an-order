@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type MonitoringConditionsPageContent = PageContent<
+type MonitoringConditionsPageContent = QuestionPageContent<
   | 'conditionType'
   | 'endDate'
   | 'endTime'

@@ -37,7 +37,7 @@ export default class OrderSearchController {
       const model: OrderSearchViewModel = {
         orders: [],
         emptySearch: true,
-        variationsEnabled: config.variations.enabled,
+        variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
       }
       res.render('pages/search', model)
       return
@@ -46,7 +46,7 @@ export default class OrderSearchController {
     if (!formData.searchTerm) {
       const model: OrderSearchViewModel = {
         orders: [],
-        variationsEnabled: config.variations.enabled,
+        variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
       }
       res.render('pages/search', model)
       return

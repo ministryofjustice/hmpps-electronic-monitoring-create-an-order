@@ -113,8 +113,8 @@ export default {
   sqs: {
     audit: auditConfig(),
   },
-  variations: {
-    enabled: get('VARIATIONS_ENABLED', 'false') === 'true',
+  variationAsNewOrder: {
+    enabled: get('VARIATION_AS_NEW_ORDER_ENABLED', 'false') === 'true',
   },
   monitoringConditionTimes: {
     enabled: get('MONITORING_CONDITION_TIMES_ENABLED', 'false') === 'true',
