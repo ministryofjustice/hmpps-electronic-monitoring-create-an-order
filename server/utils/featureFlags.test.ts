@@ -13,6 +13,7 @@ const mockFlags = {
   MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATIONS_ENABLED: true,
   ORDER_TYPE_ENABLED: false,
+  ALCOHOL_MONITORING_ENABLED: false,
 }
 
 jest.mock('fs')

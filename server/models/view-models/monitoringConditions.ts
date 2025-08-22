@@ -19,6 +19,7 @@ type MonitoringConditionsViewModel = ViewModel<
   monitoringRequired: MultipleChoiceField
   monitoringConditionTimes: boolean
   orderTypeEnabled: boolean
+  alcoholEnabled: boolean
   DDv5: boolean
 }
 
@@ -76,6 +77,7 @@ const createViewModelFromMonitoringConditions = (order: Order): MonitoringCondit
   errorSummary: null,
   monitoringConditionTimes: config.monitoringConditionTimes.enabled,
   orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
+  alcoholEnabled: FeatureFlags.getInstance().get('ALCOHOL_MONITORING_ENABLED'),
   DDv5: order.dataDictionaryVersion === 'DDV5',
 })
 
@@ -137,6 +139,7 @@ const createViewModelFromFormData = (
     errorSummary: createGovukErrorSummary(validationErrors),
     monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
+    alcoholEnabled: FeatureFlags.getInstance().get('ALCOHOL_MONITORING_ENABLED'),
     DDv5: order.dataDictionaryVersion === 'DDV5',
   }
 }

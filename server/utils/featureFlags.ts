@@ -28,6 +28,7 @@ export default class FeatureFlags {
       MONITORING_CONDITION_TIMES_ENABLED: process.env.MONITORING_CONDITION_TIMES_ENABLED === 'true',
       VARIATIONS_ENABLED: process.env.VARIATIONS_ENABLED === 'true',
       ORDER_TYPE_ENABLED: process.env.ORDER_TYPE_ENABLED === 'true',
+      ALCOHOL_MONITORING_ENABLED: process.env.ALCOHOL_MONITORING_ENABLED === 'true',
     }
   }
 

@@ -56,7 +56,7 @@ context('Monitoring conditions', () => {
         cy.signIn()
       })
 
-      it('Should submit a correctly formatted monitoring conditions and got to installation location page', () => {
+      it('Should submit a correctly formatted monitoring conditions and go to installation location page', () => {
         const page = Page.visit(MonitoringConditionsPage, {
           orderId: mockOrderId,
         })
@@ -126,6 +126,58 @@ context('Monitoring conditions', () => {
         page.form.fillInWith(formData)
         page.form.saveAndContinueButton.click()
         Page.verifyOnPage(CurfewConditionsPage)
+      })
+
+      context('when alcohol monitoring is enabled', () => {
+        const testFlags = { ALCOHOL_MONITORING_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+
+        it('Can select and submit alchol as a monitoring type', () => {
+          const formData = {
+            monitoringRequired: ['Alcohol monitoring'],
+            conditionType: 'Licence condition',
+            startDate: new Date('2024-02-27T11:02:00Z'),
+            endDate: new Date('2025-03-08T04:40:00Z'),
+            sentenceType: 'Extended Determinate Sentence',
+            issp: 'No',
+            hdc: 'Yes',
+            prarr: 'Not able to provide this information',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+          }
+
+          const response = {
+            orderType: 'POST_RELEASE',
+            orderTypeDescription: null,
+            conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: false,
+            alcohol: true,
+            startDate: '2024-10-10T11:00:00.000Z',
+            endDate: '2024-10-11T11:00:00.000Z',
+            sentenceType: 'EPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+          }
+
+          cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
+          const page = Page.visit(MonitoringConditionsPage, {
+            orderId: mockOrderId,
+          })
+
+          page.form.fillInWith(formData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(InstallationLocationPage)
+        })
       })
 
       context('should successfully submit with order with data dictionary version DDV4', () => {
