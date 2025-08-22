@@ -76,6 +76,7 @@ context('Scenarios', () => {
         conditionType: 'Licence condition',
         monitoringRequired: 'Curfew',
         sentenceType: 'Detention and Training Order (DTO)',
+        pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -326,6 +327,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')

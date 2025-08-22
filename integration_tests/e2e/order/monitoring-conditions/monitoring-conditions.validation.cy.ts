@@ -28,7 +28,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
-  pilot: 'GPS Acquisitive Crime Parole',
+  pilot: 'GPS Acquisitive Crime',
 }
 
 context('Monitoring conditions', () => {
@@ -49,7 +49,12 @@ context('Monitoring conditions', () => {
       })
 
       it('Should show the user validation errors', () => {
-        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: [] })
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: [],
+        })
 
         const page = Page.visit(MonitoringConditionsPage, {
           orderId: mockOrderId,
@@ -61,12 +66,14 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.shouldHaveValidationMessage(errorMessages.monitoringTypeRequired)
         page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
         page.form.sentenceTypeField.shouldHaveValidationMessage(errorMessages.sentenceTypeRequired)
+        page.form.pilotField.shouldHaveValidationMessage(errorMessages.pilotRequired)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(errorMessages.conditionTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
         page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
         page.errorSummary.shouldHaveError(errorMessages.sentenceTypeRequired)
+        page.errorSummary.shouldHaveError(errorMessages.pilotRequired)
       })
 
       it('should show errors from API response if frontend validation passes', () => {

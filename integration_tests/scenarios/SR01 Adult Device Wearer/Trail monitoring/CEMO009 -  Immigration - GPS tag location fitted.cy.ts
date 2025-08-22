@@ -79,6 +79,7 @@ context.skip('Scenarios', () => {
       orderType: 'Immigration',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
+      pilot: 'They are not part of any of these pilots',
       // sentenceType: 'Immigration Bail'
     }
     const trailMonitoringOrder = {
@@ -332,6 +333,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: '',
             },
           })
           .should('be.true')
