@@ -98,6 +98,7 @@ context('Scenarios', () => {
         conditionType: 'Licence condition',
         monitoringRequired: 'Exclusion zone monitoring',
         sentenceType: 'Detention and Training Order (DTO)',
+        pilot: 'They are not part of any of these pilots',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
@@ -364,6 +365,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')
