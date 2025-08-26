@@ -138,7 +138,7 @@ context('Monitoring conditions', () => {
           cy.task('resetFeatureFlags')
         })
 
-        it('Can select and submit alchol as a monitoring type', () => {
+        it('Can select and submit alcohol as a monitoring type', () => {
           const formData = {
             monitoringRequired: ['Alcohol monitoring'],
             conditionType: 'Licence condition',
@@ -148,7 +148,7 @@ context('Monitoring conditions', () => {
             issp: 'No',
             hdc: 'Yes',
             prarr: 'Not able to provide this information',
-            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            pilot: 'GPS Acquisitive Crime',
           }
 
           const response = {
