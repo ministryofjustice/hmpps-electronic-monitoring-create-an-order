@@ -62,7 +62,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime Parole',
+        pilot: 'GPS Acquisitive Crime',
         conditionType: 'Licence condition',
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Standard Determinate Sentence',
@@ -255,6 +255,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: 'GPS Acquisitive Crime Parole',
               },
             })
             .should('be.true')

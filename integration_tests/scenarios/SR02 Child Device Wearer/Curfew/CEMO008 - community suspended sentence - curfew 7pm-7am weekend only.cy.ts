@@ -69,6 +69,7 @@ context.skip('Scenarios', () => {
       orderType: 'Community',
       conditionType: 'Requirement of a Community Order',
       monitoringRequired: 'Curfew',
+      pilot: 'They are not part of any of these pilots',
       // sentenceType: 'Community YRO'
     }
     const curfewReleaseDetails = {
@@ -295,6 +296,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: '',
             },
           })
           .should('be.true')

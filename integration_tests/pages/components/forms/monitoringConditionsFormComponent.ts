@@ -42,15 +42,11 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
-  get pilotField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What pilot project is the device wearer part of? (optional)', [
+  get pilotField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What pilot project is the device wearer part of?', [
       'Domestic Abuse Perpetrator on Licence (DAPOL)',
-      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
-      'Domestic Abuse Perpetrator on Licence Project',
-      'GPS Acquisitive Crime Home Detention Curfew',
-      'GPS Acquisitive Crime Parole',
-      'Acquisitive Crime Project',
-      'Licence Variation Project',
+      'GPS Acquisitive Crime',
+      'They are not part of any of these pilots',
     ])
   }
 

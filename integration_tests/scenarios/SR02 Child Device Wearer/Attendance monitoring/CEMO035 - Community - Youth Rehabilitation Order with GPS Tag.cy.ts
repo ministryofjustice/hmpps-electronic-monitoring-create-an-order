@@ -96,6 +96,7 @@ context.skip('Scenarios', () => {
         orderType: 'Community',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Mandatory attendance monitoring',
+        pilot: 'They are not part of any of these pilots',
         // sentenceType: 'Community YRO',
       }
 
@@ -380,6 +381,7 @@ ${attendanceMonitoringOrder.address.postcode}
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')
