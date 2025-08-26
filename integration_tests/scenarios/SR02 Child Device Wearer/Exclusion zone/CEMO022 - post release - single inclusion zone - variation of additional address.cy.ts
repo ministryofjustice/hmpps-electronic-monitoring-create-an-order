@@ -89,6 +89,7 @@ context('Scenarios', () => {
         conditionType: 'Licence condition',
         monitoringRequired: 'Exclusion zone monitoring',
         sentenceType: 'Detention and Training Order',
+        pilot: 'They are not part of any of these pilots',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
@@ -290,6 +291,8 @@ context('Scenarios', () => {
                 sentence_type: 'Detention & Training Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
+                date_and_time_installation_will_take_place: '',
+                released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -326,6 +329,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')

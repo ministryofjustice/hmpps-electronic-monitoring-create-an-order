@@ -11,9 +11,10 @@ const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-fea
 const mockFlags = {
   MAPPA_ENABLED: true,
   MONITORING_CONDITION_TIMES_ENABLED: false,
-  VARIATIONS_ENABLED: true,
+  VARIATION_AS_NEW_ORDER_ENABLED: true,
   ORDER_TYPE_ENABLED: false,
   ALCOHOL_MONITORING_ENABLED: false,
+  CREATE_NEW_ORDER_VERSION_ENABLED: false,
 }
 
 jest.mock('fs')

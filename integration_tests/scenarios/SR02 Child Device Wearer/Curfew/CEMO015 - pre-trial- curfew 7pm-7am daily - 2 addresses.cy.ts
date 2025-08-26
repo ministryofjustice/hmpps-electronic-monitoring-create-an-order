@@ -71,6 +71,7 @@ context.skip('Scenarios', () => {
         orderType: 'Pre-Trial',
         conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Curfew',
+        pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -249,6 +250,8 @@ context.skip('Scenarios', () => {
                 sentence_type: '',
                 tag_at_source: '',
                 tag_at_source_details: '',
+                date_and_time_installation_will_take_place: '',
+                released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -361,6 +364,7 @@ context.skip('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')

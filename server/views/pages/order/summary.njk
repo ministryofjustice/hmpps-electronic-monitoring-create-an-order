@@ -105,6 +105,17 @@
           classes: "govuk-button--secondary"
         }) }}
       {% endif %}
+
+      {% if createNewOrderVersionEnabled and order.status == "SUBMITTED" %}
+        <div class="govuk-!-margin-top-5">
+        {{ govukButton({
+          text: "Make changes to this form",
+          id: "make-changes-button",
+          href: "/order/" + order.id + "/edit"
+        }) }}
+        </div>
+      {% endif %}
+  
     </div>
   </div>
 {% endblock %}

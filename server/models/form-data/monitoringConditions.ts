@@ -70,7 +70,9 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
       issp: z.string(),
       hdc: z.string(),
       prarr: z.string(),
-      pilot: z.string().nullable(),
+      pilot: z.string().refine(val => val.length >= 1 || dataDictionaryVersion !== 'DDV5', {
+        message: validationErrors.monitoringConditions.pilotRequired,
+      }),
     })
     .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...data }) => ({
       orderType: orderType === '' ? null : orderType,

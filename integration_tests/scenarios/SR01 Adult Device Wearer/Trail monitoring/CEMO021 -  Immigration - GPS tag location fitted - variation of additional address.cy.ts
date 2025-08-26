@@ -83,6 +83,7 @@ context.skip('Scenarios', () => {
       orderTypeDescription: 'DAPOL',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
+      pilot: 'They are not part of any of these pilots',
     }
     const trailMonitoringOrder = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -304,6 +305,8 @@ context.skip('Scenarios', () => {
               sentence_type: '',
               tag_at_source: '',
               tag_at_source_details: '',
+              date_and_time_installation_will_take_place: '',
+              released_under_prarr: '',
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',

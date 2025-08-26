@@ -69,6 +69,7 @@ context.skip('Scenarios', () => {
       orderType: 'Community',
       conditionType: 'Requirement of a Community Order',
       monitoringRequired: 'Curfew',
+      pilot: 'They are not part of any of these pilots',
       // sentenceType: 'Community YRO'
     }
     const curfewReleaseDetails = {
@@ -248,6 +249,8 @@ context.skip('Scenarios', () => {
               // sentence_type: 'Community YRO',
               tag_at_source: '',
               tag_at_source_details: '',
+              date_and_time_installation_will_take_place: '',
+              released_under_prarr: '',
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
@@ -294,6 +297,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: '',
             },
           })
           .should('be.true')

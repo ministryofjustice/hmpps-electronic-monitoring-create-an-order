@@ -17,7 +17,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
-  pilot: 'GPS Acquisitive Crime Parole',
+  pilot: 'GPS Acquisitive Crime',
 }
 
 const mockResponse = {
@@ -97,7 +97,7 @@ context('Monitoring conditions', () => {
           issp: 'No',
           hdc: 'Yes',
           prarr: 'Not able to provide this information',
-          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+          pilot: 'GPS Acquisitive Crime',
         }
 
         const response = {
@@ -115,7 +115,7 @@ context('Monitoring conditions', () => {
           issp: 'YES',
           hdc: 'NO',
           prarr: 'UNKNOWN',
-          pilot: '',
+          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
         }
 
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
@@ -208,7 +208,7 @@ context('Monitoring conditions', () => {
           issp: 'YES',
           hdc: 'NO',
           prarr: 'UNKNOWN',
-          pilot: null,
+          pilot: 'UNKNOWN',
         }
 
         it('should successfully submit', () => {

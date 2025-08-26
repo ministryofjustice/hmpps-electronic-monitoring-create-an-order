@@ -7,7 +7,9 @@ import curfewConditionsPageContent from './pages/curfewConditions'
 import curfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import curfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import curfewTimeTablePageContent from './pages/curfewTimetable'
+import deleteConfirmPageContent from './pages/deleteConfirm'
 import deviceWearerPageContent from './pages/deviceWearer'
+import editConfirmPageContent from './pages/editConfirm'
 import exclusionZonePageContent from './pages/exclusionZone'
 import identityNumbersPageContent from './pages/identityNumbers'
 import installationAddressPageContent from './pages/installationAddress'
@@ -39,7 +41,9 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       curfewAdditionalDetails: curfewAdditionalDetailsPageContent,
       curfewReleaseDate: curfewReleaseDatePageContent,
       curfewTimetable: curfewTimeTablePageContent,
+      deleteConfirm: deleteConfirmPageContent,
       deviceWearer: deviceWearerPageContent,
+      editConfirm: editConfirmPageContent,
       exclusionZone: exclusionZonePageContent,
       identityNumbers: identityNumbersPageContent,
       installationAddress: installationAddressPageContent,

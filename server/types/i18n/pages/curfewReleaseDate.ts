@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type CurfewReleaseDatePageContent = PageContent<'address' | 'endTime' | 'releaseDate' | 'startTime'>
+type CurfewReleaseDatePageContent = QuestionPageContent<'address' | 'endTime' | 'releaseDate' | 'startTime'>
 
 export default CurfewReleaseDatePageContent

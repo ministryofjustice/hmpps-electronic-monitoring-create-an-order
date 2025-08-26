@@ -39,6 +39,15 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
+  async createVariationFromExisting(input: OrderRequestInput): Promise<Order> {
+    const result = await this.apiClient.post({
+      path: `/api/orders/${input.orderId}/copy-as-variation`,
+      token: input.accessToken,
+    })
+
+    return OrderModel.parse(result)
+  }
+
   async getOrder(input: OrderRequestInput): Promise<Order> {
     const result = await this.apiClient.get({
       path: `/api/orders/${input.orderId}`,

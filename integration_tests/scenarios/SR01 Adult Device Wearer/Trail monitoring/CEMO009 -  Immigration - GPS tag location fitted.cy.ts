@@ -79,6 +79,7 @@ context.skip('Scenarios', () => {
       orderType: 'Immigration',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',
+      pilot: 'They are not part of any of these pilots',
       // sentenceType: 'Immigration Bail'
     }
     const trailMonitoringOrder = {
@@ -303,6 +304,8 @@ context.skip('Scenarios', () => {
               // sentence_type: 'Immigration Bail',
               tag_at_source: '',
               tag_at_source_details: '',
+              date_and_time_installation_will_take_place: '',
+              released_under_prarr: '',
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
@@ -332,6 +335,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: '',
             },
           })
           .should('be.true')

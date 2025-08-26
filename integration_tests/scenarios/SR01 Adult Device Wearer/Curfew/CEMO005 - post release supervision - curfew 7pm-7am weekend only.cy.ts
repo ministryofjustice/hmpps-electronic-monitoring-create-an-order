@@ -67,6 +67,7 @@ context('Scenarios', () => {
         monitoringRequired: 'Curfew',
         sentenceType: 'Life Sentence',
         hdc: 'Yes',
+        pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -246,6 +247,8 @@ context('Scenarios', () => {
                 sentence_type: 'Life Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
+                date_and_time_installation_will_take_place: '',
+                released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -292,6 +295,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'Yes',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')

@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type DeviceWearerPageContent = PageContent<
+type DeviceWearerPageContent = QuestionPageContent<
   | 'alias'
   | 'adultAtTimeOfInstallation'
   | 'dateOfBirth'

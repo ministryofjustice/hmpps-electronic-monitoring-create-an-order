@@ -65,7 +65,7 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
-      pilot: 'Acquisitive Crime Project',
+      pilot: 'GPS Acquisitive Crime',
       conditionType: 'Post-Sentence Supervision Requirement',
       monitoringRequired: 'Trail monitoring',
       sentenceType: 'Standard Determinate Sentence',
@@ -229,6 +229,8 @@ context('Scenarios', () => {
               sentence_type: 'Standard Determinate Sentence',
               tag_at_source: '',
               tag_at_source_details: '',
+              date_and_time_installation_will_take_place: '',
+              released_under_prarr: '',
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
@@ -258,6 +260,7 @@ context('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              pilot: 'GPS Acquisitive Crime Parole',
             },
           })
           .should('be.true')

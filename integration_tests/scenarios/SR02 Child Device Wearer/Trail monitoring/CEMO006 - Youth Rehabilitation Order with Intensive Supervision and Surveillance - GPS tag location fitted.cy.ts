@@ -98,6 +98,7 @@ context.skip('Scenarios', () => {
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Community YRO',
         issp: 'Yes',
+        pilot: 'They are not part of any of these pilots',
       }
       const trailMonitoringOrder = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -324,6 +325,8 @@ context.skip('Scenarios', () => {
                 // sentence_type: 'Community YRO',
                 tag_at_source: '',
                 tag_at_source_details: '',
+                date_and_time_installation_will_take_place: '',
+                released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -353,6 +356,7 @@ context.skip('Scenarios', () => {
                 issp: 'Yes',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')
