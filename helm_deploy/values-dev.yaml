@@ -15,7 +15,8 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
     DD_V5_1_ENABLED: "false"
-    
+    CREATE_NEW_ORDER_VERSION_ENABLED: "true"
+
   allowlist:
     unrestricted: "0.0.0.0/0"
 

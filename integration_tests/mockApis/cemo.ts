@@ -163,6 +163,7 @@ type GetOrderStubOptions = {
   httpStatus: number
   id?: string
   status?: string
+  type?: string
   order?: Partial<Order>
 }
 
@@ -170,28 +171,33 @@ const defaultGetOrderOptions = {
   httpStatus: 200,
   id: uuidv4(),
   status: 'IN_PROGRESS',
+  type: 'REQUEST',
 }
 
-const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperAgentRequest =>
-  stubFor({
+const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperAgentRequest => {
+  const stubOptions = { ...defaultGetOrderOptions, ...options }
+
+  return stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/cemo/api/orders/${options.id}`,
+      urlPattern: `/cemo/api/orders/${stubOptions.id}`,
     },
     response: {
-      status: options.httpStatus,
+      status: stubOptions.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       jsonBody:
-        options.httpStatus === 200
+        stubOptions.httpStatus === 200
           ? {
               ...mockApiOrder(),
-              id: options.id,
-              status: options.status,
-              ...(options.order ? options.order : {}),
+              id: stubOptions.id,
+              status: stubOptions.status,
+              type: stubOptions.type,
+              ...(stubOptions.order ? stubOptions.order : {}),
             }
           : null,
     },
   })
+}
 
 type CreateOrderStubOptions = {
   httpStatus: number
@@ -239,6 +245,7 @@ type Attachment = {
   fileType?: string
   fileName?: string
 }
+
 const getOrderWithAttachments = (
   options: GetOrderWithAttachmentStubOptions = defaultGetOrderOptions,
 ): SuperAgentRequest =>
@@ -304,6 +311,37 @@ const deleteOrder = (options: DeleteOrderStubOptions) =>
         options.httpStatus === 200
           ? {}
           : { status: options.httpStatus, userMessage: options.error, developerMessage: '' },
+    },
+  })
+
+type CreateVariationStubOptions = {
+  httpStatus: number
+  originalId: string
+  variationId: string
+}
+
+const defaultCreateVariationOptions = {
+  httpStatus: 200,
+  originalId: uuidv4(),
+  variationId: uuidv4(),
+}
+const createVariation = (options: CreateVariationStubOptions = defaultCreateVariationOptions): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: `/cemo/api/orders/${options.originalId}/copy-as-variation`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              type: 'VARIATION',
+              id: options.variationId,
+            }
+          : null,
     },
   })
 
@@ -627,6 +665,7 @@ const resetDB = async () => {
 
 export default {
   stubCemoCreateOrder: createOrder,
+  stubCemoCreateVariation: createVariation,
   stubCemoGetOrder: getOrder,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
