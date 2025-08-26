@@ -94,6 +94,17 @@ export const getAddressViews = (addresses: Address[]): AddressViews => {
 
   return addressViews
 }
+
 export type ErrorsViewModel = {
   [field: string]: ErrorMessage
+}
+
+export type ConfirmationPageViewModel = {
+  order: {
+    id: string
+  }
+  deviceWearer: {
+    firstName: string
+    lastName: string
+  }
 }

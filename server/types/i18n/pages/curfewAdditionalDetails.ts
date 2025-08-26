@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type CurfewAdditionalDetailsPageContent = PageContent<'provideDetails' | 'curfewAdditionalDetails'>
+type CurfewAdditionalDetailsPageContent = QuestionPageContent<'provideDetails' | 'curfewAdditionalDetails'>
 
 export default CurfewAdditionalDetailsPageContent

@@ -1,6 +1,6 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type ExclusionZonePageContent = PageContent<
+type ExclusionZonePageContent = QuestionPageContent<
   'anotherZone' | 'description' | 'duration' | 'endDate' | 'file' | 'startDate'
 >
 

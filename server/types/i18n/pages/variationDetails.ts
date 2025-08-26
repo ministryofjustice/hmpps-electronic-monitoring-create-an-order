@@ -1,5 +1,5 @@
-import PageContent from './page'
+import QuestionPageContent from './questionPage'
 
-type VariationDetailsPageContent = PageContent<'variationDate' | 'variationType' | 'variationDetails'>
+type VariationDetailsPageContent = QuestionPageContent<'variationDate' | 'variationType' | 'variationDetails'>
 
 export default VariationDetailsPageContent

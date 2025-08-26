@@ -251,7 +251,7 @@ describe('OrderSearchController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/search', {
         orders: [],
-        variationsEnabled: true,
+        variationAsNewOrderEnabled: true,
       })
     })
   })

@@ -293,6 +293,8 @@ context('Scenarios', () => {
                 sentence_type: 'Detention & Training Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
+                date_and_time_installation_will_take_place: '',
+                released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
