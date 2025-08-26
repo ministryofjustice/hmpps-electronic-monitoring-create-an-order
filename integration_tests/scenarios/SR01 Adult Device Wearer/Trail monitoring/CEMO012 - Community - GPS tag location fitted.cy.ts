@@ -92,7 +92,6 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk,
           monitoringConditions,
-          installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           files,
           probationDeliveryUnit,
