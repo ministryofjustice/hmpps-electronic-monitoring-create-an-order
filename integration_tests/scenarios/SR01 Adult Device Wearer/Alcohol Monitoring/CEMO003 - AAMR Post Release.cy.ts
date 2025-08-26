@@ -68,6 +68,7 @@ context('Scenarios', () => {
       orderType: 'Community',
       conditionType: 'Licence condition',
       monitoringRequired: 'Alcohol monitoring',
+      pilot: 'They are not part of any of these pilots',
       sentenceType: 'Standard Determinate Sentence',
     }
     const alcoholMonitoringDetails = {
