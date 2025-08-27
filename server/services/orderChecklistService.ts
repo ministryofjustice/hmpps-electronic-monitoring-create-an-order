@@ -5,7 +5,7 @@ export default class OrderChecklistService {
   constructor(private readonly dataStore: OrderChecklistStore) {}
 
   public async updateChecklist(
-    orderId: string,
+    key: string,
     section:
       | 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM'
       | 'ABOUT_THE_DEVICE_WEARER'
@@ -14,20 +14,20 @@ export default class OrderChecklistService {
       | 'ELECTRONIC_MONITORING_CONDITIONS'
       | 'ADDITIONAL_DOCUMENTS',
   ) {
-    let checklist = await this.dataStore.getSectionCheckStatus(orderId)
+    let checklist = await this.dataStore.getSectionCheckStatus(key)
     if (checklist == null) {
       checklist = OrderChecklistModel.parse({})
     }
     checklist[section] = true
-    await this.dataStore.setSectionCheckStatus(orderId, checklist, 60 * 60)
+    await this.dataStore.setSectionCheckStatus(key, checklist, 60 * 60)
   }
 
-  public async getChecklist(orderId: string) {
-    let checklist = await this.dataStore.getSectionCheckStatus(orderId)
+  public async getChecklist(key: string) {
+    let checklist = await this.dataStore.getSectionCheckStatus(key)
     if (checklist == null) {
       checklist = OrderChecklistModel.parse({})
     }
-    await this.dataStore.setSectionCheckStatus(orderId, checklist, 24 * 60 * 60)
+    await this.dataStore.setSectionCheckStatus(key, checklist, 24 * 60 * 60)
     return checklist
   }
 }

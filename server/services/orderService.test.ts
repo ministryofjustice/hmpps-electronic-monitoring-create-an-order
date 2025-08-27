@@ -9,9 +9,9 @@ jest.mock('../data/restClient')
 
 const mockId = uuidv4()
 
-const mockApiResponse = { ...mockApiOrder(), id: mockId }
+const mockApiResponse = { ...mockApiOrder(), id: mockId, versionId: mockId }
 
-const mockNewOrder = getMockOrder({ id: mockId })
+const mockNewOrder = getMockOrder({ id: mockId, versionId: mockId })
 
 const mock404Error: SanitisedError = {
   message: 'Not Found',

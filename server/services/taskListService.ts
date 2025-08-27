@@ -575,7 +575,7 @@ export default class TaskListService {
 
   async getSections(order: Order): Promise<SectionBlock[]> {
     const tasks = this.getTasks(order)
-    const checkList = await this.checklistService.getChecklist(order.id)
+    const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
 
     return Object.values(SECTIONS)
       .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')

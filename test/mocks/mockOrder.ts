@@ -202,6 +202,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   isValid: false,
   probationDeliveryUnit: null,
   orderParameters: null,
+  versionId: randomUUID(),
   ...overrideProperties,
 })
 
@@ -256,6 +257,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
     location: 'INSTALLATION',
   },
   orderParameters: null,
+  versionId: randomUUID(),
   ...overrideProperties,
 })
 
