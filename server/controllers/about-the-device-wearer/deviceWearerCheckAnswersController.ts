@@ -27,7 +27,7 @@ export default class DeviceWearerCheckAnswersController {
     const order = req.order!
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
-    await this.checklistService.updateChecklist(order.id, 'ABOUT_THE_DEVICE_WEARER')
+    await this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ABOUT_THE_DEVICE_WEARER')
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
         res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order))

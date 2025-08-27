@@ -28,7 +28,7 @@ export default class CheckAnswersController {
     const order = req.order!
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
-    this.checklistService.updateChecklist(order.id, 'RISK_INFORMATION')
+    this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'RISK_INFORMATION')
 
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {

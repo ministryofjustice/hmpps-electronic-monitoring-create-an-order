@@ -29,6 +29,7 @@ export default class VariationDetailsController {
 
   update: RequestHandler = async (req, res) => {
     const { orderId } = req.params
+    const order = req.order!
     const { action, ...formData } = VariationDetailsFormDataParser.parse(req.body)
 
     const result = await this.variationDetailsService.updateVariationDetails({
@@ -42,10 +43,16 @@ export default class VariationDetailsController {
       req.flash('validationErrors', result)
       res.redirect(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      this.checklistService.updateChecklist(orderId, 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM')
+      this.checklistService.updateChecklist(
+        `${order.id}-${order.versionId}`,
+        'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+      )
       res.redirect(this.taskListService.getNextPage('VARIATION_DETAILS', req.order!))
     } else {
-      this.checklistService.updateChecklist(orderId, 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM')
+      this.checklistService.updateChecklist(
+        `${order.id}-${order.versionId}`,
+        'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+      )
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }

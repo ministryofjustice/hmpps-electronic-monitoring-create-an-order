@@ -112,7 +112,7 @@ export default class AttachmentsController {
     const error = req.flash('attachmentDeletionErrors')
 
     const answers = createViewModel(order, res.locals.content)
-    this.checklistService.updateChecklist(order.id, 'ADDITIONAL_DOCUMENTS')
+    this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ADDITIONAL_DOCUMENTS')
     res.render(`pages/order/attachments/view`, {
       answers,
       error: error && error.length > 0 ? error[0] : undefined,
