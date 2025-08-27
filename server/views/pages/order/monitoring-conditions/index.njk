@@ -87,17 +87,20 @@
     {{ govukRadios({
       name: "orderTypeDescription",
       fieldset: {
-	legend: {
-	  text: questions.orderTypeDescription.text,
-	  classes: "govuk-fieldset__legend--s"
-	}
+        legend: {
+          text: questions.orderTypeDescription.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+	      text: questions.orderTypeDescription.hint
       },
       items: [
         { text: content.reference.orderTypeDescriptions.DAPOL, value: 'DAPOL', disabled: not isOrderEditable },
-	{ text: content.reference.orderTypeDescriptions.DAPOL_HDC, value: 'DAPOL_HDC', disabled: not isOrderEditable },
+	      { text: content.reference.orderTypeDescriptions.DAPOL_HDC, value: 'DAPOL_HDC', disabled: not isOrderEditable },
         { text: content.reference.orderTypeDescriptions.GPS_ACQUISITIVE_CRIME_HDC, value: 'GPS_ACQUISITIVE_CRIME_HDC', disabled: not isOrderEditable },
         { text: content.reference.orderTypeDescriptions.GPS_ACQUISITIVE_CRIME_PAROLE, value: 'GPS_ACQUISITIVE_CRIME_PAROLE', disabled: not isOrderEditable },
-	{ divider: "or", disabled: not isOrderEditable },
+	      { divider: "or", disabled: not isOrderEditable },
         { text: content.reference.orderTypeDescriptions.UNKNOWN, value: 'UNKNOWN', disabled: not isOrderEditable}
       ],
       value: orderTypeDescription.value,
@@ -116,6 +119,9 @@
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
+      },
+      hint: {
+	      text: questions.pilot.hint
       },     
       items: [        
         { 
