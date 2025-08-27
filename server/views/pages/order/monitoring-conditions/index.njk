@@ -347,7 +347,7 @@
           value: "trail",
           text: "Trail monitoring",
           hint: {
-            text: "Recording and gathering data on movements of the device wearer throughout the day. Trail monitoring must be selected if the device wearer is part of the Acquisitive Crime Project."
+            text: "Recording and gathering data on movements of the device wearer throughout the day."
           },
           checked: monitoringRequired.values | select("equalto", "trail") | length,
           disabled: not isOrderEditable
