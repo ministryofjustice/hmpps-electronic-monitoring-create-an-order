@@ -7,8 +7,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
-// Scenario skipped as alcohol monitoring is currently disabled.
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -67,8 +66,10 @@ context.skip('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Community',
-      conditionType: 'Bail Order',
+      conditionType: 'Licence condition',
       monitoringRequired: 'Alcohol monitoring',
+      pilot: 'They are not part of any of these pilots',
+      sentenceType: 'Standard Determinate Sentence',
     }
     const alcoholMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -169,14 +170,14 @@ context.skip('Scenarios', () => {
             case_id: fmsCaseId,
             allday_lockdown: '',
             atv_allowance: '',
-            condition_type: monitoringConditions.conditionType,
+            condition_type: 'License Condition of a Custodial Order',
             court: '',
             court_order_email: '',
             device_type: '',
             device_wearer: deviceWearerDetails.fullName,
             enforceable_condition: [
               {
-                condition: 'AML',
+                condition: 'AAMR',
                 start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
                 end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
               },
@@ -228,11 +229,12 @@ context.skip('Scenarios', () => {
             ro_region: interestedParties.responsibleOrganisationRegion,
             sentence_date: '',
             sentence_expiry: '',
-            sentence_type: '',
-            tag_at_source: '',
-            tag_at_source_details: '',
-            date_and_time_installation_will_take_place: '',
-            released_under_prarr: '',
+            sentence_type: 'Standard Determinate Sentence',
+            tag_at_source: 'Yes',
+            tag_at_source_details: alcoholMonitoringDetails.installLocation,
+            date_and_time_installation_will_take_place: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
+            released_under_prarr: 'No',
+            pilot: '',
             technical_bail: '',
             trial_date: '',
             trial_outcome: '',
@@ -252,11 +254,11 @@ context.skip('Scenarios', () => {
             checkin_schedule: [],
             revocation_date: '',
             revocation_type: '',
-            installation_address_1: '',
-            installation_address_2: '',
-            installation_address_3: '',
-            installation_address_4: '',
-            installation_address_post_code: '',
+            installation_address_1: fakePrimaryAddress.line1,
+            installation_address_2: fakePrimaryAddress.line2,
+            installation_address_3: fakePrimaryAddress.line3,
+            installation_address_4: fakePrimaryAddress.line4,
+            installation_address_post_code: fakePrimaryAddress.postcode,
             crown_court_case_reference_number: '',
             magistrate_court_case_reference_number: '',
             issp: 'No',
