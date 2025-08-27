@@ -272,7 +272,7 @@ describe('VariationDetailsController', () => {
 
       // Then
       expect(mockOrderChecklistService.updateChecklist).toHaveBeenCalledWith(
-        req.order?.id,
+        `${req.order?.id}-${req.order?.versionId}`,
         'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
       )
     })

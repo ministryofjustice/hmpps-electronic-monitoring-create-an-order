@@ -78,6 +78,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   variationDetails: null,
   isValid: false,
   orderParameters: null,
+  versionId: uuidv4(),
 })
 
 type ListOrdersStubOptions = {

@@ -200,7 +200,10 @@ describe('AttachmentController', () => {
 
       await controller.view(req, res, next)
 
-      expect(mockOrderChecklistService.updateChecklist).toHaveBeenCalledWith(req.order?.id, 'ADDITIONAL_DOCUMENTS')
+      expect(mockOrderChecklistService.updateChecklist).toHaveBeenCalledWith(
+        `${req.order?.id}-${req.order?.versionId}`,
+        'ADDITIONAL_DOCUMENTS',
+      )
     })
   })
 
