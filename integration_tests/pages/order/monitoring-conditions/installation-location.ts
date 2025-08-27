@@ -10,4 +10,10 @@ export default class InstallationLocationPage extends AppFormPage {
   constructor() {
     super('', paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, 'Electronic monitoring required')
   }
+
+  checkOnPage(): void {
+    super.checkOnPage()
+
+    this.form.checkHasForm()
+  }
 }

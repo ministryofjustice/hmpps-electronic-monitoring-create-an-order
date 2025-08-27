@@ -286,14 +286,14 @@ context('Monitoring conditions', () => {
         })
       })
 
-      context('Shoud continue to Installation appointment page', () => {
+      context('Should continue to Installation appointment page', () => {
         it(`when selected location is prison`, () => {
           cy.task('stubCemoSubmitOrder', {
             httpStatus: 200,
             id: mockOrderId,
             subPath: apiPath,
             response: {
-              location: 'PROBATION_OFFICE',
+              location: 'PRISON',
             },
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
@@ -305,7 +305,7 @@ context('Monitoring conditions', () => {
           Page.verifyOnPage(InstallationAppointmentPage)
         })
 
-        it(`when selected location is prison`, () => {
+        it(`when selected location is probation`, () => {
           cy.task('stubCemoSubmitOrder', {
             httpStatus: 200,
             id: mockOrderId,

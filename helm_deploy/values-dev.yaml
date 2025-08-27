@@ -17,6 +17,7 @@ generic-service:
     DD_V5_1_ENABLED: "false"
     ALCOHOL_MONITORING_ENABLED: "true"
     CREATE_NEW_ORDER_VERSION_ENABLED: "true"
+    TAG_AT_SOURCE_OPTIONS_ENABLED: "true"    
 
   allowlist:
     unrestricted: "0.0.0.0/0"

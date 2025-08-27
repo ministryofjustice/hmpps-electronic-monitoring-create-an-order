@@ -122,6 +122,9 @@ export default {
   mappa: {
     enabled: get('MAPPA_ENABLED', 'true') === 'true',
   },
+  tagAtSourceOptions: {
+    enabled: get('TAG_AT_SOURCE_OPTIONS_ENABLED', 'false') === 'true',
+  },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   logLevel: get('LOG_LEVEL', 'debug'),

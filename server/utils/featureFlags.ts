@@ -30,6 +30,7 @@ export default class FeatureFlags {
       ORDER_TYPE_ENABLED: process.env.ORDER_TYPE_ENABLED === 'true',
       ALCOHOL_MONITORING_ENABLED: process.env.ALCOHOL_MONITORING_ENABLED === 'true',
       CREATE_NEW_ORDER_VERSION_ENABLED: process.env.CREATE_NEW_ORDER_VERSION_ENABLED === 'true',
+      TAG_AT_SOURCE_OPTIONS_ENABLED: process.env.TAG_AT_SOURCE_OPTIONS_ENABLED === 'true',
     }
   }
 

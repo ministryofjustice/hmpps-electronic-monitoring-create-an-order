@@ -3,6 +3,7 @@ import Page from '../../../pages/page'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
+import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 
 const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions'
@@ -85,6 +86,36 @@ context('Monitoring conditions', () => {
             pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
           },
         }).should('be.true')
+      })
+
+      it('Should go to exclusion zone page when exclusion zone is only condition selected', () => {
+        const response = {
+          ...mockResponse,
+          curfew: false,
+          exclusionZone: true,
+          trail: false,
+          mandatoryAttendance: false,
+          alcohol: false,
+        }
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response,
+        })
+
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.fillInWith({
+          ...validFormData,
+          monitoringRequired: ['Exclusion zone monitoring'],
+        })
+
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(EnforcementZonePage)
       })
 
       it('Should go to curfew page when curfew is only condition selected', () => {
@@ -270,6 +301,90 @@ context('Monitoring conditions', () => {
             },
           }).should('be.true')
         })
+      })
+    })
+
+    context('When "Tag at source" feature is ENABLED', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        const testFlags = { TAG_AT_SOURCE_OPTIONS_ENABLED: true }
+        cy.task('setFeatureFlags', testFlags)
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
+        cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: mockResponse })
+
+        cy.signIn()
+      })
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+
+      it('should go to installation location page when exclusion zone is selected', () => {
+        const response = {
+          ...mockResponse,
+          curfew: true,
+          alcohol: false,
+          exclusionZone: false,
+          trail: false,
+          mandatoryAttendance: false,
+        }
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response,
+        })
+
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.fillInWith({
+          ...validFormData,
+          monitoringRequired: ['Curfew'],
+        })
+
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(InstallationLocationPage)
+      })
+
+      it('should go to installation location page when curfew is selected', () => {
+        const response = {
+          ...mockResponse,
+          curfew: true,
+          alcohol: false,
+          exclusionZone: false,
+          trail: false,
+          mandatoryAttendance: false,
+        }
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response,
+        })
+
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.fillInWith({
+          ...validFormData,
+          monitoringRequired: ['Curfew'],
+        })
+
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(InstallationLocationPage)
       })
     })
   })

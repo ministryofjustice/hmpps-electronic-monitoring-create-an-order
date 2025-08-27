@@ -153,5 +153,26 @@ context('Monitoring conditions', () => {
         page.form.locationField.shouldHaveOption('At a probation office')
       })
     })
+    context('When tag at source is ENABLED', () => {
+      beforeEach(() => {
+        const testFlags = { TAG_AT_SOURCE_OPTIONS_ENABLED: true }
+        cy.task('setFeatureFlags', testFlags)
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder(mockDefaultOrder)
+        cy.signIn()
+      })
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      it('Should show options for probation and prison for any monitoring type', () => {
+        const page = Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+        page.form.locationField.shouldHaveOption('At a prison')
+        page.form.locationField.shouldHaveOption('At a probation office')
+      })
+    })
   })
 })
