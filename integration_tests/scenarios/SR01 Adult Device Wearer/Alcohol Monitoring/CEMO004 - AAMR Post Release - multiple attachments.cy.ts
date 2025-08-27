@@ -7,8 +7,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-// Scenario skipped as alcohol monitoring is currently disabled.
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -103,7 +102,7 @@ context.skip('Scenarios', () => {
       },
     })
 
-    cy.readFile(files.photoId.contents, 'base64').then(content => {
+    cy.readFile(files.licence.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         scenario: {
           name: 'CEMO004',
@@ -112,12 +111,12 @@ context.skip('Scenarios', () => {
         },
         id: '(.*)',
         httpStatus: 200,
-        contextType: 'image/jpeg',
+        contextType: 'application/pdf',
         fileBase64Body: content,
       })
     })
 
-    cy.readFile(files.licence.contents, 'base64').then(content => {
+    cy.readFile(files.photoId.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         scenario: {
           name: 'CEMO004',
@@ -126,7 +125,7 @@ context.skip('Scenarios', () => {
         },
         id: '(.*)',
         httpStatus: 200,
-        contextType: 'application/pdf',
+        contextType: 'image/jpeg',
         fileBase64Body: content,
       })
     })
@@ -152,8 +151,10 @@ context.skip('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        conditionType: 'Bail Order',
+        conditionType: 'Licence condition',
         monitoringRequired: 'Alcohol monitoring',
+        pilot: 'They are not part of any of these pilots',
+        sentenceType: 'Standard Determinate Sentence',
       }
       const alcoholMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -253,7 +254,7 @@ context.skip('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -279,7 +280,7 @@ context.skip('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: interestedParties.notifyingOrganisationName,
+                no_name: 'LIVERPOOL_AND_KNOWSLEY_MAGISTRATES_COURT',
                 no_phone_number: '',
                 offence: '',
                 offence_date: '',
@@ -312,11 +313,12 @@ context.skip('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
-                tag_at_source: '',
-                tag_at_source_details: '',
-                date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                sentence_type: 'Standard Determinate Sentence',
+                tag_at_source: 'Yes',
+                tag_at_source_details: `at installation address: ${fakePrimaryAddress}`,
+                pilot: '',
+                date_and_time_installation_will_take_place: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
+                released_under_prarr: 'No',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -336,11 +338,11 @@ context.skip('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: '',
-                installation_address_2: '',
-                installation_address_3: '',
-                installation_address_4: '',
-                installation_address_post_code: '',
+                installation_address_1: fakePrimaryAddress.line1,
+                installation_address_2: fakePrimaryAddress.line2,
+                installation_address_3: fakePrimaryAddress.line3,
+                installation_address_4: fakePrimaryAddress.line4,
+                installation_address_post_code: fakePrimaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
@@ -361,7 +363,6 @@ context.skip('Scenarios', () => {
           })
         })
 
-        // Verify the attachments were sent to the FMS API
         cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
             index: 1,
