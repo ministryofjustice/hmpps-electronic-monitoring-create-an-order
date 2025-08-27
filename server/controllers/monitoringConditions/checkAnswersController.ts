@@ -27,7 +27,7 @@ export default class CheckAnswersController {
     const order = req.order!
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
-    this.checklistService.updateChecklist(order.id, 'ELECTRONIC_MONITORING_CONDITIONS')
+    this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ELECTRONIC_MONITORING_CONDITIONS')
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
         res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order))

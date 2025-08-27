@@ -51,6 +51,7 @@ const OrderModel = z.object({
   dataDictionaryVersion: DataDictionaryVersionEnum,
   orderParameters: OrderParametersModel.nullable().optional(),
   submittedBy: z.string().nullable().optional(),
+  versionId: z.string().uuid(),
 })
 
 export type Order = z.infer<typeof OrderModel>
