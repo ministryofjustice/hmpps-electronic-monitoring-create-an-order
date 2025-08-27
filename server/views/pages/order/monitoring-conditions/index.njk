@@ -296,6 +296,10 @@
 
   {% endcall %}
 
+  {% set alcoholHintText %}
+    {{ "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol." if alcoholEnabled else "This service does not yet offer Alcohol Monitoring as a monitoring requirement. If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process."  }}
+  {% endset %}
+
   {% call govukFieldset({
     legend: {
       text: "Monitoring required",
@@ -355,10 +359,10 @@
           value: "alcohol",
           text: "Alcohol monitoring",
           hint: {
-            text: "This service does not yet offer Alcohol Monitoring as a monitoring requirement. If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process."
+            text: alcoholHintText
           },
           checked: monitoringRequired.values | select("equalto", "alcohol") | length,
-          disabled: true
+          disabled: not alcoholEnabled or not isOrderEditable
         }
       ],
       errorMessage: monitoringRequired.error,
