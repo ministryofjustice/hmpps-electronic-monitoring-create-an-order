@@ -27,7 +27,7 @@ context('Attachments', () => {
         cy.signIn()
       })
 
-      it('Should render summary page with no download links and no delete links', () => {
+      it('Should render summary page with download links but no change links', () => {
         const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'View answers')
 
         // Header
@@ -53,6 +53,8 @@ context('Attachments', () => {
           .find('.govuk-summary-list__value')
           .contains('photo.jpeg')
           .should('have.attr', 'href', `/order/${mockOrderId}/attachments/photo_Id/photo.jpeg`)
+
+        page.changeLinks.should('not.exist')
 
         // Buttons
         page.backToSummaryButton.should('exist')
