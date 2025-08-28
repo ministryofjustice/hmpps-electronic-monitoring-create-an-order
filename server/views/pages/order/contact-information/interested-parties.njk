@@ -41,7 +41,7 @@
     name: 'prison',
     label: content.pages.interestedParties.questions.prison.text,
     hint: content.pages.interestedParties.questions.prison.hint,
-    options: content.reference.prisons | toOptions(false, true),
+    options: content.reference.prisons | toOptions(false, true) | removeOptions(['COOKHAM_WOOD_YOUNG_OFFENDER_INSTITUTION']),
     value: notifyingOrganisationName.value,
     errorMessage: notifyingOrganisationName.error,
     nonce: cspNonce
