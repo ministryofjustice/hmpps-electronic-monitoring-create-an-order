@@ -152,6 +152,35 @@ context('Monitoring conditions', () => {
         page.form.locationField.shouldHaveOption('At a prison')
         page.form.locationField.shouldHaveOption('At a probation office')
       })
+
+      it('Should not show options for probation and prison, when non-alcohol monitoring order is selected', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({
+          ...mockDefaultOrder,
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: false,
+            alcohol: false,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+          },
+        })
+        const page = Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+        page.form.locationField.shouldNotHaveOption('At a prison')
+        page.form.locationField.shouldNotHaveOption('At a probation office')
+      })
     })
     context('When tag at source is ENABLED', () => {
       beforeEach(() => {

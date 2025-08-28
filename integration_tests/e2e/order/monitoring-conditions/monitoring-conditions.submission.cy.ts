@@ -330,9 +330,9 @@ context('Monitoring conditions', () => {
       it('should go to installation location page when exclusion zone is selected', () => {
         const response = {
           ...mockResponse,
-          curfew: true,
+          curfew: false,
           alcohol: false,
-          exclusionZone: false,
+          exclusionZone: true,
           trail: false,
           mandatoryAttendance: false,
         }
@@ -350,7 +350,7 @@ context('Monitoring conditions', () => {
 
         page.form.fillInWith({
           ...validFormData,
-          monitoringRequired: ['Curfew'],
+          monitoringRequired: ['Exclusion zone monitoring'],
         })
 
         page.form.saveAndContinueButton.click()
@@ -381,6 +381,36 @@ context('Monitoring conditions', () => {
         page.form.fillInWith({
           ...validFormData,
           monitoringRequired: ['Curfew'],
+        })
+
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(InstallationLocationPage)
+      })
+
+      it('should go to installation location page when multiple monitoring types are selected', () => {
+        const response = {
+          ...mockResponse,
+          curfew: true,
+          alcohol: false,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: false,
+        }
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response,
+        })
+
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.fillInWith({
+          ...validFormData,
+          monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
         })
 
         page.form.saveAndContinueButton.click()
