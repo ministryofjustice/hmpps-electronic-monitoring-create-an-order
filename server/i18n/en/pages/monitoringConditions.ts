@@ -32,9 +32,11 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     },
     orderTypeDescription: {
       text: 'What pilot project is the device wearer part of?',
+      hint: 'This is on Create and Vary a Licence (CVL) on the page you print the licence',
     },
     pilot: {
       text: 'What pilot project is the device wearer part of?',
+      hint: 'This is on Create and Vary a Licence (CVL) on the page you print the licence',
     },
     prarr: {
       text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
