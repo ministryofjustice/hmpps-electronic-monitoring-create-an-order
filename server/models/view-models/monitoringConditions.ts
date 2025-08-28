@@ -21,6 +21,7 @@ type MonitoringConditionsViewModel = ViewModel<
   orderTypeEnabled: boolean
   alcoholEnabled: boolean
   DDv5: boolean
+  fixedAddressExist: boolean
 }
 
 const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): string[] => {
@@ -38,6 +39,11 @@ const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): st
     }
     return acc
   }, [])
+}
+
+const hasFixedAddress = (order: Order): boolean => {
+  const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
+  return primaryAddress !== undefined
 }
 
 const createViewModelFromMonitoringConditions = (order: Order): MonitoringConditionsViewModel => ({
@@ -79,6 +85,7 @@ const createViewModelFromMonitoringConditions = (order: Order): MonitoringCondit
   orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
   alcoholEnabled: FeatureFlags.getInstance().get('ALCOHOL_MONITORING_ENABLED'),
   DDv5: order.dataDictionaryVersion === 'DDV5',
+  fixedAddressExist: hasFixedAddress(order),
 })
 
 const createViewModelFromFormData = (
@@ -141,6 +148,7 @@ const createViewModelFromFormData = (
     orderTypeEnabled: FeatureFlags.getInstance().get('ORDER_TYPE_ENABLED'),
     alcoholEnabled: FeatureFlags.getInstance().get('ALCOHOL_MONITORING_ENABLED'),
     DDv5: order.dataDictionaryVersion === 'DDV5',
+    fixedAddressExist: hasFixedAddress(order),
   }
 }
 
