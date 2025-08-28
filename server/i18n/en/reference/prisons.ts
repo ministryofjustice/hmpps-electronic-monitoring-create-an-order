@@ -20,6 +20,7 @@ const prisons: Prisons = {
   CHANNINGS_WOOD_PRISON: 'Channings Wood Prison',
   CHELMSFORD_PRISON: 'Chelmsford Prison',
   COLDINGLEY_PRISON: 'Coldingley Prison',
+  COOKHAM_WOOD_PRISON: 'Cookham Wood Prison',
   COOKHAM_WOOD_YOUNG_OFFENDER_INSTITUTION: 'Cookham Wood Young Offender Institution',
   DARTMOOR_PRISON: 'Dartmoor Prison',
   DEERBOLT_PRISON: 'Deerbolt Prison',

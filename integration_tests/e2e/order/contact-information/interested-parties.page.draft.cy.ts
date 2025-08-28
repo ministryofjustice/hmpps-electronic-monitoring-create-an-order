@@ -44,6 +44,13 @@ context('Contact information', () => {
 
           page.checkIsAccessible()
         })
+
+        it('Should not display Cookham Wood YOI', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+          page.form.prisonField.shouldNotHaveOption('Cookham Wood Young Offender Institution')
+          page.form.prisonField.shouldHaveOption('Cookham Wood Prison')
+        })
       })
 
       context('DDv5', () => {
