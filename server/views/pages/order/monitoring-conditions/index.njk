@@ -7,6 +7,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../../../partials/timeInput.njk" import timeInput %}
 {% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+  {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set section = content.pages.monitoringConditions.section %}
 {% set heading = content.pages.monitoringConditions.title %}
@@ -301,7 +302,7 @@
     }) }}
 
   {% endcall %}
-
+  
   {% set alcoholHintText %}
     {{ "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol." if alcoholEnabled else "This service does not yet offer Alcohol Monitoring as a monitoring requirement. If you need to create an order including an Alcohol Monitoring requirement, or a multiple monitoring requirement order (for example, Alcohol Monitoring and Curfew), continue to use your current process."  }}
   {% endset %}
@@ -313,6 +314,15 @@
       isPageHeading: false
     }
   }) %}
+
+
+
+{% if not fixedAddressExist %}
+{{ govukInsetText({
+  text: "Some monitoring types can't be selected because the device wearer has no fixed address."
+}) }}
+{% endif %}
+
     {{ govukCheckboxes({
       name: "monitoringRequired",
       fieldset: {
@@ -332,7 +342,7 @@
             text: "Monitoring the device wearer adheres to set times and days that they must remain at a location."
           },
           checked: monitoringRequired.values | select("equalto", "curfew") | length,
-          disabled: not isOrderEditable
+          disabled: not isOrderEditable or not fixedAddressExist
         },
         {
           value: "exclusionZone",
@@ -341,7 +351,7 @@
             text: "Prevents the device wearer entering areas or visiting locations at set times."
           },
           checked: monitoringRequired.values | select("equalto", "exclusionZone") | length,
-          disabled: not isOrderEditable
+          disabled: not isOrderEditable or not fixedAddressExist
         },
         {
           value: "trail",
@@ -350,7 +360,7 @@
             text: "Recording and gathering data on movements of the device wearer throughout the day."
           },
           checked: monitoringRequired.values | select("equalto", "trail") | length,
-          disabled: not isOrderEditable
+          disabled: not isOrderEditable or not fixedAddressExist
         },
         {
           value: "mandatoryAttendance",
@@ -359,7 +369,7 @@
             text: "Recording the device wearer's attendance at arranged meetings or places."
           },
           checked: monitoringRequired.values | select("equalto", "mandatoryAttendance") | length,
-          disabled: not isOrderEditable
+          disabled: not isOrderEditable or not fixedAddressExist
         },
         {
           value: "alcohol",

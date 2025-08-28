@@ -49,7 +49,19 @@ context('Monitoring conditions', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
-          order: { dataDictionaryVersion: 'DDV5' },
+          order: {
+            addresses: [
+              {
+                addressType: 'PRIMARY',
+                addressLine1: '10 Downing Street',
+                addressLine2: '',
+                addressLine3: '',
+                addressLine4: '',
+                postcode: '',
+              },
+            ],
+            dataDictionaryVersion: 'DDV5',
+          },
         })
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: mockResponse })
 
@@ -216,7 +228,19 @@ context('Monitoring conditions', () => {
             httpStatus: 200,
             id: mockOrderId,
             status: 'IN_PROGRESS',
-            order: { dataDictionaryVersion: 'DDV4' },
+            order: {
+              addresses: [
+                {
+                  addressType: 'PRIMARY',
+                  addressLine1: '10 Downing Street',
+                  addressLine2: '',
+                  addressLine3: '',
+                  addressLine4: '',
+                  postcode: '',
+                },
+              ],
+              dataDictionaryVersion: 'DDV4',
+            },
           })
 
           cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
@@ -235,7 +259,19 @@ context('Monitoring conditions', () => {
             httpStatus: 200,
             id: mockOrderId,
             status: 'IN_PROGRESS',
-            order: { dataDictionaryVersion: 'DDV4' },
+            order: {
+              addresses: [
+                {
+                  addressType: 'PRIMARY',
+                  addressLine1: '10 Downing Street',
+                  addressLine2: '',
+                  addressLine3: '',
+                  addressLine4: '',
+                  postcode: '',
+                },
+              ],
+              dataDictionaryVersion: 'DDV4',
+            },
           })
 
           cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })
