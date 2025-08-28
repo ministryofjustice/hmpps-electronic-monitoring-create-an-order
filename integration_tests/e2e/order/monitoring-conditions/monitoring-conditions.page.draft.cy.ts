@@ -15,7 +15,19 @@ context('Monitoring conditions', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
-          order: { dataDictionaryVersion: 'DDV5' },
+          order: {
+            addresses: [
+              {
+                addressType: 'PRIMARY',
+                addressLine1: '10 Downing Street',
+                addressLine2: '',
+                addressLine3: '',
+                addressLine4: '',
+                postcode: '',
+              },
+            ],
+            dataDictionaryVersion: 'DDV5',
+          },
         })
 
         cy.signIn()
@@ -93,6 +105,49 @@ context('Monitoring conditions', () => {
           orderId: mockOrderId,
         })
         page.checkIsAccessible()
+      })
+    })
+
+    context('Viewing a draft order with no fixed address', () => {
+      const testFlags = { ALCOHOL_MONITORING_ENABLED: true }
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('setFeatureFlags', testFlags)
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            dataDictionaryVersion: 'DDV5',
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('All monitoring condition but Alcohol is disabled', () => {
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+        page.header.userName().should('contain.text', 'J. Smith')
+        page.header.phaseBanner().should('contain.text', 'dev')
+
+        page.form.monitoringRequiredField.element.find('input[type=checkbox][value="curfew"]').should('be.disabled')
+        page.form.monitoringRequiredField.element
+          .find('input[type=checkbox][value="exclusionZone"]')
+          .should('be.disabled')
+        page.form.monitoringRequiredField.element
+          .find('input[type=checkbox][value="mandatoryAttendance"]')
+          .should('be.disabled')
+        page.form.monitoringRequiredField.element.find('input[type=checkbox][value="trail"]').should('be.disabled')
+        page.form.monitoringRequiredField.element.find('input[type=checkbox][value="alcohol"]').should('be.enabled')
+
+        page.form.shouldHaveAllOptions()
       })
     })
   })

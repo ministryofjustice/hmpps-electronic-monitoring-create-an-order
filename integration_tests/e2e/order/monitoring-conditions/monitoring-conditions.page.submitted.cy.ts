@@ -33,6 +33,16 @@ context('Monitoring conditions', () => {
               prarr: 'UNKNOWN',
               pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
+            addresses: [
+              {
+                addressType: 'PRIMARY',
+                addressLine1: '10 Downing Street',
+                addressLine2: '',
+                addressLine3: '',
+                addressLine4: '',
+                postcode: '',
+              },
+            ],
             dataDictionaryVersion: 'DDV5',
           },
         })
