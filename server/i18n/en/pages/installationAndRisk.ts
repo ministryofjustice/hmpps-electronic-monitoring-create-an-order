@@ -12,7 +12,7 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
     },
     offence: {
       text: 'What type of offence did the device wearer commit? (optional)',
-      hint: 'If more than one offence commented, select the main offence',
+      hint: 'If more than one offence committed, select the main offence',
     },
     offenceAdditionalDetails: {
       text: 'Any other information to be aware of about the offence committed? (optional)',
@@ -23,7 +23,7 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
       hint: 'Check if there are any alerts for the device wearer. Select all that apply',
     },
     riskCategory: {
-      text: 'At installation what are the possible risks at the installation address? (optional)',
+      text: 'What are the possible risks at the installation address? (optional)',
       hint: "Risks relate to the device wearer's behaviour and installation address. Select all that apply",
     },
     riskDetails: {

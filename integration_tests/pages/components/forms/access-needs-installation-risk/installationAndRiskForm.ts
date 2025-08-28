@@ -53,7 +53,7 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
   }
 
   get riskCategoryField(): FormCheckboxesComponent {
-    const label = 'At installation what are the possible risks at the installation address? (optional)'
+    const label = 'What are the possible risks at the installation address? (optional)'
     return new FormCheckboxesComponent(this.form, label, [
       'History of substance abuse',
       'Diversity concerns (mental health issues, learning difficulties etc)',
