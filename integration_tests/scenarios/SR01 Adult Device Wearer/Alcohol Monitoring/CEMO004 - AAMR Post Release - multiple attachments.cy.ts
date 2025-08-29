@@ -151,7 +151,6 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        conditionType: 'Licence condition',
         monitoringRequired: 'Alcohol monitoring',
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',

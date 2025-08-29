@@ -145,7 +145,6 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Pre-Trial',
-        conditionType: 'Licence condition',
         monitoringRequired: 'Curfew',
         pilot: 'GPS Acquisitive Crime',
         sentenceType: 'Life Sentence',

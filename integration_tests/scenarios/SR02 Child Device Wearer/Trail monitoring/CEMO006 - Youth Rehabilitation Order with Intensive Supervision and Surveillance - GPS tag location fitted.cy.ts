@@ -94,7 +94,6 @@ context.skip('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Community YRO',
         issp: 'Yes',
@@ -267,7 +266,7 @@ context.skip('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
