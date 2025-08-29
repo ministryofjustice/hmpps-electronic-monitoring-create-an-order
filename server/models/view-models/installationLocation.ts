@@ -6,7 +6,7 @@ import { InstallationLocationFormData } from '../form-data/installationLocation'
 import { ValidationResult } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
-import FeatureFlags from '../../utils/featureFlags'
+import { isTagAtSourceAvailable } from '../../services/taskListService'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
@@ -57,8 +57,7 @@ const construct = (
   formData: InstallationLocationFormData,
   validationErrors: ValidationResult,
 ): InstallationLocationViewModel => {
-  const showTagAtSourceOptions =
-    FeatureFlags.getInstance().get('TAG_AT_SOURCE_OPTIONS_ENABLED') || order.monitoringConditions.alcohol === true
+  const showTagAtSourceOptions = isTagAtSourceAvailable(order)
 
   const primaryAddressView = createPrimaryAddressView(order.addresses)
 

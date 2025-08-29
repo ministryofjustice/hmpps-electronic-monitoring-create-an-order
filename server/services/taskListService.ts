@@ -117,7 +117,7 @@ const doesOrderHavePhotoId = (order: Order): boolean => {
   return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
 }
 
-const isTagAtSourceAvailable = (order: Order): boolean => {
+export const isTagAtSourceAvailable = (order: Order): boolean => {
   return FeatureFlags.getInstance().get('TAG_AT_SOURCE_OPTIONS_ENABLED') || order.monitoringConditions.alcohol === true
 }
 
