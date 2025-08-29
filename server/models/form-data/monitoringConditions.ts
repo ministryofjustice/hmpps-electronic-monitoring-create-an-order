@@ -53,7 +53,11 @@ const MonitoringConditionsFormDataParser = z.object({
 })
 
 type MonitoringConditionsFormData = Omit<z.infer<typeof MonitoringConditionsFormDataParser>, 'action'>
-
+const getConditionTypeFromOrderType = (orderType: string): string => {
+  if (orderType === 'POST_RELEASE') return 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER'
+  if (orderType === 'COMMUNITY') return 'REQUIREMENT_OF_A_COMMUNITY_ORDER'
+  return ''
+}
 const validateMonitoringConditionsFormData = (formData: MonitoringConditionsFormData) => {
   const { dataDictionaryVersion } = formData
   return z
@@ -63,7 +67,6 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
       orderTypeDescription: z.string().refine(val => val !== 'undefined' || dataDictionaryVersion !== 'DDV4', {
         message: validationErrors.monitoringConditions.orderTypeDescriptionRequired,
       }),
-      conditionType: z.string().min(1, validationErrors.monitoringConditions.conditionTypeRequired),
       startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
       endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
       sentenceType: z.string({ message: validationErrors.monitoringConditions.sentenceTypeRequired }),
@@ -84,6 +87,7 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
       mandatoryAttendance: monitoringRequired.includes('mandatoryAttendance'),
       alcohol: monitoringRequired.includes('alcohol'),
       pilot: pilot === '' ? null : pilot,
+      conditionType: getConditionTypeFromOrderType(orderType),
       ...data,
     }))
     .parse(formData)

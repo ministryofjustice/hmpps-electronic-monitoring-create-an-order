@@ -94,7 +94,6 @@ context.skip('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Mandatory attendance monitoring',
         pilot: 'They are not part of any of these pilots',
         // sentenceType: 'Community YRO',

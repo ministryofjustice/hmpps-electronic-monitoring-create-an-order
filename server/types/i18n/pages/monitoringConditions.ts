@@ -1,7 +1,6 @@
 import QuestionPageContent from './questionPage'
 
 type MonitoringConditionsPageContent = QuestionPageContent<
-  | 'conditionType'
   | 'endDate'
   | 'endTime'
   | 'hdc'

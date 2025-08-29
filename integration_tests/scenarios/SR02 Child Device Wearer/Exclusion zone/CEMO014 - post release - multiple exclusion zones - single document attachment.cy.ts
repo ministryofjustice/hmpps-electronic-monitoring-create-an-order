@@ -95,7 +95,6 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
-        conditionType: 'Licence condition',
         monitoringRequired: 'Exclusion zone monitoring',
         sentenceType: 'Detention and Training Order (DTO)',
         pilot: 'They are not part of any of these pilots',

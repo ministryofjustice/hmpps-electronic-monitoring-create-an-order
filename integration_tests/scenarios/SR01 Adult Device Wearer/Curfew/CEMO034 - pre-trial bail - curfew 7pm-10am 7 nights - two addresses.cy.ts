@@ -61,7 +61,7 @@ context.skip('Scenarios', () => {
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Pre-Trial',
+      orderType: 'Post Release',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
       pilot: 'They are not part of any of these pilots',

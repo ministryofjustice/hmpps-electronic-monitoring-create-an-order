@@ -79,7 +79,7 @@ context.skip('Scenarios', () => {
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Immigration',
+      orderType: 'Post Release',
       orderTypeDescription: 'DAPOL',
       conditionType: 'License Condition of a Custodial Order',
       monitoringRequired: 'Trail monitoring',

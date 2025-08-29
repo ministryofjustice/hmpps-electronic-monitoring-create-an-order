@@ -72,8 +72,7 @@ context('Scenarios', () => {
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Pre-Trial',
-        conditionType: 'Licence condition',
+        orderType: 'Post Release',
         monitoringRequired: 'Curfew',
         hdc: 'Yes',
         sentenceType: 'Life Sentence',
@@ -285,7 +284,7 @@ context('Scenarios', () => {
                 order_id: orderId,
                 order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: 'Pre-Trial',
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),

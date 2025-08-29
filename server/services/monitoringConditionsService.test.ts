@@ -28,7 +28,7 @@ const createInput = (overrideData: Partial<MonitoringConditionsFormData> = {}): 
     accessToken: 'mockToken',
     orderId: 'mockId',
     data: {
-      orderType: 'CIVIL',
+      orderType: 'POST_RELEASE',
       monitoringRequired: ['someMonitoring'],
       orderTypeDescription: 'some pilot',
       conditionType: 'condition',
@@ -67,14 +67,14 @@ describe('Monitoring conditions service', () => {
       expect(mockRestClient.put).toHaveBeenCalledWith({
         data: {
           alcohol: false,
-          conditionType: 'condition',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
           curfew: false,
           endDate: '2005-03-31T23:00:00.000Z',
           exclusionZone: false,
           hdc: 'YES',
           issp: 'YES',
           mandatoryAttendance: false,
-          orderType: 'CIVIL',
+          orderType: 'POST_RELEASE',
           orderTypeDescription: 'some pilot',
           prarr: 'YES',
           sentenceType: 'LIFE_SENTENCE',

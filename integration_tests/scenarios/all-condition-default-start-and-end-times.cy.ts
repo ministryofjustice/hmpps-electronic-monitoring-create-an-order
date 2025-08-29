@@ -66,7 +66,7 @@ context('The kitchen sink', () => {
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
       pilot: 'GPS Acquisitive Crime',
-      conditionType: 'Licence condition',
+
       sentenceType: 'Life Sentence',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
     }

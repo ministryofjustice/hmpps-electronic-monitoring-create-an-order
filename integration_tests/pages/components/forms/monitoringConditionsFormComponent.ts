@@ -50,13 +50,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     ])
   }
 
-  get conditionTypeField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'What condition is the monitoring part of?', [
-      'Licence condition',
-      'Post-Sentence Supervision Requirement',
-    ])
-  }
-
   get monitoringRequiredField(): FormCheckboxesComponent {
     return new FormCheckboxesComponent(this.form, 'What monitoring does the device wearer need?', [
       'Curfew',
@@ -127,10 +120,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       this.orderTypeDescriptionField.set(data.orderTypeDescription)
     }
 
-    if (data.conditionType) {
-      this.conditionTypeField.set(data.conditionType)
-    }
-
     if (data.startDate) {
       this.startDateField.set(data.startDate)
     }
@@ -164,7 +153,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldNotHaveValidationMessage()
     this.monitoringRequiredField.shouldNotHaveValidationMessage()
     this.pilotField.shouldNotHaveValidationMessage()
-    this.conditionTypeField.shouldNotHaveValidationMessage()
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
     this.sentenceTypeField.shouldNotHaveValidationMessage()
@@ -177,7 +165,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldBeDisabled()
     this.monitoringRequiredField.shouldBeDisabled()
     this.pilotField.shouldBeDisabled()
-    this.conditionTypeField.shouldBeDisabled()
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
     this.sentenceTypeField.shouldBeDisabled()
@@ -190,7 +177,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     this.orderTypeField.shouldNotBeDisabled()
     this.monitoringRequiredField.shouldNotBeDisabledWithException('value', 'alcohol')
     this.pilotField.shouldNotBeDisabled()
-    this.conditionTypeField.shouldNotBeDisabled()
     this.startDateField.shouldNotBeDisabled()
     this.endDateField.shouldNotBeDisabled()
     this.sentenceTypeField.shouldNotBeDisabled()
@@ -202,7 +188,6 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
   shouldHaveAllOptions(): void {
     this.orderTypeField.shouldHaveAllOptions()
     this.pilotField.shouldHaveAllOptions()
-    this.conditionTypeField.shouldHaveAllOptions()
     this.monitoringRequiredField.shouldHaveAllOptions()
     this.sentenceTypeField.shouldHaveAllOptions()
     this.isspField.shouldHaveAllOptions()

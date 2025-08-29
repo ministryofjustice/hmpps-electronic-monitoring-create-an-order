@@ -161,23 +161,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'What condition is the monitoring part of?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what condition is the monitoring part of?',
-                },
-              ],
-            },
-          },
+
           {
             key: {
               text: 'What type of sentence has the device wearer been given?',
@@ -539,23 +523,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What condition is the monitoring part of?',
-            },
-            value: {
-              text: 'Licence condition',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },
@@ -1449,23 +1416,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What condition is the monitoring part of?',
-            },
-            value: {
-              text: 'Licence condition',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what condition is the monitoring part of?',
                 },
               ],
             },

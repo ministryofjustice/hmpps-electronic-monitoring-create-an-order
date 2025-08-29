@@ -84,7 +84,6 @@ context('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
-      conditionType: 'Licence condition',
       monitoringRequired: 'Trail monitoring',
       sentenceType: 'Detention and Training Order (DTO)',
       pilot: 'They are not part of any of these pilots',
