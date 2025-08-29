@@ -258,7 +258,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'License Condition of a Custodial Order',
+                condition_type: 'Requirement of a Community Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
