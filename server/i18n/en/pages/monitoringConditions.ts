@@ -4,10 +4,6 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
   helpText: '',
   legend: '',
   questions: {
-    conditionType: {
-      text: 'What condition is the monitoring part of?',
-      hint: "This is on the device wearer's licence",
-    },
     endDate: {
       text: 'What is the date when all monitoring ends?',
       hint: 'For example, 21 5 2029. If more than one type of monitoring is required, provide the date when all monitoring finishes.',
