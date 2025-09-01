@@ -146,41 +146,7 @@
       disabled: not isOrderEditable
     }) }}
 {% endif %}
-
-    {{ govukRadios({
-      classes: "govuk-radios",
-      name: "conditionType",
-      fieldset: {
-        legend: {
-          text: questions.conditionType.text,
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-	text: questions.conditionType.hint
-      },
-      items: [
-        {
-          value: "LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER",
-          text: "Licence condition",
-          hint: {
-            text: "Device wearer is being released from prison before their sentence is complete. They are subject to specific licence conditions that include monitoring conditions."
-          },
-          disabled: not isOrderEditable
-        },
-        {
-          value: "POST_SENTENCE_SUPERVISION_REQUIREMENT",
-          text: "Post-Sentence Supervision Requirement",
-          hint: {
-            text: "Device wearer licence period is complete. They are being released from a standard determinate custodial sentence of less than 2 years. They are subject to post-sentence supervision requirements that include monitoring conditions."
-          },
-          disabled: not isOrderEditable
-        }
-      ],
-      value: conditionType.value,
-      errorMessage: conditionType.error
-    }) }}
+    
 
     {{ govukRadios({
       name: "sentenceType",
