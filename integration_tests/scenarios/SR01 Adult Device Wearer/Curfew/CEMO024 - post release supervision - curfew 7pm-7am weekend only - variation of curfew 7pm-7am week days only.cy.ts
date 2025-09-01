@@ -78,7 +78,6 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        conditionType: 'Post-Sentence Supervision Requirement',
         monitoringRequired: 'Curfew',
         hdc: 'Yes',
         sentenceType: 'Life Sentence',
@@ -249,7 +248,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Post-Sentence Supervision Requirement following on from an Adult Custody order',
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',

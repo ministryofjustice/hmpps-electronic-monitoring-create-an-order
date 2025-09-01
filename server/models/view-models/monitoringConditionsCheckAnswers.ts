@@ -35,7 +35,6 @@ const getSelectedMonitoringTypes = (order: Order) => {
 
 const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
-  const conditionType = lookup(content.reference.conditionTypes, order.monitoringConditions.conditionType)
   const orderType = lookup(content.reference.orderTypes, order.monitoringConditions.orderType)
   const orderTypeDescription = lookup(
     content.reference.orderTypeDescriptions,
@@ -66,7 +65,6 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
   }
   answers.push(
     ...[
-      createAnswer(questions.conditionType.text, conditionType, uri, answerOpts),
       createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
       createAnswer(questions.issp.text, issp, uri, answerOpts),
       createAnswer(questions.hdc.text, hdc, uri, answerOpts),

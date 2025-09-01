@@ -94,7 +94,6 @@ context.skip('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        conditionType: 'Requirement of a Community Order',
         monitoringRequired: 'Trail monitoring',
         sentenceType: 'Community YRO',
         issp: 'Yes',
