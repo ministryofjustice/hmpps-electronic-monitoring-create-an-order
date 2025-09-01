@@ -6,11 +6,9 @@ import { InstallationLocationFormData } from '../form-data/installationLocation'
 import { ValidationResult } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
-import { isTagAtSourceAvailable } from '../../services/taskListService'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
-  showTagAtSourceOptions: boolean
 }
 
 const createPrimaryAddressView = (addresses: Address[]): string => {
@@ -22,7 +20,6 @@ const createPrimaryAddressView = (addresses: Address[]): string => {
 
 const constructFromFormData = (
   formData: InstallationLocationFormData,
-  showTagAtSourceOptions: boolean,
   primaryAddressView: string,
   validationErrors: ValidationResult,
 ): InstallationLocationViewModel => {
@@ -32,23 +29,17 @@ const constructFromFormData = (
       error: getError(validationErrors, 'location'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    showTagAtSourceOptions,
     primaryAddressView: { value: primaryAddressView },
   }
 }
 
-const constructFromEntity = (
-  showTagAtSourceOptions: boolean,
-  primaryAddressView: string,
-  location: string = '',
-): InstallationLocationViewModel => {
+const constructFromEntity = (primaryAddressView: string, location: string = ''): InstallationLocationViewModel => {
   return {
     location: {
       value: location ?? '',
     },
     primaryAddressView: { value: primaryAddressView },
     errorSummary: null,
-    showTagAtSourceOptions,
   }
 }
 
@@ -57,14 +48,12 @@ const construct = (
   formData: InstallationLocationFormData,
   validationErrors: ValidationResult,
 ): InstallationLocationViewModel => {
-  const showTagAtSourceOptions = isTagAtSourceAvailable(order)
-
   const primaryAddressView = createPrimaryAddressView(order.addresses)
 
   if (validationErrors.length > 0) {
-    return constructFromFormData(formData, showTagAtSourceOptions, primaryAddressView, validationErrors)
+    return constructFromFormData(formData, primaryAddressView, validationErrors)
   }
-  return constructFromEntity(showTagAtSourceOptions, primaryAddressView, order.installationLocation?.location)
+  return constructFromEntity(primaryAddressView, order.installationLocation?.location)
 }
 
 export default {

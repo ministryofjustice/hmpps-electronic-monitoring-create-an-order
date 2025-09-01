@@ -352,8 +352,21 @@ context('Monitoring conditions', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
-          order: { dataDictionaryVersion: 'DDV5' },
+          order: {
+            addresses: [
+              {
+                addressType: 'PRIMARY',
+                addressLine1: '10 Downing Street',
+                addressLine2: '',
+                addressLine3: '',
+                addressLine4: '',
+                postcode: '',
+              },
+            ],
+            dataDictionaryVersion: 'DDV5',
+          },
         })
+
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: mockResponse })
 
         cy.signIn()

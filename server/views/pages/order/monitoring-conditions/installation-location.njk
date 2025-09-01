@@ -6,29 +6,24 @@
 {% set helpText = content.pages.installationLocation.helpText %}
 {% set questions = content.pages.installationLocation.questions %}
 {% block formInputs %}
- {% set items =[
+  {% set items =[
         {
-            value: "PRIMARY",
-            text: "Device wearer has no fixed address" if not primaryAddressView.value else primaryAddressView.value,
-            disabled: not isOrderEditable or not primaryAddressView.value
-        }
-    ] %}
-
- {% if showTagAtSourceOptions %}
-       {% set items =  (items.push({
-            value: "PRISON",
-            text: "At a prison",
-            disabled: not isOrderEditable
+          value: "PRIMARY",
+          text: "Device wearer has no fixed address" if not primaryAddressView.value else primaryAddressView.value,
+          disabled: not isOrderEditable or not primaryAddressView.value
         },
         {
-            value: "PROBATION_OFFICE",
-            text: "At a probation office",
-            disabled: not isOrderEditable 
-        }), items) %}
-       
-  {% endif %}
-
-{{ govukRadios({
+          value: "PRISON",
+          text: "At a prison",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "PROBATION_OFFICE",
+          text: "At a probation office",
+          disabled: not isOrderEditable 
+        }                
+    ] %}
+  {{ govukRadios({
     name: "location",
     fieldset: {
       legend: {
@@ -40,6 +35,5 @@
     items: items,
     value: location.value,
     errorMessage: location.error
-  }) 
-}}
+  }) }}
 {% endblock %}
