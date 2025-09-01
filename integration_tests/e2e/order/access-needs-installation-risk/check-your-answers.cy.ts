@@ -170,11 +170,11 @@ context('installation and risk - check your answers', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         {
-          key: 'At installation what are the possible risks at the installation address? (optional)',
+          key: 'What are the possible risks at the installation address? (optional)',
           value: 'Managed through IOM',
         },
         {
-          key: 'At installation what are the possible risks at the installation address? (optional)',
+          key: 'What are the possible risks at the installation address? (optional)',
           value: 'History of substance abuse',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },

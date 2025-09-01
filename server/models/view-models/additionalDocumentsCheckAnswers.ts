@@ -43,7 +43,7 @@ export default createViewModel
 function createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, order: Order) {
   return createAnswer(text, createFileNameLink(attachment, order.id), uri, {
     valueType: 'html',
-    ignoreActions: order.status === 'SUBMITTED',
+    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   })
 }
 

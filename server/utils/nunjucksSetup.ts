@@ -49,15 +49,19 @@ const toOptions = (
 }
 
 const addDivider = (items: Array<CheckboxItem>, dividerText: string = 'or'): Array<CheckboxItem | RadiosItem> => {
-  const lenght = items.length
+  const { length } = items
   return [
-    ...items.slice(0, lenght - 1),
+    ...items.slice(0, length - 1),
     {
       value: '',
       divider: dividerText,
     },
-    ...items.slice(lenght - 1),
+    ...items.slice(length - 1),
   ]
+}
+
+const removeOptions = (items: Array<CheckboxItem>, itemsToRemove: string[]): Array<CheckboxItem | RadiosItem> => {
+  return items.filter(item => !itemsToRemove.includes(item.value))
 }
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -98,4 +102,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('stringify', (obj: unknown) => JSON.stringify(obj))
   njkEnv.addFilter('toOptions', toOptions)
   njkEnv.addFilter('addDivider', addDivider)
+  njkEnv.addFilter('removeOptions', removeOptions)
 }
