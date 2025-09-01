@@ -124,7 +124,7 @@ context('Monitoring conditions', () => {
         page.form.locationField.shouldHaveOption('10 Downing Street, London, SW1A 2AB')
       })
 
-      it('Should show options for probation and prison, when only alcohol monitoring is selected', () => {
+      it('Should show options for probation and prison', () => {
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         stubGetOrder({
           ...mockDefaultOrder,

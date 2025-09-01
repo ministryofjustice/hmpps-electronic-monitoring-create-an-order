@@ -4,6 +4,7 @@ import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
+import FeatureFlags from '../utils/featureFlags'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -117,7 +118,7 @@ const doesOrderHavePhotoId = (order: Order): boolean => {
 }
 
 const isTagAtSourceAvailable = (order: Order): boolean => {
-  return order.monitoringConditions.alcohol === true
+  return FeatureFlags.getInstance().get('TAG_AT_SOURCE_OPTIONS_ENABLED') || order.monitoringConditions.alcohol === true
 }
 
 export default class TaskListService {
