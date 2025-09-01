@@ -332,7 +332,7 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Detention & Training Order',
-                tag_at_source: '',
+                tag_at_source: 'No',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
                 released_under_prarr: '',
