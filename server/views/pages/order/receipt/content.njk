@@ -9,8 +9,6 @@
 }) }}
 {% endif %}
 
-{{ order | dump }}
-
 <div id="receipt-download-banner">    
   <h1 class="govuk-heading-xl">
     Electronic Monitoring Order Form Summary
@@ -26,14 +24,19 @@
  
 </div>
 
-<br><br><br>
-
 <div id="form-summary">
   <h2 class="govuk-heading-l">Form details</h2>
   {{ govukSummaryList({
     classes: "govuk-!-margin-bottom-9",
     rows: statusDetails
   }) }}
+
+    
+  {% if isVariation == true %}
+    <h2 class="govuk-heading-l">About the changes to this version of the form</h2>
+    
+    {% include "../variation/answers.njk" %}
+  {% endif %}
 
   <h2 class="govuk-heading-l">About the device wearer</h2>
   

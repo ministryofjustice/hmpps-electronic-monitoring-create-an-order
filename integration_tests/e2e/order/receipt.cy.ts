@@ -166,6 +166,99 @@ context('Receipt', () => {
       page.monitoringConditionsSection.shouldExist()
     })
 
+    it('should show all sections for variation', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        type: 'VARIATION',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+          },
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'FEMALE',
+            gender: 'Prefer to self-describe',
+            disabilities: 'OTHER',
+            otherDisability: 'Broken arm',
+            noFixedAbode: true,
+            interpreterRequired: false,
+          },
+          addresses: [
+            {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: 'line1',
+              addressLine2: 'line2',
+              addressLine3: 'line3',
+              addressLine4: 'line4',
+              postcode: 'postcode',
+            },
+          ],
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationPhoneNumber: '01234567890',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: 'line1',
+              addressLine2: 'line2',
+              addressLine3: 'line3',
+              addressLine4: 'line4',
+              postcode: 'postcode',
+            },
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+          installationAndRisk: {
+            offence: 'SEXUAL_OFFENCES',
+            offenceAdditionalDetails: 'Information about offence',
+            riskCategory: ['RISK_TO_GENDER'],
+            riskDetails: 'Information about potential risks',
+            mappaLevel: 'MAPPA 1',
+            mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
+          },
+          additionalDocuments: [
+            {
+              id: mockOrderId,
+              fileType: AttachmentType.LICENCE,
+              fileName: 'Mock Licence',
+            },
+          ],
+          orderParameters: {
+            havePhoto: false,
+          },
+          variationDetails: {
+            variationDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+            variationDetails: 'some variation details',
+            variationType: 'OTHER',
+          },
+          submittedBy: 'test name',
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+        },
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+      page.variationDetailsSection.shouldExist()
+      page.variationDetailsSection.shouldHaveItems([
+        { key: 'What is the date you want the changes to take effect?', value: '01/01/2025' },
+        { key: 'Enter information on what you have changed', value: 'some variation details' },
+      ])
+    })
+
     it('should have no change links', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       cy.contains('.govuk-link', 'Change').should('not.exist')
