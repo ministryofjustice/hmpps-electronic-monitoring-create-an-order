@@ -7,8 +7,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-// test skipped as Bail is not currently a valid sentence type
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -51,7 +50,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.photoId.fileName,
+      fileName: files.licence.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -61,7 +60,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubFmsUploadAttachment', {
       httpStatus: 200,
-      fileName: files.licence.fileName,
+      fileName: files.photoId.fileName,
       deviceWearerId: fmsCaseId,
       response: {
         status: 200,
@@ -115,20 +114,30 @@ context.skip('Scenarios', () => {
       },
     })
 
-    cy.readFile(files.photoId.contents, 'base64').then(content => {
+    cy.readFile(files.licence.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
+        scenario: {
+          name: 'CEMO001',
+          requiredState: 'Started',
+          nextState: 'second',
+        },
         id: '(.*)',
         httpStatus: 200,
-        contextType: 'image/jpeg',
+        contextType: 'image/pdf',
         fileBase64Body: content,
       })
     })
 
-    cy.readFile(files.licence.contents, 'base64').then(content => {
+    cy.readFile(files.photoId.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
+        scenario: {
+          name: 'CEMO001',
+          requiredState: 'second',
+          nextState: 'Started',
+        },
         id: '(.*)',
         httpStatus: 200,
-        contextType: 'image/pdf',
+        contextType: 'image/jpeg',
         fileBase64Body: content,
       })
     })
@@ -142,11 +151,11 @@ context.skip('Scenarios', () => {
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
 
     const installationAndRisk = {
       offence: 'Robbery',
-      possibleRisk: 'Sex offender',
+      possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
@@ -156,12 +165,14 @@ context.skip('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
       monitoringRequired: 'Curfew',
-      sentenceType: 'Bail',
+      sentenceType: 'Standard Determinate Sentence',
+      hdc: 'Yes',
+      pilot: 'They are not part of any of these pilots',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
-      endTime: { hours: '10', minutes: '00' },
+      endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
     }
     const curfewConditionDetails = {
@@ -174,10 +185,12 @@ context.skip('Scenarios', () => {
       {
         day,
         startTime: '19:00:00',
-        endTime: '10:00:00',
+        endTime: '07:00:00',
         addresses: curfewConditionDetails.addresses,
       },
     ])
+
+    const probationDeliveryUnit = { unit: 'Blackburn' }
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -199,7 +212,7 @@ context.skip('Scenarios', () => {
         curfewConditionDetails,
         curfewTimetable,
         files,
-        probationDeliveryUnit: undefined,
+        probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -273,7 +286,7 @@ context.skip('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
               device_type: '',
@@ -315,7 +328,7 @@ context.skip('Scenarios', () => {
               order_variation_details: '',
               order_variation_req_received_date: '',
               order_variation_type: '',
-              pdu_responsible: '',
+              pdu_responsible: 'Blackburn',
               pdu_responsible_email: '',
               planned_order_end_date: '',
               responsible_officer_details_received: '',
@@ -333,7 +346,7 @@ context.skip('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: '',
+              sentence_type: monitoringConditions.sentenceType,
               // sentence_type: monitoringConditions.sentenceType,
               tag_at_source: '',
               tag_at_source_details: '',
@@ -344,7 +357,7 @@ context.skip('Scenarios', () => {
               trial_outcome: '',
               conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
               conditional_release_start_time: '19:00:00',
-              conditional_release_end_time: '10:00:00',
+              conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
               service_end_date: formatAsFmsDate(monitoringConditions.endDate),
@@ -359,37 +372,37 @@ context.skip('Scenarios', () => {
                     {
                       day: 'Mo',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                     {
                       day: 'Tu',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                     {
                       day: 'Wed',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                     {
                       day: 'Th',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                     {
                       day: 'Fr',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                     {
                       day: 'Sa',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                     {
                       day: 'Su',
                       start: '19:00:00',
-                      end: '10:00:00',
+                      end: '07:00:00',
                     },
                   ],
                 },
@@ -410,22 +423,40 @@ context.skip('Scenarios', () => {
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               issp: 'No',
-              hdc: 'No',
+              hdc: 'Yes',
               order_status: 'Not Started',
+              pilot: '',
             },
           })
           .should('be.true')
       })
 
       // Verify the attachments were sent to the FMS API
-      cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
+      // cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
+      //   cy.task('verifyFMSAttachmentRequestReceived', {
+      //     responseRecordFilename: 'CEMO001',
+      //     httpStatus: 200,
+      //     fileContents: contentAsBase64,
+      //   })
+      // })
+
+      cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {
+          index: 0,
           responseRecordFilename: 'CEMO001',
           httpStatus: 200,
           fileContents: contentAsBase64,
         })
       })
 
+      cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
+        cy.task('verifyFMSAttachmentRequestReceived', {
+          index: 1,
+          responseRecordFilename: 'CEMO001',
+          httpStatus: 200,
+          fileContents: contentAsBase64,
+        })
+      })
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
       submitSuccessPage.backToYourApplications.click()
 
