@@ -3,13 +3,16 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import {
+  createFakeYouthDeviceWearer,
+  createFakeInterestedParties,
+  kelvinCloseAddress,
+  createFakeResponsibleAdult,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
-// test disabled as Community Suspended Sentence is not currently a valid sentence type
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -46,36 +49,27 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFMSUpdateDeviceWearer', {
-      httpStatus: 200,
-      response: { result: [{ id: fmsCaseId, message: '' }] },
-    })
-
-    cy.task('stubFMSUpdateMonitoringOrder', {
-      httpStatus: 200,
-      response: { result: [{ id: uuidv4(), message: '' }] },
-    })
-
     stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context(
-    'Community suspended sentence with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-7am 7 nights - Variation of Curfew 7pm-7am week nights only',
+    'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO023'),
+        ...createFakeYouthDeviceWearer('CEMO036'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Probation', 'Cardiff Crown Court', 'Wales')
-      const probationDeliveryUnit = { unit: 'Gwent' }
+      const responsibleAdultDetails = createFakeResponsibleAdult()
+      const fakePrimaryAddress = kelvinCloseAddress
+      const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'London')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Community',
-        conditionType: 'Requirement of a Community Order',
-        monitoringRequired: 'Curfew',
+        orderType: 'Post Release',
+        issp: 'Yes',
+        sentenceType: 'Standard Determinate Sentence',
+        monitoringRequired: ['Curfew', 'Trail monitoring'],
         pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
@@ -89,35 +83,21 @@ context.skip('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/],
       }
-      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
-      const curfewTimetable = curfewNights.flatMap((day: string) => [
-        {
-          day,
-          startTime: '19:00:00',
-          endTime: '07:00:00',
-          addresses: curfewConditionDetails.addresses,
-        },
-      ])
-
-      const variationDetails = {
-        variationType: 'The curfew hours',
-        variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
-        variationDetails: 'Change to curfew hours',
-      }
-      const variationCurfewConditionDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewTimetable = [
+        ...curfewNights.flatMap((day: string) => [
+          {
+            day,
+            startTime: '19:00:00',
+            endTime: '07:00:00',
+            addresses: curfewConditionDetails.addresses,
+          },
+        ]),
+      ]
+      const trailMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        addresses: [/Main address/],
       }
-      const variationCurfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
-      const variationCurfewTimetable = variationCurfewNights.flatMap((day: string) => [
-        {
-          day,
-          startTime: '19:00:00',
-          endTime: '07:00:00',
-          addresses: curfewConditionDetails.addresses,
-        },
-      ])
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
@@ -130,52 +110,33 @@ context.skip('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewCurfewOrderWith({
+        orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
-          responsibleAdultDetails: undefined,
+          responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
           monitoringConditions,
+          installationAddressDetails: fakePrimaryAddress,
+          trailMonitoringDetails,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
+          attendanceMonitoringDetails: undefined,
           files,
-          probationDeliveryUnit,
+          probationDeliveryUnit: undefined,
+          installationAppointment: undefined,
+          installationLocation: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
-        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-        submitSuccessPage.backToYourApplications.click()
-
-        indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
-        indexPage.newVariationFormButton.click()
-
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-        cacheOrderId()
-        orderSummaryPage = orderSummaryPage.fillInCurfewVariationWith({
-          variationDetails,
-          deviceWearerDetails,
-          responsibleAdultDetails: undefined,
-          primaryAddressDetails: fakePrimaryAddress,
-          secondaryAddressDetails: undefined,
-          interestedParties,
-          installationAndRisk,
-          monitoringConditions,
-          curfewReleaseDetails,
-          curfewConditionDetails: variationCurfewConditionDetails,
-          curfewTimetable: variationCurfewTimetable,
-          files,
-          probationDeliveryUnit,
-        })
-        orderSummaryPage.submitOrderButton.click()
-
-        cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO023',
+        cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
+          responseRecordFilename: 'CEMO036',
           httpStatus: 200,
           body: {
             title: '',
@@ -184,7 +145,7 @@ context.skip('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
-            adult_child: 'adult',
+            adult_child: 'child',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
               .replace('Prefer not to say', 'Prefer Not to Say'),
@@ -215,15 +176,15 @@ context.skip('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: '',
+            responsible_adult_required: 'true',
+            parent: responsibleAdultDetails.fullName,
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: null,
+            parent_phone_number: formatAsFmsPhoneNumber(responsibleAdultDetails.contactNumber),
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -237,14 +198,14 @@ context.skip('Scenarios', () => {
 
         cy.wrap(orderId).then(() => {
           return cy
-            .task('verifyFMSUpdateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO023',
+            .task('verifyFMSCreateMonitoringOrderRequestReceived', {
+              responseRecordFilename: 'CEMO036',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -252,8 +213,13 @@ context.skip('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'Curfew with EM',
-                    start_date: formatAsFmsDateTime(variationCurfewConditionDetails.startDate, 0, 0),
+                    start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                     end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
+                  },
+                  {
+                    condition: 'Location Monitoring (Fitted Device)',
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -277,16 +243,16 @@ context.skip('Scenarios', () => {
                 offence_date: '',
                 order_end: formatAsFmsDateTime(monitoringConditions.endDate),
                 order_id: orderId,
-                order_request_type: 'Variation',
+                order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
                 order_type_description: null,
                 order_type_detail: '',
-                order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
+                order_variation_date: '',
                 order_variation_details: '',
                 order_variation_req_received_date: '',
-                order_variation_type: 'Change to Address',
-                pdu_responsible: 'Gwent',
+                order_variation_type: '',
+                pdu_responsible: '',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -304,7 +270,7 @@ context.skip('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
@@ -319,7 +285,7 @@ context.skip('Scenarios', () => {
                 business_unit: '',
                 service_end_date: formatAsFmsDate(monitoringConditions.endDate),
                 curfew_description: '',
-                curfew_start: formatAsFmsDateTime(variationCurfewConditionDetails.startDate, 0, 0),
+                curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 curfew_duration: [
                   {
@@ -354,7 +320,7 @@ context.skip('Scenarios', () => {
                     ],
                   },
                 ],
-                trail_monitoring: '',
+                trail_monitoring: 'Yes',
                 exclusion_zones: [],
                 inclusion_zones: [],
                 abstinence: '',
@@ -369,7 +335,7 @@ context.skip('Scenarios', () => {
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
-                issp: 'No',
+                issp: 'Yes',
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
@@ -378,11 +344,11 @@ context.skip('Scenarios', () => {
             .should('be.true')
         })
 
-        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-        variationSubmitSuccessPage.backToYourApplications.click()
+        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.SubmittedVariationFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
       })
     },
   )
