@@ -149,6 +149,22 @@ export default class OrderTasksPage extends AppPage {
       probationDeliveryUnit,
     })
 
+    if (installationLocation) {
+      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.fillInWith(installationLocation)
+      installationLocationPage.form.saveAndContinueButton.click()
+
+      if (installationAppointment) {
+        const installationAppointmentPage = Page.verifyOnPage(InstallationAppointmentPage)
+        installationAppointmentPage.form.fillInWith(installationAppointment)
+        installationAppointmentPage.form.saveAndContinueButton.click()
+
+        const installationAddress = Page.verifyOnPage(InstallationAddressPage)
+        installationAddress.form.fillInWith(installationAddressDetails)
+        installationAddress.form.saveAndContinueButton.click()
+      }
+    }
+
     if (curfewReleaseDetails) {
       this.fillInCurfewOrderDetailsWith(
         {
@@ -183,8 +199,6 @@ export default class OrderTasksPage extends AppPage {
         {
           alcoholMonitoringDetails,
           installationAddressDetails,
-          installationLocation,
-          installationAppointment,
         },
         false,
       )
@@ -342,8 +356,6 @@ export default class OrderTasksPage extends AppPage {
     alcoholMonitoringDetails,
     files,
     probationDeliveryUnit,
-    installationLocation,
-    installationAppointment,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -361,8 +373,6 @@ export default class OrderTasksPage extends AppPage {
     this.fillInAlcoholMonitoringOrderDetailsWith({
       alcoholMonitoringDetails,
       installationAddressDetails,
-      installationLocation,
-      installationAppointment,
     })
 
     this.fillInAttachmentDetailsWith({
@@ -385,8 +395,6 @@ export default class OrderTasksPage extends AppPage {
     alcoholMonitoringDetails,
     files,
     probationDeliveryUnit,
-    installationLocation,
-    installationAppointment,
   }): OrderTasksPage {
     this.fillInVariationsDetails({ variationDetails })
 
@@ -406,8 +414,6 @@ export default class OrderTasksPage extends AppPage {
     this.fillInAlcoholMonitoringOrderDetailsWith({
       alcoholMonitoringDetails,
       installationAddressDetails,
-      installationLocation,
-      installationAppointment,
     })
 
     this.fillInAttachmentDetailsWith({
@@ -585,22 +591,9 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInAlcoholMonitoringOrderDetailsWith(
-    { alcoholMonitoringDetails, installationAddressDetails, installationLocation, installationAppointment },
+    { alcoholMonitoringDetails, installationAddressDetails },
     checkYourAnswerPage = true,
   ): void {
-    const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-    installationLocationPage.form.fillInWith(installationLocation)
-    installationLocationPage.form.saveAndContinueButton.click()
-
-    if (installationAppointment) {
-      const installationAppointmentPage = Page.verifyOnPage(InstallationAppointmentPage)
-      installationAppointmentPage.form.fillInWith(installationAppointment)
-      installationAppointmentPage.form.saveAndContinueButton.click()
-
-      const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-      installationAddress.form.fillInWith(installationAddressDetails)
-      installationAddress.form.saveAndContinueButton.click()
-    }
     const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
     alcoholMonitoringPage.form.fillInWith(alcoholMonitoringDetails)
     alcoholMonitoringPage.form.saveAndContinueButton.click()

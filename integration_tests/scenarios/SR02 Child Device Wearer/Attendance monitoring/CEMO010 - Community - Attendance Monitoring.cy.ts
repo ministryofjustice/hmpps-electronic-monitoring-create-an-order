@@ -301,7 +301,7 @@ context.skip('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: interestedParties.notifyingOrganisationName,
+                no_name: interestedParties.youthCustodyServiceRegion,
                 no_phone_number: '',
                 offence: '',
                 offence_additional_details: '',

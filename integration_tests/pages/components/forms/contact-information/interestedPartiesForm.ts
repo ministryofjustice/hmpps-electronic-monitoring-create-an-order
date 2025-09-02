@@ -21,6 +21,8 @@ export type InterestedPartiesFormData = {
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
+
+  youthCustodyServiceRegion?: string
 }
 
 export default class InterestedPartiesFormComponent extends FormComponent {
@@ -222,6 +224,10 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
     if (profile.responsibleOfficerContactNumber) {
       this.responsibleOfficerContactNumberField.set(profile.responsibleOfficerContactNumber)
+    }
+
+    if (profile.youthCustodyServiceRegion) {
+      this.youthCustodyServiceField.set(profile.youthCustodyServiceRegion)
     }
   }
 

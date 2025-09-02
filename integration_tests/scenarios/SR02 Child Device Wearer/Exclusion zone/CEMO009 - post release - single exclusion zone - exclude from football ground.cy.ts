@@ -10,7 +10,6 @@ import {
   createFakeResponsibleAdult,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
@@ -223,7 +222,7 @@ context('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: interestedParties.notifyingOrganisationName,
+                no_name: interestedParties.youthCustodyServiceRegion,
                 no_phone_number: '',
                 offence: '',
                 offence_additional_details: '',
@@ -314,9 +313,6 @@ context('Scenarios', () => {
             fileContents: contentAsBase64,
           })
         })
-
-        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-        variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')

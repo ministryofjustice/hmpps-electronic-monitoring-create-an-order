@@ -96,7 +96,7 @@ context('Scenarios', () => {
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+      orderSummaryPage.fillInNewOrderWith({
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails: fakePrimaryAddress,
@@ -105,7 +105,13 @@ context('Scenarios', () => {
         installationAndRisk,
         monitoringConditions,
         installationAddressDetails,
+        trailMonitoringDetails: undefined,
+        enforcementZoneDetails: undefined,
         alcoholMonitoringDetails,
+        curfewReleaseDetails: undefined,
+        curfewConditionDetails: undefined,
+        curfewTimetable: undefined,
+        attendanceMonitoringDetails: undefined,
         files,
         probationDeliveryUnit,
         installationLocation,

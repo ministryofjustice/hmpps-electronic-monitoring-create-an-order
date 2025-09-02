@@ -3,7 +3,7 @@ import civilCountyCourts from '../../server/i18n/en/reference/ddv5/civilCountyCo
 import crownCourts from '../../server/i18n/en/reference/crownCourts'
 import familyCourts from '../../server/i18n/en/reference/ddv5/familyCourts'
 import magistratesCourts from '../../server/i18n/en/reference/magistratesCourts'
-import prisons from '../../server/i18n/en/reference/prisons'
+import prisons from '../../server/i18n/en/reference/ddv5/prisons'
 import probationRegions from '../../server/i18n/en/reference/probationRegions'
 import militaryCourts from '../../server/i18n/en/reference/ddv5/militaryCourts'
 import youthCourts from '../../server/i18n/en/reference/ddv5/youthCourts'
@@ -22,7 +22,7 @@ const crownCourtTypes = extractValues(Object.values(crownCourts))
 const familyCourtTypes = extractValues(Object.values(familyCourts))
 const magistratesCourtTypes = extractValues(Object.values(magistratesCourts))
 const militaryCourtTypes = extractValues(Object.values(militaryCourts))
-const prisonTypes = extractValues(Object.values(prisons))
+const prisonTypes = extractValues(Object.values(prisons)).filter(it => it !== 'Cookham Wood Young Offender Institution')
 const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
 const youthCourtTypes = extractValues(Object.values(youthCourts))
 const probationRegionTypes = extractValues(Object.values(probationRegions))
@@ -86,6 +86,7 @@ export type InterestedParties = {
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
+  youthCustodyServiceRegion?: string
 }
 
 export type PersonOfInterest = {
@@ -186,7 +187,7 @@ export const createFakeInterestedParties = (
   let militaryCourt = ''
   let notifyingOrgProbationRegion = ''
   let prison = ''
-  let ycsRegion = ''
+  let youthCustodyServiceRegion = ''
   let youthCourt = ''
   let probationRegion = ''
   let yjsRegion = ''
@@ -232,8 +233,8 @@ export const createFakeInterestedParties = (
   }
 
   if (notifyingOrganisation === 'Youth Custody Service') {
-    ycsRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(ycsRegionTypes)
-    notifyingOrganisationName = ycsRegion
+    youthCustodyServiceRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(ycsRegionTypes)
+    notifyingOrganisationName = youthCustodyServiceRegion
   }
 
   if (responsibleOrganisation === 'Probation') {
@@ -256,7 +257,6 @@ export const createFakeInterestedParties = (
     familyCourt,
     civilCountyCourt,
     militaryCourt,
-    ycsRegion,
     youthCourt,
     notifyingOrgProbationRegion,
     responsibleOfficerName: officerName,
@@ -266,6 +266,7 @@ export const createFakeInterestedParties = (
     responsibleOrganisationEmailAddress,
     probationRegion,
     yjsRegion,
+    youthCustodyServiceRegion,
   }
 }
 

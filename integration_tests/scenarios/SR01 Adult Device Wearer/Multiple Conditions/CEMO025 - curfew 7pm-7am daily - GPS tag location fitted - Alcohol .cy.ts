@@ -51,7 +51,7 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO036'),
+        ...createFakeAdultDeviceWearer('CEMO025'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -140,7 +140,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO036',
+          responseRecordFilename: 'CEMO025',
           httpStatus: 200,
           body: {
             title: '',
@@ -149,7 +149,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
-            adult_child: 'child',
+            adult_child: 'adult',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
               .replace('Prefer not to say', 'Prefer Not to Say'),
@@ -203,7 +203,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO036',
+              responseRecordFilename: 'CEMO025',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -280,10 +280,10 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Standard Determinate Sentence',
-                tag_at_source: '',
+                tag_at_source: 'No',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                released_under_prarr: 'No',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -347,11 +347,11 @@ context('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: '',
-                installation_address_2: '',
-                installation_address_3: '',
-                installation_address_4: '',
-                installation_address_post_code: '',
+                installation_address_1: fakePrimaryAddress.line1,
+                installation_address_2: fakePrimaryAddress.line2,
+                installation_address_3: fakePrimaryAddress.line3,
+                installation_address_4: fakePrimaryAddress.line4,
+                installation_address_post_code: fakePrimaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'Yes',
