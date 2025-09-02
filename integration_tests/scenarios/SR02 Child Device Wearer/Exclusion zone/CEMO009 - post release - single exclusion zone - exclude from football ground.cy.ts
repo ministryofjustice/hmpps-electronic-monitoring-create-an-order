@@ -69,7 +69,7 @@ context('Scenarios', () => {
     'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - Variation of additional address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer('CEMO008'),
+        ...createFakeYouthDeviceWearer('CEMO009'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -90,7 +90,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
-        description: 'Exclusion from Bolton town centre',
+        description: 'Exclusion from football grounds',
         duration: '90 days',
         anotherZone: 'No',
       }
@@ -128,7 +128,7 @@ context('Scenarios', () => {
         indexPage = Page.verifyOnPage(IndexPage)
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO008',
+          responseRecordFilename: 'CEMO009',
           httpStatus: 200,
           body: {
             title: '',
@@ -191,7 +191,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO008',
+              responseRecordFilename: 'CEMO009',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -309,7 +309,7 @@ context('Scenarios', () => {
         // Verify the attachments were sent to the FMS API
         cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
-            responseRecordFilename: 'CEMO008',
+            responseRecordFilename: 'CEMO009',
             httpStatus: 200,
             fileContents: contentAsBase64,
           })
