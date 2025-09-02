@@ -69,7 +69,7 @@ context('Scenarios', () => {
     'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - Variation of additional address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer('CEMO022'),
+        ...createFakeYouthDeviceWearer('CEMO019'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -87,7 +87,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
         orderType: 'Post Release',
         monitoringRequired: 'Exclusion zone monitoring',
-        sentenceType: 'Detention and Training Order',
+        sentenceType: 'Detention and Training Order (DTO)',
         pilot: 'They are not part of any of these pilots',
       }
       const enforcementZoneDetails = {
@@ -162,7 +162,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO022',
+          responseRecordFilename: 'CEMO019',
           httpStatus: 200,
           body: {
             title: '',
@@ -227,7 +227,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSUpdateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO022',
+              responseRecordFilename: 'CEMO019',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
