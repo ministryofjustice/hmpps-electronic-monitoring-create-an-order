@@ -3,31 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import {
-  createFakeYouthDeviceWearer,
-  createFakeResponsibleAdult,
-  createFakeInterestedParties,
-  createKnownAddress,
-} from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
-import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
+import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -69,29 +47,42 @@ context('Scenarios', () => {
     stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
-  context('Post release with Location -  Fitted Device Pebble.', () => {
+  context('Adult mandatory attendence', () => {
     const deviceWearerDetails = {
-      ...createFakeYouthDeviceWearer('CEMO011'),
+      ...createFakeAdultDeviceWearer('CEMO011'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
-    const responsibleAdultDetails = createFakeResponsibleAdult()
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = {
-      ...createFakeInterestedParties('Prison', 'YJS', 'Feltham Young Offender Institution', 'London'),
-    }
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
+
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
-      monitoringRequired: 'Trail monitoring',
-      sentenceType: 'Detention and Training Order (DTO)',
+      orderType: 'Community',
+      monitoringRequired: 'Mandatory attendance monitoring',
       pilot: 'They are not part of any of these pilots',
+      sentenceType: 'Standard Determinate Sentence',
     }
-    const trailMonitoringOrder = {
-      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+
+    const attendanceMonitoringOrder = {
+      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
+      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
+      purpose: 'Attend Bolton Magistrates Court at 9am on Mondays',
+      appointmentDay: 'Monday',
+      startTime: {
+        hours: '09',
+        minutes: '00',
+      },
+      endTime: {
+        hours: '12',
+        minutes: '00',
+      },
+      address: createKnownAddress(),
+      addAnother: 'No',
     }
+
     const installationAndRisk = {
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
@@ -103,86 +94,27 @@ context('Scenarios', () => {
       let indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
 
-      let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+      const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.aboutTheDeviceWearerTask.click()
-
-      const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
-      responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
-      responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      identityNumbersPage.form.saveAndContinueButton.click()
-
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers')
-      deviceWearerCheckYourAnswersPage.continueButton().click()
-
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith(deviceWearerDetails)
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith({
-        ...fakePrimaryAddress,
-        hasAnotherAddress: 'No',
+      orderSummaryPage.fillInNewOrderWith({
+        deviceWearerDetails,
+        responsibleAdultDetails: undefined,
+        primaryAddressDetails: fakePrimaryAddress,
+        secondaryAddressDetails: undefined,
+        interestedParties,
+        installationAndRisk,
+        monitoringConditions,
+        installationAddressDetails: undefined,
+        curfewConditionDetails: undefined,
+        curfewReleaseDetails: undefined,
+        curfewTimetable: undefined,
+        enforcementZoneDetails: undefined,
+        alcoholMonitoringDetails: undefined,
+        trailMonitoringDetails: undefined,
+        attendanceMonitoringDetails: attendanceMonitoringOrder,
+        files,
+        probationDeliveryUnit,
       })
-      primaryAddressPage.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
-
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        'Check your answers',
-      )
-      contactInformationCheckYourAnswersPage.continueButton().click()
-
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.form.fillInWith(installationAndRisk)
-      installationAndRiskPage.form.saveAndContinueButton.click()
-
-      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
-        InstallationAndRiskCheckYourAnswersPage,
-        'Check your answers',
-      )
-      installationAndRiskCheckYourAnswersPage.continueButton().click()
-
-      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      trailMonitoringPage.form.saveAndContinueButton.click()
-
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answers',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-      const licencePage = Page.verifyOnPage(UploadLicencePage)
-      licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
-      licencePage.form.saveAndContinueButton.click()
-
-      const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
-      havePhotoPage.form.havePhotoField.set('No')
-      havePhotoPage.form.saveAndContinueButton.click()
-
-      const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      attachmentPage.saveAndReturnButton.click()
-
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
@@ -195,7 +127,7 @@ context('Scenarios', () => {
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
           date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
-          adult_child: 'child',
+          adult_child: 'adult',
           sex: deviceWearerDetails.sex
             .replace('Not able to provide this information', 'Prefer Not to Say')
             .replace('Prefer not to say', 'Prefer Not to Say'),
@@ -226,15 +158,15 @@ context('Scenarios', () => {
           mappa: null,
           mappa_case_type: null,
           risk_categories: [],
-          responsible_adult_required: 'true',
-          parent: responsibleAdultDetails.fullName,
+          responsible_adult_required: 'false',
+          parent: '',
           guardian: '',
           parent_address_1: '',
           parent_address_2: '',
           parent_address_3: '',
           parent_address_4: '',
           parent_address_post_code: '',
-          parent_phone_number: formatAsFmsPhoneNumber(responsibleAdultDetails.contactNumber),
+          parent_phone_number: null,
           parent_dob: '',
           pnc_id: deviceWearerDetails.pncId,
           nomis_id: deviceWearerDetails.nomisId,
@@ -255,17 +187,16 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'License Condition of a Custodial Order',
+              condition_type: 'Requirement of a Community Order',
               court: '',
               court_order_email: '',
-
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'Location Monitoring (Fitted Device)',
-                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate, 0, 0),
-                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
+                  condition: 'Attendance Requirement',
+                  start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                  end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -291,14 +222,14 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_type: 'Community',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
               order_variation_req_received_date: '',
               order_variation_type: '',
-              pdu_responsible: '',
+              pdu_responsible: 'Blackburn',
               pdu_responsible_email: '',
               planned_order_end_date: '',
               responsible_officer_details_received: '',
@@ -316,7 +247,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: 'Detention & Training Order',
+              sentence_type: 'Standard Determinate Sentence',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',
@@ -334,9 +265,23 @@ context('Scenarios', () => {
               curfew_start: '',
               curfew_end: '',
               curfew_duration: [],
-              trail_monitoring: 'Yes',
+              trail_monitoring: '',
               exclusion_zones: [],
-              inclusion_zones: [],
+              inclusion_zones: [
+                {
+                  description: `${attendanceMonitoringOrder.purpose}
+${attendanceMonitoringOrder.appointmentDay} ${attendanceMonitoringOrder.startTime.hours}:${attendanceMonitoringOrder.startTime.minutes}:00-${attendanceMonitoringOrder.endTime.hours}:${attendanceMonitoringOrder.endTime.minutes}:00
+${attendanceMonitoringOrder.address.line1}
+${attendanceMonitoringOrder.address.line2}
+${attendanceMonitoringOrder.address.line3}
+${attendanceMonitoringOrder.address.line4}
+${attendanceMonitoringOrder.address.postcode}
+`,
+                  duration: '',
+                  start: formatAsFmsDate(attendanceMonitoringOrder.startDate),
+                  end: formatAsFmsDate(attendanceMonitoringOrder.endDate),
+                },
+              ],
               abstinence: '',
               schedule: '',
               checkin_schedule: [],

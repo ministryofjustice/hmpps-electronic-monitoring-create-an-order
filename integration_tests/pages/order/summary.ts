@@ -32,6 +32,7 @@ import CurfewAdditionalDetailsPage from './monitoring-conditions/curfew-addition
 import InstallationLocationPage from './monitoring-conditions/installation-location'
 import HavePhotoPage from './attachments/havePhoto'
 import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
+import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -129,6 +130,7 @@ export default class OrderTasksPage extends AppPage {
     enforcementZoneDetails,
     alcoholMonitoringDetails,
     trailMonitoringDetails,
+    attendanceMonitoringDetails,
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
@@ -179,6 +181,15 @@ export default class OrderTasksPage extends AppPage {
         {
           alcoholMonitoringDetails,
           installationAddressDetails,
+        },
+        false,
+      )
+    }
+
+    if (attendanceMonitoringDetails) {
+      this.fillInAttendanceMonitoringDetailsWith(
+        {
+          attendanceMonitoringDetails,
         },
         false,
       )
@@ -633,5 +644,19 @@ export default class OrderTasksPage extends AppPage {
     const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
 
     attachmentPage.backToSummaryButton.click()
+  }
+
+  fillInAttendanceMonitoringDetailsWith({ attendanceMonitoringDetails }, checkYourAnswerPage = true): void {
+    const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
+    attendanceMonitoringPage.form.fillInWith(attendanceMonitoringDetails)
+    attendanceMonitoringPage.form.saveAndContinueButton.click()
+
+    if (checkYourAnswerPage) {
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    }
   }
 }
