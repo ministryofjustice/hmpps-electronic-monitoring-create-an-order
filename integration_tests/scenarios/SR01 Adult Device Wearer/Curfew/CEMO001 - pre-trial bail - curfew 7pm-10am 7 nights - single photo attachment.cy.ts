@@ -273,7 +273,7 @@ context.skip('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              // condition_type: monitoringConditions.conditionType,
               court: '',
               court_order_email: '',
               device_type: '',

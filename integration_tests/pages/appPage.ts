@@ -8,6 +8,7 @@ export default class AppPage extends Page {
   constructor(title: string, uri?: string | RegExp, subtitle?: string) {
     super(title, uri, subtitle)
   }
+  // test
 
   get backButton(): PageElement {
     return cy.contains('Back')
