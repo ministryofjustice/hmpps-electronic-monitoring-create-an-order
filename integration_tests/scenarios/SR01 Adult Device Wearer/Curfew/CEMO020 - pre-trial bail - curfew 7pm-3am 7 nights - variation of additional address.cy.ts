@@ -67,8 +67,13 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
-      const probationDeliveryUnit = { unit: 'Blackburn' }
+      const interestedParties = createFakeInterestedParties(
+        'Prison',
+        'Probation',
+        'Elmley Prison',
+        'Kent, Surrey & Sussex',
+      )
+      const probationDeliveryUnit = { unit: 'East Kent' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -81,7 +86,7 @@ context('Scenarios', () => {
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
         startTime: { hours: '19', minutes: '00' },
-        endTime: { hours: '03', minutes: '00' },
+        endTime: { hours: '07', minutes: '00' },
         address: /Main address/,
       }
       const curfewConditionDetails = {
@@ -94,13 +99,13 @@ context('Scenarios', () => {
         {
           day,
           startTime: '19:00:00',
-          endTime: '03:00:00',
+          endTime: '07:00:00',
           addresses: curfewConditionDetails.addresses,
         },
       ])
 
       const variationDetails = {
-        variationType: 'The device wearer’s address',
+        variationType: 'The curfew hours',
         variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
         variationDetails: 'Change to address',
       }
@@ -291,7 +296,7 @@ context('Scenarios', () => {
                 order_variation_details: variationDetails.variationDetails,
                 order_variation_req_received_date: '',
                 order_variation_type: 'Change to Address',
-                pdu_responsible: 'Blackburn',
+                pdu_responsible: 'East Kent',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -319,7 +324,7 @@ context('Scenarios', () => {
                 trial_outcome: '',
                 conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
                 conditional_release_start_time: '19:00:00',
-                conditional_release_end_time: '03:00:00',
+                conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: formatAsFmsDate(monitoringConditions.endDate),
