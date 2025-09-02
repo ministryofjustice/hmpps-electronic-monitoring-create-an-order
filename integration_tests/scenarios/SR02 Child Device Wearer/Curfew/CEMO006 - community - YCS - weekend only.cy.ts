@@ -3,11 +3,16 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeResponsibleAdult, createFakeYouthDeviceWearer, createKnownAddress } from '../../../mockApis/faker'
+import {
+  createFakeInterestedParties,
+  createFakeResponsibleAdult,
+  createFakeYouthDeviceWearer,
+  createKnownAddress,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-//Skip due to order type community not available
+// Skip due to order type community not available
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
@@ -165,9 +170,9 @@ context.skip('Scenarios', () => {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
-      monitoringRequired: 'Curfew',     
+      monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
-       // sentenceType: 'Community YRO',
+      // sentenceType: 'Community YRO',
       pilot: 'GPS Acquisitive Crime',
     }
     const curfewReleaseDetails = {
@@ -191,7 +196,6 @@ context.skip('Scenarios', () => {
       },
     ])
 
-   
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
@@ -212,7 +216,7 @@ context.skip('Scenarios', () => {
         curfewConditionDetails,
         curfewTimetable,
         files,
-        probationDeliveryUnit:undefined,
+        probationDeliveryUnit: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -405,8 +409,6 @@ context.skip('Scenarios', () => {
           })
           .should('be.true')
       })
-
-     
 
       cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {

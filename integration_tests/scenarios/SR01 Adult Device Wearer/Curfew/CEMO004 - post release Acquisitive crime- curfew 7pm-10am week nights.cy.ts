@@ -392,7 +392,7 @@ context('Scenarios', () => {
                       day: 'Fr',
                       start: '19:00:00',
                       end: '07:00:00',
-                    }
+                    },
                   ],
                 },
               ],
@@ -419,8 +419,6 @@ context('Scenarios', () => {
           })
           .should('be.true')
       })
-
-     
 
       cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {
