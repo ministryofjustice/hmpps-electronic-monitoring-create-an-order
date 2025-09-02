@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
@@ -17,7 +17,6 @@ context('Scenarios', () => {
       ;[, , orderId] = parts
     })
   }
-
   const hmppsDocumentId: string = uuidv4()
   const files = {
     licence: {
@@ -52,20 +51,21 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO017'),
+        ...createFakeAdultDeviceWearer('CEMO025'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const fakePrimaryAddress = createKnownAddress()
+      const fakePrimaryAddress = kelvinCloseAddress
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime',
+        issp: 'Yes',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: 'Curfew',
+        monitoringRequired: ['Curfew', 'Trail monitoring', 'Alcohol monitoring'],
+        pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -78,22 +78,36 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/],
       }
-      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       const curfewTimetable = [
         ...curfewNights.flatMap((day: string) => [
           {
             day,
             startTime: '19:00:00',
-            endTime: '07:00:00',
+            endTime: '10:00:00',
             addresses: curfewConditionDetails.addresses,
           },
         ]),
       ]
+      const trailMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+      }
 
+      const alcoholMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        monitoringType: 'Alcohol level',
+      }
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
         riskDetails: 'No risk',
       }
+
+      const installationLocation = {
+        location: `${fakePrimaryAddress.line1}, ${fakePrimaryAddress.line2}, ${fakePrimaryAddress.postcode}`,
+      }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -102,7 +116,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewCurfewOrderWith({
+        orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -110,16 +124,23 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk,
           monitoringConditions,
+          installationAddressDetails: fakePrimaryAddress,
+          trailMonitoringDetails,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
+          attendanceMonitoringDetails: undefined,
           files,
           probationDeliveryUnit,
+          installationLocation,
+          installationAppointment: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO017',
+          responseRecordFilename: 'CEMO025',
           httpStatus: 200,
           body: {
             title: '',
@@ -182,7 +203,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO017',
+              responseRecordFilename: 'CEMO025',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -198,6 +219,16 @@ context('Scenarios', () => {
                     condition: 'Curfew with EM',
                     start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                     end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
+                  },
+                  {
+                    condition: 'Location Monitoring (Fitted Device)',
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
+                  },
+                  {
+                    condition: 'AML',
+                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -249,10 +280,10 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Standard Determinate Sentence',
-                tag_at_source: '',
+                tag_at_source: 'No',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                released_under_prarr: 'No',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -273,50 +304,60 @@ context('Scenarios', () => {
                       {
                         day: 'Mo',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Tu',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Wed',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Th',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Fr',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
+                      },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '10:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '10:00:00',
                       },
                     ],
                   },
                 ],
-                trail_monitoring: '',
+                trail_monitoring: 'Yes',
                 exclusion_zones: [],
                 inclusion_zones: [],
-                abstinence: '',
+                abstinence: 'No',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: '',
-                installation_address_2: '',
-                installation_address_3: '',
-                installation_address_4: '',
-                installation_address_post_code: '',
+                installation_address_1: fakePrimaryAddress.line1,
+                installation_address_2: fakePrimaryAddress.line2,
+                installation_address_3: fakePrimaryAddress.line3,
+                installation_address_4: fakePrimaryAddress.line4,
+                installation_address_post_code: fakePrimaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
-                issp: 'No',
+                issp: 'Yes',
                 hdc: 'No',
                 order_status: 'Not Started',
-                pilot: 'GPS Acquisitive Crime Parole',
+                pilot: '',
               },
             })
             .should('be.true')

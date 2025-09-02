@@ -3,26 +3,21 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
-context.skip('Scenarios', () => {
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
+  }
+
   let orderId: string
 
   const cacheOrderId = () => {
@@ -30,13 +25,6 @@ context.skip('Scenarios', () => {
       const parts = url.replace(Cypress.config().baseUrl, '').split('/')
       ;[, , orderId] = parts
     })
-  }
-  const hmppsDocumentId: string = uuidv4()
-  const files = {
-    licence: {
-      contents: 'cypress/fixtures/test.pdf',
-      fileName: 'test.pdf',
-    },
   }
 
   beforeEach(() => {
@@ -58,111 +46,75 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId)
+    cy.task('stubFMSUpdateDeviceWearer', {
+      httpStatus: 200,
+      response: { result: [{ id: fmsCaseId, message: '' }] },
+    })
+
+    cy.task('stubFMSUpdateMonitoringOrder', {
+      httpStatus: 200,
+      response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
-  context('Immigration with Location - NFD (Non Fitted Device) Pebble (NFD).', () => {
+  context('Single exclusion zone ', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      ...createFakeAdultDeviceWearer('CEMO012'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+    const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
-      pilot: 'Acquisitive Crime Project',
-      conditionType: 'License Condition of a Custodial Order',
-      monitoringRequired: 'Trail monitoring',
+      monitoringRequired: 'Exclusion zone monitoring',
+      sentenceType: 'Standard Determinate Sentence',
+      pilot: 'They are not part of any of these pilots',
     }
-    const trailMonitoringOrder = {
-      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+    const enforcementZoneDetails = {
+      zoneType: 'Exclusion zone',
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
+      uploadFile: files.licence,
+      description: 'Exclusion from Bolton town centre',
+      duration: '90 days',
+      anotherZone: 'No',
     }
+
     const installationAndRisk = {
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
     }
+
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
 
       let indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
 
-      let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+      const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.aboutTheDeviceWearerTask.click()
-
-      const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      identityNumbersPage.form.saveAndContinueButton.click()
-
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-      deviceWearerCheckYourAnswersPage.continueButton().click()
-
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith(deviceWearerDetails)
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-      primaryAddressPage.form.fillInWith({
-        ...fakePrimaryAddress,
-        hasAnotherAddress: 'No',
+      orderSummaryPage.fillInNewEnforcementZoneOrderWith({
+        deviceWearerDetails,
+        responsibleAdultDetails: undefined,
+        primaryAddressDetails: fakePrimaryAddress,
+        secondaryAddressDetails: undefined,
+        interestedParties,
+        installationAndRisk,
+        monitoringConditions,
+        enforcementZoneDetails,
+        files,
+        probationDeliveryUnit,
       })
-      primaryAddressPage.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
-
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        'Check your answer',
-      )
-      contactInformationCheckYourAnswersPage.continueButton().click()
-
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.form.fillInWith(installationAndRisk)
-      installationAndRiskPage.form.saveAndContinueButton.click()
-
-      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
-        InstallationAndRiskCheckYourAnswersPage,
-        'Check your answer',
-      )
-      installationAndRiskCheckYourAnswersPage.continueButton().click()
-
-      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      trailMonitoringPage.form.saveAndContinueButton.click()
-
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answer',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-      const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      attachmentPage.backToSummaryButton.click()
-
-      orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO010',
+        responseRecordFilename: 'CEMO012',
         httpStatus: 200,
         body: {
           title: '',
@@ -181,9 +133,9 @@ context.skip('Scenarios', () => {
             .replace('Non binary', 'Non-Binary'),
           disability: [],
           address_1: fakePrimaryAddress.line1,
-          address_2: 'N/A',
+          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
           address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4,
+          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
           secondary_address_1: '',
           secondary_address_2: '',
@@ -225,23 +177,22 @@ context.skip('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO010',
+            responseRecordFilename: 'CEMO012',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
-
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'Location Monitoring (Fitted Device)',
-                  start_date: formatAsFmsDateTime(trailMonitoringOrder.startDate, 0, 0),
-                  end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
+                  condition: 'EM Exclusion / Inclusion Zone',
+                  start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                  end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                 },
               ],
               exclusion_allday: '',
@@ -274,7 +225,7 @@ context.skip('Scenarios', () => {
               order_variation_details: '',
               order_variation_req_received_date: '',
               order_variation_type: '',
-              pdu_responsible: '',
+              pdu_responsible: 'Blackburn',
               pdu_responsible_email: '',
               planned_order_end_date: '',
               responsible_officer_details_received: '',
@@ -292,7 +243,7 @@ context.skip('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: '',
+              sentence_type: 'Standard Determinate Sentence',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',
@@ -310,8 +261,15 @@ context.skip('Scenarios', () => {
               curfew_start: '',
               curfew_end: '',
               curfew_duration: [],
-              trail_monitoring: 'Yes',
-              exclusion_zones: [],
+              trail_monitoring: 'No',
+              exclusion_zones: [
+                {
+                  description: enforcementZoneDetails.description,
+                  duration: enforcementZoneDetails.duration,
+                  start: formatAsFmsDate(enforcementZoneDetails.startDate),
+                  end: formatAsFmsDate(enforcementZoneDetails.endDate),
+                },
+              ],
               inclusion_zones: [],
               abstinence: '',
               schedule: '',
@@ -328,10 +286,19 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
-              pilot: 'GPS Acquisitive Crime Parole',
+              pilot: '',
             },
           })
           .should('be.true')
+      })
+
+      // Verify the attachments were sent to the FMS API
+      cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
+        cy.task('verifyFMSAttachmentRequestReceived', {
+          responseRecordFilename: 'CEMO012',
+          httpStatus: 200,
+          fileContents: contentAsBase64,
+        })
       })
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

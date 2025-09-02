@@ -4,7 +4,6 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
-import ResponsibleAdultDetailsPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
@@ -16,28 +15,23 @@ import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
-import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
-context('Scenarios', () => {
+// test disabled as community YRO is not currently a valid sentence type
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
-  const hmppsDocumentId: string = uuidv4()
-  const files = {
-    licence: {
-      contents: 'cypress/fixtures/test.pdf',
-      fileName: 'test.pdf',
-    },
-  }
   let orderId: string
 
   const cacheOrderId = () => {
@@ -45,6 +39,13 @@ context('Scenarios', () => {
       const parts = url.replace(Cypress.config().baseUrl, '').split('/')
       ;[, , orderId] = parts
     })
+  }
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
   }
 
   beforeEach(() => {
@@ -70,10 +71,10 @@ context('Scenarios', () => {
   })
 
   context(
-    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Grounds, document attachment',
+    'Youth Rehabilitation order (Community) with GPS Tag (Attendance Monitoring). Inclusion zone - "not to leave the boundary of the M60".',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer('CEMO014'),
+        ...createFakeYouthDeviceWearer('CEMO010'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -83,31 +84,34 @@ context('Scenarios', () => {
         ...fakePrimaryAddress,
         hasAnotherAddress: 'No',
       }
-
-      const interestedParties = createFakeInterestedParties(
-        'Prison',
-        'YJS',
-        'Feltham Young Offender Institution',
-        'London',
-      )
-
+      const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'North West')
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
-        orderType: 'Post Release',
-        monitoringRequired: 'Exclusion zone monitoring',
-        sentenceType: 'Detention and Training Order (DTO)',
-        pilot: 'They are not part of any of these pilots',
-      }
-      const enforcementZoneDetails = {
-        zoneType: 'Exclusion zone',
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-        uploadFile: files.licence,
-        description: 'Excluded from Football Grounds',
-        duration: '90 days',
-        anotherZone: 'No',
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+        orderType: 'Community',
+        monitoringRequired: 'Mandatory attendance monitoring',
+        pilot: 'They are not part of any of these pilots',
+        sentenceType: 'Detention and Training Order',
+        // sentenceType: 'Community YRO',
       }
+
+      const attendanceMonitoringOrder = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
+        purpose: 'Attend Bolton Magistrates Court at 9am on Mondays',
+        appointmentDay: 'Monday',
+        startTime: {
+          hours: '09',
+          minutes: '00',
+        },
+        endTime: {
+          hours: '12',
+          minutes: '00',
+        },
+        address: createKnownAddress(),
+        addAnother: 'No',
+      }
+
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
         riskDetails: 'No risk',
@@ -127,7 +131,7 @@ context('Scenarios', () => {
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
         aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
-        const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
+        const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
         responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
         responsibleAdultDetailsPage.form.saveAndContinueButton.click()
 
@@ -177,9 +181,9 @@ context('Scenarios', () => {
         monitoringConditionsPage.form.fillInWith(monitoringConditions)
         monitoringConditionsPage.form.saveAndContinueButton.click()
 
-        const enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-        enforcementZonePage.form.fillInWith(enforcementZoneDetails)
-        enforcementZonePage.form.saveAndContinueButton.click()
+        const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
+        attendanceMonitoringPage.form.fillInWith(attendanceMonitoringOrder)
+        attendanceMonitoringPage.form.saveAndContinueButton.click()
 
         const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
           MonitoringConditionsCheckYourAnswersPage,
@@ -202,7 +206,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO014',
+          responseRecordFilename: 'CEMO010',
           httpStatus: 200,
           body: {
             title: '',
@@ -224,7 +228,7 @@ context('Scenarios', () => {
             address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
             address_3: fakePrimaryAddress.line3,
             address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
-            address_post_code: primaryAddressDetails.postcode,
+            address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -265,20 +269,20 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO014',
+              responseRecordFilename: 'CEMO010',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'License Condition of a Custodial Order',
+                condition_type: 'Requirement of a Community Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'EM Exclusion / Inclusion Zone',
+                    condition: 'Attendance Requirement',
                     start_date: formatAsFmsDateTime(monitoringConditions.startDate),
                     end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                   },
@@ -297,7 +301,7 @@ context('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: interestedParties.notifyingOrganisationName,
+                no_name: interestedParties.youthCustodyServiceRegion,
                 no_phone_number: '',
                 offence: '',
                 offence_additional_details: '',
@@ -306,7 +310,7 @@ context('Scenarios', () => {
                 order_id: orderId,
                 order_request_type: 'New Order',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_type: 'Community',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -331,7 +335,8 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Detention & Training Order',
+                sentence_type: '',
+                // sentence_type: 'Community YRO',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
@@ -349,16 +354,23 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: 'No',
-                exclusion_zones: [
+                trail_monitoring: '',
+                exclusion_zones: [],
+                inclusion_zones: [
                   {
-                    description: enforcementZoneDetails.description,
-                    duration: enforcementZoneDetails.duration,
-                    start: formatAsFmsDate(enforcementZoneDetails.startDate),
-                    end: formatAsFmsDate(enforcementZoneDetails.endDate),
+                    description: `${attendanceMonitoringOrder.purpose}
+${attendanceMonitoringOrder.appointmentDay} ${attendanceMonitoringOrder.startTime.hours}:${attendanceMonitoringOrder.startTime.minutes}:00-${attendanceMonitoringOrder.endTime.hours}:${attendanceMonitoringOrder.endTime.minutes}:00
+${attendanceMonitoringOrder.address.line1}
+${attendanceMonitoringOrder.address.line2}
+${attendanceMonitoringOrder.address.line3}
+${attendanceMonitoringOrder.address.line4}
+${attendanceMonitoringOrder.address.postcode}
+`,
+                    duration: '',
+                    start: formatAsFmsDate(attendanceMonitoringOrder.startDate),
+                    end: formatAsFmsDate(attendanceMonitoringOrder.endDate),
                   },
                 ],
-                inclusion_zones: [],
                 abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
@@ -378,15 +390,6 @@ context('Scenarios', () => {
               },
             })
             .should('be.true')
-        })
-
-        // Verify the attachments were sent to the FMS API
-        cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
         })
 
         const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
