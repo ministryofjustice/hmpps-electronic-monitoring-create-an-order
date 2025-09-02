@@ -8,8 +8,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
-// test disabled as Bail is not currently a valid sentence type
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -56,7 +55,7 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
   context(
@@ -73,9 +72,9 @@ context.skip('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        conditionType: 'Bail Order',
         monitoringRequired: 'Curfew',
         pilot: 'They are not part of any of these pilots',
+        sentenceType: 'Standard Determinate Sentence',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -233,7 +232,7 @@ context.skip('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: monitoringConditions.conditionType,
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -268,7 +267,7 @@ context.skip('Scenarios', () => {
                 order_id: orderId,
                 order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: 'Pre-Trial',
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
@@ -293,7 +292,7 @@ context.skip('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Standard Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
@@ -361,11 +360,11 @@ context.skip('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: fakeVariationPrimaryAddress.line1,
-                installation_address_2: fakeVariationPrimaryAddress.line2,
-                installation_address_3: fakeVariationPrimaryAddress.line3 ?? '',
-                installation_address_4: fakeVariationPrimaryAddress.line4 ?? '',
-                installation_address_post_code: fakeVariationPrimaryAddress.postcode,
+                installation_address_1: '',
+                installation_address_2: '',
+                installation_address_3: '',
+                installation_address_4: '',
+                installation_address_post_code: '',
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
