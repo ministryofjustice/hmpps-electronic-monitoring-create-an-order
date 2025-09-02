@@ -3,6 +3,7 @@ import * as DeviceWearerCheckAnswers from './deviceWearerCheckAnswers'
 import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAnswers'
 import * as RiskInformationCheckAnswers from './riskInformationCheckAnswers'
 import * as AdditionalDocumentsCheckAnswers from './additionalDocumentsCheckAnswers'
+import * as VariationDetailsCheckAnswers from './variationDetailsCheckAnswers'
 import { createAnswer, createDateTimeAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
@@ -27,6 +28,7 @@ const createViewModel = (order: Order, content: I18n) => {
   const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
   const riskDetails = RiskInformationCheckAnswers.default(order, content)
   const additionalDocumentDetails = AdditionalDocumentsCheckAnswers.default(order, content)
+  const variationDetails = VariationDetailsCheckAnswers.default(order, content)
 
   return {
     statusDetails,
@@ -34,6 +36,7 @@ const createViewModel = (order: Order, content: I18n) => {
     ...devicewearer,
     ...monitoringConditions,
     ...riskDetails,
+    ...variationDetails,
     additionalDocumentDetails,
   }
 }

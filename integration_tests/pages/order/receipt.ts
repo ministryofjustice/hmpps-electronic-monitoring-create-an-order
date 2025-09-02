@@ -18,6 +18,11 @@ export default class ReceiptPage extends AppPage {
     return new SummaryListComponent(label)
   }
 
+  get variationDetailsSection(): SummaryListComponent {
+    const label = 'About the changes to this version of the form'
+    return new SummaryListComponent(label)
+  }
+
   get riskInformationSection(): SummaryListComponent {
     const label = 'Risk information'
     return new SummaryListComponent(label)
