@@ -342,7 +342,7 @@ context('Scenarios', () => {
                 trail_monitoring: 'Yes',
                 exclusion_zones: [],
                 inclusion_zones: [],
-                abstinence: '',
+                abstinence: 'No',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
