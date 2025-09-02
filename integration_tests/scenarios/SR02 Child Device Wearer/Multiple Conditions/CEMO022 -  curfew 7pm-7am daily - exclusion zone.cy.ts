@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAddress } from '../../../mockApis/faker'
+import { createFakeYouthDeviceWearer, createFakeInterestedParties, kelvinCloseAddress, createFakeResponsibleAdult } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
@@ -48,24 +48,23 @@ context('Scenarios', () => {
   })
 
   context(
-    'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
+    'Curfew and exclusion zone',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO036'),
+        ...createFakeYouthDeviceWearer('CEMO022'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
+      const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = kelvinCloseAddress
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Fosse Way Prison', 'East Midlands')
-      const probationDeliveryUnit = { unit: 'Derby City' }
+      const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'London')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
         pilot: 'They are not part of any of these pilots',
-        sentenceType: 'Standard Determinate Sentence',
+        sentenceType: 'Detention and Training Order (DTO)',
         monitoringRequired: ['Curfew', 'Exclusion zone monitoring'],
-        hdc: 'Yes',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -94,7 +93,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
-        description: 'Exclusion from Bolton town centre',
+        description: 'Exclusion from Liverpool MET Quarter',
         duration: '90 days',
         anotherZone: 'No',
       }
@@ -114,7 +113,7 @@ context('Scenarios', () => {
         cacheOrderId()
         orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
-          responsibleAdultDetails: undefined,
+          responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
@@ -129,14 +128,14 @@ context('Scenarios', () => {
           curfewTimetable,
           attendanceMonitoringDetails: undefined,
           files,
-          probationDeliveryUnit,
+          probationDeliveryUnit:undefined,
           installationAppointment: undefined,
           installationLocation: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO036',
+          responseRecordFilename: 'CEMO022',
           httpStatus: 200,
           body: {
             title: '',
@@ -145,7 +144,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
-            adult_child: 'adult',
+            adult_child: 'child',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
               .replace('Prefer not to say', 'Prefer Not to Say'),
@@ -176,15 +175,15 @@ context('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: '',
+            responsible_adult_required: 'true',
+            parent: responsibleAdultDetails.fullName,
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: null,
+            parent_phone_number: formatAsFmsPhoneNumber(responsibleAdultDetails.contactNumber),
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -199,7 +198,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO036',
+              responseRecordFilename: 'CEMO022',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -252,7 +251,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: 'Derby City',
+                pdu_responsible: '',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -270,7 +269,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Standard Determinate Sentence',
+                sentence_type: 'Detention & Training Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
@@ -353,7 +352,7 @@ context('Scenarios', () => {
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
-                hdc: 'Yes',
+                hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
               },
