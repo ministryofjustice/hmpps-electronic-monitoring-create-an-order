@@ -10,7 +10,6 @@ import {
   createFakeResponsibleAdult,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
@@ -121,11 +120,6 @@ context('Scenarios', () => {
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
-
-        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-        submitSuccessPage.backToYourApplications.click()
-
-        indexPage = Page.verifyOnPage(IndexPage)
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
           responseRecordFilename: 'CEMO008',
@@ -315,8 +309,8 @@ context('Scenarios', () => {
           })
         })
 
-        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-        variationSubmitSuccessPage.backToYourApplications.click()
+        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')

@@ -5,10 +5,19 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
+  const hmppsDocumentId: string = uuidv4()
+  const files = {
+    licence: {
+      contents: 'cypress/fixtures/test.pdf',
+      fileName: 'test.pdf',
+    },
+  }
+
   let orderId: string
 
   const cacheOrderId = () => {
@@ -16,13 +25,6 @@ context('Scenarios', () => {
       const parts = url.replace(Cypress.config().baseUrl, '').split('/')
       ;[, , orderId] = parts
     })
-  }
-  const hmppsDocumentId: string = uuidv4()
-  const files = {
-    licence: {
-      contents: 'cypress/fixtures/test.pdf',
-      fileName: 'test.pdf',
-    },
   }
 
   beforeEach(() => {
@@ -44,43 +46,44 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId)
+    cy.task('stubFMSUpdateDeviceWearer', {
+      httpStatus: 200,
+      response: { result: [{ id: fmsCaseId, message: '' }] },
+    })
+
+    cy.task('stubFMSUpdateMonitoringOrder', {
+      httpStatus: 200,
+      response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
-  context('Adult mandatory attendence', () => {
+  context('Single exclusion zone ', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer('CEMO011'),
+      ...createFakeAdultDeviceWearer('CEMO012'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
-
     const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Community',
-      monitoringRequired: 'Mandatory attendance monitoring',
-      pilot: 'They are not part of any of these pilots',
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
+      orderType: 'Post Release',
+      monitoringRequired: 'Exclusion zone monitoring',
       sentenceType: 'Standard Determinate Sentence',
+      pilot: 'They are not part of any of these pilots',
     }
-
-    const attendanceMonitoringOrder = {
-      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
-      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
-      purpose: 'Attend Bolton Magistrates Court at 9am on Wednesdays & Fridays',
-      appointmentDay: 'Wednesdays & Fridays',
-      startTime: {
-        hours: '09',
-        minutes: '00',
-      },
-      endTime: {
-        hours: '12',
-        minutes: '00',
-      },
-      address: createKnownAddress(),
-      addAnother: 'No',
+    const enforcementZoneDetails = {
+      zoneType: 'Exclusion zone',
+      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
+      uploadFile: files.licence,
+      description: 'Exclusion from Bolton town centre',
+      duration: '90 days',
+      anotherZone: 'No',
     }
 
     const installationAndRisk = {
@@ -96,7 +99,7 @@ context('Scenarios', () => {
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.fillInNewOrderWith({
+      orderSummaryPage.fillInNewEnforcementZoneOrderWith({
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails: fakePrimaryAddress,
@@ -104,21 +107,14 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: undefined,
-        curfewConditionDetails: undefined,
-        curfewReleaseDetails: undefined,
-        curfewTimetable: undefined,
-        enforcementZoneDetails: undefined,
-        alcoholMonitoringDetails: undefined,
-        trailMonitoringDetails: undefined,
-        attendanceMonitoringDetails: attendanceMonitoringOrder,
+        enforcementZoneDetails,
         files,
         probationDeliveryUnit,
       })
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO011',
+        responseRecordFilename: 'CEMO012',
         httpStatus: 200,
         body: {
           title: '',
@@ -181,20 +177,20 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO011',
+            responseRecordFilename: 'CEMO012',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'Requirement of a Community Order',
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
               device_type: '',
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'Attendance Requirement',
+                  condition: 'EM Exclusion / Inclusion Zone',
                   start_date: formatAsFmsDateTime(monitoringConditions.startDate),
                   end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                 },
@@ -222,7 +218,7 @@ context('Scenarios', () => {
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: 'Community',
+              order_type: monitoringConditions.orderType,
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -265,23 +261,16 @@ context('Scenarios', () => {
               curfew_start: '',
               curfew_end: '',
               curfew_duration: [],
-              trail_monitoring: '',
-              exclusion_zones: [],
-              inclusion_zones: [
+              trail_monitoring: 'No',
+              exclusion_zones: [
                 {
-                  description: `${attendanceMonitoringOrder.purpose}
-${attendanceMonitoringOrder.appointmentDay} ${attendanceMonitoringOrder.startTime.hours}:${attendanceMonitoringOrder.startTime.minutes}:00-${attendanceMonitoringOrder.endTime.hours}:${attendanceMonitoringOrder.endTime.minutes}:00
-${attendanceMonitoringOrder.address.line1}
-${attendanceMonitoringOrder.address.line2}
-${attendanceMonitoringOrder.address.line3}
-${attendanceMonitoringOrder.address.line4}
-${attendanceMonitoringOrder.address.postcode}
-`,
-                  duration: '',
-                  start: formatAsFmsDate(attendanceMonitoringOrder.startDate),
-                  end: formatAsFmsDate(attendanceMonitoringOrder.endDate),
+                  description: enforcementZoneDetails.description,
+                  duration: enforcementZoneDetails.duration,
+                  start: formatAsFmsDate(enforcementZoneDetails.startDate),
+                  end: formatAsFmsDate(enforcementZoneDetails.endDate),
                 },
               ],
+              inclusion_zones: [],
               abstinence: '',
               schedule: '',
               checkin_schedule: [],
@@ -301,6 +290,15 @@ ${attendanceMonitoringOrder.address.postcode}
             },
           })
           .should('be.true')
+      })
+
+      // Verify the attachments were sent to the FMS API
+      cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
+        cy.task('verifyFMSAttachmentRequestReceived', {
+          responseRecordFilename: 'CEMO012',
+          httpStatus: 200,
+          fileContents: contentAsBase64,
+        })
       })
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
