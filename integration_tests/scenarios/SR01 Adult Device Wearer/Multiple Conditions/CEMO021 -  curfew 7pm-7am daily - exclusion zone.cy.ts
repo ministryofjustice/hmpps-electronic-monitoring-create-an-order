@@ -51,13 +51,13 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO021'),
+        ...createFakeAdultDeviceWearer('CEMO024'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = kelvinCloseAddress
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Fosse Way Prison', 'East Midlands')
-      const probationDeliveryUnit = { unit: 'Derby City' }
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
@@ -65,7 +65,6 @@ context('Scenarios', () => {
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',
         monitoringRequired: ['Curfew', 'Exclusion zone monitoring'],
-        hdc: 'Yes',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -84,7 +83,7 @@ context('Scenarios', () => {
           {
             day,
             startTime: '19:00:00',
-            endTime: '07:00:00',
+            endTime: '03:00:00',
             addresses: curfewConditionDetails.addresses,
           },
         ]),
@@ -94,7 +93,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
-        description: 'Exclusion from Bolton town centre',
+        description: 'Exclusion from park',
         duration: '90 days',
         anotherZone: 'No',
       }
@@ -136,7 +135,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO021',
+          responseRecordFilename: 'CEMO024',
           httpStatus: 200,
           body: {
             title: '',
@@ -199,7 +198,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO021',
+              responseRecordFilename: 'CEMO024',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -252,7 +251,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: 'Derby City',
+                pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -295,37 +294,37 @@ context('Scenarios', () => {
                       {
                         day: 'Mo',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Tu',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Wed',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Th',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Fr',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Sa',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                       {
                         day: 'Su',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '03:00:00',
                       },
                     ],
                   },
