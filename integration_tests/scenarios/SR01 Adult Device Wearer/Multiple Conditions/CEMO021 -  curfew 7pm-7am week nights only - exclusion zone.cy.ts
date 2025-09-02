@@ -56,15 +56,16 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = kelvinCloseAddress
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
-      const probationDeliveryUnit = { unit: 'Blackburn' }
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Fosse Way Prison', 'East Midlands')
+      const probationDeliveryUnit = { unit: 'Derby City' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime',
+        pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Trail monitoring'],
+        monitoringRequired: ['Curfew', 'Exclusion zone monitoring'],
+        hdc: 'Yes',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -77,7 +78,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/],
       }
-      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       const curfewTimetable = [
         ...curfewNights.flatMap((day: string) => [
           {
@@ -88,9 +89,14 @@ context('Scenarios', () => {
           },
         ]),
       ]
-      const trailMonitoringDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+      const enforcementZoneDetails = {
+        zoneType: 'Exclusion zone',
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
+        uploadFile: files.licence,
+        description: 'Exclusion from Bolton town centre',
+        duration: '90 days',
+        anotherZone: 'No',
       }
 
       const installationAndRisk = {
@@ -115,8 +121,8 @@ context('Scenarios', () => {
           installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          trailMonitoringDetails,
-          enforcementZoneDetails: undefined,
+          trailMonitoringDetails: undefined,
+          enforcementZoneDetails,
           alcoholMonitoringDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
@@ -211,9 +217,9 @@ context('Scenarios', () => {
                     end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                   },
                   {
-                    condition: 'Location Monitoring (Fitted Device)',
-                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
-                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
+                    condition: 'EM Exclusion / Inclusion Zone',
+                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -246,7 +252,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: 'Blackburn',
+                pdu_responsible: 'Derby City',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -311,11 +317,28 @@ context('Scenarios', () => {
                         start: '19:00:00',
                         end: '07:00:00',
                       },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '07:00:00',
+                      },
                     ],
                   },
                 ],
-                trail_monitoring: 'Yes',
-                exclusion_zones: [],
+                trail_monitoring: 'No',
+                exclusion_zones: [
+                  {
+                    description: enforcementZoneDetails.description,
+                    duration: enforcementZoneDetails.duration,
+                    start: formatAsFmsDate(enforcementZoneDetails.startDate),
+                    end: formatAsFmsDate(enforcementZoneDetails.endDate),
+                  },
+                ],
                 inclusion_zones: [],
                 abstinence: '',
                 schedule: '',
@@ -330,9 +353,9 @@ context('Scenarios', () => {
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
-                hdc: 'No',
+                hdc: 'Yes',
                 order_status: 'Not Started',
-                pilot: 'GPS Acquisitive Crime Parole',
+                pilot: '',
               },
             })
             .should('be.true')
