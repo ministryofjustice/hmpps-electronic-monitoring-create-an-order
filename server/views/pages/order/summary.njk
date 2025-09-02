@@ -97,22 +97,24 @@
             <a href="/order/{{ orderId }}/delete" class="govuk-link">Delete form</a>
           </div>
         </form>
-      {% else %}
-        <img src="{{ formDownloadIcon }}" width="62px" height="85px" alt="Icon of a form">
-        {{ govukButton({
-          text: "View and download the completed application form",
-          href: "/order/" + orderId + "/receipt",
-          classes: "govuk-button--secondary"
-        }) }}
       {% endif %}
 
-      {% if createNewOrderVersionEnabled and order.status == "SUBMITTED" %}
+      {% if order.status == "SUBMITTED" %}
         <div class="govuk-!-margin-top-5">
-        {{ govukButton({
-          text: "Make changes to this form",
-          id: "make-changes-button",
-          href: "/order/" + order.id + "/edit"
-        }) }}
+	  <div class="govuk-button-group">
+            {% if createNewOrderVersionEnabled %}
+              {{ govukButton({
+                text: "Make changes to this form",
+                id: "make-changes-button",
+                href: "/order/" + order.id + "/edit"
+              }) }}
+            {% endif %}
+            {{ govukButton({
+              text: "View and download the completed application form",
+              href: "/order/" + orderId + "/receipt",
+              classes: "govuk-button--secondary"
+            }) }}
+	  </div>
         </div>
       {% endif %}
   
