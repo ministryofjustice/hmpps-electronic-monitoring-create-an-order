@@ -145,8 +145,11 @@ context('The kitchen sink', () => {
         enforcementZoneDetails: primaryEnforcementZoneDetails,
         alcoholMonitoringDetails: undefined,
         trailMonitoringDetails: trailMonitoringOrder,
+        attendanceMonitoringDetails: undefined,
         files: attachmentFiles,
         probationDeliveryUnit,
+        installationLocation: undefined,
+        installationAppointment: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {

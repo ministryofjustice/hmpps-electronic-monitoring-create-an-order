@@ -7,7 +7,8 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
-context('Scenarios', () => {
+// SKIP not in phase 4 scenario pack
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -121,8 +122,11 @@ context('Scenarios', () => {
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
+          attendanceMonitoringDetails: undefined,
           files,
           probationDeliveryUnit,
+          installationAppointment: undefined,
+          installationLocation: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
 

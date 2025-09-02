@@ -5,16 +5,13 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
+import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
-    photoId: {
-      contents: 'cypress/fixtures/profile.jpeg',
-      fileName: 'profile.jpeg',
-    },
     licence: {
       contents: 'cypress/fixtures/test.pdf',
       fileName: 'test.pdf',
@@ -28,7 +25,6 @@ context('Scenarios', () => {
       ;[, , orderId] = parts
     })
   }
-
   beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
@@ -48,132 +44,73 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFmsUploadAttachment', {
+    cy.task('stubFMSUpdateDeviceWearer', {
       httpStatus: 200,
-      fileName: files.photoId.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
+      response: { result: [{ id: fmsCaseId, message: '' }] },
     })
 
-    cy.task('stubFmsUploadAttachment', {
+    cy.task('stubFMSUpdateMonitoringOrder', {
       httpStatus: 200,
-      fileName: files.licence.fileName,
-      deviceWearerId: fmsCaseId,
-      response: {
-        status: 200,
-        result: {},
-      },
+      response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubUploadDocument', {
-      scenario: {
-        name: 'CEMO004',
-        requiredState: 'Started',
-        nextState: 'second',
-      },
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: files.licence.fileName,
-        filename: files.licence.fileName,
-        fileExtension: files.licence.fileName.split('.')[1],
-        mimeType: 'application/pdf',
-      },
-    })
-
-    cy.task('stubUploadDocument', {
-      scenario: {
-        name: 'CEMO004',
-        requiredState: 'second',
-        nextState: 'Started',
-      },
-      id: '(.*)',
-      httpStatus: 200,
-      response: {
-        documentUuid: hmppsDocumentId,
-        documentFilename: files.photoId.fileName,
-        filename: files.photoId.fileName,
-        fileExtension: files.photoId.fileName.split('.')[1],
-        mimeType: 'image/jpeg',
-      },
-    })
-
-    cy.readFile(files.licence.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        scenario: {
-          name: 'CEMO004',
-          requiredState: 'Started',
-          nextState: 'second',
-        },
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'application/pdf',
-        fileBase64Body: content,
-      })
-    })
-
-    cy.readFile(files.photoId.contents, 'base64').then(content => {
-      cy.task('stubGetDocument', {
-        scenario: {
-          name: 'CEMO004',
-          requiredState: 'second',
-          nextState: 'Started',
-        },
-        id: '(.*)',
-        httpStatus: 200,
-        contextType: 'image/jpeg',
-        fileBase64Body: content,
-      })
-    })
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
   context(
-    'Alcohol Abstinence and Monitoring Requirement - AAMR (Post Release), Photo and Multiple Document attachments',
+    'Location Monitoring (Inclusion/Exclusion) (Post Release) with GPS Tag (Location - Fitted) (Inclusion/Exclusion zone). Excluded from Football Ground - Variation of home address',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO004'),
+        ...createFakeAdultDeviceWearer('CEMO017'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties(
-        'Magistrates Court',
-        'Probation',
-        'Liverpool & Knowsley Magistrates Court',
-        'North West',
-      )
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Community',
-        monitoringRequired: 'Alcohol monitoring',
-        pilot: 'They are not part of any of these pilots',
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
+        orderType: 'Post Release',
+        conditionType: 'License condition',
+        monitoringRequired: 'Exclusion zone monitoring',
         sentenceType: 'Standard Determinate Sentence',
+        pilot: 'They are not part of any of these pilots',
       }
-      const alcoholMonitoringDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        monitoringType: 'Alcohol abstinence',
-        installLocation: `at installation address: ${fakePrimaryAddress}`,
+      const enforcementZoneDetails = {
+        zoneType: 'Exclusion zone',
+        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
+        uploadFile: files.licence,
+        description: 'Excluded from Football Grounds',
+        duration: '90 days',
+        anotherZone: 'No',
       }
+
+      const variationDetails = {
+        variationType: 'The device wearer’s address',
+        variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+        variationDetails: 'Change to address',
+      }
+      let fakeVariationPrimaryAddress = createKnownAddress()
+      while (fakeVariationPrimaryAddress.postcode === fakePrimaryAddress.postcode) {
+        fakeVariationPrimaryAddress = createKnownAddress()
+      }
+
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
         riskDetails: 'No risk',
       }
+
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewAlcoholMonitoringOrderWith({
+        orderSummaryPage.fillInNewEnforcementZoneOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -181,15 +118,38 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk,
           monitoringConditions,
-          installationAddressDetails: fakePrimaryAddress,
-          alcoholMonitoringDetails,
+          enforcementZoneDetails,
           files,
           probationDeliveryUnit,
         })
         orderSummaryPage.submitOrderButton.click()
 
-        cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO004',
+        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
+        submitSuccessPage.backToYourApplications.click()
+
+        indexPage = Page.verifyOnPage(IndexPage)
+        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.newVariationFormButton.click()
+
+        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        cacheOrderId()
+        orderSummaryPage = orderSummaryPage.fillInEnforcementZoneVariationWith({
+          variationDetails,
+          deviceWearerDetails,
+          responsibleAdultDetails: undefined,
+          primaryAddressDetails: fakeVariationPrimaryAddress,
+          secondaryAddressDetails: undefined,
+          interestedParties,
+          installationAndRisk,
+          monitoringConditions,
+          enforcementZoneDetails,
+          files,
+          probationDeliveryUnit,
+        })
+        orderSummaryPage.submitOrderButton.click()
+
+        cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
+          responseRecordFilename: 'CEMO017',
           httpStatus: 200,
           body: {
             title: '',
@@ -207,11 +167,11 @@ context('Scenarios', () => {
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
             disability: [],
-            address_1: fakePrimaryAddress.line1,
-            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
-            address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
-            address_post_code: fakePrimaryAddress.postcode,
+            address_1: fakeVariationPrimaryAddress.line1,
+            address_2: fakeVariationPrimaryAddress.line2 === '' ? 'N/A' : fakeVariationPrimaryAddress.line2,
+            address_3: fakeVariationPrimaryAddress.line3,
+            address_4: fakeVariationPrimaryAddress.line4 === '' ? 'N/A' : fakeVariationPrimaryAddress.line4,
+            address_post_code: fakeVariationPrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -251,23 +211,23 @@ context('Scenarios', () => {
 
         cy.wrap(orderId).then(() => {
           return cy
-            .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO004',
+            .task('verifyFMSUpdateMonitoringOrderRequestReceived', {
+              responseRecordFilename: 'CEMO017',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
                 device_wearer: deviceWearerDetails.fullName,
                 enforceable_condition: [
                   {
-                    condition: 'AAMR',
-                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
-                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
+                    condition: 'EM Exclusion / Inclusion Zone',
+                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
+                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
                   },
                 ],
                 exclusion_allday: '',
@@ -284,22 +244,22 @@ context('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: 'LIVERPOOL_AND_KNOWSLEY_MAGISTRATES_COURT',
+                no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: '',
                 offence_additional_details: '',
                 offence_date: '',
                 order_end: formatAsFmsDateTime(monitoringConditions.endDate),
                 order_id: orderId,
-                order_request_type: 'New Order',
+                order_request_type: 'Variation',
                 order_start: formatAsFmsDateTime(monitoringConditions.startDate),
                 order_type: monitoringConditions.orderType,
                 order_type_description: null,
                 order_type_detail: '',
-                order_variation_date: '',
-                order_variation_details: '',
+                order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
+                order_variation_details: 'Change to address',
                 order_variation_req_received_date: '',
-                order_variation_type: '',
+                order_variation_type: 'Change to Address',
                 pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
@@ -319,11 +279,10 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Standard Determinate Sentence',
-                tag_at_source: 'Yes',
-                tag_at_source_details: `at installation address: ${fakePrimaryAddress}`,
-                pilot: '',
-                date_and_time_installation_will_take_place: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
-                released_under_prarr: 'No',
+                tag_at_source: '',
+                tag_at_source_details: '',
+                date_and_time_installation_will_take_place: '',
+                released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -337,24 +296,32 @@ context('Scenarios', () => {
                 curfew_start: '',
                 curfew_end: '',
                 curfew_duration: [],
-                trail_monitoring: '',
-                exclusion_zones: [],
+                trail_monitoring: 'No',
+                exclusion_zones: [
+                  {
+                    description: enforcementZoneDetails.description,
+                    duration: enforcementZoneDetails.duration,
+                    start: formatAsFmsDate(enforcementZoneDetails.startDate),
+                    end: formatAsFmsDate(enforcementZoneDetails.endDate),
+                  },
+                ],
                 inclusion_zones: [],
-                abstinence: 'Yes',
+                abstinence: '',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: fakePrimaryAddress.line1,
-                installation_address_2: fakePrimaryAddress.line2,
-                installation_address_3: fakePrimaryAddress.line3,
-                installation_address_4: fakePrimaryAddress.line4,
-                installation_address_post_code: fakePrimaryAddress.postcode,
+                installation_address_1: '',
+                installation_address_2: '',
+                installation_address_3: '',
+                installation_address_4: '',
+                installation_address_post_code: '',
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
+                pilot: '',
               },
             })
             .should('be.true')
@@ -363,24 +330,14 @@ context('Scenarios', () => {
         // Verify the attachments were sent to the FMS API
         cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 0,
             responseRecordFilename: 'CEMO001',
             httpStatus: 200,
             fileContents: contentAsBase64,
           })
         })
 
-        cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
-          cy.task('verifyFMSAttachmentRequestReceived', {
-            index: 1,
-            responseRecordFilename: 'CEMO001',
-            httpStatus: 200,
-            fileContents: contentAsBase64,
-          })
-        })
-
-        const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-        submitSuccessPage.backToYourApplications.click()
+        const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
+        variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')

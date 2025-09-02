@@ -62,12 +62,7 @@ context('Scenarios', () => {
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties(
-        'Prison',
-        'YJS',
-        'Feltham Young Offender Institution',
-        'London',
-      )
+      const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'London')
 
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
@@ -87,6 +82,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/],
+        curfewAdditionalDetails: 'Curfew address boundary extended to garden',
       }
       const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       const curfewTimetable = curfewNights.flatMap((day: string) => [
@@ -223,7 +219,7 @@ context('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: interestedParties.notifyingOrganisationName,
+                no_name: interestedParties.youthCustodyServiceRegion,
                 no_phone_number: '',
                 offence: '',
                 offence_additional_details: '',
@@ -271,7 +267,7 @@ context('Scenarios', () => {
                 reason_for_order_ending_early: '',
                 business_unit: '',
                 service_end_date: formatAsFmsDate(monitoringConditions.endDate),
-                curfew_description: '',
+                curfew_description: 'Curfew address boundary extended to garden',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 curfew_duration: [

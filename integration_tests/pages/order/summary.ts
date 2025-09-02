@@ -32,6 +32,7 @@ import CurfewAdditionalDetailsPage from './monitoring-conditions/curfew-addition
 import InstallationLocationPage from './monitoring-conditions/installation-location'
 import HavePhotoPage from './attachments/havePhoto'
 import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
+import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -129,8 +130,11 @@ export default class OrderTasksPage extends AppPage {
     enforcementZoneDetails,
     alcoholMonitoringDetails,
     trailMonitoringDetails,
+    attendanceMonitoringDetails,
     files,
     probationDeliveryUnit,
+    installationLocation,
+    installationAppointment,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -144,6 +148,22 @@ export default class OrderTasksPage extends AppPage {
       monitoringConditions,
       probationDeliveryUnit,
     })
+
+    if (installationLocation) {
+      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
+      installationLocationPage.form.fillInWith(installationLocation)
+      installationLocationPage.form.saveAndContinueButton.click()
+
+      if (installationAppointment) {
+        const installationAppointmentPage = Page.verifyOnPage(InstallationAppointmentPage)
+        installationAppointmentPage.form.fillInWith(installationAppointment)
+        installationAppointmentPage.form.saveAndContinueButton.click()
+
+        const installationAddress = Page.verifyOnPage(InstallationAddressPage)
+        installationAddress.form.fillInWith(installationAddressDetails)
+        installationAddress.form.saveAndContinueButton.click()
+      }
+    }
 
     if (curfewReleaseDetails) {
       this.fillInCurfewOrderDetailsWith(
@@ -179,6 +199,15 @@ export default class OrderTasksPage extends AppPage {
         {
           alcoholMonitoringDetails,
           installationAddressDetails,
+        },
+        false,
+      )
+    }
+
+    if (attendanceMonitoringDetails) {
+      this.fillInAttendanceMonitoringDetailsWith(
+        {
+          attendanceMonitoringDetails,
         },
         false,
       )
@@ -565,21 +594,6 @@ export default class OrderTasksPage extends AppPage {
     { alcoholMonitoringDetails, installationAddressDetails },
     checkYourAnswerPage = true,
   ): void {
-    const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-    installationLocationPage.form.fillInWith({ location: 'At a prison' })
-    installationLocationPage.form.saveAndContinueButton.click()
-
-    const installationAppointmentPage = Page.verifyOnPage(InstallationAppointmentPage)
-    installationAppointmentPage.form.fillInWith({
-      placeName: alcoholMonitoringDetails.installLocation,
-      appointmentDate: alcoholMonitoringDetails.startDate,
-    })
-    installationAppointmentPage.form.saveAndContinueButton.click()
-
-    const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-    installationAddress.form.fillInWith(installationAddressDetails)
-    installationAddress.form.saveAndContinueButton.click()
-
     const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
     alcoholMonitoringPage.form.fillInWith(alcoholMonitoringDetails)
     alcoholMonitoringPage.form.saveAndContinueButton.click()
@@ -633,5 +647,19 @@ export default class OrderTasksPage extends AppPage {
     const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
 
     attachmentPage.backToSummaryButton.click()
+  }
+
+  fillInAttendanceMonitoringDetailsWith({ attendanceMonitoringDetails }, checkYourAnswerPage = true): void {
+    const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
+    attendanceMonitoringPage.form.fillInWith(attendanceMonitoringDetails)
+    attendanceMonitoringPage.form.saveAndContinueButton.click()
+
+    if (checkYourAnswerPage) {
+      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        'Check your answer',
+      )
+      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    }
   }
 }
