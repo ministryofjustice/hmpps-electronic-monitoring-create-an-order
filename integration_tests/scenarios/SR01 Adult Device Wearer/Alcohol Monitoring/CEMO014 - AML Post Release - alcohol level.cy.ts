@@ -49,17 +49,12 @@ context('Scenarios', () => {
 
   context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer('CEMO013'),
+      ...createFakeAdultDeviceWearer('CEMO014'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties(
-      'Magistrates Court',
-      'Probation',
-      'Warrington Magistrates Court',
-      'North West',
-    )
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
@@ -73,11 +68,14 @@ context('Scenarios', () => {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       monitoringType: 'Alcohol level',
-      installLocation: `at installation address: ${fakePrimaryAddress}`,
     }
     const installationAndRisk = {
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
+    }
+
+    const installationLocation = {
+      location: `${fakePrimaryAddress.line1}, ${fakePrimaryAddress.line2}, ${fakePrimaryAddress.postcode}`,
     }
 
     it('Should successfully submit the order to the FMS API', () => {
@@ -96,15 +94,17 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: fakePrimaryAddress,
+        installationAddressDetails: undefined,
         alcoholMonitoringDetails,
         files,
         probationDeliveryUnit,
+        installationLocation,
+        installationAppointment: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO013',
+        responseRecordFilename: 'CEMO014',
         httpStatus: 200,
         body: {
           title: '',
@@ -167,7 +167,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO013',
+            responseRecordFilename: 'CEMO014',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -180,7 +180,7 @@ context('Scenarios', () => {
               device_wearer: deviceWearerDetails.fullName,
               enforceable_condition: [
                 {
-                  condition: 'AAMR',
+                  condition: 'AML',
                   start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
                   end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
                 },
@@ -234,9 +234,9 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: 'Standard Determinate Sentence',
-              tag_at_source: 'Yes',
-              tag_at_source_details: `at installation address: ${fakePrimaryAddress}`,
-              date_and_time_installation_will_take_place: formatAsFmsDateTime(alcoholMonitoringDetails.startDate),
+              tag_at_source: 'No',
+              tag_at_source_details: '',
+              date_and_time_installation_will_take_place: '',
               released_under_prarr: 'No',
               pilot: '',
               technical_bail: '',
