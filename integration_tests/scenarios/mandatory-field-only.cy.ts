@@ -346,7 +346,7 @@ context('Mandatory fields only', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
-      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 
@@ -639,7 +639,7 @@ context('Mandatory fields only', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
-      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

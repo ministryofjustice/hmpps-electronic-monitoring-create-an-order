@@ -4,12 +4,10 @@ import { AddressTypeEnum } from '../Address'
 import { Order } from '../Order'
 
 type OrderListViewModel = {
-  orders: Array<{
-    displayName: string
-    status: string
-    type: string
-    summaryUri: string
-  }>
+  orders: {
+    text?: string | null | undefined
+    html?: string
+  }[][]
   variationAsNewOrderEnabled: boolean
 }
 
@@ -47,12 +45,15 @@ const getIdList = (order: Order) => {
   return idList.join('</br>')
 }
 
+const getNameLink = (order: Order) => {
+  return `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} >${getDisplayName(order)}</a>`
+}
+
 const createOrderItem = (order: Order) => {
-  const nameLink = `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} >${getDisplayName(order)}</a>`
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
   return [
     {
-      html: nameLink,
+      html: getNameLink(order),
     },
     {
       text: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : undefined,
@@ -86,13 +87,29 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
 export function constructListViewModel(orders: Array<Order>): OrderListViewModel {
   return {
     orders: orders.map(order => {
-      return {
-        displayName: getDisplayName(order),
-        status: order.status,
-        type: order.type,
-        summaryUri: paths.ORDER.SUMMARY.replace(':orderId', order.id),
-      }
+      return [
+        {
+          html: getNameLink(order),
+        },
+        { html: getStatusTags(order) },
+      ]
     }),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
   }
+}
+
+const getStatusTags = (order: Order): string => {
+  let statusTags = ''
+  if (order.type === 'VARIATION') {
+    statusTags += '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Variation</strong>'
+  }
+  if (order.status === 'IN_PROGRESS') {
+    statusTags += '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>'
+  } else if (order.status === 'ERROR') {
+    statusTags += '<strong class="govuk-tag govuk-tag--red govuk-!-margin-right-2">Failed to submit</strong>'
+  } else if (order.status === 'SUBMITTED') {
+    // Have to handle submitted orders until they are removed from list orders endpoint
+    statusTags += '<strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>'
+  }
+  return statusTags
 }

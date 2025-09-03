@@ -131,6 +131,28 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
       },
       status: 'ERROR',
     },
+    {
+      ...mockApiOrder(),
+      deviceWearer: {
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        homeOfficeReferenceNumber: null,
+        firstName: 'vari',
+        lastName: 'ation',
+        alias: null,
+        dateOfBirth: null,
+        adultAtTimeOfInstallation: null,
+        sex: null,
+        gender: null,
+        disabilities: null,
+        noFixedAbode: null,
+        interpreterRequired: null,
+      },
+      type: 'VARIATION',
+      status: 'IN_PROGRESS',
+    },
   ],
 }
 

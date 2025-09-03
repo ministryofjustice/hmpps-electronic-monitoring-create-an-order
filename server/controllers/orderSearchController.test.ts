@@ -115,18 +115,18 @@ describe('OrderSearchController', () => {
         'pages/index',
         expect.objectContaining({
           orders: [
-            {
-              displayName: 'New form',
-              status: 'IN_PROGRESS',
-              type: 'REQUEST',
-              summaryUri: `/order/${mockDraftOrder.id}/summary`,
-            },
-            {
-              displayName: 'first last',
-              status: 'SUBMITTED',
-              type: 'VARIATION',
-              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
-            },
+            [
+              { html: `<a class="govuk-link" href=/order/${mockDraftOrder.id}/summary >New form</a>` },
+              { html: '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>' },
+            ],
+            [
+              {
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+              },
+              {
+                html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Variation</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>',
+              },
+            ],
           ],
         }),
       )

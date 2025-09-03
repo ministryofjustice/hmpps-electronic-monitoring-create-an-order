@@ -31,10 +31,11 @@ context('Index', () => {
       page.searchFormButton.should('exist')
 
       // Order list
-      page.orders.should('exist').should('have.length', 3)
-      page.SubmittedOrderFor('New form').should('exist')
-      page.DraftOrderFor('test tester').should('exist')
-      page.FailedOrderFor('Failed request').should('exist')
+      page.orders.should('exist').should('have.length', 4)
+      page.TableContains('New form', 'Submitted')
+      page.TableContains('test tester', 'Draft')
+      page.TableContains('Failed request', 'Failed')
+      page.TableContains('vari ation', 'VariationDraft')
 
       // A11y
       page.checkIsAccessible()
@@ -133,7 +134,7 @@ context('Index', () => {
       cy.signIn()
 
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.orders.should('exist').and('have.length', 1)
+      indexPage.ordersList.get('.govuk-table__body').should('not.exist')
       cy.contains('No existing forms found.').should('exist')
     })
   })

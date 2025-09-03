@@ -1,16 +1,10 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import AppPage from './appPage'
 
 import { PageElement } from './page'
 
 export default class IndexPage extends AppPage {
-  protected elementCacheId: string = uuidv4()
-
   constructor() {
-    super('Electronic Monitoring Application forms', '/', 'Existing application forms')
-
-    cy.get('#ordersList', { log: false }).as(`${this.elementCacheId}-orders`)
+    super('Electronic Monitoring Order (EMO) forms', '/', 'Existing application forms')
   }
 
   get newOrderFormButton(): PageElement {
@@ -26,30 +20,23 @@ export default class IndexPage extends AppPage {
   }
 
   get ordersList(): PageElement {
-    return cy.get(`@${this.elementCacheId}-orders`)
+    return cy.get('#ordersList')
   }
 
   get orders(): PageElement {
-    return this.ordersList.get('.govuk-task-list__item')
+    return this.ordersList.get('.govuk-table__body').find('.govuk-table__row')
   }
 
-  SubmittedOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', `${name} Submitted`)
+  OrderFor(name: string): PageElement {
+    return this.ordersList.contains('td', name)
   }
 
-  SubmittedVariationFor(name: string): PageElement {
-    return this.ordersList.contains('li', `${name} Variation Submitted`)
-  }
-
-  IncompleteOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', `${name} Incomplete`)
-  }
-
-  DraftOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', `${name} Draft`)
-  }
-
-  FailedOrderFor(name: string): PageElement {
-    return this.ordersList.contains('li', `${name} Failed to submit`)
+  TableContains(name: string, status: string): PageElement {
+    return this.ordersList
+      .contains('td', name)
+      .parent()
+      .within(() => {
+        cy.get('.govuk-table__cell').contains(status).should('be.visible')
+      })
   }
 }
