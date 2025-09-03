@@ -173,7 +173,7 @@ context.skip('Scenarios', () => {
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       // sentenceType: 'Community YRO',
-      pilot: 'GPS Acquisitive Crime',
+      pilot: 'They are not part of any of these pilots',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -404,7 +404,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
-              pilot: 'GPS Acquisitive Crime Parole',
+              pilot: '',
             },
           })
           .should('be.true')

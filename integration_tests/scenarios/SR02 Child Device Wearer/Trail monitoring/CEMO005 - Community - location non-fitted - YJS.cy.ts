@@ -153,6 +153,7 @@ context('Scenarios', () => {
       // sentenceType: 'Community YRO',
       monitoringRequired: 'Trail monitoring',
       issp: 'Yes',
+      pilot: 'They are not part of any of these pilots',
     }
     const trailMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -256,7 +257,7 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'Requirement of a Community Order',
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
               device_type: '',
@@ -316,7 +317,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: 'Standard Determinate Sentence',
+              sentence_type: 'Detention & Training Order',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',
@@ -352,7 +353,7 @@ context('Scenarios', () => {
               issp: 'Yes',
               hdc: 'No',
               order_status: 'Not Started',
-              pilot: 'GPS Acquisitive Crime Parole',
+              pilot: '',
             },
           })
           .should('be.true')
