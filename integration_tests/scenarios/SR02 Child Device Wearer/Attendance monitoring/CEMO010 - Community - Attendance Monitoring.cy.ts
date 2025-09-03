@@ -66,7 +66,7 @@ context('Scenarios', () => {
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Community',
+        orderType: 'Post Release',
         monitoringRequired: 'Mandatory attendance monitoring',
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Detention and Training Order (DTO)',
@@ -195,7 +195,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'License Condition of a Custodial Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',

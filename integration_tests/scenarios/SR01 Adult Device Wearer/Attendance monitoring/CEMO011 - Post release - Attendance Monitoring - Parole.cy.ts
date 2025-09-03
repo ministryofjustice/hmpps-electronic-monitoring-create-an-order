@@ -60,10 +60,10 @@ context('Scenarios', () => {
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Community',
+      orderType: 'Post Release',
       monitoringRequired: 'Mandatory attendance monitoring',
       pilot: 'They are not part of any of these pilots',
-      sentenceType: 'Standard Determinate Sentence',
+      sentenceType: 'Extended Determinate Sentence',
     }
 
     const attendanceMonitoringOrder = {
@@ -189,7 +189,7 @@ context('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: 'Requirement of a Community Order',
+              condition_type: 'License Condition of a Custodial Order',
               court: '',
               court_order_email: '',
               device_type: '',
@@ -249,7 +249,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: 'Standard Determinate Sentence',
+              sentence_type: 'Extended Determinate Sentence',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',
