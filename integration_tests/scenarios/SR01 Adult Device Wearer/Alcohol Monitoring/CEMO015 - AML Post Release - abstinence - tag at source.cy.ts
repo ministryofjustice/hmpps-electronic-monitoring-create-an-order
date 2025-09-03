@@ -85,7 +85,7 @@ context('Scenarios', () => {
 
     const installationAppointment = {
       placeName: 'mock prison',
-      appointmentDate: alcoholMonitoringDetails.startDate,
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
     const installationAddressDetails = createFakeAddress()
     it('Should successfully submit the order to the FMS API', () => {

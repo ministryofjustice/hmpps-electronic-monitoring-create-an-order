@@ -73,7 +73,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
       monitoringRequired: 'Exclusion zone monitoring',
-      sentenceType: 'Standard Determinate Sentence',
+      sentenceType: 'Imprisonment for Public Protection (IPP)',
       pilot: 'They are not part of any of these pilots',
     }
     const enforcementZoneDetails = {
@@ -243,7 +243,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: 'Standard Determinate Sentence',
+              sentence_type: 'Imprisonment for Public Protection (IPP)',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',

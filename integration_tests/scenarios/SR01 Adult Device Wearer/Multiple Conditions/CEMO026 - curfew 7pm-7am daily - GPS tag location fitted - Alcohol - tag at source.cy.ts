@@ -4,10 +4,10 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import {
-  createFakeYouthDeviceWearer,
+  createFakeAdultDeviceWearer,
   createFakeInterestedParties,
   kelvinCloseAddress,
-  createFakeResponsibleAdult,
+  createFakeAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
@@ -30,7 +30,13 @@ context('Scenarios', () => {
     },
   }
 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
   beforeEach(() => {
+    const testFlags = { TAG_AT_SOURCE_OPTIONS_ENABLED: true }
+    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 
@@ -56,20 +62,20 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer('CEMO023'),
+        ...createFakeAdultDeviceWearer('CEMO026'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
-      const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = kelvinCloseAddress
-      const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'London')
+      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
         issp: 'Yes',
-        sentenceType: 'Detention and Training Order (DTO)',
-        monitoringRequired: ['Curfew', 'Trail monitoring'],
+        sentenceType: 'Standard Determinate Sentence',
+        monitoringRequired: ['Curfew', 'Trail monitoring', 'Alcohol monitoring'],
         pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
@@ -83,13 +89,13 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
         addresses: [/Main address/],
       }
-      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+      const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
       const curfewTimetable = [
         ...curfewNights.flatMap((day: string) => [
           {
             day,
             startTime: '19:00:00',
-            endTime: '07:00:00',
+            endTime: '10:00:00',
             addresses: curfewConditionDetails.addresses,
           },
         ]),
@@ -99,11 +105,26 @@ context('Scenarios', () => {
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       }
 
+      const alcoholMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        monitoringType: 'Alcohol abstinence',
+      }
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
         riskDetails: 'No risk',
       }
 
+      const installationLocation = {
+        location: `At a prison`,
+      }
+
+      const installationAppointment = {
+        placeName: 'mock prison',
+        appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+      }
+
+      const installationAddressDetails = createFakeAddress()
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -114,29 +135,29 @@ context('Scenarios', () => {
         cacheOrderId()
         orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
-          responsibleAdultDetails,
+          responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
           monitoringConditions,
-          installationAddressDetails: fakePrimaryAddress,
+          installationAddressDetails,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
-          alcoholMonitoringDetails: undefined,
+          alcoholMonitoringDetails,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
           attendanceMonitoringDetails: undefined,
           files,
-          probationDeliveryUnit: undefined,
-          installationAppointment: undefined,
-          installationLocation: undefined,
+          probationDeliveryUnit,
+          installationLocation,
+          installationAppointment,
         })
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO023',
+          responseRecordFilename: 'CEMO026',
           httpStatus: 200,
           body: {
             title: '',
@@ -145,7 +166,7 @@ context('Scenarios', () => {
             last_name: deviceWearerDetails.lastName,
             alias: deviceWearerDetails.alias,
             date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
-            adult_child: 'child',
+            adult_child: 'adult',
             sex: deviceWearerDetails.sex
               .replace('Not able to provide this information', 'Prefer Not to Say')
               .replace('Prefer not to say', 'Prefer Not to Say'),
@@ -176,15 +197,15 @@ context('Scenarios', () => {
             mappa: null,
             mappa_case_type: null,
             risk_categories: [],
-            responsible_adult_required: 'true',
-            parent: responsibleAdultDetails.fullName,
+            responsible_adult_required: 'false',
+            parent: '',
             guardian: '',
             parent_address_1: '',
             parent_address_2: '',
             parent_address_3: '',
             parent_address_4: '',
             parent_address_post_code: '',
-            parent_phone_number: formatAsFmsPhoneNumber(responsibleAdultDetails.contactNumber),
+            parent_phone_number: null,
             parent_dob: '',
             pnc_id: deviceWearerDetails.pncId,
             nomis_id: deviceWearerDetails.nomisId,
@@ -199,7 +220,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO023',
+              responseRecordFilename: 'CEMO026',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -220,6 +241,11 @@ context('Scenarios', () => {
                     condition: 'Location Monitoring (Fitted Device)',
                     start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
                     end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
+                  },
+                  {
+                    condition: 'AML',
+                    start_date: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -252,7 +278,7 @@ context('Scenarios', () => {
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: '',
+                pdu_responsible: 'Blackburn',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -270,11 +296,13 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Detention & Training Order',
-                tag_at_source: '',
-                tag_at_source_details: '',
-                date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                sentence_type: 'Standard Determinate Sentence',
+                tag_at_source: 'Yes',
+                tag_at_source_details: 'mock prison',
+                date_and_time_installation_will_take_place: formatAsFmsDateTime(
+                  installationAppointment.appointmentDate,
+                ),
+                released_under_prarr: 'No',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -295,27 +323,37 @@ context('Scenarios', () => {
                       {
                         day: 'Mo',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Tu',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Wed',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Th',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
                       },
                       {
                         day: 'Fr',
                         start: '19:00:00',
-                        end: '07:00:00',
+                        end: '10:00:00',
+                      },
+                      {
+                        day: 'Sa',
+                        start: '19:00:00',
+                        end: '10:00:00',
+                      },
+                      {
+                        day: 'Su',
+                        start: '19:00:00',
+                        end: '10:00:00',
                       },
                     ],
                   },
@@ -323,16 +361,16 @@ context('Scenarios', () => {
                 trail_monitoring: 'Yes',
                 exclusion_zones: [],
                 inclusion_zones: [],
-                abstinence: '',
+                abstinence: 'Yes',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: '',
-                installation_address_2: '',
-                installation_address_3: '',
-                installation_address_4: '',
-                installation_address_post_code: '',
+                installation_address_1: installationAddressDetails.line1,
+                installation_address_2: installationAddressDetails.line2,
+                installation_address_3: installationAddressDetails.line3,
+                installation_address_4: installationAddressDetails.line4,
+                installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'Yes',

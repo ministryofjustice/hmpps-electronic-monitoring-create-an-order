@@ -72,7 +72,7 @@ context('Scenarios', () => {
 
   context('Single exclusion zone ', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer('CEMO012'),
+      ...createFakeAdultDeviceWearer('CEMO016'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
@@ -108,7 +108,7 @@ context('Scenarios', () => {
 
     const installationAppointment = {
       placeName: 'mock prison',
-      appointmentDate: monitoringConditions.startDate,
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
 
     const installationAddressDetails = createFakeAddress()
@@ -144,7 +144,7 @@ context('Scenarios', () => {
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO012',
+        responseRecordFilename: 'CEMO016',
         httpStatus: 200,
         body: {
           title: '',
@@ -207,7 +207,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO012',
+            responseRecordFilename: 'CEMO016',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -325,7 +325,7 @@ context('Scenarios', () => {
       // Verify the attachments were sent to the FMS API
       cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {
-          responseRecordFilename: 'CEMO012',
+          responseRecordFilename: 'CEMO016',
           httpStatus: 200,
           fileContents: contentAsBase64,
         })

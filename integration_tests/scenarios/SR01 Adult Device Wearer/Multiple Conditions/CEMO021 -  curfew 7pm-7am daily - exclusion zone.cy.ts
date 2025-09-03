@@ -51,7 +51,7 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeAdultDeviceWearer('CEMO024'),
+        ...createFakeAdultDeviceWearer('CEMO021'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -94,7 +94,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
-        description: 'Exclusion from park',
+        description: 'Exclusion from The Trafford Centre',
         duration: '90 days',
         anotherZone: 'No',
       }
@@ -136,7 +136,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO024',
+          responseRecordFilename: 'CEMO021',
           httpStatus: 200,
           body: {
             title: '',
@@ -199,7 +199,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO024',
+              responseRecordFilename: 'CEMO021',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,

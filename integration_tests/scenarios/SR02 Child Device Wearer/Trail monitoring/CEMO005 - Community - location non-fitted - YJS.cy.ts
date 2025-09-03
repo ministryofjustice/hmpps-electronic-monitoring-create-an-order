@@ -12,8 +12,7 @@ import {
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-// Skip due to order type community not available
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -149,12 +148,11 @@ context.skip('Scenarios', () => {
     const monitoringConditions = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Community',
-      sentenceType: 'Standard Determinate Sentence',
+      orderType: 'Post Release',
+      sentenceType: 'Detention and Training Order (DTO)',
       // sentenceType: 'Community YRO',
       monitoringRequired: 'Trail monitoring',
       issp: 'Yes',
-      pilot: 'GPS Acquisitive Crime',
     }
     const trailMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days

@@ -3,34 +3,16 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
   createKnownAddress,
 } from '../../../mockApis/faker'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
-import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
-import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
-import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
-import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
-// test disabled as community YRO is not currently a valid sentence type
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -80,10 +62,6 @@ context.skip('Scenarios', () => {
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
       const fakePrimaryAddress = createKnownAddress()
-      const primaryAddressDetails = {
-        ...fakePrimaryAddress,
-        hasAnotherAddress: 'No',
-      }
       const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'North West')
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
@@ -91,7 +69,7 @@ context.skip('Scenarios', () => {
         orderType: 'Community',
         monitoringRequired: 'Mandatory attendance monitoring',
         pilot: 'They are not part of any of these pilots',
-        sentenceType: 'Detention and Training Order',
+        sentenceType: 'Detention and Training Order (DTO)',
         // sentenceType: 'Community YRO',
       }
 
@@ -123,88 +101,30 @@ context.skip('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.aboutTheDeviceWearerTask.click()
-
-        const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-        aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-        aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-        const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
-        responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
-        responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-        identityNumbersPage.form.fillInWith(deviceWearerDetails)
-        identityNumbersPage.form.saveAndContinueButton.click()
-
-        const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(
-          DeviceWearerCheckYourAnswersPage,
-          'Check your answer',
-        )
-        deviceWearerCheckYourAnswersPage.continueButton().click()
-
-        const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-        contactDetailsPage.form.fillInWith(deviceWearerDetails)
-        contactDetailsPage.form.saveAndContinueButton.click()
-
-        const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-        noFixedAbode.form.fillInWith(deviceWearerDetails)
-        noFixedAbode.form.saveAndContinueButton.click()
-
-        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-        primaryAddressPage.form.fillInWith(primaryAddressDetails)
-        primaryAddressPage.form.saveAndContinueButton.click()
-
-        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-        interestedPartiesPage.form.fillInWith(interestedParties)
-        interestedPartiesPage.form.saveAndContinueButton.click()
-
-        const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-          ContactInformationCheckYourAnswersPage,
-          'Check your answer',
-        )
-        contactInformationCheckYourAnswersPage.continueButton().click()
-
-        const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-        installationAndRiskPage.form.fillInWith(installationAndRisk)
-        installationAndRiskPage.form.saveAndContinueButton.click()
-
-        const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
-          InstallationAndRiskCheckYourAnswersPage,
-          'Check your answer',
-        )
-        installationAndRiskCheckYourAnswersPage.continueButton().click()
-
-        const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-        monitoringConditionsPage.form.fillInWith(monitoringConditions)
-        monitoringConditionsPage.form.saveAndContinueButton.click()
-
-        const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
-        attendanceMonitoringPage.form.fillInWith(attendanceMonitoringOrder)
-        attendanceMonitoringPage.form.saveAndContinueButton.click()
-
-        const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-          MonitoringConditionsCheckYourAnswersPage,
-          'Check your answer',
-        )
-        monitoringConditionsCheckYourAnswersPage.continueButton().click()
-
-        const licencePage = Page.verifyOnPage(UploadLicencePage)
-        licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
-        licencePage.form.saveAndContinueButton.click()
-
-        const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
-        havePhotoPage.form.havePhotoField.set('No')
-        havePhotoPage.form.saveAndContinueButton.click()
-
-        const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-        attachmentPage.saveAndReturnButton.click()
-
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        orderSummaryPage.fillInNewOrderWith({
+          deviceWearerDetails,
+          responsibleAdultDetails,
+          primaryAddressDetails: fakePrimaryAddress,
+          secondaryAddressDetails: undefined,
+          interestedParties,
+          installationAndRisk,
+          monitoringConditions,
+          installationAddressDetails: undefined,
+          curfewConditionDetails: undefined,
+          curfewReleaseDetails: undefined,
+          curfewTimetable: undefined,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails: undefined,
+          trailMonitoringDetails: undefined,
+          attendanceMonitoringDetails: attendanceMonitoringOrder,
+          files,
+          probationDeliveryUnit: undefined,
+          installationAppointment: undefined,
+          installationLocation: undefined,
+        })
         orderSummaryPage.submitOrderButton.click()
-
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
           responseRecordFilename: 'CEMO010',
           httpStatus: 200,
@@ -335,7 +255,7 @@ context.skip('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: '',
+                sentence_type: 'Detention & Training Order',
                 // sentence_type: 'Community YRO',
                 tag_at_source: '',
                 tag_at_source_details: '',
