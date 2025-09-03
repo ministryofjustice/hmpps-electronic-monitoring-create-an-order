@@ -111,6 +111,7 @@
             {% endif %}
             {{ govukButton({
               text: "View and download form",
+	      id: "view-and-download-button",
               href: "/order/" + orderId + "/receipt",
               classes: "govuk-button--secondary"
             }) }}
