@@ -684,6 +684,14 @@ context('Order Summary', () => {
       page.submitOrderButton.should('not.exist')
     })
 
+    it('should display the "View and download form" button when variations are enabled', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.viewAndDownloadButton.should('be.visible')
+
+      page.viewAndDownloadButton.should('have.attr', 'href', `/order/${mockOrderId}/receipt`)
+    })
+
     it('should display the "Make changes" button when variations are enabled', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
