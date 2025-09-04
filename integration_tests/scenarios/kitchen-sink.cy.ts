@@ -373,7 +373,7 @@ context('The kitchen sink', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
-      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

@@ -106,7 +106,7 @@ describe('OrderSearchController', () => {
   })
 
   describe('list orders', () => {
-    it('should render a view containing order search results', async () => {
+    it('should render a view containing users orders', async () => {
       mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
 
       await orderController.list(req, res, next)
@@ -116,16 +116,19 @@ describe('OrderSearchController', () => {
         expect.objectContaining({
           orders: [
             {
-              displayName: 'New form',
-              status: 'IN_PROGRESS',
-              type: 'REQUEST',
-              summaryUri: `/order/${mockDraftOrder.id}/summary`,
+              href: `/order/${mockDraftOrder.id}/summary`,
+              index: 0,
+              name: 'Not supplied',
+              statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
             {
-              displayName: 'first last',
-              status: 'SUBMITTED',
-              type: 'VARIATION',
-              summaryUri: `/order/${mockSubmittedOrder.id}/summary`,
+              href: `/order/${mockSubmittedOrder.id}/summary`,
+              index: 1,
+              name: 'first last',
+              statusTags: [
+                { type: 'VARIATION', text: 'Change to form' },
+                { type: 'SUBMITTED', text: 'Submitted' },
+              ],
             },
           ],
         }),
@@ -167,7 +170,7 @@ describe('OrderSearchController', () => {
           orders: [
             [
               {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               { text: '20/11/2000' },
               { html: 'some id number' },
@@ -198,7 +201,7 @@ describe('OrderSearchController', () => {
           orders: [
             [
               {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               { text: '20/11/2000' },
               { html: 'nomisId</br>pncId</br>deliusId</br>hoRefNum</br>prisNum' },

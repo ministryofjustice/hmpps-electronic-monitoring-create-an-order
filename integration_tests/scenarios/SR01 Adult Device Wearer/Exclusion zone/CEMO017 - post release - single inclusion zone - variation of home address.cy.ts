@@ -128,7 +128,7 @@ context('Scenarios', () => {
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
         indexPage.newVariationFormButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -340,7 +340,7 @@ context('Scenarios', () => {
         variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
       })
     },
   )
