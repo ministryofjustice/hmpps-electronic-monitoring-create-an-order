@@ -33,9 +33,13 @@ context('Index', () => {
       // Order list
       page.orders.should('exist').should('have.length', 4)
       page.TableContains('Not supplied', 'Submitted')
+      page.IsAccesible('Not supplied', 0)
       page.TableContains('test tester', 'Draft')
+      page.IsAccesible('test tester', 1)
       page.TableContains('Failed request', 'Failed')
+      page.IsAccesible('Failed request', 2)
       page.TableContains('vari ation', 'Change to formDraft')
+      page.IsAccesible('vari ation', 3)
 
       // A11y
       page.checkIsAccessible()

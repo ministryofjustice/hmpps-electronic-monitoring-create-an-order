@@ -39,4 +39,8 @@ export default class IndexPage extends AppPage {
         cy.get('.govuk-table__cell').contains(status).should('be.visible')
       })
   }
+
+  IsAccesible(name: string, index: number): PageElement {
+    return this.OrderFor(name).children().first().should('have.attr', 'aria-describedby', `order-${index}-status`)
+  }
 }
