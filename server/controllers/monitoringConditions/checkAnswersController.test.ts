@@ -129,23 +129,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What is the order type?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the order type?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
               text: 'What pilot project is the device wearer part of?',
             },
             value: {
@@ -493,23 +476,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'What is the order type?',
-            },
-            value: {
-              text: 'Pre-Trial',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the order type?',
-                },
-              ],
-            },
-          },
+
           {
             key: {
               text: 'What pilot project is the device wearer part of?',
@@ -1382,23 +1349,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the order type?',
-            },
-            value: {
-              text: 'Pre-Trial',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the order type?',
                 },
               ],
             },
