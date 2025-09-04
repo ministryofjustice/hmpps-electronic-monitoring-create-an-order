@@ -116,12 +116,12 @@ describe('OrderSearchController', () => {
         expect.objectContaining({
           orders: [
             [
-              { html: `<a class="govuk-link" href=/order/${mockDraftOrder.id}/summary >New form</a>` },
+              { html: `<a class="govuk-link" href=/order/${mockDraftOrder.id}/summary>Not supplied</a>` },
               { html: '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>' },
             ],
             [
               {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               {
                 html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>',
@@ -167,7 +167,7 @@ describe('OrderSearchController', () => {
           orders: [
             [
               {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               { text: '20/11/2000' },
               { html: 'some id number' },
@@ -198,7 +198,7 @@ describe('OrderSearchController', () => {
           orders: [
             [
               {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
+                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               { text: '20/11/2000' },
               { html: 'nomisId</br>pncId</br>deliusId</br>hoRefNum</br>prisNum' },

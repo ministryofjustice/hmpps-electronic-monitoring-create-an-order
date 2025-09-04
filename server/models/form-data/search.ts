@@ -24,11 +24,7 @@ export type OrderSearchViewModel = {
 
 function getDisplayName(order: Order): string {
   if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
-    if (order.type === 'VARIATION') {
-      return 'New variation'
-    }
-
-    return 'New form'
+    return 'Not supplied'
   }
 
   return `${order.deviceWearer.firstName || ''} ${order.deviceWearer.lastName || ''}`
@@ -46,7 +42,7 @@ const getIdList = (order: Order) => {
 }
 
 const getNameLink = (order: Order) => {
-  return `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)} >${getDisplayName(order)}</a>`
+  return `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)}>${getDisplayName(order)}</a>`
 }
 
 const createOrderItem = (order: Order) => {

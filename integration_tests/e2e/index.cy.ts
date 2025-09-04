@@ -32,7 +32,7 @@ context('Index', () => {
 
       // Order list
       page.orders.should('exist').should('have.length', 4)
-      page.TableContains('New form', 'Submitted')
+      page.TableContains('Not supplied', 'Submitted')
       page.TableContains('test tester', 'Draft')
       page.TableContains('Failed request', 'Failed')
       page.TableContains('vari ation', 'Change to formDraft')
@@ -135,7 +135,7 @@ context('Index', () => {
 
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList.get('.govuk-table__body').should('not.exist')
-      cy.contains('No existing forms found.').should('exist')
+      cy.contains('You have no draft forms').should('exist')
     })
   })
 })

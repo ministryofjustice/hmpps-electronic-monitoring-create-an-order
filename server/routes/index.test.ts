@@ -104,7 +104,7 @@ describe('authorised user', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Electronic Monitoring Order (EMO) forms')
-          expect(res.text).toContain('No existing forms found.')
+          expect(res.text).toContain('You have no draft forms')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
             correlationId: expect.any(String),
