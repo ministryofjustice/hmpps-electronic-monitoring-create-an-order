@@ -6,11 +6,12 @@
 {%- from "moj/components/search/macro.njk" import mojSearch -%}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block content %}
   {{ mojPageHeaderActions({
     heading: {
-      text: 'Electronic Monitoring Application forms'
+      text: 'Electronic Monitoring Order (EMO) forms'
     } })
   }}
 
@@ -81,46 +82,62 @@
 
   <h2>Existing application forms</h2>
 
-  <p class="govuk-body">Edit or view saved application forms.</p>
+  {% set tableRows = [] %}
+  {% for order in orders %}
+    {% set name %}
+      <a class="govuk-link" aria-describedby="order-{{ order.index }}-status" href="{{ order.href }}">
+        {{ order.name }}
+      </a>
+    {% endset %}
+    
+    {% set status %}
+      <div id="order-{{order.index}}-status">
+        {% for tag in order.statusTags %}
+	  {% if tag.type == 'VARIATION' %}
+	    {% set colour = "blue" %}
+	  {% elif tag.type == 'SUBMITTED' %}
+	    {% set colour = "green" %}
+	  {% elif tag.type == 'FAILED' %}
+	    {% set colour = "red" %}
+	  {% elif tag.type == 'DRAFT' %}
+	    {% set colour = "grey" %}
+	  {% endif %}
+
+          <strong class="govuk-tag govuk-tag--{{ colour }} govuk-!-margin-right-2">{{ tag.text }}</strong>
+        {% endfor %}
+      </div>
+    {% endset %}
+
+    {% set row = [
+      {
+        html: name
+      }, {
+        html: status
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(row), tableRows) %}
+  {% endfor %}
 
   <div id="ordersList">
-    <ul class="govuk-task-list">
-      {% if orders.length == 0 %}
-        <li class="govuk-task-list__item govuk-task-list__item--with-link">
-          No existing forms found.
-        </li>
-      {% endif %}
+    {% if orders.length > 0 %}
+      {{ govukTable ({
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Name"
+        },
+        {
+          text: "Status"
+        }
+      ],
+      rows: tableRows
+    })}}
+    {% endif %}
 
-      {% for order in orders %}
-        <li class="govuk-task-list__item govuk-task-list__item--with-link">
-          <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link" href="{{ order.summaryUri }}" aria-describedby="company-details-1-status">
-              {{ order.displayName }}
-            </a>
-          </div>
-          <div class="govuk-task-list__status">
-            {% if order.type == 'VARIATION' %}
-              <strong class="govuk-tag govuk-tag--blue">
-                Variation
-              </strong>
-            {% endif %}
-            {% if order.status == 'SUBMITTED' %}
-              <strong class="govuk-tag govuk-tag--green">
-                Submitted
-              </strong>
-            {% elif order.status == 'ERROR' %}
-              <strong class="govuk-tag govuk-tag--red">
-                Failed to submit
-              </strong>            
-            {% else %}
-              <strong class="govuk-tag govuk-tag--grey">
-                Draft
-              </strong>
-            {% endif %}
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
+    {% if orders.length == 0 %}
+      <p class="govuk-body">You have no draft forms</p>
+    {% endif %}
   </div>
 
   {# {{ pagination | safe }} #}
