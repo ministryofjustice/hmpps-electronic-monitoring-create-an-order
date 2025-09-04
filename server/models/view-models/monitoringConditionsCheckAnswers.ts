@@ -87,7 +87,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
 
-  return [createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri, answerOpts)]
+  return [createAddressAnswer(content.pages.installationAddress.title, installationAddress, uri, answerOpts)]
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
@@ -332,7 +332,7 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 
   const { questions } = content.pages.installationAppointment
 
-  if (!order.installationAppointment) {
+  if (!order.installationAppointment || order.installationLocation?.location === 'PRIMARY') {
     return []
   }
   return [
