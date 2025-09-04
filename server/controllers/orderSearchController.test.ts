@@ -115,22 +115,21 @@ describe('OrderSearchController', () => {
         'pages/index',
         expect.objectContaining({
           orders: [
-            [
-              {
-                html: `<a class="govuk-link" aria-describedby="order-0-status" href=/order/${mockDraftOrder.id}/summary>Not supplied</a>`,
-              },
-              {
-                html: '<div id="order-0-status"><strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong></div>',
-              },
-            ],
-            [
-              {
-                html: `<a class="govuk-link" aria-describedby="order-1-status" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
-              },
-              {
-                html: '<div id="order-1-status"><strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong></div>',
-              },
-            ],
+            {
+              href: `/order/${mockDraftOrder.id}/summary`,
+              index: 0,
+              name: 'Not supplied',
+              statusTags: [{ colour: 'grey', text: 'Draft' }],
+            },
+            {
+              href: `/order/${mockSubmittedOrder.id}/summary`,
+              index: 1,
+              name: 'first last',
+              statusTags: [
+                { colour: 'blue', text: 'Change to form' },
+                { colour: 'green', text: 'Submitted' },
+              ],
+            },
           ],
         }),
       )

@@ -5,9 +5,11 @@ import { Order } from '../Order'
 
 type OrderListViewModel = {
   orders: {
-    text?: string | null | undefined
-    html?: string
-  }[][]
+    name: string
+    href: string
+    statusTags: { text: string; colour: string }[]
+    index: number
+  }[]
   variationAsNewOrderEnabled: boolean
 }
 
@@ -41,10 +43,7 @@ const getIdList = (order: Order) => {
   return idList.join('</br>')
 }
 
-const getNameLink = (order: Order, index?: number) => {
-  if (index !== undefined) {
-    return `<a class="govuk-link" aria-describedby="order-${index}-status" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)}>${getDisplayName(order)}</a>`
-  }
+const getNameLink = (order: Order) => {
   return `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)}>${getDisplayName(order)}</a>`
 }
 
@@ -85,30 +84,31 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
 
 export function constructListViewModel(orders: Array<Order>): OrderListViewModel {
   return {
-    orders: orders.map((order, i) => {
-      return [
-        {
-          html: getNameLink(order, i),
-        },
-        { html: getStatusTags(order, i) },
-      ]
-    }),
+    orders: orders.map((order, index) => ({
+      name: getDisplayName(order),
+      href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
+      statusTags: getStatusTags(order),
+      index,
+    })),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
   }
 }
 
-const getStatusTags = (order: Order, index: number): string => {
-  let statusTags = ''
+const getStatusTags = (order: Order) => {
+  const statusTags = []
+
   if (order.type === 'VARIATION') {
-    statusTags += `<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong>`
+    statusTags.push({ text: 'Change to form', colour: 'blue' })
   }
+
   if (order.status === 'IN_PROGRESS') {
-    statusTags += `<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>`
+    statusTags.push({ text: 'Draft', colour: 'grey' })
   } else if (order.status === 'ERROR') {
-    statusTags += `<strong class="govuk-tag govuk-tag--red govuk-!-margin-right-2">Failed to submit</strong>`
+    statusTags.push({ text: 'Failed to submit', colour: 'red' })
   } else if (order.status === 'SUBMITTED') {
     // Have to handle submitted orders until they are removed from list orders endpoint
-    statusTags += `<strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>`
+    statusTags.push({ text: 'Submitted', colour: 'green' })
   }
-  return `<div id="order-${index}-status">${statusTags}</div>`
+
+  return statusTags
 }

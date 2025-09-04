@@ -38,7 +38,7 @@ context('Index', () => {
       page.IsAccesible('test tester', 1)
       page.TableContains('Failed request', 'Failed')
       page.IsAccesible('Failed request', 2)
-      page.TableContains('vari ation', 'Change to formDraft')
+      page.TableContains('vari ation', 'Change to form Draft')
       page.IsAccesible('vari ation', 3)
 
       // A11y
