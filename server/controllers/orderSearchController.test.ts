@@ -120,7 +120,7 @@ describe('OrderSearchController', () => {
                 html: `<a class="govuk-link" aria-describedby="order-0-status" href=/order/${mockDraftOrder.id}/summary>Not supplied</a>`,
               },
               {
-                html: '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2" id="order-0-status">Draft</strong>',
+                html: '<div id="order-0-status"><strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong></div>',
               },
             ],
             [
@@ -128,7 +128,7 @@ describe('OrderSearchController', () => {
                 html: `<a class="govuk-link" aria-describedby="order-1-status" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               {
-                html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2" id="order-1-status">Submitted</strong>',
+                html: '<div id="order-1-status"><strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong></div>',
               },
             ],
           ],

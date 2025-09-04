@@ -103,12 +103,12 @@ const getStatusTags = (order: Order, index: number): string => {
     statusTags += `<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong>`
   }
   if (order.status === 'IN_PROGRESS') {
-    statusTags += `<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2" id="order-${index}-status">Draft</strong>`
+    statusTags += `<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>`
   } else if (order.status === 'ERROR') {
-    statusTags += `<strong class="govuk-tag govuk-tag--red govuk-!-margin-right-2" id="order-${index}-status">Failed to submit</strong>`
+    statusTags += `<strong class="govuk-tag govuk-tag--red govuk-!-margin-right-2">Failed to submit</strong>`
   } else if (order.status === 'SUBMITTED') {
     // Have to handle submitted orders until they are removed from list orders endpoint
-    statusTags += `<strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2" id="order-${index}-status">Submitted</strong>`
+    statusTags += `<strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>`
   }
-  return statusTags
+  return `<div id="order-${index}-status">${statusTags}</div>`
 }

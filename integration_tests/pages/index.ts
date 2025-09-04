@@ -40,7 +40,13 @@ export default class IndexPage extends AppPage {
       })
   }
 
-  IsAccesible(name: string, index: number): PageElement {
-    return this.OrderFor(name).children().first().should('have.attr', 'aria-describedby', `order-${index}-status`)
+  IsAccesible(name: string, index: number) {
+    const expectedId = `order-${index}-status`
+    this.OrderFor(name).find('a').should('have.attr', 'aria-describedby', expectedId)
+    this.OrderFor(name)
+      .parent()
+      .within(() => {
+        cy.get(`#${expectedId}`).should('exist')
+      })
   }
 }
