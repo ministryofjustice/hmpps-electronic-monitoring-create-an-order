@@ -119,15 +119,15 @@ describe('OrderSearchController', () => {
               href: `/order/${mockDraftOrder.id}/summary`,
               index: 0,
               name: 'Not supplied',
-              statusTags: [{ colour: 'grey', text: 'Draft' }],
+              statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
             {
               href: `/order/${mockSubmittedOrder.id}/summary`,
               index: 1,
               name: 'first last',
               statusTags: [
-                { colour: 'blue', text: 'Change to form' },
-                { colour: 'green', text: 'Submitted' },
+                { type: 'VARIATION', text: 'Change to form' },
+                { type: 'SUBMITTED', text: 'Submitted' },
               ],
             },
           ],

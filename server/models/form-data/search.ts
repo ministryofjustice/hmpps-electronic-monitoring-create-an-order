@@ -7,7 +7,7 @@ type OrderListViewModel = {
   orders: {
     name: string
     href: string
-    statusTags: { text: string; colour: string }[]
+    statusTags: { text: string; type: string }[]
     index: number
   }[]
   variationAsNewOrderEnabled: boolean
@@ -98,16 +98,16 @@ const getStatusTags = (order: Order) => {
   const statusTags = []
 
   if (order.type === 'VARIATION') {
-    statusTags.push({ text: 'Change to form', colour: 'blue' })
+    statusTags.push({ text: 'Change to form', type: 'VARIATION' })
   }
 
   if (order.status === 'IN_PROGRESS') {
-    statusTags.push({ text: 'Draft', colour: 'grey' })
+    statusTags.push({ text: 'Draft', type: 'DRAFT' })
   } else if (order.status === 'ERROR') {
-    statusTags.push({ text: 'Failed to submit', colour: 'red' })
+    statusTags.push({ text: 'Failed to submit', type: 'FAILED' })
   } else if (order.status === 'SUBMITTED') {
     // Have to handle submitted orders until they are removed from list orders endpoint
-    statusTags.push({ text: 'Submitted', colour: 'green' })
+    statusTags.push({ text: 'Submitted', type: 'SUBMITTED' })
   }
 
   return statusTags

@@ -93,7 +93,17 @@
     {% set status %}
       <div id="order-{{order.index}}-status">
         {% for tag in order.statusTags %}
-          <strong class="govuk-tag govuk-tag--{{ tag.colour }} govuk-!-margin-right-2">{{ tag.text }}</strong>
+	  {% if tag.type == 'VARIATION' %}
+	    {% set colour = "blue" %}
+	  {% elif tag.type == 'SUBMITTED' %}
+	    {% set colour = "green" %}
+	  {% elif tag.type == 'FAILED' %}
+	    {% set colour = "red" %}
+	  {% elif tag.type == 'DRAFT' %}
+	    {% set colour = "grey" %}
+	  {% endif %}
+
+          <strong class="govuk-tag govuk-tag--{{ colour }} govuk-!-margin-right-2">{{ tag.text }}</strong>
         {% endfor %}
       </div>
     {% endset %}
