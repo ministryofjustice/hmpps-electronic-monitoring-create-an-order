@@ -35,7 +35,7 @@ context('Index', () => {
       page.TableContains('New form', 'Submitted')
       page.TableContains('test tester', 'Draft')
       page.TableContains('Failed request', 'Failed')
-      page.TableContains('vari ation', 'VariationDraft')
+      page.TableContains('vari ation', 'Change to formDraft')
 
       // A11y
       page.checkIsAccessible()

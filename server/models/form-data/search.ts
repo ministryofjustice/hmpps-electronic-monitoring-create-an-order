@@ -101,7 +101,7 @@ export function constructListViewModel(orders: Array<Order>): OrderListViewModel
 const getStatusTags = (order: Order): string => {
   let statusTags = ''
   if (order.type === 'VARIATION') {
-    statusTags += '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Variation</strong>'
+    statusTags += '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong>'
   }
   if (order.status === 'IN_PROGRESS') {
     statusTags += '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>'

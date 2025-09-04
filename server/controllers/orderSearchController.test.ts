@@ -124,7 +124,7 @@ describe('OrderSearchController', () => {
                 html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary >first last</a>`,
               },
               {
-                html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Variation</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>',
+                html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>',
               },
             ],
           ],
