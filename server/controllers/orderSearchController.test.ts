@@ -106,7 +106,7 @@ describe('OrderSearchController', () => {
   })
 
   describe('list orders', () => {
-    it('should render a view containing order search results', async () => {
+    it('should render a view containing users orders', async () => {
       mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
 
       await orderController.list(req, res, next)
@@ -116,15 +116,19 @@ describe('OrderSearchController', () => {
         expect.objectContaining({
           orders: [
             [
-              { html: `<a class="govuk-link" href=/order/${mockDraftOrder.id}/summary>Not supplied</a>` },
-              { html: '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2">Draft</strong>' },
+              {
+                html: `<a class="govuk-link" aria-describedby="order-0-status" href=/order/${mockDraftOrder.id}/summary>Not supplied</a>`,
+              },
+              {
+                html: '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-right-2" id="order-0-status">Draft</strong>',
+              },
             ],
             [
               {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
+                html: `<a class="govuk-link" aria-describedby="order-1-status" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
               },
               {
-                html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2">Submitted</strong>',
+                html: '<strong class="govuk-tag govuk-tag--blue govuk-!-margin-right-2">Change to form</strong><strong class="govuk-tag govuk-tag--green govuk-!-margin-right-2" id="order-1-status">Submitted</strong>',
               },
             ],
           ],
