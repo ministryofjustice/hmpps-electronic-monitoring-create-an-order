@@ -40,49 +40,8 @@
     </div>
   </form>
 
-  {% if next != 0 %}
-    {% set nextButton = { text: 'Next', href: ''} %}
-  {% endif %}
-
-  {% set pagination %}
-    {{ mojPagination({
-    items: [{
-      text: '1',
-      href: '/page=1',
-      selected: true
-    }, {
-      text: '2',
-      href: '/page=2'
-
-    }, {
-      text: '3',
-      href: '/page=3'
-    }, {
-      type: 'dots'
-    }, {
-      text: '5',
-      href: '/page=5'
-    }],
-    results: {
-      count: 30,
-      from: 10,
-      to: 20,
-      text: 'pages'
-    },
-    previous: {
-      text: 'Previous',
-      href: ''
-    },
-    next: {
-      text: 'Next',
-      href: ''
-    }
-  }) }}
-  {% endset %}
-
   <h2>Existing application forms</h2>
 
   {% include "./orderList.njk" %}
 
-  {# {{ pagination | safe }} #}
 {% endblock %}
