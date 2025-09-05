@@ -121,18 +121,21 @@
 
   <div id="ordersList">
     {% if orders.length > 0 %}
-      {{ govukTable ({
-      firstCellIsHeader: false,
-      head: [
-        {
-          text: "Name"
-        },
-        {
-          text: "Status"
-        }
-      ],
-      rows: tableRows
-    })}}
+      {{
+        govukTable ({
+          firstCellIsHeader: false,
+          head: [
+            {
+              text: "Name",
+              classes: "govuk-!-width-two-thirds"
+            },
+            {
+              text: "Status"
+            }
+          ],
+          rows: tableRows
+        })
+      }}
     {% endif %}
 
     {% if orders.length == 0 %}
