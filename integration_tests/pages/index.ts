@@ -27,6 +27,15 @@ export default class IndexPage extends AppPage {
     return this.ordersList.get('.govuk-table__body').find('.govuk-table__row')
   }
 
+  HasTab(name: string): PageElement {
+    return cy
+      .get('.govuk-tabs__list')
+      .children()
+      .within(() => {
+        cy.get('.govuk-tabs__tab').contains(name)
+      })
+  }
+
   OrderFor(name: string): PageElement {
     return this.ordersList.contains('td', name)
   }

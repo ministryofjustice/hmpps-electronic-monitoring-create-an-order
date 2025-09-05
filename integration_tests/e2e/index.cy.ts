@@ -30,6 +30,9 @@ context('Index', () => {
       page.newVariationFormButton.should('exist')
       page.searchFormButton.should('exist')
 
+      // Tabs
+      page.HasTab('Your draft forms')
+
       // Order list
       page.orders.should('exist').should('have.length', 4)
       page.TableContains('Not supplied', 'Submitted')
