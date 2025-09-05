@@ -75,7 +75,7 @@ context('Check your answers', () => {
         'What pilot project is the device wearer part of?',
         'GPS Acquisitive Crime',
       )
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewOnDayOfReleaseSection.shouldHaveItems([
         { key: 'What date is the device wearer released from custody?', value: '11/05/2025' },
@@ -125,7 +125,7 @@ context('Check your answers', () => {
           value: '10 Downing Street, London, SW1A 2AB',
         },
       ])
-      page.installationAddressSection().should('not.exist')
+      page.installationAddressSection().shouldNotExist()
     })
 
     it('shows installation location - Prison', () => {
@@ -148,7 +148,7 @@ context('Check your answers', () => {
         .shouldHaveItems([
           { key: 'Where will installation of the electronic monitoring device take place?', value: 'At a prison' },
         ])
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
     })
 
     it('shows installation location - Probation Office', () => {
@@ -172,7 +172,7 @@ context('Check your answers', () => {
           value: 'At a probation office',
         },
       ])
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
     })
 
     it('shows installation location - INSTALLATION', () => {
@@ -196,7 +196,7 @@ context('Check your answers', () => {
           value: 'At another address',
         },
       ])
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
     })
 
     it('shows installation appointment', () => {
@@ -232,7 +232,44 @@ context('Check your answers', () => {
           value: '10:30',
         },
       ])
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
+    })
+
+    it('shows installation address', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: 'Mock Prison',
+              addressLine2: 'Mock City',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
+          installationLocation: {
+            location: 'PRISON',
+          },
+          installationAppointment: {
+            placeName: 'Mock Prison',
+            appointmentDate: '2025-02-01T10:30:00Z',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationAddressSection().shouldExist()
+      page.installationAddressSection().shouldHaveItems([
+        {
+          key: 'At what address will installation of the electronic monitoring device take place?',
+          value: 'Mock Prison, Mock City, SW1A 2AB',
+        },
+      ])
     })
 
     it('shows correct buttons', () => {
@@ -309,7 +346,7 @@ context('Check your answers', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.monitoringConditionsSection.shouldExist()
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
       page.curfewTimetableSection().should('exist')
@@ -400,7 +437,7 @@ context('Check your answers', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.monitoringConditionsSection.shouldExist()
-      page.installationAddressSection().should('exist')
+      page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
       page.curfewTimetableSection().should('exist')
