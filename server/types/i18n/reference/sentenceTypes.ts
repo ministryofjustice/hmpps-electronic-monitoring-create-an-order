@@ -9,6 +9,7 @@ type SentenceTypes = ReferenceData<
   | 'SECTION_85_EXTENDED_SENTENCES'
   | 'STANDARD_DETERMINATE_SENTENCE'
   | 'DTO'
+  | 'SECTION_91'
 >
 
 export default SentenceTypes
