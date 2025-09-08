@@ -4,7 +4,7 @@ import { PageElement } from './page'
 
 export default class IndexPage extends AppPage {
   constructor() {
-    super('Electronic Monitoring Order (EMO) forms', '/', 'Existing application forms')
+    super('Electronic Monitoring Order (EMO) forms', '/')
   }
 
   get newOrderFormButton(): PageElement {

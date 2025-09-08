@@ -1,14 +1,17 @@
 {% extends "../partials/layout.njk" %}
-
 {% set pageTitle = applicationName + " - Search" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../components/search/macro.njk" import search %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
-
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% block content %}
-    {% set submittedActive = true %}
-    {% include "./formsNav.njk" %}
-    {% include "./searchList.njk" %}
+  {{ mojPageHeaderActions({
+    heading: {
+      text: 'Electronic Monitoring Order (EMO) forms'
+    }
+  }) }}
+  {% set submittedActive = true %}
+  {% include "./formsNav.njk" %}
+  {% include "./searchList.njk" %}
 {% endblock %}
-
