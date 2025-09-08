@@ -57,6 +57,9 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = kelvinCloseAddress
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+      interestedParties.responsibleOfficerContactNumber = '01914980881'
+      interestedParties.responsibleOrganisationEmailAddress = 'responsible-org@example.com'
+      interestedParties.responsibleOfficerName = 'Darin Murphy'
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
@@ -64,7 +67,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Exclusion zone monitoring'],
+        monitoringRequired: ['Curfew', 'Trail monitoring'],
         hdc: 'Yes',
       }
       const curfewReleaseDetails = {
@@ -89,14 +92,9 @@ context('Scenarios', () => {
           },
         ]),
       ]
-      const enforcementZoneDetails = {
-        zoneType: 'Exclusion zone',
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
-        uploadFile: files.licence,
-        description: 'Exclusion from The Trafford Centre',
-        duration: '90 days',
-        anotherZone: 'No',
+      const trailMonitoringDetails = {
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       }
 
       const installationAndRisk = {
@@ -121,8 +119,8 @@ context('Scenarios', () => {
           installationAndRisk,
           monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
-          trailMonitoringDetails: undefined,
-          enforcementZoneDetails,
+          trailMonitoringDetails,
+          enforcementZoneDetails: undefined,
           alcoholMonitoringDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
@@ -217,9 +215,9 @@ context('Scenarios', () => {
                     end_date: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                   },
                   {
-                    condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                    condition: 'Location Monitoring (Fitted Device)',
+                    start_date: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -330,15 +328,8 @@ context('Scenarios', () => {
                     ],
                   },
                 ],
-                trail_monitoring: 'No',
-                exclusion_zones: [
-                  {
-                    description: enforcementZoneDetails.description,
-                    duration: enforcementZoneDetails.duration,
-                    start: formatAsFmsDate(enforcementZoneDetails.startDate),
-                    end: formatAsFmsDate(enforcementZoneDetails.endDate),
-                  },
-                ],
+                trail_monitoring: 'Yes',
+                exclusion_zones: [],
                 inclusion_zones: [],
                 abstinence: '',
                 schedule: '',

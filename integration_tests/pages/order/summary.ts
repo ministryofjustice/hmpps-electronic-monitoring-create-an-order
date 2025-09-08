@@ -33,6 +33,7 @@ import InstallationLocationPage from './monitoring-conditions/installation-locat
 import HavePhotoPage from './attachments/havePhoto'
 import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
 import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
+import TertiaryAddressPage from './contact-information/tertiary-adddress'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -135,6 +136,7 @@ export default class OrderTasksPage extends AppPage {
     probationDeliveryUnit,
     installationLocation,
     installationAppointment,
+    tertiaryAddressDetails = undefined,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -147,6 +149,7 @@ export default class OrderTasksPage extends AppPage {
       installationAndRisk,
       monitoringConditions,
       probationDeliveryUnit,
+      tertiaryAddressDetails,
     })
 
     if (installationLocation) {
@@ -476,6 +479,7 @@ export default class OrderTasksPage extends AppPage {
     installationAndRisk,
     monitoringConditions,
     probationDeliveryUnit,
+    tertiaryAddressDetails = undefined,
   }): void {
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
     aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -512,9 +516,17 @@ export default class OrderTasksPage extends AppPage {
       const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage)
       secondaryAddressPage.form.fillInWith({
         ...secondaryAddressDetails,
-        hasAnotherAddress: 'No',
+        hasAnotherAddress: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
       })
       secondaryAddressPage.form.saveAndContinueButton.click()
+    }
+
+    if (tertiaryAddressDetails !== undefined) {
+      const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage)
+      tertiaryAddressPage.form.fillInWith({
+        ...tertiaryAddressDetails,
+      })
+      tertiaryAddressPage.form.saveAndContinueButton.click()
     }
 
     const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)

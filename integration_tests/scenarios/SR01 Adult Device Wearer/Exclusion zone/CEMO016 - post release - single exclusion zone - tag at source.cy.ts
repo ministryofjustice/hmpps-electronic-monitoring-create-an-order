@@ -6,8 +6,9 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import {
   createFakeAdultDeviceWearer,
   createFakeInterestedParties,
-  createKnownAddress,
   createFakeAddress,
+  Address,
+  kelvinCloseAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 
@@ -76,7 +77,9 @@ context('Scenarios', () => {
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
-    const fakePrimaryAddress = createKnownAddress()
+    const fakePrimaryAddress = kelvinCloseAddress
+    const fakeSecondaryAddress = new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA')
+    const fakeTertiaryAddress = new Address('2 Dunlin Close', 'Bolton', 'Greater Manchester', '', 'BL2 1EW')
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
@@ -124,7 +127,7 @@ context('Scenarios', () => {
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails: fakePrimaryAddress,
-        secondaryAddressDetails: undefined,
+        secondaryAddressDetails: fakeSecondaryAddress,
         interestedParties,
         installationAndRisk,
         monitoringConditions,
@@ -140,6 +143,7 @@ context('Scenarios', () => {
         probationDeliveryUnit,
         installationLocation,
         installationAppointment,
+        tertiaryAddressDetails: fakeTertiaryAddress,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -167,16 +171,16 @@ context('Scenarios', () => {
           address_3: fakePrimaryAddress.line3,
           address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
-          secondary_address_1: '',
-          secondary_address_2: '',
-          secondary_address_3: '',
-          secondary_address_4: '',
-          secondary_address_post_code: '',
-          tertiary_address_1: '',
-          tertiary_address_2: '',
-          tertiary_address_3: '',
-          tertiary_address_4: '',
-          tertiary_address_post_code: '',
+          secondary_address_1: fakeSecondaryAddress.line1,
+          secondary_address_2: fakeSecondaryAddress.line2 === '' ? 'N/A' : fakeSecondaryAddress.line2,
+          secondary_address_3: fakeSecondaryAddress.line3,
+          secondary_address_4: fakeSecondaryAddress.line4 === '' ? 'N/A' : fakeSecondaryAddress.line4,
+          secondary_address_post_code: fakeSecondaryAddress.postcode,
+          tertiary_address_1: fakeTertiaryAddress.line1,
+          tertiary_address_2: fakeTertiaryAddress.line2 === '' ? 'N/A' : fakeTertiaryAddress.line2,
+          tertiary_address_3: fakeTertiaryAddress.line3,
+          tertiary_address_4: fakeTertiaryAddress.line4 === '' ? 'N/A' : fakeTertiaryAddress.line4,
+          tertiary_address_post_code: fakeTertiaryAddress.postcode,
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
