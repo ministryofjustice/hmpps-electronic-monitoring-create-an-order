@@ -5,13 +5,19 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+
 {% block content %}
   {{ mojPageHeaderActions({
     heading: {
       text: 'Electronic Monitoring Order (EMO) forms'
     }
   }) }}
+
+  {% set csrfToken = csrfToken %}
+  {% include "./createOrderButtons.njk"%}
+
   {% set submittedActive = true %}
   {% include "./formsNav.njk" %}
+
   {% include "./searchList.njk" %}
 {% endblock %}

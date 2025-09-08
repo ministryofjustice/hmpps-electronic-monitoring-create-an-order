@@ -11,6 +11,14 @@ export default class SearchPage extends AppPage {
     super('Electronic Monitoring Order (EMO) forms', '/search')
   }
 
+  get newOrderFormButton(): PageElement {
+    return cy.contains('Start new form')
+  }
+
+  get newVariationFormButton(): PageElement {
+    return cy.contains('Change submitted form')
+  }
+
   get searchButton(): PageElement {
     return cy.get('.govuk-button').contains('Search')
   }
