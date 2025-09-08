@@ -7,17 +7,8 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
 {% block content %}
-  {{ mojSubNavigation({
-  label: "Sub navigation",
-  items: [{
-    text: "Draft forms",
-    href: "/"
-  },{
-    text: "Submitted forms",
-    href: "/search",
-    active: true
-  }]
-}) }}
-	{% include "./searchList.njk" %}
+    {% set submittedActive = true %}
+    {% include "./formsNav.njk" %}
+    {% include "./searchList.njk" %}
 {% endblock %}
 

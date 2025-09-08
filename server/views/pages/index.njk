@@ -38,18 +38,8 @@
 
   <h2>Existing application forms</h2>
 
-  {{ mojSubNavigation({
-  label: "Sub navigation",
-  items: [{
-    text: "Draft forms",
-    href: "/",
-    active: true
-  },{
-    text: "Submitted forms",
-    href: "/search",
-    active: false
-  }]
-}) }}
+  {% set draftActive = true %}
+  {% include "./formsNav.njk" %}
 
   {% include "./orderList.njk" %}
 
