@@ -27,6 +27,10 @@ export default class IndexPage extends AppPage {
     return this.ordersList.get('.govuk-table__body').find('.govuk-table__row')
   }
 
+  get subNav(): PageElement {
+    return cy.get('.moj-sub-navigation')
+  }
+
   OrderFor(name: string): PageElement {
     return this.ordersList.contains('td', name)
   }

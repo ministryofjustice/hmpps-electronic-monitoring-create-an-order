@@ -7,6 +7,7 @@
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
 {% block content %}
   {{ mojPageHeaderActions({
@@ -19,28 +20,36 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
     <div class="govuk-button-group">
-        {{ govukButton({
+      {{ govukButton({
             text: "Start new form",
             name: "type",
             value: "REQUEST"
         }) }}
-        {% if variationAsNewOrderEnabled %}
-          {{ govukButton({
+      {% if variationAsNewOrderEnabled %}
+        {{ govukButton({
               text: "Change submitted form",
               name: "type",
               value: "VARIATION",
 	      classes: "govuk-button--secondary"
           }) }}
-        {% endif %}
-        {{ govukButton({
-            text: "Search submitted form",
-            href: "/search",
-	    classes: "govuk-button--secondary"
-        }) }}
+      {% endif %}
     </div>
   </form>
 
   <h2>Existing application forms</h2>
+
+  {{ mojSubNavigation({
+  label: "Sub navigation",
+  items: [{
+    text: "Draft forms",
+    href: "/",
+    active: true
+  },{
+    text: "Submitted forms",
+    href: "/search",
+    active: false
+  }]
+}) }}
 
   {% include "./orderList.njk" %}
 
