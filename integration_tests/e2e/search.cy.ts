@@ -3,13 +3,14 @@ import SearchPage from '../pages/search'
 import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
 import OrderTasksPage from '../pages/order/summary'
+import IndexPage from '../pages'
 
 const mockOrderId = uuidv4()
 
 const basicOrder = mockApiOrder()
 
 context('Search', () => {
-  context('Searching for sumitted orders', () => {
+  context('Searching for submitted orders', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -26,9 +27,31 @@ context('Search', () => {
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
 
+      page.subNav.should('exist')
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
+      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Submitted forms').should('have.attr', 'aria-current', `page`)
+
       // Search
       page.searchButton.should('exist')
       page.searchBox.should('exist')
+    })
+
+    it('should navigate to index when the draft forms nav link is clicked', () => {
+      const page = Page.visit(SearchPage)
+
+      page.subNav.contains('Draft forms').click()
+
+      Page.verifyOnPage(IndexPage)
+    })
+
+    it('should navigate to search page when the submitted forms nav link is clicked', () => {
+      const page = Page.visit(SearchPage)
+
+      page.subNav.contains('Submitted forms').click()
+
+      Page.verifyOnPage(SearchPage)
     })
 
     it('should show a message when the search button is clicked without input', () => {
