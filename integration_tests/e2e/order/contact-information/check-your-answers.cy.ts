@@ -1004,7 +1004,7 @@ context('Contact Information - check your answers', () => {
       page.deviceWearerAddressesSection.shouldExist()
       page.deviceWearerAddressesSection.shouldHaveItems([
         { key: 'Does the device wearer have a fixed address?', value: 'Yes' },
-        { key: "What is the device wearer's main address?", value: '10 downing street, , London, ENGLAND, SW1A 2AA' },
+        { key: "What is the device wearer's main address?", value: '10 downing street, London, ENGLAND, SW1A 2AA' },
       ])
 
       page.deviceWearerAddressesSection.shouldNotHaveItems([
@@ -1103,7 +1103,7 @@ context('Contact Information - check your answers', () => {
       page.deviceWearerAddressesSection.shouldExist()
       page.deviceWearerAddressesSection.shouldHaveItems([
         { key: 'Does the device wearer have a fixed address?', value: 'Yes' },
-        { key: "What is the device wearer's main address?", value: '10 downing street, , London, ENGLAND, SW1A 2AA' },
+        { key: "What is the device wearer's main address?", value: '10 downing street, London, ENGLAND, SW1A 2AA' },
         {
           key: "What is the device wearer's second address?",
           value: '3 Kelvin Close, Birchwood, Warrington, ENGLAND, WA3 7PB',

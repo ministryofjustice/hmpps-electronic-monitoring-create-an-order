@@ -222,6 +222,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           addressType: 'RESPONSIBLE_ORGANISATION',
           addressLine1: 'Line 1',
           addressLine2: 'Line 2',
+          addressLine3: 'Line 3',
           postcode: 'Postcode',
         }),
       ],
@@ -407,24 +408,28 @@ describe('ContactDetailsCheckAnswersController', () => {
         createAddress({
           addressLine1: 'Line 1',
           addressLine2: 'Line 2',
+          addressLine3: 'Line 3',
           postcode: 'Postcode',
         }),
         createAddress({
           addressType: 'SECONDARY',
           addressLine1: 'Line 1',
           addressLine2: 'Line 2',
+          addressLine3: 'Line 3',
           postcode: 'Postcode',
         }),
         createAddress({
           addressType: 'TERTIARY',
           addressLine1: 'Line 1',
           addressLine2: 'Line 2',
+          addressLine3: 'Line 3',
           postcode: 'Postcode',
         }),
         createAddress({
           addressType: 'RESPONSIBLE_ORGANISATION',
           addressLine1: 'Line 1',
           addressLine2: 'Line 2',
+          addressLine3: 'Line 3',
           postcode: 'Postcode',
         }),
       ],
@@ -480,7 +485,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: "What is the device wearer's main address?",
           },
           value: {
-            html: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Line 3, Postcode',
           },
           actions: {
             items: [
@@ -500,7 +505,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: "What is the device wearer's second address?",
           },
           value: {
-            html: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Line 3, Postcode',
           },
           actions: {
             items: [
@@ -520,7 +525,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             text: "What is the device wearer's third address?",
           },
           value: {
-            html: 'Line 1, Line 2, Postcode',
+            html: 'Line 1, Line 2, Line 3, Postcode',
           },
           actions: {
             items: [
