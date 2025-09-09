@@ -1,0 +1,22 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<form action="/order/create" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+  <div class="govuk-button-group">
+    {{ govukButton({
+          text: "Start new form",
+          name: "type",
+          value: "REQUEST"
+      }) }}
+    {% if variationAsNewOrderEnabled %}
+      {{ govukButton({
+            text: "Change submitted form",
+            name: "type",
+            value: "VARIATION",
+      classes: "govuk-button--secondary"
+        }) }}
+    {% endif %}
+  </div>
+  
+</form>
