@@ -4,7 +4,7 @@ import { PageElement } from './page'
 
 export default class IndexPage extends AppPage {
   constructor() {
-    super('Electronic Monitoring Order (EMO) forms', '/', 'Existing application forms')
+    super('Electronic Monitoring Order (EMO) forms', '/')
   }
 
   get newOrderFormButton(): PageElement {
@@ -15,16 +15,16 @@ export default class IndexPage extends AppPage {
     return cy.contains('Change submitted form')
   }
 
-  get searchFormButton(): PageElement {
-    return cy.contains('Search submitted form')
-  }
-
   get ordersList(): PageElement {
     return cy.get('#ordersList')
   }
 
   get orders(): PageElement {
     return this.ordersList.get('.govuk-table__body').find('.govuk-table__row')
+  }
+
+  get subNav(): PageElement {
+    return cy.get('.moj-sub-navigation')
   }
 
   OrderFor(name: string): PageElement {
