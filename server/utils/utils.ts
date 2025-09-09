@@ -202,5 +202,17 @@ export const lookup = (map: ReferenceData, value: string | null | undefined, def
   return defaultValue
 }
 
-export const createAddressPreview = (address: AddressWithoutType | null | undefined): string =>
-  isNullOrUndefined(address) ? '' : `${address.addressLine1}, ${address.addressLine2}, ${address.postcode}`
+export const createAddressPreview = (address: AddressWithoutType | null | undefined): string => {
+  if (isNullOrUndefined(address)) {
+    return ''
+  }
+  const separator = ', '
+  let addressString = `${address.addressLine1}, ${address.addressLine2}`
+  if (address.addressLine3) {
+    addressString += separator + address.addressLine3
+  }
+  if (address.addressLine4) {
+    addressString += separator + address.addressLine4
+  }
+  return addressString + separator + address.postcode
+}
