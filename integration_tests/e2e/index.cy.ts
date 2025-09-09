@@ -28,7 +28,13 @@ context('Index', () => {
       // Create buttons
       page.newOrderFormButton.should('exist')
       page.newVariationFormButton.should('exist')
-      page.searchFormButton.should('exist')
+
+      // Sub nav
+      page.subNav.should('exist')
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
+      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Submitted forms').should('not.have.attr', 'aria-current', `page`)
 
       // Order list
       page.orders.should('exist').should('have.length', 4)
@@ -43,6 +49,14 @@ context('Index', () => {
 
       // A11y
       page.checkIsAccessible()
+    })
+
+    it('navigates to the index page when we click the draft forms nav link', () => {
+      const page = Page.visit(IndexPage)
+
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+
+      Page.verifyOnPage(IndexPage)
     })
   })
 
@@ -121,7 +135,7 @@ context('Index', () => {
     it('should navigate to the search page', () => {
       const page = Page.visit(IndexPage)
 
-      page.searchFormButton.click()
+      page.subNav.contains('Submitted forms').click()
 
       Page.verifyOnPage(SearchPage)
     })
