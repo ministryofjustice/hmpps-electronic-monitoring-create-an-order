@@ -5,8 +5,8 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/search/macro.njk" import mojSearch -%}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
 {% block content %}
   {{ mojPageHeaderActions({
@@ -15,32 +15,11 @@
     } })
   }}
 
-  <form action="/order/create" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  {% set csrfToken = csrfToken %}
+  {% include "./createOrderButtons.njk"%}
 
-    <div class="govuk-button-group">
-        {{ govukButton({
-            text: "Start new form",
-            name: "type",
-            value: "REQUEST"
-        }) }}
-        {% if variationAsNewOrderEnabled %}
-          {{ govukButton({
-              text: "Change submitted form",
-              name: "type",
-              value: "VARIATION",
-	      classes: "govuk-button--secondary"
-          }) }}
-        {% endif %}
-        {{ govukButton({
-            text: "Search submitted form",
-            href: "/search",
-	    classes: "govuk-button--secondary"
-        }) }}
-    </div>
-  </form>
-
-  <h2>Existing application forms</h2>
+  {% set draftActive = true %}
+  {% include "./formsNav.njk" %}
 
   {% include "./orderList.njk" %}
 
