@@ -255,18 +255,21 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           createAddress({
             addressLine1: 'Line 1',
             addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
             postcode: 'Postcode',
           }),
           createAddress({
             addressType: 'SECONDARY',
             addressLine1: 'Line 1',
             addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
             postcode: 'Postcode',
           }),
           createAddress({
             addressType: 'INSTALLATION',
             addressLine1: 'Line 1',
             addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
             postcode: 'Postcode',
           }),
         ],
@@ -642,7 +645,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'On the day of release, where will the device wearer be during curfew hours?',
             },
             value: {
-              html: 'Line 1, Line 2, Postcode',
+              html: 'Line 1, Line 2, Line 3, Postcode',
             },
             actions: {
               items: [
@@ -695,7 +698,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Where will the device wearer be during curfew hours?',
             },
             value: {
-              html: 'Line 1, Line 2, Postcode<br/>Line 1, Line 2, Postcode',
+              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
             },
             actions: {
               items: [
@@ -711,7 +714,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewTimetable: [
           {
             key: {
-              text: 'Line 1, Line 2, Postcode',
+              text: 'Line 1, Line 2, Line 3, Postcode',
             },
             value: {
               html: 'Monday - 11:11-11:11<br/>Tuesday - 11:11-11:11<br/>Wednesday - 11:11-11:11<br/>Thursday - 11:11-11:11<br/>Friday - 11:11-11:11<br/>Saturday - 11:11-11:11<br/>Sunday - 11:11-11:11',
@@ -721,14 +724,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'line 1, line 2, postcode',
+                  visuallyHiddenText: 'line 1, line 2, line 3, postcode',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Line 1, Line 2, Postcode',
+              text: 'Line 1, Line 2, Line 3, Postcode',
             },
             value: {
               html: 'Monday - 11:11-11:11',
@@ -738,7 +741,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'line 1, line 2, postcode',
+                  visuallyHiddenText: 'line 1, line 2, line 3, postcode',
                 },
               ],
             },
@@ -1166,18 +1169,21 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           createAddress({
             addressLine1: 'Line 1',
             addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
             postcode: 'Postcode',
           }),
           createAddress({
             addressType: 'SECONDARY',
             addressLine1: 'Line 1',
             addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
             postcode: 'Postcode',
           }),
           createAddress({
             addressType: 'INSTALLATION',
             addressLine1: 'Line 1',
             addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
             postcode: 'Postcode',
           }),
         ],
@@ -1518,7 +1524,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'On the day of release, where will the device wearer be during curfew hours?',
             },
             value: {
-              html: 'Line 1, Line 2, Postcode',
+              html: 'Line 1, Line 2, Line 3, Postcode',
             },
             actions: {
               items: [
@@ -1571,7 +1577,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Where will the device wearer be during curfew hours?',
             },
             value: {
-              html: 'Line 1, Line 2, Postcode<br/>Line 1, Line 2, Postcode',
+              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
             },
             actions: {
               items: [
@@ -1587,7 +1593,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewTimetable: [
           {
             key: {
-              text: 'Line 1, Line 2, Postcode',
+              text: 'Line 1, Line 2, Line 3, Postcode',
             },
             value: {
               html: 'Monday - 11:11-11:11<br/>Tuesday - 11:11-11:11<br/>Wednesday - 11:11-11:11<br/>Thursday - 11:11-11:11<br/>Friday - 11:11-11:11<br/>Saturday - 11:11-11:11<br/>Sunday - 11:11-11:11',
@@ -1597,14 +1603,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'line 1, line 2, postcode',
+                  visuallyHiddenText: 'line 1, line 2, line 3, postcode',
                 },
               ],
             },
           },
           {
             key: {
-              text: 'Line 1, Line 2, Postcode',
+              text: 'Line 1, Line 2, Line 3, Postcode',
             },
             value: {
               html: 'Monday - 11:11-11:11',
@@ -1614,7 +1620,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 {
                   href: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id),
                   text: 'Change',
-                  visuallyHiddenText: 'line 1, line 2, postcode',
+                  visuallyHiddenText: 'line 1, line 2, line 3, postcode',
                 },
               ],
             },
