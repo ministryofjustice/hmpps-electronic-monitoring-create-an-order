@@ -207,10 +207,11 @@ export const createAddressPreview = (address: AddressWithoutType | null | undefi
     return ''
   }
   const separator = ', '
-  let addressString = `${address.addressLine1}, ${address.addressLine2}`
-  if (address.addressLine3) {
-    addressString += separator + address.addressLine3
+  let addressString = address.addressLine1
+  if (address.addressLine2) {
+    addressString += separator + address.addressLine2
   }
+  addressString += separator + address.addressLine3
   if (address.addressLine4) {
     addressString += separator + address.addressLine4
   }
