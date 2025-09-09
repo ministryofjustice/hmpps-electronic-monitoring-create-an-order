@@ -110,7 +110,7 @@ context('Check your answers', () => {
               addressLine1: '10 Downing Street',
               addressLine2: 'London',
               addressLine3: '',
-              addressLine4: '',
+              addressLine4: 'England',
               postcode: 'SW1A 2AB',
             },
           ],
@@ -122,7 +122,7 @@ context('Check your answers', () => {
       page.installationLocationSection().shouldHaveItems([
         {
           key: 'Where will installation of the electronic monitoring device take place?',
-          value: '10 Downing Street, London, SW1A 2AB',
+          value: '10 Downing Street, London, England, SW1A 2AB',
         },
       ])
       page.installationAddressSection().shouldNotExist()
@@ -317,7 +317,7 @@ context('Check your answers', () => {
               addressLine1: '10 Downing Street',
               addressLine2: 'London',
               addressLine3: '',
-              addressLine4: '',
+              addressLine4: 'England',
               postcode: 'SW1A 2AB',
             },
           ],
