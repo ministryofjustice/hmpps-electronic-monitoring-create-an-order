@@ -97,7 +97,7 @@ context('Scenarios', () => {
       const alcoholMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-        monitoringType: 'Alcohol level',
+        monitoringType: 'Alcohol abstinence',
       }
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
@@ -280,7 +280,7 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Standard Determinate Sentence',
-                tag_at_source: 'No',
+                tag_at_source: 'False',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
                 released_under_prarr: 'No',
@@ -342,7 +342,7 @@ context('Scenarios', () => {
                 trail_monitoring: 'Yes',
                 exclusion_zones: [],
                 inclusion_zones: [],
-                abstinence: 'No',
+                abstinence: 'Yes',
                 schedule: '',
                 checkin_schedule: [],
                 revocation_date: '',

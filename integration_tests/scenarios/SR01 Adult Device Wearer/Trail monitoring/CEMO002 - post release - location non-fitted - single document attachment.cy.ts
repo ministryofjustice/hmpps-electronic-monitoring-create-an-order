@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import {
+  createFakeAdultDeviceWearer,
+  createFakeInterestedParties,
+  createKnownAddress,
+  createFakeAddress,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
@@ -29,7 +34,13 @@ context('Scenarios', () => {
     })
   }
 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
   beforeEach(() => {
+    const testFlags = { TAG_AT_SOURCE_OPTIONS_ENABLED: true }
+    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 
@@ -159,6 +170,17 @@ context('Scenarios', () => {
         possibleRisk: 'There are no risks that the installer should be aware of',
         riskDetails: 'No risk',
       }
+
+      const installationLocation = {
+        location: `At a prison`,
+      }
+
+      const installationAppointment = {
+        placeName: 'mock prison',
+        appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+      }
+
+      const installationAddressDetails = createFakeAddress()
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -167,7 +189,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewTrailMonitoringOrderWith({
+        orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
           primaryAddressDetails: fakePrimaryAddress,
@@ -175,9 +197,18 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk,
           monitoringConditions,
+          installationAddressDetails,
           trailMonitoringDetails,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails: undefined,
+          curfewReleaseDetails: undefined,
+          curfewConditionDetails: undefined,
+          curfewTimetable: undefined,
+          attendanceMonitoringDetails: undefined,
           files,
           probationDeliveryUnit,
+          installationLocation,
+          installationAppointment,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -312,9 +343,11 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Standard Determinate Sentence',
-                tag_at_source: '',
-                tag_at_source_details: '',
-                date_and_time_installation_will_take_place: '',
+                tag_at_source: 'True',
+                tag_at_source_details: 'mock prison',
+                date_and_time_installation_will_take_place: formatAsFmsDateTime(
+                  installationAppointment.appointmentDate,
+                ),
                 released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
@@ -337,11 +370,11 @@ context('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: '',
-                installation_address_2: '',
-                installation_address_3: '',
-                installation_address_4: '',
-                installation_address_post_code: '',
+                installation_address_1: installationAddressDetails.line1,
+                installation_address_2: installationAddressDetails.line2,
+                installation_address_3: installationAddressDetails.line3,
+                installation_address_4: installationAddressDetails.line4,
+                installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',

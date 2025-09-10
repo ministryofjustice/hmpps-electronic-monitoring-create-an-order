@@ -56,7 +56,7 @@ context('Scenarios', () => {
     'Detention Order (HDC) (Post Release) with Radio Frequency (RF) (HMU + PID) on a Curfew Weekend Only 7pm-7am',
     () => {
       const deviceWearerDetails = {
-        ...createFakeYouthDeviceWearer('CEMO036'),
+        ...createFakeYouthDeviceWearer('CEMO023'),
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -68,7 +68,7 @@ context('Scenarios', () => {
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
         issp: 'Yes',
-        sentenceType: 'Standard Determinate Sentence',
+        sentenceType: 'Detention and Training Order (DTO)',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
         pilot: 'They are not part of any of these pilots',
       }
@@ -136,7 +136,7 @@ context('Scenarios', () => {
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO036',
+          responseRecordFilename: 'CEMO023',
           httpStatus: 200,
           body: {
             title: '',
@@ -199,7 +199,7 @@ context('Scenarios', () => {
         cy.wrap(orderId).then(() => {
           return cy
             .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-              responseRecordFilename: 'CEMO036',
+              responseRecordFilename: 'CEMO023',
               httpStatus: 200,
               body: {
                 case_id: fmsCaseId,
@@ -270,7 +270,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Standard Determinate Sentence',
+                sentence_type: 'Detention & Training Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
