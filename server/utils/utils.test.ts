@@ -189,7 +189,19 @@ describe('createAddressPreview', () => {
         addressLine4: 'Line 4',
         postcode: 'Postcode',
       },
-      'Line 1, Line 2, Postcode',
+      'Line 1, Line 2, Line 3, Line 4, Postcode',
+    ],
+    [
+      'Partial address',
+      {
+        addressType: AddressTypeEnum.enum.PRIMARY,
+        addressLine1: 'Line 1',
+        addressLine2: '',
+        addressLine3: 'County',
+        addressLine4: '',
+        postcode: 'Postcode',
+      },
+      'Line 1, County, Postcode',
     ],
   ])(
     '%s - createAddressPreview(%s) === "%s"',

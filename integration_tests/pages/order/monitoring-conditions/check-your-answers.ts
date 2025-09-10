@@ -13,8 +13,6 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  installationAddressSection = (): PageElement => cy.contains('Installation address')
-
   get curfewOnDayOfReleaseSection(): SummaryListComponent {
     const label = 'Curfew on day of release'
     return new SummaryListComponent(label)
@@ -38,6 +36,11 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
 
   installationAppointmentSection(): SummaryListComponent {
     const label = 'Installation appointment'
+    return new SummaryListComponent(label)
+  }
+
+  installationAddressSection(): SummaryListComponent {
+    const label = 'Installation address'
     return new SummaryListComponent(label)
   }
 }

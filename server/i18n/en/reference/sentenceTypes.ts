@@ -9,6 +9,7 @@ const sentenceTypes: SentenceTypes = {
   EPP: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
   SECTION_85_EXTENDED_SENTENCES: 'Section 85 Extended Sentences',
   DTO: 'Detention and Training Order (DTO)',
+  SECTION_91: 'Section 250 / Section 91',
 }
 
 export default sentenceTypes
