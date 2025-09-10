@@ -6,8 +6,9 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import {
   createFakeAdultDeviceWearer,
   createFakeInterestedParties,
-  createKnownAddress,
   createFakeAddress,
+  Address,
+  kelvinCloseAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 
@@ -72,11 +73,13 @@ context('Scenarios', () => {
 
   context('Single exclusion zone ', () => {
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer('CEMO012'),
+      ...createFakeAdultDeviceWearer('CEMO016'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
-    const fakePrimaryAddress = createKnownAddress()
+    const fakePrimaryAddress = kelvinCloseAddress
+    const fakeSecondaryAddress = new Address('10 downing street', '', 'London', 'ENGLAND', 'SW1A 2AA')
+    const fakeTertiaryAddress = new Address('2 Dunlin Close', 'Bolton', 'Greater Manchester', '', 'BL2 1EW')
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
@@ -84,7 +87,7 @@ context('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
       orderType: 'Post Release',
       monitoringRequired: 'Exclusion zone monitoring',
-      sentenceType: 'Standard Determinate Sentence',
+      sentenceType: 'Extended Determinate Sentence',
       pilot: 'They are not part of any of these pilots',
     }
     const enforcementZoneDetails = {
@@ -108,7 +111,7 @@ context('Scenarios', () => {
 
     const installationAppointment = {
       placeName: 'mock prison',
-      appointmentDate: monitoringConditions.startDate,
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
 
     const installationAddressDetails = createFakeAddress()
@@ -124,7 +127,7 @@ context('Scenarios', () => {
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails: fakePrimaryAddress,
-        secondaryAddressDetails: undefined,
+        secondaryAddressDetails: fakeSecondaryAddress,
         interestedParties,
         installationAndRisk,
         monitoringConditions,
@@ -140,11 +143,12 @@ context('Scenarios', () => {
         probationDeliveryUnit,
         installationLocation,
         installationAppointment,
+        tertiaryAddressDetails: fakeTertiaryAddress,
       })
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO012',
+        responseRecordFilename: 'CEMO016',
         httpStatus: 200,
         body: {
           title: '',
@@ -167,16 +171,16 @@ context('Scenarios', () => {
           address_3: fakePrimaryAddress.line3,
           address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
           address_post_code: fakePrimaryAddress.postcode,
-          secondary_address_1: '',
-          secondary_address_2: '',
-          secondary_address_3: '',
-          secondary_address_4: '',
-          secondary_address_post_code: '',
-          tertiary_address_1: '',
-          tertiary_address_2: '',
-          tertiary_address_3: '',
-          tertiary_address_4: '',
-          tertiary_address_post_code: '',
+          secondary_address_1: fakeSecondaryAddress.line1,
+          secondary_address_2: fakeSecondaryAddress.line2 === '' ? 'N/A' : fakeSecondaryAddress.line2,
+          secondary_address_3: fakeSecondaryAddress.line3,
+          secondary_address_4: fakeSecondaryAddress.line4 === '' ? 'N/A' : fakeSecondaryAddress.line4,
+          secondary_address_post_code: fakeSecondaryAddress.postcode,
+          tertiary_address_1: fakeTertiaryAddress.line1,
+          tertiary_address_2: fakeTertiaryAddress.line2 === '' ? 'N/A' : fakeTertiaryAddress.line2,
+          tertiary_address_3: fakeTertiaryAddress.line3,
+          tertiary_address_4: fakeTertiaryAddress.line4 === '' ? 'N/A' : fakeTertiaryAddress.line4,
+          tertiary_address_post_code: fakeTertiaryAddress.postcode,
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
           risk_self_harm: '',
@@ -207,7 +211,7 @@ context('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO012',
+            responseRecordFilename: 'CEMO016',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -273,8 +277,8 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: 'Standard Determinate Sentence',
-              tag_at_source: 'Yes',
+              sentence_type: 'Extended Determinate Sentence',
+              tag_at_source: 'True',
               tag_at_source_details: 'mock prison',
               date_and_time_installation_will_take_place: formatAsFmsDateTime(installationAppointment.appointmentDate),
               released_under_prarr: '',
@@ -325,7 +329,7 @@ context('Scenarios', () => {
       // Verify the attachments were sent to the FMS API
       cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {
-          responseRecordFilename: 'CEMO012',
+          responseRecordFilename: 'CEMO016',
           httpStatus: 200,
           fileContents: contentAsBase64,
         })

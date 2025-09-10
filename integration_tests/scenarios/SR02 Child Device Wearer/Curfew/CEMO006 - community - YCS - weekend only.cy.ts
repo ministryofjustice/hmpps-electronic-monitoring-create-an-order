@@ -88,7 +88,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubUploadDocument', {
       scenario: {
-        name: 'CEMO004',
+        name: 'CEMO006',
         requiredState: 'Started',
         nextState: 'second',
       },
@@ -105,7 +105,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubUploadDocument', {
       scenario: {
-        name: 'CEMO004',
+        name: 'CEMO006',
         requiredState: 'second',
         nextState: 'Started',
       },
@@ -123,7 +123,7 @@ context.skip('Scenarios', () => {
     cy.readFile(files.licence.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         scenario: {
-          name: 'CEMO004',
+          name: 'CEMO006',
           requiredState: 'Started',
           nextState: 'second',
         },
@@ -137,7 +137,7 @@ context.skip('Scenarios', () => {
     cy.readFile(files.photoId.contents, 'base64').then(content => {
       cy.task('stubGetDocument', {
         scenario: {
-          name: 'CEMO004',
+          name: 'CEMO006',
           requiredState: 'second',
           nextState: 'Started',
         },
@@ -173,7 +173,7 @@ context.skip('Scenarios', () => {
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       // sentenceType: 'Community YRO',
-      pilot: 'GPS Acquisitive Crime',
+      pilot: 'They are not part of any of these pilots',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -221,7 +221,7 @@ context.skip('Scenarios', () => {
       orderSummaryPage.submitOrderButton.click()
 
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
-        responseRecordFilename: 'CEMO004',
+        responseRecordFilename: 'CEMO006',
         httpStatus: 200,
         body: {
           title: '',
@@ -284,7 +284,7 @@ context.skip('Scenarios', () => {
       cy.wrap(orderId).then(() => {
         return cy
           .task('verifyFMSCreateMonitoringOrderRequestReceived', {
-            responseRecordFilename: 'CEMO004',
+            responseRecordFilename: 'CEMO006',
             httpStatus: 200,
             body: {
               case_id: fmsCaseId,
@@ -404,7 +404,7 @@ context.skip('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
-              pilot: 'GPS Acquisitive Crime Parole',
+              pilot: '',
             },
           })
           .should('be.true')
@@ -413,7 +413,7 @@ context.skip('Scenarios', () => {
       cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {
           index: 0,
-          responseRecordFilename: 'CEMO004',
+          responseRecordFilename: 'CEMO006',
           httpStatus: 200,
           fileContents: contentAsBase64,
         })
@@ -422,7 +422,7 @@ context.skip('Scenarios', () => {
       cy.readFile(files.photoId.contents, 'base64').then(contentAsBase64 => {
         cy.task('verifyFMSAttachmentRequestReceived', {
           index: 1,
-          responseRecordFilename: 'CEMO004',
+          responseRecordFilename: 'CEMO006',
           httpStatus: 200,
           fileContents: contentAsBase64,
         })

@@ -85,7 +85,7 @@ context('Scenarios', () => {
 
     const installationAppointment = {
       placeName: 'mock prison',
-      appointmentDate: alcoholMonitoringDetails.startDate,
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
     const installationAddressDetails = createFakeAddress()
     it('Should successfully submit the order to the FMS API', () => {
@@ -250,7 +250,7 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: 'Standard Determinate Sentence',
-              tag_at_source: 'Yes',
+              tag_at_source: 'True',
               tag_at_source_details: installationAppointment.placeName,
               date_and_time_installation_will_take_place: formatAsFmsDateTime(installationAppointment.appointmentDate),
               released_under_prarr: 'No',

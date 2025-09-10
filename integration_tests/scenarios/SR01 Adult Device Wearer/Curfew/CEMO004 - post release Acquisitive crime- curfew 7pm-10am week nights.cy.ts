@@ -166,7 +166,8 @@ context('Scenarios', () => {
       orderType: 'Post Release',
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
-      pilot: 'GPS Acquisitive Crime',
+      pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      hdc: 'Yes',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -412,9 +413,9 @@ context('Scenarios', () => {
               crown_court_case_reference_number: '',
               magistrate_court_case_reference_number: '',
               issp: 'No',
-              hdc: 'No',
+              hdc: 'Yes',
               order_status: 'Not Started',
-              pilot: 'GPS Acquisitive Crime Parole',
+              pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
             },
           })
           .should('be.true')

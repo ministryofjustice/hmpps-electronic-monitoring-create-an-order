@@ -345,7 +345,7 @@ context('Scenarios', () => {
         // Verify the attachments were sent to the FMS API
         cy.readFile(files.licence.contents, 'base64').then(contentAsBase64 => {
           cy.task('verifyFMSAttachmentRequestReceived', {
-            responseRecordFilename: 'CEMO001',
+            responseRecordFilename: 'CEMO019',
             httpStatus: 200,
             fileContents: contentAsBase64,
           })
