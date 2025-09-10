@@ -1,3 +1,14 @@
+{% set detailsHtml %}
+<p class="govuk-body">A personal identity number is:</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>National Offender Management Information System (NOMIS)</li>
+  <li>Police National Computer (PNC)</li>
+  <li>NDelius ID</li>
+  <li>Prison Number</li>
+  <li>Home Office Reference Number</li>
+</ul>
+{% endset %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {{ search({
@@ -19,6 +30,7 @@
         text: 'Search'
       }
     }) }}
+
   </div>
 </div>
 
@@ -30,37 +42,46 @@
 <p>Try searching using the device wearer's:</p>
 <ul class="govuk-list govuk-list--bullet">
   <li>first name and surname</li>
+  <li>personal ID number</li>
+  <li>full name and personal ID number</li>
 </ul>
+<p>Check spelling is correct and numbers are in the right place.</p>
+
+{{ govukDetails({
+  summaryText: "What's a personal identity number?",
+  html: detailsHtml
+}) }}
+
   {% elif noResults %}
-<h2 class="govuk-heading-m">No results found for '{{ searchTerm }}'</h2>
+    <h2 class="govuk-heading-m">No results found for '{{ searchTerm }}'</h2>
 
-<p>Check spelling is correct.</p>
+    <p>Check spelling is correct.</p>
 
-<p>Try searching using the device wearer's full name.</p>
+    <p>Try searching using the device wearer's full name.</p>
 
-<div class="govuk-warning-text">
-  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-  <strong class="govuk-warning-text__text">
-    <span class="govuk-visually-hidden">Warning</span>
-    <h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+        <h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
     If the form is not listed in the search results, it may be an emailed form so not available online.
     <br>
-    {% if variationAsNewOrderEnabled %}
-    <form action="/order/create" method="post" class="govuk-!-margin-top-3">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-      {{ govukButton({
+        {% if variationAsNewOrderEnabled %}
+          <form action="/order/create" method="post" class="govuk-!-margin-top-3">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukButton({
         text: "Tell us about a change to a form sent by email",
         name: "type",
         value: "VARIATION",
         classes: "govuk-button--secondary"
       }) }}
-    </form>
-    {% endif %}	
-  </strong>
-</div>
+          </form>
+        {% endif %}
+      </strong>
+    </div>
 
-{% elif orders.length > 0 %}
-  {{ govukTable({
+  {% elif orders.length > 0 %}
+    {{ govukTable({
     firstCellIsHeader: false,
     head: [
       {
@@ -87,4 +108,10 @@
     ],
     rows: orders
   }) }}
-{% endif %}
+
+  {% else %}
+    {{ govukDetails({
+      summaryText: "What's a personal identity number?",
+      html: detailsHtml
+    }) }}
+  {% endif %}

@@ -31,6 +31,14 @@ export default class SearchPage extends AppPage {
     return cy.get('#ordersList')
   }
 
+  get detailsSummary(): PageElement {
+    return cy.get('.govuk-details__summary-text')
+  }
+
+  get detailsList(): PageElement {
+    return cy.get('.govuk-list')
+  }
+
   get variationFormButton(): PageElement {
     return cy.contains('Tell us about a change to a form sent by email')
   }
