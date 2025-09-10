@@ -31,6 +31,9 @@ context('Search', () => {
       page.newOrderFormButton.should('exist')
       page.newVariationFormButton.should('exist')
 
+      page.searchHint.contains("Enter the device wearer's full name or personal identity number.")
+      page.searchHint.contains('For example Bob Smith NHEFTH.')
+
       page.subNav.should('exist')
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
       page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
