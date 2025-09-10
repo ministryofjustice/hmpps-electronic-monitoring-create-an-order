@@ -78,6 +78,7 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
       'Section 85 Extended Sentences',
       'Standard Determinate Sentence',
       'Detention and Training Order (DTO)',
+      'Section 250 / Section 91',
     ])
   }
 

@@ -35,7 +35,6 @@ const getSelectedMonitoringTypes = (order: Order) => {
 
 const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
-  const orderType = lookup(content.reference.orderTypes, order.monitoringConditions.orderType)
   const orderTypeDescription = lookup(
     content.reference.orderTypeDescriptions,
     order.monitoringConditions.orderTypeDescription,
@@ -53,7 +52,6 @@ const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOp
   answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
   if (config.monitoringConditionTimes.enabled)
     answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
-  answers.push(createAnswer(questions.orderType.text, orderType, uri, answerOpts))
   if (order.dataDictionaryVersion === 'DDV5') {
     let { pilot } = order.monitoringConditions
     if ('pilots' in content.reference) {
@@ -87,7 +85,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
 
-  return [createAddressAnswer(content.pages.installationAddress.legend, installationAddress, uri, answerOpts)]
+  return [createAddressAnswer(content.pages.installationAddress.title, installationAddress, uri, answerOpts)]
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
@@ -332,7 +330,7 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 
   const { questions } = content.pages.installationAppointment
 
-  if (!order.installationAppointment) {
+  if (!order.installationAppointment || order.installationLocation?.location === 'PRIMARY') {
     return []
   }
   return [

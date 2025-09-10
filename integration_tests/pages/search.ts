@@ -8,7 +8,15 @@ export default class SearchPage extends AppPage {
   protected elementCacheId: string = uuidv4()
 
   constructor() {
-    super('Search for a submitted form', '/search')
+    super('Electronic Monitoring Order (EMO) forms', '/search')
+  }
+
+  get newOrderFormButton(): PageElement {
+    return cy.contains('Start new form')
+  }
+
+  get newVariationFormButton(): PageElement {
+    return cy.contains('Change submitted form')
   }
 
   get searchButton(): PageElement {

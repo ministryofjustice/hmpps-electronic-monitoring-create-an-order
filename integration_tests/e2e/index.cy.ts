@@ -28,16 +28,35 @@ context('Index', () => {
       // Create buttons
       page.newOrderFormButton.should('exist')
       page.newVariationFormButton.should('exist')
-      page.searchFormButton.should('exist')
+
+      // Sub nav
+      page.subNav.should('exist')
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
+      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Submitted forms').should('not.have.attr', 'aria-current', `page`)
 
       // Order list
-      page.orders.should('exist').should('have.length', 3)
-      page.SubmittedOrderFor('New form').should('exist')
-      page.DraftOrderFor('test tester').should('exist')
-      page.FailedOrderFor('Failed request').should('exist')
+      page.orders.should('exist').should('have.length', 4)
+      page.TableContains('Not supplied', 'Submitted')
+      page.IsAccesible('Not supplied', 0)
+      page.TableContains('test tester', 'Draft')
+      page.IsAccesible('test tester', 1)
+      page.TableContains('Failed request', 'Failed')
+      page.IsAccesible('Failed request', 2)
+      page.TableContains('vari ation', 'Change to form Draft')
+      page.IsAccesible('vari ation', 3)
 
       // A11y
       page.checkIsAccessible()
+    })
+
+    it('navigates to the index page when we click the draft forms nav link', () => {
+      const page = Page.visit(IndexPage)
+
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+
+      Page.verifyOnPage(IndexPage)
     })
   })
 
@@ -116,7 +135,7 @@ context('Index', () => {
     it('should navigate to the search page', () => {
       const page = Page.visit(IndexPage)
 
-      page.searchFormButton.click()
+      page.subNav.contains('Submitted forms').click()
 
       Page.verifyOnPage(SearchPage)
     })
@@ -133,8 +152,8 @@ context('Index', () => {
       cy.signIn()
 
       const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.orders.should('exist').and('have.length', 1)
-      cy.contains('No existing forms found.').should('exist')
+      indexPage.ordersList.get('.govuk-table__body').should('not.exist')
+      cy.contains('You have no draft forms').should('exist')
     })
   })
 })
