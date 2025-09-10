@@ -250,7 +250,7 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: 'Standard Determinate Sentence',
-              tag_at_source: 'Yes',
+              tag_at_source: 'True',
               tag_at_source_details: installationAppointment.placeName,
               date_and_time_installation_will_take_place: formatAsFmsDateTime(installationAppointment.appointmentDate),
               released_under_prarr: 'No',
