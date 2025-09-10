@@ -100,8 +100,8 @@ context('Search', () => {
       page.searchButton.click()
 
       page.ordersList.contains("No results found for 'Unknown name'")
-      page.ordersList.contains('Check spelling is correct.')
-      page.ordersList.contains("Try searching using the device wearer's full name")
+      page.ordersList.contains('Check spelling is correct and numbers are in the right place.')
+      page.ordersList.contains("Try searching using the device wearer's personal ID number, full name or both.")
       page.ordersList.contains("Can't find what you are looking for?")
       page.ordersList.contains(
         'If the form is not listed in the search results, it may be an emailed form so not available online.',
