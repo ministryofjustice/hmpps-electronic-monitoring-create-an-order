@@ -12,8 +12,8 @@ import {
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
-// Skip due to order type community not available
-context.skip('Scenarios', () => {
+
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -151,7 +151,7 @@ context.skip('Scenarios', () => {
 
   context('Community curfew weekend only', () => {
     const deviceWearerDetails = {
-      ...createFakeYouthDeviceWearer('CEMO005'),
+      ...createFakeYouthDeviceWearer('CEMO006'),
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
@@ -171,8 +171,7 @@ context.skip('Scenarios', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
       monitoringRequired: 'Curfew',
-      sentenceType: 'Standard Determinate Sentence',
-      // sentenceType: 'Community YRO',
+      sentenceType: 'Section 250 / Section 91',
       pilot: 'They are not part of any of these pilots',
     }
     const curfewReleaseDetails = {
@@ -350,8 +349,7 @@ context.skip('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: monitoringConditions.sentenceType,
-              // sentence_type: monitoringConditions.sentenceType,
+              sentence_type: 'HDC (Section 91)',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',

@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress,createFakeAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -22,6 +22,10 @@ context('Scenarios', () => {
     licence: {
       contents: 'cypress/fixtures/test.pdf',
       fileName: 'test.pdf',
+    },    
+    photoId: {
+      contents: 'cypress/fixtures/profile.jpeg',
+      fileName: 'profile.jpeg',
     },
   }
 
@@ -44,7 +48,99 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId)
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.licence.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubFmsUploadAttachment', {
+      httpStatus: 200,
+      fileName: files.photoId.fileName,
+      deviceWearerId: fmsCaseId,
+      response: {
+        status: 200,
+        result: {},
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.photoId.fileName,
+        filename: files.photoId.fileName,
+        fileExtension: files.photoId.fileName.split('.')[1],
+        mimeType: 'image/jpeg',
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      scenario: {
+        name: 'CEMO014',
+        requiredState: 'Started',
+        nextState: 'second',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.licence.fileName,
+        filename: files.licence.fileName,
+        fileExtension: files.licence.fileName.split('.')[1],
+        mimeType: 'application/pdf',
+      },
+    })
+
+    cy.task('stubUploadDocument', {
+      scenario: {
+        name: 'CEMO014',
+        requiredState: 'second',
+        nextState: 'Started',
+      },
+      id: '(.*)',
+      httpStatus: 200,
+      response: {
+        documentUuid: hmppsDocumentId,
+        documentFilename: files.photoId.fileName,
+        filename: files.photoId.fileName,
+        fileExtension: files.photoId.fileName.split('.')[1],
+        mimeType: 'image/jpeg',
+      },
+    })
+
+    cy.readFile(files.licence.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        scenario: {
+          name: 'CEMO014',
+          requiredState: 'Started',
+          nextState: 'second',
+        },
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/pdf',
+        fileBase64Body: content,
+      })
+    })
+
+    cy.readFile(files.photoId.contents, 'base64').then(content => {
+      cy.task('stubGetDocument', {
+        scenario: {
+          name: 'CEMO014',
+          requiredState: 'second',
+          nextState: 'Started',
+        },
+        id: '(.*)',
+        httpStatus: 200,
+        contextType: 'image/jpeg',
+        fileBase64Body: content,
+      })
+    })
   })
 
   context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
@@ -75,8 +171,14 @@ context('Scenarios', () => {
     }
 
     const installationLocation = {
-      location: `${fakePrimaryAddress.line1}, ${fakePrimaryAddress.line2}, ${fakePrimaryAddress.postcode}`,
+      location: `At a prison`,
     }
+
+    const installationAppointment = {
+      placeName: 'mock prison',
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+    }
+    const installationAddressDetails = createFakeAddress()
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -94,7 +196,7 @@ context('Scenarios', () => {
         interestedParties,
         installationAndRisk,
         monitoringConditions,
-        installationAddressDetails: undefined,
+        installationAddressDetails,
         trailMonitoringDetails: undefined,
         enforcementZoneDetails: undefined,
         alcoholMonitoringDetails,
@@ -105,7 +207,7 @@ context('Scenarios', () => {
         files,
         probationDeliveryUnit,
         installationLocation,
-        installationAppointment: undefined,
+        installationAppointment,
       })
       orderSummaryPage.submitOrderButton.click()
 
