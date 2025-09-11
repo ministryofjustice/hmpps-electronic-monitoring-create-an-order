@@ -278,7 +278,7 @@ context('Scenarios', () => {
               sentence_date: '',
               sentence_expiry: '',
               sentence_type: 'Extended Determinate Sentence',
-              tag_at_source: 'Yes',
+              tag_at_source: 'True',
               tag_at_source_details: 'mock prison',
               date_and_time_installation_will_take_place: formatAsFmsDateTime(installationAppointment.appointmentDate),
               released_under_prarr: '',
@@ -339,7 +339,7 @@ context('Scenarios', () => {
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.SubmittedOrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
     })
   })
 })

@@ -76,6 +76,10 @@ export default class OrderTasksPage extends AppPage {
     return cy.get('#make-changes-button')
   }
 
+  get viewAndDownloadButton(): PageElement {
+    return cy.get('#view-and-download-button')
+  }
+
   fillInNewCurfewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails,

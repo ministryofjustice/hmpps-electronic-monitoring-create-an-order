@@ -25,7 +25,7 @@ const installationAddressPageContent: AddressPageContent = {
     },
   },
   section: 'Electronic monitoring required',
-  title: 'Where will the installation of the electronic monitoring device take place?',
+  title: 'At what address will installation of the electronic monitoring device take place?',
 }
 
 export default installationAddressPageContent

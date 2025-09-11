@@ -3,13 +3,14 @@ import SearchPage from '../pages/search'
 import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
 import OrderTasksPage from '../pages/order/summary'
+import IndexPage from '../pages'
 
 const mockOrderId = uuidv4()
 
 const basicOrder = mockApiOrder()
 
 context('Search', () => {
-  context('Searching for sumitted orders', () => {
+  context('Searching for submitted orders', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -26,9 +27,47 @@ context('Search', () => {
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
 
+      // Create buttons
+      page.newOrderFormButton.should('exist')
+      page.newVariationFormButton.should('exist')
+
+      page.searchHint.contains("Enter the device wearer's full name or personal identity number.")
+      page.searchHint.contains('For example Bob Smith NHEFTH.')
+
+      page.subNav.should('exist')
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
+      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Submitted forms').should('have.attr', 'aria-current', `page`)
+
       // Search
       page.searchButton.should('exist')
       page.searchBox.should('exist')
+
+      // Details
+      page.detailsSummary.contains("What's a personal identity number?")
+      page.detailsSummary.click()
+      page.detailsList.contains('National Offender Management Information System (NOMIS)')
+      page.detailsList.contains('Police National Computer (PNC)')
+      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('Prison Number')
+      page.detailsList.contains('Home Office Reference Number')
+    })
+
+    it('should navigate to index when the draft forms nav link is clicked', () => {
+      const page = Page.visit(SearchPage)
+
+      page.subNav.contains('Draft forms').click()
+
+      Page.verifyOnPage(IndexPage)
+    })
+
+    it('should navigate to search page when the submitted forms nav link is clicked', () => {
+      const page = Page.visit(SearchPage)
+
+      page.subNav.contains('Submitted forms').click()
+
+      Page.verifyOnPage(SearchPage)
     })
 
     it('should show a message when the search button is clicked without input', () => {
@@ -37,8 +76,20 @@ context('Search', () => {
       page.searchButton.click()
 
       page.ordersList.contains('You have not entered any search terms')
-      page.ordersList.contains("Try searching using the device wearer's")
+      page.ordersList.contains("Try searching using the device wearer's:")
       page.ordersList.contains('first name and surname')
+      page.ordersList.contains('personal ID number')
+      page.ordersList.contains('full name and personal ID number')
+      page.ordersList.contains('Check spelling is correct and numbers are in the right place.')
+
+      // Details
+      page.detailsSummary.contains("What's a personal identity number?")
+      page.detailsSummary.click()
+      page.detailsList.contains('National Offender Management Information System (NOMIS)')
+      page.detailsList.contains('Police National Computer (PNC)')
+      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('Prison Number')
+      page.detailsList.contains('Home Office Reference Number')
     })
 
     it('should show a message when there are no results', () => {
@@ -49,12 +100,14 @@ context('Search', () => {
       page.searchButton.click()
 
       page.ordersList.contains("No results found for 'Unknown name'")
-      page.ordersList.contains('Check spelling is correct.')
-      page.ordersList.contains("Try searching using the device wearer's full name")
+      page.ordersList.contains('Check spelling is correct and numbers are in the right place.')
+      page.ordersList.contains("Try searching using the device wearer's personal ID number, full name or both.")
       page.ordersList.contains("Can't find what you are looking for?")
       page.ordersList.contains(
         'If the form is not listed in the search results, it may be an emailed form so not available online.',
       )
+
+      page.detailsSummary.should('not.exist')
     })
 
     it('should show "Tell us about a change.." button when there are no results', () => {
@@ -143,6 +196,59 @@ context('Search', () => {
         page.ordersList.contains('some id')
         page.ordersList.contains('Glossop')
         page.ordersList.contains('20/11/2000')
+      })
+    })
+
+    context('Submitting a create order request', () => {
+      it('should create a new order', () => {
+        // Visit the search page
+        const page = Page.visit(SearchPage)
+
+        // Create a new order
+        page.newOrderFormButton.click()
+
+        // Verify the api was called correctly
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders`,
+          method: 'POST',
+          body: {
+            type: 'REQUEST',
+          },
+        }).should('be.true')
+
+        // Verify the user was redirected to the task page
+        Page.verifyOnPage(OrderTasksPage)
+      })
+    })
+
+    context('Submitting a create variation request', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoListOrders')
+        cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
+        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.signIn()
+      })
+
+      it('should create a new variation', () => {
+        // Visit the search page
+        const page = Page.visit(SearchPage)
+
+        // Create a new variation
+        page.newVariationFormButton.click()
+
+        // Verify the api was called correctly
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders`,
+          method: 'POST',
+          body: {
+            type: 'VARIATION',
+          },
+        }).should('be.true')
+
+        // Verify the user was redirected to the task page
+        Page.verifyOnPage(OrderTasksPage)
       })
     })
   })

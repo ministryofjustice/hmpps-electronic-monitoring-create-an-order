@@ -8,7 +8,19 @@ export default class SearchPage extends AppPage {
   protected elementCacheId: string = uuidv4()
 
   constructor() {
-    super('Search for a submitted form', '/search')
+    super('Electronic Monitoring Order (EMO) forms', '/search')
+  }
+
+  get newOrderFormButton(): PageElement {
+    return cy.contains('Start new form')
+  }
+
+  get newVariationFormButton(): PageElement {
+    return cy.contains('Change submitted form')
+  }
+
+  get searchHint(): PageElement {
+    return cy.get('#search-hint')
   }
 
   get searchButton(): PageElement {
@@ -21,6 +33,18 @@ export default class SearchPage extends AppPage {
 
   get ordersList(): PageElement {
     return cy.get('#ordersList')
+  }
+
+  get detailsSummary(): PageElement {
+    return cy.get('.govuk-details__summary-text')
+  }
+
+  get detailsList(): PageElement {
+    return cy.get('.govuk-list')
+  }
+
+  get subNav(): PageElement {
+    return cy.get('.moj-sub-navigation')
   }
 
   get variationFormButton(): PageElement {
