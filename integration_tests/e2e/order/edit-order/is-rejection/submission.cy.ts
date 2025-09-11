@@ -4,8 +4,8 @@ import Page from '../../../../pages/page'
 import OrderTasksPage from '../../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
-const verationPath = '/copy-as-variation'
-const amentpath = '/amend-rejected-order'
+const variationPath = '/copy-as-variation'
+const amendPath = '/amend-rejected-order'
 context('Edit Order', () => {
   context('Is Rejection', () => {
     beforeEach(() => {
@@ -16,7 +16,7 @@ context('Edit Order', () => {
         httpStatus: 200,
         method: 'POST',
         id: mockOrderId,
-        subPath: verationPath,
+        subPath: variationPath,
         response: [{}],
       })
 
@@ -24,13 +24,13 @@ context('Edit Order', () => {
         httpStatus: 200,
         method: 'POST',
         id: mockOrderId,
-        subPath: amentpath,
+        subPath: amendPath,
         response: [{}],
       })
       cy.signIn()
     })
 
-    it('Should return to order summay page when backButton is clicked', () => {
+    it('Should return to order summary page when backButton is clicked', () => {
       const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
 
       page.form.backButton.click()
@@ -51,7 +51,7 @@ context('Edit Order', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('Should call copy-as-variation endpoint if Yes is selected', () => {
+    it('Should call amend-rejected-order endpoint if Yes is selected', () => {
       const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
       page.form.fillInWith('Yes')
       page.form.saveAndContinueButton.click()
