@@ -25,10 +25,6 @@ export default class AppPage extends Page {
     return cy.get('.govuk-notification-banner')
   }
 
-  get subNav(): PageElement {
-    return cy.get('.moj-sub-navigation')
-  }
-
   checkOnPage(): void {
     super.checkOnPage()
 

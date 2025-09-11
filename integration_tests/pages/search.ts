@@ -19,6 +19,10 @@ export default class SearchPage extends AppPage {
     return cy.contains('Change submitted form')
   }
 
+  get searchHint(): PageElement {
+    return cy.get('#search-hint')
+  }
+
   get searchButton(): PageElement {
     return cy.get('.govuk-button').contains('Search')
   }
@@ -29,6 +33,18 @@ export default class SearchPage extends AppPage {
 
   get ordersList(): PageElement {
     return cy.get('#ordersList')
+  }
+
+  get detailsSummary(): PageElement {
+    return cy.get('.govuk-details__summary-text')
+  }
+
+  get detailsList(): PageElement {
+    return cy.get('.govuk-list')
+  }
+
+  get subNav(): PageElement {
+    return cy.get('.moj-sub-navigation')
   }
 
   get variationFormButton(): PageElement {

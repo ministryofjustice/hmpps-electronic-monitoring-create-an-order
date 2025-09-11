@@ -31,6 +31,9 @@ context('Search', () => {
       page.newOrderFormButton.should('exist')
       page.newVariationFormButton.should('exist')
 
+      page.searchHint.contains("Enter the device wearer's full name or personal identity number.")
+      page.searchHint.contains('For example Bob Smith NHEFTH.')
+
       page.subNav.should('exist')
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
       page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
@@ -40,6 +43,15 @@ context('Search', () => {
       // Search
       page.searchButton.should('exist')
       page.searchBox.should('exist')
+
+      // Details
+      page.detailsSummary.contains("What's a personal identity number?")
+      page.detailsSummary.click()
+      page.detailsList.contains('National Offender Management Information System (NOMIS)')
+      page.detailsList.contains('Police National Computer (PNC)')
+      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('Prison Number')
+      page.detailsList.contains('Home Office Reference Number')
     })
 
     it('should navigate to index when the draft forms nav link is clicked', () => {
@@ -64,8 +76,20 @@ context('Search', () => {
       page.searchButton.click()
 
       page.ordersList.contains('You have not entered any search terms')
-      page.ordersList.contains("Try searching using the device wearer's")
+      page.ordersList.contains("Try searching using the device wearer's:")
       page.ordersList.contains('first name and surname')
+      page.ordersList.contains('personal ID number')
+      page.ordersList.contains('full name and personal ID number')
+      page.ordersList.contains('Check spelling is correct and numbers are in the right place.')
+
+      // Details
+      page.detailsSummary.contains("What's a personal identity number?")
+      page.detailsSummary.click()
+      page.detailsList.contains('National Offender Management Information System (NOMIS)')
+      page.detailsList.contains('Police National Computer (PNC)')
+      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('Prison Number')
+      page.detailsList.contains('Home Office Reference Number')
     })
 
     it('should show a message when there are no results', () => {
@@ -76,12 +100,14 @@ context('Search', () => {
       page.searchButton.click()
 
       page.ordersList.contains("No results found for 'Unknown name'")
-      page.ordersList.contains('Check spelling is correct.')
-      page.ordersList.contains("Try searching using the device wearer's full name")
+      page.ordersList.contains('Check spelling is correct and numbers are in the right place.')
+      page.ordersList.contains("Try searching using the device wearer's personal ID number, full name or both.")
       page.ordersList.contains("Can't find what you are looking for?")
       page.ordersList.contains(
         'If the form is not listed in the search results, it may be an emailed form so not available online.',
       )
+
+      page.detailsSummary.should('not.exist')
     })
 
     it('should show "Tell us about a change.." button when there are no results', () => {
