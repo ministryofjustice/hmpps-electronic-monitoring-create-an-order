@@ -343,7 +343,7 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Standard Determinate Sentence',
-                tag_at_source: 'True',
+                tag_at_source: 'true',
                 tag_at_source_details: 'mock prison',
                 date_and_time_installation_will_take_place: formatAsFmsDateTime(
                   installationAppointment.appointmentDate,

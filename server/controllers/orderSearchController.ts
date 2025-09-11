@@ -33,19 +33,19 @@ export default class OrderSearchController {
   search: RequestHandler = async (req: Request, res: Response) => {
     const formData = SearchOrderFormDataParser.parse(req.query)
 
-    if (formData.searchTerm === '') {
+    if (formData.searchTerm === undefined || formData.searchTerm === null) {
       const model: OrderSearchViewModel = {
         orders: [],
-        emptySearch: true,
         variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
       }
       res.render('pages/search', model)
       return
     }
 
-    if (!formData.searchTerm) {
+    if (formData.searchTerm.trim() === '') {
       const model: OrderSearchViewModel = {
         orders: [],
+        emptySearch: true,
         variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
       }
       res.render('pages/search', model)
