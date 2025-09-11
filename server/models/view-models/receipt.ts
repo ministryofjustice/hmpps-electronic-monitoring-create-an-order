@@ -13,12 +13,32 @@ const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
   const answers = [
     createAnswer('Status', order.status, '', answerOpts),
-    createAnswer('Type', order.type, '', answerOpts),
+    createAnswer('Type', getOrderTypeName(order.type), '', answerOpts),
     createAnswer('Reference number', order.id, '', answerOpts),
     createDateTimeAnswer('Date submitted', order.fmsResultDate, '', answerOpts),
     createAnswer('Submitted by', order.submittedBy, '', answerOpts),
   ]
   return answers
+}
+
+const getOrderTypeName = (type: 'REQUEST' | 'VARIATION' | 'REJECTED' | 'AMEND_ORIGINAL_REQUEST') => {
+  switch (type) {
+    case 'REQUEST': {
+      return 'New order'
+    }
+    case 'VARIATION': {
+      return 'Change to an order'
+    }
+    case 'REJECTED': {
+      return 'Rejected order'
+    }
+    case 'AMEND_ORIGINAL_REQUEST': {
+      return 'New order (original order was rejected)'
+    }
+    default: {
+      return ''
+    }
+  }
 }
 
 const createViewModel = (order: Order, content: I18n) => {
