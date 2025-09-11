@@ -16,11 +16,9 @@
 
 {% block formInputs %}
 
-{{ govukRadios({
+    {{ govukRadios({
   classes: "govuk-radios--inline",
-  name: "isRejection",
-  errorMessage: isRejection.error,
-  value: isRejection.value,
+  name: "isRejection",  
   fieldset: {
     legend: {
       text: questions.isRejection.text,
@@ -40,4 +38,4 @@
   ]
 })}}
 
-{% endblock %} 
+{% endblock %}
