@@ -17,5 +17,20 @@ context('Edit Order', () => {
       const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
       page.checkIsAccessible()
     })
+
+    it('Should display content', () => {
+      const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
+
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.header.phaseBanner().should('contain.text', 'dev')
+
+      page.form.isRejectionField.shouldExist()
+      page.form.isRejectionField.shouldNotBeDisabled()
+      page.form.isRejectionField.shouldHaveOption('Yes')
+      page.form.isRejectionField.shouldHaveOption('No')
+
+      page.form.saveAndContinueButton.should('exist')
+      page.form.backButton.should('exist')
+    })
   })
 })

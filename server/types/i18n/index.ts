@@ -23,6 +23,7 @@ import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
 import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
+import IsRejectionPageContent from './pages/isRejection'
 
 type I18n = {
   pages: {
@@ -55,6 +56,7 @@ type I18n = {
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
+    isRejection: IsRejectionPageContent
   }
   reference: ReferenceData
 }
