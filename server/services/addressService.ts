@@ -14,6 +14,7 @@ type UpdateAddressRequest = AuthenticatedRequestInput & {
     addressLine3?: string
     addressLine4?: string
     postcode?: string
+    hasAnotherAddress?: boolean
   }
 }
 

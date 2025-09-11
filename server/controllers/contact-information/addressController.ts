@@ -58,6 +58,7 @@ export default class AddressController {
       data: {
         addressType: addressType.toUpperCase(),
         ...formData,
+        hasAnotherAddress: hasAnotherAddress === 'true',
       },
     })
 
