@@ -246,6 +246,21 @@ describe('OrderSearchController', () => {
       )
     })
 
+    it('should render a view when search term is just whitespace', async () => {
+      mockOrderService.searchOrders.mockResolvedValue([])
+      req.query = { searchTerm: '       ' }
+
+      await orderController.search(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/search',
+        expect.objectContaining({
+          orders: [],
+          emptySearch: true,
+        }),
+      )
+    })
+
     it('should render a view when searchTerm is undefined', async () => {
       mockOrderService.searchOrders.mockResolvedValue([])
       req.query = {}
