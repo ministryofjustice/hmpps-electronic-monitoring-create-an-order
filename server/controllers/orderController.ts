@@ -25,11 +25,7 @@ export default class OrderController {
     const { orderId } = req.params
 
     if (action === 'continue') {
-      await this.orderService.createVariationFromExisting({
-        orderId,
-        accessToken: res.locals.user.token,
-      })
-      res.redirect(`/order/${orderId}/summary`)
+      res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
     }
   }
 
