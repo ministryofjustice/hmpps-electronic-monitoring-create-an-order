@@ -4,9 +4,10 @@ import { createGovukErrorSummary } from '../../utils/errors'
 import paths from '../../constants/paths'
 import { validationErrors } from '../../constants/validationErrors'
 import { IsRejectionFromDataModel } from './models'
+import IsRejectionService from './service'
 
 export default class IsRejectionController {
-  constructor() {}
+  constructor(private readonly service: IsRejectionService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors') as unknown as ValidationResult
@@ -18,19 +19,35 @@ export default class IsRejectionController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-
     const formData = IsRejectionFromDataModel.parse(req.body)
 
-    if (formData.isRejection === null) {
-      req.flash('validationErrors', [
-        {
-          error: validationErrors.isRejection.isRejectionRequired,
-          field: 'isRejection',
-          focusTarget: 'isRejection',
-        },
-      ])
+    if (formData.action === 'continue') {
+      if (formData.isRejection === null) {
+        req.flash('validationErrors', [
+          {
+            error: validationErrors.isRejection.isRejectionRequired,
+            field: 'isRejection',
+            focusTarget: 'isRejection',
+          },
+        ])
+        res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
+      } else {
+        if (formData.isRejection) {
+          await this.service.createAmendOriginalFromExisting({
+            orderId,
+            accessToken: res.locals.user.token,
+          })
+        } else {
+          await this.service.createVariationFromExisting({
+            orderId,
+            accessToken: res.locals.user.token,
+          })
+        }
 
-      res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
+        res.redirect(`/order/${orderId}/summary`)
+      }
+    } else {
+      res.redirect(`/order/${orderId}/summary`)
     }
   }
 }

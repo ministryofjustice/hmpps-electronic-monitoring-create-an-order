@@ -11,4 +11,10 @@ export default class IsRejectionFormComponent extends FormComponent {
   get backButton(): PageElement {
     return this.form.contains('Cancel and return back to form')
   }
+
+  fillInWith(isRejected: string): void {
+    if (isRejected) {
+      this.isRejectionField.set(isRejected)
+    }
+  }
 }

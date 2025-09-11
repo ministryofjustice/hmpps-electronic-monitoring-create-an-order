@@ -62,6 +62,7 @@ export default function routes({
   installationLocationService,
   installationAppointmentService,
   orderChecklistService,
+  isRejectionService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -175,7 +176,7 @@ export default function routes({
     taskListService,
   )
 
-  const isRejectionController = new IsRejectionController()
+  const isRejectionController = new IsRejectionController(isRejectionService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)

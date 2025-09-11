@@ -28,6 +28,7 @@ import { createRedisClient } from '../data/redisClient'
 import RedisOrderChecklistStore from '../data/orderChecklistStore/redisOrderChecklistStore'
 import config from '../config'
 import InMemoryOrderChecklistStore from '../data/orderChecklistStore/inMemoryOrderChecklistStore'
+import IsRejectionService from '../routes/is-rejection/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -59,6 +60,7 @@ export const services = () => {
   const curfewAdditionalDetailsService = new CurfewAdditionalDetailsService(cemoApiClient)
   const installationLocationService = new InstallationLocationService(cemoApiClient)
   const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
+  const isRejectionService = new IsRejectionService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -86,6 +88,7 @@ export const services = () => {
     installationLocationService,
     installationAppointmentService,
     orderChecklistService,
+    isRejectionService,
   }
 }
 
@@ -110,4 +113,5 @@ export {
   ProbationDeliveryUnitService,
   InstallationLocationService,
   OrderChecklistService,
+  IsRejectionService,
 }
