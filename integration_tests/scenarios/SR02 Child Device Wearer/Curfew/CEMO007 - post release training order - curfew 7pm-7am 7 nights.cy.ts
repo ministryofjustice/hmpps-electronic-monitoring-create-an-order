@@ -7,7 +7,8 @@ import {
   createFakeYouthDeviceWearer,
   createFakeInterestedParties,
   createFakeResponsibleAdult,
-  createKnownAddress,
+  createFakeAddress,
+  Address,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
@@ -30,7 +31,13 @@ context('Scenarios', () => {
     },
   }
 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
   beforeEach(() => {
+    const testFlags = { TAG_AT_SOURCE_OPTIONS_ENABLED: true }
+    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 
@@ -61,7 +68,7 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const responsibleAdultDetails = createFakeResponsibleAdult()
-      const fakePrimaryAddress = createKnownAddress()
+      const fakePrimaryAddress = new Address('2 Dunlin Close', 'Bolton', 'Greater Manchester', '', 'BL2 1EW')
       const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'London')
 
       const monitoringConditions = {
@@ -73,14 +80,14 @@ context('Scenarios', () => {
         pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
-        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 day
         startTime: { hours: '19', minutes: '00' },
         endTime: { hours: '07', minutes: '00' },
         address: /Main address/,
       }
       const curfewConditionDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 40).setHours(0, 0, 0, 0)), // 40 days
         addresses: [/Main address/],
         curfewAdditionalDetails: 'Curfew address boundary extended to garden',
       }
@@ -99,6 +106,16 @@ context('Scenarios', () => {
         riskDetails: 'No risk',
       }
 
+      const installationLocation = {
+        location: `At a prison`,
+      }
+
+      const installationAppointment = {
+        placeName: 'mock prison',
+        appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(13, 0, 0, 0)),
+      }
+
+      const installationAddressDetails = createFakeAddress()
       it('Should successfully submit the order to the FMS API', () => {
         cy.signIn()
 
@@ -107,7 +124,7 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
-        orderSummaryPage.fillInNewCurfewOrderWith({
+        orderSummaryPage.fillInNewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails,
           primaryAddressDetails: fakePrimaryAddress,
@@ -115,11 +132,18 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk,
           monitoringConditions,
+          installationAddressDetails,
+          trailMonitoringDetails: undefined,
+          enforcementZoneDetails: undefined,
+          alcoholMonitoringDetails: undefined,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
+          attendanceMonitoringDetails: undefined,
           files,
           probationDeliveryUnit: undefined,
+          installationLocation,
+          installationAppointment,
         })
         orderSummaryPage.submitOrderButton.click()
 
@@ -254,9 +278,11 @@ context('Scenarios', () => {
                 sentence_date: '',
                 sentence_expiry: '',
                 sentence_type: 'Detention & Training Order',
-                tag_at_source: '',
-                tag_at_source_details: '',
-                date_and_time_installation_will_take_place: '',
+                tag_at_source: 'true',
+                tag_at_source_details: 'mock prison',
+                date_and_time_installation_will_take_place: formatAsFmsDateTime(
+                  installationAppointment.appointmentDate,
+                ),
                 released_under_prarr: '',
                 technical_bail: '',
                 trial_date: '',
@@ -321,11 +347,11 @@ context('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: '',
-                installation_address_2: '',
-                installation_address_3: '',
-                installation_address_4: '',
-                installation_address_post_code: '',
+                installation_address_1: installationAddressDetails.line1,
+                installation_address_2: installationAddressDetails.line2,
+                installation_address_3: installationAddressDetails.line3,
+                installation_address_4: installationAddressDetails.line4,
+                installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',

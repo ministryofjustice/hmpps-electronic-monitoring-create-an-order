@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress,createFakeAddress } from '../../../mockApis/faker'
+import {
+  createFakeAdultDeviceWearer,
+  createFakeInterestedParties,
+  createKnownAddress,
+  Address,
+} from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 
@@ -22,7 +27,7 @@ context('Scenarios', () => {
     licence: {
       contents: 'cypress/fixtures/test.pdf',
       fileName: 'test.pdf',
-    },    
+    },
     photoId: {
       contents: 'cypress/fixtures/profile.jpeg',
       fileName: 'profile.jpeg',
@@ -178,7 +183,13 @@ context('Scenarios', () => {
       placeName: 'mock prison',
       appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
-    const installationAddressDetails = createFakeAddress()
+    const installationAddressDetails = new Address(
+      '419 Graham-Morissette View',
+      'Long Rutherford',
+      'Northern Ireland',
+      '',
+      'FA5 0NI',
+    )
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()

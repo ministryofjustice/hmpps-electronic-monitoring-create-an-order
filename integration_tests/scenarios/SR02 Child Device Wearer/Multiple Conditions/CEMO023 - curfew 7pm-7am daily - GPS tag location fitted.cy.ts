@@ -73,14 +73,14 @@ context('Scenarios', () => {
         pilot: 'They are not part of any of these pilots',
       }
       const curfewReleaseDetails = {
-        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 day
         startTime: { hours: '19', minutes: '00' },
         endTime: { hours: '07', minutes: '00' },
         address: /Main address/,
       }
       const curfewConditionDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 40).setHours(0, 0, 0, 0)), // 40 days
         addresses: [/Main address/],
       }
       const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
@@ -95,8 +95,8 @@ context('Scenarios', () => {
         ]),
       ]
       const trailMonitoringDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 40).setHours(0, 0, 0, 0)), // 40 days
       }
 
       const installationAndRisk = {
