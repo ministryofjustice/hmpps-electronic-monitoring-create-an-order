@@ -6,6 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import SearchPage from '../../../pages/search'
 
 // test skipped as Bail is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -370,7 +371,12 @@ context.skip('Scenarios', () => {
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.searchNav.click()
+
+      const searchPage = Page.verifyOnPage(SearchPage)
+      searchPage.searchBox.type(deviceWearerDetails.lastName)
+      searchPage.searchButton.click()
+      searchPage.ordersList.contains(deviceWearerDetails.fullName)
     })
   })
 })

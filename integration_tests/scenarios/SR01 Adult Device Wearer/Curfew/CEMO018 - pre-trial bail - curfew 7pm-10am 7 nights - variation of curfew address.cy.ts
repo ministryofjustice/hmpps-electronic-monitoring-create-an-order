@@ -7,6 +7,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import SearchPage from '../../../pages/search'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -380,7 +381,12 @@ context('Scenarios', () => {
         variationSubmitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.searchNav.click()
+
+        const searchPage = Page.verifyOnPage(SearchPage)
+        searchPage.searchBox.type(deviceWearerDetails.lastName)
+        searchPage.searchButton.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName)
       })
     },
   )
