@@ -27,6 +27,10 @@ export default class IndexPage extends AppPage {
     return cy.get('.moj-sub-navigation')
   }
 
+  get searchNav(): PageElement {
+    return cy.contains('.moj-sub-navigation a', 'Submitted forms')
+  }
+
   OrderFor(name: string): PageElement {
     return this.ordersList.contains('td', name)
   }
