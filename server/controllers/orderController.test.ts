@@ -134,11 +134,7 @@ describe('OrderController', () => {
       await orderController.createVariation(req, res, next)
 
       // Then
-      expect(mockOrderService.createVariationFromExisting).toHaveBeenCalledWith({
-        accessToken: 'fakeUserToken',
-        orderId,
-      })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-rejection`)
     })
   })
 

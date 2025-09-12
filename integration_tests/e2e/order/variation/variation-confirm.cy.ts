@@ -1,6 +1,7 @@
 import Page from '../../../pages/page'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import OrderTasksPage from '../../../pages/order/summary'
+import IsRejectionPage from '../edit-order/is-rejection/isRejectionPage'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
@@ -59,7 +60,7 @@ context('Variation', () => {
 
         page.confirmButton().click()
 
-        Page.verifyOnPage(OrderTasksPage)
+        Page.verifyOnPage(IsRejectionPage)
       })
     })
   })

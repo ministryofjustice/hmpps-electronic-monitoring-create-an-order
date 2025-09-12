@@ -84,13 +84,13 @@
               }) }}
           {% elseif isOrderEditable %}
             {{ govukButton({
-                text: "Save and continue",
+                text: "Save and continue" ,
                 name: "action",
                 value: "continue"
             }) }}
 
             {{ govukButton({
-                text: "Save as draft",
+                text: "Save as draft" if not backButtonText else backButtonText,
                 classes: "govuk-button--secondary",
                 name: "action",
                 value: "back"

@@ -12,6 +12,7 @@ const paths = {
     RECEIPT: '/order/:orderId/receipt',
     RECEIPT_DOWNLOAD: '/order/:orderId/pdf',
     EDIT: '/order/:orderId/edit',
+    IS_REJECTION: '/order/:orderId/is-rejection',
     VARIATION: '/order/:orderId/variation',
   },
 

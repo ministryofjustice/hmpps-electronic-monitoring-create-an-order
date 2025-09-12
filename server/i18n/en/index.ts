@@ -30,6 +30,7 @@ import installationLocationPageContent from './pages/installationLocation'
 import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
+import isRejectionPageContent from './pages/isRejection'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -63,6 +64,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       installationLocation: installationLocationPageContent,
       installationAppointment: installationAppointmentPageContent,
+      isRejection: isRejectionPageContent,
     },
     reference: getReferenceData(ddVersion),
   }
