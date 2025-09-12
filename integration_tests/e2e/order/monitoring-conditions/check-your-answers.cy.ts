@@ -89,7 +89,7 @@ context('Check your answers', () => {
           value: 'some additional details',
         },
       ])
-      page.curfewTimetableSection().should('exist')
+      page.curfewTimetableSection().element.should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
     })
@@ -278,6 +278,75 @@ context('Check your answers', () => {
       page.continueButton().should('exist')
       page.returnButton().should('exist')
     })
+
+    it('shows curfew timetable when primary address is applied', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          curfewTimeTable: [
+            {
+              orderId: '0',
+              dayOfWeek: 'WEDNESDAY',
+              startTime: '19:00:00',
+              endTime: '23:59:00',
+              curfewAddress: 'PRIMARY_ADDRESS',
+            },
+            {
+              orderId: '0',
+              dayOfWeek: 'FRIDAY',
+              startTime: '00:00:00',
+              endTime: '07:00:00',
+              curfewAddress: 'PRIMARY_ADDRESS',
+            },
+          ],
+        },
+      })
+    })
+    it('shows curfew timetable when multiple address is applied', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          curfewTimeTable: [
+            {
+              orderId: '0',
+              dayOfWeek: 'WEDNESDAY',
+              startTime: '19:00:00',
+              endTime: '23:59:00',
+              curfewAddress: 'PRIMARY_ADDRESS,SECONDARY_ADDRESS',
+            },
+            {
+              orderId: '0',
+              dayOfWeek: 'FRIDAY',
+              startTime: '00:00:00',
+              endTime: '07:00:00',
+              curfewAddress: 'PRIMARY_ADDRESS,SECONDARY_ADDRESS',
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.curfewTimetableSection().shouldExist()
+      page.curfewTimetableSection().shouldHaveItems([
+        {
+          key: 'Primary address',
+          value: 'Wednesday - 19:00-23:59Friday - 00:00-07:00',
+        },
+      ])
+
+      page.curfewTimetableSection().shouldHaveItems([
+        {
+          key: 'Secondary address',
+          value: 'Wednesday - 19:00-23:59Friday - 00:00-07:00',
+        },
+      ])
+    })
   })
 
   context('Application status is submitted', () => {
@@ -349,7 +418,7 @@ context('Check your answers', () => {
       page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
-      page.curfewTimetableSection().should('exist')
+      page.curfewTimetableSection().element.should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
     })
@@ -440,7 +509,7 @@ context('Check your answers', () => {
       page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
-      page.curfewTimetableSection().should('exist')
+      page.curfewTimetableSection().element.should('exist')
       page.trailMonitoringConditionsSection().should('exist')
       page.alcoholMonitoringConditionsSection().should('exist')
     })
