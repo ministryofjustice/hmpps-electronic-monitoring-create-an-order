@@ -168,17 +168,16 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [
-            [
-              {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
-              },
-              { text: '20/11/2000' },
-              { html: 'some id number' },
-              { text: 'Glossop' },
-              { text: '20/11/2000' },
-              { text: '20/11/2000' },
-              { text: '20/11/2000' },
-            ],
+            {
+              name: 'first last',
+              href: `/order/${mockSubmittedOrder.id}/summary`,
+              dob: '20/11/2000',
+              pins: ['some id number'],
+              location: 'Glossop',
+              startDate: '20/11/2000',
+              endDate: '20/11/2000',
+              lastUpdated: '20/11/2000',
+            },
           ],
         }),
       )
@@ -199,17 +198,16 @@ describe('OrderSearchController', () => {
         'pages/search',
         expect.objectContaining({
           orders: [
-            [
-              {
-                html: `<a class="govuk-link" href=/order/${mockSubmittedOrder.id}/summary>first last</a>`,
-              },
-              { text: '20/11/2000' },
-              { html: 'nomisId</br>pncId</br>deliusId</br>hoRefNum</br>prisNum' },
-              { text: 'Glossop' },
-              { text: '20/11/2000' },
-              { text: '20/11/2000' },
-              { text: '20/11/2000' },
-            ],
+            {
+              name: 'first last',
+              href: `/order/${mockSubmittedOrder.id}/summary`,
+              dob: '20/11/2000',
+              pins: ['nomisId', 'pncId', 'deliusId', 'hoRefNum', 'prisNum'],
+              location: 'Glossop',
+              startDate: '20/11/2000',
+              endDate: '20/11/2000',
+              lastUpdated: '20/11/2000',
+            },
           ],
         }),
       )
