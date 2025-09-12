@@ -304,6 +304,15 @@ context('Check your answers', () => {
           ],
         },
       })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.curfewTimetableSection().shouldExist()
+      page.curfewTimetableSection().shouldHaveItems([
+        {
+          key: 'Primary address',
+          value: 'Wednesday - 19:00-23:59Friday - 00:00-07:00',
+        },
+      ])
     })
     it('shows curfew timetable when multiple address is applied', () => {
       cy.task('stubCemoGetOrder', {
