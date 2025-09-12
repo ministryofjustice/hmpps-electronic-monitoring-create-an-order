@@ -313,6 +313,7 @@ context('Check your answers', () => {
           value: 'Wednesday - 19:00-23:59Friday - 00:00-07:00',
         },
       ])
+      page.curfewTimetableSection().shouldNotHaveItem('Secondary address')
     })
     it('shows curfew timetable when multiple address is applied', () => {
       cy.task('stubCemoGetOrder', {
