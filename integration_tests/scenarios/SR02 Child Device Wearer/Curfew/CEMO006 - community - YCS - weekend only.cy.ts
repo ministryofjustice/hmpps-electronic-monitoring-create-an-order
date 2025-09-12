@@ -11,6 +11,7 @@ import {
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
+import SearchPage from '../../../pages/search'
 
 // Skip due to order type community not available
 context.skip('Scenarios', () => {
@@ -431,7 +432,12 @@ context.skip('Scenarios', () => {
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.searchNav.click()
+
+      const searchPage = Page.verifyOnPage(SearchPage)
+      searchPage.searchBox.type(deviceWearerDetails.lastName)
+      searchPage.searchButton.click()
+      searchPage.ordersList.contains(deviceWearerDetails.fullName)
     })
   })
 })

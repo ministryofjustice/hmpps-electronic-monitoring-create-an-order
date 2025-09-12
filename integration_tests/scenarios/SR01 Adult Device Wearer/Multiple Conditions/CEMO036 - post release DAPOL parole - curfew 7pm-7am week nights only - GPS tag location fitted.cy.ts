@@ -6,6 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import SearchPage from '../../../pages/search'
 
 // SKIP not in phase 4 scenario pack
 context.skip('Scenarios', () => {
@@ -343,7 +344,12 @@ context.skip('Scenarios', () => {
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.searchNav.click()
+
+        const searchPage = Page.verifyOnPage(SearchPage)
+        searchPage.searchBox.type(deviceWearerDetails.lastName)
+        searchPage.searchButton.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName)
       })
     },
   )
