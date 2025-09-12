@@ -94,13 +94,13 @@ const createSchedulePreview = (schedule: CurfewSchedule) =>
 const groupTimetableByAddress = (timetable: CurfewTimetable) =>
   timetable.reduce(
     (acc, schedule) => {
-      if (schedule.curfewAddress === 'PRIMARY_ADDRESS') {
+      if (schedule.curfewAddress.includes('PRIMARY_ADDRESS')) {
         acc.PRIMARY.push(schedule)
       }
-      if (schedule.curfewAddress === 'SECONDARY_ADDRESS') {
+      if (schedule.curfewAddress.includes('SECONDARY_ADDRESS')) {
         acc.SECONDARY.push(schedule)
       }
-      if (schedule.curfewAddress === 'TERTIARY_ADDRESS') {
+      if (schedule.curfewAddress.includes('TERTIARY_ADDRESS')) {
         acc.TERTIARY.push(schedule)
       }
       return acc
@@ -127,7 +127,7 @@ const createCurfewTimetableAnswers = (order: Order, answerOpts: AnswerOptions) =
   const groups = groupTimetableByAddress(timetable)
   const keys = Object.keys(groups) as Array<keyof typeof groups>
 
-  return keys
+  const result = keys
     .filter(group => groups[group].length > 0)
     .map(group => {
       const address = order.addresses.find(({ addressType }) => addressType === group)
@@ -137,6 +137,8 @@ const createCurfewTimetableAnswers = (order: Order, answerOpts: AnswerOptions) =
 
       return createMultipleChoiceAnswer(preview, groups[group].map(createSchedulePreview), uri, answerOpts)
     })
+
+  return result
 }
 
 const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
