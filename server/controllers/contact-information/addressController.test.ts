@@ -135,7 +135,7 @@ describe('AddressController', () => {
       },
     )
 
-    it('should render the form using submitted data when there are validaiton errors', async () => {
+    it('should render the form using submitted data when there are validation errors', async () => {
       // Given
       const req = createMockRequest({
         order: mockOrder,
@@ -443,11 +443,12 @@ describe('AddressController', () => {
     })
 
     it.each([
-      ['true', true],
-      ['false', false],
+      { submittedValue: 'true', expectedBoolean: true },
+      { submittedValue: 'false', expectedBoolean: false },
     ])(
-      'should call the address service with hasAnotherAddress converted to a boolean',
-      async (submittedValue: string, expectedBoolean: boolean) => {
+      'should call the address service with hasAnotherAddress converted to a boolean ($expectedBoolean)',
+      async ({ submittedValue, expectedBoolean }) => {
+        // Given
         const req = createMockRequest({
           order: mockOrder,
           body: {
@@ -475,18 +476,27 @@ describe('AddressController', () => {
           addressLine4: 'd',
           postcode: 'e',
         })
+        taskListService.getNextPage.mockReturnValue('')
 
-        taskListService.getNextPage = jest.fn().mockReturnValue([])
+        const expectedPayload = {
+          accessToken: 'fakeUserToken',
+          orderId: mockOrder.id,
+          data: {
+            addressType: 'PRIMARY',
+            addressLine1: 'a',
+            addressLine2: 'b',
+            addressLine3: 'c',
+            addressLine4: 'd',
+            postcode: 'e',
+            hasAnotherAddress: expectedBoolean,
+          },
+        }
 
+        // When
         await addressController.update(req, res, next)
 
-        expect(mockAddressService.updateAddress).toHaveBeenCalledWith(
-          expect.objectContaining({
-            data: expect.objectContaining({
-              hasAnotherAddress: expectedBoolean,
-            }),
-          }),
-        )
+        // Then
+        expect(mockAddressService.updateAddress).toHaveBeenCalledWith(expectedPayload)
       },
     )
   })
