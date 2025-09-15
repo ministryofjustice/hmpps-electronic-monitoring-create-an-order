@@ -38,6 +38,7 @@ import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/cu
 import UploadLicencePage from '../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../pages/order/attachments/havePhoto'
 import { stubAttachments } from './utils'
+import SearchPage from '../pages/search'
 
 context('Mandatory fields only', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -346,7 +347,13 @@ context('Mandatory fields only', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
-      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.searchNav.click()
+
+      const searchPage = Page.verifyOnPage(SearchPage)
+      if (takeScreenshots) cy.screenshot('27. searchPageAfterSubmission', { overwrite: true })
+      searchPage.searchBox.type(deviceWearerDetails.lastName)
+      searchPage.searchButton.click()
+      searchPage.ordersList.contains(deviceWearerDetails.fullName)
     })
   })
 
@@ -639,7 +646,13 @@ context('Mandatory fields only', () => {
 
       indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
-      indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+      indexPage.searchNav.click()
+
+      const searchPage = Page.verifyOnPage(SearchPage)
+      if (takeScreenshots) cy.screenshot('27. searchPageAfterSubmission', { overwrite: true })
+      searchPage.searchBox.type(deviceWearerDetails.lastName)
+      searchPage.searchButton.click()
+      searchPage.ordersList.contains(deviceWearerDetails.fullName)
     })
   })
 })

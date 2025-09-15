@@ -141,7 +141,15 @@ context('Scenarios', () => {
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.searchNav.click()
+
+        let searchPage = Page.verifyOnPage(SearchPage)
+        searchPage.searchBox.type(deviceWearerDetails.lastName)
+        searchPage.searchButton.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName)
+        searchPage.listNav.click()
+
+        indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newVariationFormButton.click()
 
         orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -383,7 +391,7 @@ context('Scenarios', () => {
         indexPage = Page.verifyOnPage(IndexPage)
         indexPage.searchNav.click()
 
-        const searchPage = Page.verifyOnPage(SearchPage)
+        searchPage = Page.verifyOnPage(SearchPage)
         searchPage.searchBox.type(deviceWearerDetails.lastName)
         searchPage.searchButton.click()
         searchPage.ordersList.contains(deviceWearerDetails.fullName)
