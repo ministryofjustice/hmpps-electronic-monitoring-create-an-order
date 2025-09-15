@@ -15,9 +15,15 @@ type OrderListViewModel = {
 
 export type OrderSearchViewModel = {
   orders: {
-    text?: string | null | undefined
-    html?: string
-  }[][]
+    name: string
+    href: string
+    dob: string
+    pins: string[]
+    location: string
+    startDate: string
+    endDate: string
+    lastUpdated: string
+  }[]
   variationAsNewOrderEnabled: boolean
   emptySearch?: boolean
   noResults?: boolean
@@ -40,38 +46,21 @@ const formatDateTime = (dateToFormat: string): string => {
 const getIdList = (order: Order) => {
   const { nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber } = order.deviceWearer
   const idList = [nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber].filter(id => id && id?.length > 0)
-  return idList.join('</br>')
-}
-
-const getNameLink = (order: Order) => {
-  return `<a class="govuk-link" href=${paths.ORDER.SUMMARY.replace(':orderId', order.id)}>${getDisplayName(order)}</a>`
+  return idList as string[]
 }
 
 const createOrderItem = (order: Order) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
-  return [
-    {
-      html: getNameLink(order),
-    },
-    {
-      text: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : undefined,
-    },
-    {
-      html: getIdList(order),
-    },
-    {
-      text: currentAddress?.addressLine3 ?? '',
-    },
-    {
-      text: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : undefined,
-    },
-    {
-      text: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : undefined,
-    },
-    {
-      text: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    },
-  ]
+  return {
+    name: getDisplayName(order),
+    href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
+    dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
+    pins: getIdList(order),
+    location: currentAddress?.addressLine3 ?? '',
+    startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
+    endDate: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : '',
+    lastUpdated: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '',
+  }
 }
 
 export const constructSearchViewModel = (orders: Array<Order>, searchTerm: string): OrderSearchViewModel => {
