@@ -82,6 +82,35 @@
     </div>
 
   {% elif orders.length > 0 %}
+    {% set tableRows = [] %}
+    {% for order in orders %}
+
+      {% set name %}
+      <a class="govuk-link" href="{{ order.href }}">
+        {{ order.name }}
+      </a>
+      {% endset %}
+
+      {% set row = [
+        {
+          html: name
+        }, {
+          text: order.dob
+        }, {
+          html: order.pins | join('<\br>')
+        }, {
+          text: order.location
+        }, {
+          text: order.startDate
+        }, {
+          text: order.endDate
+        }, {
+          text: order.lastUpdated
+        }
+      ] %}
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
     {{ govukTable({
     firstCellIsHeader: false,
     head: [
@@ -107,7 +136,7 @@
         text: "Last updated"
       }
     ],
-    rows: orders
+    rows: tableRows
   }) }}
 
   {% else %}
