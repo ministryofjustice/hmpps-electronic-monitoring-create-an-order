@@ -28,6 +28,7 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
+import SearchPage from '../../../pages/search'
 
 // test disabled as community YRO is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -400,7 +401,12 @@ ${attendanceMonitoringOrder.address.postcode}
         submitSuccessPage.backToYourApplications.click()
 
         indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.OrderFor(deviceWearerDetails.fullName).should('exist')
+        indexPage.searchNav.click()
+
+        const searchPage = Page.verifyOnPage(SearchPage)
+        searchPage.searchBox.type(deviceWearerDetails.lastName)
+        searchPage.searchButton.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName)
       })
     },
   )

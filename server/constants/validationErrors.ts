@@ -79,6 +79,9 @@ interface ValidationErrors {
     riskDetailsRequired: string
     riskDetailsTooLong: string
   }
+  isRejection: {
+    isRejectionRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -252,6 +255,9 @@ const validationErrors: ValidationErrors = {
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
     riskDetailsRequired: 'Enter any other risks to be aware of',
     riskDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
+  },
+  isRejection: {
+    isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
   },
 }
 

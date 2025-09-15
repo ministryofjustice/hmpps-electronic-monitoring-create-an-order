@@ -33,6 +33,7 @@ import CurfewAdditionalDetailsController from '../controllers/monitoringConditio
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
 import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
+import IsRejectionController from './is-rejection/controller'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
@@ -61,6 +62,7 @@ export default function routes({
   installationLocationService,
   installationAppointmentService,
   orderChecklistService,
+  isRejectionService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -173,6 +175,8 @@ export default function routes({
     installationAppointmentService,
     taskListService,
   )
+
+  const isRejectionController = new IsRejectionController(isRejectionService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -184,6 +188,8 @@ export default function routes({
   get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
   get(paths.ORDER.SUMMARY, orderController.summary)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
+  get(paths.ORDER.IS_REJECTION, isRejectionController.view)
+  post(paths.ORDER.IS_REJECTION, isRejectionController.update)
   post(paths.ORDER.VARIATION, orderController.createVariation)
   get(paths.ORDER.DELETE, orderController.confirmDelete)
   post(paths.ORDER.DELETE, orderController.delete)

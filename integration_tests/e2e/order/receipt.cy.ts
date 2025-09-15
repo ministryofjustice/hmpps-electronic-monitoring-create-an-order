@@ -145,7 +145,7 @@ context('Receipt', () => {
       page.orderStatusSection.shouldExist()
       page.orderStatusSection.shouldHaveItems([
         { key: 'Status', value: 'IN_PROGRESS' },
-        { key: 'Type', value: 'REQUEST' },
+        { key: 'Type', value: 'New order' },
         { key: 'Reference number', value: mockOrderId },
         { key: 'Date submitted', value: '01/01/2025, 10:30' },
         { key: 'Submitted by', value: 'test name' },
@@ -257,6 +257,66 @@ context('Receipt', () => {
         { key: 'What is the date you want the changes to take effect?', value: '01/01/2025' },
         { key: 'Enter information on what you have changed', value: 'some variation details' },
       ])
+    })
+
+    it('Should type as New order when order type is REQUEST', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: mockOrder,
+        type: 'REQUEST',
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.orderStatusSection.shouldExist()
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'New order' }])
+    })
+
+    it('Should type as Change to an order when order type is VARIATION', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: mockOrder,
+        type: 'VARIATION',
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.orderStatusSection.shouldExist()
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Change to an order' }])
+    })
+
+    it('Should type as Change to an order when order type is REJECTED', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: mockOrder,
+        type: 'REJECTED',
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.orderStatusSection.shouldExist()
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Rejected order' }])
+    })
+
+    it('Should type as Change to an order when order type is AMEND_ORIGINAL_REQUEST', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: mockOrder,
+        type: 'AMEND_ORIGINAL_REQUEST',
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.orderStatusSection.shouldExist()
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'New order (original order was rejected)' }])
     })
 
     it('should have no change links', () => {
