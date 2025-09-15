@@ -47,6 +47,10 @@ export default class SearchPage extends AppPage {
     return cy.get('.moj-sub-navigation')
   }
 
+  get listNav(): PageElement {
+    return cy.contains('.moj-sub-navigation a', 'Draft forms')
+  }
+
   get variationFormButton(): PageElement {
     return cy.contains('Tell us about a change to a form sent by email')
   }
