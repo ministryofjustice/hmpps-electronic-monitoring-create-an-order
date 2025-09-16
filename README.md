@@ -29,8 +29,6 @@ This service acts as a frontend to the [Create an Electronic Monitoring Order AP
 
 ## First time setup
 
-You'll need to complete these steps before you can run and use the service locally.
-
 ### 1. Create a personal client in the development environment of DPS
 
 This service uses the dev instance of [HMPPS Auth](https://github.com/ministryofjustice/hmpps-auth) to authenticate users.
@@ -87,7 +85,7 @@ Use your HMPPS Auth credentials (dev) to sign in.
 
 ---
 
-## Running this service and the CEMO API together
+## Running this service and the CEMO API locally
 
 Running the CEMO frontend & api together can be useful for development purposes.
 
