@@ -81,6 +81,7 @@ context('Contact information', () => {
             addressLine3: 'line 3',
             addressLine4: 'line 4',
             postcode: 'postcode',
+            hasAnotherAddress: false,
           },
         }).should('be.true')
       })
