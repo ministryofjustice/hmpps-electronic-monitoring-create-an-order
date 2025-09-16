@@ -135,7 +135,7 @@ describe('AddressController', () => {
       },
     )
 
-    it('should render the form using submitted data when there are validaiton errors', async () => {
+    it('should render the form using submitted data when there are validation errors', async () => {
       // Given
       const req = createMockRequest({
         order: mockOrder,
@@ -441,5 +441,63 @@ describe('AddressController', () => {
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/interested-parties`)
     })
+
+    it.each([
+      { submittedValue: 'true', expectedBoolean: true },
+      { submittedValue: 'false', expectedBoolean: false },
+    ])(
+      'should call the address service with hasAnotherAddress converted to a boolean ($expectedBoolean)',
+      async ({ submittedValue, expectedBoolean }) => {
+        // Given
+        const req = createMockRequest({
+          order: mockOrder,
+          body: {
+            action: 'continue',
+            addressLine1: 'a',
+            addressLine2: 'b',
+            addressLine3: 'c',
+            addressLine4: 'd',
+            postcode: 'e',
+            hasAnotherAddress: submittedValue,
+          },
+          params: {
+            orderId: mockOrder.id,
+            addressType: 'primary',
+          },
+        })
+        const res = createMockResponse()
+        const next = jest.fn()
+
+        mockAddressService.updateAddress.mockResolvedValue({
+          addressType: 'PRIMARY',
+          addressLine1: 'a',
+          addressLine2: 'b',
+          addressLine3: 'c',
+          addressLine4: 'd',
+          postcode: 'e',
+        })
+        taskListService.getNextPage.mockReturnValue('')
+
+        const expectedPayload = {
+          accessToken: 'fakeUserToken',
+          orderId: mockOrder.id,
+          data: {
+            addressType: 'PRIMARY',
+            addressLine1: 'a',
+            addressLine2: 'b',
+            addressLine3: 'c',
+            addressLine4: 'd',
+            postcode: 'e',
+            hasAnotherAddress: expectedBoolean,
+          },
+        }
+
+        // When
+        await addressController.update(req, res, next)
+
+        // Then
+        expect(mockAddressService.updateAddress).toHaveBeenCalledWith(expectedPayload)
+      },
+    )
   })
 })
