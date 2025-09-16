@@ -6,7 +6,22 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds">
+
+
+{% set html %}
+  <p class="govuk-notification-banner__heading">
+    You can now search for and change a submitted order.
+  </p>
+  <p>
+    Previously if you were making a change you had to enter all the information again. You can now search for the form and just edit the things that have changed.
+  </p>
+  <a class="govuk-notification-banner__link" href="https://teams.microsoft.com/l/message/19:OnBcewjl8XVVbtZHzEubBtFzb4YrBiXPzVy_7636qqE1@thread.tacv2/1758015177552?tenantId=c6874728-71e6-41fe-a9e1-2e8c36776ad8&groupId=7b704d24-6eac-4f53-a418-4e92b5ebd531&parentMessageId=1758015177552&teamName=Electronic%20Monitoring%20Order%20Support%20Channel&channelName=Electronic%20Monitoring%20Order%20Support%20&createdTime=1758015177552" target="_blank">View more information (opens in a new tab)</a>
+{% endset %}
+
+{{ govukNotificationBanner({
+  html: html
+}) }}
 
       <h1 class="govuk-heading-l">Apply, change or end an Electronic Monitoring Order (EMO)</h1>
 
