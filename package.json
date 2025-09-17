@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.846.0",
-    "@ministryofjustice/frontend": "^5.1.4",
+    "@ministryofjustice/frontend": "^5.1.5",
     "@types/multer": "^2.0.0",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
