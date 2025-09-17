@@ -152,7 +152,7 @@ context('Receipt', () => {
       ])
       page.riskInformationSection.shouldExist()
       page.riskInformationSection.shouldHaveItems([
-        { key: 'What type of offence did the device wearer commit? (optional)', value: 'Sexual offences' },
+        { key: 'What type of offence did the device wearer commit?', value: 'Sexual offences' },
         {
           key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',

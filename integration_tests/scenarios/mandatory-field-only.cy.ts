@@ -161,6 +161,7 @@ context('Mandatory fields only', () => {
     }
 
     const installationAndRisk = {
+      offence: 'Sexual offences',
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
       riskDetails: 'No risk',
@@ -449,6 +450,7 @@ context('Mandatory fields only', () => {
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
     }
     const installationAndRisk = {
+      offence: 'Sexual offences',
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
       riskDetails: 'No risk',

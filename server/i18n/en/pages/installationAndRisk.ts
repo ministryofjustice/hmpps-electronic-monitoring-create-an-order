@@ -11,12 +11,12 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
       text: 'Which level of MAPPA applies? (optional)',
     },
     offence: {
-      text: 'What type of offence did the device wearer commit? (optional)',
+      text: 'What type of offence did the device wearer commit?',
       hint: 'If more than one offence committed, select the main offence',
     },
     offenceAdditionalDetails: {
       text: 'Any other information to be aware of about the offence committed? (optional)',
-      hint: "Provide additional risk information about the device wearer's offence",
+      hint: "Provide additional risk information about the device wearer's offence. If the device wearer is part of the acquisitive crime pilot add details of their theft, robbery, or burglary offences.",
     },
     possibleRisk: {
       text: "At installation what are the possible risks from the device wearer's behaviour?",

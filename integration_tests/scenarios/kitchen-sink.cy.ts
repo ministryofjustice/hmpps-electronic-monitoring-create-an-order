@@ -150,6 +150,7 @@ context('The kitchen sink', () => {
       anotherZone: 'No',
     }
     const installationAndRisk = {
+      offence: 'Sexual offences',
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
       riskDetails: 'No risk',
