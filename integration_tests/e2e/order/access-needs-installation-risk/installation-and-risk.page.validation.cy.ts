@@ -24,6 +24,24 @@ context('Access needs and installation risk information', () => {
         cy.signIn()
       })
 
+      it('should display error when no offence is selected', () => {
+        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+        const validFormData = {
+          riskDetails: 'No Risk',
+          mappaLevel: 'MAPPA 1',
+          mappaCaseType: 'Serious Organised Crime',
+          possibleRisk: 'Sex offender',
+        }
+
+        page.form.fillInWith(validFormData)
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(InstallationAndRiskPage)
+        page.form.offenceField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
+        page.errorSummary.shouldHaveError('Select the type of offence the device wearer committed')
+      })
+
       it('should display error when no possible risk selected', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
 
