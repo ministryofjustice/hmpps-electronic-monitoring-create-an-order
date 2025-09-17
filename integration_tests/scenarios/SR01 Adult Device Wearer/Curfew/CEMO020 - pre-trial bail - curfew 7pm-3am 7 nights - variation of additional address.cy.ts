@@ -8,6 +8,16 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
+import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
+import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
+import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import SecondaryAddressPage from '../../../pages/order/contact-information/secondary-address'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -119,14 +129,14 @@ context.skip('Scenarios', () => {
         endDate: curfewConditionDetails.endDate,
         addresses: [/Main address/, /Second address/],
       }
-      const variationCurfewTimetable = curfewNights.flatMap((day: string) => [
-        {
-          day,
-          startTime: '19:00:00',
-          endTime: '03:00:00',
-          addresses: variationCurfewConditionDetails.addresses,
-        },
-      ])
+      // const variationCurfewTimetable = curfewNights.flatMap((day: string) => [
+      //   {
+      //     day,
+      //     startTime: '19:00:00',
+      //     endTime: '03:00:00',
+      //     addresses: variationCurfewConditionDetails.addresses,
+      //   },
+      // ])
 
       const installationAndRisk = {
         possibleRisk: 'There are no risks that the installer should be aware of',
@@ -139,7 +149,7 @@ context.skip('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
         orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
@@ -166,29 +176,42 @@ context.skip('Scenarios', () => {
         let searchPage = Page.verifyOnPage(SearchPage)
         searchPage.searchBox.type(deviceWearerDetails.lastName)
         searchPage.searchButton.click()
-        searchPage.ordersList.contains(deviceWearerDetails.fullName)
-        searchPage.listNav.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName).click()
 
-        indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.newVariationFormButton.click()
+        Page.verifyOnPage(OrderSummaryPage).makeChanges()
 
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-        cacheOrderId()
-        orderSummaryPage = orderSummaryPage.fillInCurfewVariationWith({
-          variationDetails,
-          deviceWearerDetails,
-          responsibleAdultDetails: undefined,
-          primaryAddressDetails: fakePrimaryAddress,
-          secondaryAddressDetails: fakeVariationSecondaryAddress,
-          interestedParties,
-          installationAndRisk,
-          monitoringConditions,
-          curfewReleaseDetails,
-          curfewConditionDetails: variationCurfewConditionDetails,
-          curfewTimetable: variationCurfewTimetable,
-          files,
-          probationDeliveryUnit,
-        })
+        Page.verifyOnPage(ConfirmVariationPage).confirm()
+
+        Page.verifyOnPage(IsRejectionPage).isNotRejection()
+
+        orderSummaryPage.fillInVariationsDetails({ variationDetails })
+
+        orderSummaryPage.aboutTheDeviceWearerTask.click()
+
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
+
+        Page.verifyOnPage(
+          ContactInformationCheckYourAnswersPage,
+          'Check your answers',
+        ).deviceWearerAddressesSection.changeAnswer("What is the device wearer's main address?")
+
+        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+        primaryAddressPage.hasAnotherAddress(true)
+        primaryAddressPage.saveAndContinue()
+
+        Page.verifyOnPage(SecondaryAddressPage).clearAndRepopulate(fakeVariationSecondaryAddress)
+
+        // NOTE: After the secondary address is entered the  user should to be routed to the Contact Details CYA page. Instead they're routed to Interested Parties/Organisation Details, because adding a new address sets this section of the form to Incomplete.
+        Page.verifyOnPage(InterestedPartiesPage).saveAndContinue()
+
+        Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
+
+        Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
+
+        // Note: The curfew times should be updated in this scenaro. This needs to be implemented.
+        Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
+
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
