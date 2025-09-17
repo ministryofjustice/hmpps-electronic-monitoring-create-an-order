@@ -114,6 +114,7 @@ context('The kitchen sink', () => {
     }
 
     const installationAndRisk = {
+      offence: 'Sexual offences',
       possibleRisk: 'Sex offender',
       riskCategory: 'Children under the age of 18 are living at the property',
       riskDetails: 'No risk',
@@ -266,7 +267,7 @@ context('The kitchen sink', () => {
             no_email: interestedParties.notifyingOrganisationEmailAddress,
             no_name: interestedParties.notifyingOrganisationName,
             no_phone_number: '',
-            offence: '',
+            offence: installationAndRisk.offence,
             offence_additional_details: '',
             offence_date: '',
             order_end: formatAsFmsDateTime(monitoringConditions.endDate),
