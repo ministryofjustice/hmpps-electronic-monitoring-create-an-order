@@ -17,6 +17,10 @@ export default class FormInputComponent {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
+  clear() {
+    this.element.clear()
+  }
+
   set(value?: string | number | boolean) {
     this.element.type(value as string)
   }

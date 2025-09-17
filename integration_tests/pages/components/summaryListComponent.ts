@@ -43,4 +43,12 @@ export default class SummaryListComponent {
   shouldNotHaveItems(keys: Array<string>) {
     return keys.map(key => this.shouldNotHaveItem(key))
   }
+
+  getChangeLink(questionText: string) {
+    return cy.contains('dt', questionText).siblings('.govuk-summary-list__actions').children('a')
+  }
+
+  changeAnswer(questionText: string) {
+    this.getChangeLink(questionText).click()
+  }
 }

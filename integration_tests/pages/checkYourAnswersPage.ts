@@ -17,4 +17,12 @@ export default class CheckYourAnswersPage extends AppPage {
       cy.get('h1 span', { log: false }).contains(this.subtitle)
     }
   }
+
+  continue(): void {
+    this.continueButton().click()
+  }
+
+  return(): void {
+    this.returnButton().click()
+  }
 }

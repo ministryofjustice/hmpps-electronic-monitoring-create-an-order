@@ -17,4 +17,12 @@ export default class ConfirmVariationPage extends AppPage {
   confirmButton = (): PageElement => cy.get('#confirm-button')
 
   cancelButton = (): PageElement => cy.get('#cancel-button')
+
+  confirm() {
+    this.confirmButton().click()
+  }
+
+  cancel() {
+    this.cancelButton().click()
+  }
 }
