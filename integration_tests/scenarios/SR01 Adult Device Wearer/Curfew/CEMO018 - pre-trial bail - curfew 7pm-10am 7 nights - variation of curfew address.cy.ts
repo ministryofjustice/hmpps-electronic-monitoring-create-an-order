@@ -127,7 +127,7 @@ context('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
         orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
@@ -155,7 +155,6 @@ context('Scenarios', () => {
         searchPage.searchBox.type(deviceWearerDetails.lastName)
         searchPage.searchButton.click()
 
-
         searchPage.ordersList.contains(deviceWearerDetails.fullName).click()
 
         Page.verifyOnPage(OrderSummaryPage).makeChanges()
@@ -168,8 +167,11 @@ context('Scenarios', () => {
         orderSummaryPage.aboutTheDeviceWearerTask.click()
 
         Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-                
-        Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').deviceWearerAddressesSection.changeAnswer("What is the device wearer's main address?")
+
+        Page.verifyOnPage(
+          ContactInformationCheckYourAnswersPage,
+          'Check your answers',
+        ).deviceWearerAddressesSection.changeAnswer("What is the device wearer's main address?")
 
         Page.verifyOnPage(PrimaryAddressPage).clearAndRepopulate(fakeVariationPrimaryAddress)
 
