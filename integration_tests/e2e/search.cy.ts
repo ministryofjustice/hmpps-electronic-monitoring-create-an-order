@@ -29,7 +29,6 @@ context('Search', () => {
 
       // Create buttons
       page.newOrderFormButton.should('exist')
-      page.newVariationFormButton.should('exist')
 
       page.searchHint.contains("Enter the device wearer's full name or personal identity number.")
       page.searchHint.contains('For example Bob Smith C4365JN.')
@@ -229,26 +228,6 @@ context('Search', () => {
         cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
         cy.signIn()
-      })
-
-      it('should create a new variation', () => {
-        // Visit the search page
-        const page = Page.visit(SearchPage)
-
-        // Create a new variation
-        page.newVariationFormButton.click()
-
-        // Verify the api was called correctly
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders`,
-          method: 'POST',
-          body: {
-            type: 'VARIATION',
-          },
-        }).should('be.true')
-
-        // Verify the user was redirected to the task page
-        Page.verifyOnPage(OrderTasksPage)
       })
     })
   })

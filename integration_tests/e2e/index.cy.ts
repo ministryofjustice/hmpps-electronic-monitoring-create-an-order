@@ -27,7 +27,6 @@ context('Index', () => {
 
       // Create buttons
       page.newOrderFormButton.should('exist')
-      page.newVariationFormButton.should('exist')
 
       // Sub nav
       page.subNav.should('exist')
@@ -99,26 +98,6 @@ context('Index', () => {
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
-    })
-
-    it('should create a new variation', () => {
-      // Visit the home page
-      const page = Page.visit(IndexPage)
-
-      // Create a new variation
-      page.newVariationFormButton.click()
-
-      // Verify the api was called correctly
-      cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders`,
-        method: 'POST',
-        body: {
-          type: 'VARIATION',
-        },
-      }).should('be.true')
-
-      // Verify the user was redirected to the task page
-      Page.verifyOnPage(OrderTasksPage)
     })
   })
 

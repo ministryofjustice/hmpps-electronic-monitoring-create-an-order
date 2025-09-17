@@ -11,10 +11,6 @@ export default class IndexPage extends AppPage {
     return cy.contains('Start new form')
   }
 
-  get newVariationFormButton(): PageElement {
-    return cy.contains('Change submitted form')
-  }
-
   get ordersList(): PageElement {
     return cy.get('#ordersList')
   }
