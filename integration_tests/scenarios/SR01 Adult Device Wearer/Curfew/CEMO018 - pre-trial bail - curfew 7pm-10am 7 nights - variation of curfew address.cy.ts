@@ -8,6 +8,14 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
+import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
+import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -119,7 +127,7 @@ context('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
         orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
@@ -146,91 +154,33 @@ context('Scenarios', () => {
         let searchPage = Page.verifyOnPage(SearchPage)
         searchPage.searchBox.type(deviceWearerDetails.lastName)
         searchPage.searchButton.click()
-        searchPage.ordersList.contains(deviceWearerDetails.fullName)
-        searchPage.listNav.click()
 
-        indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.newVariationFormButton.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName).click()
 
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-        cacheOrderId()
-        orderSummaryPage = orderSummaryPage.fillInCurfewVariationWith({
-          variationDetails,
-          deviceWearerDetails,
-          responsibleAdultDetails: undefined,
-          primaryAddressDetails: fakeVariationPrimaryAddress,
-          secondaryAddressDetails: undefined,
-          interestedParties,
-          installationAndRisk,
-          monitoringConditions,
-          curfewReleaseDetails,
-          curfewConditionDetails,
-          curfewTimetable,
-          files,
-          probationDeliveryUnit: undefined,
-        })
+        Page.verifyOnPage(OrderSummaryPage).makeChanges()
+
+        Page.verifyOnPage(ConfirmVariationPage).confirm()
+
+        Page.verifyOnPage(IsRejectionPage).isNotRejection()
+
+        orderSummaryPage.fillInVariationsDetails({ variationDetails })
+        orderSummaryPage.aboutTheDeviceWearerTask.click()
+
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
+
+        Page.verifyOnPage(
+          ContactInformationCheckYourAnswersPage,
+          'Check your answers',
+        ).deviceWearerAddressesSection.changeAnswer("What is the device wearer's main address?")
+
+        Page.verifyOnPage(PrimaryAddressPage).clearAndRepopulate(fakeVariationPrimaryAddress)
+
+        Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
+
         orderSummaryPage.submitOrderButton.click()
-
-        cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {
-          responseRecordFilename: 'CEMO018',
-          httpStatus: 200,
-          body: {
-            title: '',
-            first_name: deviceWearerDetails.firstNames,
-            middle_name: '',
-            last_name: deviceWearerDetails.lastName,
-            alias: deviceWearerDetails.alias,
-            date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),
-            adult_child: 'adult',
-            sex: deviceWearerDetails.sex
-              .replace('Not able to provide this information', 'Prefer Not to Say')
-              .replace('Prefer not to say', 'Prefer Not to Say'),
-            gender_identity: deviceWearerDetails.genderIdentity
-              .replace('Not able to provide this information', '')
-              .replace('Self identify', 'Prefer to self-describe')
-              .replace('Non binary', 'Non-Binary'),
-            disability: [],
-            address_1: fakeVariationPrimaryAddress.line1,
-            address_2: fakeVariationPrimaryAddress.line2 === '' ? 'N/A' : fakeVariationPrimaryAddress.line2,
-            address_3: fakeVariationPrimaryAddress.line3,
-            address_4: fakeVariationPrimaryAddress.line4 === '' ? 'N/A' : fakeVariationPrimaryAddress.line4,
-            address_post_code: fakeVariationPrimaryAddress.postcode,
-            secondary_address_1: '',
-            secondary_address_2: '',
-            secondary_address_3: '',
-            secondary_address_4: '',
-            secondary_address_post_code: '',
-            tertiary_address_1: '',
-            tertiary_address_2: '',
-            tertiary_address_3: '',
-            tertiary_address_4: '',
-            tertiary_address_post_code: '',
-            phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
-            risk_serious_harm: '',
-            risk_self_harm: '',
-            risk_details: 'No risk',
-            mappa: null,
-            mappa_case_type: null,
-            risk_categories: [],
-            responsible_adult_required: 'false',
-            parent: '',
-            guardian: '',
-            parent_address_1: '',
-            parent_address_2: '',
-            parent_address_3: '',
-            parent_address_4: '',
-            parent_address_post_code: '',
-            parent_phone_number: null,
-            parent_dob: '',
-            pnc_id: deviceWearerDetails.pncId,
-            nomis_id: deviceWearerDetails.nomisId,
-            delius_id: deviceWearerDetails.deliusId,
-            prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
-            interpreter_required: 'false',
-            language: '',
-          },
-        }).should('be.true')
 
         cy.wrap(orderId).then(() => {
           return cy

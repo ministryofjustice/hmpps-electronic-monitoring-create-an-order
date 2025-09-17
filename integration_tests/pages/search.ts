@@ -15,10 +15,6 @@ export default class SearchPage extends AppPage {
     return cy.contains('Start new form')
   }
 
-  get newVariationFormButton(): PageElement {
-    return cy.contains('Change submitted form')
-  }
-
   get searchHint(): PageElement {
     return cy.get('#search-hint')
   }

@@ -8,6 +8,14 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
+import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
+import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -109,7 +117,7 @@ context('Scenarios', () => {
         let indexPage = Page.verifyOnPage(IndexPage)
         indexPage.newOrderFormButton.click()
 
-        let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+        const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
         orderSummaryPage.fillInNewEnforcementZoneOrderWith({
           deviceWearerDetails,
@@ -134,27 +142,32 @@ context('Scenarios', () => {
         let searchPage = Page.verifyOnPage(SearchPage)
         searchPage.searchBox.type(deviceWearerDetails.lastName)
         searchPage.searchButton.click()
-        searchPage.ordersList.contains(deviceWearerDetails.fullName)
-        searchPage.listNav.click()
+        searchPage.ordersList.contains(deviceWearerDetails.fullName).click()
 
-        indexPage = Page.verifyOnPage(IndexPage)
-        indexPage.newVariationFormButton.click()
+        Page.verifyOnPage(OrderSummaryPage).makeChanges()
 
-        orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-        cacheOrderId()
-        orderSummaryPage = orderSummaryPage.fillInEnforcementZoneVariationWith({
-          variationDetails,
-          deviceWearerDetails,
-          responsibleAdultDetails: undefined,
-          primaryAddressDetails: fakeVariationPrimaryAddress,
-          secondaryAddressDetails: undefined,
-          interestedParties,
-          installationAndRisk,
-          monitoringConditions,
-          enforcementZoneDetails,
-          files,
-          probationDeliveryUnit,
-        })
+        Page.verifyOnPage(ConfirmVariationPage).confirm()
+
+        Page.verifyOnPage(IsRejectionPage).isNotRejection()
+
+        orderSummaryPage.fillInVariationsDetails({ variationDetails })
+
+        orderSummaryPage.aboutTheDeviceWearerTask.click()
+
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
+
+        Page.verifyOnPage(
+          ContactInformationCheckYourAnswersPage,
+          'Check your answers',
+        ).deviceWearerAddressesSection.changeAnswer("What is the device wearer's main address?")
+
+        Page.verifyOnPage(PrimaryAddressPage).clearAndRepopulate(fakeVariationPrimaryAddress)
+
+        Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
+
         orderSummaryPage.submitOrderButton.click()
 
         cy.task('verifyFMSUpdateDeviceWearerRequestReceived', {

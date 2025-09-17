@@ -65,19 +65,17 @@
       <strong class="govuk-warning-text__text">
         <span class="govuk-visually-hidden">Warning</span>
         <h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
-    If the form is not listed in the search results, it may be an emailed form so not available online.
-    <br>
-        {% if variationAsNewOrderEnabled %}
-          <form action="/order/create" method="post" class="govuk-!-margin-top-3">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        If the form is not listed in the search results, it may be an emailed form so not available online.
+        <br>
+        <form action="/order/create" method="post" class="govuk-!-margin-top-3">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             {{ govukButton({
-        text: "Tell us about a change to a form sent by email",
-        name: "type",
-        value: "VARIATION",
-        classes: "govuk-button--secondary"
-      }) }}
-          </form>
-        {% endif %}
+              text: "Tell us about a change to a form sent by email",
+              name: "type",
+              value: "VARIATION",
+              classes: "govuk-button--secondary"
+            }) }}
+        </form>
       </strong>
     </div>
 
