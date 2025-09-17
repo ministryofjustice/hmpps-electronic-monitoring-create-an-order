@@ -28,4 +28,12 @@ export default class AddressPage extends AppFormPage {
     this.form.clearAndRepopulate(newAddress)
     this.form.saveAndContinueButton.click()
   }
+
+  hasAnotherAddress(hasAnotherAddress: boolean) {
+    this.form.hasAnotherAddress(hasAnotherAddress)
+  }
+
+  saveAndContinue() {
+    this.form.saveAndContinueButton.click()
+  }
 }

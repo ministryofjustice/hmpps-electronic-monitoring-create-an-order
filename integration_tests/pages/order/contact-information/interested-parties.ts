@@ -16,4 +16,8 @@ export default class InterestedPartiesPage extends AppFormPage {
 
     this.form.checkHasForm()
   }
+
+  saveAndContinue() {
+    this.form.saveAndContinueButton.click()
+  }
 }

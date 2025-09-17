@@ -89,6 +89,10 @@ export default class AddressFormComponent extends FormComponent {
     this.fillInWith(newAddress)
   }
 
+  hasAnotherAddress(hasAnotherAddress: boolean) {
+    this.hasAnotherAddressField.set(hasAnotherAddress ? 'Yes' : 'No')
+  }
+
   shouldBeValid(): void {
     this.addressLine1Field.shouldNotHaveValidationMessage()
     this.addressLine2Field.shouldNotHaveValidationMessage()
