@@ -22,4 +22,8 @@ export default class AttachmentSummaryPage extends CheckYourAnswersPage {
   get saveAndReturnButton(): PageElement {
     return cy.contains('Save and return to main form menu')
   }
+
+  saveAndReturn() {
+    this.saveAndReturnButton.click()
+  }
 }

@@ -15,13 +15,17 @@ export default class AddressPage extends AppFormPage {
     super(title, uri, subheading)
   }
 
+  get backToSummaryButton(): PageElement {
+    return cy.get('a#backToSummary')
+  }
+
   checkOnPage(): void {
     super.checkOnPage()
-
     this.form.checkHasForm()
   }
 
-  get backToSummaryButton(): PageElement {
-    return cy.get('a#backToSummary')
+  clearAndRepopulate(newAddress) {
+    this.form.clearAndRepopulate(newAddress)
+    this.form.saveAndContinueButton.click()
   }
 }
