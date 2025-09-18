@@ -5,7 +5,6 @@ export default class OrderTypeController {
   constructor(private readonly orderTypeService: OrderTypeService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    // random page for now
-    res.render('pages/order/edit/is-rejection')
+    res.render('pages/order/monitoring-conditions/order-type-description/order-type')
   }
 }
