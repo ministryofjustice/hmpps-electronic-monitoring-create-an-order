@@ -34,8 +34,8 @@ import InstallationLocationController from '../controllers/monitoringConditions/
 import ReceiptController from '../controllers/receiptController'
 import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
+import createOrderTypeDescriptionRouter from './monitoring-conditions/order-type/router'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function routes({
   alcoholMonitoringService,
   attachmentService,
@@ -63,6 +63,7 @@ export default function routes({
   installationAppointmentService,
   orderChecklistService,
   isRejectionService,
+  orderTypeService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -329,6 +330,8 @@ export default function routes({
    */
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
+
+  router.use(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION, createOrderTypeDescriptionRouter({ orderTypeService }))
 
   return router
 }

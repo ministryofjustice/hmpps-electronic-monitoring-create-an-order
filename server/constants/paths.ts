@@ -52,6 +52,7 @@ const paths = {
     CURFEW_ADDITIONAL_DETAILS: '/order/:orderId/monitoring-conditions/curfew/additional-details',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
     CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/check-your-answers',
+    ORDER_TYPE_DESCRIPTION: '/order/:orderId/monitoring-conditions/order-type-description',
   },
 
   ATTACHMENT: {
