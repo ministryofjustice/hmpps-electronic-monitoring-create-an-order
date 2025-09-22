@@ -42,7 +42,7 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), {})
+    expect(res.render).toHaveBeenCalledWith(expect.anything(), { orderType: { value: '' }, errorSummary: null })
   })
 
   it('should construct the correct model when there is data in the store', async () => {
@@ -53,6 +53,9 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), data)
+    expect(res.render).toHaveBeenCalledWith(expect.anything(), {
+      orderType: { value: 'COMMUNITY' },
+      errorSummary: null,
+    })
   })
 })
