@@ -89,6 +89,7 @@ context.skip('Scenarios', () => {
     ])
 
     const installationAndRisk = {
+      offence: 'Sexual offences',
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
     }
@@ -210,7 +211,7 @@ context.skip('Scenarios', () => {
               no_email: interestedParties.notifyingOrganisationEmailAddress,
               no_name: interestedParties.notifyingOrganisationName,
               no_phone_number: '',
-              offence: '',
+              offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
               order_end: formatAsFmsDateTime(monitoringConditions.endDate),

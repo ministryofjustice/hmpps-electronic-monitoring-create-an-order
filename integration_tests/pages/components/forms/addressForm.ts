@@ -50,6 +50,14 @@ export default class AddressFormComponent extends FormComponent {
 
   // FORM HELPERS
 
+  clearAllFields(): void {
+    this.addressLine1Field.clear()
+    this.addressLine2Field.clear()
+    this.addressLine3Field.clear()
+    this.addressLine4Field.clear()
+    this.postcodeField.clear()
+  }
+
   fillInWith(address: AddressFormData): void {
     if (address.line1) {
       this.addressLine1Field.set(address.line1)
@@ -74,6 +82,15 @@ export default class AddressFormComponent extends FormComponent {
     if (address.hasAnotherAddress) {
       this.hasAnotherAddressField.set(address.hasAnotherAddress)
     }
+  }
+
+  clearAndRepopulate(newAddress) {
+    this.clearAllFields()
+    this.fillInWith(newAddress)
+  }
+
+  hasAnotherAddress(hasAnotherAddress: boolean) {
+    this.hasAnotherAddressField.set(hasAnotherAddress ? 'Yes' : 'No')
   }
 
   shouldBeValid(): void {

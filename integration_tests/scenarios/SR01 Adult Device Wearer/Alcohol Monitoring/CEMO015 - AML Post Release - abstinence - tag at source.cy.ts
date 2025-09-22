@@ -76,6 +76,7 @@ context('Scenarios', () => {
       monitoringType: 'Alcohol abstinence',
     }
     const installationAndRisk = {
+      offence: 'Sexual offences',
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
     }
@@ -218,7 +219,7 @@ context('Scenarios', () => {
               no_email: interestedParties.notifyingOrganisationEmailAddress,
               no_name: interestedParties.notifyingOrganisationName,
               no_phone_number: '',
-              offence: '',
+              offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
               order_end: formatAsFmsDateTime(monitoringConditions.endDate),
@@ -254,7 +255,7 @@ context('Scenarios', () => {
               tag_at_source: 'true',
               tag_at_source_details: installationAppointment.placeName,
               date_and_time_installation_will_take_place: formatAsFmsDateTime(installationAppointment.appointmentDate),
-              released_under_prarr: 'No',
+              released_under_prarr: 'false',
               pilot: '',
               technical_bail: '',
               trial_date: '',

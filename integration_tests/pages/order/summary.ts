@@ -466,6 +466,10 @@ export default class OrderTasksPage extends AppPage {
     return Page.verifyOnPage(OrderTasksPage)
   }
 
+  makeChanges(): void {
+    this.makeChangesButton.click()
+  }
+
   fillInVariationsDetails({ variationDetails }): void {
     this.variationDetailsTask.click()
     const variationDetailsPage = Page.verifyOnPage(VariationDetailsPage)
