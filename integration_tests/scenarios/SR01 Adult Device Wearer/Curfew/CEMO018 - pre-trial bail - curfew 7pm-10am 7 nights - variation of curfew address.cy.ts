@@ -256,7 +256,7 @@ context('Scenarios', () => {
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                released_under_prarr: 'false',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
