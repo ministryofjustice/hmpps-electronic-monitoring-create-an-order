@@ -283,7 +283,7 @@ context('Scenarios', () => {
               tag_at_source: 'true',
               tag_at_source_details: 'mock prison',
               date_and_time_installation_will_take_place: formatAsFmsDateTime(installationAppointment.appointmentDate),
-              released_under_prarr: '',
+              released_under_prarr: 'false',
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
