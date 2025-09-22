@@ -1,0 +1,33 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+
+{% block formInputs %}
+    {{ govukRadios({
+  name: "orderType",  
+  fieldset: {
+    legend: {
+      text: 'What is the order type?',
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }, 
+  items: [
+    {
+      value: "yes",
+      text: "Release from prison",
+      hint: { text: "Monitoring is a condition of being released from prison following a custodial sentence."},
+      disabled: not isOrderEditable
+    },
+    {
+      value: "no",
+      text: "Community",
+      hint: { text: "Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence." },
+      disabled: not isOrderEditable
+    }
+  ]
+})}}
+
+{% endblock %}
