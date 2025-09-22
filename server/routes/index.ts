@@ -63,7 +63,7 @@ export default function routes({
   installationAppointmentService,
   orderChecklistService,
   isRejectionService,
-  orderTypeService,
+  monitoringConditionsStoreService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -331,7 +331,10 @@ export default function routes({
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
 
-  router.use(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION, createOrderTypeDescriptionRouter({ orderTypeService }))
+  router.use(
+    paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION,
+    createOrderTypeDescriptionRouter({ monitoringConditionsStoreService }),
+  )
 
   return router
 }

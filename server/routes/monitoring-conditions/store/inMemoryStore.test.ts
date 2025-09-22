@@ -1,12 +1,12 @@
 import InMemoryMonitoringConditionsStore from './inMemoryStore'
-import { MonitoringConditionsModel } from './model'
+import { MonitoringConditions } from '../model'
 
 describe('in memory order type description store', () => {
   let store: InMemoryMonitoringConditionsStore
   beforeEach(() => {
     store = new InMemoryMonitoringConditionsStore()
   })
-  const data: MonitoringConditionsModel = {}
+  const data: MonitoringConditions = {}
 
   it('should store the order type description model', async () => {
     await store.setMonitoringConditions('some key', data, 1000)
