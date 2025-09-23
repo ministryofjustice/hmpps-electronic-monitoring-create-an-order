@@ -8,7 +8,7 @@ export default class OrderTypeController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions('some token')
 
-    const model = constructModel(monitoringConditions)
+    const model = constructModel(req.order!, monitoringConditions)
 
     res.render('pages/order/monitoring-conditions/order-type-description/order-type', model)
   }
