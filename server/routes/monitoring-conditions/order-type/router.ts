@@ -11,6 +11,7 @@ const createOrderTypeDescriptionRouter = (services: Pick<Services, 'monitoringCo
   const orderTypeController = new OrderTypeController(monitoringConditionsStoreService)
 
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
+  router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
   return router
 }

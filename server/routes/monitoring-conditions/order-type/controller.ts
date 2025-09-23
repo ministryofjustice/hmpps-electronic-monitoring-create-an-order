@@ -1,6 +1,8 @@
 import { Request, RequestHandler, Response } from 'express'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import constructModel from './model'
+import constructModel from './viewModel'
+import { OrderTypeFormDataModel } from './formModel'
+import paths from '../../../constants/paths'
 
 export default class OrderTypeController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
@@ -18,5 +20,29 @@ export default class OrderTypeController {
     const model = constructModel(notifyingOrganisation, monitoringConditions)
 
     res.render('pages/order/monitoring-conditions/order-type-description/order-type', model)
+  }
+
+  update: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.order!.id
+    const formData = OrderTypeFormDataModel.parse(req.body)
+
+    if (formData.orderType === null || formData.orderType === undefined) {
+      req.flash('validationErrors', [
+        {
+          error: 'Select the order type',
+          field: 'orderType',
+          focusTarget: 'orderType',
+        },
+      ])
+      res.redirect(`${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`)
+      return
+    }
+
+    if (formData.action === 'continue') {
+      this.montoringConditionsStoreService.updateMonitoringConditions(orderId, formData)
+
+      // continue to next page
+      res.redirect(`/order/${orderId}/summary`)
+    }
   }
 }

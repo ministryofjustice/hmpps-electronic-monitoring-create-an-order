@@ -9,7 +9,7 @@ export default class MonitoringConditionsStoreService {
     await this.dataStore.setMonitoringConditions(key, data, 24 * 60 * 60)
   }
 
-  public async getMonitoringConditions(key: string) {
+  public async getMonitoringConditions(key: string): Promise<MonitoringConditions> {
     let result = await this.dataStore.getMonitoringConditions(key)
 
     if (result === null) {
@@ -21,5 +21,12 @@ export default class MonitoringConditionsStoreService {
     await this.dataStore.setMonitoringConditions(key, data, 24 * 60 * 60)
 
     return data
+  }
+
+  public async updateOrderType(key: string, data: Pick<MonitoringConditions, 'orderType'>) {
+    const monitoringConditions = await this.getMonitoringConditions(key)
+    monitoringConditions.orderType = data.orderType
+
+    await this.updateMonitoringConditions(key, monitoringConditions)
   }
 }

@@ -27,12 +27,12 @@ const getQuestions = (notifyingOrg: NotifyingOrganisation) => {
         {
           question: 'Release from prison',
           hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
-          value: 'Post Release',
+          value: 'POST_RELEASE',
         },
         {
           question: 'Community',
           hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
-          value: 'Community',
+          value: 'COMMUNITY',
         },
       ]
     case 'CIVIL_COUNTY_COURT':
@@ -46,17 +46,17 @@ const getQuestions = (notifyingOrg: NotifyingOrganisation) => {
         {
           question: 'Community',
           hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
-          value: 'Community',
+          value: 'COMMUNITY',
         },
         {
           question: 'Bail',
           hint: 'Monitoring is a condition of bail.',
-          value: 'Bail',
+          value: 'BAIL',
         },
         {
           question: 'Civil',
           hint: 'Monitoring is a condition of a civil court order, rather than a criminal one.',
-          value: 'Civil',
+          value: 'CIVIL',
         },
       ]
     default:

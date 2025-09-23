@@ -7,8 +7,9 @@ import { MonitoringConditions } from '../model'
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { Order } from '../../../models/Order'
 import { InterestedParties } from '../../../models/InterestedParties'
-import { OrderTypeModel } from './model'
+import { OrderTypeModel } from './viewModel'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import paths from '../../../constants/paths'
 
 jest.mock('../monitoringConditionsStoreService')
 
@@ -46,6 +47,7 @@ describe('order type controller', () => {
 
     req = createMockRequest()
     req.order = mockOrder
+    req.flash = jest.fn()
     res = createMockResponse()
     next = jest.fn()
   })
@@ -101,12 +103,12 @@ describe('order type controller', () => {
         {
           question: 'Release from prison',
           hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
-          value: 'Post Release',
+          value: 'POST_RELEASE',
         },
         {
           question: 'Community',
           hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
-          value: 'Community',
+          value: 'COMMUNITY',
         },
       ],
       orderType: { value: '' },
@@ -136,17 +138,17 @@ describe('order type controller', () => {
         {
           question: 'Community',
           hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
-          value: 'Community',
+          value: 'COMMUNITY',
         },
         {
           question: 'Bail',
           hint: 'Monitoring is a condition of bail.',
-          value: 'Bail',
+          value: 'BAIL',
         },
         {
           question: 'Civil',
           hint: 'Monitoring is a condition of a civil court order, rather than a criminal one.',
-          value: 'Civil',
+          value: 'CIVIL',
         },
       ],
       orderType: { value: '' },
@@ -155,5 +157,42 @@ describe('order type controller', () => {
 
     expect(res.render).toHaveBeenCalledWith(expect.anything(), expectedViewObject)
   })
+
   // TODO: prison and home office redirects
+
+  it('should save the form to storage when the action is continue', async () => {
+    req.body = {
+      action: 'continue',
+      orderType: 'CIVIL',
+    }
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.update(req, res, next)
+
+    expect(mockMonitoringConditionsStoreService.updateMonitoringConditions).toHaveBeenCalled()
+  })
+
+  it('should redirect to view with errors when orderType is missing', async () => {
+    req.body = {
+      action: 'continue',
+    }
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.update(req, res, next)
+
+    expect(res.redirect).toHaveBeenCalledWith(`${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`)
+  })
+
+  it('should flash the request with the correct errors when orderType is missing', async () => {
+    req.body = {
+      action: 'continue',
+    }
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.update(req, res, next)
+
+    expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+      { error: 'Select the order type', field: 'orderType', focusTarget: 'orderType' },
+    ])
+  })
 })
