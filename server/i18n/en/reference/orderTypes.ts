@@ -9,6 +9,4 @@ const orderTypes: OrderTypes = {
   SPECIAL: 'Special',
 }
 
-export const orderTypeList = Object.keys(orderTypes)
-
 export default orderTypes
