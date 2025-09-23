@@ -34,10 +34,23 @@ export default class InstallationLocationController {
 
       res.redirect(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', orderId))
     } else if (action === 'continue') {
+      const orderLocation = req.order!.installationLocation?.location
+      const newLocation = result?.location
+
+      let { installationAppointment } = req.order!
+      let newAddressList = req.order!.addresses
+
+      if (newLocation !== orderLocation) {
+        installationAppointment = null
+        newAddressList = newAddressList.filter(address => address.addressType !== 'INSTALLATION')
+      }
+
       res.redirect(
         this.taskListService.getNextPage('INSTALLATION_LOCATION', {
           ...req.order!,
           installationLocation: result,
+          installationAppointment,
+          addresses: newAddressList,
         }),
       )
     } else {

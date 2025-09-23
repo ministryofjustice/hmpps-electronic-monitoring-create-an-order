@@ -10,6 +10,10 @@ export default class CheckYourAnswersPage extends AppPage {
     return cy.contains('.govuk-link', 'Change')
   }
 
+  changeLinkByQuestion(questionText: string): PageElement {
+    return cy.contains('.govuk-summary-list__row', questionText).find('a').contains('Change')
+  }
+
   checkOnPage(): void {
     cy.get('h1', { log: false }).contains(this.title)
 

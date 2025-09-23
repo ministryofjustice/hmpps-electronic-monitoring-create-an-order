@@ -304,7 +304,7 @@ context('Scenarios', () => {
                 date_and_time_installation_will_take_place: formatAsFmsDateTime(
                   installationAppointment.appointmentDate,
                 ),
-                released_under_prarr: 'No',
+                released_under_prarr: 'false',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
