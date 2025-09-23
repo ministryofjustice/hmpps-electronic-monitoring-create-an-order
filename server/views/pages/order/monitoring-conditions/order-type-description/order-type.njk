@@ -17,6 +17,8 @@
 {% block formInputs %}
     {{ govukRadios({
   name: "orderType",  
+  errorMessage: orderType.error,
+  value: orderType.value,
   fieldset: {
     legend: {
       text: 'What is the order type?',

@@ -180,7 +180,9 @@ describe('order type controller', () => {
 
     await controller.update(req, res, next)
 
-    expect(res.redirect).toHaveBeenCalledWith(`${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`)
+    expect(res.redirect).toHaveBeenCalledWith(
+      `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`.replace(':orderId', mockOrder.id),
+    )
   })
 
   it('should flash the request with the correct errors when orderType is missing', async () => {

@@ -3,6 +3,7 @@ import MonitoringConditionsStoreService from '../monitoringConditionsStoreServic
 import constructModel from './viewModel'
 import { OrderTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
+import { ValidationResult } from '../../../models/Validation'
 
 export default class OrderTypeController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
@@ -17,7 +18,8 @@ export default class OrderTypeController {
       throw new Error('notifyingOrganisation not set')
     }
 
-    const model = constructModel(notifyingOrganisation, monitoringConditions)
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
+    const model = constructModel(notifyingOrganisation, monitoringConditions, errors)
 
     res.render('pages/order/monitoring-conditions/order-type-description/order-type', model)
   }
@@ -34,7 +36,7 @@ export default class OrderTypeController {
           focusTarget: 'orderType',
         },
       ])
-      res.redirect(`${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`)
+      res.redirect(`${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`.replace(':orderId', orderId))
       return
     }
 

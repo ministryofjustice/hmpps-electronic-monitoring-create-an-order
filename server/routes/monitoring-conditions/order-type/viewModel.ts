@@ -1,5 +1,8 @@
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
 export type OrderTypeModel = ViewModel<Pick<MonitoringConditions, 'orderType'>> & {
@@ -12,10 +15,22 @@ type OrderTypeQuestion = {
   value: string
 }
 
-const contructModel = (notifyingOrg: NotifyingOrganisation, data: MonitoringConditions): OrderTypeModel => {
-  const model: OrderTypeModel = { orderType: { value: data.orderType || '' }, errorSummary: null }
+const contructModel = (
+  notifyingOrg: NotifyingOrganisation,
+  data: MonitoringConditions,
+  errors: ValidationResult,
+): OrderTypeModel => {
+  const model: OrderTypeModel = {
+    orderType: { value: data.orderType || '' },
+    errorSummary: null,
+  }
 
   model.orderTypeQuestions = getQuestions(notifyingOrg)
+
+  if (errors && errors.length) {
+    model.orderType!.error = getError(errors, 'orderType')
+    model.errorSummary = createGovukErrorSummary(errors)
+  }
 
   return model
 }

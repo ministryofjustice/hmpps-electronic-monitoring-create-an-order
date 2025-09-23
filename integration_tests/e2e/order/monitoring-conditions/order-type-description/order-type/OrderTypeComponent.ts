@@ -5,7 +5,7 @@ import { PageElement } from '../../../../../pages/page'
 export default class OrderTypeComponent extends FormComponent {
   get orderTypeField(): FormRadiosComponent {
     const label = 'What is the order type?'
-    return new FormRadiosComponent(this.form, label, ['Release from prison', 'Community'])
+    return new FormRadiosComponent(this.form, label, [])
   }
 
   get backButton(): PageElement {
