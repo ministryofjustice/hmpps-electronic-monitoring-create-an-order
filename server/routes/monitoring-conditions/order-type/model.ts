@@ -39,6 +39,30 @@ const getQuestions = (notifyingOrg: NotifyingOrganisation) => {
           value: 'Community',
         },
       ]
+    case 'CIVIL_COUNTY_COURT':
+    case 'CROWN_COURT':
+    case 'FAMILY_COURT':
+    case 'YOUTH_COURT':
+    case 'MILITARY_COURT':
+    case 'SCOTTISH_COURT':
+    case 'MAGISTRATES_COURT':
+      return [
+        {
+          question: 'Community',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
+          value: 'Community',
+        },
+        {
+          question: 'Bail',
+          hint: 'Monitoring is a condition of bail.',
+          value: 'Bail',
+        },
+        {
+          question: 'Civil',
+          hint: 'Monitoring is a condition of a civil court order, rather than a criminal one.',
+          value: 'Civil',
+        },
+      ]
     default:
       return []
   }

@@ -8,6 +8,7 @@ import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { Order } from '../../../models/Order'
 import { InterestedParties } from '../../../models/InterestedParties'
 import { OrderTypeModel } from './model'
+import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 
 jest.mock('../monitoringConditionsStoreService')
 
@@ -98,6 +99,46 @@ describe('order type controller', () => {
           question: 'Community',
           hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
           value: 'Community',
+        },
+      ],
+      orderType: { value: '' },
+      errorSummary: null,
+    }
+
+    expect(res.render).toHaveBeenCalledWith(expect.anything(), expectedViewObject)
+  })
+
+  it.each<{ notifyingOrg: NotifyingOrganisation }>([
+    { notifyingOrg: 'CIVIL_COUNTY_COURT' },
+    { notifyingOrg: 'CROWN_COURT' },
+    { notifyingOrg: 'SCOTTISH_COURT' },
+    { notifyingOrg: 'YOUTH_COURT' },
+    { notifyingOrg: 'MILITARY_COURT' },
+    { notifyingOrg: 'FAMILY_COURT' },
+    { notifyingOrg: 'MAGISTRATES_COURT' },
+  ])('should construct the correct model when notifying org is %notifyingOrg', async ({ notifyingOrg }) => {
+    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: notifyingOrg })
+    req.order = mockOrder
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.view(req, res, next)
+
+    const expectedViewObject: OrderTypeModel = {
+      orderTypeQuestions: [
+        {
+          question: 'Community',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
+          value: 'Community',
+        },
+        {
+          question: 'Bail',
+          hint: 'Monitoring is a condition of bail.',
+          value: 'Bail',
+        },
+        {
+          question: 'Civil',
+          hint: 'Monitoring is a condition of a civil court order, rather than a criminal one.',
+          value: 'Civil',
         },
       ],
       orderType: { value: '' },
