@@ -35,6 +35,8 @@ interface ValidationErrors {
   mandatoryAttendanceConditions: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    purposeRequired: string
+    appointmentDayRequired: string
   }
   curfewConditions: {
     addressesRequired: string
@@ -191,6 +193,8 @@ const validationErrors: ValidationErrors = {
   mandatoryAttendanceConditions: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring', true),
+    purposeRequired: 'Enter what the appointment is for',
+    appointmentDayRequired: 'Enter on what day the appointment is',
   },
   curfewConditions: {
     addressesRequired: 'Select where the device wearer will be during curfew hours',
