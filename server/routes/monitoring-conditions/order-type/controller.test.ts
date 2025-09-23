@@ -91,6 +91,30 @@ describe('order type controller', () => {
     )
   })
 
+  it('should construct the correct model when there are errors', async () => {
+    req.flash = jest.fn().mockReturnValueOnce([
+      {
+        error: 'Select the order type',
+        field: 'orderType',
+        focusTarget: 'orderType',
+      },
+    ])
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        orderType: { value: '', error: { text: 'Select the order type' } },
+        errorSummary: {
+          errorList: [{ href: '#orderType', text: 'Select the order type' }],
+          titleText: 'There is a problem',
+        },
+      }),
+    )
+  })
+
   it('should construct the correct model when notifying org is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
     req.order = mockOrder
