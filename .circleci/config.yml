@@ -157,7 +157,7 @@ jobs:
 
   scenario_test:
     executor: scenario-testing
-    parallelism: 4
+    parallelism: 6
     environment:
       TZ: Europe/London
     steps:
