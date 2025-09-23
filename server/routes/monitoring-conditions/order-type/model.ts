@@ -1,5 +1,4 @@
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
-import { Order } from '../../../models/Order'
 import { ViewModel } from '../../../models/view-models/utils'
 import { MonitoringConditions } from '../model'
 
@@ -13,13 +12,10 @@ type OrderTypeQuestion = {
   value: string
 }
 
-const contructModel = (order: Order, data: MonitoringConditions): OrderTypeModel => {
+const contructModel = (notifyingOrg: NotifyingOrganisation, data: MonitoringConditions): OrderTypeModel => {
   const model: OrderTypeModel = { orderType: { value: data.orderType || '' }, errorSummary: null }
 
-  const notifyingOrg = order.interestedParties?.notifyingOrganisation
-  if (notifyingOrg !== undefined) {
-    model.orderTypeQuestions = getQuestions(notifyingOrg)
-  }
+  model.orderTypeQuestions = getQuestions(notifyingOrg)
 
   return model
 }

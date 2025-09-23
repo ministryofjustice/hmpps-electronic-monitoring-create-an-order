@@ -4,6 +4,16 @@
 {% set section = "Electronic monitoring required" %}
 {% set singleQuestionPage = true %}
 
+{% set items = [] %}
+{% for question in orderTypeQuestions %}
+    {% set items = (items.push({
+	text: question.question,
+	hint: {text: question.hint},
+	value: question.value,
+	disabled: not isOrderEditable
+    }), items) %}
+{% endfor %}
+
 {% block formInputs %}
     {{ govukRadios({
   name: "orderType",  
@@ -14,20 +24,7 @@
       classes: "govuk-fieldset__legend--l"
     }
   }, 
-  items: [
-    {
-      value: "yes",
-      text: "Release from prison",
-      hint: { text: "Monitoring is a condition of being released from prison following a custodial sentence."},
-      disabled: not isOrderEditable
-    },
-    {
-      value: "no",
-      text: "Community",
-      hint: { text: "Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence." },
-      disabled: not isOrderEditable
-    }
-  ]
+  items: items 
 })}}
 
 {% endblock %}

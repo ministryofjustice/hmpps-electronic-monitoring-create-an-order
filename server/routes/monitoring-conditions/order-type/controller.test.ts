@@ -12,9 +12,9 @@ import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 
 jest.mock('../monitoringConditionsStoreService')
 
-const createInterestedParties = (overrides: Partial<InterestedParties>): InterestedParties => {
+const createInterestedParties = (overrides: Partial<InterestedParties> = {}): InterestedParties => {
   return {
-    notifyingOrganisation: 'PRISON',
+    notifyingOrganisation: 'PROBATION',
     notifyingOrganisationName: '',
     notifyingOrganisationEmail: '',
     responsibleOfficerName: '',
@@ -42,8 +42,10 @@ describe('order type controller', () => {
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({})
 
     mockOrder = getMockOrder()
+    mockOrder.interestedParties = createInterestedParties()
 
     req = createMockRequest()
+    req.order = mockOrder
     res = createMockResponse()
     next = jest.fn()
   })
@@ -64,7 +66,10 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), { orderType: { value: '' }, errorSummary: null })
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ orderType: { value: '' }, errorSummary: null }),
+    )
   })
 
   it('should construct the correct model when there is data in the store', async () => {
@@ -75,10 +80,13 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), {
-      orderType: { value: 'COMMUNITY' },
-      errorSummary: null,
-    })
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        orderType: { value: 'COMMUNITY' },
+        errorSummary: null,
+      }),
+    )
   })
 
   it('should construct the correct model when notifying org is probation', async () => {
@@ -147,4 +155,5 @@ describe('order type controller', () => {
 
     expect(res.render).toHaveBeenCalledWith(expect.anything(), expectedViewObject)
   })
+  // TODO: prison and home office redirects
 })
