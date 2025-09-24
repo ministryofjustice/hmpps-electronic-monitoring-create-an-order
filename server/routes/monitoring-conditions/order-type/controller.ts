@@ -41,7 +41,7 @@ export default class OrderTypeController {
     }
 
     if (formData.action === 'continue') {
-      this.montoringConditionsStoreService.updateMonitoringConditions(orderId, formData)
+      this.montoringConditionsStoreService.updateOrderType(orderId, formData)
 
       // continue to next page
       res.redirect(`/order/${orderId}/summary`)

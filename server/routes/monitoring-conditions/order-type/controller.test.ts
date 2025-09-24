@@ -193,7 +193,7 @@ describe('order type controller', () => {
 
     await controller.update(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateMonitoringConditions).toHaveBeenCalled()
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalled()
   })
 
   it('should redirect to view with errors when orderType is missing', async () => {
