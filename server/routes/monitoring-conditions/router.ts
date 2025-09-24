@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { Services } from '../../../services'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
-import OrderTypeController from './controller'
+import { Services } from '../../services'
+import asyncMiddleware from '../../middleware/asyncMiddleware'
+import OrderTypeController from './order-type/controller'
 
 const createOrderTypeDescriptionRouter = (services: Pick<Services, 'monitoringConditionsStoreService'>): Router => {
   const router = Router()
