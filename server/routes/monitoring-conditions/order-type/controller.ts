@@ -10,7 +10,7 @@ export default class OrderTypeController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const orderId = req.order!.id
-    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions('some token')
+    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
 
     const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisation
     if (!notifyingOrganisation) {
@@ -52,7 +52,9 @@ export default class OrderTypeController {
       this.montoringConditionsStoreService.updateOrderType(orderId, formData)
 
       // continue to next page
-      res.redirect(`/order/${orderId}/summary`)
+      res.redirect(
+        `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/check-your-answers`.replace(':orderId', orderId),
+      )
     }
   }
 }

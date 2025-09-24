@@ -3,6 +3,7 @@ import MonitoringConditionsStoreService from '../monitoringConditionsStoreServic
 import InMemoryMonitoringConditionsStore from '../store/inMemoryStore'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import CheckYourAnswersController from './controller'
+import paths from '../../../constants/paths'
 
 jest.mock('../monitoringConditionsStoreService')
 
@@ -25,14 +26,47 @@ describe('check your answers controller', () => {
     next = jest.fn()
   })
 
-  it('should render the correct view', () => {
+  it('should render the correct view', async () => {
     const controller = new CheckYourAnswersController(mockMonitoringConditionsStoreService)
 
-    controller.view(req, res, next)
+    await controller.view(req, res, next)
 
     expect(res.render).toHaveBeenCalledWith(
       'pages/order/monitoring-conditions/order-type-description/check-your-answers',
       expect.anything(),
     )
+  })
+
+  it('should construct the correct model', async () => {
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+      orderType: 'COMMUNITY',
+      orderTypeConditions: 'REQUIREMENTS_OF_A_COMMUNITY_ORDER',
+    })
+    const controller = new CheckYourAnswersController(mockMonitoringConditionsStoreService)
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(expect.anything(), {
+      answers: [
+        {
+          key: {
+            text: 'What is the order type?',
+          },
+          value: { text: 'Community' },
+          actions: {
+            items: [
+              {
+                href: `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`.replace(
+                  ':orderId',
+                  req.order!.id,
+                ),
+                text: 'Change',
+                visuallyHiddenText: 'What is the order type?'.toLowerCase(),
+              },
+            ],
+          },
+        },
+      ],
+    })
   })
 })
