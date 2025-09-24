@@ -27,6 +27,22 @@ export default class MonitoringConditionsStoreService {
     const monitoringConditions = await this.getMonitoringConditions(key)
     monitoringConditions.orderType = data.orderType
 
+    switch (data.orderType) {
+      case 'POST_RELEASE':
+        monitoringConditions.orderTypeConditions = 'LICENCE_CONDITIONS_OF_A_CUSTODIAL_ORDER'
+        break
+      case 'COMMUNITY':
+        monitoringConditions.orderTypeConditions = 'REQUIREMENTS_OF_A_COMMUNITY_ORDER'
+        break
+      case 'CIVIL':
+      case 'IMMIGRATION':
+      case 'BAIL':
+        monitoringConditions.orderTypeConditions = 'BAIL_ORDER'
+        break
+      default:
+        throw new Error('Invalid order type')
+    }
+
     await this.updateMonitoringConditions(key, monitoringConditions)
   }
 }
