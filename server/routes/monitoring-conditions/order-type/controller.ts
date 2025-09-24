@@ -9,6 +9,7 @@ export default class OrderTypeController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.order!.id
     const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions('some token')
 
     const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisation
@@ -16,6 +17,13 @@ export default class OrderTypeController {
       // Throw error for now as this will not be possible in the future
       // Should figure out what behaviour we want if it isn't set
       throw new Error('notifyingOrganisation not set')
+    }
+
+    if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+      this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'POST_RELEASE' })
+      // Update to sentence page when it is made
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      return
     }
 
     const errors = req.flash('validationErrors') as unknown as ValidationResult

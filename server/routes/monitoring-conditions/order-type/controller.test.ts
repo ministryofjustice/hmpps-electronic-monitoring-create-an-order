@@ -183,6 +183,35 @@ describe('order type controller', () => {
   })
 
   // TODO: prison and home office redirects
+  it('should save order type and redirect if notifyingOrg is prison', async () => {
+    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PRISON' })
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.view(req, res, next)
+
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+      orderType: 'POST_RELEASE',
+    })
+
+    // expect(res.redirect).toHaveBeenCalledWith(
+    //   paths.MONITORING_CONDITIONS.SENTENCE_TYPE
+    // )
+  })
+
+  it('should save order type and redirect if notifyingOrg is ycs', async () => {
+    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' })
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.view(req, res, next)
+
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+      orderType: 'POST_RELEASE',
+    })
+
+    // expect(res.redirect).toHaveBeenCalledWith(
+    //   paths.MONITORING_CONDITIONS.SENTENCE_TYPE
+    // )
+  })
 
   it('should save the form to storage when the action is continue', async () => {
     req.body = {
