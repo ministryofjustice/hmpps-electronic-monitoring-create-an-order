@@ -72,10 +72,10 @@ To request a personal client:
 **NOTE: In order for the frontend service to work fully it needs to receive data from the CEMO API.  
 [See the next section](#running-the-cemo-frontend-service--cemo-api-locally) for instructions on running both of these services locally.**
 
-1. Start the main services in docker, excluding hmpps-auth and the typescript template app:
+1. Start the main services in docker, excluding hmpps-auth and the typescript template app:  
     `docker compose up --scale=app=0 --scale=hmpps-auth=0`
 
-2.  Build assets and start the app with esbuild:
+2.  Build assets and start the app with esbuild:  
     `npm run start:dev`
 
 3.  Access the service via [http://localhost:3000](http://localhost:3000).  
@@ -86,7 +86,7 @@ Use your HMPPS Auth credentials (dev) to sign in.
 ## Running this service and the CEMO API locally
 Running the CEMO frontend & api together locally can be useful for development purposes.
 
-[Instructions are in this section of the API repo]](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api#running-this-service-and-the-cemo-frontend-locally).
+[Instructions are in this section of the API repo](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api#running-this-service-and-the-cemo-frontend-locally).
 
 
 ---
