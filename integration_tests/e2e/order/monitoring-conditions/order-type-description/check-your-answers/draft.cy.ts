@@ -5,49 +5,47 @@ import OrderTypePage from '../order-type/OrderTypePage'
 
 const mockOrderId = uuidv4()
 
-context('', () => {
-  context('Is Rejection', () => {
-    beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        order: {
-          interestedParties: {
-            notifyingOrganisation: 'PROBATION',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: '',
-            responsibleOrganisation: 'HOME_OFFICE',
-            responsibleOrganisationRegion: '',
-            responsibleOrganisationEmail: '',
-          },
+context('Check your answers', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      order: {
+        interestedParties: {
+          notifyingOrganisation: 'PROBATION',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: '',
+          responsibleOfficerName: '',
+          responsibleOfficerPhoneNumber: '',
+          responsibleOrganisation: 'HOME_OFFICE',
+          responsibleOrganisationRegion: '',
+          responsibleOrganisationEmail: '',
         },
-      })
-      cy.signIn()
-
-      // go through the flow
-      const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-      orderTypePage.form.orderTypeField.set('Community')
-      orderTypePage.form.continueButton.click()
+      },
     })
+    cy.signIn()
 
-    const pageHeading = 'Check your answers'
+    // go through the flow
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.orderTypeField.set('Community')
+    orderTypePage.form.continueButton.click()
+  })
 
-    it('Page accessisble', () => {
-      const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-      page.checkIsAccessible()
-    })
+  const pageHeading = 'Check your answers'
 
-    it('Should display content', () => {
-      const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+  it('Page accessisble', () => {
+    const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+    page.checkIsAccessible()
+  })
 
-      page.header.userName().should('contain.text', 'J. Smith')
-      page.header.phaseBanner().should('contain.text', 'dev')
+  it('Should display content', () => {
+    const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.orderInformationSection.shouldExist()
-    })
+    page.header.userName().should('contain.text', 'J. Smith')
+    page.header.phaseBanner().should('contain.text', 'dev')
+
+    page.orderInformationSection.shouldExist()
   })
 })

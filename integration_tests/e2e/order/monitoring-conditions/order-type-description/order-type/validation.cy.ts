@@ -22,26 +22,24 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
 }
 
 const mockOrderId = uuidv4()
-context('Edit Order', () => {
-  context('Is Rejection', () => {
-    beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      stubGetOrder()
+context('order type', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    stubGetOrder()
 
-      cy.signIn()
-    })
+    cy.signIn()
+  })
 
-    it('Should show errors when I do not select orderType', () => {
-      const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
+  it('Should show errors when I do not select orderType', () => {
+    const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-      page.header.userName().should('contain.text', 'J. Smith')
-      page.header.phaseBanner().should('contain.text', 'dev')
+    page.header.userName().should('contain.text', 'J. Smith')
+    page.header.phaseBanner().should('contain.text', 'dev')
 
-      page.form.continueButton.click()
+    page.form.continueButton.click()
 
-      page.errorSummary.shouldExist()
-      page.form.orderTypeField.validationMessage.contains('Select the order type')
-    })
+    page.errorSummary.shouldExist()
+    page.form.orderTypeField.validationMessage.contains('Select the order type')
   })
 })
