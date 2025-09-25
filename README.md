@@ -69,7 +69,7 @@ To request a personal client:
 ---
 
 ## Running the service locally
-**NOTE: In order for the frontend service to work, it needs to receive data from the CEMO API.  
+**NOTE: In order for the frontend service to work fully it needs to receive data from the CEMO API.  
 [See the next section](#running-the-cemo-frontend-service--cemo-api-locally) for instructions on running both of these services locally.**
 
 1. Start the main services in docker, excluding hmpps-auth and the typescript template app:
