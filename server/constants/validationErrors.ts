@@ -23,6 +23,9 @@ interface ValidationErrors {
     orderTypeRequired: string
     sentenceTypeRequired: string
     pilotRequired: string
+    isspRequired: string
+    hdcRequired: string
+    prarrRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -52,6 +55,7 @@ interface ValidationErrors {
     durationTooLong: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    anotherZoneRequired: string
   }
   trailMonitoring: {
     startDateTime: DateTimeErrorMessages
@@ -179,6 +183,9 @@ const validationErrors: ValidationErrors = {
     pilotRequired: 'Select the type of pilot the device wearer is part of',
     orderTypeRequired: 'Select order type',
     sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
+    isspRequired: 'Select if the device wearer is on the ISSP',
+    hdcRequired: 'Select if the device wearer is on a HDC',
+    prarrRequired: 'Select if the device wearer is being released on a P-RARR',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
   },
@@ -208,6 +215,7 @@ const validationErrors: ValidationErrors = {
     descriptionTooLong: 'Where is the exclusion zone must be 200 characters or less',
     durationRequired: 'Enforcement zone duration is required',
     durationTooLong: 'When must the exclusion zone be followed must be 200 characters or less',
+    anotherZoneRequired: 'Select ‘Yes’ if you need to add another exclusion zone',
   },
   trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),

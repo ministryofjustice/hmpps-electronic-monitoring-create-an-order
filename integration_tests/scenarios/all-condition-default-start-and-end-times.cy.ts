@@ -66,9 +66,11 @@ context('The kitchen sink', () => {
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
       pilot: 'GPS Acquisitive Crime',
-
       sentenceType: 'Life Sentence',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

@@ -105,7 +105,7 @@ describe('EnforcementZoneController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/enforcement-zone', {
         anotherZone: {
-          value: 'false',
+          value: '',
         },
         description: {
           value: 'MockDescription',
