@@ -31,6 +31,7 @@ import InMemoryOrderChecklistStore from '../data/orderChecklistStore/inMemoryOrd
 import IsRejectionService from '../routes/is-rejection/service'
 import MonitoringConditionsStoreService from '../routes/monitoring-conditions/monitoringConditionsStoreService'
 import InMemoryMonitoringConditionsStore from '../routes/monitoring-conditions/store/inMemoryStore'
+import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -64,6 +65,7 @@ export const services = () => {
   const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
   const isRejectionService = new IsRejectionService(cemoApiClient)
   const monitoringConditionsStoreService = new MonitoringConditionsStoreService(new InMemoryMonitoringConditionsStore())
+  const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
 
   return {
     alcoholMonitoringService,
@@ -94,6 +96,7 @@ export const services = () => {
     orderChecklistService,
     isRejectionService,
     monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
   }
 }
 
@@ -120,4 +123,5 @@ export {
   OrderChecklistService,
   IsRejectionService,
   MonitoringConditionsStoreService,
+  MonitoringConditionsUpdateService,
 }

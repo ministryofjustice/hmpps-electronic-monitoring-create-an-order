@@ -28,15 +28,15 @@ describe('store service', () => {
 
     it.each<{
       orderType: MonitoringConditions['orderType']
-      orderTypeConditions: MonitoringConditions['orderTypeConditions']
+      orderTypeConditions: MonitoringConditions['conditionType']
     }>([
       {
         orderType: 'POST_RELEASE',
-        orderTypeConditions: 'LICENCE_CONDITIONS_OF_A_CUSTODIAL_ORDER',
+        orderTypeConditions: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
       },
       {
         orderType: 'COMMUNITY',
-        orderTypeConditions: 'REQUIREMENTS_OF_A_COMMUNITY_ORDER',
+        orderTypeConditions: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
       },
       {
         orderType: 'CIVIL',
@@ -57,7 +57,7 @@ describe('store service', () => {
 
         const result = await service.getMonitoringConditions(mockOrderId)
 
-        const expected: MonitoringConditions = { orderType, orderTypeConditions }
+        const expected: MonitoringConditions = { orderType, conditionType: orderTypeConditions }
 
         expect(result).toEqual(expected)
       },

@@ -64,6 +64,7 @@ export default function routes({
   orderChecklistService,
   isRejectionService,
   monitoringConditionsStoreService,
+  monitoringConditionsUpdateService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -333,7 +334,7 @@ export default function routes({
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION,
-    createOrderTypeDescriptionRouter({ monitoringConditionsStoreService }),
+    createOrderTypeDescriptionRouter({ monitoringConditionsStoreService, monitoringConditionsUpdateService }),
   )
 
   return router
