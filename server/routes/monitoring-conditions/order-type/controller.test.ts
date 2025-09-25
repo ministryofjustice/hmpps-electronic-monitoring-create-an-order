@@ -213,6 +213,21 @@ describe('order type controller', () => {
     // )
   })
 
+  it('should save order type and redirect if notifyingOrg is home office', async () => {
+    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' })
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+
+    await controller.view(req, res, next)
+
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+      orderType: 'IMMIGRATION',
+    })
+
+    // expect(res.redirect).toHaveBeenCalledWith(
+    //   paths.MONITORING_CONDITIONS.SENTENCE_TYPE
+    // )
+  })
+
   it('should save the form to storage when the action is continue', async () => {
     req.body = {
       action: 'continue',

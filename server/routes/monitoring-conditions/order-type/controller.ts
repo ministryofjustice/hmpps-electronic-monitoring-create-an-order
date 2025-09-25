@@ -22,7 +22,17 @@ export default class OrderTypeController {
     if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
       this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'POST_RELEASE' })
       // Update to sentence page when it is made
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      res.redirect(
+        `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/check-your-answers`.replace(':orderId', orderId),
+      )
+      return
+    }
+    if (notifyingOrganisation === 'HOME_OFFICE') {
+      this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'IMMIGRATION' })
+      // Update to sentence page when it is made
+      res.redirect(
+        `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/check-your-answers`.replace(':orderId', orderId),
+      )
       return
     }
 
