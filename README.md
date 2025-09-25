@@ -4,11 +4,10 @@
 [![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-electronic-monitoring-create-an-order/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-electronic-monitoring-create-an-order)
 
 ## Contents <!-- omit in toc -->
-
 - [About this project](#about-this-project)
 - [First time setup](#first-time-setup)
 - [Running the service locally](#running-the-service-locally)
-- [Running this service and the CEMO API together](#running-this-service-and-the-cemo-api-together)
+- [Running this service and the CEMO API locally](#running-this-service-and-the-cemo-api-locally)
 - [Tests](#tests)
     - [Unit](#unit-tests)
     - [Integration](#integration-tests)
@@ -23,6 +22,8 @@
 This service allows authenticated MoJ users to create and submit electronic monitoring orders by entering data into a webform.
 
 This service acts as a frontend to the [Create an Electronic Monitoring Order API](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api), which is used to persist EM order form data and submit completed EM order forms to the field monitoring service.
+
+This service is hosted in [Cloud Platform](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide).
 
 ---
 
@@ -42,7 +43,6 @@ To request a personal client:
 - Post the ticket in the [HMPPS Auth and Audit slack channel](https://moj.enterprise.slack.com/archives/C02S71KUBED) and ask for it to be reviewed & processed.
 
 ### 2. Configuire .env
-
 - Create a .env file in the root level of the repository with the following contents. Replace the Client IDs and Client Secrets with values from Kubernetes secrets. [See this section of the Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html) for guidance on accessing kubernetes resources.
 
     ```
@@ -63,14 +63,12 @@ To request a personal client:
 - Use the command `env` to check that the environment variables are in your current shell session. If any of them aren't listed, then load the environment variables into your current shell session using `export $(cat .env)`
 
 ### 3. NPM & dependencies
-
 - Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json` and the CircleCI build config.
 - Install dependencies using `npm install`.
 
 ---
 
 ## Running the service locally
-
 **NOTE: In order for the frontend service to work, it needs to receive data from the CEMO API.  
 [See the next section](#running-the-cemo-frontend-service--cemo-api-locally) for instructions on running both of these services locally.**
 
@@ -86,16 +84,14 @@ Use your HMPPS Auth credentials (dev) to sign in.
 ---
 
 ## Running this service and the CEMO API locally
+Running the CEMO frontend & api together locally can be useful for development purposes.
 
-Running the CEMO frontend & api together can be useful for development purposes.
-
-Instructions for this can be found in the readme of the [Create an EM Order API repo](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api).
+[Instructions are in this section of the API repo]](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api#running-this-service-and-the-cemo-frontend-locally).
 
 
 ---
 
 ## Tests
-
 This service has several levels of testing:
 
 - Unit
@@ -107,13 +103,11 @@ These can be run locally, and are also automated in the CI/CD pipeline.
 ---
 
 ### Unit tests
-
 Run with `npm run test: ui`.
 
 ---
 
-## Integration tests
-
+### Integration tests
 1. Start a test db and wiremock instance:  
 `docker compose -f docker-compose-test.yml up`
 
@@ -126,7 +120,7 @@ Run with `npm run test: ui`.
    - Run in headless mode: `npm run int-test`
    - Run in the Cypress UI: `npm run int-test-ui`
 
-###  Notes:
+####  Notes:
 
 - In the Cypress UI, integration tests are in the E2E directory.
 - The Cypress UI will also list scenario tests but these won't work.  
@@ -135,18 +129,17 @@ To run the scenario tests see [Running scenario tests](#scenario-tests).
 ---
 
 
-## Scenario tests
+### Scenario tests
 
 The scenario tests simulate specific user journeys through the CEMO service.  
 They can be run in two different ways:
 1. Against a containerised instance of the CEMO API running in Docker,  
 which matches the version currently deployed to production.
-2. Against a local clone of the API.  
+2. Against a local clone of the API repo.  
 This allows you to make changes to the API and test against them.
 
 
-### Docker run
-
+#### Docker run
 1. Pull the latest Docker images:  
     `docker compose -f docker-compose-scenarios.yml pull`
 
@@ -164,15 +157,14 @@ This allows you to make changes to the API and test against them.
    - Run in the Cypress UI: `npm run int-test-ui`
 
 
-### Local clone run
-
+#### Local repo run
 1. [Clone the CEMO API](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api) & configure it using the instructions in the readme.
 
 2. Start a test db and wiremock instance:   
     `docker compose -f docker-compose-scenarios.yml up --scale cemo-api=0`
 
 3. Configure the local API for scenario testing:  
-    - Populate the environemnt variuables file (eg. .env) with the following values:
+    - Populate the environemnt variuables file (eg. .env) with the following values.
 
         ```shell
         HMPPS_AUTH_URL=http://localhost:9091/auth
@@ -204,8 +196,7 @@ This allows you to make changes to the API and test against them.
    - Run in the Cypress UI: `npm run int-test-ui`
 
 
-###  Notes:
-
+####  Notes:
 - In the Cypress UI, scenario tests are in the Scenarios directory.
 - The Cypress UI will also list inegration tests but these won't work.  
 To run the scenario tests see [Running integration tests](#integration-tests).
@@ -214,13 +205,12 @@ To run the scenario tests see [Running integration tests](#integration-tests).
 
 
 ## Code quality checks
-
 Run linter: `npm run lint`
 
 ---
 
-## Change log
 
+## Change log
 A change log for the service is available [here](./CHANGELOG.md)
 
 ---
