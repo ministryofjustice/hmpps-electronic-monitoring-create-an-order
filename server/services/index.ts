@@ -29,6 +29,10 @@ import RedisOrderChecklistStore from '../data/orderChecklistStore/redisOrderChec
 import config from '../config'
 import InMemoryOrderChecklistStore from '../data/orderChecklistStore/inMemoryOrderChecklistStore'
 import IsRejectionService from '../routes/is-rejection/service'
+import MonitoringConditionsStoreService from '../routes/monitoring-conditions/monitoringConditionsStoreService'
+import InMemoryMonitoringConditionsStore from '../routes/monitoring-conditions/store/inMemoryStore'
+import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
+import RedisMonitoringConditionsStore from '../routes/monitoring-conditions/store/redisStore'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -61,6 +65,13 @@ export const services = () => {
   const installationLocationService = new InstallationLocationService(cemoApiClient)
   const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
   const isRejectionService = new IsRejectionService(cemoApiClient)
+  const monitoringConditionsStoreService = new MonitoringConditionsStoreService(
+    config.redis.enabled
+      ? new RedisMonitoringConditionsStore(createRedisClient())
+      : new InMemoryMonitoringConditionsStore(),
+  )
+  const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
+
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -89,6 +100,8 @@ export const services = () => {
     installationAppointmentService,
     orderChecklistService,
     isRejectionService,
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
   }
 }
 
@@ -114,4 +127,6 @@ export {
   InstallationLocationService,
   OrderChecklistService,
   IsRejectionService,
+  MonitoringConditionsStoreService,
+  MonitoringConditionsUpdateService,
 }

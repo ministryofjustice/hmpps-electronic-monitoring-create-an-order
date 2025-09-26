@@ -31,6 +31,10 @@ export default abstract class FormComponent {
     return this.form.contains('Save and continue')
   }
 
+  get continueButton(): PageElement {
+    return this.form.contains('Continue')
+  }
+
   get saveAsDraftButton(): PageElement {
     return this.form.contains('Save as draft')
   }
