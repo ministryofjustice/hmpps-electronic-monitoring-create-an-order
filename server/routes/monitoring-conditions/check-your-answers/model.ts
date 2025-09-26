@@ -10,7 +10,7 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
 
   const nofityingOrg = order.interestedParties?.notifyingOrganisation
   if (!(nofityingOrg === 'PRISON' || nofityingOrg === 'YOUTH_CUSTODY_SERVICE' || nofityingOrg === 'HOME_OFFICE')) {
-    const path = `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
     answers.push(
       createAnswer(
         'What is the order type?',

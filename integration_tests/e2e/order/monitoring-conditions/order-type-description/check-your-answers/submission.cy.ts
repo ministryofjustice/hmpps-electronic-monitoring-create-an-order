@@ -69,6 +69,7 @@ context('Check your answers', () => {
       body: {
         orderType: 'COMMUNITY',
         conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        // some default values until other pages are filled in
         startDate: '2020-11-07T10:00:00.000Z',
         endDate: '2040-11-08T10:00:00.000Z',
         curfew: true,

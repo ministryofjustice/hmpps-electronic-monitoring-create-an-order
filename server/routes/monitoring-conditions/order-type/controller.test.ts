@@ -249,7 +249,7 @@ describe('order type controller', () => {
     await controller.update(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith(
-      `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`.replace(':orderId', mockOrder.id),
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', mockOrder.id),
     )
   })
 

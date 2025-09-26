@@ -4,7 +4,7 @@ import SummaryListComponent from '../../../../../pages/components/summaryListCom
 
 export default class OrderTypeDescriptionCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor(heading: string) {
-    super(heading, `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/check-your-answers`)
+    super(heading, paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS)
   }
 
   get orderInformationSection(): SummaryListComponent {

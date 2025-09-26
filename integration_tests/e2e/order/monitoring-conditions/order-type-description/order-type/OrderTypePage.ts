@@ -6,6 +6,6 @@ export default class OrderTypePage extends AppFormPage {
   public form = new OrderTypeComponent()
 
   constructor() {
-    super('', `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`)
+    super('', paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE)
   }
 }

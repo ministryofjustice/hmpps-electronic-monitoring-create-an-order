@@ -78,7 +78,7 @@ describe('check your answers controller', () => {
             actions: {
               items: [
                 {
-                  href: `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(
                     ':orderId',
                     req.order!.id,
                   ),

@@ -333,7 +333,7 @@ export default function routes({
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
 
   router.use(
-    paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION,
+    paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
     createOrderTypeDescriptionRouter({ monitoringConditionsStoreService, monitoringConditionsUpdateService }),
   )
 

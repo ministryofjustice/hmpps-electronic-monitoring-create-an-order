@@ -30,9 +30,7 @@ export default class OrderTypeController {
     if (notifyingOrganisation === 'HOME_OFFICE') {
       this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'IMMIGRATION' })
       // Update to sentence page when it is made
-      res.redirect(
-        `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/check-your-answers`.replace(':orderId', orderId),
-      )
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
       return
     }
 
@@ -54,7 +52,7 @@ export default class OrderTypeController {
           focusTarget: 'orderType',
         },
       ])
-      res.redirect(`${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/order-type`.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', orderId))
       return
     }
 
@@ -62,9 +60,7 @@ export default class OrderTypeController {
       this.montoringConditionsStoreService.updateOrderType(orderId, formData)
 
       // continue to next page
-      res.redirect(
-        `${paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION}/check-your-answers`.replace(':orderId', orderId),
-      )
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
     }
   }
 }
