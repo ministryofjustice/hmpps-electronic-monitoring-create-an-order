@@ -67,12 +67,11 @@ context('Check your answers', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
       body: {
-        data: {
-          orderType: 'COMMUNITY',
-          conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
-        },
-        accessToken: '',
-        orderId: mockOrderId,
+        orderType: 'COMMUNITY',
+        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        startDate: '2020-11-07T10:00:00.000Z',
+        endDate: '2040-11-08T10:00:00.000Z',
+        curfew: true,
       },
     }).should('be.true')
   })
