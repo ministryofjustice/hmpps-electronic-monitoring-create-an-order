@@ -4,6 +4,7 @@ import constructModel from './viewModel'
 import { OrderTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
+import { validationErrors } from '../../../constants/validationErrors'
 
 export default class OrderTypeController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
@@ -47,7 +48,7 @@ export default class OrderTypeController {
     if (formData.orderType === null || formData.orderType === undefined) {
       req.flash('validationErrors', [
         {
-          error: 'Select the order type',
+          error: validationErrors.monitoringConditions.orderTypeRequired,
           field: 'orderType',
           focusTarget: 'orderType',
         },

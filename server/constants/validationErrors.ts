@@ -177,7 +177,7 @@ const validationErrors: ValidationErrors = {
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeDescriptionRequired: 'Select the type of pilot the device wearer is part of',
     pilotRequired: 'Select the type of pilot the device wearer is part of',
-    orderTypeRequired: 'Select order type',
+    orderTypeRequired: 'Select the order type',
     sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),

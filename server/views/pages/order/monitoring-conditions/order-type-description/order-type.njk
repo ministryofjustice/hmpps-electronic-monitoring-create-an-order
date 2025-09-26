@@ -3,6 +3,7 @@
 
 {% set section = "Electronic monitoring required" %}
 {% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
 
 {% set items = [] %}
 {% for question in orderTypeQuestions %}
@@ -21,7 +22,7 @@
   value: orderType.value,
   fieldset: {
     legend: {
-      text: 'What is the order type?',
+      text: questions.orderType.text,
       isPageHeading: true,
       classes: "govuk-fieldset__legend--l"
     }
