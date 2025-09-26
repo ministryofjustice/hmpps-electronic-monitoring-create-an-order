@@ -199,7 +199,7 @@ This allows you to make changes to the API and test against them.
 ####  Notes:
 - In the Cypress UI, scenario tests are in the Scenarios directory.
 - The Cypress UI will also list inegration tests but these won't work.  
-To run the scenario tests see [Running integration tests](#integration-tests).
+To run the integration tests see [Running integration tests](#integration-tests).
 
 ---
 
