@@ -3,14 +3,19 @@ import { deserialiseTime, deserialiseDateTime, getError } from '../../utils/util
 import { AttendanceMonitoring } from '../AttendanceMonitoring'
 import { AttendanceMonitoringFormData } from '../form-data/attendanceMonitoring'
 import { ValidationResult } from '../Validation'
-import { AddressField, DateTimeField, TimeField, ViewModel } from './utils'
+import { DateTimeField, TextField, TimeField, ViewModel } from './utils'
 
 type AttendanceMonitoringViewModel = ViewModel<Pick<AttendanceMonitoring, 'appointmentDay' | 'purpose'>> & {
-  address: AddressField
+  addressLine1: TextField
+  addressLine2: TextField
+  addressLine3: TextField
+  addressLine4: TextField
+  postcode: TextField
   endDate: DateTimeField
   endTime: TimeField
   startDate: DateTimeField
   startTime: TimeField
+  addAnother?: TextField
 }
 
 const constructFromFormData = (
@@ -18,15 +23,22 @@ const constructFromFormData = (
   validationErrors: ValidationResult,
 ): AttendanceMonitoringViewModel => {
   return {
-    address: {
-      value: {
-        line1: formData.addressLine1,
-        line2: formData.addressLine2,
-        line3: formData.addressLine3,
-        line4: formData.addressLine4,
-        postcode: formData.postcode,
-      },
-      error: getError(validationErrors, 'address'),
+    addressLine1: {
+      value: formData.addressLine1,
+      error: getError(validationErrors, 'addressLine1'),
+    },
+    addressLine2: {
+      value: formData.addressLine2,
+    },
+    addressLine3: {
+      value: formData.addressLine3,
+    },
+    addressLine4: {
+      value: formData.addressLine4,
+    },
+    postcode: {
+      value: formData.postcode,
+      error: getError(validationErrors, 'postcode'),
     },
     appointmentDay: {
       value: formData.appointmentDay,
@@ -61,6 +73,10 @@ const constructFromFormData = (
       value: { hours: formData.startTimeHours, minutes: formData.startTimeMinutes },
       error: getError(validationErrors, 'startTime'),
     },
+    addAnother: {
+      value: formData.addAnother,
+      error: getError(validationErrors, 'addAnother'),
+    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -70,14 +86,20 @@ const createFromEntity = (attendanceMonitoring?: AttendanceMonitoring): Attendan
   const [endTimeHours, endTimeMinutes] = deserialiseTime(attendanceMonitoring?.endTime)
 
   return {
-    address: {
-      value: {
-        line1: attendanceMonitoring?.addressLine1 || '',
-        line2: attendanceMonitoring?.addressLine2 || '',
-        line3: attendanceMonitoring?.addressLine3 || '',
-        line4: attendanceMonitoring?.addressLine4 || '',
-        postcode: attendanceMonitoring?.postcode || '',
-      },
+    addressLine1: {
+      value: attendanceMonitoring?.addressLine1 || '',
+    },
+    addressLine2: {
+      value: attendanceMonitoring?.addressLine2 || '',
+    },
+    addressLine3: {
+      value: attendanceMonitoring?.addressLine3 || '',
+    },
+    addressLine4: {
+      value: attendanceMonitoring?.addressLine4 || '',
+    },
+    postcode: {
+      value: attendanceMonitoring?.postcode || '',
     },
     appointmentDay: {
       value: attendanceMonitoring?.appointmentDay || '',
