@@ -37,11 +37,6 @@ const DeviceWearerFormDataValidator = z.object({
   alias: z.string().max(200, validationErrors.deviceWearer.preferredNameMaxLength),
   dateOfBirth: DateInputModel(validationErrors.deviceWearer.dateOfBirth),
   language: z.string().min(0, validationErrors.deviceWearer.languageRequired), // TODO ELM-3376 this needs changing to be conditional on interpreter needed
-  interpreterRequired: BooleanInputModel.pipe(
-    z.boolean({
-      message: validationErrors.deviceWearer.interpreterRequired,
-    }),
-  ),
   adultAtTimeOfInstallation: BooleanInputModel.pipe(
     z.boolean({ message: validationErrors.deviceWearer.responsibleAdultRequired }),
   ),
@@ -49,6 +44,11 @@ const DeviceWearerFormDataValidator = z.object({
   gender: z.string().min(1, validationErrors.deviceWearer.genderRequired),
   disabilities: MultipleChoiceInputModel.pipe(z.array(DisabilityEnum)).transform(val => val.join(',')),
   otherDisability: z.string().optional(),
+  interpreterRequired: BooleanInputModel.pipe(
+    z.boolean({
+      message: validationErrors.deviceWearer.interpreterRequired,
+    }),
+  ),
 })
 
 // The output of validation should be an object that can be sent to the API

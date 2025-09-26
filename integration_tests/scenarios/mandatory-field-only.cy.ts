@@ -119,6 +119,9 @@ context('Mandatory fields only', () => {
         // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
         // 'Alcohol monitoring',
       ],
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -409,6 +412,9 @@ context('Mandatory fields only', () => {
         // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
         // 'Alcohol monitoring',
       ],
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

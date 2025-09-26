@@ -72,6 +72,9 @@ context('Scenarios', () => {
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Detention and Training Order (DTO)',
         // sentenceType: 'Community YRO',
+        issp: 'No',
+        hdc: 'No',
+        prarr: 'No',
       }
 
       const attendanceMonitoringOrder = {

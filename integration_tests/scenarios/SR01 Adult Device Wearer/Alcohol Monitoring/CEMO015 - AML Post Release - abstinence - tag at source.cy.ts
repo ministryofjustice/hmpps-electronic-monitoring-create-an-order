@@ -69,6 +69,9 @@ context('Scenarios', () => {
       monitoringRequired: 'Alcohol monitoring',
       pilot: 'They are not part of any of these pilots',
       sentenceType: 'Standard Determinate Sentence',
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const alcoholMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days

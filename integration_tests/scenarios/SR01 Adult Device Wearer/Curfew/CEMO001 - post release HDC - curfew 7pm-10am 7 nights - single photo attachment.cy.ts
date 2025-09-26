@@ -168,6 +168,8 @@ context('Scenarios', () => {
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'Yes',
+      issp: 'No',
+      prarr: 'No',
       pilot: 'They are not part of any of these pilots',
     }
     const curfewReleaseDetails = {

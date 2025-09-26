@@ -72,6 +72,9 @@ context('Scenarios', () => {
         monitoringRequired: 'Curfew',
         sentenceType: 'Detention and Training Order (DTO)',
         pilot: 'They are not part of any of these pilots',
+        issp: 'No',
+        hdc: 'No',
+        prarr: 'No',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

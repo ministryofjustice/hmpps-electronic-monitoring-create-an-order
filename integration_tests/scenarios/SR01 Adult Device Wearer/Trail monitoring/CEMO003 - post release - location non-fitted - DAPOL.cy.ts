@@ -149,6 +149,9 @@ context('Scenarios', () => {
         sentenceType: 'Standard Determinate Sentence',
         monitoringRequired: 'Trail monitoring',
         pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+        issp: 'No',
+        hdc: 'No',
+        prarr: 'No',
       }
       const trailMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days

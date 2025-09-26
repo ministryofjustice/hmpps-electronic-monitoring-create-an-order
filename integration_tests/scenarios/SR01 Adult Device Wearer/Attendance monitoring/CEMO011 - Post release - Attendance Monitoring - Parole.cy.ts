@@ -65,6 +65,9 @@ context('Scenarios', () => {
       monitoringRequired: 'Mandatory attendance monitoring',
       pilot: 'They are not part of any of these pilots',
       sentenceType: 'Extended Determinate Sentence',
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
 
     const attendanceMonitoringOrder = {

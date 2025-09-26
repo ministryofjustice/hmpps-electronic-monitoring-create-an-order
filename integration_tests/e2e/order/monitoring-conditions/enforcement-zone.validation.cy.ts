@@ -46,11 +46,13 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.endDateField.shouldHaveValidationMessage('Enter end date for enforcement zone')
         page.form.descriptionField.shouldHaveValidationMessage('Enforcement zone description is required')
         page.form.durationField.shouldHaveValidationMessage('Enforcement zone duration is required')
+        page.form.anotherZoneField.shouldHaveValidationMessage('Select ‘Yes’ if you need to add another exclusion zone')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('Enter start date for enforcement zone')
         page.errorSummary.shouldHaveError('Enter end date for enforcement zone')
         page.errorSummary.shouldHaveError('Enforcement zone description is required')
         page.errorSummary.shouldHaveError('Enforcement zone duration is required')
+        page.errorSummary.shouldHaveError('Select ‘Yes’ if you need to add another exclusion zone')
       })
     })
 
@@ -80,6 +82,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
           endDate: new Date('2024-12-11T00:00:00.000Z'),
           description: 'A test description: Lorum ipsum dolar sit amet...',
           duration: 'A test duration: Lorum ipsum dolar sit amet...',
+          anotherZone: 'No',
         }
 
         page.form.fillInWith(validFormData)

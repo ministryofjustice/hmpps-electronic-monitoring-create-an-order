@@ -84,6 +84,9 @@ context('Scenarios', () => {
         monitoringRequired: 'Curfew',
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',
+        issp: 'No',
+        hdc: 'No',
+        prarr: 'No',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

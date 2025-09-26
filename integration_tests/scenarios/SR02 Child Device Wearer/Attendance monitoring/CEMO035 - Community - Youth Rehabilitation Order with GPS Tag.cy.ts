@@ -98,6 +98,9 @@ context.skip('Scenarios', () => {
         monitoringRequired: 'Mandatory attendance monitoring',
         pilot: 'They are not part of any of these pilots',
         // sentenceType: 'Community YRO',
+        issp: 'No',
+        hdc: 'No',
+        prarr: 'No',
       }
 
       const attendanceMonitoringOrder = {

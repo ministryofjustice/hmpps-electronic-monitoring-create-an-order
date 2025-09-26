@@ -67,6 +67,8 @@ context('Scenarios', () => {
         sentenceType: 'Life Sentence',
         monitoringRequired: ['Curfew', 'Exclusion zone monitoring'],
         hdc: 'Yes',
+        issp: 'No',
+        prarr: 'No',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

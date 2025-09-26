@@ -155,6 +155,8 @@ context('Scenarios', () => {
       monitoringRequired: 'Trail monitoring',
       issp: 'Yes',
       pilot: 'They are not part of any of these pilots',
+      hdc: 'No',
+      prarr: 'No',
     }
     const trailMonitoringDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days

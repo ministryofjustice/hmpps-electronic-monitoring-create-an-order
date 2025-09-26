@@ -105,11 +105,11 @@ const createViewModelFromFormData = (
       timeError: getError(validationErrors, 'endDate_time'),
     },
     hdc: {
-      value: formData.hdc,
+      value: formData.hdc || '',
       error: getError(validationErrors, 'hdc'),
     },
     issp: {
-      value: formData.issp,
+      value: formData.issp || '',
       error: getError(validationErrors, 'issp'),
     },
     monitoringRequired: {
@@ -126,7 +126,7 @@ const createViewModelFromFormData = (
       error: getError(validationErrors, 'orderTypeDescription'),
     },
     prarr: {
-      value: formData.prarr,
+      value: formData.prarr || '',
       error: getError(validationErrors, 'prarr'),
     },
     sentenceType: {

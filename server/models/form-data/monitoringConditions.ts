@@ -37,17 +37,17 @@ const MonitoringConditionsFormDataParser = z.object({
     .string()
     .nullable()
     .default(null)
-    .transform(val => (val === null ? 'UNKNOWN' : val)),
+    .transform(val => (val === '' ? null : val)),
   hdc: z
     .string()
     .nullable()
     .default(null)
-    .transform(val => (val === null ? 'UNKNOWN' : val)),
+    .transform(val => (val === '' ? null : val)),
   prarr: z
     .string()
     .nullable()
     .default(null)
-    .transform(val => (val === null ? 'UNKNOWN' : val)),
+    .transform(val => (val === '' ? null : val)),
   pilot: z.coerce.string().nullable().default(''),
   dataDictionaryVersion: z.string().optional(),
 })
@@ -63,19 +63,19 @@ const validateMonitoringConditionsFormData = (formData: MonitoringConditionsForm
   return z
     .object({
       orderType: z.string().min(1, validationErrors.monitoringConditions.orderTypeRequired),
-      monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
       orderTypeDescription: z.string().refine(val => val !== 'undefined' || dataDictionaryVersion !== 'DDV4', {
         message: validationErrors.monitoringConditions.orderTypeDescriptionRequired,
       }),
       startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
       endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
-      sentenceType: z.string({ message: validationErrors.monitoringConditions.sentenceTypeRequired }),
-      issp: z.string(),
-      hdc: z.string(),
-      prarr: z.string(),
       pilot: z.string().refine(val => val.length >= 1 || dataDictionaryVersion !== 'DDV5', {
         message: validationErrors.monitoringConditions.pilotRequired,
       }),
+      sentenceType: z.string({ message: validationErrors.monitoringConditions.sentenceTypeRequired }),
+      issp: z.string({ message: validationErrors.monitoringConditions.isspRequired }),
+      hdc: z.string({ message: validationErrors.monitoringConditions.hdcRequired }),
+      prarr: z.string({ message: validationErrors.monitoringConditions.prarrRequired }),
+      monitoringRequired: z.array(z.string()).min(1, validationErrors.monitoringConditions.monitoringTypeRequired),
     })
     .transform(({ monitoringRequired, orderType, orderTypeDescription, pilot, ...data }) => ({
       orderType: orderType === '' ? null : orderType,

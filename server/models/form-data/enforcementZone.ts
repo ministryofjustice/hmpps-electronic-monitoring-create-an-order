@@ -39,6 +39,7 @@ const EnforcementZoneFormDataValidator = z
       .max(200, validationErrors.enforcementZone.durationTooLong),
     startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
     endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
+    anotherZone: z.string().min(1, { message: validationErrors.enforcementZone.anotherZoneRequired }),
   })
   .transform(({ ...formData }) => ({
     zoneType: 'EXCLUSION',

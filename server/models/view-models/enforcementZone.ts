@@ -18,7 +18,7 @@ const constructFromFormData = (
 ): EnforcementZoneViewModel => {
   return {
     anotherZone: {
-      value: formData.anotherZone,
+      value: formData.anotherZone || '',
       error: getError(validationErrors, 'anotherZone'),
     },
     description: {
@@ -63,7 +63,7 @@ const createFromEntity = (zoneId: number, enforcementZones: Array<EnforcementZon
 
   return {
     anotherZone: {
-      value: hasAnotherZone.toString(),
+      value: hasAnotherZone ? 'true' : '',
     },
     description: {
       value: currentZone?.description || '',

@@ -70,6 +70,8 @@ context('Scenarios', () => {
         sentenceType: 'Standard Determinate Sentence',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
         hdc: 'Yes',
+        issp: 'No',
+        prarr: 'No',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
