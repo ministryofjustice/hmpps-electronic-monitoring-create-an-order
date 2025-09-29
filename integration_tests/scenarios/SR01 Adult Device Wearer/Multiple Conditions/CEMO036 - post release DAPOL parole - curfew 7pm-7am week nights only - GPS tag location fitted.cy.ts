@@ -67,6 +67,9 @@ context.skip('Scenarios', () => {
         pilot: 'GPS Acquisitive Crime',
         sentenceType: 'Standard Determinate Sentence',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
+        issp: 'No',
+        hdc: 'No',
+        prarr: 'No',
       }
       const curfewReleaseDetails = {
         releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

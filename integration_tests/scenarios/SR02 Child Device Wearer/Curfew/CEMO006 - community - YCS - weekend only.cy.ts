@@ -175,6 +175,9 @@ context.skip('Scenarios', () => {
       sentenceType: 'Standard Determinate Sentence',
       // sentenceType: 'Community YRO',
       pilot: 'They are not part of any of these pilots',
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
