@@ -76,6 +76,9 @@ context('Scenarios', () => {
       monitoringRequired: 'Exclusion zone monitoring',
       sentenceType: 'Imprisonment for Public Protection (IPP)',
       pilot: 'They are not part of any of these pilots',
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const enforcementZoneDetails = {
       zoneType: 'Exclusion zone',
