@@ -168,7 +168,9 @@ context('Scenarios', () => {
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      issp: 'No',
       hdc: 'Yes',
+      prarr: 'No',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

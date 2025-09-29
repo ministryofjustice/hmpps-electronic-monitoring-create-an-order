@@ -17,6 +17,9 @@ const errorMessages = {
   endDateRequired: 'Enter end date for monitoring',
   yearMustIncludeFourNumbers: 'Year must include 4 numbers',
   sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
+  isspRequired: 'Select if the device wearer is on the ISSP',
+  hdcRequired: 'Select if the device wearer is on a HDC',
+  prarrRequired: 'Select if the device wearer is being released on a P-RARR',
 }
 
 const validFormData = {
@@ -78,12 +81,18 @@ context('Monitoring conditions', () => {
         page.form.startDateField.shouldHaveValidationMessage(errorMessages.startDateRequired)
         page.form.sentenceTypeField.shouldHaveValidationMessage(errorMessages.sentenceTypeRequired)
         page.form.pilotField.shouldHaveValidationMessage(errorMessages.pilotRequired)
+        page.form.isspField.shouldHaveValidationMessage(errorMessages.isspRequired)
+        page.form.hdcField.shouldHaveValidationMessage(errorMessages.hdcRequired)
+        page.form.prarrField.shouldHaveValidationMessage(errorMessages.prarrRequired)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(errorMessages.monitoringTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.startDateRequired)
         page.errorSummary.shouldHaveError(errorMessages.endDateRequired)
         page.errorSummary.shouldHaveError(errorMessages.sentenceTypeRequired)
         page.errorSummary.shouldHaveError(errorMessages.pilotRequired)
+        page.errorSummary.shouldHaveError(errorMessages.isspRequired)
+        page.errorSummary.shouldHaveError(errorMessages.hdcRequired)
+        page.errorSummary.shouldHaveError(errorMessages.prarrRequired)
       })
 
       it('should show errors from API response if frontend validation passes', () => {
@@ -96,6 +105,9 @@ context('Monitoring conditions', () => {
             { field: 'updateMonitoringConditionsDto', error: 'Test error - monitoring required' },
             { field: 'startDate', error: 'Test error - start date' },
             { field: 'endDate', error: 'Test error - end date' },
+            { field: 'issp', error: 'Test error - ISSP' },
+            { field: 'hdc', error: 'Test error - HDC' },
+            { field: 'prarr', error: 'Test error - PRARR' },
           ],
         })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions`)
@@ -105,10 +117,16 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.shouldHaveValidationMessage('Test error - monitoring required')
         page.form.startDateField.shouldHaveValidationMessage('Test error - start date')
         page.form.endDateField.shouldHaveValidationMessage('Test error - end date')
+        page.form.isspField.shouldHaveValidationMessage('Test error - ISSP')
+        page.form.hdcField.shouldHaveValidationMessage('Test error - HDC')
+        page.form.prarrField.shouldHaveValidationMessage('Test error - PRARR')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('Test error - monitoring required')
         page.errorSummary.shouldHaveError('Test error - start date')
         page.errorSummary.shouldHaveError('Test error - end date')
+        page.errorSummary.shouldHaveError('Test error - ISSP')
+        page.errorSummary.shouldHaveError('Test error - HDC')
+        page.errorSummary.shouldHaveError('Test error - PRARR')
       })
 
       context('order is ddv4', () => {
