@@ -4,7 +4,7 @@ import { MonitoringConditions } from '../model'
 import MonitoringConditionsStore from './store'
 
 export default class RedisMonitoringConditionsStore implements MonitoringConditionsStore {
-  private readonly prefix = 'orderCheckList:'
+  private readonly prefix = 'monitoringConditions:'
 
   constructor(private readonly client: RedisClient) {
     logger.info(`${this.prefix}Create RedisStore`)
