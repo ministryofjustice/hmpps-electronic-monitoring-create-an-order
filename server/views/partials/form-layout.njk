@@ -82,6 +82,12 @@
                 name: "action",
                 value: "returnToSummary"
               }) }}
+	  {% elseif singleQuestionPage %}
+            {{ govukButton({
+                text: "Continue",
+                name: "action",
+                value: "continue"
+              }) }}
           {% elseif isOrderEditable %}
             {{ govukButton({
                 text: "Save and continue" ,
