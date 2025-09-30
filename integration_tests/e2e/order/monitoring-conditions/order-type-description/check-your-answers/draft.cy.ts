@@ -36,7 +36,7 @@ context('Check your answers', () => {
 
   it('Page accessisble', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.orderTypeField.set('Community')
+    orderTypePage.form.fillInWith('Community')
     orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)

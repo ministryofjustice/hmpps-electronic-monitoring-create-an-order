@@ -6,7 +6,7 @@ import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
 export type OrderTypeModel = ViewModel<Pick<MonitoringConditions, 'orderType'>> & {
-  orderTypeQuestions?: OrderTypeQuestion[]
+  orderTypeQuestions: OrderTypeQuestion[]
 }
 
 type OrderTypeQuestion = {
@@ -22,6 +22,7 @@ const contructModel = (
 ): OrderTypeModel => {
   const model: OrderTypeModel = {
     orderType: { value: data.orderType || '' },
+    orderTypeQuestions: [],
     errorSummary: null,
   }
 

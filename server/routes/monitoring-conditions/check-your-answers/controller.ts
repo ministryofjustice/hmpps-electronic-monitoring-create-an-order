@@ -36,9 +36,11 @@ export default class CheckYourAnswersController {
       orderId,
     })
 
+    // TODO
+    // if continue
+    // redirect to next page
+    // if save as draft
+    // go to summary
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
-    // get object from store
-    // submit object to backend
-    // redirect to summary page
   }
 }
