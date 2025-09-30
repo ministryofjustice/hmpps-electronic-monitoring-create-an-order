@@ -41,6 +41,7 @@ interface ValidationErrors {
     purposeRequired: string
     appointmentDayRequired: string
     addressLine1Required: string
+    addressLine3Required: string
     postcodeRequired: string
     addAnotherRequired: string
   }
@@ -201,13 +202,14 @@ const validationErrors: ValidationErrors = {
     installationLocationRequired: 'Select the address of the base station',
   },
   mandatoryAttendanceConditions: {
-    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring', true),
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring appointment'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring appointment', true),
     purposeRequired: 'Enter what the appointment is for',
     appointmentDayRequired: 'Enter on what day the appointment is',
     addressLine1Required: 'Enter address line 1',
+    addressLine3Required: 'Enter town or city',
     postcodeRequired: 'Enter postcode',
-    addAnotherRequired: 'Select if you need to add another appointment',
+    addAnotherRequired: 'Select yes if you need to add another appointment',
   },
   curfewConditions: {
     addressesRequired: 'Select where the device wearer will be during curfew hours',

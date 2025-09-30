@@ -32,6 +32,7 @@ const constructFromFormData = (
     },
     addressLine3: {
       value: formData.addressLine3,
+      error: getError(validationErrors, 'addressLine3'),
     },
     addressLine4: {
       value: formData.addressLine4,

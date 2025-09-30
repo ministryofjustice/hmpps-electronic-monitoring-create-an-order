@@ -47,7 +47,7 @@ const AttendanceMonitoringFormDataValidator = z
     appointmentDay: z.string().min(1, validationErrors.mandatoryAttendanceConditions.appointmentDayRequired),
     addressLine1: z.string().min(1, validationErrors.mandatoryAttendanceConditions.addressLine1Required),
     addressLine2: z.string(),
-    addressLine3: z.string(),
+    addressLine3: z.string().min(1, validationErrors.mandatoryAttendanceConditions.addressLine3Required),
     addressLine4: z.string(),
     postcode: z.string().min(1, validationErrors.mandatoryAttendanceConditions.postcodeRequired),
     startTimeHours: z.string(),
