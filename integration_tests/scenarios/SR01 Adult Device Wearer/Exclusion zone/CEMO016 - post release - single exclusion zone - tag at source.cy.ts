@@ -90,6 +90,9 @@ context('Scenarios', () => {
       monitoringRequired: 'Exclusion zone monitoring',
       sentenceType: 'Extended Determinate Sentence',
       pilot: 'They are not part of any of these pilots',
+      issp: 'No',
+      hdc: 'No',
+      prarr: 'No',
     }
     const enforcementZoneDetails = {
       zoneType: 'Exclusion zone',
