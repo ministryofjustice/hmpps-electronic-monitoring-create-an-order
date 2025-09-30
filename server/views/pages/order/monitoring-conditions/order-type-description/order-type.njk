@@ -1,0 +1,33 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+
+{% set items = [] %}
+{% for question in orderTypeQuestions %}
+    {% set items = (items.push({
+	text: question.question,
+	hint: {text: question.hint},
+	value: question.value,
+	disabled: not isOrderEditable
+    }), items) %}
+{% endfor %}
+
+{% block formInputs %}
+    {{ govukRadios({
+  name: "orderType",  
+  errorMessage: orderType.error,
+  value: orderType.value,
+  fieldset: {
+    legend: {
+      text: questions.orderType.text,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }, 
+  items: items 
+})}}
+
+{% endblock %}
