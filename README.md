@@ -103,7 +103,7 @@ These can be run locally, and are also automated in the CI/CD pipeline.
 ---
 
 ### Unit tests
-Run with `npm run test:ci`.
+Run with `npm run test`.
 
 ---
 
