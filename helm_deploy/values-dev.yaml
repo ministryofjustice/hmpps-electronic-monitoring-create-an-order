@@ -16,7 +16,7 @@ generic-service:
     AUDIT_ENABLED: "false"
     DD_V5_1_ENABLED: "false"
     ALCOHOL_MONITORING_ENABLED: "true"
-    TAG_AT_SOURCE_OPTIONS_ENABLED: "false"    
+    TAG_AT_SOURCE_OPTIONS_ENABLED: "true"    
 
   allowlist:
     unrestricted: "0.0.0.0/0"

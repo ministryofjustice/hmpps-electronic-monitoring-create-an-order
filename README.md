@@ -42,7 +42,7 @@ To request a personal client:
 - Clone the [request template](https://dsdmoj.atlassian.net/browse/HAAR-664)
 - Post the ticket in the [HMPPS Auth and Audit slack channel](https://moj.enterprise.slack.com/archives/C02S71KUBED) and ask for it to be reviewed & processed.
 
-### 2. Configuire .env
+### 2. Configure .env
 - Create a .env file in the root level of the repository with the following contents. Replace the Client IDs and Client Secrets with values from Kubernetes secrets. [See this section of the Cloud Platform User Guide](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html) for guidance on accessing kubernetes resources.
 
     ```
@@ -103,7 +103,7 @@ These can be run locally, and are also automated in the CI/CD pipeline.
 ---
 
 ### Unit tests
-Run with `npm run test: ui`.
+Run with `npm run test`.
 
 ---
 
@@ -114,7 +114,6 @@ Run with `npm run test: ui`.
 2. Run the server in test mode. Two options:
     - Run with auto-restart on changes: `npm run start-feature:dev`
     - Run without auto-restart: `npm run start-feature`  
-    
 
 3. Run the tests using Cypress. Two options:
    - Run in headless mode: `npm run int-test`
@@ -149,8 +148,7 @@ This allows you to make changes to the API and test against them.
 3. Run the server in test mode. Two options:
 
     - Run with auto-restart on changes: `npm run start-feature:dev`
-    - Run without auto-restart: `npm run start-feature`  
-    
+    - Run without auto-restart: `npm run start-feature`   
 
 4. Run the tests using Cypress. Two options:
    - Run in headless mode: `npm run int-test-scenarios`
@@ -164,7 +162,7 @@ This allows you to make changes to the API and test against them.
     `docker compose -f docker-compose-scenarios.yml up --scale cemo-api=0`
 
 3. Configure the local API for scenario testing:  
-    - Populate the environemnt variuables file (eg. .env) with the following values.
+    - Populate the environment variables file (e.g. .env) with the following values.
 
         ```shell
         HMPPS_AUTH_URL=http://localhost:9091/auth
@@ -198,7 +196,7 @@ This allows you to make changes to the API and test against them.
 
 ####  Notes:
 - In the Cypress UI, scenario tests are in the Scenarios directory.
-- The Cypress UI will also list inegration tests but these won't work.  
+- The Cypress UI will also list integration tests but these won't work.  
 To run the integration tests see [Running integration tests](#integration-tests).
 
 ---
