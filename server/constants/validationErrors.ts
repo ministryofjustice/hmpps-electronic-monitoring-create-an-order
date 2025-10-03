@@ -3,6 +3,12 @@ interface ValidationErrors {
     licenceRequired: string
     photoIdentityRequired: string
   }
+  address: {
+    addressLine1Required: string
+    addressLine3Required: string
+    postcodeRequired: string
+    addAnotherRequired: string
+  }
   deviceWearer: {
     dateOfBirth: DateErrorMessages
     firstNameMaxLength: string
@@ -159,6 +165,12 @@ const validationErrors: ValidationErrors = {
   attachments: {
     licenceRequired: 'Upload a licence or court document',
     photoIdentityRequired: 'Select the photo identification document',
+  },
+  address: {
+    addressLine1Required: 'Enter address line 1, typically the building and street',
+    addressLine3Required: 'Enter town or city',
+    postcodeRequired: 'Enter postcode',
+    addAnotherRequired: 'Select if electronic monitoring devices are required at another address',
   },
   deviceWearer: {
     // might be best to make these a sub object in case of multiple, different date validations

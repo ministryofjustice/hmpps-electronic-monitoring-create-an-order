@@ -442,12 +442,9 @@ describe('AddressController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/interested-parties`)
     })
 
-    it.each([
-      { submittedValue: 'true', expectedBoolean: true },
-      { submittedValue: 'false', expectedBoolean: false },
-    ])(
-      'should call the address service with hasAnotherAddress converted to a boolean ($expectedBoolean)',
-      async ({ submittedValue, expectedBoolean }) => {
+    it.each([{ submittedValue: 'true' }, { submittedValue: 'false' }])(
+      'should call the address service with the correct data',
+      async ({ submittedValue }) => {
         // Given
         const req = createMockRequest({
           order: mockOrder,
@@ -482,13 +479,13 @@ describe('AddressController', () => {
           accessToken: 'fakeUserToken',
           orderId: mockOrder.id,
           data: {
-            addressType: 'PRIMARY',
+            addressType: 'primary',
             addressLine1: 'a',
             addressLine2: 'b',
             addressLine3: 'c',
             addressLine4: 'd',
             postcode: 'e',
-            hasAnotherAddress: expectedBoolean,
+            hasAnotherAddress: submittedValue,
           },
         }
 

@@ -41,7 +41,8 @@ const constructFromFormData = (
       error: getError(validationErrors, 'postcode'),
     },
     hasAnotherAddress: {
-      value: formData.hasAnotherAddress,
+      value: formData.hasAnotherAddress ?? '',
+      error: getError(validationErrors, 'hasAnotherAddress'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
