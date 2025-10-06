@@ -44,6 +44,27 @@ context('Contact information', () => {
         page.errorSummary.shouldHaveError(expectedValidationErrors.hasAnotherAddress)
       })
 
+      it('Show validation error if user leaves has another address question blank', () => {
+        const page = Page.visit(SecondaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'secondary',
+        })
+        const formDataMissingHasAnotherAddress = {
+          line1: '1 Buckingham Palace',
+          line3: 'London',
+          postcode: 'SW1A 1AA',
+        }
+        page.form.fillInWith(formDataMissingHasAnotherAddress)
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(SecondaryAddressPage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Select yes if electronic monitoring devices are required at another address')
+        page.form.hasAnotherAddressField.shouldHaveValidationMessage(
+          'Select yes if electronic monitoring devices are required at another address',
+        )
+      })
+
       it('Show validation errors from API response if frontend validation passes', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
