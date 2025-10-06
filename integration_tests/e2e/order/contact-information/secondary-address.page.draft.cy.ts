@@ -34,6 +34,7 @@ context('Contact information', () => {
         page.form.addressLine3Field.shouldHaveValue('')
         page.form.addressLine4Field.shouldHaveValue('')
         page.form.postcodeField.shouldHaveValue('')
+        page.form.hasAnotherAddressField.shouldNotHaveValue()
         page.backToSummaryButton.should('not.exist')
         page.errorSummary.shouldNotExist()
         page.form.shouldHaveAllOptions()

@@ -3,6 +3,12 @@ interface ValidationErrors {
     licenceRequired: string
     photoIdentityRequired: string
   }
+  address: {
+    addressLine1Required: string
+    addressLine3Required: string
+    postcodeRequired: string
+    addAnotherRequired: string
+  }
   deviceWearer: {
     dateOfBirth: DateErrorMessages
     firstNameMaxLength: string
@@ -38,6 +44,12 @@ interface ValidationErrors {
   mandatoryAttendanceConditions: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    purposeRequired: string
+    appointmentDayRequired: string
+    addressLine1Required: string
+    addressLine3Required: string
+    postcodeRequired: string
+    addAnotherRequired: string
   }
   curfewConditions: {
     addressesRequired: string
@@ -154,6 +166,12 @@ const validationErrors: ValidationErrors = {
     licenceRequired: 'Upload a licence or court document',
     photoIdentityRequired: 'Select the photo identification document',
   },
+  address: {
+    addressLine1Required: 'Enter address line 1, typically the building and street',
+    addressLine3Required: 'Enter town or city',
+    postcodeRequired: 'Enter postcode',
+    addAnotherRequired: 'Select yes if electronic monitoring devices are required at another address',
+  },
   deviceWearer: {
     // might be best to make these a sub object in case of multiple, different date validations
     dateOfBirth: {
@@ -196,8 +214,14 @@ const validationErrors: ValidationErrors = {
     installationLocationRequired: 'Select the address of the base station',
   },
   mandatoryAttendanceConditions: {
-    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring', true),
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('attendance monitoring appointment'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('attendance monitoring appointment', true),
+    purposeRequired: 'Enter what the appointment is for',
+    appointmentDayRequired: 'Enter on what day the appointment is',
+    addressLine1Required: 'Enter address line 1',
+    addressLine3Required: 'Enter town or city',
+    postcodeRequired: 'Enter postcode',
+    addAnotherRequired: 'Select yes if you need to add another appointment',
   },
   curfewConditions: {
     addressesRequired: 'Select where the device wearer will be during curfew hours',

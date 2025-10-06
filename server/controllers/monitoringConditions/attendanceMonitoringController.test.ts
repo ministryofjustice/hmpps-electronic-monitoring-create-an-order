@@ -72,6 +72,7 @@ describe('attendanceMonitoringController', () => {
       addressLine3: 'add 3',
       addressLine4: '',
       postcode: 'PC13DE',
+      addAnother: 'true',
     },
   ]
 
@@ -163,15 +164,11 @@ describe('attendanceMonitoringController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/attendance-monitoring', {
-        address: {
-          value: {
-            line1: 'add 1',
-            line2: 'add 2',
-            line3: 'add 3',
-            line4: '',
-            postcode: 'PC13DE',
-          },
-        },
+        addressLine1: { value: 'add 1' },
+        addressLine2: { value: 'add 2' },
+        addressLine3: { value: 'add 3' },
+        addressLine4: { value: '' },
+        postcode: { value: 'PC13DE' },
         appointmentDay: { value: 'test day' },
         endDate: {
           value: {
@@ -238,6 +235,7 @@ describe('attendanceMonitoringController', () => {
               purpose: '',
               startTimeHours: '',
               startTimeMinutes: '',
+              addAnother: '',
             },
           ]),
       })
@@ -250,15 +248,25 @@ describe('attendanceMonitoringController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/attendance-monitoring', {
         id: undefined,
-        address: {
+        addressLine1: {
           error: undefined,
-          value: {
-            line1: '',
-            line2: '',
-            line3: '',
-            line4: '',
-            postcode: '',
-          },
+          value: '',
+        },
+        addressLine2: {
+          error: undefined,
+          value: '',
+        },
+        addressLine3: {
+          error: undefined,
+          value: '',
+        },
+        addressLine4: {
+          error: undefined,
+          value: '',
+        },
+        postcode: {
+          error: undefined,
+          value: '',
         },
         appointmentDay: {
           error: undefined,
@@ -303,6 +311,10 @@ describe('attendanceMonitoringController', () => {
             hours: '',
             minutes: '',
           },
+        },
+        addAnother: {
+          error: undefined,
+          value: '',
         },
         errorSummary: {
           errorList: [

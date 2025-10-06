@@ -184,7 +184,10 @@ context('Scenarios', () => {
         primaryAddressPage.hasAnotherAddress(true)
         primaryAddressPage.saveAndContinue()
 
-        Page.verifyOnPage(SecondaryAddressPage).clearAndRepopulate(fakeVariationSecondaryAddress)
+        Page.verifyOnPage(SecondaryAddressPage).clearAndRepopulate({
+          hasAnotherAddress: 'No',
+          ...fakeVariationSecondaryAddress,
+        })
 
         // NOTE: After the secondary address is entered the  user should to be routed to the Contact Details CYA page. Instead they're routed to Interested Parties/Organisation Details, because adding a new address sets this section of the form to Incomplete.
         Page.verifyOnPage(InterestedPartiesPage).saveAndContinue()

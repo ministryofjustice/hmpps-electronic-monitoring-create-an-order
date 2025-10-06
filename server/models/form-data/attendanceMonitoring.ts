@@ -31,7 +31,7 @@ const AttendanceMonitoringFormDataModel = z.object({
   addressLine3: z.string(),
   addressLine4: z.string(),
   postcode: z.string(),
-  addAnother: z.string().default('false'),
+  addAnother: z.string().default(''),
 })
 
 type AttendanceMonitoringFormData = z.infer<typeof AttendanceMonitoringFormDataModel>
@@ -43,17 +43,18 @@ const AttendanceMonitoringFormDataValidator = z
     id: z.string().nullable(),
     startDate: DateTimeInputModel(validationErrors.mandatoryAttendanceConditions.startDateTime),
     endDate: DateTimeInputModel(validationErrors.mandatoryAttendanceConditions.endDateTime),
-    purpose: z.string(),
-    appointmentDay: z.string(),
-    addressLine1: z.string(),
+    purpose: z.string().min(1, validationErrors.mandatoryAttendanceConditions.purposeRequired),
+    appointmentDay: z.string().min(1, validationErrors.mandatoryAttendanceConditions.appointmentDayRequired),
+    addressLine1: z.string().min(1, validationErrors.mandatoryAttendanceConditions.addressLine1Required),
     addressLine2: z.string(),
-    addressLine3: z.string(),
+    addressLine3: z.string().min(1, validationErrors.mandatoryAttendanceConditions.addressLine3Required),
     addressLine4: z.string(),
-    postcode: z.string(),
+    postcode: z.string().min(1, validationErrors.mandatoryAttendanceConditions.postcodeRequired),
     startTimeHours: z.string(),
     startTimeMinutes: z.string(),
     endTimeHours: z.string(),
     endTimeMinutes: z.string(),
+    addAnother: z.string().min(1, validationErrors.mandatoryAttendanceConditions.addAnotherRequired),
   })
   .transform(({ startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, postcode, ...formData }) => ({
     startTime: serialiseTime(startTimeHours, startTimeMinutes),

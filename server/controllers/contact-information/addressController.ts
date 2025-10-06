@@ -4,7 +4,7 @@ import { AuditService } from '../../services'
 import AddressService from '../../services/addressService'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService, { Page } from '../../services/taskListService'
-import AddressFormDataModel from '../../models/form-data/address'
+import { AddressFormDataModel } from '../../models/form-data/address'
 import addressViewModel from '../../models/view-models/address'
 
 export default class AddressController {
@@ -50,15 +50,14 @@ export default class AddressController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, addressType } = req.params
-    const { action, hasAnotherAddress, ...formData } = AddressFormDataModel.parse(req.body)
+    const { action, ...formData } = AddressFormDataModel.parse(req.body)
 
     const result = await this.addressService.updateAddress({
       accessToken: res.locals.user.token,
       orderId,
       data: {
-        addressType: addressType.toUpperCase(),
         ...formData,
-        hasAnotherAddress: hasAnotherAddress === 'true',
+        addressType,
       },
     })
 
@@ -70,7 +69,7 @@ export default class AddressController {
     } else if (action === 'continue') {
       res.redirect(
         this.taskListService.getNextPage(this.getCurrentPage(addressType), req.order!, {
-          hasAnotherAddress: hasAnotherAddress === 'true',
+          hasAnotherAddress: formData.hasAnotherAddress === 'true',
           addressType,
         }),
       )
