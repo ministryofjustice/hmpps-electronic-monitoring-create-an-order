@@ -170,7 +170,7 @@ const validationErrors: ValidationErrors = {
     addressLine1Required: 'Enter address line 1, typically the building and street',
     addressLine3Required: 'Enter town or city',
     postcodeRequired: 'Enter postcode',
-    addAnotherRequired: 'Select if electronic monitoring devices are required at another address',
+    addAnotherRequired: 'Select yes if electronic monitoring devices are required at another address',
   },
   deviceWearer: {
     // might be best to make these a sub object in case of multiple, different date validations

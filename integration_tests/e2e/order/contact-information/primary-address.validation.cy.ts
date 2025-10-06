@@ -8,7 +8,7 @@ const expectedValidationErrors = {
   addressLine1: 'Enter address line 1, typically the building and street',
   addressLine3: 'Enter town or city',
   postcode: 'Enter postcode',
-  hasAnotherAddress: 'Select if electronic monitoring devices are required at another address',
+  hasAnotherAddress: 'Select yes if electronic monitoring devices are required at another address',
 }
 
 context('Contact information', () => {

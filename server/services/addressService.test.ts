@@ -124,7 +124,7 @@ describe('AddressService', () => {
       expect(result).toEqual([
         {
           field: 'hasAnotherAddress',
-          error: 'Select if electronic monitoring devices are required at another address',
+          error: 'Select yes if electronic monitoring devices are required at another address',
         },
       ])
     })
