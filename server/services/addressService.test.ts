@@ -19,21 +19,23 @@ describe('AddressService', () => {
   })
 
   describe('updateAddress', () => {
-    it('should call  API with the correct data and return parsed Address on success', async () => {
+    it('should parse and send valid address to the API and return response', async () => {
       const mockOrderId = 'mockUid'
       const mockAccessToken = 'mockToken'
       const mockRequestData = {
-        addressType: 'PRIMARY',
+        addressType: 'primary',
         addressLine1: 'Mock Address Line 1',
         addressLine2: 'Mock Address Line 2',
+        addressLine3: 'Mock Address Line 3',
+        addressLine4: '',
         postcode: 'SW1A 1AA',
-        hasAnotherAddress: false,
+        hasAnotherAddress: 'false',
       }
       const mockApiResponse: Address = {
         addressType: AddressTypeEnum.Enum.PRIMARY,
         addressLine1: 'Mock Address Line 1',
         addressLine2: 'Mock Address Line 2',
-        addressLine3: '',
+        addressLine3: 'Mock Address Line 3',
         addressLine4: '',
         postcode: 'SW1A 1AA',
       }
@@ -45,45 +47,86 @@ describe('AddressService', () => {
         accessToken: mockAccessToken,
         data: mockRequestData,
       })
+      const expectedApiPayload = {
+        addressType: 'PRIMARY',
+        addressLine1: 'Mock Address Line 1',
+        addressLine2: 'Mock Address Line 2',
+        addressLine3: 'Mock Address Line 3',
+        addressLine4: '',
+        postcode: 'SW1A 1AA',
+        hasAnotherAddress: false,
+      }
 
       expect(mockRestClient.put).toHaveBeenCalledTimes(1)
       expect(mockRestClient.put).toHaveBeenCalledWith({
         path: `/api/orders/${mockOrderId}/address`,
-        data: mockRequestData,
+        data: expectedApiPayload,
         token: mockAccessToken,
       })
 
       expect(result).toEqual(mockApiResponse)
     })
 
-    it('should correctly send the "hasAnotherAddress: true" flag to the API', async () => {
+    it('should correctly send the hasAnotherAddress: "true" to a boolean', async () => {
       const mockOrderId = 'mockUuid'
       const mockAccessToken = 'testmockToken'
       const mockRequestData = {
+        addressType: 'secondary',
+        addressLine1: 'Mock Secondary Address Line 1',
+        addressLine2: 'Mock Secondary Address Line 2',
+        addressLine3: 'Mock Secondary Address Line 3',
+        addressLine4: '',
+        postcode: 'SS2 2SS',
+        hasAnotherAddress: 'true',
+      }
+
+      mockRestClient.put.mockResolvedValue({})
+
+      await addressService.updateAddress({ orderId: mockOrderId, accessToken: mockAccessToken, data: mockRequestData })
+
+      const expectedApiPayload = {
         addressType: 'SECONDARY',
         addressLine1: 'Mock Secondary Address Line 1',
         addressLine2: 'Mock Secondary Address Line 2',
+        addressLine3: 'Mock Secondary Address Line 3',
+        addressLine4: '',
         postcode: 'SS2 2SS',
         hasAnotherAddress: true,
       }
 
-      const mockApiResponse: Address = {
-        addressType: AddressTypeEnum.Enum.SECONDARY,
-        addressLine1: 'Mock Secondary Address Line 1',
-        addressLine2: 'Mock Secondary Address Line 2',
-        addressLine3: '',
-        addressLine4: '',
-        postcode: 'SS2 2SS',
-      }
-      mockRestClient.put.mockResolvedValue(mockApiResponse)
-
-      await addressService.updateAddress({ orderId: mockOrderId, accessToken: mockAccessToken, data: mockRequestData })
-
       expect(mockRestClient.put).toHaveBeenCalledWith({
         path: `/api/orders/${mockOrderId}/address`,
-        data: mockRequestData,
+        data: expectedApiPayload,
         token: mockAccessToken,
       })
+    })
+
+    it('should return a validation error and not call the API if required data is missing', async () => {
+      const mockInvalidInput = {
+        addressType: 'primary',
+        addressLine1: '123 Main St',
+        addressLine2: '',
+        addressLine3: 'Main City',
+        addressLine4: '',
+        postcode: 'Test',
+        hasAnotherAddress: undefined,
+        action: 'continue',
+      }
+
+      const result = await addressService.updateAddress({
+        orderId: 'mockId',
+        accessToken: 'mockToken',
+        data: mockInvalidInput,
+      })
+
+      expect(mockRestClient.put).not.toHaveBeenCalled()
+
+      expect(result).toEqual([
+        {
+          field: 'hasAnotherAddress',
+          error: 'Select yes if electronic monitoring devices are required at another address',
+        },
+      ])
     })
   })
 })

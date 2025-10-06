@@ -41,7 +41,8 @@ const constructFromFormData = (
       error: getError(validationErrors, 'postcode'),
     },
     hasAnotherAddress: {
-      value: formData.hasAnotherAddress,
+      value: formData.hasAnotherAddress ?? '',
+      error: getError(validationErrors, 'hasAnotherAddress'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
@@ -65,7 +66,13 @@ const getHasAnotherAddress = (addressType: AddressType, addresses: Array<Address
   }
 
   if (addressType === 'PRIMARY' || addressType === 'SECONDARY') {
-    return addresses.some(address => address.addressType === getNextAddressType(addressType))
+    if (addresses.some(address => address.addressType === getNextAddressType(addressType))) {
+      return true
+    }
+    if (addresses.some(address => address.addressType === addressType)) {
+      return false
+    }
+    return null
   }
 
   return false

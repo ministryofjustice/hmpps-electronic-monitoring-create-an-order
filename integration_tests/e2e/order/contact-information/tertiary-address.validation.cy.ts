@@ -4,9 +4,11 @@ import TertiaryAddressPage from '../../../pages/order/contact-information/tertia
 
 const mockOrderId = uuidv4()
 const apiPath = '/address'
-const addressLine1Error = 'Address line 1 is required'
-const addressLine2Error = 'Address line 2 is required'
-const postcodeError = 'Postcode is required'
+const expectedValidationErrors = {
+  addressLine1: 'Enter address line 1, typically the building and street',
+  addressLine3: 'Enter town or city',
+  postcode: 'Enter postcode',
+}
 
 context('Contact information', () => {
   context('Tertiary address', () => {
@@ -16,21 +18,11 @@ context('Contact information', () => {
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'addressLine1', error: addressLine1Error },
-            { field: 'addressLine2', error: addressLine2Error },
-            { field: 'postcode', error: postcodeError },
-          ],
-        })
 
         cy.signIn()
       })
 
-      it('Should display validation error messages', () => {
+      it('Should display frontend validation error messages', () => {
         const page = Page.visit(TertiaryAddressPage, {
           orderId: mockOrderId,
           'addressType(primary|secondary|tertiary)': 'tertiary',
@@ -40,12 +32,39 @@ context('Contact information', () => {
 
         Page.verifyOnPage(TertiaryAddressPage)
 
-        page.form.addressLine1Field.shouldHaveValidationMessage(addressLine1Error)
-        page.form.addressLine2Field.shouldHaveValidationMessage(addressLine2Error)
-        page.form.postcodeField.shouldHaveValidationMessage(postcodeError)
-        page.errorSummary.shouldHaveError(addressLine1Error)
-        page.errorSummary.shouldHaveError(addressLine2Error)
-        page.errorSummary.shouldHaveError(postcodeError)
+        page.form.addressLine1Field.shouldHaveValidationMessage(expectedValidationErrors.addressLine1)
+        page.form.addressLine3Field.shouldHaveValidationMessage(expectedValidationErrors.addressLine3)
+        page.form.postcodeField.shouldHaveValidationMessage(expectedValidationErrors.postcode)
+
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(expectedValidationErrors.addressLine1)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.addressLine3)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.postcode)
+      })
+
+      it('Show validation errors from API response if frontend validation passes', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: [{ field: 'postcode', error: 'Backend postcode validation error' }],
+        })
+        const page = Page.visit(TertiaryAddressPage, {
+          orderId: mockOrderId,
+          'addressType(primary|secondary|tertiary)': 'tertiary',
+        })
+        const validFormData = {
+          line1: '1 Buckingham Palace',
+          line3: 'London',
+          postcode: 'SW1A 1AA',
+        }
+        page.form.fillInWith(validFormData)
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(TertiaryAddressPage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError('Backend postcode validation error')
+        page.form.postcodeField.shouldHaveValidationMessage('Backend postcode validation error')
       })
     })
   })
