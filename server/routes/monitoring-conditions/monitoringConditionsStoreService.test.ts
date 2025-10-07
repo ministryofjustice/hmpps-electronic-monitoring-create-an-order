@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringConditionsStoreService from './monitoringConditionsStoreService'
 import InMemoryMonitoringConditionsStore from './store/inMemoryStore'
-import { MonitoringConditions } from './model'
+import { MonitoringConditions, SentenceTypeEnum } from './model'
 
 describe('store service', () => {
   let store: InMemoryMonitoringConditionsStore
@@ -62,5 +62,41 @@ describe('store service', () => {
         expect(result).toEqual(expected)
       },
     )
+  })
+  describe('when updating sentenceType', () => {
+    it.each(SentenceTypeEnum.options)(
+      'correctly updates the sentence type value to %s in the store',
+      async sentenceType => {
+        await service.updateSentenceType(mockOrderId, { sentenceType })
+        const result = await service.getMonitoringConditions(mockOrderId)
+        const expected: MonitoringConditions = expect.objectContaining({ sentenceType })
+        expect(result).toEqual(expected)
+      },
+    )
+
+    it('should set hdc to YES when sentenceType is "Section 250 / Section 91"', async () => {
+      const sentenceType = 'Section 250 / Section 91'
+      await service.updateSentenceType(mockOrderId, { sentenceType })
+      const result = await service.getMonitoringConditions(mockOrderId)
+      const expected: MonitoringConditions = expect.objectContaining({
+        sentenceType,
+        hdc: 'YES',
+      })
+      expect(result).toEqual(expected)
+    })
+
+    // it('should set hdc to NO when sentenceType is not "Section 250 / Section 91"', async () => {
+
+    //   await service.updateSentenceType(mockOrderId, { sentenceType: 'Section 250 / Section 91' })
+
+    //   const newSentenceType = 'Standard Determinate Sentence'
+    //   await service.updateSentenceType(mockOrderId, { sentenceType: newSentenceType })
+    //   const result = await service.getMonitoringConditions(mockOrderId)
+    //   const expected: MonitoringConditions = expect.objectContaining({
+    //     sentenceType: newSentenceType,
+    //     hdc: 'NO',
+    //   })
+    //   expect(result).toEqual(expected)
+    // })
   })
 })
