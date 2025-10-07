@@ -1,0 +1,33 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+
+{% set items = [] %}
+
+{% for question in sentenceTypeQuestions %}
+    {% set items = (items.push({
+      text: question.question,
+      value: question.value,
+      disabled: not isOrderEditable
+    }), items) %}
+{% endfor %}
+
+{% block formInputs %}
+    {{ govukRadios({
+      name: "sentenceType",
+      errorMessage: sentenceType.error,
+      value: sentenceType.value,
+      fieldset: {
+        legend: {
+          text: questions.sentenceType.text,
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: items
+    })}}
+{% endblock %}
+
