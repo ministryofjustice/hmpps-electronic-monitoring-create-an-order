@@ -6,6 +6,4 @@ export default class StartPage extends Page {
   }
 
   signInButton = (): PageElement => cy.get('#sign-in-button')
-
-  informationBanner = (): PageElement => cy.get('.govuk-notification-banner')
 }
