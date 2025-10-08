@@ -51,6 +51,24 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            deviceWearer: {
+              nomisId: 'nomis',
+              pncId: 'pnc',
+              deliusId: 'delius',
+              prisonNumber: 'prison',
+              homeOfficeReferenceNumber: 'ho',
+              firstName: 'test',
+              lastName: 'tester',
+              alias: 'tes',
+              dateOfBirth: '2000-01-01T00:00:00Z',
+              adultAtTimeOfInstallation: true,
+              sex: 'MALE',
+              gender: 'MALE',
+              disabilities: 'MENTAL_HEALTH',
+              otherDisability: null,
+              noFixedAbode: null,
+              interpreterRequired: false,
+            },
             addresses: [
               {
                 addressType: 'PRIMARY',
