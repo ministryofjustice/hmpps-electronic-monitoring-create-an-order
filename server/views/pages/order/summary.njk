@@ -55,6 +55,13 @@
 
         {% if not isOrderEditable %}
           {% set statusArgs = {} %}
+        {% elif not section.isReady %}
+          {% set statusArgs = { 
+            tag: {
+                  text: "Cannot start yet",
+                  classes: "govuk-task-list__status--cannot-start-yet no-tag"
+                }
+          } %}
         {% elif section.completed %}
              {% if not section.checked %}
                 {% set statusArgs = {                  
@@ -74,12 +81,22 @@
           } %}
         {% endif %}
 
-        {% set items = (items.push({
-          idPrefix: "order-section",
-          title: { text: name },
-          href: section.path,
-          status: statusArgs
-        }), items) %}
+        {%  if not section.isReady %}
+          {% set items = (items.push({
+            idPrefix: "order-section",
+            title: { text: name },      
+            hint: { text: section.hint},              
+            status: statusArgs,
+            classes: 'disabled-link'
+          }), items) %}
+        {% else %}
+          {% set items = (items.push({
+            idPrefix: "order-section",
+            title: { text: name }, 
+            href: section.path, 
+            status: statusArgs
+          }), items) %}
+        {% endif %}
 
       {% endfor %}
 
