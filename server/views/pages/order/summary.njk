@@ -56,11 +56,9 @@
         {% if not isOrderEditable %}
           {% set statusArgs = {} %}
         {% elif not section.isReady %}
-          {% set statusArgs = { 
-            tag: {
+          {% set statusArgs = {             
                   text: "Cannot start yet",
-                  classes: "govuk-task-list__status--cannot-start-yet no-tag"
-                }
+                  classes: "govuk-task-list__status--cannot-start-yet"                
           } %}
         {% elif section.completed %}
              {% if not section.checked %}
