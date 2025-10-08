@@ -82,8 +82,7 @@
         {%  if not section.isReady %}
           {% set items = (items.push({
             idPrefix: "order-section",
-            title: { text: name },      
-            hint: { text: section.hint},              
+            title: { text: name },                       
             status: statusArgs,
             classes: 'disabled-link'
           }), items) %}

@@ -83,7 +83,6 @@ type SectionBlock = {
   checked: boolean
   path: string
   isReady: boolean
-  hint: string
 }
 
 type FormData = Record<string, string | boolean>
@@ -578,17 +577,11 @@ export default class TaskListService {
 
   isSectionReady(section: Section, tasks: Task[]): boolean {
     if (section === SECTIONS.electronicMonitoringCondition) {
-      const sectionsTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
-      return this.isSectionComplete(sectionsTasks)
+      const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
+      const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
+      return this.isSectionComplete(contactInformationTasks) && this.isSectionComplete(deviceWearerTasks)
     }
     return true
-  }
-
-  getSectionHint(section: Section): string {
-    if (section === SECTIONS.electronicMonitoringCondition) {
-      return 'Complete contact information before starting this section'
-    }
-    return ''
   }
 
   async getSections(order: Order): Promise<SectionBlock[]> {
@@ -610,7 +603,6 @@ export default class TaskListService {
           checked: checkList[section],
           path: path.replace(':orderId', order.id),
           isReady: this.isSectionReady(section, tasks),
-          hint: this.getSectionHint(section),
         }
       })
   }
