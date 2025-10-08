@@ -721,7 +721,7 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should display monitoring condition task as Not Cannot start yet', () => {
+    it('should display monitoring condition task as Not Cannot start yet when device wearer not complete', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -752,6 +752,43 @@ context('Order Summary', () => {
             otherRelationshipDetails: null,
             relationship: null,
           },
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+          isValid: true,
+        },
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.electronicMonitoringTask.link.should('not.exist')
+      page.submitOrderButton.should('be.disabled')
+    })
+
+    it('should display monitoring condition task as Not Cannot start yet when contact information not complete', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          contactDetails: { contactNumber: '' },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -779,52 +816,6 @@ context('Order Summary', () => {
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
           },
-          enforcementZoneConditions: [
-            {
-              description: null,
-              duration: null,
-              endDate: null,
-              fileId: null,
-              fileName: null,
-              startDate: null,
-              zoneId: null,
-              zoneType: null,
-            },
-          ],
-          addresses: [
-            {
-              addressType: 'PRIMARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'SECONDARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'TERTIARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'INSTALLATION',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-          ],
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
           orderParameters: { havePhoto: false },
           isValid: true,
