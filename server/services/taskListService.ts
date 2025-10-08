@@ -82,6 +82,8 @@ type SectionBlock = {
   completed: boolean
   checked: boolean
   path: string
+  isReady: boolean
+  hint: string
 }
 
 type FormData = Record<string, string | boolean>
@@ -574,6 +576,21 @@ export default class TaskListService {
     return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
 
+  isSectionReady(section: Section, tasks: Task[]): boolean {
+    if (section === SECTIONS.electronicMonitoringCondition) {
+      const sectionsTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
+      return this.isSectionComplete(sectionsTasks)
+    }
+    return true
+  }
+
+  getSectionHint(section: Section): string {
+    if (section === SECTIONS.electronicMonitoringCondition) {
+      return 'Complete contact information before starting this section'
+    }
+    return ''
+  }
+
   async getSections(order: Order): Promise<SectionBlock[]> {
     const tasks = this.getTasks(order)
     const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
@@ -592,6 +609,8 @@ export default class TaskListService {
           completed,
           checked: checkList[section],
           path: path.replace(':orderId', order.id),
+          isReady: this.isSectionReady(section, tasks),
+          hint: this.getSectionHint(section),
         }
       })
   }

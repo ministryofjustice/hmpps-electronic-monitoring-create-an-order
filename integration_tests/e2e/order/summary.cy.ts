@@ -19,7 +19,11 @@ context('Order Summary', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       // Create an order with noFixedAbode set to null and all monitoringConditions set to null
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+      })
 
       cy.signIn()
     })
@@ -47,8 +51,8 @@ context('Order Summary', () => {
       page.riskInformationTask.shouldHaveStatus('Incomplete')
       page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
 
-      page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
-      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.electronicMonitoringTask.link.should('not.exist')
 
       page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
       page.additionalDocumentsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/attachments/licence`)
@@ -96,8 +100,8 @@ context('Order Summary', () => {
       page.riskInformationTask.shouldHaveStatus('Incomplete')
       page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
 
-      page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
-      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.electronicMonitoringTask.link.should('not.exist')
 
       page.variationDetailsTask.shouldHaveStatus('Incomplete')
       page.variationDetailsTask.link.should('have.attr', 'href', `/order/${mockOrderId}/variation/details`)
@@ -706,6 +710,202 @@ context('Order Summary', () => {
       page.makeChangesButton.click()
 
       Page.verifyOnPage(ConfirmVariationPage)
+    })
+  })
+
+  context('Partial complete order, not submitted', () => {
+    beforeEach(() => {
+      mockOrderId = uuidv4()
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
+    })
+
+    it('should display monitoring condition task as Not Cannot start yet', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          enforcementZoneConditions: [
+            {
+              description: null,
+              duration: null,
+              endDate: null,
+              fileId: null,
+              fileName: null,
+              startDate: null,
+              zoneId: null,
+              zoneType: null,
+            },
+          ],
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+          isValid: true,
+        },
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.electronicMonitoringTask.link.should('not.exist')
+      page.submitOrderButton.should('be.disabled')
+    })
+
+    it('should display monitoring condition task as Incomplete', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: { contactNumber: '' },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          addresses: [],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+        },
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
+      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.submitOrderButton.should('be.disabled')
     })
   })
 
