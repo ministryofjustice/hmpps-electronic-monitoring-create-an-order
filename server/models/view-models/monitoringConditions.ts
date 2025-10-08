@@ -22,6 +22,7 @@ type MonitoringConditionsViewModel = ViewModel<
   alcoholEnabled: boolean
   DDv5: boolean
   fixedAddressExist: boolean
+  isYouth: boolean
 }
 
 const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): string[] => {
@@ -44,6 +45,10 @@ const parseMonitoringRequired = (monitoringConditions: MonitoringConditions): st
 const hasFixedAddress = (order: Order): boolean => {
   const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
   return primaryAddress !== undefined
+}
+
+const isYouth = (order: Order): boolean => {
+  return !order.deviceWearer.adultAtTimeOfInstallation
 }
 
 const createViewModelFromMonitoringConditions = (order: Order): MonitoringConditionsViewModel => ({
@@ -86,6 +91,7 @@ const createViewModelFromMonitoringConditions = (order: Order): MonitoringCondit
   alcoholEnabled: FeatureFlags.getInstance().get('ALCOHOL_MONITORING_ENABLED'),
   DDv5: order.dataDictionaryVersion === 'DDV5',
   fixedAddressExist: hasFixedAddress(order),
+  isYouth: isYouth(order),
 })
 
 const createViewModelFromFormData = (
@@ -149,6 +155,7 @@ const createViewModelFromFormData = (
     alcoholEnabled: FeatureFlags.getInstance().get('ALCOHOL_MONITORING_ENABLED'),
     DDv5: order.dataDictionaryVersion === 'DDV5',
     fixedAddressExist: hasFixedAddress(order),
+    isYouth: isYouth(order),
   }
 }
 

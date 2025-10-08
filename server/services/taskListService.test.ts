@@ -837,7 +837,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -845,7 +844,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'CONTACT_INFORMATION',
           path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -853,7 +851,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -861,7 +858,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
           path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-          hint: 'Complete contact information before starting this section',
           isReady: false,
         },
         {
@@ -872,7 +868,6 @@ describe('TaskListService', () => {
             ':fileType(photo_Id|licence)',
             'licence',
           ),
-          hint: '',
           isReady: true,
         },
       ])
@@ -920,7 +915,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -928,7 +922,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'CONTACT_INFORMATION',
           path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -936,7 +929,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -944,7 +936,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
           path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: 'Complete contact information before starting this section',
           isReady: true,
         },
         {
@@ -952,7 +943,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
       ])
@@ -1010,7 +1000,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1018,7 +1007,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'CONTACT_INFORMATION',
           path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1026,7 +1014,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1034,7 +1021,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
           path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: 'Complete contact information before starting this section',
           isReady: true,
         },
         {
@@ -1042,7 +1028,6 @@ describe('TaskListService', () => {
           completed: true,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
       ])
@@ -1076,7 +1061,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1084,7 +1068,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'CONTACT_INFORMATION',
           path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1092,7 +1075,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1100,7 +1082,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
           path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-          hint: 'Complete contact information before starting this section',
           isReady: false,
         },
         {
@@ -1111,7 +1092,6 @@ describe('TaskListService', () => {
             ':fileType(photo_Id|licence)',
             'licence',
           ),
-          hint: '',
           isReady: true,
         },
       ])
@@ -1146,7 +1126,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
           path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1154,7 +1133,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1162,7 +1140,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'CONTACT_INFORMATION',
           path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1170,7 +1147,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1178,7 +1154,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
           path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-          hint: 'Complete contact information before starting this section',
           isReady: false,
         },
         {
@@ -1189,7 +1164,6 @@ describe('TaskListService', () => {
             ':fileType(photo_Id|licence)',
             'licence',
           ),
-          hint: '',
           isReady: true,
         },
       ])
@@ -1222,7 +1196,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1230,7 +1203,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'CONTACT_INFORMATION',
           path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1238,7 +1210,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
         {
@@ -1246,7 +1217,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
           path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-          hint: 'Complete contact information before starting this section',
           isReady: false,
         },
         {
@@ -1254,7 +1224,6 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id),
-          hint: '',
           isReady: true,
         },
       ])

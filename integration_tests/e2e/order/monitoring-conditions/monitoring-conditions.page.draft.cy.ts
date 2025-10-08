@@ -16,6 +16,24 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
+            deviceWearer: {
+              nomisId: 'nomis',
+              pncId: 'pnc',
+              deliusId: 'delius',
+              prisonNumber: 'prison',
+              homeOfficeReferenceNumber: 'ho',
+              firstName: 'test',
+              lastName: 'tester',
+              alias: 'tes',
+              dateOfBirth: '2000-01-01T00:00:00Z',
+              adultAtTimeOfInstallation: true,
+              sex: 'MALE',
+              gender: 'MALE',
+              disabilities: 'MENTAL_HEALTH',
+              otherDisability: null,
+              noFixedAbode: null,
+              interpreterRequired: false,
+            },
             addresses: [
               {
                 addressType: 'PRIMARY',
@@ -123,6 +141,24 @@ context('Monitoring conditions', () => {
           status: 'IN_PROGRESS',
           order: {
             dataDictionaryVersion: 'DDV5',
+            deviceWearer: {
+              nomisId: 'nomis',
+              pncId: 'pnc',
+              deliusId: 'delius',
+              prisonNumber: 'prison',
+              homeOfficeReferenceNumber: 'ho',
+              firstName: 'test',
+              lastName: 'tester',
+              alias: 'tes',
+              dateOfBirth: '2000-01-01T00:00:00Z',
+              adultAtTimeOfInstallation: true,
+              sex: 'MALE',
+              gender: 'MALE',
+              disabilities: 'MENTAL_HEALTH',
+              otherDisability: null,
+              noFixedAbode: null,
+              interpreterRequired: false,
+            },
           },
         })
 
@@ -147,6 +183,71 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.element.find('input[type=checkbox][value="alcohol"]').should('be.enabled')
 
         page.form.shouldHaveAllOptions()
+      })
+    })
+
+    context('Viewing a draft order where device wearer is youth', () => {
+      const testFlags = { ALCOHOL_MONITORING_ENABLED: true }
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('setFeatureFlags', testFlags)
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            dataDictionaryVersion: 'DDV5',
+            deviceWearer: {
+              nomisId: 'nomis',
+              pncId: 'pnc',
+              deliusId: 'delius',
+              prisonNumber: 'prison',
+              homeOfficeReferenceNumber: 'ho',
+              firstName: 'test',
+              lastName: 'tester',
+              alias: 'tes',
+              dateOfBirth: '2000-01-01T00:00:00Z',
+              adultAtTimeOfInstallation: false,
+              sex: 'MALE',
+              gender: 'MALE',
+              disabilities: 'MENTAL_HEALTH',
+              otherDisability: null,
+              noFixedAbode: null,
+              interpreterRequired: false,
+            },
+            addresses: [
+              {
+                addressType: 'PRIMARY',
+                addressLine1: '10 Downing Street',
+                addressLine2: '',
+                addressLine3: '',
+                addressLine4: '',
+                postcode: '',
+              },
+            ],
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('Alcohol is disabled', () => {
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+        page.header.userName().should('contain.text', 'J. Smith')
+        page.header.phaseBanner().should('contain.text', 'dev')
+
+        page.form.monitoringRequiredField.element.find('input[type=checkbox][value="alcohol"]').should('be.disabled')
+        cy.contains(
+          '.govuk-inset-text',
+          'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
+        )
       })
     })
   })
