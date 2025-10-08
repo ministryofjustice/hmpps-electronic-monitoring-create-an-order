@@ -24,12 +24,12 @@ context('Contact information', () => {
           subPath: apiPath,
           response: [
             {
-              field: 'notifyingOrganisationName',
-              error: expectedValidationErrors.notifyingOrganisationName,
-            },
-            {
               field: 'responsibleOrganisation',
               error: expectedValidationErrors.responsibleOrganisation,
+            },
+            {
+              field: 'notifyingOrganisationName',
+              error: expectedValidationErrors.notifyingOrganisationName,
             },
           ],
         })
@@ -53,8 +53,10 @@ context('Contact information', () => {
           expectedValidationErrors.responsibleOrganisation,
         )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.responsibleOrganisation)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.notifyingOrganisationName)
+        page.errorSummary.verifyErrorSummary([
+          expectedValidationErrors.notifyingOrganisationName,
+          expectedValidationErrors.responsibleOrganisation,
+        ])
       })
     })
   })
