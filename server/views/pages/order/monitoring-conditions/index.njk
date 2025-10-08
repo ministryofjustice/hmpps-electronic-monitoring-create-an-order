@@ -287,6 +287,10 @@
 {{ govukInsetText({
   text: "Some monitoring types can't be selected because the device wearer has no fixed address."
 }) }}
+{% elif isYouth %}
+{{ govukInsetText({
+  text: "Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed."
+}) }}
 {% endif %}
 
     {{ govukCheckboxes({
@@ -344,7 +348,7 @@
             text: alcoholHintText
           },
           checked: monitoringRequired.values | select("equalto", "alcohol") | length,
-          disabled: not alcoholEnabled or not isOrderEditable
+          disabled: not alcoholEnabled or not isOrderEditable or isYouth
         }
       ],
       errorMessage: monitoringRequired.error,
