@@ -38,9 +38,9 @@ describe('redis client', () => {
   it('allows setting a value', async () => {
     const store = new RedisMonitoringConditionsStore(mockRedisClient as unknown as RedisClient)
 
-    await store.setMonitoringConditions('some key', { orderType: 'CIVIL', hdc: null }, 1000)
+    await store.setMonitoringConditions('some key', { orderType: 'CIVIL', hdc:null  }, 1000)
 
     expect(storedValue).not.toBe(null)
-    expect(JSON.parse(storedValue!)).toEqual({ orderType: 'CIVIL' })
+    expect(JSON.parse(storedValue!)).toEqual({ orderType: 'CIVIL', hdc: null })
   })
 })
