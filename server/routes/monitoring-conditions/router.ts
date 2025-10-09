@@ -3,7 +3,7 @@ import { Services } from '../../services'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import OrderTypeController from './order-type/controller'
 import CheckYourAnswersController from './check-your-answers/controller'
-import HDCController from './hdc/controller'
+import HdcController from './hdc/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
@@ -18,7 +18,7 @@ const createOrderTypeDescriptionRouter = (
     monitoringConditionsUpdateService,
   )
 
-  const hdcController = new HDCController(monitoringConditionsStoreService)
+  const hdcController = new HdcController(monitoringConditionsStoreService)
 
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
@@ -27,6 +27,7 @@ const createOrderTypeDescriptionRouter = (
   router.post('/check-your-answers', asyncMiddleware(checkYourAnswersController.update))
 
   router.get('/hdc', asyncMiddleware(hdcController.view))
+  router.post('/hdc', asyncMiddleware(hdcController.update))
 
   return router
 }
