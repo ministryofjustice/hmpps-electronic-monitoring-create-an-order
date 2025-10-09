@@ -212,10 +212,10 @@ context('Curfew monitoring - release date', () => {
           id: mockOrderId,
           subPath: '/monitoring-conditions-curfew-release-date',
           response: [
+            { field: 'curfewAddress', error: 'You must enter a valid address' },
             { field: 'releaseDate', error: 'You must enter a valid date' },
             { field: 'startTime', error: 'You must enter a valid start time' },
             { field: 'endTime', error: 'You must enter a valid end time' },
-            { field: 'curfewAddress', error: 'You must enter a valid address' },
           ],
         })
         cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
@@ -224,11 +224,17 @@ context('Curfew monitoring - release date', () => {
         cy.get('#releaseDate-error').should('contain', 'You must enter a valid date')
         cy.get('#curfewTimes-start-error').should('contain', 'You must enter a valid start time')
         cy.get('#curfewTimes-end-error').should('contain', 'You must enter a valid end time')
-        cy.get('#address-error').should('contain', 'You must enter a valid address')
+        cy.get('#curfewAddress-error').should('contain', 'You must enter a valid address')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('You must enter a valid date')
         page.errorSummary.shouldHaveError('You must enter a valid end time')
         page.errorSummary.shouldHaveError('You must enter a valid address')
+        page.errorSummary.verifyErrorSummary([
+          'You must enter a valid date',
+          'You must enter a valid start time',
+          'You must enter a valid end time',
+          'You must enter a valid address',
+        ])
       })
 
       it('should show an error when releaseDate is provided in the wrong format', () => {
