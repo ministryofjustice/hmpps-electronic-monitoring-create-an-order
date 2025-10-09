@@ -55,7 +55,7 @@ const paths = {
     ORDER_TYPE_DESCRIPTION: {
       BASE_PATH: '/order/:orderId/monitoring-conditions/order-type-description',
       ORDER_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/order-type',
-
+HDC: '/order/:orderId/monitoring-conditions/order-type-description/hdc',
       HDC: '/order/:orderId/monitoring-conditions/order-type-description/hdc',
       CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/order-type-description/check-your-answers',
     },
