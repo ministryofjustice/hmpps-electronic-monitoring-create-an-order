@@ -31,6 +31,10 @@ export default class HdcController {
         },
       ])
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
+    } else {
+      await this.montoringConditionsStoreService.updateHdc(orderId, formData)
+      // Update to Pilots page when added
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
     }
   }
 }

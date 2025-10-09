@@ -4,7 +4,7 @@ import { PageElement } from '../../../../../pages/page'
 
 export default class HdcComponent extends FormComponent {
   get hdcField(): FormRadiosComponent {
-    const label = 'Is the device wearer on  a Home Detention Curfew(HDC)?'
+    const label = 'Is the device wearer on a Home Detention Curfew (HDC)?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
