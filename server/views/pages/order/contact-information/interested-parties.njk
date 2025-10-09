@@ -170,6 +170,9 @@
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: crownCourtHtml
       },
@@ -190,6 +193,9 @@
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: magistratesCourtHtml
       },
