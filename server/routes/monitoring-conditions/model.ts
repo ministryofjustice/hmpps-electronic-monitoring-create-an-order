@@ -19,6 +19,7 @@ const MonitoringConditionsModel = z.object({
   alcohol: z.boolean().nullable().optional(),
   startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).nullable().optional(),
   endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime).nullable().optional(),
+  hdc: z.string().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>
