@@ -246,7 +246,7 @@ context('Monitoring conditions', () => {
         page.form.monitoringRequiredField.element.find('input[type=checkbox][value="alcohol"]').should('be.disabled')
         cy.contains(
           '.govuk-inset-text',
-          'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
+          'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electronic monitoring device is installed.',
         )
       })
     })
