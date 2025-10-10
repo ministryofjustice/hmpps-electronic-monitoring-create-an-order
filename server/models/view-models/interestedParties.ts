@@ -1,4 +1,4 @@
-import { createGovukErrorSummary } from '../../utils/errors'
+import { createSortedGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
 import { InterestedParties } from '../InterestedParties'
@@ -42,6 +42,17 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
   return ''
 }
 
+const fieldNames = {
+  notifyingOrganisation: 'notifyingOrganisation',
+  notifyingOrganisationName: 'notifyingOrganisationName',
+  notifyingOrganisationEmail: 'notifyingOrganisationEmail',
+  reponsibleOfficerName: 'responsibleOfficerName',
+  responsibleOfficerPhoneNumber: 'responsibleOfficerPhoneNumber',
+  responsibleOrganisation: 'responsibleOrganisation',
+  responsibleOrganisationRegion: 'responsibleOrganisationRegion',
+  responsibleOrganisationEmail: 'responsibleOrganisationEmail',
+} as const
+
 const constructFromFormData = (
   formData: InterestedPartiesFormData,
   validationErrors: ValidationResult,
@@ -50,37 +61,37 @@ const constructFromFormData = (
   return {
     notifyingOrganisation: {
       value: formData.notifyingOrganisation || '',
-      error: getError(validationErrors, 'notifyingOrganisation'),
+      error: getError(validationErrors, fieldNames.notifyingOrganisation),
     },
     notifyingOrganisationName: {
       value: getNotifyingOrganisationName(formData),
-      error: getError(validationErrors, 'notifyingOrganisationName'),
+      error: getError(validationErrors, fieldNames.notifyingOrganisationName),
     },
     notifyingOrganisationEmail: {
       value: formData.notifyingOrganisationEmail,
-      error: getError(validationErrors, 'notifyingOrganisationEmail'),
+      error: getError(validationErrors, fieldNames.notifyingOrganisationEmail),
     },
     responsibleOfficerName: {
       value: formData.responsibleOfficerName || '',
-      error: getError(validationErrors, 'responsibleOfficerName'),
+      error: getError(validationErrors, fieldNames.reponsibleOfficerName),
     },
     responsibleOfficerPhoneNumber: {
       value: formData.responsibleOfficerPhoneNumber || '',
-      error: getError(validationErrors, 'responsibleOfficerPhoneNumber'),
+      error: getError(validationErrors, fieldNames.responsibleOfficerPhoneNumber),
     },
     responsibleOrganisation: {
       value: formData.responsibleOrganisation || '',
-      error: getError(validationErrors, 'responsibleOrganisation'),
+      error: getError(validationErrors, fieldNames.responsibleOrganisation),
     },
     responsibleOrganisationRegion: {
       value: getResponsibleOrgansiationRegion(formData),
-      error: getError(validationErrors, 'responsibleOrganisationRegion'),
+      error: getError(validationErrors, fieldNames.responsibleOrganisationRegion),
     },
     responsibleOrganisationEmail: {
       value: formData.responsibleOrganisationEmail,
-      error: getError(validationErrors, 'responsibleOrganisationEmail'),
+      error: getError(validationErrors, fieldNames.responsibleOrganisationEmail),
     },
-    errorSummary: createGovukErrorSummary(validationErrors),
+    errorSummary: createSortedGovukErrorSummary(validationErrors, Object.values(fieldNames)),
     DDv5: order.dataDictionaryVersion === 'DDV5',
   }
 }

@@ -40,7 +40,8 @@ const constructFromFormData = (
         hours: formData.appointmentDate.hours,
         minutes: formData.appointmentDate.minutes,
       },
-      error: getError(validationErrors, 'appointmentDate'),
+      timeError: getError(validationErrors, 'appointmentDate-hours'),
+      dateError: getError(validationErrors, 'appointmentDate'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
   }

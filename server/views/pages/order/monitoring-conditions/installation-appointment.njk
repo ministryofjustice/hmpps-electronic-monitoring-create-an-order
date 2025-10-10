@@ -33,9 +33,8 @@
       timeLabel: questions.appointmentTime.text,
       timeHint: questions.appointmentTime.hint,
       errorMessages: {
-        field: appointmentDate.error,
-        date: errors.dateError,
-        time: errors.timeError
+        date: appointmentDate.dateError,
+        time: appointmentDate.timeError
       },
       disabled: not isOrderEditable,
       timesEnabled: true     

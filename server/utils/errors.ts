@@ -53,6 +53,14 @@ export const convertBackendErrorToValidationError = (sanitisedError: SanitisedEr
   })
 }
 
+export const createSortedGovukErrorSummary = (
+  validationErrors: ValidationResult,
+  fieldOrder: string[],
+): ErrorSummary | null => {
+  const sortedErrors = validationErrors.sort((a, b) => fieldOrder.indexOf(a.field) - fieldOrder.indexOf(b.field))
+  return createGovukErrorSummary(sortedErrors)
+}
+
 export const createGovukErrorSummary = (validationErrors: ValidationResult): ErrorSummary | null => {
   if (validationErrors.length === 0) {
     return null

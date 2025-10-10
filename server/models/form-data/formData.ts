@@ -152,8 +152,6 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             focusPath: 'day',
           },
         })
-
-        return z.NEVER
       }
 
       if (val.day || val.month || val.year) {
@@ -293,6 +291,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
           code: z.ZodIssueCode.custom,
           message: messages.time.required,
           fatal: true,
+          path: ['hours'],
         })
 
         return z.NEVER

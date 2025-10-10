@@ -4,9 +4,6 @@ import { validationErrors } from '../../constants/validationErrors'
 
 const EnforcementZoneFormDataModel = z.object({
   action: z.string(),
-  zoneId: z.number().nullable().default(null),
-  description: z.string().default(''),
-  duration: z.string().default(''),
   startDate: z.object({
     day: z.string().default(''),
     month: z.string().default(''),
@@ -21,6 +18,9 @@ const EnforcementZoneFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
+  zoneId: z.number().nullable().default(null),
+  description: z.string().default(''),
+  duration: z.string().default(''),
   anotherZone: z.string().default(''),
 })
 
@@ -29,6 +29,8 @@ type EnforcementZoneFormData = Omit<z.infer<typeof EnforcementZoneFormDataModel>
 const EnforcementZoneFormDataValidator = z
   .object({
     zoneId: z.number().nullable().default(0),
+    startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
+    endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
     description: z
       .string()
       .min(1, validationErrors.enforcementZone.descriptionRequired)
@@ -37,8 +39,6 @@ const EnforcementZoneFormDataValidator = z
       .string()
       .min(1, validationErrors.enforcementZone.durationRequired)
       .max(200, validationErrors.enforcementZone.durationTooLong),
-    startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
-    endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
     anotherZone: z.string().min(1, { message: validationErrors.enforcementZone.anotherZoneRequired }),
   })
   .transform(({ ...formData }) => ({

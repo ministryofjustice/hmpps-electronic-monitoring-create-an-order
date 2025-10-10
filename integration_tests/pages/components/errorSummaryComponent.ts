@@ -28,4 +28,11 @@ export default class ErrorSummaryComponent {
   shouldHaveTitle(title: string) {
     return this.title.contains(title)
   }
+
+  public verifyErrorSummary(expectedErrors: string[]): void {
+    this.errorList.find('li').then(listItems => {
+      const errorList = listItems.map((_, el) => el.textContent.trim()).get()
+      expect(errorList).to.deep.equal(expectedErrors)
+    })
+  }
 }

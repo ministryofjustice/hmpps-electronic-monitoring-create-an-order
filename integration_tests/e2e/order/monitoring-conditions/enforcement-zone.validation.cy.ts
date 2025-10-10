@@ -42,17 +42,19 @@ context('Monitoring conditions - Enforcement Zone', () => {
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(EnforcementZonePage)
-        page.form.startDateField.shouldHaveValidationMessage('Enter start date for enforcement zone')
-        page.form.endDateField.shouldHaveValidationMessage('Enter end date for enforcement zone')
-        page.form.descriptionField.shouldHaveValidationMessage('Enforcement zone description is required')
-        page.form.durationField.shouldHaveValidationMessage('Enforcement zone duration is required')
+        page.form.startDateField.shouldHaveValidationMessage('Enter start date for exclusion zone')
+        page.form.endDateField.shouldHaveValidationMessage('Enter end date for exclusion zone')
+        page.form.descriptionField.shouldHaveValidationMessage('Enter where the exclusion zone is required')
+        page.form.durationField.shouldHaveValidationMessage('Enter when the exclusion zone must be followed')
         page.form.anotherZoneField.shouldHaveValidationMessage('Select ‘Yes’ if you need to add another exclusion zone')
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Enter start date for enforcement zone')
-        page.errorSummary.shouldHaveError('Enter end date for enforcement zone')
-        page.errorSummary.shouldHaveError('Enforcement zone description is required')
-        page.errorSummary.shouldHaveError('Enforcement zone duration is required')
-        page.errorSummary.shouldHaveError('Select ‘Yes’ if you need to add another exclusion zone')
+        page.errorSummary.verifyErrorSummary([
+          'Enter start date for exclusion zone',
+          'Enter end date for exclusion zone',
+          'Enter where the exclusion zone is required',
+          'Enter when the exclusion zone must be followed',
+          'Select ‘Yes’ if you need to add another exclusion zone',
+        ])
       })
     })
 

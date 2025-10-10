@@ -90,7 +90,7 @@ describe('CurfewReleaseDateController', () => {
       ]
       const mockFormData = {
         action: 'continue',
-        address: 'PRIMARY',
+        curfewAddress: 'PRIMARY',
         releaseDateDay: '11',
         releaseDateMonth: '09',
         releaseDateYear: '2025',
@@ -134,12 +134,12 @@ describe('CurfewReleaseDateController', () => {
         errorSummary: {
           errorList: [
             {
-              href: '#curfewAddress',
-              text: 'mockError',
-            },
-            {
               href: '#startTime',
               text: 'mock start time Error',
+            },
+            {
+              href: '#curfewAddress',
+              text: 'mockError',
             },
           ],
           titleText: 'There is a problem',
@@ -227,7 +227,7 @@ describe('CurfewReleaseDateController', () => {
     it('Should redirect to view and save form and validation error flash when service return validation error', async () => {
       req.body = {
         action: 'continue',
-        address: 'PRIMARY',
+        curfewAddress: 'PRIMARY',
         releaseDateDay: '11',
         releaseDateMonth: '09',
         releaseDateYear: '2025',
