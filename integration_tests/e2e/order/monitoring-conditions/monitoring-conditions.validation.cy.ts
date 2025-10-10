@@ -18,7 +18,7 @@ const errorMessages = {
   yearMustIncludeFourNumbers: 'Year must include 4 numbers',
   sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
   isspRequired: 'Select if the device wearer is on the ISSP',
-  hdcRequired: 'Select if the device wearer is on a HDC',
+  hdcRequired: 'Select Yes if the device wearer is on a HDC',
   prarrRequired: 'Select if the device wearer is being released on a P-RARR',
 }
 
