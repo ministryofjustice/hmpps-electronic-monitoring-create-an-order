@@ -42,6 +42,15 @@ context('About the device wearer', () => {
         cy.signIn()
       })
 
+      it('should include screen reader accessibility hints for radio buttons with secondary inputs', () => {
+        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+        page.form.otherDisabilityField.shouldExist()
+
+        cy.get('#disabilities-11-item-hint').find('span').should('have.class', 'govuk-visually-hidden')
+        cy.get('#disabilities-11-item-hint').find('span').contains('Selecting this will reveal an additional input')
+      })
+
       it('should continue to the identity numbers page', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
