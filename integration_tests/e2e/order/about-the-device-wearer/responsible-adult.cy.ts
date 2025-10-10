@@ -28,6 +28,13 @@ context('About the device wearer - Responsible Adult', () => {
       page.form.shouldHaveAllOptions()
     })
 
+    it('should include screen reader accessibility hint for radio button with secondary input', () => {
+      Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })
+
+      cy.get('#relationship-3-item-hint').find('span').should('have.class', 'govuk-visually-hidden')
+      cy.get('#relationship-3-item-hint').find('span').contains('Selecting this will reveal an additional input')
+    })
+
     // TODO: FAIL there are two form input related issues
     it.skip('Should be accessible', () => {
       const page = Page.visit(ResponsibleAdultPage, { orderId: mockOrderId })

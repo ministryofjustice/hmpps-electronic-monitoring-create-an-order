@@ -136,9 +136,7 @@ context('Contact information', () => {
       })
 
       it('should include screen reader accessibility hints for radio buttons with secondary inputs', () => {
-        const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
-
-        page.form.notifyingOrganisationField.shouldExist()
+        Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
         const ids = [
           '#notifyingOrganisation-item-hint',
