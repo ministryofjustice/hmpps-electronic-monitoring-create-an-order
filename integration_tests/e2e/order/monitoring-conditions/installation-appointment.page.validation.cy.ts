@@ -24,10 +24,12 @@ context('Monitoring conditions', () => {
         page.form.saveAndContinueButton.click()
 
         page.form.placeNameField.shouldHaveValidationMessage('Enter name of the place where installation takes place')
-        page.form.appointmentDateField.shouldHaveValidationMessage('Enter date of installation')
+        cy.get('.form-date').contains('Enter date of installation')
+        cy.get('.form-time').contains('Enter time of installation')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('Enter name of the place where installation takes place')
         page.errorSummary.shouldHaveError('Enter date of installation')
+        page.errorSummary.shouldHaveError('Enter time of installation')
       })
       context('Date validations', () => {
         const validFormData = {
