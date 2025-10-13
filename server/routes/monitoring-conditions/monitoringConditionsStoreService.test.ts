@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringConditionsStoreService from './monitoringConditionsStoreService'
-import InMemoryMonitoringConditionsStore from './store/inMemoryStore'
+import InMemoryStore from './store/inMemoryStore'
 import { MonitoringConditions } from './model'
 
 describe('store service', () => {
-  let store: InMemoryMonitoringConditionsStore
+  let store: InMemoryStore
   let service: MonitoringConditionsStoreService
   const mockOrderId = uuidv4()
   beforeEach(() => {
-    store = new InMemoryMonitoringConditionsStore()
+    store = new InMemoryStore()
     service = new MonitoringConditionsStoreService(store)
   })
   describe('when updating orderType', () => {

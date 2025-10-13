@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import OrderTypeController from './controller'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import InMemoryMonitoringConditionsStore from '../store/inMemoryStore'
+import InMemoryStore from '../store/inMemoryStore'
 import { MonitoringConditions } from '../model'
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { Order } from '../../../models/Order'
@@ -28,7 +28,7 @@ const createInterestedParties = (overrides: Partial<InterestedParties> = {}): In
 }
 
 describe('order type controller', () => {
-  let mockDataStore: InMemoryMonitoringConditionsStore
+  let mockDataStore: InMemoryStore
   let mockMonitoringConditionsStoreService: jest.Mocked<MonitoringConditionsStoreService>
   let mockOrder: Order
   let req: Request
@@ -36,7 +36,7 @@ describe('order type controller', () => {
   let next: NextFunction
 
   beforeEach(() => {
-    mockDataStore = new InMemoryMonitoringConditionsStore()
+    mockDataStore = new InMemoryStore()
     mockMonitoringConditionsStoreService = new MonitoringConditionsStoreService(
       mockDataStore,
     ) as jest.Mocked<MonitoringConditionsStoreService>

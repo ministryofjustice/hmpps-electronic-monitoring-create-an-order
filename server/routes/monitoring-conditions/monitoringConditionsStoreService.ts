@@ -1,24 +1,29 @@
 import MonitoringConditionsModel from './model'
 import type { MonitoringConditions } from './model'
-import MonitoringConditionsStore from './store/store'
+import Store from './store/store'
 
 export default class MonitoringConditionsStoreService {
-  constructor(private readonly dataStore: MonitoringConditionsStore) {}
+  constructor(private readonly dataStore: Store) {}
 
   public async updateMonitoringConditions(key: string, data: MonitoringConditions) {
-    await this.dataStore.setMonitoringConditions(key, data, 24 * 60 * 60)
+    await this.dataStore.set(key, JSON.stringify(data), 24 * 60 * 60)
+  }
+
+  public async updateField<T extends keyof MonitoringConditions>(key: string, field: T, data: MonitoringConditions[T]) {
+    const monitoringConditions = await this.getMonitoringConditions(key)
+    monitoringConditions[field] = data
+    await this.updateMonitoringConditions(key, monitoringConditions)
   }
 
   public async getMonitoringConditions(key: string): Promise<MonitoringConditions> {
-    let result = await this.dataStore.getMonitoringConditions(key)
+    let result = await this.dataStore.get(key)
 
     if (result === null) {
       result = JSON.stringify({})
     }
+    await this.dataStore.set(key, result, 24 * 60 * 60)
 
     const data = MonitoringConditionsModel.parse(JSON.parse(result))
-
-    await this.dataStore.setMonitoringConditions(key, data, 24 * 60 * 60)
 
     return data
   }
