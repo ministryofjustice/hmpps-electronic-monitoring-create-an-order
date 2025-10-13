@@ -195,6 +195,11 @@ context('Curfew conditions', () => {
         page.errorSummary.shouldHaveError('Enter start date for curfew monitoring')
         page.errorSummary.shouldHaveError('Enter end date for curfew monitoring')
         page.errorSummary.shouldHaveError('Select where the device wearer will be during curfew hours')
+        page.errorSummary.verifyErrorSummary([
+          'Enter start date for curfew monitoring',
+          'Enter end date for curfew monitoring',
+          'Select where the device wearer will be during curfew hours',
+        ])
       })
 
       it('should show an error when startDate is provided in the wrong format', () => {
