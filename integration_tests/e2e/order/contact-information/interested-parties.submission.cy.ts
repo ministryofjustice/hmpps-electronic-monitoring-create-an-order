@@ -134,6 +134,21 @@ context('Contact information', () => {
 
         Page.verifyOnPage(OrderSummaryPage)
       })
+
+      it('should include screen reader accessibility hints for radio buttons with secondary inputs', () => {
+        Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+        const ids = [
+          '#notifyingOrganisation-item-hint',
+          '#notifyingOrganisation-4-item-hint',
+          '#notifyingOrganisation-6-item-hint',
+        ]
+
+        ids.forEach(id => {
+          cy.get(id).find('span').should('have.class', 'govuk-visually-hidden')
+          cy.get(id).find('span').contains('Selecting this will reveal an additional input')
+        })
+      })
     })
   })
 })
