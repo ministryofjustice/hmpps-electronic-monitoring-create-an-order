@@ -49,7 +49,7 @@ export default class CurfewReleaseDateService {
       releaseDate: serialiseDate(formData.releaseDateYear, formData.releaseDateMonth, formData.releaseDateDay),
       startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
       endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
-      curfewAddress: formData.address ?? null,
+      curfewAddress: formData.curfewAddress ?? null,
     }
   }
 }
