@@ -11,20 +11,27 @@ export default class SentenceTypeController {
 
   view: RequestHandler = async (req: Request, res: Response): Promise<void> => {
     const orderId = req.order!.id
-    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+    let monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+
+    if (!monitoringConditions.orderType) {
+      const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisation
+      if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+        await this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'POST_RELEASE' })
+        monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+      }
+    }
 
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    const model = constructModel(monitoringConditions, errors)
+    const model = constructModel(monitoringConditions.orderType, monitoringConditions, errors)
 
-    res.render('pages/order/monitoring-conditions/sentence-type/sentence-type', model)
+    res.render('pages/order/monitoring-conditions/order-type-description/sentence-type', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response): Promise<void> => {
     const orderId = req.order!.id
+    const formData = SentenceTypeFormDataModel.parse(req.body)
 
-    const formData = SentenceTypeFormDataModel.safeParse(req.body)
-
-    if (!formData.success || formData.data.sentenceType === null || formData.data.sentenceType === undefined) {
+    if (formData.sentenceType === null || formData.sentenceType === undefined) {
       req.flash('validationErrors', [
         {
           error: validationErrors.monitoringConditions.sentenceTypeRequired,
@@ -36,20 +43,69 @@ export default class SentenceTypeController {
       return
     }
 
-    if (formData.data.action === 'continue') {
-      await this.montoringConditionsStoreService.updateSentenceType(orderId, formData.data)
+    if (formData.action === 'continue') {
+      await this.montoringConditionsStoreService.updateSentenceType(orderId, { sentenceType: formData.sentenceType })
 
-      switch (formData.data.sentenceType) {
-        case 'Standard Determinate Sentence':
-          res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
-          return
-        case 'Detention and Training Order (DTO)':
-          res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-          return
-        case 'Section 250 / Section 91':
-        default:
-          res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', orderId))
+      const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+
+      if (monitoringConditions.orderType === 'POST_RELEASE') {
+        switch (formData.sentenceType) {
+          case 'Standard Determinate Sentence':
+            // update to HDC page when it is made
+            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
+            // return
+            res.redirect(
+              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
+            )
+            return
+
+          case 'Detention and Training Order (DTO)':
+            // update to ISS page when it is made
+            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
+            res.redirect(
+              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
+            )
+
+            return
+          default:
+            // update to PRARR page when it is made
+            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', orderId))
+            // return
+            res.redirect(
+              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
+            )
+            return
+        }
       }
+
+      if (monitoringConditions.orderType === 'COMMUNITY') {
+        switch (formData.sentenceType) {
+          case 'Community YRO':
+            res.redirect(
+              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
+            )
+            return
+          default:
+            // update to Monitoring Dates page when it is made
+            // res.redirect(
+            // paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId),
+            // )
+            res.redirect(
+              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
+            )
+
+            return
+        }
+      }
+
+      if (monitoringConditions.orderType === 'BAIL') {
+        // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
+        // return
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+        return
+      }
+
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
     }
   }
 }

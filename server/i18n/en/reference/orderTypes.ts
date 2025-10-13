@@ -7,6 +7,7 @@ const orderTypes: OrderTypes = {
   POST_RELEASE: 'Post Release',
   PRE_TRIAL: 'Pre-Trial',
   SPECIAL: 'Special',
+  BAIL: 'Bail',
 }
 
 export default orderTypes

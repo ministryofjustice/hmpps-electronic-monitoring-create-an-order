@@ -31,6 +31,16 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
     }
   }
 
+  if (data.sentenceType) {
+    const question =
+      data.orderType === 'BAIL'
+        ? 'What type of bail has the device wearer been given?'
+        : 'What type of sentence has the device wearer been given?'
+
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE
+    answers.push(createAnswer(question, data.sentenceType, path.replace(':orderId', order.id)))
+  }
+
   return {
     answers,
   }
