@@ -11,6 +11,16 @@ describe('store service', () => {
     store = new InMemoryStore()
     service = new MonitoringConditionsStoreService(store)
   })
+
+  it('can update a single top level field', async () => {
+    await service.updateField(mockOrderId, 'orderType', 'IMMIGRATION')
+
+    const result = await service.getMonitoringConditions(mockOrderId)
+
+    const expected: MonitoringConditions = expect.objectContaining({ orderType: 'IMMIGRATION' })
+    expect(result).toEqual(expected)
+  })
+
   describe('when updating orderType', () => {
     it('correctly updates the order type value in the store', async () => {
       const initial = await service.getMonitoringConditions(mockOrderId)

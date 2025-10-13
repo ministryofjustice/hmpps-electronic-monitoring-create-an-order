@@ -50,10 +50,4 @@ export default class MonitoringConditionsStoreService {
 
     await this.updateMonitoringConditions(key, monitoringConditions)
   }
-
-  public async updateHdc(key: string, data: Pick<MonitoringConditions, 'hdc'>) {
-    const monitoringConditions = await this.getMonitoringConditions(key)
-    monitoringConditions.hdc = data.hdc
-    await this.updateMonitoringConditions(key, monitoringConditions)
-  }
 }
