@@ -1,4 +1,4 @@
-import { createGovukErrorSummary } from '../../utils/errors'
+import { createSortedGovukErrorSummary } from '../../utils/errors'
 import { deserialiseDateTime, deserialiseTime, getError, getErrors } from '../../utils/utils'
 import { Address } from '../Address'
 import { CurfewReleaseDate } from '../CurfewReleaseDate'
@@ -11,6 +11,13 @@ type CurfewReleaseDateViewModel = AddressViewsViewModel<Pick<CurfewReleaseDate, 
   curfewStartTime: TimeField
   curfewEndTime: TimeField
 }
+
+const fieldNames = {
+  releaseDate: 'releaseDate',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  curfewAddress: 'curfewAddress',
+} as const
 
 const createViewModelFromCurfewReleaseDate = (
   addressViews: AddressViews,
@@ -38,33 +45,36 @@ const createViewModelFromFormData = (
   validationErrors: ValidationResult,
 ): CurfewReleaseDateViewModel => {
   return {
-    curfewAddress: { value: formData?.address ?? '', error: getError(validationErrors, 'curfewAddress') },
+    curfewAddress: {
+      value: formData?.curfewAddress ?? '',
+      error: getError(validationErrors, fieldNames.curfewAddress),
+    },
     releaseDate: {
       value: {
         year: formData.releaseDateYear,
         month: formData.releaseDateMonth,
         day: formData.releaseDateDay,
       },
-      error: getError(validationErrors, 'releaseDate'),
+      error: getError(validationErrors, fieldNames.releaseDate),
     },
     curfewStartTime: {
       value: {
         hours: formData.curfewTimesStartHours,
         minutes: formData.curfewTimesStartMinutes,
       },
-      error: getErrors(validationErrors, ['startTime']),
+      error: getErrors(validationErrors, [fieldNames.startTime]),
     },
     curfewEndTime: {
       value: {
         hours: formData.curfewTimesEndHours,
         minutes: formData.curfewTimesEndMinutes,
       },
-      error: getErrors(validationErrors, ['endTime']),
+      error: getErrors(validationErrors, [fieldNames.endTime]),
     },
     primaryAddressView: { value: addressViews.primaryAddressView },
     secondaryAddressView: { value: addressViews.secondaryAddressView },
     tertiaryAddressView: { value: addressViews.tertiaryAddressView },
-    errorSummary: createGovukErrorSummary(validationErrors),
+    errorSummary: createSortedGovukErrorSummary(validationErrors, Object.values(fieldNames)),
   }
 }
 

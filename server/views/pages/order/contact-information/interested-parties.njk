@@ -11,6 +11,10 @@
 {% set legend = content.pages.interestedParties.legend %}
 {% set helpText = content.pages.interestedParties.helpText %}
 
+{% set visuallyHiddenHint %}
+  <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
+{% endset %}
+
 {% set crownCourtHtml %}
   {{ accessibleAutocomplete({
     id: 'crownCourt',
@@ -166,6 +170,9 @@
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: crownCourtHtml
       },
@@ -186,6 +193,9 @@
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: magistratesCourtHtml
       },
@@ -206,6 +216,9 @@
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: prisonHtml
       },
