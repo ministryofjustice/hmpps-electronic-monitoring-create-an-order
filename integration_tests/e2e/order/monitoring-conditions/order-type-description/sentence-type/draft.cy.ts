@@ -1,14 +1,22 @@
 import { v4 as uuidv4 } from 'uuid'
 import SentenceTypePage from './SentenceTypePage'
 import Page from '../../../../../pages/page'
+import OrderTypePage from '../order-type/OrderTypePage'
 
-const stubGetOrder = (orderType: string = 'POST_RELEASE') => {
+const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
     order: {
-      monitoringConditions: {
-        orderType,
+      interestedParties: {
+        notifyingOrganisation: notifyingOrg,
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: '',
+        responsibleOfficerName: '',
+        responsibleOfficerPhoneNumber: '',
+        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOrganisationRegion: '',
+        responsibleOrganisationEmail: '',
       },
     },
   })
@@ -24,37 +32,68 @@ context('sentenceType', () => {
     cy.signIn()
   })
 
-  it('Page is accessible', () => {
-    const page = Page.visit(SentenceTypePage, { orderId: mockOrderId })
+  it('Page accessible', () => {
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.continueButton.click()
+
+    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })
 
-  it('Should display  content', () => {
-    const page = Page.visit(SentenceTypePage, { orderId: mockOrderId })
+  it('Should display content', () => {
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.continueButton.click()
+
+    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
     page.header.userName().should('contain.text', 'J. Smith')
     page.header.phaseBanner().should('contain.text', 'dev')
 
     page.form.sentenceTypeField.shouldExist()
     page.form.sentenceTypeField.shouldNotBeDisabled()
-
     page.form.continueButton.should('exist')
   })
 
   it('when order type is Post Release', () => {
-    stubGetOrder('POST_RELEASE')
-    const page = Page.visit(SentenceTypePage, { orderId: mockOrderId })
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.continueButton.click()
 
+    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
+
+    cy.get('h1').should('contain', 'What type of sentence has the device wearer been given?')
     page.form.sentenceTypeField.shouldHaveOption('Standard Determinate Sentence')
     page.form.sentenceTypeField.shouldHaveOption('Detention and Training Order')
     page.form.sentenceTypeField.shouldHaveOption('Section 250 / Section 91')
   })
 
   it('when order type is Community', () => {
-    stubGetOrder('POST_RELEASE')
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Community')
+    orderTypePage.form.continueButton.click()
 
-    const page = Page.visit(SentenceTypePage, { orderId: mockOrderId })
+    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
+    cy.get('h1').should('contain', 'What type of sentence has the device wearer been given?')
     page.form.sentenceTypeField.shouldHaveOption('Supervision Default Order')
+    page.form.sentenceTypeField.shouldHaveOption('Suspended Sentence')
+    page.form.sentenceTypeField.shouldHaveOption('Youth Rehabilitation Order (YRO)')
+    page.form.sentenceTypeField.shouldHaveOption('They have not been given one of these sentences')
+  })
+
+  it('when order type is Bail', () => {
+    stubGetOrder('CROWN_COURT')
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Bail')
+    orderTypePage.form.continueButton.click()
+
+    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
+
+    cy.get('h1').should('contain', 'What type of bail has the device wearer been given?')
+    page.form.bailTypeField.shouldHaveOption('Bail Supervision & Support')
+    page.form.bailTypeField.shouldHaveOption('Bail Remand to Local Authority Accomodation (RLAA)')
+    page.form.bailTypeField.shouldHaveOption('The type of bail they have been given is not in the list')
   })
 })

@@ -18,6 +18,13 @@ export const SentenceTypeEnum = z.enum([
   'Standard Determinate Sentence',
   'Detention and Training Order (DTO)',
   'Section 250 / Section 91',
+  'Community YRO',
+  'Community SDO',
+  'Community Suspended Sentence',
+  'COMMUNITY',
+  'Bail Supervision & Support',
+  'BAIL RLAA',
+  'BAIL',
 ])
 
 export const YesNoUnknownEnum = z.enum(['YES', 'NO', 'UNKNOWN'])

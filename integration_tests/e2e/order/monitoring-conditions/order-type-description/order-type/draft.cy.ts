@@ -27,11 +27,10 @@ context('orderType', () => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder()
-
     cy.signIn()
   })
 
-  it('Page accessisble', () => {
+  it('Page accessible', () => {
     const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })

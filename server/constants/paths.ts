@@ -59,6 +59,7 @@ const paths = {
       HDC: '/order/:orderId/monitoring-conditions/order-type-description/hdc',
       ISS: '/order/:orderId/monitoring-conditions/order-type-description/iss',
       PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
+      MONITORING_DATES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-dates',
       CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/order-type-description/check-your-answers',
     },
   },

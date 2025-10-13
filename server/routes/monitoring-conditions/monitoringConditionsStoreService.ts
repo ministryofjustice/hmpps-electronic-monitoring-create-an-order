@@ -55,10 +55,12 @@ export default class MonitoringConditionsStoreService {
     const monitoringConditions = await this.getMonitoringConditions(key)
     monitoringConditions.sentenceType = data.sentenceType
 
-    if (data.sentenceType === 'Section 250 / Section 91') {
-      monitoringConditions.hdc = 'YES'
-    } else {
-      monitoringConditions.hdc = 'NO'
+    if (monitoringConditions.orderType === 'POST_RELEASE') {
+      if (data.sentenceType === 'Section 250 / Section 91') {
+        monitoringConditions.hdc = 'YES'
+      } else {
+        monitoringConditions.hdc = 'NO'
+      }
     }
 
     await this.updateMonitoringConditions(key, monitoringConditions)

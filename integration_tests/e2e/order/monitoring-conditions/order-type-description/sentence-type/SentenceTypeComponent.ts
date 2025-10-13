@@ -7,6 +7,11 @@ export default class SentenceTypeComponent extends FormComponent {
     return new FormRadiosComponent(this.form, label, [])
   }
 
+  get bailTypeField(): FormRadiosComponent {
+    const label = 'What type of bail has the device wearer been given?'
+    return new FormRadiosComponent(this.form, label, [])
+  }
+
   fillInWith(sentenceType: string) {
     if (sentenceType) {
       this.sentenceTypeField.set(sentenceType)

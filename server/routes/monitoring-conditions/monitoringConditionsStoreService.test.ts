@@ -73,10 +73,11 @@ describe('store service', () => {
       },
     )
   })
+
   describe('when updating sentenceType', () => {
-    it.each(SentenceTypeEnum.options)(
-      'correctly updates the sentence type value to %s in the store',
-      async sentenceType => {
+    it.each(SentenceTypeEnum.options.map(o => ({ sentenceType: o })))(
+      'correctly updates the sentence type value to $sentenceType in the store',
+      async ({ sentenceType }) => {
         await service.updateSentenceType(mockOrderId, { sentenceType })
         const result = await service.getMonitoringConditions(mockOrderId)
         const expected: MonitoringConditions = expect.objectContaining({ sentenceType })
@@ -85,28 +86,42 @@ describe('store service', () => {
     )
 
     it('should set hdc to YES when sentenceType is "Section 250 / Section 91"', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'POST_RELEASE' })
+
       const sentenceType = 'Section 250 / Section 91'
       await service.updateSentenceType(mockOrderId, { sentenceType })
       const result = await service.getMonitoringConditions(mockOrderId)
-      const expected: MonitoringConditions = expect.objectContaining({
-        sentenceType,
-        hdc: 'YES',
-      })
-      expect(result).toEqual(expected)
+
+      expect(result.hdc).toBe('YES')
     })
 
-    // it('should set hdc to NO when sentenceType is not "Section 250 / Section 91"', async () => {
+    it('should set hdc to NO when a different POST_RELEASE sentenceType is selected', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'POST_RELEASE' })
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'Section 250 / Section 91' })
 
-    //   await service.updateSentenceType(mockOrderId, { sentenceType: 'Section 250 / Section 91' })
+      const newSentenceType = 'Standard Determinate Sentence'
+      await service.updateSentenceType(mockOrderId, { sentenceType: newSentenceType })
+      const result = await service.getMonitoringConditions(mockOrderId)
 
-    //   const newSentenceType = 'Standard Determinate Sentence'
-    //   await service.updateSentenceType(mockOrderId, { sentenceType: newSentenceType })
-    //   const result = await service.getMonitoringConditions(mockOrderId)
-    //   const expected: MonitoringConditions = expect.objectContaining({
-    //     sentenceType: newSentenceType,
-    //     hdc: 'NO',
-    //   })
-    //   expect(result).toEqual(expected)
-    // })
+      expect(result.hdc).toBe('NO')
+    })
+
+    it("should save the 'COMMUNITY' sentence type when 'not in list' is selected", async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'COMMUNITY' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'COMMUNITY' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+
+      expect(result.sentenceType).toBe('COMMUNITY')
+    })
+
+    it("should transform the bail 'not in list' option to 'BAIL' when saving", async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'BAIL' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'BAIL' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+
+      expect(result.sentenceType).toBe('BAIL')
+    })
   })
 })
