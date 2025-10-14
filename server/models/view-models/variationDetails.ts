@@ -34,10 +34,7 @@ const createViewModelFromFormData = (
 const createViewModelFromEntity = (order: Order): VariationDetailsViewModel => {
   return {
     variationType: {
-      value:
-        (order.variationDetails?.variationType ?? order.dataDictionaryVersion === 'DDV4')
-          ? 'ADDRESS'
-          : 'CHANGE_TO_ADDRESS',
+      value: order.variationDetails?.variationType ?? '',
     },
     variationDate: {
       value: deserialiseDateTime(order.variationDetails?.variationDate ?? null),
