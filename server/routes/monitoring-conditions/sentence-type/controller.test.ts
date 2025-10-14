@@ -24,8 +24,7 @@ describe('SentenceTypeController', () => {
     mockMonitoringConditionsStoreService = new MonitoringConditionsStoreService(
       mockDataStore,
     ) as jest.Mocked<MonitoringConditionsStoreService>
-
-    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({} as MonitoringConditions)
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({})
 
     mockOrder = getMockOrder()
 
@@ -39,7 +38,9 @@ describe('SentenceTypeController', () => {
   describe('view', () => {
     it('should render the correct view', async () => {
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
+
       await controller.view(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/monitoring-conditions/order-type-description/sentence-type',
         expect.anything(),
@@ -48,7 +49,9 @@ describe('SentenceTypeController', () => {
 
     it('should construct the correct model when there is no data in the store', async () => {
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
+
       await controller.view(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({ sentenceType: { value: '' }, errorSummary: null }),
@@ -57,13 +60,17 @@ describe('SentenceTypeController', () => {
 
     it('should construct the correct model when there is data in the store', async () => {
       const data: Partial<MonitoringConditions> = { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
-      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data as MonitoringConditions)
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
+
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
+
       await controller.view(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
           sentenceType: { value: 'STANDARD_DETERMINATE_SENTENCE' },
+          errorSummary: null,
         }),
       )
     })
@@ -71,25 +78,34 @@ describe('SentenceTypeController', () => {
     it('should construct the correct model when there are errors', async () => {
       req.flash = jest.fn().mockReturnValueOnce([
         {
-          error: validationErrors.monitoringConditions.sentenceTypeRequired,
+          error: 'Select the type of sentence the device wearer has been given',
           field: 'sentenceType',
           focusTarget: 'sentenceType',
         },
       ])
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
+
       await controller.view(req, res, next)
+
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
-          sentenceType: { value: '', error: { text: validationErrors.monitoringConditions.sentenceTypeRequired } },
-          errorSummary: expect.anything(),
+          sentenceType: { value: '', error: { text: 'Select the type of sentence the device wearer has been given' } },
+          errorSummary: {
+            errorList: [
+              { href: '#sentenceType', text: 'Select the type of sentence the device wearer has been given' },
+            ],
+            titleText: 'There is a problem',
+          },
         }),
       )
     })
 
     it('should construct the correct model when the order type is POST_RELEASE', async () => {
       const data: Partial<MonitoringConditions> = { orderType: 'POST_RELEASE' }
-      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data as MonitoringConditions)
+
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
+
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith(
@@ -139,7 +155,7 @@ describe('SentenceTypeController', () => {
         req.body = { action: 'continue', sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'POST_RELEASE',
-        } as MonitoringConditions)
+        })
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
 
@@ -156,7 +172,7 @@ describe('SentenceTypeController', () => {
         req.body = { action: 'continue', sentenceType: 'SECTION_91' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'POST_RELEASE',
-        } as MonitoringConditions)
+        })
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
 
@@ -176,7 +192,7 @@ describe('SentenceTypeController', () => {
         req.body = { action: 'continue', sentenceType: 'COMMUNITY_YRO' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'COMMUNITY',
-        } as MonitoringConditions)
+        })
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
 
