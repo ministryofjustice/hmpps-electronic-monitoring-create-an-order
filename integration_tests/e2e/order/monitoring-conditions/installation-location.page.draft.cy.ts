@@ -85,6 +85,180 @@ context('Monitoring conditions', () => {
         page.checkIsAccessible()
       })
 
+      it('Should display install at source generic text if prison part of pilot', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({
+          ...mockDefaultOrder,
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: 'line1',
+              addressLine2: 'line2',
+              addressLine3: 'line3',
+              addressLine4: 'line4',
+              postcode: 'postcode',
+            },
+          ],
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'SWANSEA_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+          },
+        })
+
+        Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+
+        cy.get('#location-hint').contains("Installation can't take place at the prison for some orders.")
+
+        cy.get('#location-hint')
+          .contains('Help Guide (opens in new tab)')
+          .should(
+            'have.attr',
+            'href',
+            'https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot',
+          )
+      })
+
+      it('Should not display install at source generic text if prison not part of pilot', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({
+          ...mockDefaultOrder,
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: 'line1',
+              addressLine2: 'line2',
+              addressLine3: 'line3',
+              addressLine4: 'line4',
+              postcode: 'postcode',
+            },
+          ],
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'BELMARSH_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+          },
+        })
+
+        Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+
+        cy.get('#location-hint')
+          .contains("Installation can't take place at the prison for some orders.")
+          .should('not.exist')
+
+        cy.get('#location-hint').contains('Help Guide (opens in new tab)').should('not.exist')
+      })
+
+      it('Should display install at source alcohol text if prison part of pilot and device wearer has no fixed address', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({
+          ...mockDefaultOrder,
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'MALE',
+            gender: 'MALE',
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
+            noFixedAbode: true,
+            interpreterRequired: false,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'CARDIFF_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+          },
+        })
+
+        Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+
+        cy.get('#location-hint').contains(
+          'If the device wearer has no fixed address they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office.',
+        )
+
+        cy.get('#location-hint')
+          .contains('Help Guide (opens in new tab)')
+          .should(
+            'have.attr',
+            'href',
+            'https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot',
+          )
+      })
+
+      it('Should not display install at source alcohol text if prison not part of pilot and device wearer has no fixed address', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({
+          ...mockDefaultOrder,
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'MALE',
+            gender: 'MALE',
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
+            noFixedAbode: true,
+            interpreterRequired: false,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'BELMARSH_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+          },
+        })
+
+        Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+
+        cy.get('#location-hint')
+          .contains(
+            'If the device wearer has no fixed address they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office.',
+          )
+          .should('not.exist')
+      })
+
       it('Should grey out fixed address option, when device wearer has no fixed address', () => {
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         stubGetOrder({
