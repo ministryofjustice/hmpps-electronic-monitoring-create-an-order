@@ -28,6 +28,17 @@ export const SentenceTypeEnum = z.enum([
 ])
 
 export const YesNoUnknownEnum = z.enum(['YES', 'NO', 'UNKNOWN'])
+export const PilotTypeEnum = z.enum([
+  'ACQUISITIVE_CRIME_PROJECT',
+  'DOMESTIC_ABUSE_PERPETRATOR,_ON_LICENCE_PROJECT',
+  'LICENCE_VARIATION_PROJECT',
+  'DOMESTIC_ABUSE_PROTECTION_ORDER',
+  'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+  'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
+  'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
+  'GPS_ACQUISITIVE_CRIME_PAROLE',
+  'UNKNOWN',
+])
 
 const MonitoringConditionsModel = z.object({
   orderType: OrderTypeEnum.nullable().optional(),
@@ -41,6 +52,7 @@ const MonitoringConditionsModel = z.object({
   startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime).nullable().optional(),
   endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime).nullable().optional(),
   hdc: z.string().nullable().optional(),
+  pilot: PilotTypeEnum.nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>
