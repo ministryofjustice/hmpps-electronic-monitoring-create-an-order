@@ -15,7 +15,7 @@ const mockFlags = {
   ORDER_TYPE_ENABLED: false,
   ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
-  TAG_AT_SOURCE_OPTIONS_ENABLED: false,
+  TAG_AT_SOURCE_PILOT_PRISONS: '',
 }
 
 jest.mock('fs')
