@@ -121,25 +121,42 @@ describe('check your answers controller', () => {
 
       await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          answers: expect.arrayContaining([
-            expect.objectContaining({ key: { text: 'What is the order type?' } }),
-            expect.objectContaining({
-              key: { text: 'What type of sentence has the device wearer been given?' },
-              value: { text: 'Standard Determinate Sentence' },
-              actions: expect.objectContaining({
-                items: expect.arrayContaining([
-                  expect.objectContaining({
-                    href: expect.stringContaining('/sentence-type'),
-                  }),
-                ]),
-              }),
-            }),
-          ]),
-        }),
-      )
+      expect(res.render).toHaveBeenCalledWith(expect.anything(), {
+        answers: [
+          {
+            key: { text: 'What is the order type?' },
+            value: { text: 'Post Release' },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(
+                    ':orderId',
+                    req.order!.id,
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: 'what is the order type?',
+                },
+              ],
+            },
+          },
+          {
+            key: { text: 'What type of sentence has the device wearer been given?' },
+            value: { text: 'Standard Determinate Sentence' },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(
+                    ':orderId',
+                    req.order!.id,
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
+                },
+              ],
+            },
+          },
+        ],
+      })
     })
   })
 
@@ -184,9 +201,16 @@ describe('check your answers controller', () => {
 
     await controller.view(req, res, next)
 
-    const { answers } = (res.render as jest.Mock).mock.calls[0][1]
-    expect(answers).toHaveLength(1)
-    expect(answers[0].key.text).toBe('What type of sentence has the device wearer been given?')
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        answers: expect.arrayContaining([
+          expect.objectContaining({
+            key: { text: 'What type of sentence has the device wearer been given?' },
+          }),
+        ]),
+      }),
+    )
   })
 
   describe('update', () => {

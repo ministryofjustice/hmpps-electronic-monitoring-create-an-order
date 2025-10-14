@@ -27,6 +27,7 @@ context('orderType', () => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder()
+
     cy.signIn()
   })
 

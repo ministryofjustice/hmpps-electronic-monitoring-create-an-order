@@ -5,8 +5,6 @@ import SentenceTypePage from './SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
 import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
 
-const mockOrderId = uuidv4()
-
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -26,11 +24,13 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   })
 }
 
-context('Sentence Type form submission', () => {
+const mockOrderId = uuidv4()
+context('sentenceType form submission', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder()
+
     cy.signIn()
   })
 

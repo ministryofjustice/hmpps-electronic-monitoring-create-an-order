@@ -67,10 +67,7 @@ describe('store service', () => {
 
         const result = await service.getMonitoringConditions(mockOrderId)
 
-        const expected: MonitoringConditions = expect.objectContaining({
-          orderType,
-          conditionType: orderTypeConditions,
-        })
+        const expected: MonitoringConditions = { orderType, conditionType: orderTypeConditions }
 
         expect(result).toEqual(expected)
       },

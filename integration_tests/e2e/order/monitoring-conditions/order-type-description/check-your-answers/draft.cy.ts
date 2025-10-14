@@ -50,6 +50,7 @@ context('Check your answers', () => {
     hdcPage.form.continueButton.click()
 
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+    page.checkIsAccessible()
 
     page.orderInformationSection.shouldHaveItems([
       { key: 'What is the order type?', value: 'Post Release' },
@@ -60,15 +61,19 @@ context('Check your answers', () => {
 
   it('Should display content for a Community order', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Community')
+    orderTypePage.form.orderTypeField.set('Community')
     orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
-    sentenceTypePage.form.fillInWith('Supervision Default Order')
+    sentenceTypePage.form.sentenceTypeField.set('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
+    page.header.userName().should('contain.text', 'J. Smith')
+    page.header.phaseBanner().should('contain.text', 'dev')
+
+    page.orderInformationSection.shouldExist()
     page.orderInformationSection.shouldHaveItems([
       { key: 'What is the order type?', value: 'Community' },
       { key: 'What type of sentence has the device wearer been given?', value: 'Supervision Default Order' },
@@ -133,9 +138,9 @@ context('Check your answers', () => {
   })
 
   it('should clear dependent answers when a previous answer is changed', () => {
-    const orderTypePage1 = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage1.form.fillInWith('Release from prison')
-    orderTypePage1.form.continueButton.click()
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Standard Determinate Sentence')
@@ -145,15 +150,15 @@ context('Check your answers', () => {
     hdcPage.form.fillInWith('No')
     hdcPage.form.continueButton.click()
 
-    const cyaPage1 = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-    cyaPage1.changeLinkByQuestion('What is the order type?').click()
+    let cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+    cyaPage.changeLinkByQuestion('What is the order type?').click()
 
     stubGetOrder('HOME_OFFICE')
     Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    const cyaPage2 = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-    cyaPage2.orderInformationSection.shouldNotHaveItem('What type of sentence has the device wearer been given?')
-    cyaPage2.orderInformationSection.shouldNotHaveItem('What is the order type?')
-    cyaPage2.orderInformationSection.shouldNotHaveItem('Is the device wearer on a Home Detention Curfew (HDC)?')
+    cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+    cyaPage.orderInformationSection.shouldNotHaveItem('What type of sentence has the device wearer been given?')
+    cyaPage.orderInformationSection.shouldNotHaveItem('What is the order type?')
+    cyaPage.orderInformationSection.shouldNotHaveItem('Is the device wearer on a Home Detention Curfew (HDC)?')
   })
 })
