@@ -10,6 +10,7 @@ import { getError } from '../../utils/utils'
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
   pilotPrison?: boolean
+  fixedAddressExist: boolean
 }
 
 const installAtSourcePilotPrisons = [
@@ -34,11 +35,16 @@ const createPrimaryAddressView = (addresses: Address[]): string => {
     : ''
 }
 
+const hasFixedAddress = (order: Order): boolean => {
+  const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
+  return primaryAddress !== undefined
+}
+
 const constructFromFormData = (
   formData: InstallationLocationFormData,
   primaryAddressView: string,
   validationErrors: ValidationResult,
-  isPilotPrison: boolean,
+  order: Order,
 ): InstallationLocationViewModel => {
   return {
     location: {
@@ -47,13 +53,14 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     primaryAddressView: { value: primaryAddressView },
-    pilotPrison: isPilotPrison,
+    pilotPrison: getPilotPrisonStatus(order),
+    fixedAddressExist: hasFixedAddress(order),
   }
 }
 
 const constructFromEntity = (
   primaryAddressView: string,
-  isPilotPrison: boolean,
+  order: Order,
   location: string = '',
 ): InstallationLocationViewModel => {
   return {
@@ -62,7 +69,8 @@ const constructFromEntity = (
     },
     primaryAddressView: { value: primaryAddressView },
     errorSummary: null,
-    pilotPrison: isPilotPrison,
+    pilotPrison: getPilotPrisonStatus(order),
+    fixedAddressExist: hasFixedAddress(order),
   }
 }
 
@@ -74,9 +82,9 @@ const construct = (
   const primaryAddressView = createPrimaryAddressView(order.addresses)
 
   if (validationErrors.length > 0) {
-    return constructFromFormData(formData, primaryAddressView, validationErrors, getPilotPrisonStatus(order))
+    return constructFromFormData(formData, primaryAddressView, validationErrors, order)
   }
-  return constructFromEntity(primaryAddressView, getPilotPrisonStatus(order), order.installationLocation?.location)
+  return constructFromEntity(primaryAddressView, order, order.installationLocation?.location)
 }
 
 export default {
