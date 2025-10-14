@@ -51,6 +51,9 @@ interface ValidationErrors {
     postcodeRequired: string
     addAnotherRequired: string
   }
+  contactInformation: {
+    pduRequired: string
+  }
   curfewConditions: {
     addressesRequired: string
     startDateTime: DateTimeErrorMessages
@@ -222,6 +225,9 @@ const validationErrors: ValidationErrors = {
     addressLine3Required: 'Enter town or city',
     postcodeRequired: 'Enter postcode',
     addAnotherRequired: 'Select yes if you need to add another appointment',
+  },
+  contactInformation: {
+    pduRequired: "Select the Responsible Organisation's PDU",
   },
   curfewConditions: {
     addressesRequired: 'Select where the device wearer will be during curfew hours',

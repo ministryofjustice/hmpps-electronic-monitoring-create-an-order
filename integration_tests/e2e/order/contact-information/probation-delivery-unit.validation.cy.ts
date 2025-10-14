@@ -3,11 +3,6 @@ import Page from '../../../pages/page'
 import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
 const mockOrderId = uuidv4()
-const apiPath = '/probation-delivery-unit'
-
-const expectedValidationErrors = {
-  unit: 'Mock Error',
-}
 
 context('Contact information', () => {
   context('Interested parties', () => {
@@ -34,17 +29,6 @@ context('Contact information', () => {
             },
           },
         })
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            {
-              field: 'unit',
-              error: expectedValidationErrors.unit,
-            },
-          ],
-        })
 
         cy.signIn()
       })
@@ -52,17 +36,13 @@ context('Contact information', () => {
       it('Should display validation error messages', () => {
         const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
-        page.form.fillInWith({
-          unit: 'County Durham and Darlington',
-        })
-
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(ProbationDeliveryUnitPage)
 
-        page.form.unitField.shouldHaveValidationMessage(expectedValidationErrors.unit)
+        page.form.unitField.shouldHaveValidationMessage("Select the Responsible Organisation's PDU")
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.unit)
+        page.errorSummary.shouldHaveError("Select the Responsible Organisation's PDU")
       })
     })
   })
