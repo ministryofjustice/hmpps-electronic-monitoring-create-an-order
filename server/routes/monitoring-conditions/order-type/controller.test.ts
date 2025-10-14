@@ -193,9 +193,9 @@ describe('order type controller', () => {
       orderType: 'POST_RELEASE',
     })
 
-    // expect(res.redirect).toHaveBeenCalledWith(
-    //   paths.MONITORING_CONDITIONS.SENTENCE_TYPE
-    // )
+    expect(res.redirect).toHaveBeenCalledWith(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrder.id),
+    )
   })
 
   it('should save order type and redirect if notifyingOrg is ycs', async () => {
@@ -208,9 +208,9 @@ describe('order type controller', () => {
       orderType: 'POST_RELEASE',
     })
 
-    // expect(res.redirect).toHaveBeenCalledWith(
-    //   paths.MONITORING_CONDITIONS.SENTENCE_TYPE
-    // )
+    expect(res.redirect).toHaveBeenCalledWith(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrder.id),
+    )
   })
 
   it('should save order type and redirect if notifyingOrg is home office', async () => {
@@ -222,10 +222,9 @@ describe('order type controller', () => {
     expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
       orderType: 'IMMIGRATION',
     })
-
-    // expect(res.redirect).toHaveBeenCalledWith(
-    //   paths.MONITORING_CONDITIONS.SENTENCE_TYPE
-    // )
+    expect(res.redirect).toHaveBeenCalledWith(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+    )
   })
 
   it('should save the form to storage when the action is continue', async () => {

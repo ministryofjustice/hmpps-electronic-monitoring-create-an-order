@@ -20,7 +20,7 @@ const mockResponse = {
   alcohol: true,
   startDate: '2024-10-10T11:00:00.000Z',
   endDate: '2024-10-11T11:00:00.000Z',
-  sentenceType: 'EPP',
+  sentenceType: 'COMMUNITY_SDO',
   issp: 'YES',
   hdc: 'NO',
   prarr: 'UNKNOWN',
@@ -74,7 +74,7 @@ context('Check your answers', () => {
       body: {
         orderType: 'COMMUNITY',
         conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
-        sentenceType: 'Community SDO',
+        sentenceType: 'COMMUNITY_SDO',
         // some default values until other pages are filled in
         startDate: '2020-11-07T10:00:00.000Z',
         endDate: '2040-11-08T10:00:00.000Z',

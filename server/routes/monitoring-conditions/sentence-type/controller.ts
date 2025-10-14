@@ -1,10 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
+import z from 'zod'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import constructModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
 import { SentenceTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
+import { YesNoUnknownEnum } from '../model'
 
 export default class SentenceTypeController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
@@ -44,22 +46,24 @@ export default class SentenceTypeController {
     }
 
     if (formData.action === 'continue') {
-      await this.montoringConditionsStoreService.updateSentenceType(orderId, { sentenceType: formData.sentenceType })
-
       const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+
+      let hdc: z.infer<typeof YesNoUnknownEnum> | undefined
+      if (monitoringConditions.orderType === 'POST_RELEASE') {
+        hdc = formData.sentenceType === 'SECTION_91' ? 'YES' : 'NO'
+      }
+
+      await this.montoringConditionsStoreService.updateSentenceType(orderId, {
+        sentenceType: formData.sentenceType,
+        hdc,
+      })
 
       if (monitoringConditions.orderType === 'POST_RELEASE') {
         switch (formData.sentenceType) {
-          case 'Standard Determinate Sentence':
-            // update to HDC page when it is made
-            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
-            // return
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
-            )
+          case 'STANDARD_DETERMINATE_SENTENCE':
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
             return
-
-          case 'Detention and Training Order (DTO)':
+          case 'DTO':
             // update to ISS page when it is made
             // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
             res.redirect(
@@ -80,20 +84,19 @@ export default class SentenceTypeController {
 
       if (monitoringConditions.orderType === 'COMMUNITY') {
         switch (formData.sentenceType) {
-          case 'Community YRO':
+          case 'COMMUNITY_YRO':
+            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
             res.redirect(
               paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
             )
             return
           default:
-            // update to Monitoring Dates page when it is made
-            // res.redirect(
-            // paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId),
-            // )
             res.redirect(
               paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
             )
-
+            // res.redirect(
+            //   paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId),
+            // )
             return
         }
       }

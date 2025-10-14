@@ -80,7 +80,7 @@ context('sentenceType', () => {
     page.form.sentenceTypeField.shouldHaveOption('Supervision Default Order')
     page.form.sentenceTypeField.shouldHaveOption('Suspended Sentence')
     page.form.sentenceTypeField.shouldHaveOption('Youth Rehabilitation Order (YRO)')
-    page.form.sentenceTypeField.shouldHaveOption('They have not been given one of these sentences')
+    page.form.sentenceTypeField.shouldHaveOption('The sentence they have been given is not in the list')
   })
 
   it('when order type is Bail', () => {

@@ -25,7 +25,15 @@ export default class MonitoringConditionsStoreService {
 
   public async updateOrderType(key: string, data: Pick<MonitoringConditions, 'orderType'>) {
     const monitoringConditions = await this.getMonitoringConditions(key)
+    const previousOrderType = monitoringConditions.orderType
     monitoringConditions.orderType = data.orderType
+
+    const goesToSentencePage = data.orderType ? ['POST_RELEASE', 'COMMUNITY', 'BAIL'].includes(data.orderType) : false
+
+    if (!goesToSentencePage && previousOrderType !== data.orderType) {
+      monitoringConditions.sentenceType = undefined
+      monitoringConditions.hdc = undefined
+    }
 
     switch (data.orderType) {
       case 'POST_RELEASE':
@@ -46,16 +54,12 @@ export default class MonitoringConditionsStoreService {
     await this.updateMonitoringConditions(key, monitoringConditions)
   }
 
-  public async updateSentenceType(key: string, data: Pick<MonitoringConditions, 'sentenceType'>) {
+  public async updateSentenceType(key: string, data: Pick<MonitoringConditions, 'sentenceType' | 'hdc'>) {
     const monitoringConditions = await this.getMonitoringConditions(key)
     monitoringConditions.sentenceType = data.sentenceType
 
-    if (monitoringConditions.orderType === 'POST_RELEASE') {
-      if (data.sentenceType === 'Section 250 / Section 91') {
-        monitoringConditions.hdc = 'YES'
-      } else {
-        monitoringConditions.hdc = 'NO'
-      }
+    if (data.hdc !== undefined) {
+      monitoringConditions.hdc = data.hdc
     }
 
     await this.updateMonitoringConditions(key, monitoringConditions)

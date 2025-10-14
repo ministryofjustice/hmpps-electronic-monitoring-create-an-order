@@ -18,17 +18,6 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
         path.replace(':orderId', order.id),
       ),
     )
-
-    if (data.hdc !== undefined) {
-      const hdcPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC
-      answers.push(
-        createAnswer(
-          content.pages.monitoringConditions.questions.hdc.text,
-          lookup(content.reference.yesNoUnknown, data.hdc),
-          hdcPath.replace(':orderId', order.id),
-        ),
-      )
-    }
   }
 
   if (data.sentenceType) {
@@ -38,7 +27,24 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
         : 'What type of sentence has the device wearer been given?'
 
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE
-    answers.push(createAnswer(question, data.sentenceType, path.replace(':orderId', order.id)))
+    answers.push(
+      createAnswer(
+        question,
+        lookup(content.reference.sentenceTypes, data.sentenceType),
+        path.replace(':orderId', order.id),
+      ),
+    )
+  }
+
+  if (data.hdc !== undefined) {
+    const hdcPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.hdc.text,
+        lookup(content.reference.yesNoUnknown, data.hdc),
+        hdcPath.replace(':orderId', order.id),
+      ),
+    )
   }
 
   return {

@@ -112,7 +112,7 @@ describe('check your answers controller', () => {
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
         orderType: 'POST_RELEASE',
         conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
-        sentenceType: 'Standard Determinate Sentence',
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
       })
       const controller = new CheckYourAnswersController(
         mockMonitoringConditionsStoreService,
@@ -147,7 +147,7 @@ describe('check your answers controller', () => {
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
       orderType: 'BAIL',
       conditionType: 'BAIL_ORDER',
-      sentenceType: 'BAIL RLAA',
+      sentenceType: 'BAIL_RLAA',
     })
     const controller = new CheckYourAnswersController(
       mockMonitoringConditionsStoreService,
@@ -163,7 +163,7 @@ describe('check your answers controller', () => {
           expect.objectContaining({ key: { text: 'What is the order type?' } }),
           expect.objectContaining({
             key: { text: 'What type of bail has the device wearer been given?' },
-            value: { text: 'BAIL RLAA' },
+            value: { text: 'Bail Remand to Local Authority Accomodation (RLAA)' },
           }),
         ]),
       }),
@@ -175,7 +175,7 @@ describe('check your answers controller', () => {
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
       orderType: 'POST_RELEASE',
       conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
-      sentenceType: 'Standard Determinate Sentence',
+      sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
     })
     const controller = new CheckYourAnswersController(
       mockMonitoringConditionsStoreService,
