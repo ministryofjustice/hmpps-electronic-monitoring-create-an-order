@@ -34,10 +34,9 @@ export default class VariationDetailsFormComponent extends FormComponent {
       this.variationDateField.set(profile.variationDate)
     }
 
-    // Hide variation type question based on ticket :https://dsdmoj.atlassian.net/browse/ELM-3923
-    // if (profile.variationType) {
-    //   this.variationTypeField.set(profile.variationType)
-    // }
+    if (profile.variationType) {
+      this.variationTypeField.set(profile.variationType)
+    }
 
     if (profile.variationDetails) {
       this.variationDetailsField.set(profile.variationDetails)
@@ -45,28 +44,24 @@ export default class VariationDetailsFormComponent extends FormComponent {
   }
 
   shouldBeValid(): void {
-    // Hide variation type question based on ticket :https://dsdmoj.atlassian.net/browse/ELM-3923
-    // this.variationTypeField.shouldNotHaveValidationMessage()
+    this.variationTypeField.shouldNotHaveValidationMessage()
     this.variationDateField.shouldNotHaveValidationMessage()
     this.variationDetailsField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.variationDateField.shouldBeDisabled()
-    // Hide variation type question based on ticket :https://dsdmoj.atlassian.net/browse/ELM-3923
-    // this.variationTypeField.shouldBeDisabled()
+    this.variationTypeField.shouldBeDisabled()
     this.variationDetailsField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
     this.variationDateField.shouldNotBeDisabled()
-    // Hide variation type question based on ticket :https://dsdmoj.atlassian.net/browse/ELM-3923
-    // this.variationTypeField.shouldNotBeDisabled()
+    this.variationTypeField.shouldNotBeDisabled()
     this.variationDetailsField.shouldNotBeDisabled()
   }
 
   shouldHaveAllOptions(): void {
-    // Hide variation type question based on ticket :https://dsdmoj.atlassian.net/browse/ELM-3923
-    // this.variationTypeField.shouldHaveAllOptions()
+    this.variationTypeField.shouldHaveAllOptions()
   }
 }
