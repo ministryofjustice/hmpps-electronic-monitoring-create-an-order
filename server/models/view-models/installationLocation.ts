@@ -9,7 +9,7 @@ import { getError } from '../../utils/utils'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
-  pilotPrison?: string
+  pilotPrison?: boolean
 }
 
 const installAtSourcePilotPrisons = [
@@ -21,10 +21,10 @@ const installAtSourcePilotPrisons = [
   'CARDIFF_PRISON',
 ]
 
-const getPilotPrisonStatus = (order: Order): string => {
+const getPilotPrisonStatus = (order: Order): boolean => {
   const prisonName = order.interestedParties?.notifyingOrganisationName
   const count = installAtSourcePilotPrisons.filter(prison => prison === prisonName).length
-  return count > 0 ? 'true' : 'false'
+  return count > 0
 }
 
 const createPrimaryAddressView = (addresses: Address[]): string => {
@@ -38,7 +38,7 @@ const constructFromFormData = (
   formData: InstallationLocationFormData,
   primaryAddressView: string,
   validationErrors: ValidationResult,
-  isPilotPrison: string,
+  isPilotPrison: boolean,
 ): InstallationLocationViewModel => {
   return {
     location: {
@@ -53,7 +53,7 @@ const constructFromFormData = (
 
 const constructFromEntity = (
   primaryAddressView: string,
-  isPilotPrison: string,
+  isPilotPrison: boolean,
   location: string = '',
 ): InstallationLocationViewModel => {
   return {
