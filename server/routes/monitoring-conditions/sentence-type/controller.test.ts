@@ -6,8 +6,8 @@ import { MonitoringConditions } from '../model'
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { Order } from '../../../models/Order'
 import paths from '../../../constants/paths'
-import { validationErrors } from '../../../constants/validationErrors'
 import InMemoryMonitoringConditionsStore from '../store/inMemoryStore'
+import { validationErrors } from '../../../constants/validationErrors'
 
 jest.mock('../monitoringConditionsStoreService')
 
@@ -56,14 +56,14 @@ describe('SentenceTypeController', () => {
     })
 
     it('should construct the correct model when there is data in the store', async () => {
-      const data: Partial<MonitoringConditions> = { sentenceType: 'Standard Determinate Sentence' }
+      const data: Partial<MonitoringConditions> = { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data as MonitoringConditions)
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
-          sentenceType: { value: 'Standard Determinate Sentence' },
+          sentenceType: { value: 'STANDARD_DETERMINATE_SENTENCE' },
         }),
       )
     })
@@ -97,7 +97,7 @@ describe('SentenceTypeController', () => {
         expect.objectContaining({
           pageTitle: 'What type of sentence has the device wearer been given?',
           sentenceTypeQuestions: expect.arrayContaining([
-            expect.objectContaining({ value: 'Standard Determinate Sentence' }),
+            expect.objectContaining({ value: 'STANDARD_DETERMINATE_SENTENCE' }),
           ]),
         }),
       )
@@ -106,7 +106,7 @@ describe('SentenceTypeController', () => {
 
   describe('update', () => {
     it('should save the form to storage when the action is continue', async () => {
-      req.body = { action: 'continue', sentenceType: 'Standard Determinate Sentence' }
+      req.body = { action: 'continue', sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
       await controller.update(req, res, next)
       expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalled()
@@ -135,39 +135,35 @@ describe('SentenceTypeController', () => {
     })
 
     describe('POST_RELEASE routing', () => {
-      it("should save and redirect for 'Standard Determinate Sentence'", async () => {
-        req.body = { action: 'continue', sentenceType: 'Standard Determinate Sentence' }
+      it("should set hdc to NO and redirect to HDC page for 'STANDARD_DETERMINATE_SENTENCE'", async () => {
+        req.body = { action: 'continue', sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'POST_RELEASE',
         } as MonitoringConditions)
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
-        // TODO: Update to HDC page when it is made
+
+        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+          sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+          hdc: 'NO',
+        })
         expect(res.redirect).toHaveBeenCalledWith(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', mockOrder.id),
         )
       })
 
-      it("should save and redirect for 'Detention and Training Order (DTO)'", async () => {
-        req.body = { action: 'continue', sentenceType: 'Detention and Training Order (DTO)' }
+      it("should set hdc to YES and redirect to PRARR page for 'SECTION_91'", async () => {
+        req.body = { action: 'continue', sentenceType: 'SECTION_91' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'POST_RELEASE',
         } as MonitoringConditions)
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
-        // TODO: Update to ISS page when it is made
-        expect(res.redirect).toHaveBeenCalledWith(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
-        )
-      })
 
-      it('should save and redirect for any other sentence', async () => {
-        req.body = { action: 'continue', sentenceType: 'Section 250 / Section 91' }
-        mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-          orderType: 'POST_RELEASE',
-        } as MonitoringConditions)
-        const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
-        await controller.update(req, res, next)
+        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+          sentenceType: 'SECTION_91',
+          hdc: 'YES',
+        })
         // TODO: Update to PRARR page when it is made
         expect(res.redirect).toHaveBeenCalledWith(
           paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
@@ -176,41 +172,18 @@ describe('SentenceTypeController', () => {
     })
 
     describe('COMMUNITY routing', () => {
-      it("should save and redirect for 'Community YRO'", async () => {
-        req.body = { action: 'continue', sentenceType: 'Community YRO' }
+      it("should not set hdc and redirect to ISS for 'COMMUNITY_YRO'", async () => {
+        req.body = { action: 'continue', sentenceType: 'COMMUNITY_YRO' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'COMMUNITY',
         } as MonitoringConditions)
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
-        // TODO: Update to ISS page when it is made
-        expect(res.redirect).toHaveBeenCalledWith(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
-        )
-      })
 
-      it('should save and redirect for any other sentence', async () => {
-        req.body = { action: 'continue', sentenceType: 'Community SDO' }
-        mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-          orderType: 'COMMUNITY',
-        } as MonitoringConditions)
-        const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
-        await controller.update(req, res, next)
-        // TODO: Update to Monitoring Dates page when it is made
-        expect(res.redirect).toHaveBeenCalledWith(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
-        )
-      })
-    })
-
-    describe('BAIL routing', () => {
-      it('should save and redirect for any bail option', async () => {
-        req.body = { action: 'continue', sentenceType: 'Bail Supervision & Support' }
-        mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-          orderType: 'BAIL',
-        } as MonitoringConditions)
-        const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
-        await controller.update(req, res, next)
+        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+          sentenceType: 'COMMUNITY_YRO',
+          hdc: undefined,
+        })
         // TODO: Update to ISS page when it is made
         expect(res.redirect).toHaveBeenCalledWith(
           paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),

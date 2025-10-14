@@ -6,6 +6,4 @@ export const SentenceTypeFormDataModel = z.object({
   sentenceType: MonitoringConditionsModel.shape.sentenceType,
 })
 
-export type SentenceTypeFormData = z.infer<typeof SentenceTypeFormDataModel>
-
 export default SentenceTypeFormDataModel
