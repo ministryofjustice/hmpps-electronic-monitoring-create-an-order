@@ -118,8 +118,16 @@ const doesOrderHavePhotoId = (order: Order): boolean => {
   return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
 }
 
+const isTagAtSourcePilotPrison = (order: Order): boolean => {
+  if (order.interestedParties?.notifyingOrganisation === 'PRISON') {
+    const prisons = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
+    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName) !== -1
+  }
+  return false
+}
+
 const isTagAtSourceAvailable = (order: Order): boolean => {
-  return FeatureFlags.getInstance().get('TAG_AT_SOURCE_OPTIONS_ENABLED') || order.monitoringConditions.alcohol === true
+  return isTagAtSourcePilotPrison(order) || order.monitoringConditions.alcohol === true
 }
 
 export default class TaskListService {

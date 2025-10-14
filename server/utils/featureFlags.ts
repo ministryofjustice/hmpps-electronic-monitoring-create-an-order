@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-type FeatureFlagMap = Record<string, boolean>
+type FeatureFlagMap = Record<string, boolean | string>
 
 const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json')
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
@@ -30,11 +30,11 @@ export default class FeatureFlags {
       ORDER_TYPE_ENABLED: process.env.ORDER_TYPE_ENABLED === 'true',
       ALCOHOL_MONITORING_ENABLED: process.env.ALCOHOL_MONITORING_ENABLED === 'true',
       CREATE_NEW_ORDER_VERSION_ENABLED: process.env.CREATE_NEW_ORDER_VERSION_ENABLED === 'true',
-      TAG_AT_SOURCE_OPTIONS_ENABLED: process.env.TAG_AT_SOURCE_OPTIONS_ENABLED === 'true',
+      TAG_AT_SOURCE_PILOT_PRISONS: process.env.TAG_AT_SOURCE_PILOT_PRISONS ?? '',
     }
   }
 
-  private writeFlagsToFile(filePath: string, flags: Record<string, boolean>) {
+  private writeFlagsToFile(filePath: string, flags: Record<string, boolean | string>) {
     const jsonString = JSON.stringify(flags, null, 2)
     fs.writeFileSync(filePath, jsonString, 'utf-8')
   }
@@ -45,6 +45,14 @@ export default class FeatureFlags {
 
   public get(flagName: string): boolean {
     const flags = this.getAll()
+    if (!(flagName in flags)) {
+      throw new Error(`Feature flag "${flagName}" not defined.`)
+    }
+    return flags[flagName]
+  }
+
+  public getValue(flagName: string): string {
+    const flags = JSON.parse(fs.readFileSync(featureFlagFilePath, 'utf-8'))
     if (!(flagName in flags)) {
       throw new Error(`Feature flag "${flagName}" not defined.`)
     }
