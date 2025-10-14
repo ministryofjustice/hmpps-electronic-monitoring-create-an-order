@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import InMemoryMonitoringConditionsStore from '../store/inMemoryStore'
+import InMemoryStore from '../store/inMemoryStore'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import CheckYourAnswersController from './controller'
 import paths from '../../../constants/paths'
@@ -12,7 +12,7 @@ jest.mock('../monitoringConditionsService')
 jest.mock('../../../data/restClient')
 
 describe('check your answers controller', () => {
-  let mockDataStore: InMemoryMonitoringConditionsStore
+  let mockDataStore: InMemoryStore
   let mockMonitoringConditionsStoreService: jest.Mocked<MonitoringConditionsStoreService>
   let mockMonitoringConditionsService: jest.Mocked<MonitoringConditionsUpdateService>
   let mockRestClient: jest.Mocked<RestClient>
@@ -21,7 +21,7 @@ describe('check your answers controller', () => {
   let next: NextFunction
 
   beforeEach(() => {
-    mockDataStore = new InMemoryMonitoringConditionsStore()
+    mockDataStore = new InMemoryStore()
     mockMonitoringConditionsStoreService = new MonitoringConditionsStoreService(
       mockDataStore,
     ) as jest.Mocked<MonitoringConditionsStoreService>
