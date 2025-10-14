@@ -40,7 +40,7 @@ context('Scenarios', () => {
   })
 
   beforeEach(() => {
-    const testFlags = { TAG_AT_SOURCE_OPTIONS_ENABLED: true }
+    const testFlags = { TAG_AT_SOURCE_PILOT_PRISONS: 'LIVERPOOL_PRISON' }
     cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
