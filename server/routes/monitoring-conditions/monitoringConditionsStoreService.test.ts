@@ -1,16 +1,26 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringConditionsStoreService from './monitoringConditionsStoreService'
-import InMemoryMonitoringConditionsStore from './store/inMemoryStore'
+import InMemoryStore from './store/inMemoryStore'
 import { MonitoringConditions } from './model'
 
 describe('store service', () => {
-  let store: InMemoryMonitoringConditionsStore
+  let store: InMemoryStore
   let service: MonitoringConditionsStoreService
   const mockOrderId = uuidv4()
   beforeEach(() => {
-    store = new InMemoryMonitoringConditionsStore()
+    store = new InMemoryStore()
     service = new MonitoringConditionsStoreService(store)
   })
+
+  it('can update a single top level field', async () => {
+    await service.updateField(mockOrderId, 'orderType', 'IMMIGRATION')
+
+    const result = await service.getMonitoringConditions(mockOrderId)
+
+    const expected: MonitoringConditions = expect.objectContaining({ orderType: 'IMMIGRATION' })
+    expect(result).toEqual(expected)
+  })
+
   describe('when updating orderType', () => {
     it('correctly updates the order type value in the store', async () => {
       const initial = await service.getMonitoringConditions(mockOrderId)

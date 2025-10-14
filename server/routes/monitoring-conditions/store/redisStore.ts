@@ -1,9 +1,8 @@
 import logger from '../../../../logger'
 import { RedisClient } from '../../../data/redisClient'
-import { MonitoringConditions } from '../model'
-import MonitoringConditionsStore from './store'
+import Store from './store'
 
-export default class RedisMonitoringConditionsStore implements MonitoringConditionsStore {
+export default class RedisStore implements Store {
   private readonly prefix = 'monitoringConditions:'
 
   constructor(private readonly client: RedisClient) {
@@ -19,16 +18,12 @@ export default class RedisMonitoringConditionsStore implements MonitoringConditi
     }
   }
 
-  public async setMonitoringConditions(
-    key: string,
-    token: MonitoringConditions,
-    durationSeconds: number,
-  ): Promise<void> {
+  public async set(key: string, token: string, durationSeconds: number): Promise<void> {
     await this.ensureConnected()
-    await this.client.set(`${this.prefix}${key}`, JSON.stringify(token), { EX: durationSeconds })
+    await this.client.set(`${this.prefix}${key}`, token, { EX: durationSeconds })
   }
 
-  public async getMonitoringConditions(key: string): Promise<string | null> {
+  public async get(key: string): Promise<string | null> {
     await this.ensureConnected()
     const result = await this.client.get(`${this.prefix}${key}`)
 

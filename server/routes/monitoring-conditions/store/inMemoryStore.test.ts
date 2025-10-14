@@ -1,25 +1,23 @@
-import InMemoryMonitoringConditionsStore from './inMemoryStore'
-import { MonitoringConditions } from '../model'
+import InMemoryStore from './inMemoryStore'
 
 describe('in memory order type description store', () => {
-  let store: InMemoryMonitoringConditionsStore
+  let store: InMemoryStore
   beforeEach(() => {
-    store = new InMemoryMonitoringConditionsStore()
+    store = new InMemoryStore()
   })
-  const data: MonitoringConditions = {}
 
   it('should store the order type description model', async () => {
-    await store.setMonitoringConditions('some key', data, 1000)
+    await store.set('some key', 'some token', 1000)
 
-    const result = await store.getMonitoringConditions('some key')
+    const result = await store.get('some key')
 
-    expect(result).toEqual(JSON.stringify(data))
+    expect(result).toEqual('some token')
   })
 
   it('should return null if expiry time is in the past', async () => {
-    await store.setMonitoringConditions('some key', data, -1)
+    await store.set('some key', 'test token', -1)
 
-    const result = await store.getMonitoringConditions('some key')
+    const result = await store.get('some key')
 
     expect(result).toEqual(null)
   })
