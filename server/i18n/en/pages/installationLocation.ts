@@ -2,7 +2,7 @@ import InstallationLocationPageContent from '../../../types/i18n/pages/installat
 
 const installationLocationPageContent: InstallationLocationPageContent = {
   section: 'Electronic monitoring required',
-  title: '',
+  title: 'Installation Location',
   helpText: '',
   legend: '',
   questions: {
