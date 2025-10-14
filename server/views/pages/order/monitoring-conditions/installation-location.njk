@@ -7,7 +7,7 @@
 {% set questions = content.pages.installationLocation.questions %}
 {% block formInputs %}
   {% set hintHtml %}
-    {% if (pilotPrison == 'true') %}
+    {% if (pilotPrison == true) %}
       Installation can't take place at the prison for some orders. For guidance, refer to the <a class="govuk-link" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot" target="_blank">Help Guide (opens in new tab)</a>.
     {% endif %}
   {% endset %}
