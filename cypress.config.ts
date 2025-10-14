@@ -61,11 +61,11 @@ export default defineConfig({
         * Used to change feature flags during integration testing.
         Takes an object of flags. Only updates the values of flags that already exist; won't create new flags.
         */
-        setFeatureFlags(newFlags: Record<string, boolean>) {
+        setFeatureFlags(newFlags: Record<string, boolean | string>) {
           return fs.promises
             .readFile(featureFlagFilePath, 'utf-8')
             .then(data => {
-              const flags = JSON.parse(data) as Record<string, boolean>
+              const flags = JSON.parse(data) as Record<string, boolean | string>
 
               Object.entries(newFlags).forEach(([key, value]) => {
                 if (key in flags) {

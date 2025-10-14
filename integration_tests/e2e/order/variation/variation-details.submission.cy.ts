@@ -8,6 +8,7 @@ const mockOrderId = uuidv4()
 const apiPath = '/variation'
 const sampleFormData = {
   variationDate: new Date(2024, 0, 1),
+  variationType: 'Change of curfew hours',
   variationDetails: 'Change to curfew hours',
 }
 
@@ -29,7 +30,7 @@ context('Variation', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            variationType: 'ADDRESS',
+            variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to curfew hours',
           },
@@ -47,7 +48,7 @@ context('Variation', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            variationType: 'ADDRESS',
+            variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to curfew hours',
           },

@@ -60,6 +60,22 @@ context('Contact information', () => {
         }).should('be.true')
       })
 
+      it('should submit if not able to provide info', () => {
+        const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          unit: 'Not able to provide this information',
+        })
+        page.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            unit: null,
+          },
+        }).should('be.true')
+      })
+
       it('should continue to collect installation and risk details', () => {
         const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
