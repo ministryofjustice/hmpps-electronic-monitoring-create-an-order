@@ -8,6 +8,13 @@
 {% set items = [] %}
 
 {% for question in sentenceTypeQuestions %}
+    {% if loop.last and (question.value == 'COMMUNITY' or question.value == 'BAIL') %}
+        {% set items = (items.push({
+            divider: "or",
+            disabled: not isOrderEditable
+        }), items) %}
+    {% endif %}
+
     {% set items = (items.push({
       text: question.question,
       value: question.value,
