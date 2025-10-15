@@ -80,11 +80,11 @@ describe('pilot controller', () => {
           items: [
             {
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
             },
             {
               text: 'GPS acquisitive crime',
-              value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+              value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
               divider: 'or',

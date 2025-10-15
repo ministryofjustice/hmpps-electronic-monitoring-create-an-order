@@ -38,24 +38,33 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult): P
 }
 
 const getItems = (hdc?: string | null): Item[] => {
-  const items: Item[] = [
-    { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL' },
-    { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
-    { divider: 'or' },
-  ]
+  let items: Item[]
   if (hdc === 'NO') {
-    items.push({
-      text: 'They are not part of any of these pilots',
-      value: 'UNKNOWN',
-      hint: {
-        text: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+    items = [
+      { text: 'Domestic Abuse Perpetrator on Licence (DAPOL)', value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL' },
+      { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
+      { divider: 'or' },
+      {
+        text: 'They are not part of any of these pilots',
+        value: 'UNKNOWN',
+        hint: {
+          text: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+        },
       },
-    })
+    ]
   } else {
-    items.push({
-      text: 'They are not part of any of these pilots',
-      value: 'UNKNOWN',
-    })
+    items = [
+      {
+        text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+        value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
+      },
+      { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
+      { divider: 'or' },
+      {
+        text: 'They are not part of any of these pilots',
+        value: 'UNKNOWN',
+      },
+    ]
   }
   return items
 }
