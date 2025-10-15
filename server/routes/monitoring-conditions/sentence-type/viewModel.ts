@@ -8,7 +8,7 @@ type SentenceTypeQuestion = { question: string; value: string }
 
 export type SentenceTypeModel = ViewModel<Pick<MonitoringConditions, 'sentenceType'>> & {
   sentenceTypeQuestions: SentenceTypeQuestion[]
-  pageTitle: string
+  pageHeading: string
   orderType: MonitoringConditions['orderType']
 }
 
@@ -53,13 +53,13 @@ const constructModel = (
   data: MonitoringConditions,
   errors: ValidationResult,
 ): SentenceTypeModel => {
-  const pageTitle =
+  const pageHeading =
     orderType === 'BAIL'
       ? 'What type of bail has the device wearer been given?'
       : 'What type of sentence has the device wearer been given?'
 
   const model: SentenceTypeModel = {
-    pageTitle,
+    pageHeading,
     sentenceType: { value: data.sentenceType || '' },
     sentenceTypeQuestions: getQuestions(orderType),
     errorSummary: null,
