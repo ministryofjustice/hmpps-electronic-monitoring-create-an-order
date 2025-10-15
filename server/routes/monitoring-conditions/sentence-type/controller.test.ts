@@ -47,17 +47,6 @@ describe('SentenceTypeController', () => {
       )
     })
 
-    it('should construct the correct model when there is no data in the store', async () => {
-      const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
-
-      await controller.view(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({ sentenceType: { value: '' }, errorSummary: null }),
-      )
-    })
-
     it('should construct the correct model when there is data in the store', async () => {
       const data: Partial<MonitoringConditions> = { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
@@ -151,7 +140,7 @@ describe('SentenceTypeController', () => {
     })
 
     describe('POST_RELEASE routing', () => {
-      it("should set hdc to NO and redirect to HDC page for 'STANDARD_DETERMINATE_SENTENCE'", async () => {
+      it("should save and redirect to HDC page for 'STANDARD_DETERMINATE_SENTENCE'", async () => {
         req.body = { action: 'continue', sentenceType: 'STANDARD_DETERMINATE_SENTENCE' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'POST_RELEASE',
@@ -161,14 +150,13 @@ describe('SentenceTypeController', () => {
 
         expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
           sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
-          hdc: 'NO',
         })
         expect(res.redirect).toHaveBeenCalledWith(
           paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', mockOrder.id),
         )
       })
 
-      it("should set hdc to YES and redirect to PRARR page for 'SECTION_91'", async () => {
+      it("should save and redirect to PRARR page for 'SECTION_91'", async () => {
         req.body = { action: 'continue', sentenceType: 'SECTION_91' }
         mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
           orderType: 'POST_RELEASE',
@@ -178,7 +166,6 @@ describe('SentenceTypeController', () => {
 
         expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
           sentenceType: 'SECTION_91',
-          hdc: 'YES',
         })
         // TODO: Update to PRARR page when it is made
         expect(res.redirect).toHaveBeenCalledWith(
@@ -187,24 +174,21 @@ describe('SentenceTypeController', () => {
       })
     })
 
-    describe('COMMUNITY routing', () => {
-      it("should not set hdc and redirect to ISS for 'COMMUNITY_YRO'", async () => {
-        req.body = { action: 'continue', sentenceType: 'COMMUNITY_YRO' }
-        mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-          orderType: 'COMMUNITY',
-        })
-        const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
-        await controller.update(req, res, next)
-
-        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
-          sentenceType: 'COMMUNITY_YRO',
-          hdc: undefined,
-        })
-        // TODO: Update to ISS page when it is made
-        expect(res.redirect).toHaveBeenCalledWith(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
-        )
+    it("should save and redirect for 'COMMUNITY_YRO'", async () => {
+      req.body = { action: 'continue', sentenceType: 'COMMUNITY_YRO' }
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        orderType: 'COMMUNITY',
       })
+      const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
+      await controller.update(req, res, next)
+
+      expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+        sentenceType: 'COMMUNITY_YRO',
+      })
+      // TODO: Update to ISS page when it is made
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+      )
     })
   })
 })

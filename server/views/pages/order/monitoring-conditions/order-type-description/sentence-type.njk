@@ -23,14 +23,13 @@
 {% endfor %}
 
 {% block formInputs %}
-    {% set titleText = 'What type of bail has the device wearer been given?' if orderType == 'BAIL' else 'What type of sentence has the device wearer been given?' %}
     {{ govukRadios({
       name: "sentenceType",
       errorMessage: sentenceType.error,
       value: sentenceType.value,
       fieldset: {
         legend: {
-          text: titleText,
+          text: pageTitle,
           isPageHeading: true,
           classes: "govuk-fieldset__legend--l"
         }

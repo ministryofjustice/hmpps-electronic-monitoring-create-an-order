@@ -61,10 +61,11 @@ export default class OrderTypeController {
       case 'BAIL':
         res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', orderId))
         return
-      // case 'IMMIGRATION':
-      // case 'CIVIL':
-      // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId))
-      // return
+      case 'IMMIGRATION':
+      case 'CIVIL':
+        // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId))
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+        return
       default:
         res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
     }

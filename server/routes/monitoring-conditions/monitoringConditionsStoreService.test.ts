@@ -97,19 +97,33 @@ describe('store service', () => {
       expect(result.sentenceType).toBe('STANDARD_DETERMINATE_SENTENCE')
     })
 
-    it('correctly updates both sentenceType and hdc when provided', async () => {
-      await service.updateSentenceType(mockOrderId, { sentenceType: 'SECTION_91', hdc: 'YES' })
+    it('should set hdc to YES when sentenceType is "SECTION_91" for a Post Release order', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'POST_RELEASE' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'SECTION_91' })
       const result = await service.getMonitoringConditions(mockOrderId)
       expect(result.sentenceType).toBe('SECTION_91')
       expect(result.hdc).toBe('YES')
     })
 
-    it('does not update hdc if it is not provided', async () => {
-      await service.updateHdc(mockOrderId, { hdc: 'YES' })
-      await service.updateSentenceType(mockOrderId, { sentenceType: 'DTO' })
+    it('should set hdc to NO when a different POST_RELEASE sentenceType is selected', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'POST_RELEASE' })
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'SECTION_91' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' })
       const result = await service.getMonitoringConditions(mockOrderId)
-      expect(result.sentenceType).toBe('DTO')
-      expect(result.hdc).toBe('YES')
+
+      expect(result.hdc).toBe('NO')
+    })
+
+    it('should NOT update hdc if the journey is not POST_RELEASE', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'COMMUNITY' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'COMMUNITY_YRO' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+
+      expect(result.sentenceType).toBe('COMMUNITY_YRO')
+      expect(result.hdc).toBeUndefined()
     })
   })
 })
