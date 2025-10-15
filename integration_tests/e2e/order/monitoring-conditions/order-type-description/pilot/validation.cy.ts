@@ -10,7 +10,7 @@ const stubGetOrder = () => {
 }
 
 const mockOrderId = uuidv4()
-context('pilot', () => {
+context('order type', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -19,20 +19,12 @@ context('pilot', () => {
     cy.signIn()
   })
 
-  it('Page accessisble', () => {
-    const page = Page.visit(PilotPage, { orderId: mockOrderId })
-    page.checkIsAccessible()
-  })
-
-  it('Should display content', () => {
+  it('Should show errors when I do not select pilot', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    page.header.userName().should('contain.text', 'J. Smith')
-    page.header.phaseBanner().should('contain.text', 'dev')
+    page.form.continueButton.click()
 
-    page.form.pilotField.shouldExist()
-    page.form.pilotField.shouldNotBeDisabled()
-
-    page.form.continueButton.should('exist')
+    page.errorSummary.shouldExist()
+    page.form.pilotField.validationMessage.contains('Select the type of pilot the device wearer is part of')
   })
 })

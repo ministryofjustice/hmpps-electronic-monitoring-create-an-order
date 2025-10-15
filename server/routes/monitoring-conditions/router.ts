@@ -39,7 +39,7 @@ const createOrderTypeDescriptionRouter = (
   router.post('/hdc', asyncMiddleware(hdcController.update))
 
   router.get('/pilot', asyncMiddleware(pilotController.view))
-  // router.post('/pilot', asyncMiddleware(hdcController.update))
+  router.post('/pilot', asyncMiddleware(pilotController.update))
 
   return router
 }

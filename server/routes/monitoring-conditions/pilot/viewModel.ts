@@ -1,7 +1,10 @@
+import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
-export type OrderTypeModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
+export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
 }
 
@@ -19,14 +22,19 @@ interface Divider {
 
 type Item = Option | Divider
 
-const constructModel = (data: MonitoringConditions): OrderTypeModel => {
-  return {
+const constructModel = (data: MonitoringConditions, errors: ValidationResult): PilotModel => {
+  const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
     },
     items: getItems(data.hdc),
     errorSummary: null,
   }
+  if (errors && errors.length > 0) {
+    model.pilot!.error = getError(errors, 'pilot')
+    model.errorSummary = createGovukErrorSummary(errors)
+  }
+  return model
 }
 
 const getItems = (hdc?: string | null): Item[] => {

@@ -5,6 +5,7 @@ import InMemoryMonitoringConditionsStore from '../store/inMemoryStore'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import { Order } from '../../../models/Order'
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import paths from '../../../constants/paths'
 
 jest.mock('../monitoringConditionsStoreService')
 
@@ -29,6 +30,7 @@ describe('pilot controller', () => {
 
     req = createMockRequest()
     req.order = mockOrder
+    req.flash = jest.fn()
 
     res = createMockResponse()
     next = jest.fn()
@@ -43,88 +45,130 @@ describe('pilot controller', () => {
     )
   })
 
-  it('no pilot in store', async () => {
-    await controller.view(req, res, next)
+  describe('view', () => {
+    it('no pilot in store', async () => {
+      await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ pilot: { value: '' } }))
-  })
-
-  it('pilot in store', async () => {
-    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-      pilot: 'ACQUISITIVE_CRIME_PROJECT',
+      expect(res.render).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ pilot: { value: '' } }))
     })
 
-    await controller.view(req, res, next)
+    it('pilot in store', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        pilot: 'ACQUISITIVE_CRIME_PROJECT',
+      })
 
-    expect(res.render).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({
-        pilot: { value: 'ACQUISITIVE_CRIME_PROJECT' },
-      }),
-    )
-  })
+      await controller.view(req, res, next)
 
-  it('hdc yes questions', async () => {
-    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-      hdc: 'YES',
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          pilot: { value: 'ACQUISITIVE_CRIME_PROJECT' },
+        }),
+      )
     })
 
-    await controller.view(req, res, next)
+    it('hdc yes questions', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        hdc: 'YES',
+      })
 
-    expect(res.render).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({
-        items: [
-          {
-            text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-            value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-          },
-          {
-            text: 'GPS acquisitive crime',
-            value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
-          },
-          {
-            divider: 'or',
-          },
-          {
-            text: 'They are not part of any of these pilots',
-            value: 'UNKNOWN',
-          },
-        ],
-      }),
-    )
-  })
-  it('hdc no questions', async () => {
-    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
-      hdc: 'NO',
-    })
+      await controller.view(req, res, next)
 
-    await controller.view(req, res, next)
-
-    expect(res.render).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({
-        items: [
-          {
-            text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-            value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-          },
-          {
-            text: 'GPS acquisitive crime',
-            value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
-          },
-          {
-            divider: 'or',
-          },
-          {
-            text: 'They are not part of any of these pilots',
-            value: 'UNKNOWN',
-            hint: {
-              text: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: [
+            {
+              text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
             },
+            {
+              text: 'GPS acquisitive crime',
+              value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            },
+            {
+              divider: 'or',
+            },
+            {
+              text: 'They are not part of any of these pilots',
+              value: 'UNKNOWN',
+            },
+          ],
+        }),
+      )
+    })
+    it('hdc no questions', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        hdc: 'NO',
+      })
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: [
+            {
+              text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+            },
+            {
+              text: 'GPS acquisitive crime',
+              value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            },
+            {
+              divider: 'or',
+            },
+            {
+              text: 'They are not part of any of these pilots',
+              value: 'UNKNOWN',
+              hint: {
+                text: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+              },
+            },
+          ],
+        }),
+      )
+    })
+
+    it('validation errors', async () => {
+      req.flash = jest.fn().mockReturnValueOnce([
+        {
+          error: 'Select the type of pilot the device wearer is part of',
+          field: 'pilot',
+        },
+      ])
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          pilot: { value: '', error: { text: 'Select the type of pilot the device wearer is part of' } },
+          errorSummary: {
+            errorList: [{ href: '#pilot', text: 'Select the type of pilot the device wearer is part of' }],
+            titleText: 'There is a problem',
           },
-        ],
-      }),
-    )
+        }),
+      )
+    })
+  })
+
+  describe('update', () => {
+    it('validates', async () => {
+      req.body = {
+        action: 'continue',
+        pilot: '',
+      }
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        { error: 'Select the type of pilot the device wearer is part of', field: 'pilot' },
+      ])
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', req.order!.id),
+      )
+    })
   })
 })
