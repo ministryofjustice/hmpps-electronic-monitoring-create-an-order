@@ -100,7 +100,7 @@ describe('SentenceTypeController', () => {
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
-          pageTitle: 'What type of sentence has the device wearer been given?',
+          pageHeading: 'What type of sentence has the device wearer been given?',
           sentenceTypeQuestions: expect.arrayContaining([
             expect.objectContaining({ value: 'STANDARD_DETERMINATE_SENTENCE' }),
           ]),
