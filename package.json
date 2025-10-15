@@ -121,7 +121,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.9.0",
+    "@faker-js/faker": "^10.0.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
