@@ -44,7 +44,6 @@ context('Variation', () => {
           })
         })
 
-       
         it('Should have DDv5 options only', () => {
           Page.visit(VariationDetailsPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(VariationDetailsPage)
@@ -53,7 +52,9 @@ context('Variation', () => {
           page.form.variationTypeField.shouldHaveOption(' Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('The curfew hours')
-          page.form.variationTypeField.shouldHaveOption('Temporary suspension of monitoring (attend a funeral or go on holiday)')
+          page.form.variationTypeField.shouldHaveOption(
+            'Temporary suspension of monitoring (attend a funeral or go on holiday)',
+          )
           page.form.variationTypeField.shouldHaveOption('Change to an enforceable condition')
           page.form.variationTypeField.shouldHaveOption('I have changed something due to an administration error')
           page.form.variationTypeField.shouldHaveOption('I have changed something else in the form')
@@ -74,7 +75,7 @@ context('Variation', () => {
             order: { dataDictionaryVersion: 'DDV4' },
           })
         })
-       
+
         it('Should have DDv4 options only', () => {
           Page.visit(VariationDetailsPage, { orderId: mockOrderId })
           const page = Page.verifyOnPage(VariationDetailsPage)
@@ -91,7 +92,9 @@ context('Variation', () => {
           page.form.variationTypeField.shouldNotHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('The curfew hours')
           page.form.variationTypeField.shouldNotHaveOption('Change to an enforceable condition')
-          page.form.variationTypeField.shouldNotHaveOption('Temporary suspension of monitoring (attend a funeral or go on holiday)')
+          page.form.variationTypeField.shouldNotHaveOption(
+            'Temporary suspension of monitoring (attend a funeral or go on holiday)',
+          )
           page.form.variationTypeField.shouldNotHaveOption('I have changed something due to an administration error')
           page.form.variationTypeField.shouldNotHaveOption('I have changed something else in the form')
         })
