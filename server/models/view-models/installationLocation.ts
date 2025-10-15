@@ -14,7 +14,7 @@ type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
 const createPrimaryAddressView = (addresses: Address[]): string => {
   const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
   return primaryAddress
-    ? `${primaryAddress.addressLine1}, ${primaryAddress.addressLine3}, ${primaryAddress.postcode}`
+    ? `${primaryAddress.addressLine1}, ${primaryAddress.addressLine2}, ${primaryAddress.postcode}`
     : ''
 }
 
