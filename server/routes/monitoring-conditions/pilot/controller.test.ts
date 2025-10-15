@@ -43,22 +43,88 @@ describe('pilot controller', () => {
     )
   })
 
-  it('should contruct the correct model when store data has no pilot', async () => {
+  it('no pilot in store', async () => {
     await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), { pilot: { value: '' }, errorSummary: null })
+    expect(res.render).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ pilot: { value: '' } }))
   })
 
-  it('should contruct the correct model when store data has a pilot', async () => {
+  it('pilot in store', async () => {
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
       pilot: 'ACQUISITIVE_CRIME_PROJECT',
     })
 
     await controller.view(req, res, next)
 
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), {
-      pilot: { value: 'ACQUISITIVE_CRIME_PROJECT' },
-      errorSummary: null,
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        pilot: { value: 'ACQUISITIVE_CRIME_PROJECT' },
+      }),
+    )
+  })
+
+  it('hdc yes questions', async () => {
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+      hdc: 'YES',
     })
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        items: [
+          {
+            text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+            value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+          },
+          {
+            text: 'GPS acquisitive crime',
+            value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+          },
+          {
+            divider: 'or',
+          },
+          {
+            text: 'They are not part of any of these pilots',
+            value: 'UNKNOWN',
+          },
+        ],
+      }),
+    )
+  })
+  it('hdc no questions', async () => {
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+      hdc: 'NO',
+    })
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        items: [
+          {
+            text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+            value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+          },
+          {
+            text: 'GPS acquisitive crime',
+            value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+          },
+          {
+            divider: 'or',
+          },
+          {
+            text: 'They are not part of any of these pilots',
+            value: 'UNKNOWN',
+            hint: {
+              text: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+            },
+          },
+        ],
+      }),
+    )
   })
 })
