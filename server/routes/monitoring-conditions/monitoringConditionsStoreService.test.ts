@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringConditionsStoreService from './monitoringConditionsStoreService'
-import { MonitoringConditions, SentenceTypeEnum } from './model'
+import { MonitoringConditions } from './model'
 import InMemoryStore from './store/inMemoryStore'
 
 describe('store service', () => {
