@@ -22,13 +22,12 @@ export default class OrderTypeController {
 
     if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
       this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'POST_RELEASE' })
-      // Update to sentence page when it is made
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', orderId))
       return
     }
     if (notifyingOrganisation === 'HOME_OFFICE') {
       this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'IMMIGRATION' })
-      // Update to sentence page when it is made
+      // Update to monitoring dates page when it is made
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
       return
     }
@@ -54,12 +53,21 @@ export default class OrderTypeController {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', orderId))
       return
     }
+    await this.montoringConditionsStoreService.updateOrderType(orderId, formData)
 
-    if (formData.action === 'continue') {
-      this.montoringConditionsStoreService.updateOrderType(orderId, formData)
-
-      // continue to next page
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+    switch (formData.orderType) {
+      case 'POST_RELEASE':
+      case 'COMMUNITY':
+      case 'BAIL':
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', orderId))
+        return
+      case 'IMMIGRATION':
+      case 'CIVIL':
+        // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId))
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+        return
+      default:
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
     }
   }
 }

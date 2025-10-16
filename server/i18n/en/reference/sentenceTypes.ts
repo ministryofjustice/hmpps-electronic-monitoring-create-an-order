@@ -10,6 +10,13 @@ const sentenceTypes: SentenceTypes = {
   SECTION_85_EXTENDED_SENTENCES: 'Section 85 Extended Sentences',
   DTO: 'Detention and Training Order (DTO)',
   SECTION_91: 'Section 250 / Section 91',
+  COMMUNITY_YRO: 'Youth Rehabilitation Order (YRO)',
+  COMMUNITY_SDO: 'Supervision Default Order',
+  COMMUNITY_SUSPENDED_SENTENCE: 'Suspended Sentence',
+  COMMUNITY: 'The sentence they have been given is not in the list',
+  BAIL_SUPERVISION_SUPPORT: 'Bail Supervision & Support',
+  BAIL_RLAA: 'Bail Remand to Local Authority Accomodation (RLAA)',
+  BAIL: 'The type of bail they have been given is not in the list',
 }
 
 export default sentenceTypes
