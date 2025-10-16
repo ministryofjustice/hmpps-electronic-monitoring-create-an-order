@@ -1,19 +1,34 @@
 import { Order } from '../Order'
 import { ViewModel, TextField } from './utils'
-import { Address, AddressTypeEnum } from '../Address'
+import { Address, AddressTypeEnum, AddressWithoutType } from '../Address'
 import { InstallationLocation } from '../InstallationLocation'
 import { InstallationLocationFormData } from '../form-data/installationLocation'
 import { ValidationResult } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
-import { createAddressPreview, getError } from '../../utils/utils'
+import { getError, isNullOrUndefined } from '../../utils/utils'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
 }
 
+export const createAddress = (address: AddressWithoutType | null | undefined): string => {
+  if (isNullOrUndefined(address)) {
+    return ''
+  }
+  const separator = ', '
+  let addressString = address.addressLine1
+  if (address.addressLine2) {
+    addressString += separator + address.addressLine2
+  }
+  if (address.addressLine4) {
+    addressString += separator + address.addressLine4
+  }
+  return addressString + separator + address.postcode
+}
+
 const createPrimaryAddressView = (addresses: Address[]): string => {
   const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
-  return primaryAddress ? `${createAddressPreview(primaryAddress)}` : ''
+  return primaryAddress ? `${createAddress(primaryAddress)}` : ''
 }
 
 const constructFromFormData = (
