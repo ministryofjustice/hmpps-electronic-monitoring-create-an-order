@@ -4,6 +4,7 @@ import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
+import PilotPage from '../pilot/PilotPage'
 
 const mockOrderId = uuidv4()
 
@@ -48,6 +49,10 @@ context('Check your answers', () => {
     const hdcPage = Page.verifyOnPage(HdcPage, { orderId: mockOrderId })
     hdcPage.form.fillInWith('No')
     hdcPage.form.continueButton.click()
+
+    const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
+    pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.continueButton.click()
 
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     page.checkIsAccessible()
@@ -109,6 +114,10 @@ context('Check your answers', () => {
     hdcPage.form.fillInWith('Yes')
     hdcPage.form.continueButton.click()
 
+    const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
+    pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.orderInformationSection.shouldNotHaveItem('What is the order type?')
@@ -131,6 +140,10 @@ context('Check your answers', () => {
     hdcPage.form.fillInWith('No')
     hdcPage.form.continueButton.click()
 
+    const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
+    pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     page.changeLinkByQuestion('What type of sentence has the device wearer been given?').click()
 
@@ -149,6 +162,10 @@ context('Check your answers', () => {
     const hdcPage = Page.verifyOnPage(HdcPage, { orderId: mockOrderId })
     hdcPage.form.fillInWith('No')
     hdcPage.form.continueButton.click()
+
+    const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
+    pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.continueButton.click()
 
     let cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     cyaPage.changeLinkByQuestion('What is the order type?').click()
