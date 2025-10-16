@@ -62,6 +62,8 @@ To request a personal client:
     ```
 - Use the command `env` to check that the environment variables are in your current shell session. If any of them aren't listed, then load the environment variables into your current shell session using `export $(cat .env)`
 
+Note: The pre-commit hook prevents any file from being committed if it contains the key `SERCO_PASSWORD` with a value other than `serco`, or the key `SERCO_CLIENT_SECRET` with a value other than `clientsecret`. This is to prevent the accidental commit of actual Serco credentials.
+
 ### 3. NPM & dependencies
 - Using `nvm` (or [fnm](https://github.com/Schniz/fnm)), run `nvm install --latest-npm` within the repository folder to use the correct version of node, and the latest version of npm. This matches the `engines` config in `package.json` and the CircleCI build config.
 - Install dependencies using `npm install`.
@@ -172,10 +174,10 @@ This allows you to make changes to the API and test against them.
         DB_PASS=postgres
         DOCUMENT_MANAGEMENT_URL=http://localhost:9091/hmpps/
         SERCO_AUTH_URL=http://localhost:9091/auth/oauth/token
-        SERCO_CLIENT_ID=
-        SERCO_CLIENT_SECRET=
-        SERCO_USERNAME=
-        SERCO_PASSWORD=
+        SERCO_CLIENT_ID=clientid
+        SERCO_CLIENT_SECRET=clientsecret
+        SERCO_USERNAME=serco
+        SERCO_PASSWORD=serco
         SERCO_URL=http://localhost:9091/fms
         CP_PROCESSING_ENABLED=false
         CP_FMS_INTEGRATION_ENABLED=false

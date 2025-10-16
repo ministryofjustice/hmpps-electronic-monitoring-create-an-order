@@ -85,11 +85,15 @@
     ],
     "*.json": [
       "prettier --write"
+    ],
+    "*": [
+      "secretlint"
     ]
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.907.0",
     "@ministryofjustice/frontend": "^5.2.1",
+    "@secretlint/secretlint-rule-pattern": "^11.2.5",
     "@types/multer": "^2.0.0",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
@@ -123,6 +127,7 @@
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
+    "@secretlint/secretlint-rule-preset-recommend": "^11.2.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -181,6 +186,7 @@
     "pg": "^8.16.3",
     "prettier": "^3.6.2",
     "prettier-plugin-jinja-template": "^2.1.0",
+    "secretlint": "^11.2.5",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
