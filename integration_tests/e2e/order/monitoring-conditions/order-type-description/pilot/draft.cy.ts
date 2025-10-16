@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import PilotPage from './PilotPage'
 import Page from '../../../../../pages/page'
+import HdcPage from '../hdc/hdcPage'
 
 const stubGetOrder = () => {
   cy.task('stubCemoGetOrder', {
@@ -34,5 +35,38 @@ context('pilot', () => {
     page.form.pilotField.shouldNotBeDisabled()
 
     page.form.continueButton.should('exist')
+  })
+
+  it('hdc yes', () => {
+    const hdcPage = Page.visit(HdcPage, { orderId: mockOrderId })
+
+    hdcPage.form.fillInWith('Yes')
+    hdcPage.form.continueButton.click()
+
+    const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
+
+    pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
+    pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
+
+    pilotPage.form.fillInWith('They are not part of any of these pilots')
+  })
+
+  it('hdc no', () => {
+    const hdcPage = Page.visit(HdcPage, { orderId: mockOrderId })
+
+    hdcPage.form.fillInWith('No')
+    hdcPage.form.continueButton.click()
+
+    const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
+
+    pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
+    pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
+
+    pilotPage.form.fillInWith('They are not part of any of these pilots')
+    pilotPage.form.pilotField.element.contains(
+      'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+    )
   })
 })
