@@ -65,7 +65,7 @@ context('The kitchen sink', () => {
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
-      pilot: 'GPS Acquisitive Crime',
+      pilot: 'GPS Acquisitive Crime Home Detention Curfew',
       sentenceType: 'Life Sentence',
       monitoringRequired: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
       issp: 'No',
@@ -361,7 +361,7 @@ context('The kitchen sink', () => {
             issp: 'No',
             hdc: 'No',
             order_status: 'Not Started',
-            pilot: 'GPS Acquisitive Crime Parole',
+            pilot: 'GPS Acquisitive Crime Home Detention Curfew',
           },
         }).should('be.true')
       })
