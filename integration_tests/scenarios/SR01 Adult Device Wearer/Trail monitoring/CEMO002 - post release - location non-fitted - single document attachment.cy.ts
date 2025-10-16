@@ -159,7 +159,7 @@ context('Scenarios', () => {
         orderType: 'Post Release',
         sentenceType: 'Standard Determinate Sentence',
         monitoringRequired: 'Trail monitoring',
-        pilot: 'GPS Acquisitive Crime',
+        pilot: 'GPS Acquisitive Crime Home Detention Curfew',
         issp: 'No',
         hdc: 'No',
         prarr: 'No',
@@ -385,7 +385,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
-                pilot: 'GPS Acquisitive Crime Parole',
+                pilot: 'GPS Acquisitive Crime Home Detention Curfew',
               },
             })
             .should('be.true')

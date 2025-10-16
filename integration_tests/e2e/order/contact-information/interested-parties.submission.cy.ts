@@ -124,6 +124,37 @@ context('Contact information', () => {
           )
           pduPage.form.unitField.shouldExist()
         })
+
+        it('should submit a correctly formatted interested parties submission for PARC_PRISON_AND_YOUNG_OFFENDER_INSTITUTION prison', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+          const formData = {
+            notifyingOrganisation: 'Prison',
+            notifyingOrganisationEmailAddress: 'notifying@organisation',
+            prison: 'Parc Prison and Young Offender Institute',
+            responsibleOrganisation: 'Police',
+            responsibleOrganisationEmailAddress: 'responsible@organisation',
+            responsibleOfficerName: 'name',
+            responsibleOfficerContactNumber: '01234567891',
+          }
+
+          page.form.fillInWith(formData)
+          page.form.saveAndContinueButton.click()
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'PARC_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: '',
+              responsibleOfficerName: 'name',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          }).should('be.true')
+        })
       })
 
       it('should return to the summary page', () => {

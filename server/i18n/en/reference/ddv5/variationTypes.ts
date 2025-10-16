@@ -6,7 +6,7 @@ const variationTypesDDv5: VariationTypesDDv5 = {
   CHANGE_TO_ADD_AN_EXCLUSION_ZONES: 'Change to add an exclusion zone(s)',
   CHANGE_TO_AN_EXISTING_EXCLUSION: 'Change to an existing exclusion zone(s)',
   CHANGE_TO_CURFEW_HOURS: 'The curfew hours',
-  ORDER_SUSPENSION: 'I am suspending monitoring for the device wearer',
+  ORDER_SUSPENSION: 'Temporary suspension of monitoring (attend a funeral or go on holiday)',
   CHANGE_TO_DEVICE_TYPE: 'Change to a device type',
   CHANGE_TO_ENFORCEABLE_CONDITION: 'Change to an enforceable condition',
   ADMIN_ERROR: 'I have changed something due to an administration error',

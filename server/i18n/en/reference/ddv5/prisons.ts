@@ -86,7 +86,7 @@ const prisonsDDv5: PrisonsDDv5 = {
   NOTTINGHAM_PRISON: 'Nottingham Prison',
   OAKWOOD_PRISON: 'Oakwood Prison',
   ONLEY_PRISON: 'Onley Prison',
-  PARC_PRISON_AND_YOUNG_OFFENDER_INSTITUTE: 'Parc Prison and Young Offender Institute',
+  PARC_PRISON_AND_YOUNG_OFFENDER_INSTITUTION: 'Parc Prison and Young Offender Institute',
   PENTONVILLE_PRISON: 'Pentonville Prison',
   PETERBOROUGH_PRISON: 'Peterborough Prison',
   PORTLAND_PRISON_AND_YOUNG_OFFENDER_INSTITUTION: 'Portland Prison and Young Offender Institution',
