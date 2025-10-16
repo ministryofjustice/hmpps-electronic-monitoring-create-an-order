@@ -18,7 +18,7 @@ const validFormData = {
   issp: 'No',
   hdc: 'Yes',
   prarr: 'Not able to provide this information',
-  pilot: 'GPS Acquisitive Crime',
+  pilot: 'GPS Acquisitive Crime Home Detention Curfew',
 }
 
 const mockResponse = {
@@ -36,7 +36,7 @@ const mockResponse = {
   issp: 'YES',
   hdc: 'NO',
   prarr: 'UNKNOWN',
-  pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+  pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
 }
 
 context('Monitoring conditions', () => {
@@ -113,7 +113,7 @@ context('Monitoring conditions', () => {
             issp: 'NO',
             hdc: 'YES',
             prarr: 'UNKNOWN',
-            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
           },
         }).should('be.true')
       })
@@ -176,7 +176,7 @@ context('Monitoring conditions', () => {
           issp: 'YES',
           hdc: 'NO',
           prarr: 'UNKNOWN',
-          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         }
 
         cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response })

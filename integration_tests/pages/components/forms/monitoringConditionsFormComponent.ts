@@ -15,7 +15,7 @@ export type MonitoringConditionsFormData = {
   issp?: string
   hdc?: string
   prarr?: string
-  pilot?: string
+  pilot?: string | RegExp
 }
 
 export default class MonitoringConditionsFormComponent extends FormComponent {
@@ -46,6 +46,8 @@ export default class MonitoringConditionsFormComponent extends FormComponent {
     return new FormRadiosComponent(this.form, 'What pilot project is the device wearer part of?', [
       'Domestic Abuse Perpetrator on Licence (DAPOL)',
       'GPS Acquisitive Crime',
+      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
+      'GPS Acquisitive Crime Home Detention Curfew',
       'They are not part of any of these pilots',
     ])
   }

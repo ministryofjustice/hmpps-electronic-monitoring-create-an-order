@@ -64,7 +64,7 @@ context.skip('Scenarios', () => {
         startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime',
+        pilot: 'GPS Acquisitive Crime Home Detention Curfew',
         sentenceType: 'Standard Determinate Sentence',
         monitoringRequired: ['Curfew', 'Trail monitoring'],
         issp: 'No',
@@ -338,7 +338,7 @@ context.skip('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
-                pilot: 'GPS Acquisitive Crime Parole',
+                pilot: 'GPS Acquisitive Crime Home Detention Curfew',
               },
             })
             .should('be.true')

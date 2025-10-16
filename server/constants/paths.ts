@@ -55,7 +55,11 @@ const paths = {
     ORDER_TYPE_DESCRIPTION: {
       BASE_PATH: '/order/:orderId/monitoring-conditions/order-type-description',
       ORDER_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/order-type',
+      SENTENCE_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/sentence-type',
       HDC: '/order/:orderId/monitoring-conditions/order-type-description/hdc',
+      ISS: '/order/:orderId/monitoring-conditions/order-type-description/iss',
+      PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
+      MONITORING_DATES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-dates',
       CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/order-type-description/check-your-answers',
     },
   },

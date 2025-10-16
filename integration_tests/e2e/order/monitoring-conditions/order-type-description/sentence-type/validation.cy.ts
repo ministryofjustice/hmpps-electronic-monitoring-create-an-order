@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
-import OrderTypePage from './OrderTypePage'
 import Page from '../../../../../pages/page'
-import CheckYourAnswersPage from '../../../../../pages/checkYourAnswersPage'
-import SentenceTypePage from '../sentence-type/SentenceTypePage'
+import SentenceTypePage from './SentenceTypePage'
+import OrderTypePage from '../order-type/OrderTypePage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -24,28 +23,30 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
 }
 
 const mockOrderId = uuidv4()
-context('orderType', () => {
+
+context('sentence type', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder()
-
     cy.signIn()
   })
 
-  it('Should submit the form', () => {
-    const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
+  it('Should show errors when I do not select a sentence type', () => {
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.continueButton.click()
 
-    page.form.fillInWith('Community')
+    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
+
+    page.header.userName().should('contain.text', 'J. Smith')
+    page.header.phaseBanner().should('contain.text', 'dev')
+
     page.form.continueButton.click()
 
-    const sentenceTypePage = Page.verifyOnPage(
-      SentenceTypePage,
-      'What type of sentence has the device wearer been given?',
+    page.errorSummary.shouldExist()
+    page.form.sentenceTypeField.validationMessage.contains(
+      'Select the type of sentence the device wearer has been given',
     )
-    sentenceTypePage.form.fillInWith('Supervision Default Order')
-    sentenceTypePage.form.continueButton.click()
-
-    Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
   })
 })

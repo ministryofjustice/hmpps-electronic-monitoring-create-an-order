@@ -3,6 +3,7 @@ import { Services } from '../../services'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import OrderTypeController from './order-type/controller'
 import CheckYourAnswersController from './check-your-answers/controller'
+import SentenceTypeController from './sentence-type/controller'
 import HdcController from './hdc/controller'
 
 const createOrderTypeDescriptionRouter = (
@@ -18,10 +19,15 @@ const createOrderTypeDescriptionRouter = (
     monitoringConditionsUpdateService,
   )
 
+  const sentenceTypeController = new SentenceTypeController(monitoringConditionsStoreService)
+
   const hdcController = new HdcController(monitoringConditionsStoreService)
 
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
+
+  router.get('/sentence-type', asyncMiddleware(sentenceTypeController.view))
+  router.post('/sentence-type', asyncMiddleware(sentenceTypeController.update))
 
   router.get('/check-your-answers', asyncMiddleware(checkYourAnswersController.view))
   router.post('/check-your-answers', asyncMiddleware(checkYourAnswersController.update))
