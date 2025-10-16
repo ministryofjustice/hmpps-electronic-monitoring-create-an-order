@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringConditionsStoreService from './monitoringConditionsStoreService'
-import InMemoryStore from './store/inMemoryStore'
 import { MonitoringConditions } from './model'
+import InMemoryStore from './store/inMemoryStore'
 
 describe('store service', () => {
   let store: InMemoryStore
@@ -72,5 +72,58 @@ describe('store service', () => {
         expect(result).toEqual(expected)
       },
     )
+
+    it('should clear dependant answers and update new answers when changing journey', async () => {
+      await service.updateMonitoringConditions(mockOrderId, {
+        orderType: 'POST_RELEASE',
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'NO',
+      })
+
+      await service.updateOrderType(mockOrderId, { orderType: 'CIVIL' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+
+      expect(result.sentenceType).toBeUndefined()
+      expect(result.hdc).toBeUndefined()
+      expect(result.orderType).toBe('CIVIL')
+      expect(result.conditionType).toBe('BAIL_ORDER')
+    })
+  })
+
+  describe('when updating sentenceType', () => {
+    it('correctly updates the sentenceType value in the store', async () => {
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+      expect(result.sentenceType).toBe('STANDARD_DETERMINATE_SENTENCE')
+    })
+
+    it('should set hdc to YES when sentenceType is "SECTION_91" for a Post Release order', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'POST_RELEASE' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'SECTION_91' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+      expect(result.sentenceType).toBe('SECTION_91')
+      expect(result.hdc).toBe('YES')
+    })
+
+    it('should set hdc to NO when a different POST_RELEASE sentenceType is selected', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'POST_RELEASE' })
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'SECTION_91' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+
+      expect(result.hdc).toBe('NO')
+    })
+
+    it('should NOT update hdc if the journey is not POST_RELEASE', async () => {
+      await service.updateOrderType(mockOrderId, { orderType: 'COMMUNITY' })
+
+      await service.updateSentenceType(mockOrderId, { sentenceType: 'COMMUNITY_YRO' })
+      const result = await service.getMonitoringConditions(mockOrderId)
+
+      expect(result.sentenceType).toBe('COMMUNITY_YRO')
+      expect(result.hdc).toBeUndefined()
+    })
   })
 })

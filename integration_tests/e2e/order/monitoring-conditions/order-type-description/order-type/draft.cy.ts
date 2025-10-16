@@ -31,7 +31,7 @@ context('orderType', () => {
     cy.signIn()
   })
 
-  it('Page accessisble', () => {
+  it('Page accessible', () => {
     const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })

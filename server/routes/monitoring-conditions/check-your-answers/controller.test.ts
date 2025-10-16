@@ -6,10 +6,26 @@ import CheckYourAnswersController from './controller'
 import paths from '../../../constants/paths'
 import RestClient from '../../../data/restClient'
 import MonitoringConditionsUpdateService from '../monitoringConditionsService'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import { InterestedParties } from '../../../models/InterestedParties'
 
 jest.mock('../monitoringConditionsStoreService')
 jest.mock('../monitoringConditionsService')
 jest.mock('../../../data/restClient')
+
+const createInterestedParties = (overrides: Partial<InterestedParties> = {}): InterestedParties => {
+  return {
+    notifyingOrganisation: 'PROBATION',
+    notifyingOrganisationName: '',
+    notifyingOrganisationEmail: '',
+    responsibleOfficerName: '',
+    responsibleOfficerPhoneNumber: '',
+    responsibleOrganisation: 'HOME_OFFICE',
+    responsibleOrganisationRegion: '',
+    responsibleOrganisationEmail: '',
+    ...overrides,
+  }
+}
 
 describe('check your answers controller', () => {
   let mockDataStore: InMemoryStore
@@ -56,7 +72,7 @@ describe('check your answers controller', () => {
       )
     })
 
-    it('should construct the correct model', async () => {
+    it('should construct the correct model when orderType is answered', async () => {
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
         orderType: 'COMMUNITY',
         conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
@@ -91,7 +107,112 @@ describe('check your answers controller', () => {
         ],
       })
     })
+
+    it('should construct the correct model with both orderType and sentenceType', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        orderType: 'POST_RELEASE',
+        conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+      })
+      const controller = new CheckYourAnswersController(
+        mockMonitoringConditionsStoreService,
+        mockMonitoringConditionsService,
+      )
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(expect.anything(), {
+        answers: [
+          {
+            key: { text: 'What is the order type?' },
+            value: { text: 'Post Release' },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(
+                    ':orderId',
+                    req.order!.id,
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: 'what is the order type?',
+                },
+              ],
+            },
+          },
+          {
+            key: { text: 'What type of sentence has the device wearer been given?' },
+            value: { text: 'Standard Determinate Sentence' },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(
+                    ':orderId',
+                    req.order!.id,
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
+                },
+              ],
+            },
+          },
+        ],
+      })
+    })
   })
+
+  it('should construct the correct model for a Bail journey', async () => {
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+      orderType: 'BAIL',
+      conditionType: 'BAIL_ORDER',
+      sentenceType: 'BAIL_RLAA',
+    })
+    const controller = new CheckYourAnswersController(
+      mockMonitoringConditionsStoreService,
+      mockMonitoringConditionsService,
+    )
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        answers: expect.arrayContaining([
+          expect.objectContaining({ key: { text: 'What is the order type?' } }),
+          expect.objectContaining({
+            key: { text: 'What type of bail has the device wearer been given?' },
+            value: { text: 'Bail Remand to Local Authority Accomodation (RLAA)' },
+          }),
+        ]),
+      }),
+    )
+  })
+
+  it('should not display orderType for a PRISON journey but still display sentenceType', async () => {
+    req.order = getMockOrder({ interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }) })
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+      orderType: 'POST_RELEASE',
+      conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+      sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+    })
+    const controller = new CheckYourAnswersController(
+      mockMonitoringConditionsStoreService,
+      mockMonitoringConditionsService,
+    )
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        answers: expect.arrayContaining([
+          expect.objectContaining({
+            key: { text: 'What type of sentence has the device wearer been given?' },
+          }),
+        ]),
+      }),
+    )
+  })
+
   describe('update', () => {
     it('should submit the monitoring conditions', async () => {
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({

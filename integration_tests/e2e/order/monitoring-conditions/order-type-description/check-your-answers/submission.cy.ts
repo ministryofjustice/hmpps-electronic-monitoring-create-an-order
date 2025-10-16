@@ -3,6 +3,7 @@ import CheckYourAnswersPage from './CheckYourAnswersPage'
 import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import OrderTasksPage from '../../../../../pages/order/summary'
+import SentenceTypePage from '../sentence-type/SentenceTypePage'
 
 const mockOrderId = uuidv4()
 
@@ -19,7 +20,7 @@ const mockResponse = {
   alcohol: true,
   startDate: '2024-10-10T11:00:00.000Z',
   endDate: '2024-10-11T11:00:00.000Z',
-  sentenceType: 'EPP',
+  sentenceType: 'COMMUNITY_SDO',
   issp: 'YES',
   hdc: 'NO',
   prarr: 'UNKNOWN',
@@ -53,6 +54,10 @@ context('Check your answers', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
     orderTypePage.form.fillInWith('Community')
     orderTypePage.form.continueButton.click()
+
+    const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
+    sentenceTypePage.form.fillInWith('Supervision Default Order')
+    sentenceTypePage.form.continueButton.click()
   })
 
   const pageHeading = 'Check your answers'
@@ -69,6 +74,7 @@ context('Check your answers', () => {
       body: {
         orderType: 'COMMUNITY',
         conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        sentenceType: 'COMMUNITY_SDO',
         // some default values until other pages are filled in
         startDate: '2020-11-07T10:00:00.000Z',
         endDate: '2040-11-08T10:00:00.000Z',
