@@ -38,6 +38,7 @@ export default class MonitoringConditionsStoreService {
     if (!goesToSentencePage && previousOrderType !== data.orderType) {
       monitoringConditions.sentenceType = undefined
       monitoringConditions.hdc = undefined
+      monitoringConditions.pilot = undefined
     }
 
     switch (data.orderType) {

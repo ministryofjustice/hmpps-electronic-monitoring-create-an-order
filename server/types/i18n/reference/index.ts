@@ -45,6 +45,7 @@ type ReferenceCatalogDDv4 = {
   orderTypeDescriptions: OrderTypeDescriptions
   orderTypes: OrderTypes
   prisons: Prisons
+  pilots: Pilots
   probationRegions: ProbationRegions
   relationship: Relationship
   responsibleOrganisations: ResponsibleOrganisations

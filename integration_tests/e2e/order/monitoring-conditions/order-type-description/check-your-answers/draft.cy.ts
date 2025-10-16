@@ -37,7 +37,7 @@ context('Check your answers', () => {
 
   const pageHeading = 'Check your answers'
 
-  it('Page is accessible', () => {
+  it('correct questions', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
     orderTypePage.form.fillInWith('Release from prison')
     orderTypePage.form.continueButton.click()
@@ -61,6 +61,10 @@ context('Check your answers', () => {
       { key: 'What is the order type?', value: 'Post Release' },
       { key: 'What type of sentence has the device wearer been given?', value: 'Standard Determinate Sentence' },
       { key: 'Is the device wearer on a Home Detention Curfew (HDC)?', value: 'No' },
+      {
+        key: 'What pilot project is the device wearer part of?',
+        value: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      },
     ])
   })
 
@@ -177,5 +181,6 @@ context('Check your answers', () => {
     cyaPage.orderInformationSection.shouldNotHaveItem('What type of sentence has the device wearer been given?')
     cyaPage.orderInformationSection.shouldNotHaveItem('What is the order type?')
     cyaPage.orderInformationSection.shouldNotHaveItem('Is the device wearer on a Home Detention Curfew (HDC)?')
+    cyaPage.orderInformationSection.shouldNotHaveItem('What pilot project is the device wearer part of?')
   })
 })
