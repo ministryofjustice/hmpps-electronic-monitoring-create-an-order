@@ -31,7 +31,7 @@ context('Monitoring conditions', () => {
               issp: 'YES',
               hdc: 'NO',
               prarr: 'UNKNOWN',
-              pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+              pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             addresses: [
               {
