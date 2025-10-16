@@ -158,7 +158,6 @@ describe('pilot controller', () => {
     it('validates', async () => {
       req.body = {
         action: 'continue',
-        pilot: '',
       }
       await controller.update(req, res, next)
 
@@ -169,6 +168,26 @@ describe('pilot controller', () => {
       expect(res.redirect).toHaveBeenCalledWith(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', req.order!.id),
       )
+    })
+
+    it('saves pilot', async () => {
+      req.body = {
+        action: 'continue',
+        pilot: 'ACQUISITIVE_CRIME_PROJECT',
+      }
+      await controller.update(req, res, next)
+
+      expect(mockMonitoringConditionsStoreService.updateField).toHaveBeenCalledWith(
+        req.order?.id,
+        'pilot',
+        'ACQUISITIVE_CRIME_PROJECT',
+      )
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id),
+      )
+      // update to PRARR when made
+      // expect(res.redirect).toHaveBeenCalledWith(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR)
     })
   })
 })
