@@ -109,7 +109,7 @@ context('Scenarios', () => {
       }
 
       const installationLocation = {
-        location: `${fakePrimaryAddress.line1}, ${fakePrimaryAddress.line2}, ${fakePrimaryAddress.postcode}`,
+        location: `${fakePrimaryAddress.addressLine1}, ${fakePrimaryAddress.addressLine2}, ${fakePrimaryAddress.postcode}`,
       }
 
       it('Should successfully submit the order to the FMS API', () => {
@@ -162,10 +162,10 @@ context('Scenarios', () => {
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
             disability: [],
-            address_1: fakePrimaryAddress.line1,
-            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
-            address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+            address_1: fakePrimaryAddress.addressLine1,
+            address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
+            address_3: fakePrimaryAddress.addressLine3,
+            address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
             address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
@@ -351,10 +351,10 @@ context('Scenarios', () => {
                 checkin_schedule: [],
                 revocation_date: '',
                 revocation_type: '',
-                installation_address_1: fakePrimaryAddress.line1,
-                installation_address_2: fakePrimaryAddress.line2,
-                installation_address_3: fakePrimaryAddress.line3,
-                installation_address_4: fakePrimaryAddress.line4,
+                installation_address_1: fakePrimaryAddress.addressLine1,
+                installation_address_2: fakePrimaryAddress.addressLine2,
+                installation_address_3: fakePrimaryAddress.addressLine3,
+                installation_address_4: fakePrimaryAddress.addressLine4,
                 installation_address_post_code: fakePrimaryAddress.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',

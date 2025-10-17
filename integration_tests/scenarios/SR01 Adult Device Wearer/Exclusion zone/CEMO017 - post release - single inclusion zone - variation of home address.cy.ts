@@ -193,10 +193,12 @@ context('Scenarios', () => {
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
             disability: [],
-            address_1: fakeVariationPrimaryAddress.line1,
-            address_2: fakeVariationPrimaryAddress.line2 === '' ? 'N/A' : fakeVariationPrimaryAddress.line2,
-            address_3: fakeVariationPrimaryAddress.line3,
-            address_4: fakeVariationPrimaryAddress.line4 === '' ? 'N/A' : fakeVariationPrimaryAddress.line4,
+            address_1: fakeVariationPrimaryAddress.addressLine1,
+            address_2:
+              fakeVariationPrimaryAddress.addressLine2 === '' ? 'N/A' : fakeVariationPrimaryAddress.addressLine2,
+            address_3: fakeVariationPrimaryAddress.addressLine3,
+            address_4:
+              fakeVariationPrimaryAddress.addressLine4 === '' ? 'N/A' : fakeVariationPrimaryAddress.addressLine4,
             address_post_code: fakeVariationPrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
