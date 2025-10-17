@@ -6,6 +6,7 @@ import { InstallationLocationFormData } from '../form-data/installationLocation'
 import { ValidationResult } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
+import FeatureFlags from '../../utils/featureFlags'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
@@ -13,19 +14,12 @@ type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   fixedAddressExist: boolean
 }
 
-const installAtSourcePilotPrisons = [
-  'PETERBOROUGH_PRISON',
-  'FOSSE_WAY_PRISON',
-  'SUDBURY_PRISON',
-  'RANBY_PRISON',
-  'SWANSEA_PRISON',
-  'CARDIFF_PRISON',
-]
-
 const getPilotPrisonStatus = (order: Order): boolean => {
-  const prisonName = order.interestedParties?.notifyingOrganisationName
-  const count = installAtSourcePilotPrisons.filter(prison => prison === prisonName).length
-  return count > 0
+  if (order.interestedParties?.notifyingOrganisation === 'PRISON') {
+    const prisons = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
+    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName) !== -1
+  }
+  return false
 }
 
 const createPrimaryAddressView = (addresses: Address[]): string => {

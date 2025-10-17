@@ -69,6 +69,9 @@ context('Monitoring conditions', () => {
           ],
         })
         cy.signIn()
+
+        const testFlags = { TAG_AT_SOURCE_PILOT_PRISONS: 'SUDBURY_PRISON,FOSSE_WAY_PRISON' }
+        cy.task('setFeatureFlags', testFlags)
       })
 
       it('Should display contents', () => {
@@ -101,7 +104,7 @@ context('Monitoring conditions', () => {
           ],
           interestedParties: {
             notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'SWANSEA_PRISON',
+            notifyingOrganisationName: 'SUDBURY_PRISON',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOfficerPhoneNumber: '01234567891',
@@ -175,7 +178,7 @@ context('Monitoring conditions', () => {
             homeOfficeReferenceNumber: 'ho',
             firstName: 'test',
             lastName: 'tester',
-            alias: 'tes',
+            alias: 'test',
             dateOfBirth: '2000-01-01T00:00:00Z',
             adultAtTimeOfInstallation: true,
             sex: 'MALE',
@@ -187,7 +190,7 @@ context('Monitoring conditions', () => {
           },
           interestedParties: {
             notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'CARDIFF_PRISON',
+            notifyingOrganisationName: 'SUDBURY_PRISON',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOfficerPhoneNumber: '01234567891',
