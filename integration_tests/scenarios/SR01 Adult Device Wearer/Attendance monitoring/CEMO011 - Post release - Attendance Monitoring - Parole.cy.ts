@@ -48,7 +48,7 @@ context('Scenarios', () => {
     stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
-  context('Adult mandatory attendence', () => {
+  context('Adult mandatory attendance', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO011'),
       interpreterRequired: false,
