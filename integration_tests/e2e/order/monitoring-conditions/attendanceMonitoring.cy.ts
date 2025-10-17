@@ -132,10 +132,10 @@ context('Attendance monitoring', () => {
       page.form.startTimeField.shouldHaveValue({ hours: '10', minutes: '00' })
       page.form.endTimeField.shouldHaveValue({ hours: '11', minutes: '00' })
       page.form.addressField.shouldHaveValue({
-        line1: '19 Strawberry Fields',
-        line2: 'Liverpool',
-        line3: 'Line 3',
-        line4: 'Line 4',
+        addressLine1: '19 Strawberry Fields',
+        addressLine2: 'Liverpool',
+        addressLine3: 'Line 3',
+        addressLine4: 'Line 4',
         postcode: 'LV3 4DG',
       })
       page.form.shouldBeDisabled()
@@ -167,10 +167,10 @@ context('Attendance monitoring', () => {
       page.form.startTimeField.shouldHaveValue({ hours: '10', minutes: '00' })
       page.form.endTimeField.shouldHaveValue({ hours: '11', minutes: '00' })
       page.form.addressField.shouldHaveValue({
-        line1: '19 Strawberry Fields',
-        line2: 'Liverpool',
-        line3: 'Line 3',
-        line4: 'Line 4',
+        addressLine1: '19 Strawberry Fields',
+        addressLine2: 'Liverpool',
+        addressLine3: 'Line 3',
+        addressLine4: 'Line 4',
         postcode: 'LV3 4DG',
       })
       page.form.saveAndContinueButton.should('exist')

@@ -4,10 +4,10 @@ import { PageElement } from '../page'
 import FormInputComponent from './formInputComponent'
 
 export type FormAddressData = {
-  line1?: string
-  line2?: string
-  line3?: string
-  line4?: string
+  addressLine1?: string
+  addressLine2?: string
+  addressLine3?: string
+  addressLine4?: string
   postcode?: string
 }
 
@@ -54,20 +54,20 @@ export default class FormAddressComponent {
   }
 
   set(address?: FormAddressData) {
-    if (address.line1) {
-      this.line1Field.set(address.line1)
+    if (address.addressLine1) {
+      this.line1Field.set(address.addressLine1)
     }
 
-    if (address.line2) {
-      this.line2Field.set(address.line2)
+    if (address.addressLine2) {
+      this.line2Field.set(address.addressLine2)
     }
 
-    if (address.line3) {
-      this.cityField.set(address.line3)
+    if (address.addressLine3) {
+      this.cityField.set(address.addressLine3)
     }
 
-    if (address.line4) {
-      this.countyField.set(address.line4)
+    if (address.addressLine4) {
+      this.countyField.set(address.addressLine4)
     }
 
     if (address.postcode) {
@@ -76,10 +76,10 @@ export default class FormAddressComponent {
   }
 
   shouldHaveValue(address?: FormAddressData) {
-    this.line1Field.shouldHaveValue(address.line1 || '')
-    this.line2Field.shouldHaveValue(address.line2 || '')
-    this.cityField.shouldHaveValue(address.line3 || '')
-    this.countyField.shouldHaveValue(address.line4 || '')
+    this.line1Field.shouldHaveValue(address.addressLine1 || '')
+    this.line2Field.shouldHaveValue(address.addressLine2 || '')
+    this.cityField.shouldHaveValue(address.addressLine3 || '')
+    this.countyField.shouldHaveValue(address.addressLine4 || '')
     this.postcodeField.shouldHaveValue(address.postcode || '')
   }
 
