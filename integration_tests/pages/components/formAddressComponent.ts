@@ -28,12 +28,12 @@ export default class FormAddressComponent {
 
   // FIELDS
 
-  get line1Field(): FormInputComponent {
+  get addressLine1Field(): FormInputComponent {
     const label = 'Address line 1'
     return new FormInputComponent(this.element, label)
   }
 
-  get line2Field(): FormInputComponent {
+  get addressLine2Field(): FormInputComponent {
     const label = 'Address line 2'
     return new FormInputComponent(this.element, label)
   }
@@ -55,11 +55,11 @@ export default class FormAddressComponent {
 
   set(address?: FormAddressData) {
     if (address.addressLine1) {
-      this.line1Field.set(address.addressLine1)
+      this.addressLine1Field.set(address.addressLine1)
     }
 
     if (address.addressLine2) {
-      this.line2Field.set(address.addressLine2)
+      this.addressLine2Field.set(address.addressLine2)
     }
 
     if (address.addressLine3) {
@@ -76,32 +76,32 @@ export default class FormAddressComponent {
   }
 
   shouldHaveValue(address?: FormAddressData) {
-    this.line1Field.shouldHaveValue(address.addressLine1 || '')
-    this.line2Field.shouldHaveValue(address.addressLine2 || '')
+    this.addressLine1Field.shouldHaveValue(address.addressLine1 || '')
+    this.addressLine2Field.shouldHaveValue(address.addressLine2 || '')
     this.cityField.shouldHaveValue(address.addressLine3 || '')
     this.countyField.shouldHaveValue(address.addressLine4 || '')
     this.postcodeField.shouldHaveValue(address.postcode || '')
   }
 
   shouldBeDisabled() {
-    this.line1Field.shouldBeDisabled()
-    this.line2Field.shouldBeDisabled()
+    this.addressLine1Field.shouldBeDisabled()
+    this.addressLine2Field.shouldBeDisabled()
     this.cityField.shouldBeDisabled()
     this.countyField.shouldBeDisabled()
     this.postcodeField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
-    this.line1Field.shouldNotBeDisabled()
-    this.line2Field.shouldNotBeDisabled()
+    this.addressLine1Field.shouldNotBeDisabled()
+    this.addressLine2Field.shouldNotBeDisabled()
     this.cityField.shouldNotBeDisabled()
     this.countyField.shouldNotBeDisabled()
     this.postcodeField.shouldNotBeDisabled()
   }
 
   shouldNotHaveValidationMessage(): void {
-    this.line1Field.shouldNotHaveValidationMessage()
-    this.line2Field.shouldNotHaveValidationMessage()
+    this.addressLine1Field.shouldNotHaveValidationMessage()
+    this.addressLine2Field.shouldNotHaveValidationMessage()
     this.cityField.shouldNotHaveValidationMessage()
     this.countyField.shouldNotHaveValidationMessage()
     this.postcodeField.shouldNotHaveValidationMessage()

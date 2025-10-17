@@ -8,16 +8,16 @@ const secondaryAddressPageContent: AddressPageContent = {
       text: 'Are electronic monitoring devices required at another address?',
       hint: "Examples include education, work, or living part-time at a relative, parent or partner's address.",
     },
-    line1: {
+    addressLine1: {
       text: 'Address line 1',
     },
-    line2: {
+    addressLine2: {
       text: 'Address line 2 (optional)',
     },
-    line3: {
+    addressLine3: {
       text: 'Town or city',
     },
-    line4: {
+    addressLine4: {
       text: 'County (optional)',
     },
     postcode: {

@@ -30,7 +30,7 @@
 {% block formInputs %}
 
   {{ govukInput({
-    label: { text: pageContent.questions.line1.text },
+    label: { text: pageContent.questions.addressLine1.text },
     id: "addressLine1",
     name: "addressLine1",
     value: addressLine1.value,
@@ -39,7 +39,7 @@
   }) }}
 
   {{ govukInput({
-    label: { text: pageContent.questions.line2.text },
+    label: { text: pageContent.questions.addressLine2.text },
     id: "addressLine2",
     name: "addressLine2",
     value: addressLine2.value,
@@ -48,7 +48,7 @@
   }) }}
 
   {{ govukInput({
-    label: { text: pageContent.questions.line3.text },
+    label: { text: pageContent.questions.addressLine3.text },
     classes: "govuk-!-width-two-thirds",
     id: "addressLine3",
     name: "addressLine3",
@@ -58,7 +58,7 @@
   }) }}
 
   {{ govukInput({
-    label: { text: pageContent.questions.line4.text },
+    label: { text: pageContent.questions.addressLine4.text },
     classes: "govuk-!-width-two-thirds",
     id: "addressLine4",
     name: "addressLine4",

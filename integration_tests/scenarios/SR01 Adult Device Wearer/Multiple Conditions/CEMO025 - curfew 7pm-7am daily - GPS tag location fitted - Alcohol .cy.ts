@@ -7,6 +7,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAd
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
+import { createAddressPreview } from '../../../../server/utils/utils'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -109,7 +110,7 @@ context('Scenarios', () => {
       }
 
       const installationLocation = {
-        location: `${fakePrimaryAddress.addressLine1}, ${fakePrimaryAddress.addressLine2}, ${fakePrimaryAddress.postcode}`,
+        location: createAddressPreview(fakePrimaryAddress),
       }
 
       it('Should successfully submit the order to the FMS API', () => {
