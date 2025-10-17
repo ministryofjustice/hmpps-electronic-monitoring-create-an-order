@@ -189,7 +189,7 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
       orderType: 'POST_RELEASE',
     })
 
@@ -204,7 +204,7 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
       orderType: 'POST_RELEASE',
     })
 
@@ -219,7 +219,7 @@ describe('order type controller', () => {
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
       orderType: 'IMMIGRATION',
     })
     expect(res.redirect).toHaveBeenCalledWith(

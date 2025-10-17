@@ -1,3 +1,4 @@
+import { Order } from '../../models/Order'
 import MonitoringConditionsModel from './model'
 import type { MonitoringConditions } from './model'
 import Store from './store/store'
@@ -5,17 +6,16 @@ import Store from './store/store'
 export default class MonitoringConditionsStoreService {
   constructor(private readonly dataStore: Store) {}
 
-  public async updateMonitoringConditions(key: string, data: MonitoringConditions) {
-    await this.dataStore.set(key, JSON.stringify(data), 24 * 60 * 60)
+  private keyFromOrder(order: Order): string {
+    return `${order.id}+${order.versionId}`
   }
 
-  public async updateField<T extends keyof MonitoringConditions>(key: string, field: T, data: MonitoringConditions[T]) {
-    const monitoringConditions = await this.getMonitoringConditions(key)
-    monitoringConditions[field] = data
-    await this.updateMonitoringConditions(key, monitoringConditions)
+  public async updateMonitoringConditions(order: Order, data: MonitoringConditions) {
+    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify(data), 24 * 60 * 60)
   }
 
-  public async getMonitoringConditions(key: string): Promise<MonitoringConditions> {
+  public async getMonitoringConditions(order: Order): Promise<MonitoringConditions> {
+    const key = this.keyFromOrder(order)
     let result = await this.dataStore.get(key)
 
     if (result === null) {
@@ -28,8 +28,18 @@ export default class MonitoringConditionsStoreService {
     return data
   }
 
-  public async updateOrderType(key: string, data: Pick<MonitoringConditions, 'orderType'>) {
-    const monitoringConditions = await this.getMonitoringConditions(key)
+  public async updateField<T extends keyof MonitoringConditions>(
+    order: Order,
+    field: T,
+    data: MonitoringConditions[T],
+  ) {
+    const monitoringConditions = await this.getMonitoringConditions(order)
+    monitoringConditions[field] = data
+    await this.updateMonitoringConditions(order, monitoringConditions)
+  }
+
+  public async updateOrderType(order: Order, data: Pick<MonitoringConditions, 'orderType'>) {
+    const monitoringConditions = await this.getMonitoringConditions(order)
     const previousOrderType = monitoringConditions.orderType
     monitoringConditions.orderType = data.orderType
 
@@ -57,11 +67,11 @@ export default class MonitoringConditionsStoreService {
         throw new Error('Invalid order type')
     }
 
-    await this.updateMonitoringConditions(key, monitoringConditions)
+    await this.updateMonitoringConditions(order, monitoringConditions)
   }
 
-  public async updateSentenceType(key: string, data: Pick<MonitoringConditions, 'sentenceType'>) {
-    const monitoringConditions = await this.getMonitoringConditions(key)
+  public async updateSentenceType(order: Order, data: Pick<MonitoringConditions, 'sentenceType'>) {
+    const monitoringConditions = await this.getMonitoringConditions(order)
     monitoringConditions.sentenceType = data.sentenceType
 
     if (monitoringConditions.orderType === 'POST_RELEASE') {
@@ -72,12 +82,6 @@ export default class MonitoringConditionsStoreService {
       }
     }
 
-    await this.updateMonitoringConditions(key, monitoringConditions)
-  }
-
-  public async updateHdc(key: string, data: Pick<MonitoringConditions, 'hdc'>) {
-    const monitoringConditions = await this.getMonitoringConditions(key)
-    monitoringConditions.hdc = data.hdc
-    await this.updateMonitoringConditions(key, monitoringConditions)
+    await this.updateMonitoringConditions(order, monitoringConditions)
   }
 }

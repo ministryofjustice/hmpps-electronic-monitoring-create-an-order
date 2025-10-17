@@ -10,17 +10,17 @@ export default class HdcController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const order = req.order!
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
 
     const model = constructModel(monitoringConditions, errors)
     res.render('pages/order/monitoring-conditions/order-type-description/hdc', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const order = req.order!
     const formData = HdcFormDataModel.parse(req.body)
     if (formData.hdc === null || formData.hdc === undefined) {
       req.flash('validationErrors', [
@@ -30,10 +30,10 @@ export default class HdcController {
           focusTarget: 'hdc',
         },
       ])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id))
     } else {
-      await this.montoringConditionsStoreService.updateField(orderId, 'hdc', formData.hdc)
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', orderId))
+      await this.montoringConditionsStoreService.updateField(order, 'hdc', formData.hdc)
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id))
     }
   }
 }
