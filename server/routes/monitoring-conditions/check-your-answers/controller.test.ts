@@ -160,6 +160,33 @@ describe('check your answers controller', () => {
     })
   })
 
+  it('pilot is answered', async () => {
+    mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+      orderType: 'BAIL',
+      conditionType: 'BAIL_ORDER',
+      sentenceType: 'BAIL_RLAA',
+      pilot: 'ACQUISITIVE_CRIME_PROJECT',
+    })
+    const controller = new CheckYourAnswersController(
+      mockMonitoringConditionsStoreService,
+      mockMonitoringConditionsService,
+    )
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        answers: expect.arrayContaining([
+          expect.objectContaining({
+            key: { text: 'What pilot project is the device wearer part of?' },
+            value: { text: 'Acquisitive Crime Project' },
+          }),
+        ]),
+      }),
+    )
+  })
+
   it('should construct the correct model for a Bail journey', async () => {
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
       orderType: 'BAIL',

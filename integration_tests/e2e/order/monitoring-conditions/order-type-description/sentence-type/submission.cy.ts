@@ -4,6 +4,7 @@ import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from './SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
 import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
+import PilotPage from '../pilot/PilotPage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -46,6 +47,10 @@ context('sentenceType form submission', () => {
     const hdcPage = Page.verifyOnPage(HdcPage, { orderId: mockOrderId })
     hdcPage.form.fillInWith('Yes')
     hdcPage.form.continueButton.click()
+
+    const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
+    pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.continueButton.click()
 
     const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
     cyaPage.orderInformationSection.shouldExist()

@@ -11,7 +11,7 @@ export default class AppFormPage extends AppPage {
 
   checkOnPage(): void {
     if (this.title) {
-      cy.get('h1', { log: false }).contains(this.title)
+      cy.get('h1, legend', { log: false }).contains(this.title)
     }
 
     if (this.subtitle) {
