@@ -10,10 +10,10 @@ export default class PilotController {
   constructor(private readonly store: MonitoringConditionsStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const order = req.order!
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const data = await this.store.getMonitoringConditions(orderId)
+    const data = await this.store.getMonitoringConditions(order)
 
     const model = constructModel(data, errors)
 
@@ -21,19 +21,19 @@ export default class PilotController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const order = req.order!
     const formData = PilotFormDataModel.parse(req.body)
 
     if (formData.pilot === null || formData.pilot === undefined) {
       req.flash('validationErrors', [{ error: validationErrors.monitoringConditions.pilotRequired, field: 'pilot' }])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id))
       return
     }
 
-    await this.store.updateField(orderId, 'pilot', formData.pilot)
+    await this.store.updateField(order, 'pilot', formData.pilot)
 
     // update to PRARR page when it is made
     // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', orderId))
-    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
   }
 }

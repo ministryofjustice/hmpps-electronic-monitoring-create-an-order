@@ -178,7 +178,7 @@ describe('pilot controller', () => {
       await controller.update(req, res, next)
 
       expect(mockMonitoringConditionsStoreService.updateField).toHaveBeenCalledWith(
-        req.order?.id,
+        req.order,
         'pilot',
         'ACQUISITIVE_CRIME_PROJECT',
       )
