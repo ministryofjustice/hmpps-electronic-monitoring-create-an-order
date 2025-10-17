@@ -10,7 +10,7 @@ import familyCourts from './ddv5/familyCourts'
 import magistratesCourtsDDv5 from './ddv5/magistratesCourts'
 import militaryCourts from './ddv5/militaryCourts'
 import notifyingOrganisationsDDv5 from './ddv5/notifyingOrganisations'
-import pilots from './ddv5/pilots'
+import pilotsDDv5 from './ddv5/pilots'
 import prisonsDDv5 from './ddv5/prisons'
 import riskCategoriesDDv5 from './ddv5/riskCategories'
 import variationTypesDDv5 from './ddv5/variationTypes'
@@ -39,6 +39,7 @@ import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
+import pilots from './pilots'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -53,6 +54,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   offences,
   orderTypeDescriptions,
   orderTypes,
+  pilots,
   prisons,
   probationRegions,
   relationship,
@@ -83,7 +85,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   offences,
   orderTypeDescriptions,
   orderTypes,
-  pilots,
+  pilots: pilotsDDv5,
   prisons: prisonsDDv5,
   probationRegions,
   probationDeliveryUnits,
