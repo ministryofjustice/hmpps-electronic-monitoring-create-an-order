@@ -56,12 +56,7 @@ export default class SentenceTypeController {
             res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id))
             return
           case 'DTO':
-            // update to ISS page when it is made
-            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            )
-
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
             return
           default:
             // update to PRARR page when it is made
@@ -94,11 +89,7 @@ export default class SentenceTypeController {
       }
 
       if (monitoringConditions.orderType === 'BAIL') {
-        // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-        // return
-        res.redirect(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-        )
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
         return
       }
 

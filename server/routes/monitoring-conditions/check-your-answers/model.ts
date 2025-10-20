@@ -47,6 +47,17 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
     )
   }
 
+  if (data.issp !== undefined) {
+    const isspPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.issp.text,
+        lookup(content.reference.yesNoUnknown, data.issp),
+        isspPath.replace(':orderId', order.id),
+      ),
+    )
+  }
+
   if (data.pilot !== undefined) {
     const pilotPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT
     answers.push(
