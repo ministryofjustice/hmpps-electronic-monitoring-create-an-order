@@ -4,6 +4,7 @@ import PrarrController from './controller'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import InMemoryStore from '../store/inMemoryStore'
 import constructModel from './viewModel'
+import paths from '../../../constants/paths'
 
 jest.mock('../monitoringConditionsStoreService')
 jest.mock('./viewModel')
@@ -27,6 +28,7 @@ describe('prarr controller', () => {
     mockConstructModel.mockReturnValue({})
 
     req = createMockRequest()
+    req.flash = jest.fn()
     res = createMockResponse()
     next = jest.fn()
   })
@@ -47,9 +49,32 @@ describe('prarr controller', () => {
 
       await controller.view(req, res, next)
 
-      expect(constructModel).toHaveBeenCalledWith({ prarr: 'YES' }, [])
-
       expect(res.render).toHaveBeenCalledWith(expect.anything(), { field: 'value' })
+    })
+  })
+
+  describe('update', () => {
+    it('redirects to the next page', async () => {
+      req.body = {
+        action: 'continue',
+        prarr: 'YES',
+      }
+      await controller.update(req, res, next)
+
+      // update to monitoring dates
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id),
+      )
+    })
+    it('validates', async () => {
+      req.body = {
+        action: 'continue',
+      }
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        { error: 'Select if the device wearer is being released on a P-RARR', field: 'prarr' },
+      ])
     })
   })
 })
