@@ -7,6 +7,7 @@ import SentenceTypeController from './sentence-type/controller'
 import HdcController from './hdc/controller'
 import PilotController from './pilot/controller'
 import IsspController from './issp/controller'
+import PrarrController from './prarr/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
@@ -29,6 +30,8 @@ const createOrderTypeDescriptionRouter = (
 
   const isspController = new IsspController(monitoringConditionsStoreService)
 
+  const prarrController = new PrarrController(monitoringConditionsStoreService)
+
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
@@ -46,6 +49,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/issp', asyncMiddleware(isspController.view))
   router.post('/issp', asyncMiddleware(isspController.update))
+
+  router.get('/prarr', asyncMiddleware(prarrController.view))
+  router.post('/prarr', asyncMiddleware(prarrController.update))
 
   return router
 }
