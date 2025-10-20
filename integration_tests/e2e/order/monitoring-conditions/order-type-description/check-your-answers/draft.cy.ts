@@ -5,6 +5,7 @@ import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
+import IsspPage from '../issp/isspPage'
 
 const mockOrderId = uuidv4()
 
@@ -89,6 +90,32 @@ context('Check your answers', () => {
     ])
   })
 
+  it('Should display content for a DTO sentence type', () => {
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.orderTypeField.set('Release from prison')
+    orderTypePage.form.continueButton.click()
+
+    const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
+    sentenceTypePage.form.sentenceTypeField.set('Detention and Training Order (DTO)')
+    sentenceTypePage.form.continueButton.click()
+
+    const isspPage = Page.verifyOnPage(IsspPage, { orderId: mockOrderId })
+    isspPage.form.fillInWith('Yes')
+    isspPage.form.continueButton.click()
+
+    const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+    page.header.userName().should('contain.text', 'J. Smith')
+    page.header.phaseBanner().should('contain.text', 'dev')
+
+    page.orderInformationSection.shouldExist()
+    page.orderInformationSection.shouldHaveItems([
+      { key: 'What is the order type?', value: 'Post Release' },
+      { key: 'What type of sentence has the device wearer been given?', value: 'Detention and Training Order (DTO)' },
+      { key: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?', value: 'Yes' },
+    ])
+  })
+
   it('Should display content for a Bail order', () => {
     stubGetOrder('CROWN_COURT')
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
@@ -99,11 +126,16 @@ context('Check your answers', () => {
     sentenceTypePage.form.bailTypeField.set('Bail Supervision & Support')
     sentenceTypePage.form.continueButton.click()
 
+    const isspPage = Page.verifyOnPage(IsspPage, { orderId: mockOrderId })
+    isspPage.form.fillInWith('No')
+    isspPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.orderInformationSection.shouldHaveItems([
       { key: 'What is the order type?', value: 'Bail' },
       { key: 'What type of bail has the device wearer been given?', value: 'Bail Supervision & Support' },
+      { key: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?', value: 'No' },
     ])
   })
 
