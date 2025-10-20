@@ -97,8 +97,8 @@ context('Mandatory fields only', () => {
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
       ...fakeAddress,
-      line2: undefined,
-      line4: undefined,
+      addressLine2: undefined,
+      addressLine4: undefined,
       hasAnotherAddress: 'No',
     }
 
@@ -391,8 +391,8 @@ context('Mandatory fields only', () => {
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
       ...fakeAddress,
-      line2: undefined,
-      line4: undefined,
+      addressLine2: undefined,
+      addressLine4: undefined,
       hasAnotherAddress: 'No',
     }
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
