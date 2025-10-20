@@ -50,15 +50,15 @@ const validUkPhoneNumbers = [
 
 export class Address {
   constructor(
-    public line1?: string,
-    public line2?: string,
-    public line3?: string,
-    public line4?: string,
+    public addressLine1?: string,
+    public addressLine2?: string,
+    public addressLine3?: string,
+    public addressLine4?: string,
     public postcode?: string,
   ) {}
 
   toString() {
-    return `${this.line1}, ${this.line2}, ${this.postcode}`
+    return `${this.addressLine1}, ${this.addressLine2}, ${this.postcode}`
   }
 }
 

@@ -5,8 +5,8 @@ import { InstallationLocation } from '../InstallationLocation'
 import { InstallationLocationFormData } from '../form-data/installationLocation'
 import { ValidationResult } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
 import FeatureFlags from '../../utils/featureFlags'
+import { createAddressPreview, getError } from '../../utils/utils'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
@@ -24,9 +24,7 @@ const getPilotPrisonStatus = (order: Order): boolean => {
 
 const createPrimaryAddressView = (addresses: Address[]): string => {
   const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
-  return primaryAddress
-    ? `${primaryAddress.addressLine1}, ${primaryAddress.addressLine2}, ${primaryAddress.postcode}`
-    : ''
+  return primaryAddress ? createAddressPreview(primaryAddress) : ''
 }
 
 const hasFixedAddress = (order: Order): boolean => {

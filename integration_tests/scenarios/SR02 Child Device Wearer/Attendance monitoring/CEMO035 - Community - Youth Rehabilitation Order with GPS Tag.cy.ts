@@ -233,10 +233,10 @@ context.skip('Scenarios', () => {
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
             disability: [],
-            address_1: fakePrimaryAddress.line1,
-            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
-            address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+            address_1: fakePrimaryAddress.addressLine1,
+            address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
+            address_3: fakePrimaryAddress.addressLine3,
+            address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
             address_post_code: fakePrimaryAddress.postcode,
             secondary_address_1: '',
             secondary_address_2: '',
@@ -369,10 +369,10 @@ context.skip('Scenarios', () => {
                   {
                     description: `${attendanceMonitoringOrder.purpose}
 ${attendanceMonitoringOrder.appointmentDay} ${attendanceMonitoringOrder.startTime.hours}:${attendanceMonitoringOrder.startTime.minutes}:00-${attendanceMonitoringOrder.endTime.hours}:${attendanceMonitoringOrder.endTime.minutes}:00
-${attendanceMonitoringOrder.address.line1}
-${attendanceMonitoringOrder.address.line2}
-${attendanceMonitoringOrder.address.line3}
-${attendanceMonitoringOrder.address.line4}
+${attendanceMonitoringOrder.address.addressLine1}
+${attendanceMonitoringOrder.address.addressLine2}
+${attendanceMonitoringOrder.address.addressLine3}
+${attendanceMonitoringOrder.address.addressLine4}
 ${attendanceMonitoringOrder.address.postcode}
 `,
                     duration: '',
