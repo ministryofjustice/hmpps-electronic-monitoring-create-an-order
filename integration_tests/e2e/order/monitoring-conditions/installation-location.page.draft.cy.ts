@@ -71,6 +71,7 @@ context('Monitoring conditions', () => {
         cy.signIn()
 
         const testFlags = { TAG_AT_SOURCE_PILOT_PRISONS: 'SUDBURY_PRISON,FOSSE_WAY_PRISON' }
+
         cy.task('setFeatureFlags', testFlags)
       })
 
@@ -118,15 +119,18 @@ context('Monitoring conditions', () => {
           orderId: mockOrderId,
         })
 
-        cy.get('#location-hint').contains("Installation can't take place at the prison for some orders.")
+        const installAtSourceDetails = [
+          'Under 18 years at the point of release',
+          'Any case which has an NSD agreed bespoke EM violation reporting protocol in place',
+          'Anyone who is NFA',
+          'Non-curfew location monitoring',
+        ]
 
-        cy.get('#location-hint')
-          .contains('Help Guide (opens in new tab)')
-          .should(
-            'have.attr',
-            'href',
-            'https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot',
-          )
+        cy.contains('Cases that are out of scope of the install at source pilot').click()
+
+        installAtSourceDetails.forEach(detail => {
+          cy.get('.govuk-details__text').contains(detail).should('be.visible')
+        })
       })
 
       it('Should not display install at source generic text if prison not part of pilot', () => {
@@ -158,12 +162,7 @@ context('Monitoring conditions', () => {
         Page.visit(InstallationLocationPage, {
           orderId: mockOrderId,
         })
-
-        cy.get('#location-hint')
-          .contains("Installation can't take place at the prison for some orders.")
-          .should('not.exist')
-
-        cy.get('#location-hint').contains('Help Guide (opens in new tab)').should('not.exist')
+        cy.contains('Cases that are out of scope of the install at source pilot').should('not.exist')
       })
 
       it('Should display install at source alcohol text if prison part of pilot and device wearer has no fixed address', () => {
@@ -204,17 +203,22 @@ context('Monitoring conditions', () => {
           orderId: mockOrderId,
         })
 
-        cy.get('#location-hint').contains(
-          'If the device wearer has no fixed address they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office.',
+        const installAtSourceDetails = [
+          'Under 18 years at the point of release',
+          'Any case which has an NSD agreed bespoke EM violation reporting protocol in place',
+          'Anyone who is NFA',
+          'Non-curfew location monitoring',
+        ]
+
+        cy.contains(
+          'If the device wearer has no fixed address then they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office.',
         )
 
-        cy.get('#location-hint')
-          .contains('Help Guide (opens in new tab)')
-          .should(
-            'have.attr',
-            'href',
-            'https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot',
-          )
+        cy.contains('Cases that are out of scope of the install at source pilot').click()
+
+        installAtSourceDetails.forEach(detail => {
+          cy.get('.govuk-details__text').contains(detail).should('be.visible')
+        })
       })
 
       it('Should not display install at source alcohol text if prison not part of pilot and device wearer has no fixed address', () => {
@@ -255,11 +259,7 @@ context('Monitoring conditions', () => {
           orderId: mockOrderId,
         })
 
-        cy.get('#location-hint')
-          .contains(
-            'If the device wearer has no fixed address they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office.',
-          )
-          .should('not.exist')
+        cy.contains('Cases that are out of scope of the install at source pilot').should('not.exist')
       })
 
       it('Should grey out fixed address option, when device wearer has no fixed address', () => {

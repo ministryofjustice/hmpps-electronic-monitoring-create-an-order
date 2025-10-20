@@ -1,5 +1,6 @@
 {% extends "../../../partials/form-layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% set section = content.pages.installationLocation.section %}
 {% set heading = content.pages.installationLocation.title %}
 {% set legend = content.pages.installationLocation.legend %}
@@ -7,13 +8,27 @@
 {% set questions = content.pages.installationLocation.questions %}
 
 {% block formInputs %}
+
+  {% set detailsTextHtml %}
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Under 18 years at the point of release.</li>
+      <li>Any case which has an NSD agreed bespoke EM violation reporting protocol in place (i.e. Specials).</li>
+      <li>Anyone who is NFA. However, please note the AML NFA cases can still be tagged at the probation office under the business-as-usual EM process.</li>
+      <li>Non-curfew location monitoring e.g. (exclusion zone or trail monitoring) cases which have a licence condition that restricts the use and/or possession of a mobile phone.</li>
+      <li>Non-curfew location monitoring e.g. (exclusion zone or trail monitoring) cases which also have an EM immigration bail order in place. </li>
+    </ul>
+  {% endset %}
+
   {% set hintHtml %}
     {% if pilotPrison %}
       {% if not fixedAddressExist %}
-        If the device wearer has no fixed address they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office. For guidance, refer to the <a class="govuk-link" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot" target="_blank">Help Guide (opens in new tab)</a>.
-      {% elif fixedAddressExist %}
-        Installation can't take place at the prison for some orders. For guidance, refer to the <a class="govuk-link" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/faq.html#install-at-source-pilot" target="_blank">Help Guide (opens in new tab)</a>.
+        If the device wearer has no fixed address then they are out of scope of the install at source pilot. The normal business process should be followed and installation of the tag should be at the probation office.
       {% endif %}
+      {{ govukDetails({
+        classes: "govuk-!-margin-top-5",
+        summaryText: "Cases that are out of scope of the install at source pilot",
+        html: detailsTextHtml
+      }) }}
     {% endif %}
   {% endset %}
 
@@ -31,8 +46,8 @@
         {
           value: "PROBATION_OFFICE",
           text: "At a probation office",
-          disabled: not isOrderEditable 
-        }                
+          disabled: not isOrderEditable
+        }
     ] %}
   {{ govukRadios({
     name: "location",
