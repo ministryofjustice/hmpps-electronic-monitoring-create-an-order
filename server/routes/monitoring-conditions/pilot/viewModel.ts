@@ -11,8 +11,8 @@ export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
 interface Option {
   text: string
   value: string
-  hint?: {
-    text: string
+  conditional?: {
+    html: string
   }
 }
 
@@ -47,8 +47,8 @@ const getItems = (hdc?: string | null): Item[] => {
       {
         text: 'They are not part of any of these pilots',
         value: 'UNKNOWN',
-        hint: {
-          text: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+        conditional: {
+          html: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
         },
       },
     ]

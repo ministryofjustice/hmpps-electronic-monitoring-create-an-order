@@ -64,9 +64,10 @@ context('pilot', () => {
     pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
     pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
 
+    const hintText =
+      'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.'
+    pilotPage.form.pilotField.element.contains(hintText).should('be.hidden')
     pilotPage.form.fillInWith('They are not part of any of these pilots')
-    pilotPage.form.pilotField.element.contains(
-      'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
-    )
+    pilotPage.form.pilotField.element.contains(hintText)
   })
 })

@@ -11,9 +11,9 @@ export default class CheckYourAnswersController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const order = req.order!
 
-    const data = await this.storeService.getMonitoringConditions(orderId)
+    const data = await this.storeService.getMonitoringConditions(order)
 
     res.render(
       'pages/order/monitoring-conditions/order-type-description/check-your-answers',
@@ -22,8 +22,8 @@ export default class CheckYourAnswersController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
-    const data = await this.storeService.getMonitoringConditions(orderId)
+    const order = req.order!
+    const data = await this.storeService.getMonitoringConditions(order)
 
     // Dummy data until we have pages that get this data
     data.startDate = new Date(2020, 10, 7, 10, 0).toISOString()
@@ -33,7 +33,7 @@ export default class CheckYourAnswersController {
     await this.monitoringConditionsService.updateMonitoringConditions({
       data,
       accessToken: res.locals.user.token,
-      orderId,
+      orderId: order.id,
     })
 
     // TODO
@@ -41,6 +41,6 @@ export default class CheckYourAnswersController {
     // redirect to next page
     // if save as draft
     // go to summary
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }
 }
