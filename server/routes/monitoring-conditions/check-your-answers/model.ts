@@ -47,6 +47,17 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
     )
   }
 
+  if (data.pilot !== undefined) {
+    const pilotPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.pilot.text,
+        lookup(content.reference.pilots, data.pilot),
+        pilotPath.replace(':orderId', order.id),
+      ),
+    )
+  }
+
   return {
     answers,
   }

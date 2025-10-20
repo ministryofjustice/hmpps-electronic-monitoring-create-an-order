@@ -148,7 +148,7 @@ describe('SentenceTypeController', () => {
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
 
-        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder, {
           sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
         })
         expect(res.redirect).toHaveBeenCalledWith(
@@ -164,7 +164,7 @@ describe('SentenceTypeController', () => {
         const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
         await controller.update(req, res, next)
 
-        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+        expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder, {
           sentenceType: 'SECTION_91',
         })
         // TODO: Update to PRARR page when it is made
@@ -182,7 +182,7 @@ describe('SentenceTypeController', () => {
       const controller = new SentenceTypeController(mockMonitoringConditionsStoreService)
       await controller.update(req, res, next)
 
-      expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder.id, {
+      expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder, {
         sentenceType: 'COMMUNITY_YRO',
       })
       // TODO: Update to ISS page when it is made
