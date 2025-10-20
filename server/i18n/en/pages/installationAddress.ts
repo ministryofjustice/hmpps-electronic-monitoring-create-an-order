@@ -8,16 +8,16 @@ const installationAddressPageContent: AddressPageContent = {
       text: '',
       hint: '',
     },
-    line1: {
+    addressLine1: {
       text: 'Address line 1',
     },
-    line2: {
+    addressLine2: {
       text: 'Address line 2 (optional)',
     },
-    line3: {
+    addressLine3: {
       text: 'Town or city',
     },
-    line4: {
+    addressLine4: {
       text: 'County (optional)',
     },
     postcode: {

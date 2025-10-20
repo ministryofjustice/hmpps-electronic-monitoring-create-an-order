@@ -61,8 +61,8 @@ context('Monitoring conditions', () => {
             {
               addressType: 'PRIMARY',
               addressLine1: '10 Downing Street',
-              addressLine2: 'London',
-              addressLine3: '',
+              addressLine2: '',
+              addressLine3: 'London',
               addressLine4: '',
               postcode: 'SW1A 2AB',
             },
