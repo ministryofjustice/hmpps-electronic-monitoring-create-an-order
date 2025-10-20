@@ -76,5 +76,14 @@ describe('prarr controller', () => {
         { error: 'Select if the device wearer is being released on a P-RARR', field: 'prarr' },
       ])
     })
+    it('updates store', async () => {
+      req.body = {
+        action: 'continue',
+        prarr: 'YES',
+      }
+      await controller.update(req, res, next)
+
+      expect(mockStore.updateField).toHaveBeenCalledWith(req.order!, 'prarr', 'YES')
+    })
   })
 })

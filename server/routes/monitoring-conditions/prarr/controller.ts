@@ -29,6 +29,8 @@ export default class PrarrController {
       return
     }
 
+    await this.store.updateField(order, 'prarr', formData.prarr)
+
     res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
   }
 }
