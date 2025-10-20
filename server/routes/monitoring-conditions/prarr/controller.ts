@@ -4,16 +4,18 @@ import constructModel from './viewModel'
 import paths from '../../../constants/paths'
 import PrarrFormDataModel from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
+import { ValidationResult } from '../../../models/Validation'
 
 export default class PrarrController {
   constructor(private readonly store: MonitoringConditionsStoreService) {}
 
   view: Handler = async (req: Request, res: Response) => {
     const order = req.order!
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     const data = await this.store.getMonitoringConditions(order)
 
-    const model = constructModel(data, [])
+    const model = constructModel(data, errors)
 
     res.render('pages/order/monitoring-conditions/order-type-description/prarr', model)
   }

@@ -25,7 +25,7 @@ describe('prarr controller', () => {
     mockStore.getMonitoringConditions.mockResolvedValue({})
     controller = new PrarrController(mockStore)
 
-    mockConstructModel.mockReturnValue({})
+    mockConstructModel.mockReturnValue({ errorSummary: null, items: [] })
 
     req = createMockRequest()
     req.flash = jest.fn()
@@ -45,11 +45,15 @@ describe('prarr controller', () => {
 
     it('render with the model', async () => {
       mockStore.getMonitoringConditions.mockResolvedValue({ prarr: 'YES' })
-      mockConstructModel.mockReturnValueOnce({ field: 'value' })
+      mockConstructModel.mockReturnValueOnce({ errorSummary: null, items: [], prarr: { value: 'YES' } })
 
       await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(expect.anything(), { field: 'value' })
+      expect(res.render).toHaveBeenCalledWith(expect.anything(), {
+        errorSummary: null,
+        items: [],
+        prarr: { value: 'YES' },
+      })
     })
   })
 
