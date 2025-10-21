@@ -6,6 +6,7 @@ import CheckYourAnswersController from './check-your-answers/controller'
 import SentenceTypeController from './sentence-type/controller'
 import HdcController from './hdc/controller'
 import PilotController from './pilot/controller'
+import IsspController from './issp/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
@@ -26,6 +27,8 @@ const createOrderTypeDescriptionRouter = (
 
   const pilotController = new PilotController(monitoringConditionsStoreService)
 
+  const isspController = new IsspController(monitoringConditionsStoreService)
+
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
@@ -40,6 +43,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
+
+  router.get('/issp', asyncMiddleware(isspController.view))
+  router.post('/issp', asyncMiddleware(isspController.update))
 
   return router
 }

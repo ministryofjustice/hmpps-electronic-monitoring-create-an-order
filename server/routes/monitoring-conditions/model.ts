@@ -53,6 +53,7 @@ const MonitoringConditionsModel = z.object({
   endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime).nullable().optional(),
   hdc: z.string().nullable().optional(),
   pilot: PilotTypeEnum.nullable().optional(),
+  issp: z.string().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>
