@@ -69,6 +69,17 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
     )
   }
 
+  if (data.prarr !== undefined) {
+    const prarrPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.prarr.text,
+        lookup(content.reference.yesNoUnknown, data.prarr),
+        prarrPath.replace(':orderId', order.id),
+      ),
+    )
+  }
+
   return {
     answers,
   }

@@ -6,6 +6,7 @@ import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
 import IsspPage from '../issp/isspPage'
+import PrarrPage from '../prarr/PrarrPage'
 
 const mockOrderId = uuidv4()
 
@@ -55,6 +56,10 @@ context('Check your answers', () => {
     pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
     pilotPage.form.continueButton.click()
 
+    const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
+    prarrPage.form.fillInWith('Yes')
+    prarrPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     page.checkIsAccessible()
 
@@ -65,6 +70,10 @@ context('Check your answers', () => {
       {
         key: 'What pilot project is the device wearer part of?',
         value: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      },
+      {
+        key: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
+        value: 'Yes',
       },
     ])
   })
@@ -154,6 +163,10 @@ context('Check your answers', () => {
     pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
     pilotPage.form.continueButton.click()
 
+    const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
+    prarrPage.form.fillInWith('Yes')
+    prarrPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.orderInformationSection.shouldNotHaveItem('What is the order type?')
@@ -180,6 +193,10 @@ context('Check your answers', () => {
     pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
     pilotPage.form.continueButton.click()
 
+    const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
+    prarrPage.form.fillInWith('Yes')
+    prarrPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     page.changeLinkByQuestion('What type of sentence has the device wearer been given?').click()
 
@@ -203,6 +220,10 @@ context('Check your answers', () => {
     pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
     pilotPage.form.continueButton.click()
 
+    const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
+    prarrPage.form.fillInWith('Yes')
+    prarrPage.form.continueButton.click()
+
     let cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     cyaPage.changeLinkByQuestion('What is the order type?').click()
 
@@ -214,5 +235,8 @@ context('Check your answers', () => {
     cyaPage.orderInformationSection.shouldNotHaveItem('What is the order type?')
     cyaPage.orderInformationSection.shouldNotHaveItem('Is the device wearer on a Home Detention Curfew (HDC)?')
     cyaPage.orderInformationSection.shouldNotHaveItem('What pilot project is the device wearer part of?')
+    cyaPage.orderInformationSection.shouldNotHaveItem(
+      'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
+    )
   })
 })
