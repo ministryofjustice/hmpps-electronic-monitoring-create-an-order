@@ -54,8 +54,8 @@ context('Monitoring conditions', () => {
         {
           addressType: 'PRIMARY',
           addressLine1: '10 Downing Street',
-          addressLine2: 'London',
-          addressLine3: '',
+          addressLine2: '',
+          addressLine3: 'London',
           addressLine4: '',
           postcode: 'SW1A 2AB',
         },
@@ -260,7 +260,7 @@ context('Monitoring conditions', () => {
           Page.verifyOnPage(CurfewConditionsPage)
         })
 
-        it(`Should continue to mandatory attendence monitoring page`, () => {
+        it(`Should continue to mandatory attendance monitoring page`, () => {
           stubGetOrder({
             startDate: '2025-01-01T00:00:00Z',
             endDate: '2025-02-01T00:00:00Z',
