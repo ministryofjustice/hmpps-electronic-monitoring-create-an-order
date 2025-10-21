@@ -184,10 +184,8 @@ describe('pilot controller', () => {
       )
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', req.order!.id),
       )
-      // update to PRARR when made
-      // expect(res.redirect).toHaveBeenCalledWith(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR)
     })
   })
 })
