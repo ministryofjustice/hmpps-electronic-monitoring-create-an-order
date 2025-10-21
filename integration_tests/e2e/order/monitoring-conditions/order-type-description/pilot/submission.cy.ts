@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import PilotPage from './PilotPage'
 import Page from '../../../../../pages/page'
-import CheckYourAnswersPage from '../../../../../pages/checkYourAnswersPage'
+import PrarrPage from '../prarr/PrarrPage'
 
 const stubGetOrder = () => {
   cy.task('stubCemoGetOrder', {
@@ -26,7 +26,6 @@ context('pilot', () => {
     page.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
     page.form.continueButton.click()
 
-    // Check on PRARR page when made
-    Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
+    Page.verifyOnPage(PrarrPage, 'Check your answers')
   })
 })
