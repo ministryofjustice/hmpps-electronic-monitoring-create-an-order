@@ -54,6 +54,7 @@ const MonitoringConditionsModel = z.object({
   hdc: z.string().nullable().optional(),
   pilot: PilotTypeEnum.nullable().optional(),
   issp: z.string().nullable().optional(),
+  prarr: YesNoUnknownEnum.nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>

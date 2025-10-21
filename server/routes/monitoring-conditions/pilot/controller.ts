@@ -32,8 +32,6 @@ export default class PilotController {
 
     await this.store.updateField(order, 'pilot', formData.pilot)
 
-    // update to PRARR page when it is made
-    // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', orderId))
-    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
   }
 }

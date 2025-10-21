@@ -167,9 +167,8 @@ describe('SentenceTypeController', () => {
         expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder, {
           sentenceType: 'SECTION_91',
         })
-        // TODO: Update to PRARR page when it is made
         expect(res.redirect).toHaveBeenCalledWith(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', mockOrder.id),
         )
       })
     })
