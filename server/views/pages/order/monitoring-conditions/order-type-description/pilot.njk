@@ -1,11 +1,20 @@
 {% extends "../../../../partials/form-layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set section = "Electronic monitoring required" %}
 {% set singleQuestionPage = true %}
 {% set questions = content.pages.monitoringConditions.questions %}
 
 {% block formInputs %}
+    {% set hintHtml %}
+        {% if not pilotProbationRegion %}
+          {{ govukInsetText({
+            text: "The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region."
+          }) }}
+        {% endif %}
+    {% endset %}
+
     {{ govukRadios({
       name: "pilot",  
       hint: { text: questions.pilot.hint },
@@ -15,7 +24,10 @@
           isPageHeading: false,
           classes: "govuk-fieldset__legend--l"
         }
-      }, 
+      },
+      hint: {
+        html: hintHtml
+      },
       items: items,
       value: pilot.value,
       errorMessage: pilot.error

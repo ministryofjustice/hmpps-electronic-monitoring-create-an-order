@@ -15,7 +15,7 @@ export default class PilotController {
 
     const data = await this.store.getMonitoringConditions(order)
 
-    const model = constructModel(data, errors)
+    const model = constructModel(order, data, errors)
 
     res.render('pages/order/monitoring-conditions/order-type-description/pilot', model)
   }
