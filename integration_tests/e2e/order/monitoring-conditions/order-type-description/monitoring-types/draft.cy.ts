@@ -5,7 +5,7 @@ import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
 
 const mockOrderId = uuidv4()
-context('prarr', () => {
+context('monitoring types', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
