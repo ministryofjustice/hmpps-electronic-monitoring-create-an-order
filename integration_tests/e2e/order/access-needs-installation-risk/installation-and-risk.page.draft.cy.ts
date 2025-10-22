@@ -46,8 +46,8 @@ context('Access needs and installation risk information', () => {
           possibleRisk: 'There are no risks that the installer should be aware of',
         })
         page.form.possibleRiskField.shouldHaveValue('There are no risks that the installer should be aware of')
-        page.form.possibleRiskField.shouldNotHaveValueChekced('Sex offender')
-        page.form.possibleRiskField.shouldNotHaveValueChekced('Violent behaviour or threats of violence')
+        page.form.possibleRiskField.shouldNotHaveValueChecked('Sex offender')
+        page.form.possibleRiskField.shouldNotHaveValueChecked('Violent behaviour or threats of violence')
       })
 
       context('With MAPPA disabled', () => {

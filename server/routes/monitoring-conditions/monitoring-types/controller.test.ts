@@ -75,7 +75,7 @@ describe('prarr controller', () => {
       await controller.update(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
-        { error: 'Select monitoring required', field: 'monitoringType' },
+        { error: 'Select monitoring required', field: 'monitoringTypes' },
       ])
     })
     it('updates store', async () => {

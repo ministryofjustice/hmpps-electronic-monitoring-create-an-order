@@ -28,7 +28,7 @@ export default class MonitoringTypesController {
     const { action, ...monitoringTypeValues } = formData
     if (Object.values(monitoringTypeValues).every(item => item === false)) {
       req.flash('validationErrors', [
-        { error: validationErrors.monitoringConditions.monitoringTypeRequired, field: 'monitoringType' },
+        { error: validationErrors.monitoringConditions.monitoringTypeRequired, field: 'monitoringTypes' },
       ])
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
       return
