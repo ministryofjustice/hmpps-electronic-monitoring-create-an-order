@@ -4,13 +4,19 @@ import constructModel from './viewModel'
 import paths from '../../../constants/paths'
 import MonitoringTypesFormDataModel from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
+import { ValidationResult } from '../../../models/Validation'
 
 export default class MonitoringTypeController {
   constructor(private readonly store: MonitoringConditionsStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const model = constructModel(order, [])
+
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
+
+    const data = await this.store.getMonitoringConditions(order)
+
+    const model = constructModel(data, errors)
     res.render('pages/order/monitoring-conditions/order-type-description/monitoring-type', model)
   }
 
