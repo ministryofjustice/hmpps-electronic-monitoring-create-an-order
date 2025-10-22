@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import MonitoringTypeController from './controller'
+import MonitoringTypesController from './controller'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import InMemoryStore from '../store/inMemoryStore'
 import constructModel from './viewModel'
@@ -12,7 +12,7 @@ jest.mock('./viewModel')
 describe('prarr controller', () => {
   let mockDataStore: InMemoryStore
   let mockStore: jest.Mocked<MonitoringConditionsStoreService>
-  let controller: MonitoringTypeController
+  let controller: MonitoringTypesController
   let res: Response
   let req: Request
   let next: NextFunction
@@ -23,7 +23,7 @@ describe('prarr controller', () => {
     mockDataStore = new InMemoryStore()
     mockStore = new MonitoringConditionsStoreService(mockDataStore) as jest.Mocked<MonitoringConditionsStoreService>
     mockStore.getMonitoringConditions.mockResolvedValue({})
-    controller = new MonitoringTypeController(mockStore)
+    controller = new MonitoringTypesController(mockStore)
 
     mockConstructModel.mockReturnValue({ errorSummary: null })
 
@@ -38,7 +38,7 @@ describe('prarr controller', () => {
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/order-type-description/monitoring-type',
+        'pages/order/monitoring-conditions/order-type-description/monitoring-types',
         expect.anything(),
       )
     })

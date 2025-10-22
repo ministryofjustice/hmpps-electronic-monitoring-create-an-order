@@ -6,7 +6,7 @@ import MonitoringTypesFormDataModel from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 
-export default class MonitoringTypeController {
+export default class MonitoringTypesController {
   constructor(private readonly store: MonitoringConditionsStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export default class MonitoringTypeController {
     const data = await this.store.getMonitoringConditions(order)
 
     const model = constructModel(data, errors)
-    res.render('pages/order/monitoring-conditions/order-type-description/monitoring-type', model)
+    res.render('pages/order/monitoring-conditions/order-type-description/monitoring-types', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
