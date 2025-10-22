@@ -168,7 +168,7 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
-      items: content.reference.sentenceTypes | toOptions(not isOrderEditable, false),
+      items: content.reference.sentenceTypes | toOptions(not isOrderEditable, false) | removeOptions(['COMMUNITY_YRO', 'COMMUNITY_SDO', 'COMMUNITY_SUSPENDED_SENTENCE','COMMUNITY','BAIL_SUPERVISION_SUPPORT','BAIL_RLAA','BAIL']),
       value: sentenceType.value,
       errorMessage: sentenceType.error
     }) }}

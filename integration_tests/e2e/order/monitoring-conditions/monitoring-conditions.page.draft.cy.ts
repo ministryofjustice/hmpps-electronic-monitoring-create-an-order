@@ -80,6 +80,19 @@ context('Monitoring conditions', () => {
         page.form.shouldHaveAllOptions()
       })
 
+      it('should not have community or bail sentence types', () => {
+        const page = Page.visit(MonitoringConditionsPage, {
+          orderId: mockOrderId,
+        })
+        page.form.sentenceTypeField.shouldNotHaveOption('Youth Rehabilitation Order (YRO)')
+        page.form.sentenceTypeField.shouldNotHaveOption('Supervision Default Order')
+        page.form.sentenceTypeField.shouldNotHaveOption('Suspended Sentence')
+        page.form.sentenceTypeField.shouldNotHaveOption('The sentence they have been given is not in the list')
+        page.form.sentenceTypeField.shouldNotHaveOption('Bail Supervision & Support')
+        page.form.sentenceTypeField.shouldNotHaveOption('Bail Remand to Local Authority Accomodation (RLAA)')
+        page.form.sentenceTypeField.shouldNotHaveOption('The type of bail they have been given is not in the list')
+      })
+
       it('should show orderTypeDescriptionField when order data dictionary version is DDv4', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
