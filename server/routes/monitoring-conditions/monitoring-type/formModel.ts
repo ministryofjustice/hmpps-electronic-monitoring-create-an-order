@@ -14,7 +14,7 @@ const processMonitoringTypes = (value: unknown) => {
   return []
 }
 
-type MonitoringType = z.infer<typeof MonitoringTypesEnum>
+export type MonitoringType = z.infer<typeof MonitoringTypesEnum>
 type MonitoringTypesBooleans = { [k in MonitoringType]: boolean }
 
 const MonitoringTypesFormDataModel = z
@@ -25,7 +25,13 @@ const MonitoringTypesFormDataModel = z
   .transform(originalData => {
     const { monitoringTypes, ...rest } = originalData
 
-    const monitoringTypeBools: MonitoringTypesBooleans = { curfew: false, alcohol: false }
+    const monitoringTypeBools: MonitoringTypesBooleans = {
+      curfew: false,
+      exclusionZone: false,
+      trail: false,
+      mandatoryAttendance: false,
+      alcohol: false,
+    }
 
     monitoringTypes.forEach(type => {
       if (type in monitoringTypeBools) {

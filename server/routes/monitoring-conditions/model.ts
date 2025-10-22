@@ -39,7 +39,7 @@ export const PilotTypeEnum = z.enum([
   'GPS_ACQUISITIVE_CRIME_PAROLE',
   'UNKNOWN',
 ])
-export const MonitoringTypesEnum = z.enum(['curfew', 'alcohol'])
+export const MonitoringTypesEnum = z.enum(['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'])
 
 const MonitoringConditionsModel = z.object({
   orderType: OrderTypeEnum.nullable().optional(),

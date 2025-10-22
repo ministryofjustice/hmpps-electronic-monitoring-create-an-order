@@ -81,13 +81,16 @@ describe('prarr controller', () => {
     it('updates store', async () => {
       req.body = {
         action: 'continue',
-        monitoringTypes: ['curfew', 'alcohol'],
+        monitoringTypes: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'],
       }
       await controller.update(req, res, next)
 
       expect(mockStore.updateMonitoringType).toHaveBeenCalledWith(req.order!, {
-        alcohol: true,
         curfew: true,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
       })
     })
   })
