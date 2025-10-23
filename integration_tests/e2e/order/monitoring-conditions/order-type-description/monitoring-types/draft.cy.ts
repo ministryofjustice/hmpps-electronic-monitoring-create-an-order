@@ -6,7 +6,48 @@ import PilotPage from '../pilot/PilotPage'
 import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 
-const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
+const createDevicerWearer = (youth: boolean = true) => {
+  return {
+    nomisId: 'nomis',
+    pncId: 'pnc',
+    deliusId: 'delius',
+    prisonNumber: 'prison',
+    homeOfficeReferenceNumber: 'ho',
+    firstName: 'test',
+    lastName: 'tester',
+    alias: 'tes',
+    dateOfBirth: '2000-01-01T00:00:00Z',
+    adultAtTimeOfInstallation: youth,
+    sex: 'MALE',
+    gender: 'MALE',
+    disabilities: 'MENTAL_HEALTH',
+    otherDisability: null,
+    noFixedAbode: null,
+    interpreterRequired: false,
+  }
+}
+
+const createAddresses = (noFixedAddress: boolean = false) => {
+  if (noFixedAddress) {
+    return []
+  }
+  return [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: '',
+      addressLine4: '',
+      postcode: '',
+    },
+  ]
+}
+
+const stubGetOrder = (
+  notifyingOrg: string = 'PROBATION',
+  deviceWearer: object = createDevicerWearer(),
+  addresses: object = createAddresses(),
+) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
@@ -21,6 +62,8 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
         responsibleOrganisationRegion: '',
         responsibleOrganisationEmail: '',
       },
+      deviceWearer,
+      addresses,
     },
   })
 }
@@ -103,6 +146,34 @@ context('monitoring types', () => {
     monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('alcohol')
     monitoringTypesPage.form.message.contains(
       "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC).",
+    )
+  })
+
+  it('no fixed address', () => {
+    stubGetOrder('PROBATION', createDevicerWearer(), createAddresses(true))
+    const monitoringTypesPage = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('curfew')
+    monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('exclusionZone')
+    monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('trail')
+    monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('mandatoryAttendance')
+    monitoringTypesPage.form.monitoringTypesField.optionIsEnabled('alcohol')
+    monitoringTypesPage.form.message.contains(
+      "Some monitoring types can't be selected because the device wearer has no fixed address.",
+    )
+  })
+
+  it('youth', () => {
+    stubGetOrder('PROBATION', createDevicerWearer(false), createAddresses())
+    const monitoringTypesPage = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    monitoringTypesPage.form.monitoringTypesField.optionIsEnabled('curfew')
+    monitoringTypesPage.form.monitoringTypesField.optionIsEnabled('exclusionZone')
+    monitoringTypesPage.form.monitoringTypesField.optionIsEnabled('trail')
+    monitoringTypesPage.form.monitoringTypesField.optionIsEnabled('mandatoryAttendance')
+    monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('alcohol')
+    monitoringTypesPage.form.message.contains(
+      'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
     )
   })
 })

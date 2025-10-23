@@ -1,3 +1,4 @@
+import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
@@ -21,8 +22,8 @@ export type MonitoringTypeModel = {
   }
 }
 
-const constructModel = (data: MonitoringConditions, errors: ValidationResult): MonitoringTypeModel => {
-  const enabled = getEnabled(data)
+const constructModel = (data: MonitoringConditions, errors: ValidationResult, order: Order): MonitoringTypeModel => {
+  const enabled = getEnabled(data, order)
   const isDisabled = (monitoringType: keyof MonitoringTypes): boolean => {
     return !enabled.options.includes(monitoringType)
   }
@@ -39,7 +40,10 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult): M
   }
 }
 
-const getEnabled = (data: MonitoringConditions): { options: (keyof MonitoringTypes)[]; message?: string } => {
+const getEnabled = (
+  data: MonitoringConditions,
+  order: Order,
+): { options: (keyof MonitoringTypes)[]; message?: string } => {
   if (data.hdc === 'NO') {
     if (data.pilot === 'UNKNOWN') {
       return {
@@ -56,7 +60,31 @@ const getEnabled = (data: MonitoringConditions): { options: (keyof MonitoringTyp
     }
   }
 
+  if (!hasFixedAddress(order)) {
+    return {
+      options: ['alcohol'],
+      message: "Some monitoring types can't be selected because the device wearer has no fixed address.",
+    }
+  }
+
+  if (isYouth(order)) {
+    return {
+      options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance'],
+      message:
+        'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
+    }
+  }
+
   return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'] }
+}
+
+const hasFixedAddress = (order: Order): boolean => {
+  const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
+  return primaryAddress !== undefined
+}
+
+const isYouth = (order: Order): boolean => {
+  return !order.deviceWearer.adultAtTimeOfInstallation
 }
 
 export default constructModel

@@ -16,7 +16,7 @@ export default class MonitoringTypesController {
 
     const data = await this.store.getMonitoringConditions(order)
 
-    const model = constructModel(data, errors)
+    const model = constructModel(data, errors, order)
     res.render('pages/order/monitoring-conditions/order-type-description/monitoring-types', model)
   }
 

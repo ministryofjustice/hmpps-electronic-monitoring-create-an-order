@@ -1,10 +1,15 @@
 import { MonitoringConditions } from '../model'
 import { ValidationResult } from '../../../models/Validation'
 import constructModel, { MonitoringTypeModel } from './viewModel'
+import { createAddress, getMockOrder } from '../../../../test/mocks/mockOrder'
 
 describe('model', () => {
+  const mockOrder = getMockOrder()
+  mockOrder.addresses.push(createAddress())
+  mockOrder.deviceWearer.adultAtTimeOfInstallation = true
+
   it('empty form data', () => {
-    const model = constructModel({}, [])
+    const model = constructModel({}, [], mockOrder)
 
     const expected: MonitoringTypeModel = {
       curfew: { value: false, disabled: false },
@@ -20,7 +25,7 @@ describe('model', () => {
 
   it('with errors', () => {
     const errors: ValidationResult = [{ error: 'some error', field: 'monitoringTypes' }]
-    const model = constructModel({}, errors)
+    const model = constructModel({}, errors, mockOrder)
 
     const expected: MonitoringTypeModel = {
       curfew: { value: false, disabled: false },
@@ -44,7 +49,7 @@ describe('model', () => {
       alcohol: true,
     }
 
-    const model = constructModel(data, [])
+    const model = constructModel(data, [], mockOrder)
 
     const expected: MonitoringTypeModel = {
       curfew: { value: true, disabled: false },
@@ -64,7 +69,7 @@ describe('model', () => {
       pilot: 'UNKNOWN',
     }
 
-    const model = constructModel(data, [])
+    const model = constructModel(data, [], mockOrder)
 
     const expected: MonitoringTypeModel = {
       curfew: { value: false, disabled: true },
@@ -85,7 +90,7 @@ describe('model', () => {
       pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
     }
 
-    const model = constructModel(data, [])
+    const model = constructModel(data, [], mockOrder)
 
     const expected: MonitoringTypeModel = {
       curfew: { value: false, disabled: true },
