@@ -34,6 +34,10 @@ import HavePhotoPage from './attachments/havePhoto'
 import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
 import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
 import TertiaryAddressPage from './contact-information/tertiary-adddress'
+import SentenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/sentence-type/SentenceTypePage'
+import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
+import PilotPage from '../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
+import PrarrPage from '../../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -488,6 +492,7 @@ export default class OrderTasksPage extends AppPage {
     monitoringConditions = undefined,
     probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
+    orderTypeDetails = undefined,
   }): void {
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
     aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -568,6 +573,9 @@ export default class OrderTasksPage extends AppPage {
       const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
+    }
+    if (orderTypeDetails) {
+      this.fillInOrderTypeDescriptionsWith(orderTypeDetails)
     }
   }
 
@@ -685,5 +693,62 @@ export default class OrderTasksPage extends AppPage {
       )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
     }
+  }
+
+  fillInOrderTypeDescriptionsWith({
+    sentenceType = undefined,
+    hdc = undefined,
+    pilot = undefined,
+    typeOfAcquistiveCrime = undefined,
+    policeForceArea = undefined,
+    prarr = undefined,
+    monitoringStartDate ,
+    monitoringEndDate ,
+    monitoringCondition,
+  }): void {
+
+    // sentence type page
+    if(sentenceType){
+    const sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
+    sentenceTypePage.form.fillInWith(sentenceType)
+    sentenceTypePage.form.continueButton.click()
+    }
+    
+
+    // HDC page
+    if(hdc){
+      const hdcPage = Page.verifyOnPage(HdcPage)
+      hdcPage.form.fillInWith(hdc)
+      hdcPage.form.continueButton.click()
+    }
+    
+
+    // Pilot page
+    if(pilot){
+      const pilotPage = Page.verifyOnPage(PilotPage)
+      pilotPage.form.fillInWith(pilot)
+      pilotPage.form.continueButton.click()
+    }   
+    // Type of Acquistive Crime
+    if(typeOfAcquistiveCrime){
+      //TODO implement type of acquistive crime page
+    }
+
+    // Police force area
+    if(policeForceArea){
+      //TODO implement policy force area
+    }
+
+    // PARAA
+    if(prarr){
+      const prarrPage = Page.verifyOnPage(PrarrPage)
+      prarrPage.form.fillInWith(prarr)
+      prarrPage.form.continueButton.click()
+    }  
+    // Monitoring Dates
+    //TODO implement monitoring dates page
+
+    // Monitoring conditions
+    //TODO implement monitoring condition page
   }
 }
