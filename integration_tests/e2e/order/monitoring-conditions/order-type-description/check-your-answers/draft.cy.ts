@@ -62,7 +62,6 @@ context('Check your answers', () => {
     prarrPage.form.continueButton.click()
 
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
-    monitoringTypesPage.form.fillInWith('Curfew')
     monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
 
@@ -83,7 +82,7 @@ context('Check your answers', () => {
       },
       {
         key: 'What monitoring does the device wearer need?',
-        value: 'CurfewAlcohol',
+        value: 'Alcohol',
       },
     ])
   })
@@ -178,7 +177,7 @@ context('Check your answers', () => {
     prarrPage.form.continueButton.click()
 
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
-    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
 
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
@@ -212,7 +211,7 @@ context('Check your answers', () => {
     prarrPage.form.continueButton.click()
 
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
-    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
 
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
@@ -243,7 +242,7 @@ context('Check your answers', () => {
     prarrPage.form.continueButton.click()
 
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
-    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
 
     let cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)

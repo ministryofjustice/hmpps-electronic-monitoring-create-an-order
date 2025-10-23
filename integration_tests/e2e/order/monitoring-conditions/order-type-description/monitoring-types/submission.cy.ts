@@ -23,7 +23,7 @@ context('pilot', () => {
   it('Should submit the form', () => {
     const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
 
-    page.form.fillInWith('Curfew')
+    page.form.fillInWith('Alcohol')
     page.form.continueButton.click()
 
     Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
