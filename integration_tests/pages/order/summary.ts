@@ -480,13 +480,13 @@ export default class OrderTasksPage extends AppPage {
 
   fillInGeneralOrderDetailsWith({
     deviceWearerDetails,
-    responsibleAdultDetails,
-    primaryAddressDetails,
-    secondaryAddressDetails,
-    interestedParties,
-    installationAndRisk,
-    monitoringConditions,
-    probationDeliveryUnit,
+    responsibleAdultDetails = undefined,
+    primaryAddressDetails = undefined,
+    secondaryAddressDetails = undefined,
+    interestedParties = undefined,
+    installationAndRisk = undefined,
+    monitoringConditions = undefined,
+    probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
   }): void {
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
@@ -552,19 +552,23 @@ export default class OrderTasksPage extends AppPage {
     )
     contactInformationCheckYourAnswersPage.continueButton().click()
 
-    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    installationAndRiskPage.form.fillInWith(installationAndRisk)
-    installationAndRiskPage.form.saveAndContinueButton.click()
+    if (installationAndRisk) {
+      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
+      installationAndRiskPage.form.saveAndContinueButton.click()
 
-    const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
-      InstallationAndRiskCheckYourAnswersPage,
-      'Check your answer',
-    )
-    installationAndRiskCheckYourAnswersPage.continueButton().click()
+      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        'Check your answer',
+      )
+      installationAndRiskCheckYourAnswersPage.continueButton().click()
+    }
 
-    const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-    monitoringConditionsPage.form.fillInWith(monitoringConditions)
-    monitoringConditionsPage.form.saveAndContinueButton.click()
+    if (monitoringConditions) {
+      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
+      monitoringConditionsPage.form.fillInWith(monitoringConditions)
+      monitoringConditionsPage.form.saveAndContinueButton.click()
+    }
   }
 
   fillInCurfewOrderDetailsWith(
