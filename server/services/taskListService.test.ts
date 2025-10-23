@@ -291,7 +291,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id))
     })
 
     it('should return installation location if current page is monitoring conditions and selected conditions include alcohol', () => {
@@ -857,7 +857,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
           isReady: false,
         },
         {
@@ -1081,7 +1081,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
           isReady: false,
         },
         {
@@ -1153,7 +1153,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
           isReady: false,
         },
         {

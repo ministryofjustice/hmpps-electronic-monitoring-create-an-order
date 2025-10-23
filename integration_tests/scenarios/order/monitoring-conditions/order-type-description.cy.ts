@@ -2,7 +2,6 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
-import OrderTypePage from '../../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import SentenceTypePage from '../../../e2e/order/monitoring-conditions/order-type-description/sentence-type/SentenceTypePage'
 import HdcPage from '../../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import PilotPage from '../../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
@@ -30,6 +29,13 @@ context('Order type descriptions', () => {
     hasAnotherAddress: 'No',
   }
 
+  const installationAndRisk = {
+    offence: 'Sexual offences',
+    possibleRisk: 'Sex offender',
+    riskCategory: 'Children under the age of 18 are living at the property',
+    riskDetails: 'No risk',
+  }
+
   beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
@@ -54,6 +60,7 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
+      installationAndRisk,
     })
     const orderTypeDetails = {
       sentenceType: 'Standard Determinate Sentence',
@@ -68,7 +75,7 @@ context('Order type descriptions', () => {
     }
     cy.wrap(orderId).then(() => {
       // Monitoring condtion order type descriptions
-      Page.visit(OrderTypePage, { orderId })
+      // Page.visit(OrderTypePage, { orderId })
 
       // sentence type page
       const sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
