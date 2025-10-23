@@ -24,10 +24,6 @@ export type TextField = FormField & {
   value: string
 }
 
-export type BoolField = FormField & {
-  value: boolean
-}
-
 export type Time = {
   hours: string
   minutes: string
@@ -72,12 +68,6 @@ export type ViewModel<T> = {
   errorSummary: ErrorSummary | null
 } & {
   [K in keyof T]: T[K] extends Date ? DateField : T[K] extends string[] ? MultipleChoiceField : TextField
-}
-
-export type ViewModelBoolean<T> = {
-  errorSummary: ErrorSummary | null
-} & {
-  [K in keyof T]: TextField | BoolField
 }
 
 export type AddressViews = {
