@@ -46,7 +46,7 @@ context('pilot', () => {
     const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
-    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
+    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
     pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
 
     pilotPage.form.fillInWith('They are not part of any of these pilots')
@@ -61,7 +61,7 @@ context('pilot', () => {
     const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
-    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
+    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
     pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
 
     const hintText =

@@ -64,7 +64,7 @@ const getItems = (isPilotProbationRegion: boolean, hdc?: string | null): Item[] 
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
         disabled: !isPilotProbationRegion,
       },
-      { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
+      { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
       { divider: 'or' },
       {
         text: 'They are not part of any of these pilots',
@@ -81,7 +81,7 @@ const getItems = (isPilotProbationRegion: boolean, hdc?: string | null): Item[] 
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
         disabled: !isPilotProbationRegion,
       },
-      { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
+      { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
       { divider: 'or' },
       {
         text: 'They are not part of any of these pilots',

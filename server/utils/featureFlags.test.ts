@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires, global-require, @typescript-eslint/no-require-imports */
 
-// NB: Intead of importing FeatureFlags at top of file, it's is imorted with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
+// NB: Instead of importing FeatureFlags at top of file, it is imported with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
 
 import path from 'path'
 import fs from 'fs'

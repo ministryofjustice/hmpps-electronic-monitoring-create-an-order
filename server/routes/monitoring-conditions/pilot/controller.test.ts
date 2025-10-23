@@ -79,11 +79,12 @@ describe('pilot controller', () => {
         expect.objectContaining({
           items: [
             {
+              disabled: true,
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
               value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
             },
             {
-              text: 'GPS acquisitive crime',
+              text: 'GPS acquisitive crime (EMAC)',
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
@@ -94,6 +95,8 @@ describe('pilot controller', () => {
               value: 'UNKNOWN',
             },
           ],
+          message:
+            'The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
         }),
       )
     })
@@ -109,11 +112,12 @@ describe('pilot controller', () => {
         expect.objectContaining({
           items: [
             {
+              disabled: true,
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
               value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
             },
             {
-              text: 'GPS acquisitive crime',
+              text: 'GPS acquisitive crime (EMAC)',
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
@@ -127,6 +131,8 @@ describe('pilot controller', () => {
               },
             },
           ],
+          message:
+            'The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
         }),
       )
     })
