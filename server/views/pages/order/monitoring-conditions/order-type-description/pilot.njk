@@ -7,26 +7,27 @@
 {% set questions = content.pages.monitoringConditions.questions %}
 
 {% block formInputs %}
-    {% set hintHtml %}
-        {% if not pilotProbationRegion %}
-          {{ govukInsetText({
-            text: "The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region."
-          }) }}
+    {% set hint %}
+        {% if message %}
+            {{ govukInsetText({
+              text: message
+            }) }}
+        {% else  %}
+          {{ questions.pilot.hint }}
         {% endif %}
     {% endset %}
 
     {{ govukRadios({
-      name: "pilot",  
-      hint: { text: questions.pilot.hint },
+      name: "pilot",
+      hint: {
+        html: hint
+      },
       fieldset: {
         legend: {
           text: questions.pilot.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--l"
         }
-      },
-      hint: {
-        html: hintHtml
       },
       items: items,
       value: pilot.value,

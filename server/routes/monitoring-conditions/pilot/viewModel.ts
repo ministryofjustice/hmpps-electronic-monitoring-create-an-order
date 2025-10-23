@@ -8,7 +8,7 @@ import FeatureFlags from '../../../utils/featureFlags'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
-  pilotProbationRegion?: boolean
+  message?: string
 }
 
 interface Option {
@@ -17,7 +17,7 @@ interface Option {
   conditional?: {
     html: string
   }
-  disabled?: string
+  disabled?: boolean
 }
 
 interface Divider {
@@ -37,13 +37,16 @@ const getPilotProbationRegionStatus = (order: Order): boolean => {
 }
 
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
+  const isPilotProbationRegion = getPilotProbationRegionStatus(order)
   const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
     },
-    items: getItems(data.hdc),
+    items: getItems(isPilotProbationRegion, data.hdc),
     errorSummary: null,
-    pilotProbationRegion: getPilotProbationRegionStatus(order),
+    message: isPilotProbationRegion
+      ? ''
+      : 'The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
   }
   if (errors && errors.length > 0) {
     model.pilot!.error = getError(errors, 'pilot')
@@ -52,14 +55,14 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
   return model
 }
 
-const getItems = (hdc?: string | null): Item[] => {
+const getItems = (isPilotProbationRegion: boolean, hdc?: string | null): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
     items = [
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-        disabled: 'not pilotProbationRegion',
+        disabled: !isPilotProbationRegion,
       },
       { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
       { divider: 'or' },
@@ -76,7 +79,7 @@ const getItems = (hdc?: string | null): Item[] => {
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
-        disabled: 'not pilotProbationRegion',
+        disabled: !isPilotProbationRegion,
       },
       { text: 'GPS acquisitive crime', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
       { divider: 'or' },
