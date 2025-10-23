@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import PrarrPage from './PrarrPage'
-import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
+import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -22,6 +22,6 @@ context('order type', () => {
     page.form.continueButton.click()
 
     // update to monitoring dates page
-    Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
+    Page.verifyOnPage(MonitoringTypesPage)
   })
 })

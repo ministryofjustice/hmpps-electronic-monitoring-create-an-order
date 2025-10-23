@@ -7,6 +7,7 @@ import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
 import IsspPage from '../issp/isspPage'
 import PrarrPage from '../prarr/PrarrPage'
+import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
 
 const mockOrderId = uuidv4()
 
@@ -60,6 +61,11 @@ context('Check your answers', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.fillInWith('Alcohol')
+    monitoringTypesPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     page.checkIsAccessible()
 
@@ -74,6 +80,10 @@ context('Check your answers', () => {
       {
         key: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
         value: 'Yes',
+      },
+      {
+        key: 'What monitoring does the device wearer need?',
+        value: 'CurfewAlcohol',
       },
     ])
   })
@@ -167,6 +177,10 @@ context('Check your answers', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.orderInformationSection.shouldNotHaveItem('What is the order type?')
@@ -197,6 +211,10 @@ context('Check your answers', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     page.changeLinkByQuestion('What type of sentence has the device wearer been given?').click()
 
@@ -223,6 +241,10 @@ context('Check your answers', () => {
     const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
+
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Curfew')
+    monitoringTypesPage.form.continueButton.click()
 
     let cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     cyaPage.changeLinkByQuestion('What is the order type?').click()
