@@ -3,18 +3,45 @@ import MonitoringTypesPage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
 import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
+import OrderTypePage from '../order-type/OrderTypePage'
+import SentenceTypePage from '../sentence-type/SentenceTypePage'
+
+const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
+  cy.task('stubCemoGetOrder', {
+    httpStatus: 200,
+    id: mockOrderId,
+    order: {
+      interestedParties: {
+        notifyingOrganisation: notifyingOrg,
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: '',
+        responsibleOfficerName: '',
+        responsibleOfficerPhoneNumber: '',
+        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOrganisationRegion: '',
+        responsibleOrganisationEmail: '',
+      },
+    },
+  })
+}
 
 const mockOrderId = uuidv4()
 context('monitoring types', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-    cy.task('stubCemoGetOrder', {
-      httpStatus: 200,
-      id: mockOrderId,
-    })
+
+    stubGetOrder()
 
     cy.signIn()
+
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.continueButton.click()
+
+    const sentenceTypePage = Page.visit(SentenceTypePage, { orderId: mockOrderId })
+    sentenceTypePage.form.fillInWith('Standard Determinate Sentence')
+    sentenceTypePage.form.continueButton.click()
   })
 
   it('Page accessisble', () => {
