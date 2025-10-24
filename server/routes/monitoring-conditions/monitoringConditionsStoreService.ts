@@ -84,4 +84,19 @@ export default class MonitoringConditionsStoreService {
 
     await this.updateMonitoringConditions(order, monitoringConditions)
   }
+
+  public async updateMonitoringType(
+    order: Order,
+    data: Pick<MonitoringConditions, 'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol'>,
+  ) {
+    const monitoringConditions = await this.getMonitoringConditions(order)
+
+    monitoringConditions.curfew = data.curfew
+    monitoringConditions.exclusionZone = data.exclusionZone
+    monitoringConditions.trail = data.trail
+    monitoringConditions.mandatoryAttendance = data.mandatoryAttendance
+    monitoringConditions.alcohol = data.alcohol
+
+    await this.updateMonitoringConditions(order, monitoringConditions)
+  }
 }
