@@ -1,8 +1,8 @@
-import FormComponent from '../../../../../pages/components/formComponent'
+import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 import { PageElement } from '../../../../../pages/page'
 
-export default class OrderTypeComponent extends FormComponent {
+export default class OrderTypeComponent extends SingleQuestionFormComponent {
   get orderTypeField(): FormRadiosComponent {
     const label = 'What is the order type?'
     return new FormRadiosComponent(this.form, label, [])
@@ -12,9 +12,9 @@ export default class OrderTypeComponent extends FormComponent {
     return this.form.contains('Cancel and return back to form')
   }
 
-  fillInWith(orderType: string) {
-    if (orderType) {
-      this.orderTypeField.set(orderType)
+  fillInWith(value: string) {
+    if (value) {
+      this.orderTypeField.set(value)
     }
   }
 }

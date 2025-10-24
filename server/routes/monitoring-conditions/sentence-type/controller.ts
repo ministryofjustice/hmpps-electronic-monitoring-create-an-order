@@ -67,10 +67,7 @@ export default class SentenceTypeController {
       if (monitoringConditions.orderType === 'COMMUNITY') {
         switch (formData.sentenceType) {
           case 'COMMUNITY_YRO':
-            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-            )
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
             return
           default:
             res.redirect(

@@ -38,6 +38,10 @@ import SentenceTypePage from '../../e2e/order/monitoring-conditions/order-type-d
 import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import PilotPage from '../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
 import PrarrPage from '../../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
+import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
+import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
+import SingleQuestionFormComponent from '../components/SingleQuestionFormComponent'
+import CheckYourAnswersPage from '../../e2e/order/monitoring-conditions/order-type-description/check-your-answers/CheckYourAnswersPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -695,60 +699,73 @@ export default class OrderTasksPage extends AppPage {
     }
   }
 
+  fillinSingleQuestionFormWith(form: SingleQuestionFormComponent, value: string) {
+    form.fillInWith(value)
+    form.continueButton.click()
+  }
+
   fillInOrderTypeDescriptionsWith({
+    orderType = undefined,
     sentenceType = undefined,
+    issp = undefined,
     hdc = undefined,
     pilot = undefined,
     typeOfAcquistiveCrime = undefined,
     policeForceArea = undefined,
     prarr = undefined,
-    monitoringStartDate ,
-    monitoringEndDate ,
+    monitoringStartDate,
+    monitoringEndDate,
     monitoringCondition,
   }): void {
+    // Order type page
+    if (orderType) {
+      const orderTypePage = Page.verifyOnPage(OrderTypePage)
+      this.fillinSingleQuestionFormWith(orderTypePage.form, orderType)
+    }
 
     // sentence type page
-    if(sentenceType){
-    const sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
-    sentenceTypePage.form.fillInWith(sentenceType)
-    sentenceTypePage.form.continueButton.click()
+    if (sentenceType) {
+      const sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
+      this.fillinSingleQuestionFormWith(sentenceTypePage.form, sentenceType)
     }
-    
 
     // HDC page
-    if(hdc){
+    if (hdc) {
       const hdcPage = Page.verifyOnPage(HdcPage)
-      hdcPage.form.fillInWith(hdc)
-      hdcPage.form.continueButton.click()
+      this.fillinSingleQuestionFormWith(hdcPage.form, hdc)
     }
-    
 
     // Pilot page
-    if(pilot){
+    if (pilot) {
       const pilotPage = Page.verifyOnPage(PilotPage)
-      pilotPage.form.fillInWith(pilot)
-      pilotPage.form.continueButton.click()
-    }   
+      this.fillinSingleQuestionFormWith(pilotPage.form, pilot)
+    }
     // Type of Acquistive Crime
-    if(typeOfAcquistiveCrime){
-      //TODO implement type of acquistive crime page
+    if (typeOfAcquistiveCrime) {
+      // TODO implement type of acquistive crime page
     }
 
     // Police force area
-    if(policeForceArea){
-      //TODO implement policy force area
+    if (policeForceArea) {
+      // TODO implement policy force area
+    }
+
+    if (issp) {
+      const isspPage = Page.verifyOnPage(IsspPage)
+      this.fillinSingleQuestionFormWith(isspPage.form, issp)
     }
 
     // PARAA
-    if(prarr){
+    if (prarr) {
       const prarrPage = Page.verifyOnPage(PrarrPage)
-      prarrPage.form.fillInWith(prarr)
-      prarrPage.form.continueButton.click()
-    }  
+      this.fillinSingleQuestionFormWith(prarrPage.form, prarr)
+    }
     // Monitoring Dates
-    //TODO implement monitoring dates page
+    // TODO implement monitoring dates page
 
     // Monitoring conditions
-    //TODO implement monitoring condition page
+    // TODO implement monitoring condition page
+
+    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answer')
   }
 }

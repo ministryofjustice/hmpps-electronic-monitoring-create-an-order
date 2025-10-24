@@ -1,7 +1,7 @@
-import FormComponent from '../../../../../pages/components/formComponent'
+import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 
-export default class SentenceTypeComponent extends FormComponent {
+export default class SentenceTypeComponent extends SingleQuestionFormComponent {
   get sentenceTypeField(): FormRadiosComponent {
     const label = 'What type of sentence has the device wearer been given?'
     return new FormRadiosComponent(this.form, label, [])
@@ -12,9 +12,9 @@ export default class SentenceTypeComponent extends FormComponent {
     return new FormRadiosComponent(this.form, label, [])
   }
 
-  fillInWith(sentenceType: string) {
-    if (sentenceType) {
-      this.sentenceTypeField.set(sentenceType)
+  fillInWith(value: string) {
+    if (value) {
+      this.sentenceTypeField.set(value)
     }
   }
 }

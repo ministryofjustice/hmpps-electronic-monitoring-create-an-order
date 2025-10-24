@@ -1,8 +1,8 @@
-import FormComponent from '../../../../../pages/components/formComponent'
+import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 import { PageElement } from '../../../../../pages/page'
 
-export default class PilotComponent extends FormComponent {
+export default class PilotComponent extends SingleQuestionFormComponent {
   get pilotField(): FormRadiosComponent {
     const label = 'What pilot project is the device wearer part of?'
     return new FormRadiosComponent(this.form, label, [])
@@ -12,9 +12,9 @@ export default class PilotComponent extends FormComponent {
     return this.form.contains('Cancel and return back to form')
   }
 
-  fillInWith(pilot: string) {
-    if (pilot) {
-      this.pilotField.set(pilot)
+  fillInWith(value: string) {
+    if (value) {
+      this.pilotField.set(value)
     }
   }
 }
