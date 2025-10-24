@@ -3,24 +3,68 @@ import PilotPage from './PilotPage'
 import Page from '../../../../../pages/page'
 import HdcPage from '../hdc/hdcPage'
 
-const stubGetOrder = () => {
+const mockOrderId = uuidv4()
+const mockDefaultOrder = {
+  deviceWearer: {
+    nomisId: 'nomis',
+    pncId: 'pnc',
+    deliusId: 'delius',
+    prisonNumber: 'prison',
+    homeOfficeReferenceNumber: 'ho',
+    firstName: 'test',
+    lastName: 'tester',
+    alias: 'tes',
+    dateOfBirth: '2000-01-01T00:00:00Z',
+    adultAtTimeOfInstallation: true,
+    sex: 'MALE',
+    gender: 'MALE',
+    disabilities: 'MENTAL_HEALTH',
+    otherDisability: null,
+    noFixedAbode: false,
+    interpreterRequired: false,
+  },
+  monitoringConditions: {
+    startDate: '2025-01-01T00:00:00Z',
+    endDate: '2025-02-01T00:00:00Z',
+    orderType: 'CIVIL',
+    curfew: true,
+    exclusionZone: true,
+    trail: true,
+    mandatoryAttendance: true,
+    alcohol: true,
+    conditionType: 'BAIL_ORDER',
+    orderTypeDescription: 'DAPO',
+    sentenceType: 'IPP',
+    issp: 'YES',
+    hdc: 'NO',
+    prarr: 'UNKNOWN',
+    pilot: '',
+  },
+}
+
+const stubGetOrder = order => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
+    status: 'IN_PROGRESS',
+    order,
   })
 }
 
-const mockOrderId = uuidv4()
 context('pilot', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-    stubGetOrder()
+    stubGetOrder({ ...mockDefaultOrder })
 
     cy.signIn()
+
+    const testFlags = { DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES' }
+
+    cy.task('setFeatureFlags', testFlags)
   })
 
-  it('Page accessisble', () => {
+  it('Page accessible', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })
@@ -32,9 +76,60 @@ context('pilot', () => {
     page.header.phaseBanner().should('contain.text', 'dev')
 
     page.form.pilotField.shouldExist()
-    page.form.pilotField.shouldNotBeDisabled()
 
     page.form.continueButton.should('exist')
+  })
+
+  it('Should disable DAPOL option and display message stating why if probation region not in pilot', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'YOUTH_COURT',
+        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+    })
+
+    Page.visit(PilotPage, { orderId: mockOrderId })
+
+    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
+      'be.disabled',
+    )
+
+    cy.get('.govuk-inset-text').contains(
+      'The device wearer is in the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
+    )
+  })
+
+  it('Should enable DAPOL option if probation region in pilot', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'YOUTH_COURT',
+        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+    })
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    page.form.pilotField.shouldNotBeDisabled()
+
+    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
+      'be.enabled',
+    )
   })
 
   it('hdc yes', () => {
@@ -46,7 +141,7 @@ context('pilot', () => {
     const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
-    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
+    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
     pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
 
     pilotPage.form.fillInWith('They are not part of any of these pilots')
@@ -61,7 +156,7 @@ context('pilot', () => {
     const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
-    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime')
+    pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
     pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
 
     const hintText =

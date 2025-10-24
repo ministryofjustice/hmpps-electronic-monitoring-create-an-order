@@ -3,10 +3,22 @@ import PilotPage from './PilotPage'
 import Page from '../../../../../pages/page'
 import PrarrPage from '../prarr/PrarrPage'
 
-const stubGetOrder = () => {
+const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
+    order: {
+      interestedParties: {
+        notifyingOrganisation: notifyingOrg,
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: '',
+        responsibleOfficerName: '',
+        responsibleOfficerPhoneNumber: '',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
+        responsibleOrganisationEmail: '',
+      },
+    },
   })
 }
 
@@ -18,6 +30,10 @@ context('pilot', () => {
     stubGetOrder()
 
     cy.signIn()
+
+    const testFlags = { DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES' }
+
+    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form', () => {
