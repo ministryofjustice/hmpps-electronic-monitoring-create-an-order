@@ -65,7 +65,7 @@ context('Order type descriptions', () => {
     })
   })
 
-  it('Flow 2 Notification org is prison, PRARR no', () => {
+  it('Notification org is prison, PRARR no', () => {
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', null, null)
     const orderTypeDetails = {
       sentenceType: 'Extended Determinate Sentence',

@@ -42,6 +42,7 @@ import IsspPage from '../../e2e/order/monitoring-conditions/order-type-descripti
 import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import SingleQuestionFormComponent from '../components/SingleQuestionFormComponent'
 import CheckYourAnswersPage from '../../e2e/order/monitoring-conditions/order-type-description/check-your-answers/CheckYourAnswersPage'
+import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -764,7 +765,10 @@ export default class OrderTasksPage extends AppPage {
     // TODO implement monitoring dates page
 
     // Monitoring conditions
-    // TODO implement monitoring condition page
+    if (monitoringCondition) {
+      const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+      this.fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
+    }
 
     const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answer')
   }
