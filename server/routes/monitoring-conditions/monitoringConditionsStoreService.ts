@@ -84,4 +84,11 @@ export default class MonitoringConditionsStoreService {
 
     await this.updateMonitoringConditions(order, monitoringConditions)
   }
+
+  public async updateMonitoringDates(order: Order, data: Pick<MonitoringConditions, 'startDate' | 'endDate'>) {
+    const monitoringConditions = await this.getMonitoringConditions(order)
+    monitoringConditions.startDate = data.startDate
+    monitoringConditions.endDate = data.endDate
+    await this.updateMonitoringConditions(order, monitoringConditions)
+  }
 }

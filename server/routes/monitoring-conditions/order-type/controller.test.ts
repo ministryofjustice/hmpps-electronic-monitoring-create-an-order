@@ -223,7 +223,7 @@ describe('order type controller', () => {
       orderType: 'IMMIGRATION',
     })
     expect(res.redirect).toHaveBeenCalledWith(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', mockOrder.id),
     )
   })
 
