@@ -22,8 +22,8 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
         notifyingOrganisationEmail: '',
         responsibleOfficerName: '',
         responsibleOfficerPhoneNumber: '',
-        responsibleOrganisation: 'HOME_OFFICE',
-        responsibleOrganisationRegion: '',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
         responsibleOrganisationEmail: '',
       },
     },
@@ -36,6 +36,10 @@ context('Check your answers', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder()
     cy.signIn()
+
+    const testFlags = { DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES' }
+
+    cy.task('setFeatureFlags', testFlags)
   })
 
   const pageHeading = 'Check your answers'
