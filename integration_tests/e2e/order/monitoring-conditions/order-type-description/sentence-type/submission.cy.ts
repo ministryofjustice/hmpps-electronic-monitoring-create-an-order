@@ -6,6 +6,7 @@ import HdcPage from '../hdc/hdcPage'
 import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
 import PilotPage from '../pilot/PilotPage'
 import PrarrPage from '../prarr/PrarrPage'
+import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -60,6 +61,10 @@ context('sentenceType form submission', () => {
     const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
+
+    const monitoringConditionsPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringConditionsPage.form.fillInWith('Alcohol')
+    monitoringConditionsPage.form.continueButton.click()
 
     const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
     cyaPage.orderInformationSection.shouldExist()

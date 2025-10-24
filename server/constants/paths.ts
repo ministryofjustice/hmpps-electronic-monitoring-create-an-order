@@ -61,6 +61,7 @@ const paths = {
       PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
       MONITORING_DATES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-dates',
       PILOT: '/order/:orderId/monitoring-conditions/order-type-description/pilot',
+      MONITORING_TYPES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-types',
       CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/order-type-description/check-your-answers',
     },
   },
