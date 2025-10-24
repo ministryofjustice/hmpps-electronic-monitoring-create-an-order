@@ -8,6 +8,7 @@ import HdcController from './hdc/controller'
 import PilotController from './pilot/controller'
 import IsspController from './issp/controller'
 import PrarrController from './prarr/controller'
+import MonitoringTypesController from './monitoring-types/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
@@ -32,6 +33,8 @@ const createOrderTypeDescriptionRouter = (
 
   const prarrController = new PrarrController(monitoringConditionsStoreService)
 
+  const monitoringTypesController = new MonitoringTypesController(monitoringConditionsStoreService)
+
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
@@ -52,6 +55,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/prarr', asyncMiddleware(prarrController.view))
   router.post('/prarr', asyncMiddleware(prarrController.update))
+
+  router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
+  router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
 
   return router
 }

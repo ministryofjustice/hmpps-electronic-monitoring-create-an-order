@@ -1,7 +1,7 @@
 import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
-import { createAnswer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createMultipleChoiceAnswer } from '../../../utils/checkYourAnswers'
 import { lookup } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
@@ -80,6 +80,23 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
     )
   }
 
+  const monitoringTypes = [
+    { name: 'Curfew', data: data.curfew },
+    { name: 'Exclusion Zone', data: data.exclusionZone },
+    { name: 'Trail', data: data.trail },
+    { name: 'Mandatory Attendance', data: data.mandatoryAttendance },
+    { name: 'Alcohol', data: data.alcohol },
+  ]
+  if (monitoringTypes.every(type => type.data !== undefined)) {
+    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+    answers.push(
+      createMultipleChoiceAnswer(
+        content.pages.monitoringConditions.questions.monitoringRequired.text,
+        monitoringTypes.filter(type => type.data).map(type => type.name),
+        monitoringTypesPath.replace(':orderId', order.id),
+      ),
+    )
+  }
   return {
     answers,
   }
