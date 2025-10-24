@@ -80,7 +80,7 @@ context('pilot', () => {
     page.form.continueButton.should('exist')
   })
 
-  it('Should disable DAPOL option and display message stating why', () => {
+  it('Should disable DAPOL option and display message stating why if probation region not in pilot', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder({
       ...mockDefaultOrder,
@@ -102,7 +102,34 @@ context('pilot', () => {
       'be.disabled',
     )
 
-    // add check for inset text
+    cy.get('.govuk-inset-text').contains(
+      'The device wearer is in the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
+    )
+  })
+
+  it('Should enable DAPOL option if probation region in pilot', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'YOUTH_COURT',
+        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+    })
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    page.form.pilotField.shouldNotBeDisabled()
+
+    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
+      'be.enabled',
+    )
   })
 
   it('hdc yes', () => {

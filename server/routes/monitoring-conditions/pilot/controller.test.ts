@@ -28,6 +28,20 @@ describe('pilot controller', () => {
 
     mockOrder = getMockOrder()
 
+    mockOrder = {
+      ...mockOrder,
+      interestedParties: {
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+        notifyingOrganisationEmail: 'test@test.com',
+        responsibleOfficerName: 'John Smith',
+        responsibleOfficerPhoneNumber: '01234567890',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOrganisationEmail: 'test2@test.com',
+      },
+    }
+
     req = createMockRequest()
     req.order = mockOrder
     req.flash = jest.fn()
@@ -96,7 +110,7 @@ describe('pilot controller', () => {
             },
           ],
           message:
-            'The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
+            'The device wearer is in the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
         }),
       )
     })
@@ -132,7 +146,7 @@ describe('pilot controller', () => {
             },
           ],
           message:
-            'The device wearer is in the North East probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
+            'The device wearer is in the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
         }),
       )
     })
