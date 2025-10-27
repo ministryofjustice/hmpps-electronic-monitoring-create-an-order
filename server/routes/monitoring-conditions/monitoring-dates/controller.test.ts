@@ -27,8 +27,8 @@ describe('MonitoringDatesController', () => {
     controller = new MonitoringDatesController(mockStore)
 
     mockConstructModel.mockReturnValue({
-      startDate: { value: { day: '', month: '', year: '' } },
-      endDate: { value: { day: '', month: '', year: '' } },
+      startDate: { value: { day: '', month: '', year: '', hours: '', minutes: '' } },
+      endDate: { value: { day: '', month: '', year: '', hours: '', minutes: '' } },
       errors: {},
       errorSummary: null,
     })
