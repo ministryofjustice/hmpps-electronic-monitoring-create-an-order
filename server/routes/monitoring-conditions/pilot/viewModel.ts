@@ -47,7 +47,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
     errorSummary: null,
     message: isPilotProbationRegion
       ? ''
-      : `The device wearer is in the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.`,
+      : `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region.`,
   }
   if (errors && errors.length > 0) {
     model.pilot!.error = getError(errors, 'pilot')

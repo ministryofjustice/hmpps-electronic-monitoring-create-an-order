@@ -12,9 +12,8 @@
             {{ govukInsetText({
               text: message
             }) }}
-        {% else  %}
-          {{ questions.pilot.hint }}
         {% endif %}
+        {{ questions.pilot.hint }}
     {% endset %}
 
     {{ govukRadios({
