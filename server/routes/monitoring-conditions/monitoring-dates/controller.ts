@@ -35,7 +35,7 @@ export default class MonitoringDatesController {
     await this.montoringConditionsStoreService.updateMonitoringDates(order, formData.data)
 
     return res.redirect(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
     )
   }
 }

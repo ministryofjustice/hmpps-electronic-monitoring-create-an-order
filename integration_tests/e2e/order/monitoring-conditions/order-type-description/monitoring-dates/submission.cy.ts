@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import MonitoringDatesPage from './MonitoringDatesPage'
-import CheckYourAnswersPage from '../../../../../pages/checkYourAnswersPage'
+import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
 
 const mockOrderId = uuidv4()
 
@@ -25,6 +25,6 @@ context('monitoringDates', () => {
     })
     page.form.continueButton.click()
 
-    Page.verifyOnPage(CheckYourAnswersPage, 'Monitoring dates')
+    Page.verifyOnPage(MonitoringTypesPage, 'What monitoring does the device wearer need?')
   })
 })

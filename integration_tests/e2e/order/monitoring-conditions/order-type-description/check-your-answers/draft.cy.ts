@@ -8,6 +8,7 @@ import PilotPage from '../pilot/PilotPage'
 import IsspPage from '../issp/isspPage'
 import PrarrPage from '../prarr/PrarrPage'
 import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
+import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 
 const mockOrderId = uuidv4()
 
@@ -65,6 +66,13 @@ context('Check your answers', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '10', month: '12', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
@@ -84,6 +92,8 @@ context('Check your answers', () => {
         key: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
         value: 'Yes',
       },
+      { key: 'What is the date for the first day of all monitoring?', value: '10/12/2025' },
+      { key: 'What is the date when all monitoring ends?', value: '11/11/2026' },
       {
         key: 'What monitoring does the device wearer need?',
         value: 'Alcohol',
@@ -100,6 +110,17 @@ context('Check your answers', () => {
     sentenceTypePage.form.sentenceTypeField.set('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '10', month: '12', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Alcohol')
+    monitoringTypesPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.header.userName().should('contain.text', 'J. Smith')
@@ -109,6 +130,12 @@ context('Check your answers', () => {
     page.orderInformationSection.shouldHaveItems([
       { key: 'What is the order type?', value: 'Community' },
       { key: 'What type of sentence has the device wearer been given?', value: 'Supervision Default Order' },
+      { key: 'What is the date for the first day of all monitoring?', value: '10/12/2025' },
+      { key: 'What is the date when all monitoring ends?', value: '11/11/2026' },
+      {
+        key: 'What monitoring does the device wearer need?',
+        value: 'Alcohol',
+      },
     ])
   })
 
@@ -125,6 +152,17 @@ context('Check your answers', () => {
     isspPage.form.fillInWith('Yes')
     isspPage.form.continueButton.click()
 
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '10', month: '12', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Alcohol')
+    monitoringTypesPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.header.userName().should('contain.text', 'J. Smith')
@@ -135,6 +173,12 @@ context('Check your answers', () => {
       { key: 'What is the order type?', value: 'Post Release' },
       { key: 'What type of sentence has the device wearer been given?', value: 'Detention and Training Order (DTO)' },
       { key: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?', value: 'Yes' },
+      { key: 'What is the date for the first day of all monitoring?', value: '10/12/2025' },
+      { key: 'What is the date when all monitoring ends?', value: '11/11/2026' },
+      {
+        key: 'What monitoring does the device wearer need?',
+        value: 'Alcohol',
+      },
     ])
   })
 
@@ -152,12 +196,29 @@ context('Check your answers', () => {
     isspPage.form.fillInWith('No')
     isspPage.form.continueButton.click()
 
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '5', month: '12', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Alcohol')
+    monitoringTypesPage.form.continueButton.click()
+
     const page = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
     page.orderInformationSection.shouldHaveItems([
       { key: 'What is the order type?', value: 'Bail' },
       { key: 'What type of bail has the device wearer been given?', value: 'Bail Supervision & Support' },
       { key: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?', value: 'No' },
+      { key: 'What is the date for the first day of all monitoring?', value: '5/12/2025' },
+      { key: 'What is the date when all monitoring ends?', value: '11/11/2026' },
+      {
+        key: 'What monitoring does the device wearer need?',
+        value: 'Alcohol',
+      },
     ])
   })
 
@@ -180,6 +241,13 @@ context('Check your answers', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '10', month: '12', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
@@ -190,6 +258,12 @@ context('Check your answers', () => {
     page.orderInformationSection.shouldHaveItems([
       { key: 'What type of sentence has the device wearer been given?', value: 'Standard Determinate Sentence' },
       { key: 'Is the device wearer on a Home Detention Curfew (HDC)?', value: 'Yes' },
+      { key: 'What is the date for the first day of all monitoring?', value: '10/12/2025' },
+      { key: 'What is the date when all monitoring ends?', value: '11/11/2026' },
+      {
+        key: 'What monitoring does the device wearer need?',
+        value: 'Alcohol',
+      },
     ])
   })
 
@@ -213,6 +287,13 @@ context('Check your answers', () => {
     const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
+
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '15', month: '12', year: '2025' },
+      endDate: { day: '8', month: '10', year: '2027' },
+    })
+    monitoringDatesPage.form.continueButton.click()
 
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringTypesPage.form.fillInWith('Alcohol')
@@ -245,7 +326,14 @@ context('Check your answers', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
-    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    let monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '10', month: '12', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    let monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
 
@@ -254,6 +342,17 @@ context('Check your answers', () => {
 
     stubGetOrder('HOME_OFFICE')
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+
+    monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '08', month: '12', year: '2025' },
+      endDate: { day: '10', month: '02', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Alcohol')
+    monitoringTypesPage.form.continueButton.click()
 
     cyaPage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
     cyaPage.orderInformationSection.shouldNotHaveItem('What type of sentence has the device wearer been given?')
