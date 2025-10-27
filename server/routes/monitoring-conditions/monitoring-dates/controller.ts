@@ -23,7 +23,11 @@ export default class MonitoringDatesController {
     const formData = MonitoringDatesFormDataModel.safeParse(req.body)
 
     if (!formData.success) {
-      req.flash('validationErrors', formData.error.issues)
+      const validationErrors = formData.error.issues.map(issue => ({
+        error: issue.message,
+        field: issue.path[0].toString(),
+      }))
+      req.flash('validationErrors', validationErrors)
       return res.redirect(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
       )

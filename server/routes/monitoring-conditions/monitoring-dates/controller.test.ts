@@ -94,7 +94,7 @@ describe('MonitoringDatesController', () => {
         'validationErrors',
         expect.arrayContaining([
           expect.objectContaining({
-            message: validationErrors.monitoringConditions.startDateTime.date.required,
+            error: validationErrors.monitoringConditions.startDateTime.date.required,
           }),
         ]),
       )
