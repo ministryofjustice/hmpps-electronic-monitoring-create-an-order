@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import PrarrPage from './PrarrPage'
-import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
+import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -21,7 +21,6 @@ context('order type', () => {
     page.form.fillInWith('Yes')
     page.form.continueButton.click()
 
-    // update to monitoring dates page
-    Page.verifyOnPage(MonitoringTypesPage)
+    Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
   })
 })

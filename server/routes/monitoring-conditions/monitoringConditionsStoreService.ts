@@ -96,7 +96,13 @@ export default class MonitoringConditionsStoreService {
     monitoringConditions.trail = data.trail
     monitoringConditions.mandatoryAttendance = data.mandatoryAttendance
     monitoringConditions.alcohol = data.alcohol
+    await this.updateMonitoringConditions(order, monitoringConditions)
+  }
 
+  public async updateMonitoringDates(order: Order, data: Pick<MonitoringConditions, 'startDate' | 'endDate'>) {
+    const monitoringConditions = await this.getMonitoringConditions(order)
+    monitoringConditions.startDate = data.startDate
+    monitoringConditions.endDate = data.endDate
     await this.updateMonitoringConditions(order, monitoringConditions)
   }
 }
