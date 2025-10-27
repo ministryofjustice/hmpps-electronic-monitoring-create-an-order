@@ -20,6 +20,7 @@ context('monitoring dates validation', () => {
     page.form.continueButton.click()
 
     page.errorSummary.shouldExist()
+    page.errorSummary.verifyErrorSummary(['Enter start date for monitoring', 'Enter end date for monitoring'])
 
     page.form.startDateField.validationMessage.contains('Enter start date for monitoring')
     page.form.endDateField.validationMessage.contains('Enter end date for monitoring')
