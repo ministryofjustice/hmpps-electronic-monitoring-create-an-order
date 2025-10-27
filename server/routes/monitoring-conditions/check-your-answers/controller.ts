@@ -28,7 +28,6 @@ export default class CheckYourAnswersController {
     // Dummy data until we have pages that get this data
     data.startDate = new Date(2020, 10, 7, 10, 0).toISOString()
     data.endDate = new Date(2040, 10, 8, 10, 0).toISOString()
-    data.curfew = true
 
     await this.monitoringConditionsService.updateMonitoringConditions({
       data,
