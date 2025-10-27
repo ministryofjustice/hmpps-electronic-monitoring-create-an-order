@@ -1,12 +1,12 @@
 import { ValidationResult } from '../../../models/Validation'
-import { ViewModel, ErrorsViewModel, DateTimeField } from '../../../models/view-models/utils'
+import { ViewModel, ErrorsViewModel, DateField } from '../../../models/view-models/utils'
 import { getError, getErrorsViewModel, deserialiseDateTime } from '../../../utils/utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { MonitoringConditions } from '../model'
 
 export type MonitoringDatesModel = ViewModel<unknown> & {
-  startDate: DateTimeField
-  endDate: DateTimeField
+  startDate: DateField
+  endDate: DateField
   errors: ErrorsViewModel
 }
 

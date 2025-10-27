@@ -6,6 +6,7 @@ import HdcPage from '../hdc/hdcPage'
 import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
 import PilotPage from '../pilot/PilotPage'
 import PrarrPage from '../prarr/PrarrPage'
+import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
@@ -62,6 +63,13 @@ context('sentenceType form submission', () => {
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
 
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '15', month: '11', year: '2025' },
+      endDate: { day: '16', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringConditionsPage.form.fillInWith('Alcohol')
     monitoringConditionsPage.form.continueButton.click()
@@ -84,11 +92,13 @@ context('sentenceType form submission', () => {
     sentenceTypePage.form.fillInWith('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
-    // TODO: Update this journey when the Monitoring Dates page is built
-    const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
-    cyaPage.orderInformationSection.shouldHaveItems([
-      { key: 'What is the order type?', value: 'Community' },
-      { key: 'What type of sentence has the device wearer been given?', value: 'Supervision Default Order' },
-    ])
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '15', month: '11', year: '2025' },
+      endDate: { day: '16', month: '11', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
   })
 })

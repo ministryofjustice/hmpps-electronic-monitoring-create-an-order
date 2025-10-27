@@ -1,11 +1,11 @@
 import { z } from 'zod'
-import { DateTimeInputModel } from '../../../models/form-data/formData'
+import { DateInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
 
 export const MonitoringDatesFormDataModel = z.object({
   action: z.string(),
-  startDate: DateTimeInputModel(validationErrors.monitoringConditions.startDateTime),
-  endDate: DateTimeInputModel(validationErrors.monitoringConditions.endDateTime),
+  startDate: DateInputModel(validationErrors.monitoringConditions.startDateTime.date),
+  endDate: DateInputModel(validationErrors.monitoringConditions.endDateTime.date),
 })
 
 export default MonitoringDatesFormDataModel
