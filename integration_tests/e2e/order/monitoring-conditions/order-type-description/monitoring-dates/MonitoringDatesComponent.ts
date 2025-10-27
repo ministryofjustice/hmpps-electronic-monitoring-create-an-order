@@ -1,16 +1,14 @@
 import FormComponent from '../../../../../pages/components/formComponent'
 import { PageElement } from '../../../../../pages/page'
-import FormDateComponent from '../../../../../pages/components/formDateComponent'
+import FormDateTimeComponent from '../../../../../pages/components/formDateTimeComponent'
 
 export default class MonitoringDatesComponent extends FormComponent {
-  get startDateField(): FormDateComponent {
-    const label = 'What is the date for the first day of all monitoring?'
-    return new FormDateComponent(this.form, label)
+  get startDateField(): FormDateTimeComponent {
+    return new FormDateTimeComponent(this.form, 'startDate')
   }
 
-  get endDateField(): FormDateComponent {
-    const label = 'What is the date when all monitoring ends?'
-    return new FormDateComponent(this.form, label)
+  get endDateField(): FormDateTimeComponent {
+    return new FormDateTimeComponent(this.form, 'endDate')
   }
 
   get backButton(): PageElement {
