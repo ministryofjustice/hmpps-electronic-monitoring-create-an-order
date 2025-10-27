@@ -97,7 +97,7 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
       ),
     )
   }
-  
+
   if (data.startDate) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES
     answers.push(

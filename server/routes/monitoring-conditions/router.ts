@@ -35,7 +35,7 @@ const createOrderTypeDescriptionRouter = (
   const prarrController = new PrarrController(monitoringConditionsStoreService)
 
   const monitoringTypesController = new MonitoringTypesController(monitoringConditionsStoreService)
-  
+
   const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
 
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
@@ -61,7 +61,7 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
   router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
-  
+
   router.get('/monitoring-dates', asyncMiddleware(monitoringDatesController.view))
   router.post('/monitoring-dates', asyncMiddleware(monitoringDatesController.update))
 
