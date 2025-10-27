@@ -21,7 +21,6 @@ export default class MonitoringDatesController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const formData = MonitoringDatesFormDataModel.safeParse(req.body)
-
     if (!formData.success) {
       const validationErrors = formData.error.issues.map(issue => ({
         error: issue.message,

@@ -1,5 +1,5 @@
 {% extends "../../../../partials/form-layout.njk" %}
-{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+{% from "../../../../partials/dateTimeInput.njk" import dateTimeInput %}
 
 {% set section = "Electronic monitoring required" %}
 {% set heading = "Monitoring dates" %}
@@ -20,7 +20,9 @@
         time: errors.timeError
       },
       disabled: not isOrderEditable,
-      timesEnabled: false
+      timesEnabled: monitoringConditionTimes,
+      defaultHours: "00",
+      defaultMinutes: "00"
     })}}
 
   {{dateTimeInput({
@@ -35,7 +37,9 @@
         time: errors.timeError
       },
       disabled: not isOrderEditable,
-      timesEnabled: false
+      timesEnabled: monitoringConditionTimes,
+      defaultHours: 23,
+      defaultMinutes: 59
     })}}
 
 {% endblock %}
