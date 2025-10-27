@@ -28,6 +28,20 @@ describe('pilot controller', () => {
 
     mockOrder = getMockOrder()
 
+    mockOrder = {
+      ...mockOrder,
+      interestedParties: {
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+        notifyingOrganisationEmail: 'test@test.com',
+        responsibleOfficerName: 'John Smith',
+        responsibleOfficerPhoneNumber: '01234567890',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOrganisationEmail: 'test2@test.com',
+      },
+    }
+
     req = createMockRequest()
     req.order = mockOrder
     req.flash = jest.fn()
@@ -79,11 +93,12 @@ describe('pilot controller', () => {
         expect.objectContaining({
           items: [
             {
+              disabled: true,
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
               value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
             },
             {
-              text: 'GPS acquisitive crime',
+              text: 'GPS acquisitive crime (EMAC)',
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
@@ -94,6 +109,8 @@ describe('pilot controller', () => {
               value: 'UNKNOWN',
             },
           ],
+          message:
+            'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region.',
         }),
       )
     })
@@ -109,11 +126,12 @@ describe('pilot controller', () => {
         expect.objectContaining({
           items: [
             {
+              disabled: true,
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
               value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
             },
             {
-              text: 'GPS acquisitive crime',
+              text: 'GPS acquisitive crime (EMAC)',
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
@@ -127,6 +145,8 @@ describe('pilot controller', () => {
               },
             },
           ],
+          message:
+            'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region.',
         }),
       )
     })

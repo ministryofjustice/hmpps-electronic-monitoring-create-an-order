@@ -33,7 +33,6 @@ export default class PrarrController {
 
     await this.store.updateField(order, 'prarr', formData.prarr)
 
-    // update to monitoring dates
-    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
+    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
   }
 }

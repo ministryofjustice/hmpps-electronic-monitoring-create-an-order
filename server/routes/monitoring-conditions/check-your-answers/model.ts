@@ -1,7 +1,7 @@
 import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
-import { createAnswer, createMultipleChoiceAnswer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createDateAnswer, createMultipleChoiceAnswer } from '../../../utils/checkYourAnswers'
 import { lookup } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
@@ -97,6 +97,25 @@ export const createModel = (order: Order, data: MonitoringConditions, content: I
       ),
     )
   }
+
+  if (data.startDate) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES
+    answers.push(
+      createDateAnswer(
+        'What is the date for the first day of all monitoring?',
+        data.startDate,
+        path.replace(':orderId', order.id),
+      ),
+    )
+  }
+
+  if (data.endDate) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES
+    answers.push(
+      createDateAnswer('What is the date when all monitoring ends?', data.endDate, path.replace(':orderId', order.id)),
+    )
+  }
+
   return {
     answers,
   }

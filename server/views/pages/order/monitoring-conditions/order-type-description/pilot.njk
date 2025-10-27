@@ -1,21 +1,33 @@
 {% extends "../../../../partials/form-layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set section = "Electronic monitoring required" %}
 {% set singleQuestionPage = true %}
 {% set questions = content.pages.monitoringConditions.questions %}
 
 {% block formInputs %}
+    {% set hint %}
+        {% if message %}
+            {{ govukInsetText({
+              text: message
+            }) }}
+        {% endif %}
+        {{ questions.pilot.hint }}
+    {% endset %}
+
     {{ govukRadios({
-      name: "pilot",  
-      hint: { text: questions.pilot.hint },
+      name: "pilot",
+      hint: {
+        html: hint
+      },
       fieldset: {
         legend: {
           text: questions.pilot.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--l"
         }
-      }, 
+      },
       items: items,
       value: pilot.value,
       errorMessage: pilot.error

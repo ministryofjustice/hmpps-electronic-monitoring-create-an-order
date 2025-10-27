@@ -71,11 +71,9 @@ export default class SentenceTypeController {
             return
           default:
             res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
+              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
             )
-            // res.redirect(
-            //   paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId),
-            // )
+
             return
         }
       }
@@ -85,7 +83,7 @@ export default class SentenceTypeController {
         return
       }
 
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
+       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
     }
   }
 }

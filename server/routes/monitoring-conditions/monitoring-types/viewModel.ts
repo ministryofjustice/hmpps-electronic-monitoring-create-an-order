@@ -1,3 +1,4 @@
+import config from '../../../config'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage } from '../../../models/view-models/utils'
@@ -15,6 +16,7 @@ export type MonitoringTypeModel = {
   errorSummary: ErrorSummary | null
   error?: ErrorMessage
   message?: string
+  monitoringConditionTimes?: boolean
 } & {
   [K in keyof MonitoringTypes]: {
     value: boolean
@@ -37,6 +39,7 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult, or
     message: enabled.message,
     error: getError(errors, 'monitoringTypes'),
     errorSummary: createGovukErrorSummary(errors),
+    monitoringConditionTimes: config.monitoringConditionTimes.enabled,
   }
 }
 

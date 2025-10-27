@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import IsspPage from './isspPage'
-import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
+import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -15,18 +15,12 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should show errors no answer selected', () => {
+  it('Should submit form', () => {
     const page = Page.visit(IsspPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
     page.form.continueButton.click()
-    // Update to Monitoring Dates page when added
-    // Page.verifyOnPage(PilotPage)
-    const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
-    cyaPage.orderInformationSection.shouldExist()
-    cyaPage.orderInformationSection.shouldHaveItem(
-      'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-      'Yes',
-    )
+
+    Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
   })
 })
