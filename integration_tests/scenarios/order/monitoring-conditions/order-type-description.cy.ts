@@ -124,7 +124,15 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
+    const interestedParties = createFakeInterestedParties(
+      'Probation Service',
+      'Probation',
+      'Kent, Surrey & Sussex',
+      'Kent, Surrey & Sussex',
+    )
+    const probationDeliveryUnit = {
+      unit: 'Surrey',
+    }
     const orderTypeDetails = {
       orderType: 'Release from prison',
       sentenceType: 'Standard Determinate Sentence',
@@ -142,6 +150,7 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       orderTypeDetails,
+      probationDeliveryUnit,
     })
   })
 

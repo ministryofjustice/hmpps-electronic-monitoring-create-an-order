@@ -43,6 +43,7 @@ import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-desc
 import SingleQuestionFormComponent from '../components/SingleQuestionFormComponent'
 import CheckYourAnswersPage from '../../e2e/order/monitoring-conditions/order-type-description/check-your-answers/CheckYourAnswersPage'
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
+import MonitoringDatesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-dates/MonitoringDatesPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -762,7 +763,12 @@ export default class OrderTasksPage extends AppPage {
       this.fillinSingleQuestionFormWith(prarrPage.form, prarr)
     }
     // Monitoring Dates
-    // TODO implement monitoring dates page
+    const monitoringDatePage = Page.verifyOnPage(MonitoringDatesPage)
+    monitoringDatePage.form.fillInWithInput({
+      startDate: monitoringStartDate,
+      endDate: monitoringEndDate,
+    })
+    monitoringDatePage.form.continueButton.click()
 
     // Monitoring conditions
     if (monitoringCondition) {
@@ -770,6 +776,6 @@ export default class OrderTasksPage extends AppPage {
       this.fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
     }
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answer')
+    Page.verifyOnPage(CheckYourAnswersPage, 'Check your answer')
   }
 }

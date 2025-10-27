@@ -2,6 +2,10 @@ import FormComponent from '../../../../../pages/components/formComponent'
 import { PageElement } from '../../../../../pages/page'
 import FormDateTimeComponent from '../../../../../pages/components/formDateTimeComponent'
 
+export type MonitoringDateInput = {
+  startDate?: Date
+  endDate?: Date
+}
 export default class MonitoringDatesComponent extends FormComponent {
   get startDateField(): FormDateTimeComponent {
     return new FormDateTimeComponent(this.form, 'startDate')
@@ -28,6 +32,15 @@ export default class MonitoringDatesComponent extends FormComponent {
       this.endDateField.setDay(data.endDate.day)
       this.endDateField.setMonth(data.endDate.month)
       this.endDateField.setYear(data.endDate.year)
+    }
+  }
+
+  fillInWithInput(profile: MonitoringDateInput, setTime: boolean = false): void {
+    if (profile.startDate) {
+      this.startDateField.set(profile.startDate, setTime)
+    }
+    if (profile.endDate) {
+      this.endDateField.set(profile.endDate, setTime)
     }
   }
 }
