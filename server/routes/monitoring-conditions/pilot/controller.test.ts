@@ -207,5 +207,17 @@ describe('pilot controller', () => {
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', req.order!.id),
       )
     })
+
+    it('redirects to offence type if gps acquisitive crime', async () => {
+      req.body = {
+        action: 'continue',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+      }
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', req.order!.id),
+      )
+    })
   })
 })
