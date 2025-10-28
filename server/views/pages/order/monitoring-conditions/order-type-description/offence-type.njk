@@ -7,7 +7,7 @@
 
 {% block formInputs %}
     {{ govukRadios({
-      name: "pilot",
+      name: "offenceType",
       fieldset: {
         legend: {
           text: questions.offenceType.text,
@@ -19,8 +19,8 @@
 	text: questions.offenceType.hint
       },
       items: items,
-      value: pilot.value,
-      errorMessage: pilot.error
+      value: offenceType.value,
+      errorMessage: offenceType.error
 })}}
 
 {% endblock %}
