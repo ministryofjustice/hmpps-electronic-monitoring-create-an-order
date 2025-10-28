@@ -108,16 +108,6 @@ describe('store service', () => {
       expect(result.hdc).toBe('YES')
     })
 
-    it('should set hdc to NO when a different POST_RELEASE sentenceType is selected', async () => {
-      await service.updateOrderType(mockOrder, { orderType: 'POST_RELEASE' })
-      await service.updateSentenceType(mockOrder, { sentenceType: 'SECTION_91' })
-
-      await service.updateSentenceType(mockOrder, { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' })
-      const result = await service.getMonitoringConditions(mockOrder)
-
-      expect(result.hdc).toBe('NO')
-    })
-
     it('should NOT update hdc if the journey is not POST_RELEASE', async () => {
       await service.updateOrderType(mockOrder, { orderType: 'COMMUNITY' })
 

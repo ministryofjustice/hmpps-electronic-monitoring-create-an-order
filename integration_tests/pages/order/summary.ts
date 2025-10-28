@@ -41,7 +41,6 @@ import PrarrPage from '../../e2e/order/monitoring-conditions/order-type-descript
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
 import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import SingleQuestionFormComponent from '../components/SingleQuestionFormComponent'
-import CheckYourAnswersPage from '../../e2e/order/monitoring-conditions/order-type-description/check-your-answers/CheckYourAnswersPage'
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 import MonitoringDatesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-dates/MonitoringDatesPage'
 
@@ -151,6 +150,7 @@ export default class OrderTasksPage extends AppPage {
     installationLocation,
     installationAppointment,
     tertiaryAddressDetails = undefined,
+    monitoringOrderTypeDescription = undefined,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -164,6 +164,7 @@ export default class OrderTasksPage extends AppPage {
       monitoringConditions,
       probationDeliveryUnit,
       tertiaryAddressDetails,
+      monitoringOrderTypeDescription,
     })
 
     if (installationLocation) {
@@ -498,7 +499,7 @@ export default class OrderTasksPage extends AppPage {
     monitoringConditions = undefined,
     probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
-    orderTypeDetails = undefined,
+    monitoringOrderTypeDescription = undefined,
   }): void {
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
     aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -580,8 +581,8 @@ export default class OrderTasksPage extends AppPage {
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
       monitoringConditionsPage.form.saveAndContinueButton.click()
     }
-    if (orderTypeDetails) {
-      this.fillInOrderTypeDescriptionsWith(orderTypeDetails)
+    if (monitoringOrderTypeDescription) {
+      this.fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
     }
   }
 
@@ -770,12 +771,8 @@ export default class OrderTasksPage extends AppPage {
     })
     monitoringDatePage.form.continueButton.click()
 
-    // Monitoring conditions
-    if (monitoringCondition) {
-      const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
-      this.fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
-    }
-
-    Page.verifyOnPage(CheckYourAnswersPage, 'Check your answer')
+    // Monicotring conditions
+    const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+    this.fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
   }
 }

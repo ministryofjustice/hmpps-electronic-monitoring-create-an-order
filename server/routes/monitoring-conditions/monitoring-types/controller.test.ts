@@ -32,6 +32,11 @@ describe('prarr controller', () => {
     jest.restoreAllMocks()
     mockDataStore = new InMemoryStore()
     mockStore = new MonitoringConditionsStoreService(mockDataStore) as jest.Mocked<MonitoringConditionsStoreService>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
     mockService = new MonitoringConditionsUpdateService(
       mockRestClient,
     ) as jest.Mocked<MonitoringConditionsUpdateService>

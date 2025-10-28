@@ -43,13 +43,11 @@ export default class MonitoringTypesController {
     await this.store.updateMonitoringType(order, monitoringTypeValues)
 
     const data = await this.store.getMonitoringConditions(order)
-
     const updateMonitoringConditionsResult = await this.monitoringConditionsService.updateMonitoringConditions({
       data,
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-
     res.redirect(
       this.taskListService.getNextPage('MONITORING_CONDITIONS', {
         ...req.order!,

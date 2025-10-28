@@ -77,8 +77,6 @@ export default class MonitoringConditionsStoreService {
     if (monitoringConditions.orderType === 'POST_RELEASE') {
       if (data.sentenceType === 'SECTION_91') {
         monitoringConditions.hdc = 'YES'
-      } else {
-        monitoringConditions.hdc = 'NO'
       }
     }
 

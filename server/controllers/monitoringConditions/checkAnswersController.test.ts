@@ -61,162 +61,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the start time on the first day of monitoring?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the end time on the last day of monitoring? (optional)',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What pilot project is the device wearer part of?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
-
-          {
-            key: {
-              text: 'What type of sentence has the device wearer been given?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
@@ -225,7 +69,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
@@ -287,7 +131,8 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           sentenceType: 'EPP',
           issp: 'NO',
           hdc: 'YES',
-          prarr: 'UNKNOWN',
+          prarr: 'YES',
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW'
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
@@ -413,6 +258,127 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
+              text: "What is the order type?"
+            },
+            value: {
+              text: "Pre-Trial"
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
+                  text: "Change",
+                  visuallyHiddenText: "what is the order type?"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: 'What type of sentence has the device wearer been given?',
+            },
+            value: {
+              text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
+            },
+            value: {
+              text: 'Yes',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
+            },
+            value: {
+              text: 'No',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText:
+                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'What pilot project is the device wearer part of?',
+            },
+            value: {
+              text: 'GPS Acquisitive Crime Home Detention Curfew',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
+                },
+              ],
+            },
+          },   
+          {
+            key: {
+              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
+            },
+            value: {
+              text: 'Yes',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText:
+                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
+                },
+              ],
+            },
+          }, 
+          {
+            key: {
+              text: 'What monitoring does the device wearer need?',
+            },
+            value: {
+              html: 'Curfew<br/>Exclusion zone monitoring<br/>Trail monitoring<br/>Mandatory attendance monitoring<br/>Alcohol monitoring',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what monitoring does the device wearer need?',
+                },
+              ],
+            },
+          },         
+          {
+            key: {
               text: 'What is the date for the first day of all monitoring?',
             },
             value: {
@@ -421,7 +387,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date for the first day of all monitoring?',
                 },
@@ -438,13 +404,13 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the start time on the first day of monitoring?',
                 },
               ],
             },
-          },
+          },          
           {
             key: {
               text: 'What is the date when all monitoring ends?',
@@ -455,7 +421,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
@@ -472,118 +438,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
                 },
               ],
             },
-          },
-
-          {
-            key: {
-              text: 'What pilot project is the device wearer part of?',
-            },
-            value: {
-              text: 'GPS Acquisitive Crime Home Detention Curfew',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What type of sentence has the device wearer been given?',
-            },
-            value: {
-              text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-            },
-            value: {
-              text: 'No',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
-            },
-            value: {
-              text: 'Yes',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
-            },
-            value: {
-              text: 'Not able to provide this information',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What monitoring does the device wearer need?',
-            },
-            value: {
-              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what monitoring does the device wearer need?',
-                },
-              ],
-            },
-          },
+          },               
+         
+        
         ],
         installationAppointment: [],
         installationLocation: [],
@@ -1202,6 +1065,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           issp: 'NO',
           hdc: 'YES',
           prarr: 'UNKNOWN',
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW'
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
@@ -1327,6 +1191,109 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
+              text: "What is the order type?"
+            },
+            value: {
+              text: "Pre-Trial"
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
+                  text: "Change",
+                  visuallyHiddenText: "what is the order type?"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: 'What type of sentence has the device wearer been given?',
+            },
+            value: {
+              text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
+            },
+            value: {
+              text: 'Yes',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
+            },
+            value: {
+              text: 'No',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText:
+                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'What pilot project is the device wearer part of?',
+            },
+            value: {
+              text: 'GPS Acquisitive Crime Home Detention Curfew',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
+                },
+              ],
+            },
+          },   
+          {
+            key: {
+              text: 'What monitoring does the device wearer need?',
+            },
+            value: {
+              html: 'Curfew<br/>Exclusion zone monitoring<br/>Trail monitoring<br/>Mandatory attendance monitoring<br/>Alcohol monitoring',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what monitoring does the device wearer need?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
               text: 'What is the date for the first day of all monitoring?',
             },
             value: {
@@ -1335,7 +1302,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date for the first day of all monitoring?',
                 },
@@ -1352,117 +1319,13 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
-          },
-          {
-            key: {
-              text: 'What pilot project is the device wearer part of?',
-            },
-            value: {
-              text: 'GPS Acquisitive Crime Home Detention Curfew',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What type of sentence has the device wearer been given?',
-            },
-            value: {
-              text: 'Section 227/228 Extended Sentence for Public Protection (EPP)',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-            },
-            value: {
-              text: 'No',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
-            },
-            value: {
-              text: 'Yes',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
-            },
-            value: {
-              text: 'Not able to provide this information',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What monitoring does the device wearer need?',
-            },
-            value: {
-              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what monitoring does the device wearer need?',
-                },
-              ],
-            },
-          },
+          },         
         ],
         installationAppointment: [],
         installationLocation: [],

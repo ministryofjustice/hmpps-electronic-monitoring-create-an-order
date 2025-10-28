@@ -1,6 +1,5 @@
 import paths from '../../constants/paths'
 import {
-  convertBooleanToEnum,
   convertToTitleCase,
   createAddressPreview,
   formatDateTime,
@@ -11,7 +10,7 @@ import {
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
 import { Order } from '../Order'
-import Answer, {
+import {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
@@ -21,55 +20,136 @@ import Answer, {
   AnswerOptions,
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
+import { notDeepEqual } from 'assert'
 import config from '../../config'
 
-const getSelectedMonitoringTypes = (order: Order) => {
-  return [
-    convertBooleanToEnum(order.monitoringConditions.curfew, '', 'Curfew', ''),
-    convertBooleanToEnum(order.monitoringConditions.exclusionZone, '', 'Exclusion zone', ''),
-    convertBooleanToEnum(order.monitoringConditions.trail, '', 'Trail', ''),
-    convertBooleanToEnum(order.monitoringConditions.mandatoryAttendance, '', 'Mandatory attendance', ''),
-    convertBooleanToEnum(order.monitoringConditions.alcohol, '', 'Alcohol', ''),
-  ].filter(val => val !== '')
-}
-
-const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
-  const orderTypeDescription = lookup(
-    content.reference.orderTypeDescriptions,
-    order.monitoringConditions.orderTypeDescription,
-  )
-  const sentenceType = lookup(content.reference.sentenceTypes, order.monitoringConditions.sentenceType)
-  const issp = lookup(content.reference.yesNoUnknown, order.monitoringConditions.issp)
-  const hdc = lookup(content.reference.yesNoUnknown, order.monitoringConditions.hdc)
-  const prarr = lookup(content.reference.yesNoUnknown, order.monitoringConditions.prarr)
-  const { questions } = content.pages.monitoringConditions
-
-  const answers: Answer[] = []
-  answers.push(createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts))
-  if (config.monitoringConditionTimes.enabled)
-    answers.push(createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts))
-  answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
-  if (config.monitoringConditionTimes.enabled)
-    answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
-  if (order.dataDictionaryVersion === 'DDV5') {
-    let { pilot } = order.monitoringConditions
-    if ('pilots' in content.reference) {
-      pilot = lookup(content.reference.pilots, order.monitoringConditions.pilot)
-    }
-    answers.push(createAnswer(questions.pilot.text, pilot, uri, answerOpts))
-  } else {
-    answers.push(createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts))
+const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const answers = []
+  const data = order.monitoringConditions
+  const nofityingOrg = order.interestedParties?.notifyingOrganisation
+  if (!(nofityingOrg === 'PRISON' || nofityingOrg === 'YOUTH_CUSTODY_SERVICE' || nofityingOrg === 'HOME_OFFICE')&& data.orderType !== null) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
+    answers.push(
+      createAnswer(
+        'What is the order type?',
+        lookup(content.reference.orderTypes, data.orderType),
+        path.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
   }
-  answers.push(
-    ...[
-      createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
-      createAnswer(questions.issp.text, issp, uri, answerOpts),
-      createAnswer(questions.hdc.text, hdc, uri, answerOpts),
-      createAnswer(questions.prarr.text, prarr, uri, answerOpts),
-      createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
-    ],
-  )
+
+  if (data.sentenceType&& data.sentenceType !== null) {
+    const question =
+      data.orderType === 'BAIL'
+        ? 'What type of bail has the device wearer been given?'
+        : 'What type of sentence has the device wearer been given?'
+
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE
+    answers.push(
+      createAnswer(
+        question,
+        lookup(content.reference.sentenceTypes, data.sentenceType),
+        path.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  if (data.hdc !== undefined && data.hdc !== null && data.hdc !== 'UNKNOWN' && data.sentenceType !== 'SECTION_91') {
+    const hdcPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.hdc.text,
+        lookup(content.reference.yesNoUnknown, data.hdc),
+        hdcPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  if (data.issp !== undefined && data.issp !== null&& data.issp !== 'UNKNOWN') {
+    const isspPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.issp.text,
+        lookup(content.reference.yesNoUnknown, data.issp),
+        isspPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  if (data.pilot !== undefined && data.pilot !== null) {
+    const pilotPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.pilot.text,
+        lookup(content.reference.pilots, data.pilot),
+        pilotPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  if (data.prarr !== undefined && data.prarr !== null && data.prarr !== 'UNKNOWN') {
+    const prarrPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.prarr.text,
+        lookup(content.reference.yesNoUnknown, data.prarr),
+        prarrPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  const monitoringTypes = [
+    { name: 'Curfew', data: data.curfew },
+    { name: 'Exclusion zone monitoring', data: data.exclusionZone },
+    { name: 'Trail monitoring', data: data.trail },
+    { name: 'Mandatory attendance monitoring', data: data.mandatoryAttendance },
+    { name: 'Alcohol monitoring', data: data.alcohol },
+  ]
+  if (monitoringTypes.every(type => type.data !== undefined)) {
+    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+    answers.push(
+      createMultipleChoiceAnswer(
+        content.pages.monitoringConditions.questions.monitoringRequired.text,
+        monitoringTypes.filter(type => type.data).map(type => type.name),
+        monitoringTypesPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  if (data.startDate && data.startDate !== null) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
+    answers.push(
+      createDateAnswer(
+        'What is the date for the first day of all monitoring?',
+        data.startDate,
+        path,
+        answerOpts,
+      ),
+    )
+    if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(content.pages.monitoringConditions.questions.startTime.text, order.monitoringConditions.startDate, path, answerOpts))
+  }
+
+
+
+
+
+  if (data.endDate && data.endDate !== null) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
+    answers.push(
+      createDateAnswer('What is the date when all monitoring ends?', data.endDate, path),
+    )
+    if (config.monitoringConditionTimes.enabled)
+  answers.push(createTimeAnswer(content.pages.monitoringConditions.questions.endTime.text, order.monitoringConditions.endDate, path, answerOpts))
+  }
+
   return answers
 }
 
@@ -347,7 +427,7 @@ const createViewModel = (order: Order, content: I18n) => {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
   return {
-    monitoringConditions: createMonitoringConditionsAnswers(order, content, ignoreActions),
+    monitoringConditions: createMonitoringOrderTypeDescriptionAnswers(order, content, ignoreActions),
     curfew: createCurfewAnswers(order, content, ignoreActions),
     curfewReleaseDate: createCurfewReleaseDateAnswers(order, content, ignoreActions),
     curfewTimetable: createCurfewTimetableAnswers(order, ignoreActions),

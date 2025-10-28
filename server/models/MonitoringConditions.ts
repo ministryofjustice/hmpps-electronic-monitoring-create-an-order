@@ -1,7 +1,15 @@
 import { z } from 'zod'
 import { YesNoUnknownEnum } from './YesNoUnknown'
 
-export const OrderTypeEnum = z.enum(['CIVIL', 'COMMUNITY', 'IMMIGRATION', 'POST_RELEASE', 'PRE_TRIAL', 'SPECIAL'])
+export const OrderTypeEnum = z.enum([
+  'CIVIL',
+  'COMMUNITY',
+  'IMMIGRATION',
+  'POST_RELEASE',
+  'PRE_TRIAL',
+  'SPECIAL',
+  'BAIL',
+])
 
 export const SentenceTypeEnum = z.enum([
   'EXTENDED_DETERMINATE_SENTENCE',
