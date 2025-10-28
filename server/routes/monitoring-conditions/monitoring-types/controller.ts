@@ -5,9 +5,15 @@ import paths from '../../../constants/paths'
 import MonitoringTypesFormDataModel from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
+import { MonitoringConditionsUpdateService } from '../../../services'
+import TaskListService from '../../../services/taskListService'
 
 export default class MonitoringTypesController {
-  constructor(private readonly store: MonitoringConditionsStoreService) {}
+  constructor(
+    private readonly store: MonitoringConditionsStoreService,
+    private readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+    private readonly taskListService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -36,6 +42,19 @@ export default class MonitoringTypesController {
 
     await this.store.updateMonitoringType(order, monitoringTypeValues)
 
-    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    const data = await this.store.getMonitoringConditions(order)
+
+    const updateMonitoringConditionsResult = await this.monitoringConditionsService.updateMonitoringConditions({
+      data,
+      accessToken: res.locals.user.token,
+      orderId: order.id,
+    })
+
+    res.redirect(
+      this.taskListService.getNextPage('MONITORING_CONDITIONS', {
+        ...req.order!,
+        monitoringConditions: updateMonitoringConditionsResult,
+      }),
+    )
   }
 }

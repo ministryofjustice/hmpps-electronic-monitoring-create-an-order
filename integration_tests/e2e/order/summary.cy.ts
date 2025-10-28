@@ -895,7 +895,11 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
-      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.electronicMonitoringTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/monitoring-conditions/order-type-description/order-type`,
+      )
       page.submitOrderButton.should('be.disabled')
     })
   })

@@ -8,6 +8,7 @@ import PilotPage from '../pilot/PilotPage'
 import PrarrPage from '../prarr/PrarrPage'
 import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
+import InstallationLocationPage from '../../../../../pages/order/monitoring-conditions/installation-location'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -71,16 +72,6 @@ context('sentenceType form submission', () => {
     monitoringDatesPage.form.continueButton.click()
 
     const monitoringConditionsPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
-    monitoringConditionsPage.form.fillInWith('Alcohol')
-    monitoringConditionsPage.form.continueButton.click()
-
-    const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
-    cyaPage.orderInformationSection.shouldExist()
-    cyaPage.orderInformationSection.shouldHaveItems([
-      { key: 'What is the order type?', value: 'Post Release' },
-      { key: 'What type of sentence has the device wearer been given?', value: 'Standard Determinate Sentence' },
-      { key: 'Is the device wearer on a Home Detention Curfew (HDC)?', value: 'Yes' },
-    ])
   })
 
   it('Should submit the form and display the correct answers for a Community journey', () => {
