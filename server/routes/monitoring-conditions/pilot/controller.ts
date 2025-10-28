@@ -32,6 +32,13 @@ export default class PilotController {
 
     await this.store.updateField(order, 'pilot', formData.pilot)
 
+    if (
+      formData.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE' ||
+      formData.pilot === 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW'
+    ) {
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', order.id))
+      return
+    }
     res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
   }
 }
