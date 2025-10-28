@@ -1,0 +1,26 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+
+{% block formInputs %}
+    {{ govukRadios({
+      name: "pilot",
+      fieldset: {
+        legend: {
+          text: questions.offenceType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+	text: questions.offenceType.hint
+      },
+      items: items,
+      value: pilot.value,
+      errorMessage: pilot.error
+})}}
+
+{% endblock %}

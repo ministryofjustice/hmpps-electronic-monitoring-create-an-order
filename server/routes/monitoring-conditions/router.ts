@@ -9,6 +9,7 @@ import PilotController from './pilot/controller'
 import IsspController from './issp/controller'
 import PrarrController from './prarr/controller'
 import MonitoringTypesController from './monitoring-types/controller'
+import OffenceTypeController from './offence-type/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
@@ -28,6 +29,8 @@ const createOrderTypeDescriptionRouter = (
   const hdcController = new HdcController(monitoringConditionsStoreService)
 
   const pilotController = new PilotController(monitoringConditionsStoreService)
+
+  const offenceTypeController = new OffenceTypeController(monitoringConditionsStoreService)
 
   const isspController = new IsspController(monitoringConditionsStoreService)
 
@@ -49,6 +52,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
+
+  router.get('/offence-type', asyncMiddleware(offenceTypeController.view))
+  router.post('/offence-type', asyncMiddleware(offenceTypeController.update))
 
   router.get('/issp', asyncMiddleware(isspController.view))
   router.post('/issp', asyncMiddleware(isspController.update))
