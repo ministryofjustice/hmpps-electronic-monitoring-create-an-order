@@ -2,6 +2,7 @@ import { MonitoringConditions } from '../model'
 import { ValidationResult } from '../../../models/Validation'
 import constructModel, { MonitoringTypeModel } from './viewModel'
 import { createAddress, getMockOrder } from '../../../../test/mocks/mockOrder'
+import config from '../../../config'
 
 describe('model', () => {
   const mockOrder = getMockOrder()
@@ -18,6 +19,7 @@ describe('model', () => {
       mandatoryAttendance: { value: false, disabled: false },
       alcohol: { value: false, disabled: false },
       errorSummary: null,
+      monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     }
 
     expect(model).toEqual(expected)
@@ -35,6 +37,7 @@ describe('model', () => {
       alcohol: { value: false, disabled: false },
       error: { text: 'some error' },
       errorSummary: { errorList: [{ href: '#monitoringTypes', text: 'some error' }], titleText: 'There is a problem' },
+      monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     }
 
     expect(model).toEqual(expected)
@@ -58,6 +61,7 @@ describe('model', () => {
       mandatoryAttendance: { value: true, disabled: false },
       alcohol: { value: true, disabled: false },
       errorSummary: null,
+      monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     }
 
     expect(model).toEqual(expected)
@@ -79,6 +83,7 @@ describe('model', () => {
       alcohol: { value: false, disabled: false },
       errorSummary: null,
       message: "Some monitoring types can't be selected because the device wearer is not part of any pilots.",
+      monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     }
 
     expect(model).toEqual(expected)
@@ -101,6 +106,7 @@ describe('model', () => {
       errorSummary: null,
       message:
         "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC).",
+      monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     }
 
     expect(model).toEqual(expected)

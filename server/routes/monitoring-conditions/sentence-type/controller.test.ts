@@ -184,9 +184,8 @@ describe('SentenceTypeController', () => {
       expect(mockMonitoringConditionsStoreService.updateSentenceType).toHaveBeenCalledWith(mockOrder, {
         sentenceType: 'COMMUNITY_YRO',
       })
-      // TODO: Update to ISS page when it is made
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', mockOrder.id),
       )
     })
   })

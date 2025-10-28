@@ -4,6 +4,8 @@ import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import OrderTasksPage from '../../../../../pages/order/summary'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
+import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
+import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
 
 const mockOrderId = uuidv4()
 
@@ -13,10 +15,10 @@ const mockResponse = {
   orderType: 'POST_RELEASE',
   orderTypeDescription: 'DAPOL',
   conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
-  curfew: true,
-  exclusionZone: true,
-  trail: true,
-  mandatoryAttendance: true,
+  curfew: false,
+  exclusionZone: false,
+  trail: false,
+  mandatoryAttendance: false,
   alcohol: true,
   startDate: '2024-10-10T11:00:00.000Z',
   endDate: '2024-10-11T11:00:00.000Z',
@@ -58,6 +60,17 @@ context('Check your answers', () => {
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
+
+    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
+    monitoringDatesPage.form.fillInWith({
+      startDate: { day: '5', month: '1', year: '2026' },
+      endDate: { day: '1', month: '5', year: '2026' },
+    })
+    monitoringDatesPage.form.continueButton.click()
+
+    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
+    monitoringTypesPage.form.fillInWith('Alcohol')
+    monitoringTypesPage.form.continueButton.click()
   })
 
   const pageHeading = 'Check your answers'
@@ -75,7 +88,11 @@ context('Check your answers', () => {
         orderType: 'COMMUNITY',
         conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
         sentenceType: 'COMMUNITY_SDO',
-        // some default values until other pages are filled in
+        curfew: false,
+        exclusionZone: false,
+        trail: false,
+        mandatoryAttendance: false,
+        alcohol: true,
         startDate: '2020-11-07T10:00:00.000Z',
         endDate: '2040-11-08T10:00:00.000Z',
       },

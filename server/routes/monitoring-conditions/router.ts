@@ -10,6 +10,7 @@ import IsspController from './issp/controller'
 import PrarrController from './prarr/controller'
 import MonitoringTypesController from './monitoring-types/controller'
 import OffenceTypeController from './offence-type/controller'
+import MonitoringDatesController from './monitoring-dates/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
@@ -38,6 +39,8 @@ const createOrderTypeDescriptionRouter = (
 
   const monitoringTypesController = new MonitoringTypesController(monitoringConditionsStoreService)
 
+  const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
+
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
@@ -64,6 +67,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
   router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
+
+  router.get('/monitoring-dates', asyncMiddleware(monitoringDatesController.view))
+  router.post('/monitoring-dates', asyncMiddleware(monitoringDatesController.update))
 
   return router
 }

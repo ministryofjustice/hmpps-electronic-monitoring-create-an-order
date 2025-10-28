@@ -110,7 +110,7 @@ describe('pilot controller', () => {
             },
           ],
           message:
-            'The device wearer is in the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
+            'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region.',
         }),
       )
     })
@@ -146,7 +146,7 @@ describe('pilot controller', () => {
             },
           ],
           message:
-            'The device wearer is in the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must live in an in-scope region.',
+            'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region.',
         }),
       )
     })
