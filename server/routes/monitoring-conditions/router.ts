@@ -12,11 +12,14 @@ import MonitoringTypesController from './monitoring-types/controller'
 import MonitoringDatesController from './monitoring-dates/controller'
 
 const createOrderTypeDescriptionRouter = (
-  services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
+  services: Pick<
+    Services,
+    'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService' | 'taskListService'
+  >,
 ): Router => {
   const router = Router()
 
-  const { monitoringConditionsStoreService, monitoringConditionsUpdateService } = services
+  const { monitoringConditionsStoreService, monitoringConditionsUpdateService, taskListService } = services
 
   const orderTypeController = new OrderTypeController(monitoringConditionsStoreService)
   const checkYourAnswersController = new CheckYourAnswersController(
@@ -34,7 +37,11 @@ const createOrderTypeDescriptionRouter = (
 
   const prarrController = new PrarrController(monitoringConditionsStoreService)
 
-  const monitoringTypesController = new MonitoringTypesController(monitoringConditionsStoreService)
+  const monitoringTypesController = new MonitoringTypesController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+    taskListService,
+  )
 
   const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
 

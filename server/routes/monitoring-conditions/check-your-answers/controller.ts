@@ -25,10 +25,6 @@ export default class CheckYourAnswersController {
     const order = req.order!
     const data = await this.storeService.getMonitoringConditions(order)
 
-    // Dummy data until we have pages that get this data
-    data.startDate = new Date(2020, 10, 7, 10, 0).toISOString()
-    data.endDate = new Date(2040, 10, 8, 10, 0).toISOString()
-
     await this.monitoringConditionsService.updateMonitoringConditions({
       data,
       accessToken: res.locals.user.token,

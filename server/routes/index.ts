@@ -334,7 +334,11 @@ export default function routes({
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
-    createOrderTypeDescriptionRouter({ monitoringConditionsStoreService, monitoringConditionsUpdateService }),
+    createOrderTypeDescriptionRouter({
+      monitoringConditionsStoreService,
+      monitoringConditionsUpdateService,
+      taskListService,
+    }),
   )
 
   return router

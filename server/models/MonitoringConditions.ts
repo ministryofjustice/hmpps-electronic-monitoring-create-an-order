@@ -13,6 +13,13 @@ export const SentenceTypeEnum = z.enum([
   'STANDARD_DETERMINATE_SENTENCE',
   'DTO',
   'SECTION_91',
+  'COMMUNITY_YRO',
+  'COMMUNITY_SDO',
+  'COMMUNITY_SUSPENDED_SENTENCE',
+  'COMMUNITY',
+  'BAIL_SUPERVISION_SUPPORT',
+  'BAIL_RLAA',
+  'BAIL',
 ])
 
 const MonitoringConditionsModel = z.object({
