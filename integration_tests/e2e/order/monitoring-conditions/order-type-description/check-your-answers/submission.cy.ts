@@ -78,7 +78,6 @@ context('Check your answers', () => {
         // some default values until other pages are filled in
         startDate: '2020-11-07T10:00:00.000Z',
         endDate: '2040-11-08T10:00:00.000Z',
-        curfew: true,
       },
     }).should('be.true')
   })
