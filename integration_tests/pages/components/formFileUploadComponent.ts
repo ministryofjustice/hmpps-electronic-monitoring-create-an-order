@@ -59,6 +59,10 @@ export default class FormFileUploadComponent {
     this.element.siblings('.govuk-label').contains(message).should('exist')
   }
 
+  shouldHaveH1Label(message: string): void {
+    this.element.siblings('h1.govuk-label-wrapper').get('.govuk-label').contains(message).should('exist')
+  }
+
   shouldHaveHint(message: string): void {
     this.element.siblings('.govuk-hint').contains(message).should('exist')
   }
