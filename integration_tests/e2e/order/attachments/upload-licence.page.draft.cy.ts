@@ -27,6 +27,10 @@ context('Attachments', () => {
         // Form
         page.form.shouldHaveEncType('multipart/form-data')
         page.form.shouldNotBeDisabled()
+        page.form.uploadField.shouldHaveLabel('Upload a copy of the licence or court order document')
+        page.form.uploadField.shouldHaveHint(
+          'Upload a scanned copy or photo of the original licence or court order document. The file must be a PDF or Word document and under 25MB in size.',
+        )
 
         // Buttons
         page.form.saveAndContinueButton.should('exist')

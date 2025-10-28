@@ -52,9 +52,8 @@
     {% set dayData = data[day] %}
     {% call govukFieldset({
       legend: {
-        text: day | title,
-        classes: "govuk-fieldset__legend--s timetable timetable-{{index}}",
-        isPageHeading: true
+        html: '<h2 class="govuk-fieldset__heading">' + (day | title) + '</h2>',
+        classes: "govuk-fieldset__legend--s timetable timetable-{{index}}"
       }
     }) %}
      
