@@ -56,6 +56,7 @@ const MonitoringConditionsModel = z.object({
   trail: z.boolean().nullable().optional(),
   mandatoryAttendance: z.boolean().nullable().optional(),
   alcohol: z.boolean().nullable().optional(),
+  offenceType: z.string().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>
