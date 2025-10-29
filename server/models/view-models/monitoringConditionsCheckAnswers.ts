@@ -1,5 +1,6 @@
 import paths from '../../constants/paths'
 import {
+  convertBooleanToEnum,
   convertToTitleCase,
   createAddressPreview,
   formatDateTime,
@@ -10,7 +11,7 @@ import {
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
 import { Order } from '../Order'
-import {
+import Answer, {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
@@ -21,6 +22,7 @@ import {
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
 import config from '../../config'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
@@ -83,11 +85,18 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
   }
 
   if (data.pilot !== undefined && data.pilot !== null) {
+    let text = lookup(content.reference.pilots, data.pilot)
     const pilotPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT
+    if (
+      FeatureFlags.getInstance().get('ORDER_TYPE_DESCRIPTION_FLOW_ENABLED') &&
+      (data.pilot === 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' || data.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE')
+    ) {
+      text = 'GPS acquisitive crime (EMAC)'
+    }
     answers.push(
       createAnswer(
         content.pages.monitoringConditions.questions.pilot.text,
-        lookup(content.reference.pilots, data.pilot),
+        text,
         pilotPath.replace(':orderId', order.id),
         answerOpts,
       ),
@@ -168,6 +177,54 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
   }
 
   return answers
+}
+const createMonitoringConditionsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id)
+  const orderTypeDescription = lookup(
+    content.reference.orderTypeDescriptions,
+    order.monitoringConditions.orderTypeDescription,
+  )
+  const sentenceType = lookup(content.reference.sentenceTypes, order.monitoringConditions.sentenceType)
+  const issp = lookup(content.reference.yesNoUnknown, order.monitoringConditions.issp)
+  const hdc = lookup(content.reference.yesNoUnknown, order.monitoringConditions.hdc)
+  const prarr = lookup(content.reference.yesNoUnknown, order.monitoringConditions.prarr)
+  const { questions } = content.pages.monitoringConditions
+
+  const answers: Answer[] = []
+  answers.push(createDateAnswer(questions.startDate.text, order.monitoringConditions.startDate, uri, answerOpts))
+  if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(questions.startTime.text, order.monitoringConditions.startDate, uri, answerOpts))
+  answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditions.endDate, uri, answerOpts))
+  if (config.monitoringConditionTimes.enabled)
+    answers.push(createTimeAnswer(questions.endTime.text, order.monitoringConditions.endDate, uri, answerOpts))
+  if (order.dataDictionaryVersion === 'DDV5') {
+    let { pilot } = order.monitoringConditions
+    if ('pilots' in content.reference) {
+      pilot = lookup(content.reference.pilots, order.monitoringConditions.pilot)
+    }
+    answers.push(createAnswer(questions.pilot.text, pilot, uri, answerOpts))
+  } else {
+    answers.push(createAnswer(questions.orderTypeDescription.text, orderTypeDescription, uri, answerOpts))
+  }
+  answers.push(
+    ...[
+      createAnswer(questions.sentenceType.text, sentenceType, uri, answerOpts),
+      createAnswer(questions.issp.text, issp, uri, answerOpts),
+      createAnswer(questions.hdc.text, hdc, uri, answerOpts),
+      createAnswer(questions.prarr.text, prarr, uri, answerOpts),
+      createMultipleChoiceAnswer(questions.monitoringRequired.text, getSelectedMonitoringTypes(order), uri, answerOpts),
+    ],
+  )
+  return answers
+}
+const getSelectedMonitoringTypes = (order: Order) => {
+  return [
+    convertBooleanToEnum(order.monitoringConditions.curfew, '', 'Curfew', ''),
+    convertBooleanToEnum(order.monitoringConditions.exclusionZone, '', 'Exclusion zone', ''),
+    convertBooleanToEnum(order.monitoringConditions.trail, '', 'Trail', ''),
+    convertBooleanToEnum(order.monitoringConditions.mandatoryAttendance, '', 'Mandatory attendance', ''),
+    convertBooleanToEnum(order.monitoringConditions.alcohol, '', 'Alcohol', ''),
+  ].filter(val => val !== '')
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
@@ -444,7 +501,9 @@ const createViewModel = (order: Order, content: I18n) => {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
   return {
-    monitoringConditions: createMonitoringOrderTypeDescriptionAnswers(order, content, ignoreActions),
+    monitoringConditions: FeatureFlags.getInstance().get('ORDER_TYPE_DESCRIPTION_FLOW_ENABLED')
+      ? createMonitoringOrderTypeDescriptionAnswers(order, content, ignoreActions)
+      : createMonitoringConditionsAnswers(order, content, ignoreActions),
     curfew: createCurfewAnswers(order, content, ignoreActions),
     curfewReleaseDate: createCurfewReleaseDateAnswers(order, content, ignoreActions),
     curfewTimetable: createCurfewTimetableAnswers(order, ignoreActions),

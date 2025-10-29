@@ -30,14 +30,35 @@ export default class FeatureFlags {
       ORDER_TYPE_ENABLED: process.env.ORDER_TYPE_ENABLED === 'true',
       ALCOHOL_MONITORING_ENABLED: process.env.ALCOHOL_MONITORING_ENABLED === 'true',
       CREATE_NEW_ORDER_VERSION_ENABLED: process.env.CREATE_NEW_ORDER_VERSION_ENABLED === 'true',
+      ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: process.env.ORDER_TYPE_DESCRIPTION_FLOW_ENABLED === 'true',
       TAG_AT_SOURCE_PILOT_PRISONS: process.env.TAG_AT_SOURCE_PILOT_PRISONS ?? '',
       DAPOL_PILOT_PROBATION_REGIONS: process.env.DAPOL_PILOT_PROBATION_REGIONS ?? '',
     }
   }
 
+  async resetFeatureFlags() {
+    return fs.promises.copyFile(defaultFeatureFlagFilePath, featureFlagFilePath).then(() => null)
+  }
+
   private writeFlagsToFile(filePath: string, flags: Record<string, boolean | string>) {
     const jsonString = JSON.stringify(flags, null, 2)
     fs.writeFileSync(filePath, jsonString, 'utf-8')
+  }
+
+  public async setFlag(flagName: string, value: boolean) {
+    return fs.promises
+      .readFile(featureFlagFilePath, 'utf-8')
+      .then(data => {
+        const flags = JSON.parse(data) as Record<string, boolean | string>
+
+        if (flagName in flags) {
+          flags[flagName] = value
+        }
+
+        const jsonString = JSON.stringify(flags, null, 2)
+        return fs.promises.writeFile(featureFlagFilePath, jsonString, 'utf-8')
+      })
+      .then(() => null)
   }
 
   public getAll(): Record<string, boolean> {
