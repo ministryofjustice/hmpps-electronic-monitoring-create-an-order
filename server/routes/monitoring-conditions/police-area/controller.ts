@@ -29,7 +29,7 @@ export default class PoliceAreaController {
       req.flash('validationErrors', [
         {
           error: validationErrors.monitoringConditions.policeAreaRequired,
-          field: 'offenceType',
+          field: 'policeArea',
         },
       ])
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA.replace(':orderId', order.id))
