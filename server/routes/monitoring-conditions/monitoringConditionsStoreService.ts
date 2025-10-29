@@ -15,13 +15,6 @@ export default class MonitoringConditionsStoreService {
     'offenceType',
     'issp',
     'prarr',
-    'startDate',
-    'endDate',
-    'curfew',
-    'exclusionZone',
-    'trail',
-    'mandatoryAttendance',
-    'alcohol',
   ]
 
   private keyFromOrder(order: Order): string {
@@ -53,7 +46,7 @@ export default class MonitoringConditionsStoreService {
   ) {
     let monitoringConditions = await this.getMonitoringConditions(order)
 
-    monitoringConditions = this.getClearedData(monitoringConditions, [field])
+    monitoringConditions = this.getClearedData(monitoringConditions, field)
 
     monitoringConditions[field] = data
     await this.updateMonitoringConditions(order, monitoringConditions)
@@ -63,7 +56,7 @@ export default class MonitoringConditionsStoreService {
     let monitoringConditions = await this.getMonitoringConditions(order)
     const previousOrderType = monitoringConditions.orderType
     if (previousOrderType !== data.orderType) {
-      monitoringConditions = {}
+      monitoringConditions = this.getClearedData(monitoringConditions, 'orderType')
     }
 
     monitoringConditions.orderType = data.orderType
@@ -91,7 +84,7 @@ export default class MonitoringConditionsStoreService {
     let monitoringConditions = await this.getMonitoringConditions(order)
 
     if (monitoringConditions.sentenceType !== data.sentenceType) {
-      monitoringConditions = this.getClearedData(monitoringConditions, ['sentenceType'])
+      monitoringConditions = this.getClearedData(monitoringConditions, 'sentenceType')
     }
 
     monitoringConditions.sentenceType = data.sentenceType
@@ -109,23 +102,8 @@ export default class MonitoringConditionsStoreService {
     order: Order,
     data: Pick<MonitoringConditions, 'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol'>,
   ) {
-    let monitoringConditions = await this.getMonitoringConditions(order)
+    const monitoringConditions = await this.getMonitoringConditions(order)
 
-    if (
-      monitoringConditions.curfew !== data.curfew ||
-      monitoringConditions.exclusionZone !== data.exclusionZone ||
-      monitoringConditions.trail !== data.trail ||
-      monitoringConditions.mandatoryAttendance !== data.mandatoryAttendance ||
-      monitoringConditions.alcohol !== data.alcohol
-    ) {
-      monitoringConditions = this.getClearedData(monitoringConditions, [
-        'curfew',
-        'exclusionZone',
-        'trail',
-        'mandatoryAttendance',
-        'alcohol',
-      ])
-    }
     monitoringConditions.curfew = data.curfew
     monitoringConditions.exclusionZone = data.exclusionZone
     monitoringConditions.trail = data.trail
@@ -135,25 +113,14 @@ export default class MonitoringConditionsStoreService {
   }
 
   public async updateMonitoringDates(order: Order, data: Pick<MonitoringConditions, 'startDate' | 'endDate'>) {
-    let monitoringConditions = await this.getMonitoringConditions(order)
-    if (data.startDate !== monitoringConditions.startDate || data.endDate !== monitoringConditions.endDate) {
-      monitoringConditions = this.getClearedData(monitoringConditions, ['startDate', 'endDate'])
-    }
+    const monitoringConditions = await this.getMonitoringConditions(order)
     monitoringConditions.startDate = data.startDate
     monitoringConditions.endDate = data.endDate
     await this.updateMonitoringConditions(order, monitoringConditions)
   }
 
-  private getClearedData(currentData: MonitoringConditions, updatedFields: (keyof MonitoringConditions)[]) {
-    const updatedIndexes = updatedFields
-      .map(updatedField => this.FIELD_HIERARCHY.indexOf(updatedField))
-      .filter(value => value !== -1)
-
-    if (updatedIndexes.length === 0) {
-      return { ...currentData }
-    }
-
-    const updatedIndex = Math.min(...updatedIndexes)
+  private getClearedData(currentData: MonitoringConditions, updatedField: keyof MonitoringConditions) {
+    const updatedIndex = this.FIELD_HIERARCHY.indexOf(updatedField)
 
     const fieldsToClear = this.FIELD_HIERARCHY.slice(updatedIndex + 1)
 
