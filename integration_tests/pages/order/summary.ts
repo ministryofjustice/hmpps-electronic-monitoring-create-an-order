@@ -43,6 +43,7 @@ import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-desc
 import SingleQuestionFormComponent from '../components/SingleQuestionFormComponent'
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 import MonitoringDatesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-dates/MonitoringDatesPage'
+import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -745,7 +746,8 @@ export default class OrderTasksPage extends AppPage {
     }
     // Type of Acquistive Crime
     if (typeOfAcquistiveCrime) {
-      // TODO implement type of acquistive crime page
+      const offenceTypePage = Page.verifyOnPage(OffenceTypePage)
+      this.fillinSingleQuestionFormWith(offenceTypePage.form, typeOfAcquistiveCrime)
     }
 
     // Police force area

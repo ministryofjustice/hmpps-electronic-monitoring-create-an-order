@@ -20,14 +20,16 @@ import {
   AnswerOptions,
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
-import { notDeepEqual } from 'assert'
 import config from '../../config'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
   const data = order.monitoringConditions
   const nofityingOrg = order.interestedParties?.notifyingOrganisation
-  if (!(nofityingOrg === 'PRISON' || nofityingOrg === 'YOUTH_CUSTODY_SERVICE' || nofityingOrg === 'HOME_OFFICE')&& data.orderType !== null) {
+  if (
+    !(nofityingOrg === 'PRISON' || nofityingOrg === 'YOUTH_CUSTODY_SERVICE' || nofityingOrg === 'HOME_OFFICE') &&
+    data.orderType !== null
+  ) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
     answers.push(
       createAnswer(
@@ -39,7 +41,7 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
-  if (data.sentenceType&& data.sentenceType !== null) {
+  if (data.sentenceType && data.sentenceType !== null) {
     const question =
       data.orderType === 'BAIL'
         ? 'What type of bail has the device wearer been given?'
@@ -68,7 +70,7 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
-  if (data.issp !== undefined && data.issp !== null&& data.issp !== 'UNKNOWN') {
+  if (data.issp !== undefined && data.issp !== null && data.issp !== 'UNKNOWN') {
     const isspPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP
     answers.push(
       createAnswer(
@@ -87,6 +89,18 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
         content.pages.monitoringConditions.questions.pilot.text,
         lookup(content.reference.pilots, data.pilot),
         pilotPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
+  if (data.offenceType !== undefined && data.offenceType !== null && data.offenceType !== '') {
+    const offenceTypePath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.offenceType.text,
+        data.offenceType,
+        offenceTypePath.replace(':orderId', order.id),
         answerOpts,
       ),
     )
@@ -126,28 +140,31 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
   if (data.startDate && data.startDate !== null) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
     answers.push(
-      createDateAnswer(
-        'What is the date for the first day of all monitoring?',
-        data.startDate,
-        path,
-        answerOpts,
-      ),
+      createDateAnswer('What is the date for the first day of all monitoring?', data.startDate, path, answerOpts),
     )
     if (config.monitoringConditionTimes.enabled)
-    answers.push(createTimeAnswer(content.pages.monitoringConditions.questions.startTime.text, order.monitoringConditions.startDate, path, answerOpts))
+      answers.push(
+        createTimeAnswer(
+          content.pages.monitoringConditions.questions.startTime.text,
+          order.monitoringConditions.startDate,
+          path,
+          answerOpts,
+        ),
+      )
   }
-
-
-
-
 
   if (data.endDate && data.endDate !== null) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
-    answers.push(
-      createDateAnswer('What is the date when all monitoring ends?', data.endDate, path),
-    )
+    answers.push(createDateAnswer('What is the date when all monitoring ends?', data.endDate, path))
     if (config.monitoringConditionTimes.enabled)
-  answers.push(createTimeAnswer(content.pages.monitoringConditions.questions.endTime.text, order.monitoringConditions.endDate, path, answerOpts))
+      answers.push(
+        createTimeAnswer(
+          content.pages.monitoringConditions.questions.endTime.text,
+          order.monitoringConditions.endDate,
+          path,
+          answerOpts,
+        ),
+      )
   }
 
   return answers

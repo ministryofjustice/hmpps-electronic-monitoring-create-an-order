@@ -20,6 +20,7 @@ const mockApiResponse = {
   startDate: '2005-03-31T23:00:00.000Z',
   trail: false,
   pilot: 'some pilot',
+  offenceType: '',
   isValid: true,
 }
 

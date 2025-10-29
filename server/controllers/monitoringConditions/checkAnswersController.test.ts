@@ -69,7 +69,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
@@ -132,7 +135,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           issp: 'NO',
           hdc: 'YES',
           prarr: 'YES',
-          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW'
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
@@ -258,20 +261,20 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
-              text: "What is the order type?"
+              text: 'What is the order type?',
             },
             value: {
-              text: "Pre-Trial"
+              text: 'Pre-Trial',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
-                  text: "Change",
-                  visuallyHiddenText: "what is the order type?"
-                }
-              ]
-            }
+                  text: 'Change',
+                  visuallyHiddenText: 'what is the order type?',
+                },
+              ],
+            },
           },
           {
             key: {
@@ -341,7 +344,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 },
               ],
             },
-          },   
+          },
           {
             key: {
               text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
@@ -359,7 +362,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 },
               ],
             },
-          }, 
+          },
           {
             key: {
               text: 'What monitoring does the device wearer need?',
@@ -370,13 +373,16 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
               ],
             },
-          },         
+          },
           {
             key: {
               text: 'What is the date for the first day of all monitoring?',
@@ -387,7 +393,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date for the first day of all monitoring?',
                 },
@@ -404,13 +413,16 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what is the start time on the first day of monitoring?',
                 },
               ],
             },
-          },          
+          },
           {
             key: {
               text: 'What is the date when all monitoring ends?',
@@ -421,7 +433,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
@@ -438,15 +453,16 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
                 },
               ],
             },
-          },               
-         
-        
+          },
         ],
         installationAppointment: [],
         installationLocation: [],
@@ -1065,7 +1081,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           issp: 'NO',
           hdc: 'YES',
           prarr: 'UNKNOWN',
-          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW'
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
@@ -1191,20 +1207,20 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
-              text: "What is the order type?"
+              text: 'What is the order type?',
             },
             value: {
-              text: "Pre-Trial"
+              text: 'Pre-Trial',
             },
             actions: {
               items: [
                 {
                   href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
-                  text: "Change",
-                  visuallyHiddenText: "what is the order type?"
-                }
-              ]
-            }
+                  text: 'Change',
+                  visuallyHiddenText: 'what is the order type?',
+                },
+              ],
+            },
           },
           {
             key: {
@@ -1274,7 +1290,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 },
               ],
             },
-          },   
+          },
           {
             key: {
               text: 'What monitoring does the device wearer need?',
@@ -1285,7 +1301,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
@@ -1302,7 +1321,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date for the first day of all monitoring?',
                 },
@@ -1319,13 +1341,16 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
-          },         
+          },
         ],
         installationAppointment: [],
         installationLocation: [],

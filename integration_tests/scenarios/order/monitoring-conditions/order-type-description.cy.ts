@@ -91,7 +91,11 @@ context('Order type descriptions', () => {
       monitoringOrderTypeDescription.pilot,
     )
 
-    // verifyValueInCheckYourAnswerPage(page, 'What type of acquisitive crime offence did the device wearer commit?', monitoringOrderTypeDescription.typeOfAcquistiveCrime)
+    verifyValueInCheckYourAnswerPage(
+      page,
+      'What type of acquisitive crime offence did the device wearer commit?',
+      monitoringOrderTypeDescription.typeOfAcquistiveCrime,
+    )
 
     // verifyValueInCheckYourAnswerPage(page, "Which police force area is the device wearer's release address in?", monitoringOrderTypeDescription.policeForceArea)
 
@@ -129,7 +133,7 @@ context('Order type descriptions', () => {
   }
 
   it('Notification org is prison, full HDC and pilot flow', () => {
-    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
     const monitoringOrderTypeDescription = {
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'Yes',
