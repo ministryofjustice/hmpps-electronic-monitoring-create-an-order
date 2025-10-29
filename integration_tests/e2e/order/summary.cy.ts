@@ -830,7 +830,9 @@ context('Order Summary', () => {
       page.submitOrderButton.should('be.disabled')
     })
 
-    it('should display monitoring condition task as Incomplete', () => {
+    it('should display monitoring condition task as Incomplete, link to order type description flow', () => {
+      const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -903,6 +905,81 @@ context('Order Summary', () => {
         `/order/${mockOrderId}/monitoring-conditions/order-type-description/order-type`,
       )
       page.submitOrderButton.should('be.disabled')
+      cy.task('resetFeatureFlags')
+    })
+
+    it('should display monitoring condition task as Incomplete', () => {
+      const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: false }
+      cy.task('setFeatureFlags', testFlags)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: { contactNumber: '' },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          addresses: [],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+        },
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
+      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.submitOrderButton.should('be.disabled')
+      cy.task('resetFeatureFlags')
     })
   })
 
