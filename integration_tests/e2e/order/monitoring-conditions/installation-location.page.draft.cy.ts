@@ -38,6 +38,7 @@ const mockDefaultOrder = {
     hdc: 'NO',
     prarr: 'UNKNOWN',
     pilot: '',
+    offenceType: '',
   },
 }
 const stubGetOrder = order => {
@@ -321,6 +322,7 @@ context('Monitoring conditions', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           },
         })
         const page = Page.visit(InstallationLocationPage, {

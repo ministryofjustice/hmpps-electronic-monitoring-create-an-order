@@ -37,6 +37,7 @@ const mockDefaultOrder = {
     issp: 'YES',
     hdc: 'NO',
     prarr: 'UNKNOWN',
+    offenceType: '',
   },
 }
 const stubGetOrder = order => {

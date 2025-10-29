@@ -71,6 +71,7 @@ context('The kitchen sink', () => {
       issp: 'No',
       hdc: 'No',
       prarr: 'No',
+      offenceType: '',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day

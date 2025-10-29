@@ -49,6 +49,7 @@ context('Monitoring conditions', () => {
         hdc: 'NO',
         prarr: 'UNKNOWN',
         pilot: '',
+        offenceType: '',
       },
       addresses: [
         {
@@ -93,6 +94,7 @@ context('Monitoring conditions', () => {
           hdc: 'NO',
           prarr: 'UNKNOWN',
           pilot: '',
+          offenceType: '',
         })
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
@@ -169,6 +171,7 @@ context('Monitoring conditions', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -196,6 +199,7 @@ context('Monitoring conditions', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -223,6 +227,7 @@ context('Monitoring conditions', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -250,6 +255,7 @@ context('Monitoring conditions', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {
@@ -277,6 +283,7 @@ context('Monitoring conditions', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           })
           const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
           const validFormData = {

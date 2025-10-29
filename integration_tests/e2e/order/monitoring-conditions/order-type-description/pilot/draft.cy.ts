@@ -39,6 +39,7 @@ const mockDefaultOrder = {
     hdc: 'NO',
     prarr: 'UNKNOWN',
     pilot: '',
+    offenceType: '',
   },
 }
 

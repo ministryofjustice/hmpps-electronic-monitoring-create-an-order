@@ -22,6 +22,7 @@ const mockResponse = {
   hdc: 'NO',
   prarr: 'UNKNOWN',
   pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+  offenceType: '',
 }
 const apiPath = '/monitoring-conditions'
 const stubGetOrder = () => {
