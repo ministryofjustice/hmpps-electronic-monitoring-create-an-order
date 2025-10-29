@@ -248,6 +248,7 @@ context('Order Summary', () => {
             prarr: null,
             pilot: null,
             isValid: true,
+            offenceType: null,
           },
           monitoringConditionsTrail: { startDate: null, endDate: null },
           monitoringConditionsAlcohol: {
@@ -587,6 +588,7 @@ context('Order Summary', () => {
             prarr: null,
             pilot: null,
             isValid: true,
+            offenceType: null,
           },
           monitoringConditionsTrail: { startDate: null, endDate: null },
           monitoringConditionsAlcohol: {
