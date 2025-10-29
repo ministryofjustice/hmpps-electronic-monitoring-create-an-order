@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import OffenceTypePage from './OffenceTypePage'
 import Page from '../../../../../pages/page'
-import PrarrPage from '../prarr/PrarrPage'
+import PoliceAreaPage from '../police-area/PoliceAreaPage'
 
 const mockOrderId = uuidv4()
 context('offence type', () => {
@@ -22,6 +22,6 @@ context('offence type', () => {
     page.form.fillInWith('Burglary in a Dwelling - Indictable only')
     page.form.continueButton.click()
 
-    Page.verifyOnPage(PrarrPage)
+    Page.verifyOnPage(PoliceAreaPage)
   })
 })
