@@ -48,6 +48,10 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What is the start time on the first day of monitoring?',
       hint: 'Enter time using a 24 hour clock. For example 14:30 instead of 2.30pm',
     },
+    offenceType: {
+      text: 'What type of acquisitive crime offence did the device wearer commit?',
+      hint: 'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence.',
+    },
   },
   section: 'Electronic monitoring required',
   title: 'Monitoring details',

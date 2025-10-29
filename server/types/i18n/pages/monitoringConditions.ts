@@ -13,6 +13,7 @@ type MonitoringConditionsPageContent = QuestionPageContent<
   | 'sentenceType'
   | 'startDate'
   | 'startTime'
+  | 'offenceType'
 >
 
 export default MonitoringConditionsPageContent

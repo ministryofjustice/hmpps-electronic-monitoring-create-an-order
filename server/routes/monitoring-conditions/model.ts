@@ -52,6 +52,7 @@ const MonitoringConditionsModel = z.object({
   endDate: z.string().datetime().nullable().optional(),
   hdc: z.string().nullable().optional(),
   pilot: PilotTypeEnum.nullable().optional(),
+  offenceType: z.string().nullable().optional(),
   issp: z.string().nullable().optional(),
   prarr: YesNoUnknownEnum.nullable().optional(),
 })

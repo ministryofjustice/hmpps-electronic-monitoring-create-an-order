@@ -32,6 +32,7 @@ interface ValidationErrors {
     isspRequired: string
     hdcRequired: string
     prarrRequired: string
+    offenceTypeRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -207,6 +208,7 @@ const validationErrors: ValidationErrors = {
     isspRequired: 'Select Yes if the device wearer is on the ISSP',
     hdcRequired: 'Select Yes if the device wearer is on a HDC',
     prarrRequired: 'Select if the device wearer is being released on a P-RARR',
+    offenceTypeRequired: 'Select the type of offence the device wearer committed',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
   },
