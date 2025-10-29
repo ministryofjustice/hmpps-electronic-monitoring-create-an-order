@@ -118,4 +118,119 @@ describe('store service', () => {
       expect(result.hdc).toBeUndefined()
     })
   })
+
+  describe('clearing down data', () => {
+    beforeEach(async () => {
+      // setup store with values from flow
+      await service.updateOrderType(mockOrder, { orderType: 'COMMUNITY' })
+      await service.updateField(mockOrder, 'sentenceType', 'STANDARD_DETERMINATE_SENTENCE')
+      await service.updateField(mockOrder, 'hdc', 'YES')
+      await service.updateField(mockOrder, 'pilot', 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW')
+      await service.updateField(mockOrder, 'offenceType', 'Burglary in a Dwelling - Indictable only')
+      await service.updateField(mockOrder, 'issp', 'YES')
+      await service.updateMonitoringDates(mockOrder, {
+        startDate: new Date(2025, 10, 10).toISOString(),
+        endDate: new Date(2025, 10, 11).toISOString(),
+      })
+      await service.updateMonitoringType(mockOrder, {
+        curfew: true,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
+      })
+    })
+
+    it('order type', async () => {
+      // change order type
+      await service.updateOrderType(mockOrder, { orderType: 'IMMIGRATION' })
+
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      const expectedData: MonitoringConditions = {
+        orderType: 'IMMIGRATION',
+        conditionType: 'BAIL_ORDER',
+      }
+
+      expect(newData).toEqual(expectedData)
+    })
+
+    it('sentenceType', async () => {
+      await service.updateSentenceType(mockOrder, { sentenceType: 'COMMUNITY' })
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      const expectedData: MonitoringConditions = {
+        orderType: 'COMMUNITY',
+        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        sentenceType: 'COMMUNITY',
+      }
+
+      expect(newData).toEqual(expectedData)
+    })
+
+    it('does not clear sentence type if same value', async () => {
+      const oldData = await service.getMonitoringConditions(mockOrder)
+      await service.updateSentenceType(mockOrder, { sentenceType: 'STANDARD_DETERMINATE_SENTENCE' })
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      expect(newData).toEqual(oldData)
+    })
+
+    it('offenceType', async () => {
+      await service.updateField(mockOrder, 'offenceType', 'some new offence type')
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      const expectedData: MonitoringConditions = {
+        orderType: 'COMMUNITY',
+        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'YES',
+        pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
+        offenceType: 'some new offence type',
+      }
+
+      expect(newData).toEqual(expectedData)
+    })
+
+    it('monitoring dates', async () => {
+      const oldData = await service.getMonitoringConditions(mockOrder)
+      await service.updateMonitoringDates(mockOrder, {
+        startDate: new Date(2025, 10, 11).toISOString(),
+        endDate: new Date(2025, 10, 12).toISOString(),
+      })
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      const expectedData: MonitoringConditions = {
+        ...oldData,
+        startDate: new Date(2025, 10, 11).toISOString(),
+        endDate: new Date(2025, 10, 12).toISOString(),
+        curfew: undefined,
+        exclusionZone: undefined,
+        trail: undefined,
+        mandatoryAttendance: undefined,
+        alcohol: undefined,
+      }
+
+      expect(newData).toEqual(expectedData)
+    })
+
+    it('monitoring type', async () => {
+      const oldData = await service.getMonitoringConditions(mockOrder)
+      await service.updateMonitoringType(mockOrder, {
+        curfew: false,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
+      })
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      const expectedData: MonitoringConditions = {
+        ...oldData,
+        curfew: false,
+      }
+
+      expect(newData).toEqual(expectedData)
+    })
+  })
 })
