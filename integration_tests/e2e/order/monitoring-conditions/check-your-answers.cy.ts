@@ -23,6 +23,7 @@ context('Check your answers', () => {
         hdc: 'NO',
         prarr: 'UNKNOWN',
         pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+        offenceType: '',
       },
       curfewReleaseDateConditions: {
         curfewAddress: '',
@@ -386,6 +387,7 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
+            offenceType: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -476,6 +478,7 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -567,6 +570,7 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           },
           curfewReleaseDateConditions: {
             curfewAddress: '',
