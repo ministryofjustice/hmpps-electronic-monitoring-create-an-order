@@ -34,17 +34,7 @@ import HavePhotoPage from './attachments/havePhoto'
 import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
 import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
 import TertiaryAddressPage from './contact-information/tertiary-adddress'
-import SentenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/sentence-type/SentenceTypePage'
-import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
-import PilotPage from '../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
-import PrarrPage from '../../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
-import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
-import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
-import SingleQuestionFormComponent from '../components/SingleQuestionFormComponent'
-import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
-import MonitoringDatesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-dates/MonitoringDatesPage'
-import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
-import PoliceAreaPage from '../../e2e/order/monitoring-conditions/order-type-description/police-area/PoliceAreaPage'
+import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -584,7 +574,7 @@ export default class OrderTasksPage extends AppPage {
       monitoringConditionsPage.form.saveAndContinueButton.click()
     }
     if (monitoringOrderTypeDescription) {
-      this.fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
+      fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
     }
   }
 
@@ -702,82 +692,5 @@ export default class OrderTasksPage extends AppPage {
       )
       monitoringConditionsCheckYourAnswersPage.continueButton().click()
     }
-  }
-
-  fillinSingleQuestionFormWith(form: SingleQuestionFormComponent, value: string) {
-    form.fillInWith(value)
-    form.continueButton.click()
-  }
-
-  fillInOrderTypeDescriptionsWith({
-    orderType = undefined,
-    sentenceType = undefined,
-    issp = undefined,
-    hdc = undefined,
-    pilot = undefined,
-    typeOfAcquistiveCrime = undefined,
-    policeForceArea = undefined,
-    prarr = undefined,
-    monitoringStartDate,
-    monitoringEndDate,
-    monitoringCondition,
-  }): void {
-    // Order type page
-    if (orderType) {
-      const orderTypePage = Page.verifyOnPage(OrderTypePage)
-      this.fillinSingleQuestionFormWith(orderTypePage.form, orderType)
-    }
-
-    // sentence type page
-    if (sentenceType) {
-      const sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
-      this.fillinSingleQuestionFormWith(sentenceTypePage.form, sentenceType)
-    }
-
-    // HDC page
-    if (hdc) {
-      const hdcPage = Page.verifyOnPage(HdcPage)
-      this.fillinSingleQuestionFormWith(hdcPage.form, hdc)
-    }
-
-    // Pilot page
-    if (pilot) {
-      const pilotPage = Page.verifyOnPage(PilotPage)
-      this.fillinSingleQuestionFormWith(pilotPage.form, pilot)
-    }
-    // Type of Acquistive Crime
-    if (typeOfAcquistiveCrime) {
-      const offenceTypePage = Page.verifyOnPage(OffenceTypePage)
-      this.fillinSingleQuestionFormWith(offenceTypePage.form, typeOfAcquistiveCrime)
-    }
-
-    // Police force area
-    if (policeForceArea) {
-      const policeAreaPage = Page.verifyOnPage(PoliceAreaPage)
-      this.fillinSingleQuestionFormWith(policeAreaPage.form, policeForceArea)
-    }
-
-    // ISSP
-    if (issp) {
-      const isspPage = Page.verifyOnPage(IsspPage)
-      this.fillinSingleQuestionFormWith(isspPage.form, issp)
-    }
-
-    // PRARR
-    if (prarr) {
-      const prarrPage = Page.verifyOnPage(PrarrPage)
-      this.fillinSingleQuestionFormWith(prarrPage.form, prarr)
-    }
-    // Monitoring Dates
-    const monitoringDatePage = Page.verifyOnPage(MonitoringDatesPage)
-    monitoringDatePage.form.fillInWithInput({
-      startDate: monitoringStartDate,
-      endDate: monitoringEndDate,
-    })
-    monitoringDatePage.form.continueButton.click()
-
-    // Monicotring conditions
-    const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
-    this.fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
   }
 }
