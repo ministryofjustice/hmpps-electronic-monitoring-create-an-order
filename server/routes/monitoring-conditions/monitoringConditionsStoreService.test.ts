@@ -3,15 +3,17 @@ import MonitoringConditionsStoreService from './monitoringConditionsStoreService
 import { MonitoringConditions } from './model'
 import InMemoryStore from './store/inMemoryStore'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
+import { Order } from '../../models/Order'
 
 describe('store service', () => {
   let store: InMemoryStore
   let service: MonitoringConditionsStoreService
   const mockOrderId = uuidv4()
-  const mockOrder = getMockOrder({ id: mockOrderId })
+  let mockOrder: Order
   beforeEach(() => {
     store = new InMemoryStore()
     service = new MonitoringConditionsStoreService(store)
+    mockOrder = getMockOrder({ id: mockOrderId })
   })
   describe('getMonitoringConditions', () => {
     it('will load monitoring codition from Order object, if not in cache', async () => {
