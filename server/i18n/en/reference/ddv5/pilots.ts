@@ -10,7 +10,7 @@ const pilots: Pilots = {
   GPS_ACQUISITIVE_CRIME_PAROLE: 'GPS Acquisitive Crime',
   ACQUISITIVE_CRIME_PROJECT: 'Acquisitive Crime Project',
   LICENCE_VARIATION_PROJECT: 'Licence Variation Project',
-  UNKNOWN: 'They are not part of any of these pilots DDV5',
+  UNKNOWN: 'They are not part of any of these pilots',
 }
 
 export default pilots
