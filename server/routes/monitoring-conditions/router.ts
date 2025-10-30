@@ -10,6 +10,7 @@ import PrarrController from './prarr/controller'
 import MonitoringTypesController from './monitoring-types/controller'
 import OffenceTypeController from './offence-type/controller'
 import MonitoringDatesController from './monitoring-dates/controller'
+import PoliceAreaController from './police-area/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<
@@ -43,6 +44,8 @@ const createOrderTypeDescriptionRouter = (
 
   const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
 
+  const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
+
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
@@ -66,6 +69,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
   router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
+
+  router.get('/police-area', asyncMiddleware(policeAreaController.view))
+  router.post('/police-area', asyncMiddleware(policeAreaController.update))
 
   router.get('/monitoring-dates', asyncMiddleware(monitoringDatesController.view))
   router.post('/monitoring-dates', asyncMiddleware(monitoringDatesController.update))

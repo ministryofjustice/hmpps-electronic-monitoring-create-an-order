@@ -38,6 +38,6 @@ export default class OffenceTypeController {
 
     await this.store.updateField(order, 'offenceType', formData.offenceType)
 
-    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
+    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA.replace(':orderId', order.id))
   }
 }

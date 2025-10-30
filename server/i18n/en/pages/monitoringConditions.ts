@@ -52,6 +52,10 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What type of acquisitive crime offence did the device wearer commit?',
       hint: 'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence.',
     },
+    policeArea: {
+      text: "Which police force area is the device wearer's release address in?",
+      hint: 'To be eligible for the acquisitive crime pilot the device wearer\'s release address must be in an in-scope police area. Use the <a href="https://www.police.uk/pu/your-area/" id="police-area-link" target="_blank" rel="noopener noreferrer" class="govuk-link">police force lookup (opens in a new tab)</a> to check which police force area the device wearer release address is in.',
+    },
   },
   section: 'Electronic monitoring required',
   title: 'Monitoring details',
