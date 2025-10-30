@@ -13,6 +13,7 @@ export default class MonitoringConditionsStoreService {
     'hdc',
     'pilot',
     'offenceType',
+    'policeArea',
     'issp',
     'prarr',
   ]

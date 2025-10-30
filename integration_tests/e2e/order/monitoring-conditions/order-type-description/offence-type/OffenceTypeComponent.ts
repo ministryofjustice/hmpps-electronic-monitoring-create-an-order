@@ -7,9 +7,9 @@ export default class OffenceTypeComponent extends SingleQuestionFormComponent {
     return new FormRadiosComponent(this.form, label, [])
   }
 
-  fillInWith(offenceType: string) {
-    if (offenceType) {
-      this.offenceTypeField.set(offenceType)
+  fillInWith(value: string) {
+    if (value) {
+      this.offenceTypeField.set(value)
     }
   }
 }

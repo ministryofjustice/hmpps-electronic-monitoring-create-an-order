@@ -115,6 +115,18 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
+  if (data.policeArea !== undefined && data.policeArea !== null && data.policeArea !== '') {
+    const policeAreaPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.policeArea.text,
+        data.policeArea,
+        policeAreaPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
   if (data.prarr !== undefined && data.prarr !== null && data.prarr !== 'UNKNOWN') {
     const prarrPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR
     answers.push(

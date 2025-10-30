@@ -102,7 +102,11 @@ context('Order type descriptions', () => {
       monitoringOrderTypeDescription.typeOfAcquistiveCrime,
     )
 
-    // verifyValueInCheckYourAnswerPage(page, "Which police force area is the device wearer's release address in?", monitoringOrderTypeDescription.policeForceArea)
+    verifyValueInCheckYourAnswerPage(
+      page,
+      "Which police force area is the device wearer's release address in?",
+      monitoringOrderTypeDescription.policeForceArea,
+    )
 
     verifyValueInCheckYourAnswerPage(
       page,

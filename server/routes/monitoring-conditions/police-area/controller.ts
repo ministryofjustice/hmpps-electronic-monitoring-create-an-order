@@ -16,7 +16,7 @@ export default class PoliceAreaController {
 
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const model = constructModel(data, errors)
+    const model = constructModel(data, errors, res.locals.content!)
     res.render('pages/order/monitoring-conditions/order-type-description/police-area', model)
   }
 

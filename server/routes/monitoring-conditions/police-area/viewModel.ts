@@ -1,5 +1,6 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
+import I18n from '../../../types/i18n'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
@@ -13,36 +14,19 @@ interface Option {
   value: string
 }
 
-const constructModel = (data: MonitoringConditions, errors: ValidationResult): PoliceAreaViewModel => {
+const constructModel = (data: MonitoringConditions, errors: ValidationResult, content: I18n): PoliceAreaViewModel => {
   return {
     policeArea: { value: data.policeArea || '', error: getError(errors, 'policeArea') },
-    items: getItems(),
+    items: getItems(content),
     errorSummary: createGovukErrorSummary(errors),
   }
 }
 
-const getItems = () => {
-  return [
-    { text: 'Avon and Somerset', value: 'Avon and Somerset' },
-    { text: 'Bedfordshire', value: 'Bedfordshire' },
-    { text: 'Cheshire', value: 'Cheshire' },
-    { text: 'City of London', value: 'City of London' },
-    { text: 'Cumbria', value: 'Cumbria' },
-    { text: 'Derbyshire', value: 'Derbyshire' },
-    { text: 'Durham', value: 'Durham' },
-    { text: 'Essex', value: 'Essex' },
-    { text: 'Gloucestershire', value: 'Gloucestershire' },
-    { text: 'Gwent', value: 'Gwent' },
-    { text: 'Hampshire', value: 'Hampshire' },
-    { text: 'Hertfordshire', value: 'Hertfordshire' },
-    { text: 'Humberside', value: 'Humberside' },
-    { text: 'Kent', value: 'Kent' },
-    { text: 'Metropolitan Police', value: 'Metropolitan Police' },
-    { text: 'North Wales', value: 'North Wales' },
-    { text: 'Nottinghamshire', value: 'Nottinghamshire' },
-    { text: 'Sussex', value: 'Sussex' },
-    { text: 'West Midlands', value: 'West Midlands' },
-  ]
+const getItems = (content: I18n) => {
+  const entries = Object.entries(content.reference.policeAreas)
+  return entries.map(it => {
+    return { text: it[1].toString(), value: it[1].toString() }
+  })
 }
 
 export default constructModel

@@ -44,6 +44,7 @@ import SingleQuestionFormComponent from '../components/SingleQuestionFormCompone
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 import MonitoringDatesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-dates/MonitoringDatesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
+import PoliceAreaPage from '../../e2e/order/monitoring-conditions/order-type-description/police-area/PoliceAreaPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -752,7 +753,8 @@ export default class OrderTasksPage extends AppPage {
 
     // Police force area
     if (policeForceArea) {
-      // TODO implement policy force area
+      const policeAreaPage = Page.verifyOnPage(PoliceAreaPage)
+      this.fillinSingleQuestionFormWith(policeAreaPage.form, policeForceArea)
     }
 
     if (issp) {

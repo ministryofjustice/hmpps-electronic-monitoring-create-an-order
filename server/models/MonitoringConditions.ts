@@ -48,6 +48,7 @@ const MonitoringConditionsModel = z.object({
   pilot: z.string().nullable(),
   isValid: z.boolean().default(false),
   offenceType: z.string().nullable(),
+  policeArea: z.string().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>
