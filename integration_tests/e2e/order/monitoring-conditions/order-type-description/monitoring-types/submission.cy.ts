@@ -26,10 +26,6 @@ const mockResponse = {
 }
 const apiPath = '/monitoring-conditions'
 const stubGetOrder = () => {
-  // cy.task('stubCemoGetOrder', {
-  //   httpStatus: 200,
-  //   id: mockOrderId,
-  // })
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,

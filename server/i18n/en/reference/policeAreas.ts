@@ -1,4 +1,4 @@
-import PoliceAreas from '../../../types/i18n/reference/policeAres'
+import PoliceAreas from '../../../types/i18n/reference/policeAreas'
 
 const policeAreas: PoliceAreas = {
   AVON_AND_SOMERSET: 'Avon and Somerset',

@@ -30,7 +30,7 @@ import ProbationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
 import InstallationLocations from './installationLocations'
 import PossibleRisks from './possibleRisks'
-import PoliceAreas from './policeAres'
+import PoliceAreas from './policeAreas'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
