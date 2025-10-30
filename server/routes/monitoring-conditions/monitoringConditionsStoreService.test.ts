@@ -13,6 +13,70 @@ describe('store service', () => {
     store = new InMemoryStore()
     service = new MonitoringConditionsStoreService(store)
   })
+  describe('getMonitoringConditions', () => {
+    it('will load monitoring codition from Order object, if not in cache', async () => {
+      mockOrder.monitoringConditions = {
+        startDate: '2025-01-01T00:00:00Z',
+        endDate: '2025-02-01T00:00:00Z',
+        orderType: 'CIVIL',
+        curfew: true,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
+        conditionType: 'BAIL_ORDER',
+        orderTypeDescription: null,
+        sentenceType: 'IPP',
+        issp: 'YES',
+        hdc: 'NO',
+        prarr: 'NO',
+        pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
+        offenceType: '',
+        isValid: true,
+      }
+      const result = await service.getMonitoringConditions(mockOrder)
+
+      expect(result).toEqual({
+        startDate: '2025-01-01T00:00:00Z',
+        endDate: '2025-02-01T00:00:00Z',
+        orderType: 'CIVIL',
+        curfew: true,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
+        conditionType: 'BAIL_ORDER',
+        sentenceType: 'IPP',
+        issp: 'YES',
+        hdc: 'NO',
+        prarr: 'NO',
+        pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
+        offenceType: '',
+      })
+    })
+
+    it('will create new instance if not in cache and order monitoring condition is null', async () => {
+      const result = await service.getMonitoringConditions(mockOrder)
+
+      expect(result).toEqual({
+        alcohol: null,
+        conditionType: null,
+        curfew: null,
+        endDate: null,
+        exclusionZone: null,
+        hdc: null,
+        issp: null,
+        mandatoryAttendance: null,
+        offenceType: null,
+        orderType: null,
+        pilot: null,
+        prarr: null,
+        sentenceType: null,
+        startDate: null,
+        trail: null,
+      })
+    })
+  })
 
   it('can update a single top level field', async () => {
     await service.updateField(mockOrder, 'orderType', 'IMMIGRATION')
@@ -99,7 +163,7 @@ describe('store service', () => {
       expect(result.sentenceType).toBe('STANDARD_DETERMINATE_SENTENCE')
     })
 
-    it('should set hdc to YES when sentenceType is "SECTION_91" for a Post Release order', async () => {
+    it('should set hdc to YES when sentenceType isSECTION_91" for a Post Release order', async () => {
       await service.updateOrderType(mockOrder, { orderType: 'POST_RELEASE' })
 
       await service.updateSentenceType(mockOrder, { sentenceType: 'SECTION_91' })

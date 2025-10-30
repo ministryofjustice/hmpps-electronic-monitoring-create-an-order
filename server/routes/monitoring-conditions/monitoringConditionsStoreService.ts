@@ -31,7 +31,8 @@ export default class MonitoringConditionsStoreService {
     let result = await this.dataStore.get(key)
 
     if (result === null) {
-      result = JSON.stringify({})
+      if (order.monitoringConditions) result = JSON.stringify(order.monitoringConditions)
+      else result = JSON.stringify({})
     }
     await this.dataStore.set(key, result, 24 * 60 * 60)
 
