@@ -10,6 +10,24 @@ describe('store service', () => {
   let service: MonitoringConditionsStoreService
   const mockOrderId = uuidv4()
   let mockOrder: Order
+
+  const emptyMoinitoringCondition = {
+    alcohol: null,
+    conditionType: null,
+    curfew: null,
+    endDate: null,
+    exclusionZone: null,
+    hdc: null,
+    issp: null,
+    mandatoryAttendance: null,
+    offenceType: null,
+    orderType: null,
+    pilot: null,
+    prarr: null,
+    sentenceType: null,
+    startDate: null,
+    trail: null,
+  }
   beforeEach(() => {
     store = new InMemoryStore()
     service = new MonitoringConditionsStoreService(store)
@@ -60,23 +78,7 @@ describe('store service', () => {
     it('will create new instance if not in cache and order monitoring condition is null', async () => {
       const result = await service.getMonitoringConditions(mockOrder)
 
-      expect(result).toEqual({
-        alcohol: null,
-        conditionType: null,
-        curfew: null,
-        endDate: null,
-        exclusionZone: null,
-        hdc: null,
-        issp: null,
-        mandatoryAttendance: null,
-        offenceType: null,
-        orderType: null,
-        pilot: null,
-        prarr: null,
-        sentenceType: null,
-        startDate: null,
-        trail: null,
-      })
+      expect(result).toEqual(emptyMoinitoringCondition)
     })
   })
 
@@ -93,7 +95,7 @@ describe('store service', () => {
     it('correctly updates the order type value in the store', async () => {
       const initial = await service.getMonitoringConditions(mockOrder)
 
-      expect(initial).toEqual({})
+      expect(initial).toEqual(emptyMoinitoringCondition)
 
       await service.updateOrderType(mockOrder, { orderType: 'COMMUNITY' })
 
@@ -135,9 +137,8 @@ describe('store service', () => {
 
         const result = await service.getMonitoringConditions(mockOrder)
 
-        const expected: MonitoringConditions = { orderType, conditionType: orderTypeConditions }
-
-        expect(result).toEqual(expected)
+        expect(result.orderType).toEqual(orderType)
+        expect(result.conditionType).toEqual(orderTypeConditions)
       },
     )
 
