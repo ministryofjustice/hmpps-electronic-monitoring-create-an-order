@@ -6,7 +6,7 @@ import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trai
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 context('Order type descriptions', () => {
-  const currenDate = new Date()
+  const currentDate = new Date()
   const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: true }
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
@@ -29,8 +29,8 @@ context('Order type descriptions', () => {
   let orderSummaryPage: OrderSummaryPage
 
   const trailMonitoringOrder = {
-    startDate: new Date(currenDate.getFullYear(), 11, 1),
-    endDate: new Date(currenDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+    startDate: new Date(currentDate.getFullYear(), 11, 1),
+    endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
   }
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)
@@ -133,7 +133,7 @@ context('Order type descriptions', () => {
       },
     ])
 
-    // Monicotring conditions
+    // Monitoring conditions
     verifyValueInCheckYourAnswerPage(
       page,
       'What monitoring does the device wearer need?',
@@ -150,8 +150,8 @@ context('Order type descriptions', () => {
       typeOfAcquistiveCrime: 'Aggravated Burglary',
       policeForceArea: 'Kent',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -171,8 +171,8 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       sentenceType: 'Extended Determinate Sentence',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -191,8 +191,8 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       sentenceType: 'Section 250 / Section 91',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -212,8 +212,8 @@ context('Order type descriptions', () => {
       sentenceType: 'Detention and Training Order',
       issp: 'Yes',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -243,8 +243,8 @@ context('Order type descriptions', () => {
       hdc: 'No',
       prarr: 'Yes',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -265,8 +265,8 @@ context('Order type descriptions', () => {
       orderType: 'Community',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
       issp: 'Yes',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -286,8 +286,8 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Suspended Sentence',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -304,8 +304,8 @@ context('Order type descriptions', () => {
   it('Notification org is home office', () => {
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -328,8 +328,8 @@ context('Order type descriptions', () => {
     )
     const monitoringOrderTypeDescription = {
       orderType: 'Civil',
-      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 

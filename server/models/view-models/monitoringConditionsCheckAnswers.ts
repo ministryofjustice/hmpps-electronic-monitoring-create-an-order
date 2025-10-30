@@ -27,9 +27,9 @@ import FeatureFlags from '../../utils/featureFlags'
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
   const data = order.monitoringConditions
-  const nofityingOrg = order.interestedParties?.notifyingOrganisation
+  const notifyingOrg = order.interestedParties?.notifyingOrganisation
   if (
-    !(nofityingOrg === 'PRISON' || nofityingOrg === 'YOUTH_CUSTODY_SERVICE' || nofityingOrg === 'HOME_OFFICE') &&
+    !(notifyingOrg === 'PRISON' || notifyingOrg === 'YOUTH_CUSTODY_SERVICE' || notifyingOrg === 'HOME_OFFICE') &&
     data.orderType !== null
   ) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE

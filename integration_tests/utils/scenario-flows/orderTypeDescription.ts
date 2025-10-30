@@ -83,7 +83,7 @@ export default function fillInOrderTypeDescriptionsWith({
   })
   monitoringDatePage.form.continueButton.click()
 
-  // Monicotring conditions
+  // Monitoring conditions
   const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
   fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
 }
