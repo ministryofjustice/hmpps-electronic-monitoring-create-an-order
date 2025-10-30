@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import OffenceTypePage from './OffenceTypePage'
+import PoliceAreaPage from './PoliceAreaPage'
 import Page from '../../../../../pages/page'
-import PoliceAreaPage from '../police-area/PoliceAreaPage'
+import PrarrPage from '../prarr/PrarrPage'
 
 const mockOrderId = uuidv4()
-context('offence type', () => {
+context('police area', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -17,11 +17,11 @@ context('offence type', () => {
   })
 
   it('Should submit the form', () => {
-    const page = Page.visit(OffenceTypePage, { orderId: mockOrderId })
+    const page = Page.visit(PoliceAreaPage, { orderId: mockOrderId })
 
-    page.form.fillInWith('Burglary in a Dwelling - Indictable only')
+    page.form.fillInWith('Essex')
     page.form.continueButton.click()
 
-    Page.verifyOnPage(PoliceAreaPage)
+    Page.verifyOnPage(PrarrPage)
   })
 })

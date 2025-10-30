@@ -33,6 +33,7 @@ interface ValidationErrors {
     hdcRequired: string
     prarrRequired: string
     offenceTypeRequired: string
+    policeAreaRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -209,6 +210,7 @@ const validationErrors: ValidationErrors = {
     hdcRequired: 'Select Yes if the device wearer is on a HDC',
     prarrRequired: 'Select if the device wearer is being released on a P-RARR',
     offenceTypeRequired: 'Select the type of offence the device wearer committed',
+    policeAreaRequired: "Select the police force area the device wearer's release address is in",
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
   },

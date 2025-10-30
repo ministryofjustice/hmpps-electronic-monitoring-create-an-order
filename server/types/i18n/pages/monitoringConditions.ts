@@ -14,6 +14,7 @@ type MonitoringConditionsPageContent = QuestionPageContent<
   | 'startDate'
   | 'startTime'
   | 'offenceType'
+  | 'policeArea'
 >
 
 export default MonitoringConditionsPageContent

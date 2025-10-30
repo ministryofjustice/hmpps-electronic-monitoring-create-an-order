@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import OffenceTypeController from './controller'
+import PoliceAreaController from './controller'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import InMemoryStore from '../store/inMemoryStore'
 import constructModel from './viewModel'
@@ -9,10 +9,10 @@ import paths from '../../../constants/paths'
 jest.mock('../monitoringConditionsStoreService')
 jest.mock('./viewModel')
 
-describe('offence type controller', () => {
+describe('police area controller', () => {
   let mockDataStore: InMemoryStore
   let mockStore: jest.Mocked<MonitoringConditionsStoreService>
-  let controller: OffenceTypeController
+  let controller: PoliceAreaController
   let res: Response
   let req: Request
   let next: NextFunction
@@ -23,7 +23,7 @@ describe('offence type controller', () => {
     mockDataStore = new InMemoryStore()
     mockStore = new MonitoringConditionsStoreService(mockDataStore) as jest.Mocked<MonitoringConditionsStoreService>
     mockStore.getMonitoringConditions.mockResolvedValue({})
-    controller = new OffenceTypeController(mockStore)
+    controller = new PoliceAreaController(mockStore)
 
     mockConstructModel.mockReturnValue({ errorSummary: null, items: [] })
 
@@ -38,7 +38,7 @@ describe('offence type controller', () => {
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/order-type-description/offence-type',
+        'pages/order/monitoring-conditions/order-type-description/police-area',
         expect.anything(),
       )
     })
@@ -47,7 +47,7 @@ describe('offence type controller', () => {
       mockStore.getMonitoringConditions.mockResolvedValue({ prarr: 'YES' })
       mockConstructModel.mockReturnValueOnce({
         errorSummary: null,
-        offenceType: { value: 'Burglary in a Dwelling - Indictable only' },
+        policeArea: { value: 'Metropolitan Police' },
         items: [],
       })
 
@@ -56,7 +56,7 @@ describe('offence type controller', () => {
       expect(res.render).toHaveBeenCalledWith(expect.anything(), {
         errorSummary: null,
         items: [],
-        offenceType: { value: 'Burglary in a Dwelling - Indictable only' },
+        policeArea: { value: 'Metropolitan Police' },
       })
     })
 
@@ -71,12 +71,12 @@ describe('offence type controller', () => {
     it('redirects to the next page', async () => {
       req.body = {
         action: 'continue',
-        offenceType: 'Burglary in a Dwelling - Indictable only',
+        policeArea: 'Metropolitan Police',
       }
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', req.order!.id),
       )
     })
     it('validates', async () => {
@@ -86,21 +86,17 @@ describe('offence type controller', () => {
       await controller.update(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
-        { error: 'Select the type of offence the device wearer committed', field: 'offenceType' },
+        { error: "Select the police force area the device wearer's release address is in", field: 'policeArea' },
       ])
     })
     it('updates store', async () => {
       req.body = {
         action: 'continue',
-        offenceType: 'Burglary in a Dwelling - Indictable only',
+        policeArea: 'Metropolitan Police',
       }
       await controller.update(req, res, next)
 
-      expect(mockStore.updateField).toHaveBeenCalledWith(
-        req.order!,
-        'offenceType',
-        'Burglary in a Dwelling - Indictable only',
-      )
+      expect(mockStore.updateField).toHaveBeenCalledWith(req.order!, 'policeArea', 'Metropolitan Police')
     })
   })
 })
