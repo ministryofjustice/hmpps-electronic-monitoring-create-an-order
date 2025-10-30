@@ -1,8 +1,8 @@
-import FormComponent from '../../../../../pages/components/formComponent'
+import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 import { PageElement } from '../../../../../pages/page'
 
-export default class PrarrComponent extends FormComponent {
+export default class PrarrComponent extends SingleQuestionFormComponent {
   get prarrField(): FormRadiosComponent {
     const label = 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
@@ -12,9 +12,9 @@ export default class PrarrComponent extends FormComponent {
     return this.form.contains('Cancel and return back to form')
   }
 
-  fillInWith(prarr: string) {
-    if (prarr) {
-      this.prarrField.set(prarr)
+  fillInWith(value: string) {
+    if (value) {
+      this.prarrField.set(value)
     }
   }
 }

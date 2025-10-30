@@ -6,6 +6,18 @@ import Store from './store/store'
 export default class MonitoringConditionsStoreService {
   constructor(private readonly dataStore: Store) {}
 
+  private readonly FIELD_HIERARCHY: (keyof MonitoringConditions)[] = [
+    'orderType',
+    'conditionType',
+    'sentenceType',
+    'hdc',
+    'pilot',
+    'offenceType',
+    'policeArea',
+    'issp',
+    'prarr',
+  ]
+
   private keyFromOrder(order: Order): string {
     return `${order.id}+${order.versionId}`
   }
@@ -19,7 +31,7 @@ export default class MonitoringConditionsStoreService {
     let result = await this.dataStore.get(key)
 
     if (result === null) {
-      result = JSON.stringify({})
+      result = JSON.stringify(order.monitoringConditions ? order.monitoringConditions : {})
     }
     await this.dataStore.set(key, result, 24 * 60 * 60)
 
@@ -33,23 +45,22 @@ export default class MonitoringConditionsStoreService {
     field: T,
     data: MonitoringConditions[T],
   ) {
-    const monitoringConditions = await this.getMonitoringConditions(order)
+    let monitoringConditions = await this.getMonitoringConditions(order)
+
+    monitoringConditions = this.getClearedData(monitoringConditions, field)
+
     monitoringConditions[field] = data
     await this.updateMonitoringConditions(order, monitoringConditions)
   }
 
   public async updateOrderType(order: Order, data: Pick<MonitoringConditions, 'orderType'>) {
-    const monitoringConditions = await this.getMonitoringConditions(order)
+    let monitoringConditions = await this.getMonitoringConditions(order)
     const previousOrderType = monitoringConditions.orderType
-    monitoringConditions.orderType = data.orderType
-
-    const goesToSentencePage = data.orderType ? ['POST_RELEASE', 'COMMUNITY', 'BAIL'].includes(data.orderType) : false
-
-    if (!goesToSentencePage && previousOrderType !== data.orderType) {
-      monitoringConditions.sentenceType = undefined
-      monitoringConditions.hdc = undefined
-      monitoringConditions.pilot = undefined
+    if (previousOrderType !== data.orderType) {
+      monitoringConditions = this.getClearedData(monitoringConditions, 'orderType')
     }
+
+    monitoringConditions.orderType = data.orderType
 
     switch (data.orderType) {
       case 'POST_RELEASE':
@@ -71,14 +82,17 @@ export default class MonitoringConditionsStoreService {
   }
 
   public async updateSentenceType(order: Order, data: Pick<MonitoringConditions, 'sentenceType'>) {
-    const monitoringConditions = await this.getMonitoringConditions(order)
+    let monitoringConditions = await this.getMonitoringConditions(order)
+
+    if (monitoringConditions.sentenceType !== data.sentenceType) {
+      monitoringConditions = this.getClearedData(monitoringConditions, 'sentenceType')
+    }
+
     monitoringConditions.sentenceType = data.sentenceType
 
     if (monitoringConditions.orderType === 'POST_RELEASE') {
       if (data.sentenceType === 'SECTION_91') {
         monitoringConditions.hdc = 'YES'
-      } else {
-        monitoringConditions.hdc = 'NO'
       }
     }
 
@@ -104,5 +118,17 @@ export default class MonitoringConditionsStoreService {
     monitoringConditions.startDate = data.startDate
     monitoringConditions.endDate = data.endDate
     await this.updateMonitoringConditions(order, monitoringConditions)
+  }
+
+  private getClearedData(currentData: MonitoringConditions, updatedField: keyof MonitoringConditions) {
+    const updatedIndex = this.FIELD_HIERARCHY.indexOf(updatedField)
+
+    const fieldsToClear = this.FIELD_HIERARCHY.slice(updatedIndex + 1)
+
+    const newData = { ...currentData }
+
+    fieldsToClear.forEach(field => delete newData[field])
+
+    return newData
   }
 }

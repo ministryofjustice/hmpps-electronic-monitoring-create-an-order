@@ -40,6 +40,7 @@ import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
 import pilots from './pilots'
+import policeAreas from './policeAreas'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -67,6 +68,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   youthJusticeServiceRegions,
   installationLocations,
   possibleRisks,
+  policeAreas,
 }
 
 const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
@@ -102,6 +104,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   probationRegionDeliveryUnits,
   installationLocations,
   possibleRisks,
+  policeAreas,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {

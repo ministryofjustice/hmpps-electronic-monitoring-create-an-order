@@ -23,6 +23,8 @@ export type InterestedPartiesFormData = {
   responsibleOfficerContactNumber?: string
 
   youthCustodyServiceRegion?: string
+  notifyingOrgProbationRegion?: string
+  civilCountyCourt?: string
 }
 
 export default class InterestedPartiesFormComponent extends FormComponent {
@@ -228,6 +230,14 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
     if (profile.youthCustodyServiceRegion) {
       this.youthCustodyServiceField.set(profile.youthCustodyServiceRegion)
+    }
+
+    if (profile.notifyingOrgProbationRegion) {
+      this.notifyingOrgProbationField.set(profile.notifyingOrgProbationRegion)
+    }
+
+    if (profile.civilCountyCourt) {
+      this.civilCountyCourtField.set(profile.civilCountyCourt)
     }
   }
 

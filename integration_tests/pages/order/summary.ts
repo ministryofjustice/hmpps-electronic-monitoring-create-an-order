@@ -34,6 +34,7 @@ import HavePhotoPage from './attachments/havePhoto'
 import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
 import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
 import TertiaryAddressPage from './contact-information/tertiary-adddress'
+import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -141,6 +142,7 @@ export default class OrderTasksPage extends AppPage {
     installationLocation,
     installationAppointment,
     tertiaryAddressDetails = undefined,
+    monitoringOrderTypeDescription = undefined,
   }): OrderTasksPage {
     this.aboutTheDeviceWearerTask.click()
 
@@ -154,6 +156,7 @@ export default class OrderTasksPage extends AppPage {
       monitoringConditions,
       probationDeliveryUnit,
       tertiaryAddressDetails,
+      monitoringOrderTypeDescription,
     })
 
     if (installationLocation) {
@@ -480,14 +483,15 @@ export default class OrderTasksPage extends AppPage {
 
   fillInGeneralOrderDetailsWith({
     deviceWearerDetails,
-    responsibleAdultDetails,
-    primaryAddressDetails,
-    secondaryAddressDetails,
-    interestedParties,
-    installationAndRisk,
-    monitoringConditions,
-    probationDeliveryUnit,
+    responsibleAdultDetails = undefined,
+    primaryAddressDetails = undefined,
+    secondaryAddressDetails = undefined,
+    interestedParties = undefined,
+    installationAndRisk = undefined,
+    monitoringConditions = undefined,
+    probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
+    monitoringOrderTypeDescription = undefined,
   }): void {
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
     aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -552,19 +556,26 @@ export default class OrderTasksPage extends AppPage {
     )
     contactInformationCheckYourAnswersPage.continueButton().click()
 
-    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    installationAndRiskPage.form.fillInWith(installationAndRisk)
-    installationAndRiskPage.form.saveAndContinueButton.click()
+    if (installationAndRisk) {
+      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+      installationAndRiskPage.form.fillInWith(installationAndRisk)
+      installationAndRiskPage.form.saveAndContinueButton.click()
 
-    const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
-      InstallationAndRiskCheckYourAnswersPage,
-      'Check your answer',
-    )
-    installationAndRiskCheckYourAnswersPage.continueButton().click()
+      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        'Check your answer',
+      )
+      installationAndRiskCheckYourAnswersPage.continueButton().click()
+    }
 
-    const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-    monitoringConditionsPage.form.fillInWith(monitoringConditions)
-    monitoringConditionsPage.form.saveAndContinueButton.click()
+    if (monitoringConditions) {
+      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
+      monitoringConditionsPage.form.fillInWith(monitoringConditions)
+      monitoringConditionsPage.form.saveAndContinueButton.click()
+    }
+    if (monitoringOrderTypeDescription) {
+      fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
+    }
   }
 
   fillInCurfewOrderDetailsWith(

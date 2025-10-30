@@ -64,7 +64,6 @@ const paths = {
       PILOT: '/order/:orderId/monitoring-conditions/order-type-description/pilot',
       MONITORING_TYPES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-types',
       OFFENCE_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/offence-type',
-      CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/order-type-description/check-your-answers',
     },
   },
 

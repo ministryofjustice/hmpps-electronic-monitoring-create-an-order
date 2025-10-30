@@ -5,14 +5,24 @@ import MonitoringConditionsStoreService from '../monitoringConditionsStoreServic
 import InMemoryStore from '../store/inMemoryStore'
 import constructModel from './viewModel'
 import paths from '../../../constants/paths'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
+import TaskListService from '../../../services/taskListService'
+import RestClient from '../../../data/restClient'
 
 jest.mock('../monitoringConditionsStoreService')
+jest.mock('../monitoringConditionsService')
 jest.mock('./viewModel')
 
 describe('prarr controller', () => {
   let mockDataStore: InMemoryStore
   let mockStore: jest.Mocked<MonitoringConditionsStoreService>
+  let mockService: jest.Mocked<MonitoringConditionsUpdateService>
+  const mockTaskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: MonitoringTypesController
+  let mockRestClient: jest.Mocked<RestClient>
   let res: Response
   let req: Request
   let next: NextFunction
@@ -22,8 +32,17 @@ describe('prarr controller', () => {
     jest.restoreAllMocks()
     mockDataStore = new InMemoryStore()
     mockStore = new MonitoringConditionsStoreService(mockDataStore) as jest.Mocked<MonitoringConditionsStoreService>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+    mockService = new MonitoringConditionsUpdateService(
+      mockRestClient,
+    ) as jest.Mocked<MonitoringConditionsUpdateService>
     mockStore.getMonitoringConditions.mockResolvedValue({})
-    controller = new MonitoringTypesController(mockStore)
+
+    controller = new MonitoringTypesController(mockStore, mockService, mockTaskListService)
 
     mockConstructModel.mockReturnValue({ errorSummary: null })
 
@@ -60,12 +79,15 @@ describe('prarr controller', () => {
     it('redirects to the next page', async () => {
       req.body = {
         action: 'continue',
-        monitoringTypes: ['curfew', 'alcohol'],
+        monitoringTypes: ['curfew'],
       }
+      mockTaskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', req.order!.id))
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', req.order!.id),
       )
     })
     it('validates', async () => {
@@ -92,6 +114,20 @@ describe('prarr controller', () => {
         mandatoryAttendance: true,
         alcohol: true,
       })
+    })
+    it('update backend', async () => {
+      req.body = {
+        action: 'continue',
+        monitoringTypes: ['trail'],
+      }
+      mockStore.getMonitoringConditions.mockResolvedValue({
+        orderType: 'COMMUNITY',
+        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+      })
+
+      await controller.update(req, res, next)
+
+      expect(mockService.updateMonitoringConditions).toHaveBeenCalled()
     })
   })
 })

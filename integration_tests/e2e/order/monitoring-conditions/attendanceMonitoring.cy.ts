@@ -17,6 +17,7 @@ const monitoringConditions = {
   trail: false,
   mandatoryAttendance: true,
   alcohol: true,
+  offenceType: null,
 }
 
 const mockEmptyAttendanceMonitoring = {

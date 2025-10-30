@@ -38,7 +38,8 @@ const mockDefaultOrder = {
     issp: 'YES',
     hdc: 'NO',
     prarr: 'UNKNOWN',
-    pilot: '',
+    pilot: null,
+    offenceType: '',
   },
 }
 
@@ -82,6 +83,7 @@ context('pilot', () => {
 
   it('Should disable DAPOL option and display message stating why if probation region not in pilot', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
       ...mockDefaultOrder,
       interestedParties: {
@@ -109,6 +111,7 @@ context('pilot', () => {
 
   it('Should enable DAPOL option if probation region in pilot', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
       ...mockDefaultOrder,
       interestedParties: {

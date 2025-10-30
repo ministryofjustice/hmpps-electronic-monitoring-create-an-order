@@ -2,7 +2,6 @@ import { Router } from 'express'
 import { Services } from '../../services'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import OrderTypeController from './order-type/controller'
-import CheckYourAnswersController from './check-your-answers/controller'
 import SentenceTypeController from './sentence-type/controller'
 import HdcController from './hdc/controller'
 import PilotController from './pilot/controller'
@@ -14,17 +13,16 @@ import MonitoringDatesController from './monitoring-dates/controller'
 import PoliceAreaController from './police-area/controller'
 
 const createOrderTypeDescriptionRouter = (
-  services: Pick<Services, 'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService'>,
+  services: Pick<
+    Services,
+    'monitoringConditionsStoreService' | 'monitoringConditionsUpdateService' | 'taskListService'
+  >,
 ): Router => {
   const router = Router()
 
-  const { monitoringConditionsStoreService, monitoringConditionsUpdateService } = services
+  const { monitoringConditionsStoreService, monitoringConditionsUpdateService, taskListService } = services
 
   const orderTypeController = new OrderTypeController(monitoringConditionsStoreService)
-  const checkYourAnswersController = new CheckYourAnswersController(
-    monitoringConditionsStoreService,
-    monitoringConditionsUpdateService,
-  )
 
   const sentenceTypeController = new SentenceTypeController(monitoringConditionsStoreService)
 
@@ -38,7 +36,11 @@ const createOrderTypeDescriptionRouter = (
 
   const prarrController = new PrarrController(monitoringConditionsStoreService)
 
-  const monitoringTypesController = new MonitoringTypesController(monitoringConditionsStoreService)
+  const monitoringTypesController = new MonitoringTypesController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+    taskListService,
+  )
 
   const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
 
@@ -49,9 +51,6 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/sentence-type', asyncMiddleware(sentenceTypeController.view))
   router.post('/sentence-type', asyncMiddleware(sentenceTypeController.update))
-
-  router.get('/check-your-answers', asyncMiddleware(checkYourAnswersController.view))
-  router.post('/check-your-answers', asyncMiddleware(checkYourAnswersController.update))
 
   router.get('/hdc', asyncMiddleware(hdcController.view))
   router.post('/hdc', asyncMiddleware(hdcController.update))

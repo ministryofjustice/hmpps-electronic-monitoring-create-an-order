@@ -23,12 +23,17 @@ import { Order } from '../models/Order'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
+import FeatureFlags from '../utils/featureFlags'
 
 describe('TaskListService', () => {
   const mockOrderChecklistService = {
     setSectionCheckStatus: jest.fn(),
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
+
+  const monitoringConditionsPath = FeatureFlags.getInstance().get('ORDER_TYPE_DESCRIPTION_FLOW_ENABLED')
+    ? paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH
+    : paths.MONITORING_CONDITIONS.BASE_URL
   describe('getNextPage', () => {
     it('should return idenity numbers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
       // Given
@@ -291,7 +296,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id))
+      expect(nextPage).toBe(monitoringConditionsPath.replace(':orderId', order.id))
     })
 
     it('should return installation location if current page is monitoring conditions and selected conditions include alcohol', () => {
@@ -857,7 +862,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: monitoringConditionsPath.replace(':orderId', order.id),
           isReady: false,
         },
         {
@@ -1081,7 +1086,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: monitoringConditionsPath.replace(':orderId', order.id),
           isReady: false,
         },
         {
@@ -1153,7 +1158,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ELECTRONIC_MONITORING_CONDITIONS',
-          path: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+          path: monitoringConditionsPath.replace(':orderId', order.id),
           isReady: false,
         },
         {

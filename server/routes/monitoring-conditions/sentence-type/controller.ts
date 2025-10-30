@@ -73,6 +73,7 @@ export default class SentenceTypeController {
             res.redirect(
               paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
             )
+
             return
         }
       }

@@ -33,7 +33,11 @@ export default class IsspController {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
     } else {
       await this.montoringConditionsStoreService.updateField(order, 'issp', formData.issp)
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
+      const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
+      if (monitoringConditions.sentenceType === 'DTO')
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
+      else
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
     }
   }
 }

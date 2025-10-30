@@ -41,6 +41,7 @@ context('Monitoring conditions', () => {
               hdc: null,
               prarr: null,
               pilot: null,
+              offenceType: null,
             },
           },
         })
@@ -161,6 +162,7 @@ context('Monitoring conditions', () => {
               hdc: null,
               prarr: null,
               pilot: null,
+              offenceType: null,
             },
           },
         })
@@ -231,6 +233,7 @@ context('Monitoring conditions', () => {
               hdc: null,
               prarr: null,
               pilot: null,
+              offenceType: null,
             },
           },
         })
@@ -301,6 +304,7 @@ context('Monitoring conditions', () => {
               hdc: null,
               prarr: null,
               pilot: null,
+              offenceType: null,
             },
           },
         })
@@ -371,6 +375,7 @@ context('Monitoring conditions', () => {
               hdc: null,
               prarr: null,
               pilot: null,
+              offenceType: null,
             },
           },
         })

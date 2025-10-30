@@ -1,8 +1,8 @@
-import FormComponent from '../../../../../pages/components/formComponent'
 import FormCheckboxesComponent from '../../../../../pages/components/formCheckboxesComponent'
 import { PageElement } from '../../../../../pages/page'
+import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 
-export default class OrderTypeComponent extends FormComponent {
+export default class OrderTypeComponent extends SingleQuestionFormComponent {
   get monitoringTypesField(): FormCheckboxesComponent {
     const label = 'What monitoring does the device wearer need?'
     return new FormCheckboxesComponent(this.form, label, [])
@@ -12,9 +12,9 @@ export default class OrderTypeComponent extends FormComponent {
     return cy.get('.govuk-inset-text')
   }
 
-  fillInWith(monitoringType: string) {
-    if (monitoringType) {
-      this.monitoringTypesField.set(monitoringType)
+  fillInWith(value: string) {
+    if (value) {
+      this.monitoringTypesField.set(value)
     }
   }
 }

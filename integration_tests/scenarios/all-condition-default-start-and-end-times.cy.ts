@@ -46,7 +46,7 @@ context('The kitchen sink', () => {
   })
 
   context('Fill in everything ', () => {
-    const currenDate = new Date()
+    const currentDate = new Date()
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
       interpreterRequired: false,
@@ -60,8 +60,8 @@ context('The kitchen sink', () => {
     const installationAddressDetails = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
     const monitoringConditions = {
-      startDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-      endDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      startDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
+      endDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       isPartOfACP: 'No',
       isPartOfDAPOL: 'No',
       orderType: 'Post Release',
@@ -71,6 +71,7 @@ context('The kitchen sink', () => {
       issp: 'No',
       hdc: 'No',
       prarr: 'No',
+      offenceType: '',
     }
     const curfewReleaseDetails = {
       releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
@@ -79,8 +80,8 @@ context('The kitchen sink', () => {
       address: /Main address/,
     }
     const curfewConditionDetails = {
-      startDate: new Date(currenDate.getFullYear(), 0, 1, 0, 0, 0),
-      endDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59, 0),
+      startDate: new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0),
+      endDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59, 0),
       addresses: [/Main address/],
     }
     const curfewNights = ['MONDAY']
@@ -100,16 +101,16 @@ context('The kitchen sink', () => {
     ])
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
-      startDate: new Date(currenDate.getFullYear(), 4, 1),
-      endDate: new Date(currenDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      startDate: new Date(currentDate.getFullYear(), 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
       uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
       anotherZone: 'No',
     }
     const trailMonitoringOrder = {
-      startDate: new Date(currenDate.getFullYear(), 11, 1),
-      endDate: new Date(currenDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      startDate: new Date(currentDate.getFullYear(), 11, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
     }
     const probationDeliveryUnit = {
       unit: 'Blackburn',

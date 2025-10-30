@@ -29,6 +29,7 @@ const mockEmptyTrailMonitoring = {
     hdc: null,
     prarr: null,
     pilot: null,
+    offenceType: null,
   },
 }
 
@@ -55,6 +56,7 @@ const mockSubmittedTrailMonitoring = {
     hdc: null,
     prarr: null,
     pilot: null,
+    offenceType: null,
   },
 }
 
