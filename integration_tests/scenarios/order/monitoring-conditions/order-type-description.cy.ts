@@ -166,180 +166,180 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  // it('Notification org is prison, PRARR no', () => {
-  //   const interestedParties = createFakeInterestedParties('Prison', 'Home Office', null, null)
-  //   const monitoringOrderTypeDescription = {
-  //     sentenceType: 'Extended Determinate Sentence',
-  //     prarr: 'Yes',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is prison, PRARR no', () => {
+    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', null, null)
+    const monitoringOrderTypeDescription = {
+      sentenceType: 'Extended Determinate Sentence',
+      prarr: 'Yes',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is YCS, sentence Section 250', () => {
-  //   const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
-  //   const monitoringOrderTypeDescription = {
-  //     sentenceType: 'Section 250 / Section 91',
-  //     prarr: 'Yes',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is YCS, sentence Section 250', () => {
+    const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
+    const monitoringOrderTypeDescription = {
+      sentenceType: 'Section 250 / Section 91',
+      prarr: 'Yes',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is YCS, sentence Section DTO, Issp yes', () => {
-  //   const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
-  //   const monitoringOrderTypeDescription = {
-  //     sentenceType: 'Detention and Training Order',
-  //     issp: 'Yes',
-  //     prarr: 'Yes',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is YCS, sentence Section DTO, Issp yes', () => {
+    const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
+    const monitoringOrderTypeDescription = {
+      sentenceType: 'Detention and Training Order',
+      issp: 'Yes',
+      prarr: 'Yes',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-  //   const interestedParties = createFakeInterestedParties(
-  //     'Probation Service',
-  //     'Probation',
-  //     'Kent, Surrey & Sussex',
-  //     'Kent, Surrey & Sussex',
-  //   )
-  //   const probationDeliveryUnit = {
-  //     unit: 'Surrey',
-  //   }
-  //   const monitoringOrderTypeDescription = {
-  //     orderType: 'Release from prison',
-  //     sentenceType: 'Standard Determinate Sentence',
-  //     hdc: 'No',
-  //     prarr: 'Yes',
-  //     pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    const interestedParties = createFakeInterestedParties(
+      'Probation Service',
+      'Probation',
+      'Kent, Surrey & Sussex',
+      'Kent, Surrey & Sussex',
+    )
+    const probationDeliveryUnit = {
+      unit: 'Surrey',
+    }
+    const monitoringOrderTypeDescription = {
+      orderType: 'Release from prison',
+      sentenceType: 'Standard Determinate Sentence',
+      hdc: 'No',
+      prarr: 'Yes',
+      pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //     probationDeliveryUnit,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+      probationDeliveryUnit,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-  //   const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
-  //   const monitoringOrderTypeDescription = {
-  //     orderType: 'Community',
-  //     sentenceType: 'Youth Rehabilitation Order (YRO)',
-  //     issp: 'Yes',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
+    const monitoringOrderTypeDescription = {
+      orderType: 'Community',
+      sentenceType: 'Youth Rehabilitation Order (YRO)',
+      issp: 'Yes',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
 
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-  //   const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
-  //   const monitoringOrderTypeDescription = {
-  //     orderType: 'Community',
-  //     sentenceType: 'Suspended Sentence',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
+    const monitoringOrderTypeDescription = {
+      orderType: 'Community',
+      sentenceType: 'Suspended Sentence',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is home office', () => {
-  //   const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
-  //   const monitoringOrderTypeDescription = {
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is home office', () => {
+    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
+    const monitoringOrderTypeDescription = {
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 
-  // it('Notification org is Civil', () => {
-  //   const interestedParties = createFakeInterestedParties(
-  //     'Civil & County Court',
-  //     'Home Office',
-  //     'Bedford County and Civil Court',
-  //     null,
-  //   )
-  //   const monitoringOrderTypeDescription = {
-  //     orderType: 'Civil',
-  //     monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
-  //     monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+  it('Notification org is Civil', () => {
+    const interestedParties = createFakeInterestedParties(
+      'Civil & County Court',
+      'Home Office',
+      'Bedford County and Civil Court',
+      null,
+    )
+    const monitoringOrderTypeDescription = {
+      orderType: 'Civil',
+      monitoringStartDate: new Date(currenDate.getFullYear(), 0, 1, 11, 11),
+      monitoringEndDate: new Date(currenDate.getFullYear() + 1, 0, 1, 23, 59),
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 })
