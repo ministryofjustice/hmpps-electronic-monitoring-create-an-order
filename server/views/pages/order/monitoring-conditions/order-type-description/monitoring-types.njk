@@ -1,25 +1,40 @@
 {% extends "../../../../partials/form-layout.njk" %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% set section = "Electronic monitoring required" %}
 {% set singleQuestionPage = true %}
 {% set questions = content.pages.monitoringConditions.questions %}
-
+{% set questionName = "Monitoring Type"%}
 {% block formInputs %}
 
+
 {% if message %}
-  {{ govukInsetText({
-    text: message
-  }) }}
+  {% set questionHeadingHtml%}
+    <h1 class="govuk-fieldset__heading">
+      {{questions.monitoringRequired.text}}
+    </h1> 
+    {{     
+      govukInsetText({
+        text: message
+      }) 
+    }}
+  {% endset %}
+{% else %}
+  {% set questionHeadingHtml%}
+    <h1 class="govuk-fieldset__heading">
+      {{questions.monitoringRequired.text}}
+    </h1>   
+  {% endset %}
 {% endif %}
 
 {{ govukCheckboxes({
   name: "monitoringTypes",
   fieldset: {
     legend: {
-      text: questions.monitoringRequired.text,
-      classes: "govuk-fieldset__legend--s"
+      html: questionHeadingHtml,
+      classes: "govuk-fieldset__legend--l"
     }
   },
   hint: {
@@ -66,7 +81,7 @@
       value: "alcohol",
       text: "Alcohol monitoring",
       hint: {
-        text: "Measureing alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
+        text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
       },
       checked: alcohol.value,
       disabled: alcohol.disabled

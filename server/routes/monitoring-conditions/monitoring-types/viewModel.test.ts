@@ -82,7 +82,8 @@ describe('model', () => {
       mandatoryAttendance: { value: false, disabled: true },
       alcohol: { value: false, disabled: false },
       errorSummary: null,
-      message: "Some monitoring types can't be selected because the device wearer is not part of any pilots.",
+      message:
+        'Some monitoring types can’t be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pilots.',
       monitoringConditionTimes: config.monitoringConditionTimes.enabled,
     }
 
