@@ -125,7 +125,7 @@ context('monitoring types', () => {
     monitoringTypesPage.form.monitoringTypesField.optionIsDisabled('mandatoryAttendance')
     monitoringTypesPage.form.monitoringTypesField.optionIsEnabled('alcohol')
     monitoringTypesPage.form.message.contains(
-      "Some monitoring types can't be selected because the device wearer is not part of any pilots.",
+      'Some monitoring types can’t be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pilots.',
     )
   })
 
