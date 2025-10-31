@@ -11,31 +11,29 @@
 
 
 {% if message %}
-  {% set legendHtml%}
+  {% set questionHeadingHtml%}
     <h1 class="govuk-fieldset__heading">
       {{questions.monitoringRequired.text}}
     </h1> 
-  {{ 
-    
-    govukInsetText({
-    text: message
-  }) 
-  }}
+    {{     
+      govukInsetText({
+        text: message
+      }) 
+    }}
   {% endset %}
 {% else %}
-{% set legendHtml%}
+  {% set questionHeadingHtml%}
     <h1 class="govuk-fieldset__heading">
       {{questions.monitoringRequired.text}}
     </h1>   
   {% endset %}
-
 {% endif %}
 
 {{ govukCheckboxes({
   name: "monitoringTypes",
   fieldset: {
     legend: {
-      html: legendHtml,
+      html: questionHeadingHtml,
       classes: "govuk-fieldset__legend--l"
     }
   },
