@@ -16,7 +16,7 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
     },
     offenceAdditionalDetails: {
       text: 'Any other information to be aware of about the offence committed? (optional)',
-      hint: "Provide additional risk information about the device wearer's offence. If the device wearer is part of the acquisitive crime pilot add details of their theft, robbery, or burglary offences.",
+      hint: "Provide additional risk information about the device wearer's offence.",
     },
     possibleRisk: {
       text: "At installation what are the possible risks from the device wearer's behaviour?",
