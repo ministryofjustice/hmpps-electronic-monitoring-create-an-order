@@ -8,6 +8,7 @@ import PilotController from './pilot/controller'
 import IsspController from './issp/controller'
 import PrarrController from './prarr/controller'
 import MonitoringTypesController from './monitoring-types/controller'
+import MonitoringTypesV2Controller from './monitoring-types-v2/controller'
 import OffenceTypeController from './offence-type/controller'
 import MonitoringDatesController from './monitoring-dates/controller'
 import PoliceAreaController from './police-area/controller'
@@ -41,6 +42,7 @@ const createOrderTypeDescriptionRouter = (
     monitoringConditionsUpdateService,
     taskListService,
   )
+  const monitoringTypesV2Controller = new MonitoringTypesV2Controller(taskListService)
 
   const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
 
@@ -67,14 +69,17 @@ const createOrderTypeDescriptionRouter = (
   router.get('/prarr', asyncMiddleware(prarrController.view))
   router.post('/prarr', asyncMiddleware(prarrController.update))
 
-  router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
-  router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
-
   router.get('/police-area', asyncMiddleware(policeAreaController.view))
   router.post('/police-area', asyncMiddleware(policeAreaController.update))
 
   router.get('/monitoring-dates', asyncMiddleware(monitoringDatesController.view))
   router.post('/monitoring-dates', asyncMiddleware(monitoringDatesController.update))
+
+  router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
+  router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
+
+  router.get('/monitoring-types-v2', asyncMiddleware(monitoringTypesV2Controller.view))
+  router.post('/monitoring-types-v2', asyncMiddleware(monitoringTypesV2Controller.update))
 
   return router
 }
