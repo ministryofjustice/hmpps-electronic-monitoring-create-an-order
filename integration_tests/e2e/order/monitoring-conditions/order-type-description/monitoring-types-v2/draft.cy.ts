@@ -68,6 +68,11 @@ const stubGetOrder = ({
   deviceWearer = createDevicerWearer(),
   addresses = createAddresses(),
   monitoringConditions = createMonitoringConditions(),
+  curfewConditions = null,
+  curfewReleaseDateConditions = null,
+  curfewTimeTable = [],
+  monitoringConditionsTrail = null,
+  monitoringConditionsAlcohol = null,
 } = {}) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -86,6 +91,11 @@ const stubGetOrder = ({
       deviceWearer,
       addresses,
       monitoringConditions,
+      curfewConditions,
+      curfewReleaseDateConditions,
+      curfewTimeTable,
+      monitoringConditionsTrail,
+      monitoringConditionsAlcohol,
     },
   })
 }
@@ -177,5 +187,67 @@ context('monitoring types', () => {
     monitoringTypesPage.form.message.contains(
       'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
     )
+  })
+
+  it('curfew already added', () => {
+    stubGetOrder({
+      monitoringConditions: createMonitoringConditions({ curfew: true }),
+      curfewReleaseDateConditions: {
+        curfewAddress: null,
+        endTime: null,
+        orderId: null,
+        releaseDate: null,
+        startTime: null,
+      },
+      curfewConditions: {
+        curfewAddress: null,
+        endDate: null,
+        orderId: null,
+        startDate: null,
+        curfewAdditionalDetails: null,
+      },
+      curfewTimeTable: [
+        {
+          curfewAddress: '',
+          dayOfWeek: '',
+          endTime: '',
+          orderId: '',
+          startTime: '',
+        },
+      ],
+    })
+
+    const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    page.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+  })
+
+  it('trail already added', () => {
+    stubGetOrder({
+      monitoringConditions: createMonitoringConditions({ trail: true }),
+      monitoringConditionsTrail: { startDate: null, endDate: null },
+    })
+
+    const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    page.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+  })
+
+  it('alcohol already added', () => {
+    stubGetOrder({
+      monitoringConditions: createMonitoringConditions({ alcohol: true }),
+      monitoringConditionsAlcohol: {
+        endDate: null,
+        installationLocation: null,
+        monitoringType: null,
+        prisonName: null,
+        probationOfficeName: null,
+        startDate: null,
+      },
+    })
+
+    const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    page.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
   })
 })
