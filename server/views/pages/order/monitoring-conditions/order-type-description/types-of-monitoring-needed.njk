@@ -1,0 +1,33 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% set section = "Electronic monitoring required" %}
+{% set heading = "Types of monitoring needed" %}
+
+{% block formInputs %}
+  
+  {{ govukRadios({
+      name: "addAnother",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: 'Are there any other types of monitoring needed for the device wearer?',
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: addAnother.value,
+      errorMessage: addAnother.error
+    }) }}
+{% endblock %}

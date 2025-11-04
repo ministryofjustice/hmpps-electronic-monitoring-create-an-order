@@ -12,6 +12,7 @@ import MonitoringTypeController from './monitoring-type/controller'
 import OffenceTypeController from './offence-type/controller'
 import MonitoringDatesController from './monitoring-dates/controller'
 import PoliceAreaController from './police-area/controller'
+import TypesOfMonitoringNeededController from './types-of-monitoring-needed/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<
@@ -48,6 +49,8 @@ const createOrderTypeDescriptionRouter = (
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
 
+  const typesOfMonitoringNeededController = new TypesOfMonitoringNeededController(monitoringConditionsStoreService)
+
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
 
@@ -68,6 +71,12 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/prarr', asyncMiddleware(prarrController.view))
   router.post('/prarr', asyncMiddleware(prarrController.update))
+
+  router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
+  router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
+
+  router.get('/types-of-monitoring-needed', asyncMiddleware(typesOfMonitoringNeededController.view))
+  router.post('/types-of-monitoring-needed', asyncMiddleware(typesOfMonitoringNeededController.update))
 
   router.get('/police-area', asyncMiddleware(policeAreaController.view))
   router.post('/police-area', asyncMiddleware(policeAreaController.update))
