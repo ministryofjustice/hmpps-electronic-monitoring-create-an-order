@@ -50,7 +50,7 @@ context('offence type', () => {
     page.form.offenceTypeField.shouldHaveOption('Robbery')
 
     const hintText =
-      'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence.'
+      'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence. Any queries around pilot eligibility need to be raised with the appropriate COM.'
     page.form.offenceTypeField.element.contains(hintText)
   })
 })
