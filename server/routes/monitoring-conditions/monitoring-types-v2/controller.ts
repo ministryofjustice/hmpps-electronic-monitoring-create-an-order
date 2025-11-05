@@ -27,14 +27,10 @@ export default class MonitoringTypesController {
       req.flash('validationErrors', [
         { error: validationErrors.monitoringConditions.monitoringTypeRequired, field: 'monitoringType' },
       ])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES_V2.replace(':orderId', order.id))
       return
     }
 
-    res.redirect(
-      this.taskListService.getNextPage('MONITORING_CONDITIONS', {
-        ...order,
-      }),
-    )
+    res.redirect(this.taskListService.getNextPage('MONITORING_CONDITIONS', order))
   }
 }
