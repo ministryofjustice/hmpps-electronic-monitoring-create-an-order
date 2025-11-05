@@ -31,6 +31,8 @@ export default class MonitoringTypesController {
       return
     }
 
+    // hack to get routing working without saving to DB
+    order.monitoringConditions[formData.monitoringType] = true
     res.redirect(this.taskListService.getNextPage('MONITORING_CONDITIONS', order))
   }
 }
