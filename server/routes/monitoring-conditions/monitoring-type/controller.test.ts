@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import MonitoringTypesController from './controller'
+import MonitoringTypeController from './controller'
 import constructModel from './viewModel'
 import paths from '../../../constants/paths'
 import TaskListService from '../../../services/taskListService'
@@ -13,7 +13,7 @@ describe('monitoring type controller', () => {
     getNextPage: jest.fn(),
   } as unknown as jest.Mocked<TaskListService>
 
-  let controller: MonitoringTypesController
+  let controller: MonitoringTypeController
 
   let res: Response
   let req: Request
@@ -23,7 +23,7 @@ describe('monitoring type controller', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
 
-    controller = new MonitoringTypesController(mockTaskListService)
+    controller = new MonitoringTypeController(mockTaskListService)
 
     mockConstructModel.mockReturnValue({ errorSummary: null })
 
@@ -38,7 +38,7 @@ describe('monitoring type controller', () => {
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/order/monitoring-conditions/order-type-description/monitoring-types-v2',
+        'pages/order/monitoring-conditions/order-type-description/monitoring-type',
         expect.anything(),
       )
     })

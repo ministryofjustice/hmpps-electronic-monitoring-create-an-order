@@ -6,7 +6,7 @@ import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
 
-export default class MonitoringTypesController {
+export default class MonitoringTypeController {
   constructor(private readonly taskListService: TaskListService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -15,7 +15,7 @@ export default class MonitoringTypesController {
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     const model = constructModel(order, errors)
-    res.render('pages/order/monitoring-conditions/order-type-description/monitoring-types-v2', model)
+    res.render('pages/order/monitoring-conditions/order-type-description/monitoring-type', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ export default class MonitoringTypesController {
       req.flash('validationErrors', [
         { error: validationErrors.monitoringConditions.monitoringTypeRequired, field: 'monitoringType' },
       ])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES_V2.replace(':orderId', order.id))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
       return
     }
 

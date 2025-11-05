@@ -6,6 +6,6 @@ export default class MonitoringTypesPage extends AppFormPage {
   public form = new MonitoringTypesComponent()
 
   constructor() {
-    super('', paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES_V2)
+    super('', paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE)
   }
 }
