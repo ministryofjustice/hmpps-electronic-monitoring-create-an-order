@@ -44,6 +44,7 @@ const paths = {
     INSTALLATION_ADDRESS: '/order/:orderId/monitoring-conditions/:addressType(installation)',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
     ZONE: '/order/:orderId/monitoring-conditions/zone/:zoneId',
+    ZONE_ADD_TO_LIST: '/order/:orderId/monitoring-conditions/add-to-list/zone/:zoneId',
     ATTENDANCE: '/order/:orderId/monitoring-conditions/attendance',
     ATTENDANCE_ITEM: '/order/:orderId/monitoring-conditions/attendance/:conditionId',
     ALCOHOL: '/order/:orderId/monitoring-conditions/alcohol',

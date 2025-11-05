@@ -17,6 +17,7 @@ import CurfewConditionsController from '../controllers/monitoringConditions/curf
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
+import EnforcementZoneControllerAddToList from './monitoring-conditions/enforcement-zone/controller'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
@@ -59,6 +60,7 @@ export default function routes({
   variationService,
   probationDeliveryUnitService,
   zoneService,
+  zoneAddToListService,
   installationLocationService,
   installationAppointmentService,
   orderChecklistService,
@@ -144,6 +146,11 @@ export default function routes({
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
   const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
+  const zoneControllerAddToList = new EnforcementZoneControllerAddToList(
+    auditService,
+    zoneAddToListService,
+    taskListService,
+  )
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
     taskListService,
@@ -311,6 +318,10 @@ export default function routes({
   // Exclusion Inclusion Zone
   get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
   post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
+
+  // Exclusion Inclusion Zone Add To List
+  get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
+  get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.update)
 
   // Check your answers
   get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.view)
