@@ -2,18 +2,18 @@ import FormComponent from '../../../../../pages/components/formComponent'
 import FormDateTimeComponent from '../../../../../pages/components/formDateTimeComponent'
 import FormFileUploadComponent from '../../../../../pages/components/formFileUploadComponent'
 import FormTextareaComponent from '../../../../../pages/components/formTextareaComponent'
-import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
+import FormInputComponent from '../../../../../pages/components/formInputComponent'
 
 export type EnforcementZoneFormData = {
   startDate?: Date
   endDate?: Date
+  name?: string
   uploadFile?: {
     fileName: string
     contents: string
   }
   description?: string
   duration?: string
-  anotherZone?: string
 }
 
 export default class EnforcementZoneFormComponent extends FormComponent {
@@ -27,6 +27,10 @@ export default class EnforcementZoneFormComponent extends FormComponent {
     return new FormDateTimeComponent(this.form, 'endDate')
   }
 
+  get nameField(): FormInputComponent {
+    return new FormInputComponent(this.form, 'What name would you give to the exclusion zone?')
+  }
+
   get uploadField(): FormFileUploadComponent {
     return new FormFileUploadComponent(this.form, 'Monitoring zone map (optional)')
   }
@@ -37,14 +41,6 @@ export default class EnforcementZoneFormComponent extends FormComponent {
 
   get durationField(): FormTextareaComponent {
     return new FormTextareaComponent(this.form, 'When must the exclusion zone be followed?')
-  }
-
-  get anotherZoneField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Do you need to add another exclusion zone?', ['Yes', 'No'])
-  }
-
-  get nameField(): FormTextareaComponent {
-    return new FormTextareaComponent(this.form, 'What name would you give to the exclusion zone?')
   }
 
   // FORM HELPERS
@@ -69,34 +65,25 @@ export default class EnforcementZoneFormComponent extends FormComponent {
     if (data.duration) {
       this.durationField.set(data.duration)
     }
-
-    if (data.anotherZone) {
-      this.anotherZoneField.set(data.anotherZone)
-    }
   }
 
   shouldBeValid(): void {
     this.startDateField.shouldNotHaveValidationMessage()
     this.endDateField.shouldNotHaveValidationMessage()
+    this.nameField.shouldNotHaveValidationMessage()
     this.uploadField.shouldNotHaveValidationMessage()
     this.descriptionField.shouldNotHaveValidationMessage()
     this.durationField.shouldNotHaveValidationMessage()
-    this.anotherZoneField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.startDateField.shouldBeDisabled()
     this.endDateField.shouldBeDisabled()
+    this.nameField.shouldBeDisabled()
     this.uploadField.shouldBeDisabled()
     this.descriptionField.shouldBeDisabled()
     this.durationField.shouldBeDisabled()
 
-    // TODO: this fails when we attempt to create the Component wrapper so we have to do it a different way
-    // this.anotherZoneField.shouldBeDisabled()
     cy.contains('legend', 'Add another exclusion or inclusion zone?', { log: false }).should('not.exist')
-  }
-
-  shouldHaveAllOptions(): void {
-    this.anotherZoneField.shouldHaveAllOptions()
   }
 }

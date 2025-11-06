@@ -36,7 +36,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.form.saveAsDraftButton.should('exist')
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
-      page.form.shouldHaveAllOptions()
       page.form.nameField.element.should('exist')
 
       page.checkIsAccessible()

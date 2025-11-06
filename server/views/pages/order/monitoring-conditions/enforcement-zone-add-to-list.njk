@@ -51,6 +51,22 @@
       defaultMinutes: 59
     })}}
 
+  {{ govukInput({
+    label: {
+      classes: "govuk-label--s",
+      text: questions.name.text
+    },
+    hint: {
+      text: questions.name.hint
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "name",
+    name: "name",
+    value: name.value,
+    errorMessage: name.error,
+    disabled: not isOrderEditable
+  }) }}
+
   {% call govukFieldset({
     legend: {
       text: "Monitoring zone map (optional)",

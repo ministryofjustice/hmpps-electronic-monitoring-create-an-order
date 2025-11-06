@@ -7,7 +7,7 @@ export default class EnforcementZonePage extends AppFormPage {
   public form = new EnforcementZoneFormComponent()
 
   constructor() {
-    super('Exclusion zone monitoring ', paths.MONITORING_CONDITIONS.ZONE, 'Electronic monitoring required')
+    super('Exclusion zone monitoring ', paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, 'Electronic monitoring required')
   }
 
   mapToolLink = (): PageElement => cy.get('#map-tool-link')
