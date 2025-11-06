@@ -49,7 +49,7 @@ const createOrderTypeDescriptionRouter = (
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
 
-  const typesOfMonitoringNeededController = new TypesOfMonitoringNeededController(monitoringConditionsStoreService)
+  const typesOfMonitoringNeededController = new TypesOfMonitoringNeededController()
 
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))
@@ -71,9 +71,6 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/prarr', asyncMiddleware(prarrController.view))
   router.post('/prarr', asyncMiddleware(prarrController.update))
-
-  router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
-  router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
 
   router.get('/types-of-monitoring-needed', asyncMiddleware(typesOfMonitoringNeededController.view))
   router.post('/types-of-monitoring-needed', asyncMiddleware(typesOfMonitoringNeededController.update))
