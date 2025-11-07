@@ -17,7 +17,6 @@ export default class EnforcementZoneController {
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    console.log('i am here')
     const { orderId, zoneId } = req.params
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
@@ -52,8 +51,6 @@ export default class EnforcementZoneController {
       }
     }
 
-    console.log('**** here')
-    console.log(errors)
     if (Object.keys(errorViewModel).length !== 0 || errors.length > 0) {
       const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), [], formData, errors)
       res.render(`pages/order/monitoring-conditions/enforcement-zone-add-to-list`, viewModel)
