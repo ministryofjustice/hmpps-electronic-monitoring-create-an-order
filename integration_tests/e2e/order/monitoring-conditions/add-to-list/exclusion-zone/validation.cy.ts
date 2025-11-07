@@ -39,7 +39,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     it.only('Should display validation error messages when submit empty request', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
 
-      // page.form.saveAndContinueButton.click()
+      page.form.saveAndContinueButton.click()
 
       Page.verifyOnPage(EnforcementZonePage)
       page.form.startDateField.shouldHaveValidationMessage('Enter start date for exclusion zone')
