@@ -21,4 +21,4 @@ generic-service:
     DAPOL_PILOT_PROBATION_REGIONS: "LONDON,EAST_OF_ENGLAND,SOUTH_WEST,KENT_SURREY_SUSSEX,WALES,SOUTH_CENTRAL,EAST_MIDLANDS,WEST_MIDLANDS"
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service-dev
+  alertSeverity: hmpps-ems-cemo-ui-dev

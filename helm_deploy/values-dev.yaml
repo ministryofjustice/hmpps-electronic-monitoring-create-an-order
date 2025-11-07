@@ -24,4 +24,4 @@ generic-service:
     unrestricted: "0.0.0.0/0"
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-electronic-monitoring-create-an-order-dev
+  alertSeverity: hmpps-ems-cemo-ui-dev
