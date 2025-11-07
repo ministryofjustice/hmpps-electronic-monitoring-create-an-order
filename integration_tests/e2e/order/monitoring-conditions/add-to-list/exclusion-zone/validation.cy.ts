@@ -19,45 +19,45 @@ context('Monitoring conditions - Enforcement Zone', () => {
       cy.signIn()
     })
 
-    // context('with no data entered', () => {
-    // beforeEach(() => {
-    //   cy.task('stubCemoSubmitOrder', {
-    //     httpStatus: 400,
-    //     id: mockOrderId,
-    //     subPath: apiPath,
-    //     response: [
-    //       { field: 'startDate', error: expectedValidationErrorMessage },
-    //       { field: 'endDate', error: expectedValidationErrorMessage },
-    //       { field: 'name', error: expectedValidationErrorMessage },
-    //       { field: 'file', error: expectedValidationErrorMessage },
-    //       { field: 'description', error: expectedValidationErrorMessage },
-    //       { field: 'duration', error: expectedValidationErrorMessage },
-    //     ],
-    //   })
-    // })
+    context('with no data entered', () => {
+      beforeEach(() => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: [
+            { field: 'startDate', error: expectedValidationErrorMessage },
+            { field: 'endDate', error: expectedValidationErrorMessage },
+            { field: 'name', error: expectedValidationErrorMessage },
+            { field: 'file', error: expectedValidationErrorMessage },
+            { field: 'description', error: expectedValidationErrorMessage },
+            { field: 'duration', error: expectedValidationErrorMessage },
+          ],
+        })
+      })
 
-    it.only('Should display validation error messages when submit empty request', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
+      it('Should display validation error messages when submit empty request', () => {
+        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
 
-      page.form.saveAndContinueButton.click()
+        page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(EnforcementZonePage)
-      page.form.startDateField.shouldHaveValidationMessage('Enter start date for exclusion zone')
-      page.form.endDateField.shouldHaveValidationMessage('Enter end date for exclusion zone')
-      page.form.nameField.shouldHaveValidationMessage('Enter the name of the exclusion zone')
-      page.form.descriptionField.shouldHaveValidationMessage('Enter where the exclusion zone is required')
-      page.form.durationField.shouldHaveValidationMessage('Enter when the exclusion zone must be followed')
-      page.errorSummary.shouldExist()
-      page.errorSummary.verifyErrorSummary([
-        'Enter start date for exclusion zone',
-        'Enter end date for exclusion zone',
-        'Enter the name of the exclusion zone',
-        'Enter where the exclusion zone is required',
-        'Enter when the exclusion zone must be followed',
-        'Select ‘Yes’ if you need to add another exclusion zone',
-      ])
+        Page.verifyOnPage(EnforcementZonePage)
+        page.form.startDateField.shouldHaveValidationMessage('Enter start date for exclusion zone')
+        page.form.endDateField.shouldHaveValidationMessage('Enter end date for exclusion zone')
+        page.form.nameField.shouldHaveValidationMessage('Enter the name of the exclusion zone')
+        page.form.descriptionField.shouldHaveValidationMessage('Enter where the exclusion zone is required')
+        page.form.durationField.shouldHaveValidationMessage('Enter when the exclusion zone must be followed')
+        page.errorSummary.shouldExist()
+        page.errorSummary.verifyErrorSummary([
+          'Enter start date for exclusion zone',
+          'Enter end date for exclusion zone',
+          'Enter the name of the exclusion zone',
+          'Enter where the exclusion zone is required',
+          'Enter when the exclusion zone must be followed',
+          'Select ‘Yes’ if you need to add another exclusion zone',
+        ])
+      })
     })
-    // })
 
     context('with only zone type entered', () => {
       beforeEach(() => {
