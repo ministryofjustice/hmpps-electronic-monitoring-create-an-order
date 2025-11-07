@@ -11,7 +11,8 @@ import {
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
 import { Order } from '../Order'
-import Answer, {
+import {
+  Answer,
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,

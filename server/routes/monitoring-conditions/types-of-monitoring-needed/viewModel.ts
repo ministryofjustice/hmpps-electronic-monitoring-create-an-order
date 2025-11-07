@@ -41,7 +41,7 @@ const getItems = (order: Order): Answer[] => {
         createAnswer(
           MONITORING_TYPE_NAMES.exclusionZone,
           `From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
-          paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', '0'),
+          paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', `${zone.zoneId}`),
         ),
       )
     })
@@ -63,7 +63,10 @@ const getItems = (order: Order): Answer[] => {
         createAnswer(
           MONITORING_TYPE_NAMES.mandatoryAttendance,
           `From ${createDatePreview(attendance.startDate)} to ${createDatePreview(attendance.endDate)}`,
-          paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId),
+          paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId).replace(
+            ':conditionId',
+            `${attendance.id}`,
+          ),
         ),
       )
     })

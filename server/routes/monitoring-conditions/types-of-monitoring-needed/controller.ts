@@ -33,6 +33,9 @@ export default class TypesOfMonitoringNeededController {
       )
     }
 
-    return res.redirect(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    // TODO
+    return res.redirect(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id),
+    )
   }
 }

@@ -22,8 +22,6 @@ export type Answer = {
   }
 }
 
-export default Answer
-
 export interface AnswerOptions {
   ignoreActions?: boolean
   valueType?: 'html' | 'text'
