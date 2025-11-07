@@ -25,4 +25,4 @@ generic-service:
       - private_prisons
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service
+  alertSeverity: hmpps-ems-cemo-ui-prod
