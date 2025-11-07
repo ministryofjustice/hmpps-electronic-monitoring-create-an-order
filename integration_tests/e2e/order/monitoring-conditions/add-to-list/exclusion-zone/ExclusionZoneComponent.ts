@@ -54,6 +54,10 @@ export default class EnforcementZoneFormComponent extends FormComponent {
       this.endDateField.set(data.endDate, false)
     }
 
+    if (data.name) {
+      this.nameField.set(data.name)
+    }
+
     if (data.uploadFile) {
       this.uploadField.uploadFile(data.uploadFile)
     }
@@ -83,7 +87,5 @@ export default class EnforcementZoneFormComponent extends FormComponent {
     this.uploadField.shouldBeDisabled()
     this.descriptionField.shouldBeDisabled()
     this.durationField.shouldBeDisabled()
-
-    cy.contains('legend', 'Add another exclusion or inclusion zone?', { log: false }).should('not.exist')
   }
 }

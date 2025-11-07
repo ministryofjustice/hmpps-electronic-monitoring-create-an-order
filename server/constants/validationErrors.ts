@@ -69,10 +69,11 @@ interface ValidationErrors {
     descriptionRequired: string
     descriptionTooLong: string
     durationRequired: string
-    nameRequired: string
     durationTooLong: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    nameRequired: string
+    nameTooLong: string
     anotherZoneRequired: string
   }
   trailMonitoring: {
@@ -250,6 +251,7 @@ const validationErrors: ValidationErrors = {
     descriptionTooLong: 'Where is the exclusion zone must be 200 characters or less',
     durationRequired: 'Enter when the exclusion zone must be followed',
     nameRequired: 'Enter the name of the exclusion zone',
+    nameTooLong: 'Exclusion zone name must be 200 characters or less',
     durationTooLong: 'When must the exclusion zone be followed must be 200 characters or less',
     anotherZoneRequired: 'Select ‘Yes’ if you need to add another exclusion zone',
   },

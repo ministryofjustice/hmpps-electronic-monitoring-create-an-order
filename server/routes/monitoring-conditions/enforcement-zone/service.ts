@@ -5,7 +5,7 @@ import { ValidationResult } from '../../../models/Validation'
 import ErrorResponseModel, { ErrorResponse } from '../../../models/ErrorResponse'
 import { SanitisedError } from '../../../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
-import { EnforcementZoneAddToListFormData, EnforcementZoneAddToListFormDataModel } from './formModel'
+import { EnforcementZoneAddToListFormData, EnforcementZoneAddToListFormDataValidator } from './formModel'
 
 type UpdateZoneRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -23,7 +23,7 @@ export default class Service {
 
   async updateZone(input: UpdateZoneRequestInput): Promise<ValidationResult | null> {
     try {
-      const requestBody = EnforcementZoneAddToListFormDataModel.parse(input.data)
+      const requestBody = EnforcementZoneAddToListFormDataValidator.parse(input.data)
       await this.apiClient.put({
         path: `/api/orders/${input.orderId}/enforcementZone`,
         data: requestBody,

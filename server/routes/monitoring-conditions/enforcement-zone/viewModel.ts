@@ -26,7 +26,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'duration'),
     },
     name: {
-      value: formData.name || '',
+      value: formData.name,
       error: getError(validationErrors, 'name'),
     },
     endDate: {
@@ -70,9 +70,9 @@ const createFromEntity = (
     duration: {
       value: currentZone?.duration || '',
     },
-    // name: {
-    //   value: currentZone?.name || '',
-    // },
+    name: {
+      value: currentZone?.name || '',
+    },
     endDate: {
       value: deserialiseDateTime(currentZone?.endDate || ''),
     },

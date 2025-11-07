@@ -21,7 +21,7 @@ const EnforcementZoneAddToListFormDataModel = z.object({
   zoneId: z.number().nullable().default(null),
   description: z.string().default(''),
   duration: z.string().default(''),
-  name: z.string().default('').optional(),
+  name: z.string().default(''),
 })
 
 type EnforcementZoneAddToListFormData = Omit<z.infer<typeof EnforcementZoneAddToListFormDataModel>, 'action'>
@@ -31,6 +31,10 @@ const EnforcementZoneAddToListFormDataValidator = z
     zoneId: z.number().nullable().default(0),
     startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
     endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
+    name: z
+      .string()
+      .min(1, validationErrors.enforcementZone.nameRequired)
+      .max(200, validationErrors.enforcementZone.nameTooLong),
     description: z
       .string()
       .min(1, validationErrors.enforcementZone.descriptionRequired)
@@ -39,7 +43,6 @@ const EnforcementZoneAddToListFormDataValidator = z
       .string()
       .min(1, validationErrors.enforcementZone.durationRequired)
       .max(200, validationErrors.enforcementZone.durationTooLong),
-    name: z.string().min(1, validationErrors.enforcementZone.nameRequired),
   })
   .transform(({ ...formData }) => ({
     zoneType: 'EXCLUSION',

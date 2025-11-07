@@ -5,6 +5,7 @@ const EnforcementZoneModel = z.object({
   zoneType: z.nativeEnum(EnforcementZoneTypes).nullable(),
   startDate: z.string().datetime().nullable(),
   endDate: z.string().datetime().nullable(),
+  name: z.string().nullable().optional(),
   description: z.string().nullable(),
   duration: z.string().nullable(),
   fileName: z.string().nullable(),
