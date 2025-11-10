@@ -6,6 +6,7 @@ import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 import InstallationLocationPage from '../../../../../pages/order/monitoring-conditions/installation-location'
 
+const currentDate = new Date()
 const mockResponse = {
   orderType: 'POST_RELEASE',
   orderTypeDescription: 'DAPOL',
@@ -16,7 +17,7 @@ const mockResponse = {
   mandatoryAttendance: false,
   alcohol: true,
   startDate: '2024-10-10T11:00:00.000Z',
-  endDate: '2024-10-11T11:00:00.000Z',
+  endDate: `${currentDate.getFullYear() + 1}-10-11T11:00:00.000Z`,
   sentenceType: 'COMMUNITY_SDO',
   issp: 'YES',
   hdc: 'NO',
@@ -68,7 +69,7 @@ context('pilot', () => {
     const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
     monitoringDatesPage.form.fillInWithInput({
       startDate: new Date('2024-02-27T00:00:00Z'),
-      endDate: new Date('2025-03-08T23:59:00Z'),
+      endDate: new Date(`${currentDate.getFullYear() + 1}-03-08T23:59:00Z`),
     })
     monitoringDatesPage.form.continueButton.click()
 
@@ -88,7 +89,7 @@ context('pilot', () => {
         mandatoryAttendance: false,
         alcohol: true,
         startDate: '2024-02-27T00:00:00.000Z',
-        endDate: '2025-03-08T23:59:00.000Z',
+        endDate: `${currentDate.getFullYear() + 1}-03-08T23:59:00.000Z`,
       },
     }).should('be.true')
 
