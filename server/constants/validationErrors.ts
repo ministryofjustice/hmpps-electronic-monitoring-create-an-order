@@ -36,6 +36,7 @@ interface ValidationErrors {
     policeAreaRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    addAnotherRequired: string
   }
   monitoringConditionsAlcohol: {
     startDateTime: DateTimeErrorMessages
@@ -215,6 +216,7 @@ const validationErrors: ValidationErrors = {
     policeAreaRequired: "Select the police force area the device wearer's release address is in",
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
+    addAnotherRequired: 'Select Yes if there are other types of monitoring needed',
   },
   monitoringConditionsAlcohol: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
