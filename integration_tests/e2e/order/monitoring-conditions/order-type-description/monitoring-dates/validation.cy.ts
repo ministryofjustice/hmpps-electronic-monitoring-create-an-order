@@ -25,4 +25,28 @@ context('monitoring dates validation', () => {
     page.form.startDateField.validationMessage.contains('Enter start date for monitoring')
     page.form.endDateField.validationMessage.contains('Enter end date for monitoring')
   })
+
+  it('Should show errors when end date is in the past', () => {
+    const page = Page.visit(MonitoringDatesPage, { orderId: mockOrderId })
+    page.form.fillInWith({
+      startDate: { day: '10', month: '11', year: '2025' },
+      endDate: { day: '11', month: '11', year: '2024' },
+    })
+    page.form.continueButton.click()
+    page.errorSummary.shouldExist()
+    page.errorSummary.shouldHaveError('End date of monitoring must be in the future')
+    page.form.endDateField.validationMessage.contains('End date of monitoring must be in the future')
+  })
+
+  it('Should show errors when end date is before start date', () => {
+    const page = Page.visit(MonitoringDatesPage, { orderId: mockOrderId })
+    page.form.fillInWith({
+      startDate: { day: '10', month: '11', year: '2026' },
+      endDate: { day: '09', month: '11', year: '2026' },
+    })
+    page.form.continueButton.click()
+    page.errorSummary.shouldExist()
+    page.errorSummary.shouldHaveError('End date must be after start date')
+    page.form.endDateField.validationMessage.contains('End date must be after start date')
+  })
 })
