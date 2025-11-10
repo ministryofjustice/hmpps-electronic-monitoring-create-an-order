@@ -32,10 +32,10 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult, or
 
   return {
     curfew: { value: data.curfew || false, disabled: isDisabled('curfew') },
-    exclusionZone: { value: data.curfew || false, disabled: isDisabled('exclusionZone') },
-    trail: { value: data.curfew || false, disabled: isDisabled('trail') },
-    mandatoryAttendance: { value: data.curfew || false, disabled: isDisabled('mandatoryAttendance') },
-    alcohol: { value: data.curfew || false, disabled: isDisabled('alcohol') },
+    exclusionZone: { value: data.exclusionZone || false, disabled: isDisabled('exclusionZone') },
+    trail: { value: data.trail || false, disabled: isDisabled('trail') },
+    mandatoryAttendance: { value: data.mandatoryAttendance || false, disabled: isDisabled('mandatoryAttendance') },
+    alcohol: { value: data.alcohol || false, disabled: isDisabled('alcohol') },
     message: enabled.message,
     error: getError(errors, 'monitoringTypes'),
     errorSummary: createGovukErrorSummary(errors),
