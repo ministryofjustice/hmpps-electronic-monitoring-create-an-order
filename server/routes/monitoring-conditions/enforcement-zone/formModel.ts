@@ -31,10 +31,7 @@ const EnforcementZoneAddToListFormDataValidator = z
     zoneId: z.number().nullable().default(0),
     startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
     endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
-    name: z
-      .string()
-      .min(1, validationErrors.enforcementZone.nameRequired)
-      .max(200, validationErrors.enforcementZone.nameTooLong),
+    name: z.string().min(1, validationErrors.enforcementZone.nameRequired),
     description: z
       .string()
       .min(1, validationErrors.enforcementZone.descriptionRequired)

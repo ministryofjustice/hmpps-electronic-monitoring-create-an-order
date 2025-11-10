@@ -54,7 +54,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           'Enter the name of the exclusion zone',
           'Enter where the exclusion zone is required',
           'Enter when the exclusion zone must be followed',
-          'Select ‘Yes’ if you need to add another exclusion zone',
         ])
       })
     })
@@ -72,7 +71,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
             { field: 'file', error: expectedValidationErrorMessage },
             { field: 'description', error: expectedValidationErrorMessage },
             { field: 'duration', error: expectedValidationErrorMessage },
-            { field: 'anotherZone', error: expectedValidationErrorMessage },
           ],
         })
       })
@@ -104,28 +102,27 @@ context('Monitoring conditions - Enforcement Zone', () => {
       })
     })
 
-    context('when name, description and duration are too long', () => {
+    context('when description and duration are too long', () => {
       beforeEach(() => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'name', error: 'Exclusion zone name must be 200 characters or less' },
             { field: 'description', error: 'Where is the exclusion zone must be 200 characters or less' },
             { field: 'duration', error: 'When must the exclusion zone be followed must be 200 characters or less' },
           ],
         })
       })
 
-      it('should display error messages when exclusion zone fields (name, description, duration) are longer than 200 characters', () => {
+      it('should display error messages when exclusion zone fields (description, duration) are longer than 200 characters', () => {
         const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
 
         const formData = {
           zoneType: 'EXCLUSION',
           startDate: new Date('2025-12-10T00:00:00.000Z'),
           endDate: new Date('2025-12-11T00:00:00.000Z'),
-          name: faker.string.fromCharacters('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 201),
+          name: 'test name',
           description: faker.string.fromCharacters(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             201,
@@ -134,14 +131,12 @@ context('Monitoring conditions - Enforcement Zone', () => {
         }
 
         page.form.fillInWith(formData)
-        page.form.nameField.shouldHaveValidationMessage('You have 1 character too many')
         page.form.descriptionField.shouldHaveValidationMessage('You have 1 character too many')
         page.form.durationField.shouldHaveValidationMessage('You have 1 character too many')
 
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(EnforcementZonePage)
-        page.form.nameField.shouldHaveValidationMessage('Exclusion zone name must be 200 characters or less')
         page.form.descriptionField.shouldHaveValidationMessage(
           'Where is the exclusion zone must be 200 characters or less',
         )
@@ -149,7 +144,6 @@ context('Monitoring conditions - Enforcement Zone', () => {
           'When must the exclusion zone be followed must be 200 characters or less',
         )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Exclusion zone name must be 200 characters or less')
         page.errorSummary.shouldHaveError('Where is the exclusion zone must be 200 characters or less')
         page.errorSummary.shouldHaveError('When must the exclusion zone be followed must be 200 characters or less')
       })

@@ -64,13 +64,17 @@ export default class EnforcementZoneController {
         const order = req.order!
         if (order.enforcementZoneConditions.length - 1 > zoneIdInt)
           res.redirect(
-            paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(
-              ':zoneId',
-              (zoneIdInt + 1).toString(),
+            // paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(
+            //   ':zoneId',
+            //   (zoneIdInt + 1).toString(),
+            // ),
+            paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(
+              ':orderId',
+              req.order!.id,
             ),
           )
         else {
-          res.redirect(this.taskListService.getNextPage('ENFORCEMENT_ZONE_MONITORING', req.order!))
+          res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
         }
       } else {
         res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
