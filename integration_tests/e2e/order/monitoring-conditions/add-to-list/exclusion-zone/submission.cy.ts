@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import EnforcementZonePage from './ExclusionZonePage'
-import AttendanceMonitoringPage from '../../../../../pages/order/monitoring-conditions/attendance-monitoring'
 import OrderSummaryPage from '../../../../../pages/order/summary'
 import { EnforcementZoneFormData } from './ExclusionZoneComponent'
+import TypesOfMonitoringNeededPage from '../../order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 const mockOrderId = uuidv4()
 const apiPath = '/enforcementZone'
@@ -11,7 +11,7 @@ const uploadApiPath = '/attachment'
 
 context('Monitoring conditions - Enforcement Zone', () => {
   // *** Remove skip when routing is working ***
-  context.skip('Submitting a valid Exclusion zone order', () => {
+  context('Submitting a valid Exclusion zone order', () => {
     const zoneType = 'Exclusion zone'
     const zoneTypeId = 'EXCLUSION'
 
@@ -95,7 +95,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       }).should('be.true')
     })
 
-    it('should continue to collect attendance monitoring data', () => {
+    it('should continue to the types of monitoring needed page', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData = {
@@ -110,7 +110,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(AttendanceMonitoringPage)
+      Page.verifyOnPage(TypesOfMonitoringNeededPage)
     })
 
     it('should return to the summary page', () => {
@@ -226,7 +226,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       }).should('be.true')
     })
 
-    it('should continue to collect the next enforcement zones data', () => {
+    it('should continue to the types of monitoring needed page', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData: EnforcementZoneFormData = {
@@ -244,7 +244,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(AttendanceMonitoringPage, { orderId: mockOrderId, zoneId: 2 })
+      Page.verifyOnPage(TypesOfMonitoringNeededPage, { orderId: mockOrderId, zoneId: 2 })
     })
 
     it('should return to the summary page', () => {
