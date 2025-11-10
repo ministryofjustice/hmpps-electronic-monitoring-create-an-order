@@ -9,7 +9,7 @@ type Action = {
   visuallyHiddenText: string
 }
 
-type Answer = {
+export type Answer = {
   key: {
     text: string
   }
@@ -21,8 +21,6 @@ type Answer = {
     items: Array<Action>
   }
 }
-
-export default Answer
 
 export interface AnswerOptions {
   ignoreActions?: boolean
@@ -57,7 +55,7 @@ export const createAnswer = (key: string, value: Optional<string>, uri: string, 
   return answer
 }
 
-const createDatePreview = (value: Optional<string>) =>
+export const createDatePreview = (value: Optional<string>) =>
   isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString('en-GB')
 
 const createTimePreview = (value: Optional<string>) =>
