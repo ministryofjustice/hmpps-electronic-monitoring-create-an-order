@@ -115,6 +115,8 @@ export interface DateErrorMessages {
   mustIncludeYear: string
   required?: string
   yearMustIncludeFourNumbers: string
+  mustNoInPast?: string
+  mustAfterStartDate?: string
 }
 
 interface TimeErrorMessages {
@@ -148,7 +150,11 @@ const getMonitoringConditionStartDateTimeErrorMessages = (type: string) => {
   }
 }
 
-const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: boolean = false) => {
+const getMonitoringConditionEndDateTimeErrorMessages = (
+  type: string,
+  required: boolean = false,
+  notInPast: boolean = false,
+) => {
   return {
     date: {
       mustBeReal: `End date for ${type} must be a real date`,
@@ -157,6 +163,8 @@ const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: 
       mustIncludeYear: `End date for ${type} must include a year`,
       yearMustIncludeFourNumbers: `Year must include 4 numbers`,
       required: required ? `Enter end date for ${type}` : undefined,
+      mustNoInPast: notInPast ? `End date of  ${type} must be in the future` : undefined,
+      mustAfterStartDate: `End date must be after start date`,
     },
     time: {
       mustBeReal: `End time for ${type} must be a real time`,
@@ -213,7 +221,7 @@ const validationErrors: ValidationErrors = {
     offenceTypeRequired: 'Select the type of offence the device wearer committed',
     policeAreaRequired: "Select the police force area the device wearer's release address is in",
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true, true),
     addAnotherRequired: 'Select Yes if there are other types of monitoring needed',
   },
   monitoringConditionsAlcohol: {
