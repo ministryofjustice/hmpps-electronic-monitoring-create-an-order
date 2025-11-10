@@ -72,7 +72,7 @@ describe('MonitoringDatesController', () => {
     const validFormData = {
       action: 'continue',
       startDate: { day: '01', month: '01', year: '2025', hours: '00', minutes: '00' },
-      endDate: { day: '01', month: '02', year: (now.getFullYear()+1).toString(), hours: '00', minutes: '00' },
+      endDate: { day: '01', month: '02', year: (now.getFullYear() + 1).toString(), hours: '00', minutes: '00' },
     }
 
     it('redirects to the next page', async () => {
@@ -110,7 +110,7 @@ describe('MonitoringDatesController', () => {
       await controller.update(req, res, next)
 
       const expectedStartDate = new Date(2025, 0, 1, 0, 0).toISOString()
-      const expectedEndDate = new Date(now.getFullYear()+1, 1, 1, 0, 0).toISOString()
+      const expectedEndDate = new Date(now.getFullYear() + 1, 1, 1, 0, 0).toISOString()
 
       expect(mockStore.updateMonitoringDates).toHaveBeenCalledWith(
         req.order!,
