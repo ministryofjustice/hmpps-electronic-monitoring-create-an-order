@@ -7,12 +7,12 @@ import TaskListService from '../../../services/taskListService'
 import { EnforcementZoneAddToListFormDataModel } from './formModel'
 import enforcementZoneAddToListViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
-import Service from './service'
+import EnforcementZoneAddToListService from './service'
 
-export default class EnforcementZoneController {
+export default class EnforcementZoneAddToListController {
   constructor(
     private readonly auditService: AuditService,
-    private readonly zoneService: Service,
+    private readonly zoneService: EnforcementZoneAddToListService,
     private readonly taskListService: TaskListService,
   ) {}
 

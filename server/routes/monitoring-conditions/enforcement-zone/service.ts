@@ -18,7 +18,7 @@ type UploadZoneAttachmentRequestInput = AuthenticatedRequestInput & {
   zoneId: number
 }
 
-export default class Service {
+export default class EnforcementZoneAddToListService {
   constructor(private readonly apiClient: RestClient) {}
 
   async updateZone(input: UpdateZoneRequestInput): Promise<ValidationResult | null> {
