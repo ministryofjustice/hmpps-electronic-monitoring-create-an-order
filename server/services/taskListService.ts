@@ -512,7 +512,6 @@ export default class TaskListService {
     if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
       return this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
     }
-
     // Otherwise, navigate to the next page in the task list.
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }

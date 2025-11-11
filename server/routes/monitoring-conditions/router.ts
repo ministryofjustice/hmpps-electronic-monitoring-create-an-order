@@ -45,7 +45,10 @@ const createOrderTypeDescriptionRouter = (
   )
   const monitoringTypeController = new MonitoringTypeController(taskListService)
 
-  const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
+  const monitoringDatesController = new MonitoringDatesController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+  )
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
 

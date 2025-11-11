@@ -4,9 +4,14 @@ import constructModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
 import { MonitoringDatesFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
+import FeatureFlags from '../../../utils/featureFlags'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 
 export default class MonitoringDatesController {
-  constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
+  constructor(
+    private readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
+    private readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -32,6 +37,18 @@ export default class MonitoringDatesController {
       )
     }
     await this.montoringConditionsStoreService.updateMonitoringDates(order, formData.data)
+
+    if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+      const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)
+      await this.monitoringConditionsService.updateMonitoringConditions({
+        data,
+        accessToken: res.locals.user.token,
+        orderId: order.id,
+      })
+      return res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id),
+      )
+    }
 
     return res.redirect(
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),

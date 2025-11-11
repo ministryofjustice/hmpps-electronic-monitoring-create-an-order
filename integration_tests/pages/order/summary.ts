@@ -155,7 +155,7 @@ export default class OrderTasksPage extends AppPage {
     })
 
     if (installationLocation) {
-      fillInInsllationLocationWith({installationLocation, installationAppointment,installationAddressDetails})
+      fillInInsllationLocationWith({ installationLocation, installationAppointment, installationAddressDetails })
     }
 
     if (curfewReleaseDetails) {
@@ -565,7 +565,7 @@ export default class OrderTasksPage extends AppPage {
     { curfewReleaseDetails, curfewConditionDetails, curfewTimetable },
     checkYourAnswerPage = true,
   ): void {
-    fillInCurfewOrderDetailsWith({curfewReleaseDetails,curfewConditionDetails,curfewTimetable})
+    fillInCurfewOrderDetailsWith({ curfewReleaseDetails, curfewConditionDetails, curfewTimetable })
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
@@ -576,7 +576,6 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
-    
     fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails)
 
     if (checkYourAnswerPage) {
@@ -603,7 +602,7 @@ export default class OrderTasksPage extends AppPage {
     }
   }
 
-  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }, checkYourAnswerPage = true): void {   
+  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }, checkYourAnswerPage = true): void {
     fillInTrailMonitoringOrderDetailsWith(trailMonitoringDetails)
 
     if (checkYourAnswerPage) {
