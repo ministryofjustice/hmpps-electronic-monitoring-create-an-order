@@ -13,11 +13,12 @@ import InstallationAndRiskController from '../controllers/installationAndRisk/in
 import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
+import AttendanceMonitoringAddToListController from './monitoring-conditions/attendance-monitoring/controller'
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
-import EnforcementZoneControllerAddToList from './monitoring-conditions/enforcement-zone/controller'
+import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
@@ -41,6 +42,7 @@ export default function routes({
   alcoholMonitoringService,
   attachmentService,
   attendanceMonitoringService,
+  attendanceMonitoringAddToListService,
   auditService,
   contactDetailsService,
   curfewConditionsService,
@@ -94,6 +96,9 @@ export default function routes({
     attendanceMonitoringService,
     taskListService,
   )
+  const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
+    attendanceMonitoringAddToListService,
+  )
   const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(
     auditService,
@@ -146,11 +151,7 @@ export default function routes({
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
   const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
-  const zoneControllerAddToList = new EnforcementZoneControllerAddToList(
-    auditService,
-    zoneAddToListService,
-    taskListService,
-  )
+  const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
     taskListService,
@@ -294,6 +295,12 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.view)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.update)
+
+  // Attendance monitoring page add to list
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.new)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.view)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
 
   // Alcohol monitoring page
   get(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController.view)

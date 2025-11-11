@@ -48,6 +48,7 @@ const paths = {
     ATTENDANCE: '/order/:orderId/monitoring-conditions/attendance',
     ATTENDANCE_ADD_TO_LIST: '/order/:orderId/monitoring-conditions/add-to-list/attendance',
     ATTENDANCE_ITEM: '/order/:orderId/monitoring-conditions/attendance/:conditionId',
+    ATTENDANCE_ITEM_ADD_TO_LIST: '/order/:orderId/monitoring-conditions/add-to-list/attendance/:conditionId',
     ALCOHOL: '/order/:orderId/monitoring-conditions/alcohol',
     CURFEW_RELEASE_DATE: '/order/:orderId/monitoring-conditions/curfew/release-date',
     CURFEW_CONDITIONS: '/order/:orderId/monitoring-conditions/curfew/conditions',

@@ -47,11 +47,7 @@ describe('EnforcementZoneAddToListController', () => {
     mockEnforcementZoneAddToListService = new EnforcementZoneAddToListService(
       mockRestClient,
     ) as jest.Mocked<EnforcementZoneAddToListService>
-    controller = new EnforcementZoneAddToListController(
-      mockAuditService,
-      mockEnforcementZoneAddToListService,
-      taskListService,
-    )
+    controller = new EnforcementZoneAddToListController(mockAuditService, mockEnforcementZoneAddToListService)
 
     req = {
       // @ts-expect-error stubbing session

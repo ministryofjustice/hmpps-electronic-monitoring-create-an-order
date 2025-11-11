@@ -3,7 +3,6 @@ import { AuditService } from '../../../services'
 import { getErrorsViewModel } from '../../../utils/utils'
 import paths from '../../../constants/paths'
 import { ErrorsViewModel } from '../../../models/view-models/utils'
-import TaskListService from '../../../services/taskListService'
 import { EnforcementZoneAddToListFormDataModel } from './formModel'
 import enforcementZoneAddToListViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
@@ -13,7 +12,6 @@ export default class EnforcementZoneAddToListController {
   constructor(
     private readonly auditService: AuditService,
     private readonly zoneService: EnforcementZoneAddToListService,
-    private readonly taskListService: TaskListService,
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {

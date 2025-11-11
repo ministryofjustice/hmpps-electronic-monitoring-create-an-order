@@ -3,6 +3,7 @@ import AddressService from './addressService'
 import AlcoholMonitoringService from './alcoholMonitoringService'
 import AttachmentService from './attachmentService'
 import AttendanceMonitoringService from './attendanceMonitoringService'
+import AttendanceMonitoringAddToListService from '../routes/monitoring-conditions/attendance-monitoring/service'
 import AuditService from './auditService'
 import ContactDetailsService from './contactDetailsService'
 import CurfewConditionsService from './curfewConditionsService'
@@ -10,8 +11,8 @@ import CurfewReleaseDateService from './curfewReleaseDateService'
 import CurfewTimetableService from './curfewTimetableService'
 import DeviceWearerResponsibleAdultService from './deviceWearerResponsibleAdultService'
 import DeviceWearerService from './deviceWearerService'
-import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
 import EnforcementZoneService from './enforcementZoneServices'
+import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
 import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
 import InterestedPartiesService from './interestedPartiesService'
@@ -41,6 +42,7 @@ export const services = () => {
   const alcoholMonitoringService = new AlcoholMonitoringService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
   const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
+  const attendanceMonitoringAddToListService = new AttendanceMonitoringAddToListService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
   const curfewConditionsService = new CurfewConditionsService(cemoApiClient)
@@ -77,6 +79,7 @@ export const services = () => {
     applicationInfo,
     attachmentService,
     attendanceMonitoringService,
+    attendanceMonitoringAddToListService,
     auditService,
     contactDetailsService,
     curfewReleaseDateService,
