@@ -9,12 +9,8 @@ import NoFixedAbodePage from './contact-information/no-fixed-abode'
 import PrimaryAddressPage from './contact-information/primary-address'
 import InterestedPartiesPage from './contact-information/interested-parties'
 import MonitoringConditionsPage from './monitoring-conditions'
-import InstallationAddressPage from './monitoring-conditions/installation-address'
 import InstallationAndRiskPage from './installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from './installation-and-risk/check-your-answers'
-import CurfewTimetablePage from './monitoring-conditions/curfew-timetable'
-import CurfewConditionsPage from './monitoring-conditions/curfew-conditions'
-import CurfewReleaseDatePage from './monitoring-conditions/curfew-release-date'
 import AttachmentSummaryPage from './attachments/summary'
 import DeviceWearerCheckYourAnswersPage from './about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from './monitoring-conditions/check-your-answers'
@@ -22,19 +18,18 @@ import ContactInformationCheckYourAnswersPage from './contact-information/check-
 import IdentityNumbersPage from './about-the-device-wearer/identity-numbers'
 import UploadPhotoIdPage from './attachments/uploadPhotoId'
 import VariationDetailsPage from './variation/variationDetails'
-import EnforcementZonePage from './monitoring-conditions/enforcement-zone'
-import AlcoholMonitoringPage from './monitoring-conditions/alcohol-monitoring'
 import UploadLicencePage from './attachments/uploadLicence'
-import TrailMonitoringPage from './monitoring-conditions/trail-monitoring'
 import SecondaryAddressPage from './contact-information/secondary-address'
 import ProbationDeliveryUnitPage from './contact-information/probation-delivery-unit'
-import CurfewAdditionalDetailsPage from './monitoring-conditions/curfew-additional-details'
-import InstallationLocationPage from './monitoring-conditions/installation-location'
 import HavePhotoPage from './attachments/havePhoto'
-import InstallationAppointmentPage from './monitoring-conditions/installation-appointment'
-import AttendanceMonitoringPage from './monitoring-conditions/attendance-monitoring'
 import TertiaryAddressPage from './contact-information/tertiary-adddress'
 import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
+import fillInInsllationLocationWith from '../../utils/scenario-flows/installation-location.cy'
+import fillInCurfewOrderDetailsWith from '../../utils/scenario-flows/curfew.cy'
+import fillInEnforcementZoneOrderDetailsWith from '../../utils/scenario-flows/enforcement-zone.cy'
+import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/alcohol-monitoring.cy'
+import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
+import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendence-monitoring.cy'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -160,19 +155,7 @@ export default class OrderTasksPage extends AppPage {
     })
 
     if (installationLocation) {
-      const installationLocationPage = Page.verifyOnPage(InstallationLocationPage)
-      installationLocationPage.form.fillInWith(installationLocation)
-      installationLocationPage.form.saveAndContinueButton.click()
-
-      if (installationAppointment) {
-        const installationAppointmentPage = Page.verifyOnPage(InstallationAppointmentPage)
-        installationAppointmentPage.form.fillInWith(installationAppointment)
-        installationAppointmentPage.form.saveAndContinueButton.click()
-
-        const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-        installationAddress.form.fillInWith(installationAddressDetails)
-        installationAddress.form.saveAndContinueButton.click()
-      }
+      fillInInsllationLocationWith({installationLocation, installationAppointment,installationAddressDetails})
     }
 
     if (curfewReleaseDetails) {
@@ -582,22 +565,7 @@ export default class OrderTasksPage extends AppPage {
     { curfewReleaseDetails, curfewConditionDetails, curfewTimetable },
     checkYourAnswerPage = true,
   ): void {
-    const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-    curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-    curfewReleaseDatePage.form.saveAndContinueButton.click()
-
-    const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-    curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-    curfewConditionsPage.form.saveAndContinueButton.click()
-
-    const curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
-    curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
-    curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
-
-    const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-    curfewTimetablePage.form.fillInWith(curfewTimetable)
-    curfewTimetablePage.form.saveAndContinueButton.click()
-
+    fillInCurfewOrderDetailsWith({curfewReleaseDetails,curfewConditionDetails,curfewTimetable})
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
@@ -608,9 +576,8 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
-    const enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-    enforcementZonePage.form.fillInWith(enforcementZoneDetails)
-    enforcementZonePage.form.saveAndContinueButton.click()
+    
+    fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
@@ -625,9 +592,7 @@ export default class OrderTasksPage extends AppPage {
     { alcoholMonitoringDetails, installationAddressDetails },
     checkYourAnswerPage = true,
   ): void {
-    const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-    alcoholMonitoringPage.form.fillInWith(alcoholMonitoringDetails)
-    alcoholMonitoringPage.form.saveAndContinueButton.click()
+    fillInAlcoholMonitoringOrderDetailsWith(alcoholMonitoringDetails)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
@@ -638,10 +603,8 @@ export default class OrderTasksPage extends AppPage {
     }
   }
 
-  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }, checkYourAnswerPage = true): void {
-    const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-    trailMonitoringPage.form.fillInWith(trailMonitoringDetails)
-    trailMonitoringPage.form.saveAndContinueButton.click()
+  fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }, checkYourAnswerPage = true): void {   
+    fillInTrailMonitoringOrderDetailsWith(trailMonitoringDetails)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
@@ -681,9 +644,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInAttendanceMonitoringDetailsWith({ attendanceMonitoringDetails }, checkYourAnswerPage = true): void {
-    const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
-    attendanceMonitoringPage.form.fillInWith(attendanceMonitoringDetails)
-    attendanceMonitoringPage.form.saveAndContinueButton.click()
+    fillInAttendanceMonitoringDetailsWith(attendanceMonitoringDetails)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
