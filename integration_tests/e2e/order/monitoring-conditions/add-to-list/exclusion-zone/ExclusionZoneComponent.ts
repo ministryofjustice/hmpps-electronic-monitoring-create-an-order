@@ -4,7 +4,7 @@ import FormFileUploadComponent from '../../../../../pages/components/formFileUpl
 import FormTextareaComponent from '../../../../../pages/components/formTextareaComponent'
 import FormInputComponent from '../../../../../pages/components/formInputComponent'
 
-export type EnforcementZoneFormData = {
+export type EnforcementZoneAddToListFormData = {
   startDate?: Date
   endDate?: Date
   name?: string
@@ -16,7 +16,7 @@ export type EnforcementZoneFormData = {
   duration?: string
 }
 
-export default class EnforcementZoneFormComponent extends FormComponent {
+export default class EnforcementZoneAddToListFormComponent extends FormComponent {
   // FIELDS
 
   get startDateField(): FormDateTimeComponent {
@@ -45,7 +45,7 @@ export default class EnforcementZoneFormComponent extends FormComponent {
 
   // FORM HELPERS
 
-  fillInWith(data: EnforcementZoneFormData): void {
+  fillInWith(data: EnforcementZoneAddToListFormData): void {
     if (data.startDate) {
       this.startDateField.set(data.startDate, false)
     }

@@ -1,10 +1,10 @@
 import { PageElement } from '../../../../../pages/page'
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
-import EnforcementZoneFormComponent from './ExclusionZoneComponent'
+import EnforcementZoneAddToListFormComponent from './ExclusionZoneComponent'
 
 export default class EnforcementZonePage extends AppFormPage {
-  public form = new EnforcementZoneFormComponent()
+  public form = new EnforcementZoneAddToListFormComponent()
 
   constructor() {
     super('Exclusion zone monitoring ', paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, 'Electronic monitoring required')

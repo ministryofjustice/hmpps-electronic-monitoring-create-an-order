@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import EnforcementZonePage from './ExclusionZonePage'
 import OrderSummaryPage from '../../../../../pages/order/summary'
-import { EnforcementZoneFormData } from './ExclusionZoneComponent'
+import { EnforcementZoneAddToListFormData } from './ExclusionZoneComponent'
 import TypesOfMonitoringNeededPage from '../../order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 const mockOrderId = uuidv4()
@@ -229,7 +229,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     it('should continue to the types of monitoring needed page', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
 
-      const validFormData: EnforcementZoneFormData = {
+      const validFormData: EnforcementZoneAddToListFormData = {
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
         name: 'A test name: Lorem ipsum dolor sit amet...',
