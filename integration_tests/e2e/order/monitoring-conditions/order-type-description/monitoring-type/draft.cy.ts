@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringTypesPage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
-import { MonitoringConditions } from '../../../../../../server/routes/monitoring-conditions/model'
+import { MonitoringConditions } from '../../../../../../server/routes/monitoring-conditions/order-type-description/model'
 
 const createDevicerWearer = (youth: boolean = true) => {
   return {

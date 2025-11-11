@@ -34,7 +34,7 @@ import InstallationLocationController from '../controllers/monitoringConditions/
 import ReceiptController from '../controllers/receiptController'
 import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
-import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
+import createOrderTypeDescriptionRouter from './monitoring-conditions/order-type-description/router'
 
 export default function routes({
   alcoholMonitoringService,
