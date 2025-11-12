@@ -1,9 +1,10 @@
 import { Handler, Request, Response } from 'express'
 import Model, { MonitoringTypeData, MonitoringType } from './viewModel'
 import { Order } from '../../../models/Order'
+import RemoveMonitoringTypeService from './service'
 
 export default class RemoveMonitoringTypeController {
-  constructor() {}
+  constructor(private readonly service: RemoveMonitoringTypeService) {}
 
   view: Handler = (req: Request, res: Response) => {
     const { monitoringTypeId } = req.params
@@ -23,6 +24,22 @@ export default class RemoveMonitoringTypeController {
     const model = Model.construct(monitoringTypeData)
 
     res.render('pages/order/monitoring-conditions/remove-monitoring-type', model)
+  }
+
+  update: Handler = async (req: Request, res: Response) => {
+    const { monitoringTypeId } = req.params
+
+    const { order } = req
+    if (!order) {
+      res.status(400).send('Order not found on request')
+      return
+    }
+
+    await this.service.removeMonitoringType({
+      orderId: order.id,
+      monitoringTypeId,
+      accessToken: res.locals.user.token,
+    })
   }
 
   private findMonitoringType = (order: Order, monitoringTypeId: string): MonitoringTypeData | undefined => {
