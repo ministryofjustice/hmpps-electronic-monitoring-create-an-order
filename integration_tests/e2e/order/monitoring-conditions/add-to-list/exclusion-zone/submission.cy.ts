@@ -10,7 +10,6 @@ const apiPath = '/enforcementZone'
 const uploadApiPath = '/attachment'
 
 context('Monitoring conditions - Enforcement Zone', () => {
-  // *** Remove skip when routing is working ***
   context('Submitting a valid Exclusion zone order', () => {
     const zoneType = 'Exclusion zone'
     const zoneTypeId = 'EXCLUSION'

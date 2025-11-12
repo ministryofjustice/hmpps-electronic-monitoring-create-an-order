@@ -113,6 +113,7 @@ export type Services = ReturnType<typeof services>
 export {
   AlcoholMonitoringService,
   AttachmentService,
+  AttendanceMonitoringAddToListService,
   AuditService,
   ContactDetailsService,
   CurfewConditionsService,
