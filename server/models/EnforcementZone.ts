@@ -2,6 +2,7 @@ import { z } from 'zod'
 import EnforcementZoneTypes from './EnforcementZoneTypes'
 
 const EnforcementZoneModel = z.object({
+  id: z.string().optional(),
   zoneType: z.nativeEnum(EnforcementZoneTypes).nullable(),
   startDate: z.string().datetime().nullable(),
   endDate: z.string().datetime().nullable(),
