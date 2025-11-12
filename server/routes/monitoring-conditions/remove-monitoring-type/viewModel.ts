@@ -9,7 +9,13 @@ type RemoveMonitoringTypeViewModel = {
   monitoringTypeText: string
 }
 
-type MonitoringTypes = CurfewConditions | AttendanceMonitoring | TrailMonitoring | EnforcementZone | AlcoholMonitoring
+export type MonitoringType =
+  | CurfewConditions
+  | AttendanceMonitoring
+  | TrailMonitoring
+  | EnforcementZone
+  | AlcoholMonitoring
+
 export type MonitoringTypeData = {
   type:
     | 'Curfew'
@@ -17,7 +23,7 @@ export type MonitoringTypeData = {
     | 'Trail monitoring'
     | 'Exclusion zone monitoring'
     | 'Alcohol monitoring'
-  monitoringType: MonitoringTypes
+  monitoringType: MonitoringType
 }
 
 const construct = (input: MonitoringTypeData): RemoveMonitoringTypeViewModel => {
