@@ -179,7 +179,7 @@ context('Attendance monitoring', () => {
     })
   })
 
-  // TO-DO: find out if skip should be here as in original test
+  // note: skip is also present in original test file: attendanceMonitoring.cy.ts
   context.skip('Submitting the form', () => {
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
