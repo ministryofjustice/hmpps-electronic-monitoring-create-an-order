@@ -6,6 +6,7 @@ import TypesOfMonitoringNeededController from './controller'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
+import config from '../../../config'
 
 jest.mock('./viewModel')
 
@@ -67,12 +68,16 @@ describe('TypesOfMonitoringNeededController', () => {
       )
     })
 
-    it('redirects to the MONITORING_TYPE page when "No" is selected', async () => {
+    it('redirects to the Check your answers page when "No" is selected', async () => {
+      config.monitoringConditionTimes.enabled = true
       req.body = { action: 'continue', addAnother: 'false' }
+      mockTaskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id))
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id),
       )
     })
 

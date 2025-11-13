@@ -299,19 +299,6 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(monitoringConditionsPath.replace(':orderId', order.id))
     })
 
-    it('should return installation location if current page is monitoring conditions and selected conditions include alcohol', () => {
-      // Given
-      const currentPage = 'MONITORING_CONDITIONS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder()
-      order.monitoringConditions.alcohol = true
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id))
-    })
-
     it('should return installation appointment if current page is installation location and location is PRISON', () => {
       // Given
       const currentPage = 'INSTALLATION_LOCATION'
@@ -340,27 +327,6 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id))
     })
 
-    it('should return exclusion zone page ', () => {
-      // Given
-      const currentPage = 'INSTALLATION_LOCATION'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: false,
-          trail: false,
-          alcohol: false,
-          exclusionZone: true,
-          mandatoryAttendance: false,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id).replace(':zoneId', '0'))
-    })
-
     it('should return installation address if current page is installation appointment', () => {
       // Given
       const currentPage = 'INSTALLATION_APPOINTMENT'
@@ -379,79 +345,7 @@ describe('TaskListService', () => {
       )
     })
 
-    it('should return curfew release date if current page is monitoring conditions and only curfew was selected', () => {
-      // Given
-      const currentPage = 'MONITORING_CONDITIONS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-          trail: false,
-          alcohol: false,
-          exclusionZone: false,
-          mandatoryAttendance: false,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id))
-    })
-
-    it('should return exclusion zone if current page is installation address and exclusionZone was selected', () => {
-      // Given
-      const currentPage = 'INSTALLATION_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          exclusionZone: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id))
-    })
-
-    it('should return trail monitoring if current page is installation address and trail was selected', () => {
-      // Given
-      const currentPage = 'INSTALLATION_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          trail: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id))
-    })
-
-    it('should return attendance monitoring if current page is installation address and mandatoryAttendance was selected', () => {
-      // Given
-      const currentPage = 'INSTALLATION_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          mandatoryAttendance: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
-    })
-
-    it('should return alcohol monitoring if current page is installation address and alcohol was selected', () => {
+    it('should return check your answers page if current page is installation address and alcohol was selected', () => {
       // Given
       const currentPage = 'INSTALLATION_ADDRESS'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -465,7 +359,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return curfew conditions if current page is curfew release date', () => {
