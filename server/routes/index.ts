@@ -35,6 +35,7 @@ import ReceiptController from '../controllers/receiptController'
 import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
+import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -65,6 +66,7 @@ export default function routes({
   isRejectionService,
   monitoringConditionsStoreService,
   monitoringConditionsUpdateService,
+  removeMonitoringTypeService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -129,6 +131,7 @@ export default function routes({
     monitoringConditionsService,
     taskListService,
   )
+  const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
   const notifyingOrganisationController = new InterestedPartiesController(
     auditService,
@@ -266,6 +269,9 @@ export default function routes({
   // Main monitoring conditions page
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
+
+  get(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.view)
+  post(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.update)
 
   // Installation location page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
