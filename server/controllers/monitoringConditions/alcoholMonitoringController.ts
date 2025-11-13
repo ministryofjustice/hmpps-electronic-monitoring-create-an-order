@@ -52,7 +52,12 @@ export default class AlcoholMonitoringController {
           paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
         )
       } else {
-        res.redirect(this.taskListService.getNextPage('ALCOHOL_MONITORING', req.order!))
+        res.redirect(
+          this.taskListService.getNextPage('ALCOHOL_MONITORING', {
+            ...req.order!,
+            monitoringConditionsAlcohol: updateResult,
+          }),
+        )
       }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))

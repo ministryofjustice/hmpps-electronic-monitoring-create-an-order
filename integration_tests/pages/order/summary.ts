@@ -153,11 +153,6 @@ export default class OrderTasksPage extends AppPage {
       tertiaryAddressDetails,
       monitoringOrderTypeDescription,
     })
-
-    if (installationLocation) {
-      fillInTagAtSourceWith({ installationLocation, installationAppointment, installationAddressDetails })
-    }
-
     if (curfewReleaseDetails) {
       this.fillInCurfewOrderDetailsWith(
         {
@@ -204,6 +199,10 @@ export default class OrderTasksPage extends AppPage {
         },
         false,
       )
+    }
+
+    if (installationLocation) {
+      fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
     }
 
     const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
