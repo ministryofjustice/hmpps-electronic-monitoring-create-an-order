@@ -182,7 +182,7 @@ export const convertBooleanToEnum = <T extends string>(
 }
 
 export const isNullOrUndefined = <T>(value: T | null | undefined): value is null | undefined => {
-  return value === null || value === undefined
+  return value === null || value === undefined || value === ''
 }
 
 export const isNotNullOrUndefined = <T>(value: T | null | undefined): value is T => !isNullOrUndefined(value)

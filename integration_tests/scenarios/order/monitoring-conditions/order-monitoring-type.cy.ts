@@ -1,8 +1,19 @@
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
+import {
+  createFakeAdultDeviceWearer,
+  createFakeInterestedParties,
+  createFakeAddress,
+  createKnownAddress,
+} from '../../../mockApis/faker'
+import fillInMonitoringTypeWith from '../../../utils/scenario-flows/monitoringType'
+import { verifyTagAtSourceInCheckYourAnswersPage } from '../../../utils/scenario-flows/installation-location.cy'
+import { verifyTrailMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/trail-monitoring.cy'
+import { verifyAlcoholMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/alcohol-monitoring.cy'
+import { verifyAttendanceMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/attendence-monitoring.cy'
+import { verifyEnforcementZoneInCheckYourAnswersPage } from '../../../utils/scenario-flows/enforcement-zone.cy'
+import { verifyCurfewInCheckYourAnswersPage } from '../../../utils/scenario-flows/curfew.cy'
 
 context('Monitoring type list flow', () => {
   const currentDate = new Date()
@@ -31,9 +42,77 @@ context('Monitoring type list flow', () => {
 
   let orderSummaryPage: OrderSummaryPage
 
-  const trailMonitoringOrder = {
+  const trail = {
     startDate: new Date(currentDate.getFullYear(), 11, 1),
     endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+  }
+
+  const alcohol = {
+    startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
+    endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+    monitoringType: 'Alcohol abstinence',
+  }
+
+  const installationLocationDetails = {
+    location: `At a prison`,
+  }
+
+  const installationAppointmentDetails = {
+    placeName: 'mock prison',
+    appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+  }
+  const installationAddress = createFakeAddress()
+  const curfewReleaseDay = {
+    releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
+    startTime: { hours: '19', minutes: '00' },
+    endTime: { hours: '07', minutes: '00' },
+    address: /Main address/,
+  }
+  const curfew = {
+    startDate: new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0),
+    endDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59, 0),
+    addresses: [/Main address/],
+    curfewAdditionalDetails: 'Mock details',
+  }
+  const curfewNights = ['MONDAY']
+  const curfewTimetableDetails = curfewNights.flatMap((day: string) => [
+    {
+      day,
+      startTime: '00:00:00',
+      endTime: '07:00:00',
+      addresses: curfew.addresses,
+    },
+    {
+      day,
+      startTime: '19:00:00',
+      endTime: '11:59:00',
+      addresses: curfew.addresses,
+    },
+  ])
+  const enforcementZone = {
+    zoneType: 'Exclusion zone',
+    startDate: new Date(currentDate.getFullYear(), 4, 1),
+    endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+    description: 'A test description: Lorum ipsum dolar sit amet...',
+    duration: 'A test duration: one, two, three...',
+    anotherZone: 'No',
+  }
+
+  const attendanceMonitoring = {
+    startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
+    endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
+    purpose: 'Attend Bolton Magistrates Court at 9am on Wednesdays & Fridays',
+    appointmentDay: 'Wednesdays & Fridays',
+    startTime: {
+      hours: '09',
+      minutes: '00',
+    },
+    endTime: {
+      hours: '12',
+      minutes: '00',
+    },
+    address: createKnownAddress(),
+    addAnother: 'No',
   }
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)
@@ -51,13 +130,7 @@ context('Monitoring type list flow', () => {
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
-  })
 
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
-
-  it('Trail and AM', () => {
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
     const monitoringOrderTypeDescription = {
       sentenceType: 'Standard Determinate Sentence',
@@ -78,9 +151,113 @@ context('Monitoring type list flow', () => {
       installationAndRisk,
       monitoringOrderTypeDescription,
     })
+  })
 
-    const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-    trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-    trailMonitoringPage.form.saveAndContinueButton.click()
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
+  const verifyResult = ({
+    installationAddressDetails = undefined,
+    installationLocation = undefined,
+    installationAppointment = undefined,
+    curfewReleaseDetails = undefined,
+    curfewConditionDetails = undefined,
+    curfewTimetable = undefined,
+    enforcementZoneDetails = undefined,
+    alcoholMonitoringDetails = undefined,
+    trailMonitoringDetails = undefined,
+    attendanceMonitoringDetails = undefined,
+  }) => {
+    verifyTagAtSourceInCheckYourAnswersPage(installationLocation, installationAppointment, installationAddressDetails)
+
+    verifyCurfewInCheckYourAnswersPage({
+      curfewConditionDetails,
+      curfewReleaseDetails,
+      curfewTimetable,
+      mainAddress: primaryAddressDetails,
+    })
+
+    verifyTrailMonitoringInCheckYourAnswersPage(trailMonitoringDetails)
+
+    verifyAlcoholMonitoringInCheckYourAnswersPage(alcoholMonitoringDetails)
+
+    verifyAttendanceMonitoringInCheckYourAnswersPage(attendanceMonitoringDetails)
+
+    verifyEnforcementZoneInCheckYourAnswersPage(enforcementZoneDetails)
+  }
+  it('Trail and AM', () => {
+    fillInMonitoringTypeWith({ trailMonitoringDetails: trail })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Alcohol monitoring',
+      alcoholMonitoringDetails: alcohol,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'No',
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
+    })
+
+    verifyResult({
+      trailMonitoringDetails: trail,
+      alcoholMonitoringDetails: alcohol,
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
+    })
+  })
+
+  it('All monitoring conditions', () => {
+    fillInMonitoringTypeWith({ trailMonitoringDetails: trail })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Alcohol monitoring',
+      alcoholMonitoringDetails: alcohol,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Curfew',
+      curfewConditionDetails: curfew,
+      curfewReleaseDetails: curfewReleaseDay,
+      curfewTimetable: curfewTimetableDetails,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Exclusion zone monitoring',
+      enforcementZoneDetails: enforcementZone,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Mandatory attendance monitoring',
+      attendanceMonitoringDetails: attendanceMonitoring,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'No',
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
+    })
+
+    verifyResult({
+      trailMonitoringDetails: trail,
+      alcoholMonitoringDetails: alcohol,
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
+      curfewConditionDetails: curfew,
+      curfewReleaseDetails: curfewReleaseDay,
+      curfewTimetable: curfewTimetableDetails,
+      enforcementZoneDetails: enforcementZone,
+      attendanceMonitoringDetails: attendanceMonitoring,
+    })
   })
 })

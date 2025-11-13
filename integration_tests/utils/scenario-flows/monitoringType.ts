@@ -2,13 +2,15 @@ import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-typ
 import Page from '../../pages/page'
 import fillInCurfewOrderDetailsWith from './curfew.cy'
 import fillInEnforcementZoneOrderDetailsWith from './enforcement-zone.cy'
-import fillInInsllationLocationWith from './installation-location.cy'
+import fillInTagAtSourceWith from './installation-location.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from './alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from './trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from './attendence-monitoring.cy'
+import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 export default function fillInMonitoringTypeWith({
-  monitoringType,
+  monitoringType = undefined,
+  additionalMonitoringConditions = undefined,
   installationAddressDetails = undefined,
   installationLocation = undefined,
   installationAppointment = undefined,
@@ -20,11 +22,16 @@ export default function fillInMonitoringTypeWith({
   trailMonitoringDetails = undefined,
   attendanceMonitoringDetails = undefined,
 }): void {
-  const monitoringTypePage = Page.verifyOnPage(MonitoringTypesPage)
-  monitoringTypePage.form.fillInWith(monitoringType)
+  if (additionalMonitoringConditions) {
+    const typesOfMoinitoringNeededPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+    typesOfMoinitoringNeededPage.form.fillInWith(additionalMonitoringConditions)
+    typesOfMoinitoringNeededPage.form.saveAndContinueButton.click()
+  }
 
-  if (installationLocation) {
-    fillInInsllationLocationWith({ installationLocation, installationAppointment, installationAddressDetails })
+  if (monitoringType) {
+    const monitoringTypePage = Page.verifyOnPage(MonitoringTypesPage)
+    monitoringTypePage.form.fillInWith(monitoringType)
+    monitoringTypePage.form.continueButton.click()
   }
 
   if (curfewReleaseDetails) {
@@ -45,5 +52,9 @@ export default function fillInMonitoringTypeWith({
 
   if (attendanceMonitoringDetails) {
     fillInAttendanceMonitoringDetailsWith(attendanceMonitoringDetails)
+  }
+
+  if (installationLocation) {
+    fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
   }
 }

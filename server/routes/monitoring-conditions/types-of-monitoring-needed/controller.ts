@@ -4,9 +4,10 @@ import { ValidationResult } from '../../../models/Validation'
 import { TypesOfMonitoringNeededFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
+import TaskListService from '../../../services/taskListService'
 
 export default class TypesOfMonitoringNeededController {
-  constructor() {}
+  constructor(private readonly taskListService: TaskListService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -34,8 +35,13 @@ export default class TypesOfMonitoringNeededController {
     }
 
     // TODO
-    return res.redirect(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id),
-    )
+    if (formData.action === 'continue') {
+      if (formData.addAnother === 'true') {
+        return res.redirect(
+          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id),
+        )
+      }
+    }
+    return res.redirect(this.taskListService.getNextPage('MONITORING_CONDITIONS', order))
   }
 }

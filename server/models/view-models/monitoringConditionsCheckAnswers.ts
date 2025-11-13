@@ -283,7 +283,7 @@ const createCurfewTimetableAnswers = (order: Order, answerOpts: AnswerOptions) =
   const timetable = order.curfewTimeTable
   const uri = paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
 
-  if (!order.monitoringConditions.curfew) {
+  if (order.curfewConditions?.startDate === undefined) {
     return []
   }
 
@@ -312,7 +312,7 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
   const { questions } = content.pages.curfewReleaseDate
 
-  if (!order.monitoringConditions.curfew) {
+  if (order.curfewConditions?.startDate === undefined) {
     return []
   }
 
@@ -350,7 +350,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
   const { questions } = content.pages.curfewConditions
   const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
 
-  if (!order.monitoringConditions.curfew) {
+  if (order.curfewConditions?.startDate === undefined) {
     return []
   }
   const answers = [
@@ -382,7 +382,7 @@ const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: Ans
   const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
   const { questions } = content.pages.exclusionZone
 
-  if (!order.monitoringConditions.exclusionZone) {
+  if (order.enforcementZoneConditions.length === 0) {
     return []
   }
 
@@ -406,7 +406,7 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
   const uri = paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
   const { questions } = content.pages.trailMonitoring
 
-  if (!order.monitoringConditions.trail) {
+  if (order.monitoringConditionsTrail?.startDate === undefined) {
     return []
   }
 
@@ -417,7 +417,7 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
 }
 
 const createAttendanceAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  if (!order.monitoringConditions.mandatoryAttendance) {
+  if (order.mandatoryAttendanceConditions.length === 0) {
     return []
   }
 
@@ -459,7 +459,7 @@ const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   )
   const { questions } = content.pages.alcohol
 
-  if (!order.monitoringConditions.alcohol) {
+  if (order.monitoringConditionsAlcohol?.startDate == null) {
     return []
   }
   return [

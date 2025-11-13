@@ -5,10 +5,15 @@ import paths from '../../../constants/paths'
 import TypesOfMonitoringNeededController from './controller'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
+import TaskListService from '../../../services/taskListService'
 
 jest.mock('./viewModel')
 
 describe('TypesOfMonitoringNeededController', () => {
+  const mockTaskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
   let controller: TypesOfMonitoringNeededController
   let res: Response
   let req: Request
@@ -18,7 +23,7 @@ describe('TypesOfMonitoringNeededController', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
 
-    controller = new TypesOfMonitoringNeededController()
+    controller = new TypesOfMonitoringNeededController(mockTaskListService)
 
     mockConstructModel.mockReturnValue({
       items: [],

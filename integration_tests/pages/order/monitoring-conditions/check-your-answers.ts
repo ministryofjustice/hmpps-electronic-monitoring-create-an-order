@@ -51,4 +51,14 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     const label = 'Installation address'
     return new SummaryListComponent(label)
   }
+
+  attendenceMonitoringSections(): SummaryListComponent {
+    const label = 'Mandatory attendance monitoring'
+    return new SummaryListComponent(label, true)
+  }
+
+  exclusionZoneMonitoringSections(): SummaryListComponent {
+    const label = 'Exclusion zone monitoring'
+    return new SummaryListComponent(label, true)
+  }
 }

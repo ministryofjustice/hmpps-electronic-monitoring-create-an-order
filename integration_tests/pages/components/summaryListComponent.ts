@@ -5,14 +5,19 @@ import { PageElement } from '../page'
 export default class SummaryListComponent {
   private elementCacheId: string = uuidv4()
 
-  constructor(private readonly label: string) {}
+  constructor(
+    private readonly label: string,
+    private readonly isCard: boolean = false,
+  ) {}
 
   get element(): PageElement {
     return cy.contains('h2', this.label)
   }
 
   get list(): PageElement {
-    return this.element.siblings('.govuk-summary-list')
+    if (!this.isCard) return this.element.siblings('.govuk-summary-list')
+
+    return this.element.siblings('.govuk-summary-card').get('.govuk-summary-list')
   }
 
   // Helpers
