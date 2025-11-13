@@ -62,7 +62,7 @@ const getItems = (order: Order): Answer[] => {
       items.push(
         createAnswer(
           MONITORING_TYPE_NAMES.mandatoryAttendance,
-          `From ${createDatePreview(attendance.startDate)} to ${createDatePreview(attendance.endDate)}`,
+          `${attendance.purpose}<br>From ${createDatePreview(attendance.startDate)} to ${createDatePreview(attendance.endDate)}`,
           paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId).replace(
             ':conditionId',
             `${attendance.id}`,
