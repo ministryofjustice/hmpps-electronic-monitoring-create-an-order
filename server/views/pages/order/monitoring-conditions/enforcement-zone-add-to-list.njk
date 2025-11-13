@@ -1,0 +1,137 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% set formEncoding = 'encType=multipart/form-data' %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+{% set section = content.pages.exclusionZone.section %}
+{% set heading = content.pages.exclusionZone.title %}
+{% set legend = content.pages.exclusionZone.legend %}
+{% set helpText = content.pages.exclusionZone.helpText %}
+{% set questions = content.pages.exclusionZone.questions %}
+{% block formInputs %}
+
+
+  {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
+
+   {{dateTimeInput({
+      id: "startDate",
+      name: "startDate",
+      date: startDate.value,
+      dateLabel:  questions.startDate.text,
+      dateHint: questions.startDate.hint,
+      errorMessages: {
+        field: startDate.error,
+        date: errors.dateError,
+        time: errors.timeError
+      },
+      disabled: not isOrderEditable,
+      timesEnabled: false,
+      defaultHours: "00",
+      defaultMinutes: "00"
+    })}}
+
+  {{dateTimeInput({
+      id: "endDate",
+      name: "endDate",
+      date: endDate.value,
+      dateLabel:  questions.endDate.text,
+      dateHint: questions.endDate.hint,
+      errorMessages: {
+        field: endDate.error,
+        date: errors.dateError,
+        time: errors.timeError
+      },
+      disabled: not isOrderEditable,
+      timesEnabled: false,
+      defaultHours: 23,
+      defaultMinutes: 59
+    })}}
+
+  {{ govukInput({
+    label: {
+      classes: "govuk-label--s",
+      text: questions.name.text
+    },
+    hint: {
+      text: questions.name.hint
+    },
+    classes: "govuk-!-width-two-thirds",
+    id: "name",
+    name: "name",
+    value: name.value,
+    errorMessage: name.error,
+    disabled: not isOrderEditable
+  }) }}
+
+  {% call govukFieldset({
+    legend: {
+      text: "Monitoring zone map (optional)",
+      classes: "govuk-fieldset__legend--s",
+      isPageHeading: false
+    }
+  }) %}
+    {% set fileHintHTML %}
+      <p class="govuk-hint">
+        Upload a map to show us where the exclusion zone is.
+      </p>
+
+      <p class="govuk-hint">
+        Use the <a href="https://mapmaker.field-dynamics.co.uk/moj/map/default" id="map-tool-link" target="_blank" rel="noopener noreferrer">'map tool' (opens in a new tab)</a>  to create a map or create your own.
+      </p>
+
+      <p class="govuk-hint">
+        You can upload a PDF, PNG, JPEG or JPG under 10MB.
+      </p>
+    {% endset %}
+
+    {{ govukFileUpload({
+      id: "file",
+      name: "file",
+      label: {
+        text: questions.file.text
+      },
+      hint: {
+        html: fileHintHTML
+      },
+      errorMessage: file.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endcall %}
+
+  {{ govukCharacterCount({
+    name: "description",
+    id: "description",
+    maxlength: 200,
+    value: description.value,
+    errorMessage: description.error,
+    label: {
+      text: questions.description.text,
+      classes: "govuk-label--s"
+    },
+    hint: {
+      html: questions.description.hint
+    },
+    attributes: attributes
+  }) }}
+
+  {{ govukCharacterCount({
+    name: "duration",
+    id: "duration",
+    maxlength: 200,
+    value: duration.value,
+    errorMessage: duration.error,
+    label: {
+      text: questions.duration.text,
+      classes: "govuk-label--s"
+    },
+    hint: {
+      text: questions.duration.hint
+    },
+    attributes: attributes
+  }) }}
+
+{% endblock %}
