@@ -320,13 +320,14 @@ type DeleteOrderStubOptions = {
   httpStatus: number
   id: string
   error: string
+  subPath?: string
 }
 
 const deleteOrder = (options: DeleteOrderStubOptions) =>
   stubFor({
     request: {
       method: 'DELETE',
-      urlPattern: `/cemo/api/orders/${options.id}`,
+      urlPattern: `/cemo/api/orders/${options.id}${options.subPath ?? ''}`,
     },
     response: {
       status: options.httpStatus,
