@@ -24,12 +24,12 @@ import ProbationDeliveryUnitPage from './contact-information/probation-delivery-
 import HavePhotoPage from './attachments/havePhoto'
 import TertiaryAddressPage from './contact-information/tertiary-adddress'
 import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
-import fillInTagAtSourceWith from '../../utils/scenario-flows/installation-location.cy'
+import fillInTagAtSourceWith from '../../utils/scenario-flows/tag-at-source.cy'
 import fillInCurfewOrderDetailsWith from '../../utils/scenario-flows/curfew.cy'
 import fillInEnforcementZoneOrderDetailsWith from '../../utils/scenario-flows/enforcement-zone.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
-import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendence-monitoring.cy'
+import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendance-monitoring.cy'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {

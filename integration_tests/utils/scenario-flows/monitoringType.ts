@@ -2,10 +2,10 @@ import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-typ
 import Page from '../../pages/page'
 import fillInCurfewOrderDetailsWith from './curfew.cy'
 import fillInEnforcementZoneOrderDetailsWith, { fillInEnforcementZoneListItemDetailsWith } from './enforcement-zone.cy'
-import fillInTagAtSourceWith from './installation-location.cy'
+import fillInTagAtSourceWith from './tag-at-source.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from './alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from './trail-monitoring.cy'
-import fillInAttendanceMonitoringDetailsWith from './attendence-monitoring.cy'
+import fillInAttendanceMonitoringDetailsWith from './attendance-monitoring.cy'
 import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 export default function fillInMonitoringTypeWith({

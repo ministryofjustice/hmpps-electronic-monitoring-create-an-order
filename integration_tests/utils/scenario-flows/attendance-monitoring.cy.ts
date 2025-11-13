@@ -20,8 +20,8 @@ export function verifyAttendanceMonitoringInCheckYourAnswersPage(attendanceMonit
   const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
 
   if (attendanceMonitoringDetails) {
-    page.attendenceMonitoringSections(attendanceMonitoringDetails.searchTerm).shouldExist()
-    page.attendenceMonitoringSections(attendanceMonitoringDetails.searchTerm).shouldHaveItems([
+    page.attendanceMonitoringSections(attendanceMonitoringDetails.searchTerm).shouldExist()
+    page.attendanceMonitoringSections(attendanceMonitoringDetails.searchTerm).shouldHaveItems([
       {
         key: 'What date does mandatory attendance monitoring start?',
         value: attendanceMonitoringDetails.startDate.toLocaleDateString('en-GB'),
@@ -52,6 +52,6 @@ export function verifyAttendanceMonitoringInCheckYourAnswersPage(attendanceMonit
       },
     ])
   } else {
-    page.attendenceMonitoringSections().shouldNotExist()
+    page.attendanceMonitoringSections().shouldNotExist()
   }
 }

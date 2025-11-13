@@ -52,7 +52,7 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  attendenceMonitoringSections(searchTerm = undefined): SummaryListComponent {
+  attendanceMonitoringSections(searchTerm = undefined): SummaryListComponent {
     const label = 'Mandatory attendance monitoring'
     return new SummaryListComponent(label, true, searchTerm)
   }

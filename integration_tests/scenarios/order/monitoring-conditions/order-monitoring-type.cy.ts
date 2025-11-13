@@ -8,10 +8,10 @@ import {
   createKnownAddress,
 } from '../../../mockApis/faker'
 import fillInMonitoringTypeWith from '../../../utils/scenario-flows/monitoringType'
-import { verifyTagAtSourceInCheckYourAnswersPage } from '../../../utils/scenario-flows/installation-location.cy'
+import { verifyTagAtSourceInCheckYourAnswersPage } from '../../../utils/scenario-flows/tag-at-source.cy'
 import { verifyTrailMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/trail-monitoring.cy'
 import { verifyAlcoholMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/alcohol-monitoring.cy'
-import { verifyAttendanceMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/attendence-monitoring.cy'
+import { verifyAttendanceMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/attendance-monitoring.cy'
 import { verifyEnforcementZoneInCheckYourAnswersPage } from '../../../utils/scenario-flows/enforcement-zone.cy'
 import { verifyCurfewInCheckYourAnswersPage } from '../../../utils/scenario-flows/curfew.cy'
 import removeMonitoringCondition from '../../../utils/scenario-flows/remove-monitoring-condition.cy'
@@ -318,7 +318,7 @@ context('Monitoring type list flow', () => {
     })
   })
 
-  it('Multiple attendence', () => {
+  it('Multiple attendance', () => {
     const attendanceMonitoring2 = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
