@@ -1,4 +1,5 @@
 import { createAddressPreview } from '../../../server/utils/utils'
+import AttendanceMonitoringAddToListPage from '../../e2e/order/monitoring-conditions/add-to-list/attendance-monitoring/AttendanceMonitoringPage'
 import AttendanceMonitoringPage from '../../pages/order/monitoring-conditions/attendance-monitoring'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import Page from '../../pages/page'
@@ -9,12 +10,18 @@ export default function fillInAttendanceMonitoringDetailsWith(attendanceMonitori
   attendanceMonitoringPage.form.saveAndContinueButton.click()
 }
 
+export function fillInEnforcementZoneListItemDetailsWith(attendanceMonitoringDetails) {
+  const enforcementZonePage = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
+  enforcementZonePage.form.fillInWith(attendanceMonitoringDetails)
+  enforcementZonePage.form.saveAndContinueButton.click()
+}
+
 export function verifyAttendanceMonitoringInCheckYourAnswersPage(attendanceMonitoringDetails = undefined): void {
   const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
 
   if (attendanceMonitoringDetails) {
-    page.attendenceMonitoringSections().shouldExist()
-    page.attendenceMonitoringSections().shouldHaveItems([
+    page.attendenceMonitoringSections(attendanceMonitoringDetails.searchTerm).shouldExist()
+    page.attendenceMonitoringSections(attendanceMonitoringDetails.searchTerm).shouldHaveItems([
       {
         key: 'What date does mandatory attendance monitoring start?',
         value: attendanceMonitoringDetails.startDate.toLocaleDateString('en-GB'),

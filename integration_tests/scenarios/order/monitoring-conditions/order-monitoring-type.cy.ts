@@ -112,7 +112,6 @@ context('Monitoring type list flow', () => {
       minutes: '00',
     },
     address: createKnownAddress(),
-    addAnother: 'No',
   }
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)
@@ -315,6 +314,46 @@ context('Monitoring type list flow', () => {
 
     verifyResult({
       enforcementZoneDetails: { searchTerm: "[zoneId='2']", ...enforcementZone3 },
+    })
+  })
+
+  it('Multiple attendence', () => {
+    const attendanceMonitoring2 = {
+      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days,
+      endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days,
+      purpose: 'Attendance 2',
+      appointmentDay: 'Wednesdays & Fridays',
+      startTime: {
+        hours: '09',
+        minutes: '00',
+      },
+      endTime: {
+        hours: '12',
+        minutes: '00',
+      },
+      address: createKnownAddress(),
+    }
+    fillInMonitoringTypeWith({
+      monitoringType: 'Mandatory attendance monitoring',
+      attendanceMonitoringDetails: attendanceMonitoring,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Mandatory attendance monitoring',
+      attendanceMonitoringDetails: attendanceMonitoring2,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'No',
+    })
+
+    verifyResult({
+      attendanceMonitoringDetails: attendanceMonitoring,
+    })
+
+    verifyResult({
+      attendanceMonitoringDetails: { searchTerm: "[attendance='2']", ...attendanceMonitoring2 },
     })
   })
 })

@@ -88,7 +88,10 @@
             text: "Attendance monitoring"
           }
         },
-        rows: item
+        rows: item,
+      attributes: {
+          "attendance": loop.index
+        }
       }) }}
     {% endfor %}
   {% endif %}

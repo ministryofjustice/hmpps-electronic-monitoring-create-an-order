@@ -52,9 +52,9 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  attendenceMonitoringSections(): SummaryListComponent {
+  attendenceMonitoringSections(searchTerm = undefined): SummaryListComponent {
     const label = 'Mandatory attendance monitoring'
-    return new SummaryListComponent(label, true)
+    return new SummaryListComponent(label, true, searchTerm)
   }
 
   exclusionZoneMonitoringSections(searchTerm = undefined): SummaryListComponent {
