@@ -2,6 +2,7 @@ import { Handler, Request, Response } from 'express'
 import Model, { MonitoringTypeData, MonitoringType } from './viewModel'
 import { Order } from '../../../models/Order'
 import RemoveMonitoringTypeService from './service'
+import paths from '../../../constants/paths'
 
 export default class RemoveMonitoringTypeController {
   constructor(private readonly service: RemoveMonitoringTypeService) {}
@@ -35,11 +36,17 @@ export default class RemoveMonitoringTypeController {
       return
     }
 
-    await this.service.removeMonitoringType({
-      orderId: order.id,
-      monitoringTypeId,
-      accessToken: res.locals.user.token,
-    })
+    if (req.body.action === 'continue') {
+      await this.service.removeMonitoringType({
+        orderId: order.id,
+        monitoringTypeId,
+        accessToken: res.locals.user.token,
+      })
+    }
+
+    res.redirect(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
+    )
   }
 
   private findMonitoringType = (order: Order, monitoringTypeId: string): MonitoringTypeData | undefined => {

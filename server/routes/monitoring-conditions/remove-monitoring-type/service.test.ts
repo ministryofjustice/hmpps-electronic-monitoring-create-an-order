@@ -25,7 +25,7 @@ describe('remove monitoring type service', () => {
     })
     expect(result).toBe('successful')
     expect(mockRestClient.delete).toHaveBeenCalledWith({
-      path: '/orders/mockOrderId/monitoring-conditions/monitoring-type/mockTypeId',
+      path: '/api/orders/mockOrderId/monitoring-conditions/monitoring-type/mockTypeId',
       token: 'token',
     })
   })

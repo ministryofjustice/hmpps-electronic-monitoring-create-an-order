@@ -11,7 +11,7 @@ export default class RemoveMonitoringTypeService {
 
   removeMonitoringType = async (input: removeMonitornigTypeInput) => {
     return this.apiClient.delete({
-      path: `/orders/${input.orderId}/monitoring-conditions/monitoring-type/${input.monitoringTypeId}`,
+      path: `/api/orders/${input.orderId}/monitoring-conditions/monitoring-type/${input.monitoringTypeId}`,
       token: input.accessToken,
     })
   }

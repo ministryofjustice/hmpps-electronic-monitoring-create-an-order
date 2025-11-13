@@ -33,6 +33,7 @@ import MonitoringConditionsStoreService from '../routes/monitoring-conditions/mo
 import InMemoryStore from '../routes/monitoring-conditions/store/inMemoryStore'
 import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
 import RedisStore from '../routes/monitoring-conditions/store/redisStore'
+import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -69,6 +70,7 @@ export const services = () => {
     config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
   )
   const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
+  const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
 
   return {
     alcoholMonitoringService,
@@ -100,6 +102,7 @@ export const services = () => {
     isRejectionService,
     monitoringConditionsStoreService,
     monitoringConditionsUpdateService,
+    removeMonitoringTypeService,
   }
 }
 
@@ -127,4 +130,5 @@ export {
   IsRejectionService,
   MonitoringConditionsStoreService,
   MonitoringConditionsUpdateService,
+  RemoveMonitoringTypeService,
 }
