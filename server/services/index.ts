@@ -3,6 +3,7 @@ import AddressService from './addressService'
 import AlcoholMonitoringService from './alcoholMonitoringService'
 import AttachmentService from './attachmentService'
 import AttendanceMonitoringService from './attendanceMonitoringService'
+import AttendanceMonitoringAddToListService from '../routes/monitoring-conditions/attendance-monitoring/service'
 import AuditService from './auditService'
 import ContactDetailsService from './contactDetailsService'
 import CurfewConditionsService from './curfewConditionsService'
@@ -11,6 +12,7 @@ import CurfewTimetableService from './curfewTimetableService'
 import DeviceWearerResponsibleAdultService from './deviceWearerResponsibleAdultService'
 import DeviceWearerService from './deviceWearerService'
 import EnforcementZoneService from './enforcementZoneServices'
+import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
 import InstallationAndRiskService from './installationAndRiskService'
 import MonitoringConditionsService from './monitoringConditionsService'
 import InterestedPartiesService from './interestedPartiesService'
@@ -41,6 +43,7 @@ export const services = () => {
   const alcoholMonitoringService = new AlcoholMonitoringService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
   const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
+  const attendanceMonitoringAddToListService = new AttendanceMonitoringAddToListService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
   const curfewConditionsService = new CurfewConditionsService(cemoApiClient)
@@ -53,6 +56,7 @@ export const services = () => {
   const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
   const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
   const zoneService = new EnforcementZoneService(cemoApiClient)
+  const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
   const orderChecklistService = new OrderChecklistService(
@@ -77,6 +81,7 @@ export const services = () => {
     applicationInfo,
     attachmentService,
     attendanceMonitoringService,
+    attendanceMonitoringAddToListService,
     auditService,
     contactDetailsService,
     curfewReleaseDateService,
@@ -95,6 +100,7 @@ export const services = () => {
     trailMonitoringService,
     variationService,
     zoneService,
+    zoneAddToListService,
     probationDeliveryUnitService,
     installationLocationService,
     installationAppointmentService,
@@ -110,6 +116,7 @@ export type Services = ReturnType<typeof services>
 export {
   AlcoholMonitoringService,
   AttachmentService,
+  AttendanceMonitoringAddToListService,
   AuditService,
   ContactDetailsService,
   CurfewConditionsService,
@@ -119,6 +126,7 @@ export {
   DeviceWearerResponsibleAdultService,
   DeviceWearerService,
   EnforcementZoneService,
+  EnforcementZoneAddToListService,
   InstallationAndRiskService,
   MonitoringConditionsService,
   OrderSearchService,
