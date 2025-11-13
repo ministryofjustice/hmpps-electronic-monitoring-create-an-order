@@ -14,6 +14,7 @@ import { verifyAlcoholMonitoringInCheckYourAnswersPage } from '../../../utils/sc
 import { verifyAttendanceMonitoringInCheckYourAnswersPage } from '../../../utils/scenario-flows/attendence-monitoring.cy'
 import { verifyEnforcementZoneInCheckYourAnswersPage } from '../../../utils/scenario-flows/enforcement-zone.cy'
 import { verifyCurfewInCheckYourAnswersPage } from '../../../utils/scenario-flows/curfew.cy'
+import removeMonitoringCondition from '../../../utils/scenario-flows/remove-monitoring-condition.cy'
 
 context('Monitoring type list flow', () => {
   const currentDate = new Date()
@@ -354,6 +355,31 @@ context('Monitoring type list flow', () => {
 
     verifyResult({
       attendanceMonitoringDetails: { searchTerm: "[attendance='2']", ...attendanceMonitoring2 },
+    })
+  })
+
+  it('Should able delete alcohol', () => {
+    fillInMonitoringTypeWith({
+      trailMonitoringDetails: trail,
+      monitoringType: 'Trail monitoring',
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Alcohol monitoring',
+      alcoholMonitoringDetails: alcohol,
+    })
+
+    removeMonitoringCondition({
+      conditionLable: 'Alcohol monitoring',
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'No',
+    })
+
+    verifyResult({
+      trailMonitoringDetails: trail,
     })
   })
 })

@@ -31,6 +31,12 @@ const getItems = (order: Order): Answer[] => {
         MONITORING_TYPE_NAMES.curfew,
         `From ${createDatePreview(order.curfewConditions.startDate)} to ${createDatePreview(order.curfewConditions.endDate)}`,
         paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId),
+        {
+          deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+            ':monitoringTypeId',
+            order.curfewConditions.id!,
+          ),
+        },
       ),
     )
   }
@@ -45,6 +51,12 @@ const getItems = (order: Order): Answer[] => {
             ':zoneId',
             `${zone.zoneId}`,
           ),
+          {
+            deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+              ':monitoringTypeId',
+              zone.id!,
+            ),
+          },
         ),
       )
     })
@@ -56,6 +68,12 @@ const getItems = (order: Order): Answer[] => {
         MONITORING_TYPE_NAMES.trail,
         `From ${createDatePreview(order.monitoringConditionsTrail.startDate)} to ${createDatePreview(order.monitoringConditionsTrail.endDate)}`,
         paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId),
+        {
+          deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+            ':monitoringTypeId',
+            order.monitoringConditionsTrail.id!,
+          ),
+        },
       ),
     )
   }
@@ -70,6 +88,12 @@ const getItems = (order: Order): Answer[] => {
             ':conditionId',
             `${attendance.id}`,
           ),
+          {
+            deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+              ':monitoringTypeId',
+              attendance.id!,
+            ),
+          },
         ),
       )
     })
@@ -81,6 +105,12 @@ const getItems = (order: Order): Answer[] => {
         MONITORING_TYPE_NAMES.alcohol,
         `From ${createDatePreview(order.monitoringConditionsAlcohol.startDate)} to ${createDatePreview(order.monitoringConditionsAlcohol.endDate)}`,
         paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId),
+        {
+          deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+            ':monitoringTypeId',
+            order.monitoringConditionsAlcohol.id!,
+          ),
+        },
       ),
     )
   }
