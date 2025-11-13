@@ -91,8 +91,8 @@ context('Check your answers', () => {
         },
       ])
       page.curfewTimetableSection().element.should('exist')
-      page.trailMonitoringConditionsSection().should('exist')
-      page.alcoholMonitoringConditionsSection().should('exist')
+      page.trailMonitoringConditionsSection().shouldExist()
+      page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
     it('shows installation location - Primary', () => {
@@ -431,8 +431,8 @@ context('Check your answers', () => {
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
       page.curfewTimetableSection().element.should('exist')
-      page.trailMonitoringConditionsSection().should('exist')
-      page.alcoholMonitoringConditionsSection().should('exist')
+      page.trailMonitoringConditionsSection().shouldExist()
+      page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
     it('does not show "change" links', () => {
@@ -523,8 +523,8 @@ context('Check your answers', () => {
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewSection.element.should('exist')
       page.curfewTimetableSection().element.should('exist')
-      page.trailMonitoringConditionsSection().should('exist')
-      page.alcoholMonitoringConditionsSection().should('exist')
+      page.trailMonitoringConditionsSection().shouldExist()
+      page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
     it('does not show "change" links', () => {
