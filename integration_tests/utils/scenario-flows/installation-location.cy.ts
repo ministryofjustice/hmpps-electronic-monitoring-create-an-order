@@ -5,7 +5,7 @@ import InstallationAppointmentPage from '../../pages/order/monitoring-conditions
 import InstallationLocationPage from '../../pages/order/monitoring-conditions/installation-location'
 import Page from '../../pages/page'
 
-export default function fillInInsllationLocationWith(
+export default function fillInTagAtSourceWith(
   installationLocation,
   installationAppointment = undefined,
   installationAddressDetails = undefined,
