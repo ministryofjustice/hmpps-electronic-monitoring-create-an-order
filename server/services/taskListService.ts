@@ -575,19 +575,32 @@ export default class TaskListService {
     return tasks.filter(task => task.section === section)
   }
 
-  isSectionComplete(tasks: Task[]): boolean {
-    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+  isSectionComplete(tasks: Task[], order: Order, section: Section): boolean {
+    const tasksCompleted = tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+    if (section === SECTIONS.electronicMonitoringCondition) {
+      const anyConditionCompleted =
+        order.monitoringConditionsAlcohol?.startDate !== undefined ||
+        order.curfewConditions?.startDate !== undefined ||
+        order.monitoringConditionsTrail?.startDate !== undefined ||
+        order.enforcementZoneConditions?.length !== 0 ||
+        order.mandatoryAttendanceConditions?.length !== 0
+      return tasksCompleted && anyConditionCompleted
+    }
+    return tasksCompleted
   }
 
   incompleteTask(task: Task): boolean {
     return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
 
-  isSectionReady(section: Section, tasks: Task[]): boolean {
+  isSectionReady(section: Section, tasks: Task[], order: Order): boolean {
     if (section === SECTIONS.electronicMonitoringCondition) {
       const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
       const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-      return this.isSectionComplete(contactInformationTasks) && this.isSectionComplete(deviceWearerTasks)
+      return (
+        this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
+        this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
+      )
     }
     return true
   }
@@ -600,7 +613,7 @@ export default class TaskListService {
       .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
-        const completed = this.isSectionComplete(sectionsTasks)
+        const completed = this.isSectionComplete(sectionsTasks, order, section)
         let { path } = sectionsTasks[0]
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
@@ -610,7 +623,7 @@ export default class TaskListService {
           completed,
           checked: checkList[section],
           path: path.replace(':orderId', order.id),
-          isReady: this.isSectionReady(section, tasks),
+          isReady: this.isSectionReady(section, tasks, order),
         }
       })
   }
