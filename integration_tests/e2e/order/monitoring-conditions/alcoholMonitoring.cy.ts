@@ -3,7 +3,7 @@ import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import Page from '../../../pages/page'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 const mockOrderId = uuidv4()
 
@@ -210,7 +210,7 @@ context('Alcohol monitoring', () => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal(baseExpectedApiRequest)
       })
-      Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers')
+      Page.verifyOnPage(InstallationLocationPage)
     })
   })
 

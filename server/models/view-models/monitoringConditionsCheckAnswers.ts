@@ -282,7 +282,6 @@ const groupTimetableByAddress = (timetable: CurfewTimetable) =>
 const createCurfewTimetableAnswers = (order: Order, answerOpts: AnswerOptions) => {
   const timetable = order.curfewTimeTable
   const uri = paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
-
   if (order.curfewConditions?.startDate === undefined) {
     return []
   }

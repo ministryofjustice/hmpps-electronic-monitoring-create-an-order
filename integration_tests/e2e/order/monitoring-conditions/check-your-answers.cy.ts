@@ -50,6 +50,15 @@ context('Check your answers', () => {
         startDate: '2024-11-11T00:00:00Z',
         curfewAdditionalDetails: 'some additional details',
       },
+      monitoringConditionsTrail: {
+        endDate: '2024-11-11T00:00:00Z',
+        startDate: '2024-11-11T00:00:00Z',
+      },
+      monitoringConditionsAlcohol: {
+        monitoringType: 'ALCOHOL_ABSTINENCE',
+        startDate: '2024-03-27T00:00:00.000Z',
+        endDate: '2025-04-28T00:00:00.000Z',
+      },
       dataDictionaryVersion: 'DDV5',
     }
     beforeEach(() => {
@@ -402,6 +411,15 @@ context('Check your answers', () => {
               postcode: 'SW1A 2AB',
             },
           ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
           fmsResultDate: new Date('2024 12 14'),
         },
       })
@@ -428,9 +446,6 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().shouldExist()
-      page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection.element.should('exist')
-      page.curfewTimetableSection().element.should('exist')
       page.trailMonitoringConditionsSection().shouldExist()
       page.alcoholMonitoringConditionsSection().shouldExist()
     })
@@ -493,6 +508,15 @@ context('Check your answers', () => {
               postcode: 'SW1A 2AB',
             },
           ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
           fmsResultDate: new Date('2024 12 14'),
         },
       })
@@ -520,9 +544,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().shouldExist()
-      page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection.element.should('exist')
-      page.curfewTimetableSection().element.should('exist')
+
       page.trailMonitoringConditionsSection().shouldExist()
       page.alcoholMonitoringConditionsSection().shouldExist()
     })
