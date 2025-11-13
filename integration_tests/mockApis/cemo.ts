@@ -327,7 +327,7 @@ const deleteOrder = (options: DeleteOrderStubOptions) =>
   stubFor({
     request: {
       method: 'DELETE',
-      urlPattern: `/cemo/api/orders/${options.id}${options.subPath ?? '/'}`,
+      urlPattern: `/cemo/api/orders/${options.id}${options.subPath ?? ''}`,
     },
     response: {
       status: options.httpStatus,
