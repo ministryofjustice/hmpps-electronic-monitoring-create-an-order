@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { fakerEN_GB as faker } from '@faker-js/faker'
 import Page from '../../../../../pages/page'
-import EnforcementZonePage from './ExclusionZonePage'
+import EnforcementZoneAddToListPage from './ExclusionZonePage'
 
 const mockOrderId = uuidv4()
 const apiPath = '/enforcementZone'
@@ -37,11 +37,11 @@ context('Monitoring conditions - Enforcement Zone', () => {
       })
 
       it('Should display validation error messages when submit empty request', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
+        const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 0 })
 
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(EnforcementZonePage)
+        Page.verifyOnPage(EnforcementZoneAddToListPage)
         page.form.startDateField.shouldHaveValidationMessage('Enter start date for exclusion zone')
         page.form.endDateField.shouldHaveValidationMessage('Enter end date for exclusion zone')
         page.form.nameField.shouldHaveValidationMessage('Enter the name of the exclusion zone')
@@ -76,7 +76,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       })
 
       it('Should display validation error messages', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
+        const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 0 })
 
         const validFormData = {
           zoneType: 'EXCLUSION',
@@ -89,7 +89,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
-        Page.verifyOnPage(EnforcementZonePage)
+        Page.verifyOnPage(EnforcementZoneAddToListPage)
 
         page.form.startDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
         page.form.endDateField.shouldHaveValidationMessage(expectedValidationErrorMessage)
@@ -116,7 +116,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       })
 
       it('should display error messages when exclusion zone fields (description, duration) are longer than 200 characters', () => {
-        const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 0 })
+        const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 0 })
 
         const formData = {
           zoneType: 'EXCLUSION',
@@ -136,7 +136,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(EnforcementZonePage)
+        Page.verifyOnPage(EnforcementZoneAddToListPage)
         page.form.descriptionField.shouldHaveValidationMessage(
           'Where is the exclusion zone must be 200 characters or less',
         )

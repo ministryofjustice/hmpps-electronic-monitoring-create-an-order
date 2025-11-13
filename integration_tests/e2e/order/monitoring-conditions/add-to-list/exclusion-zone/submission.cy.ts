@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import EnforcementZonePage from './ExclusionZonePage'
+import EnforcementZoneAddToListPage from './ExclusionZonePage'
 import OrderSummaryPage from '../../../../../pages/order/summary'
 import { EnforcementZoneAddToListFormData } from './ExclusionZoneComponent'
 import TypesOfMonitoringNeededPage from '../../order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
@@ -65,7 +65,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should submit a correctly formatted Exclusion zone submission', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData = {
         zoneType,
@@ -95,7 +95,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should continue to the types of monitoring needed page', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData = {
         zoneType,
@@ -113,7 +113,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should return to the summary page', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData = {
         zoneType,
@@ -194,7 +194,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should submit a correctly formatted file upload submission', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId })
 
       const validFormData = {
         zoneType,
@@ -226,7 +226,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should continue to the types of monitoring needed page', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData: EnforcementZoneAddToListFormData = {
         startDate: new Date('2024-12-10T00:00:00.000Z'),
@@ -247,7 +247,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('should return to the summary page', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData = {
         zoneType,

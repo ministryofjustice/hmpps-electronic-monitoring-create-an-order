@@ -95,7 +95,7 @@ context('Monitoring type list flow', () => {
     endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
     description: 'A test description: Lorum ipsum dolar sit amet...',
     duration: 'A test duration: one, two, three...',
-    anotherZone: 'No',
+    name: 'Test Zone',
   }
 
   const attendanceMonitoring = {
@@ -141,7 +141,6 @@ context('Monitoring type list flow', () => {
       prarr: 'Yes',
       monitoringStartDate: new Date(currentDate.getFullYear() + 1, 0, 1),
       monitoringEndDate: new Date(currentDate.getFullYear() + 2, 0, 1),
-      monitoringCondition: 'Trail monitoring',
     }
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
@@ -187,7 +186,10 @@ context('Monitoring type list flow', () => {
     verifyEnforcementZoneInCheckYourAnswersPage(enforcementZoneDetails)
   }
   it('Trail and AM', () => {
-    fillInMonitoringTypeWith({ trailMonitoringDetails: trail })
+    fillInMonitoringTypeWith({
+      trailMonitoringDetails: trail,
+      monitoringType: 'Trail monitoring',
+    })
 
     fillInMonitoringTypeWith({
       additionalMonitoringConditions: 'Yes',
@@ -212,7 +214,10 @@ context('Monitoring type list flow', () => {
   })
 
   it('All monitoring conditions', () => {
-    fillInMonitoringTypeWith({ trailMonitoringDetails: trail })
+    fillInMonitoringTypeWith({
+      trailMonitoringDetails: trail,
+      monitoringType: 'Trail monitoring',
+    })
 
     fillInMonitoringTypeWith({
       additionalMonitoringConditions: 'Yes',
@@ -231,7 +236,7 @@ context('Monitoring type list flow', () => {
     fillInMonitoringTypeWith({
       additionalMonitoringConditions: 'Yes',
       monitoringType: 'Exclusion zone monitoring',
-      enforcementZoneDetails: enforcementZone,
+      enforcementZoneListItemDetails: enforcementZone,
     })
 
     fillInMonitoringTypeWith({
@@ -258,6 +263,58 @@ context('Monitoring type list flow', () => {
       curfewTimetable: curfewTimetableDetails,
       enforcementZoneDetails: enforcementZone,
       attendanceMonitoringDetails: attendanceMonitoring,
+    })
+  })
+
+  it('Multiple exclusion zone', () => {
+    const enforcementZone2 = {
+      zoneType: 'Exclusion zone',
+      startDate: new Date(currentDate.getFullYear(), 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      description: '2 A test description: Lorum ipsum dolar sit amet...',
+      duration: '2 A test duration: one, two, three...',
+      name: 'Test Zone 2',
+    }
+
+    const enforcementZone3 = {
+      zoneType: 'Exclusion zone',
+      startDate: new Date(currentDate.getFullYear(), 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      description: '3 A test description: Lorum ipsum dolar sit amet...',
+      duration: '3 A test duration: one, two, three...',
+      name: 'Test Zone 3',
+    }
+    fillInMonitoringTypeWith({
+      monitoringType: 'Exclusion zone monitoring',
+      enforcementZoneListItemDetails: enforcementZone,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Exclusion zone monitoring',
+      enforcementZoneListItemDetails: enforcementZone2,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'Yes',
+      monitoringType: 'Exclusion zone monitoring',
+      enforcementZoneListItemDetails: enforcementZone3,
+    })
+
+    fillInMonitoringTypeWith({
+      additionalMonitoringConditions: 'No',
+    })
+
+    verifyResult({
+      enforcementZoneDetails: enforcementZone,
+    })
+
+    verifyResult({
+      enforcementZoneDetails: { searchTerm: "[zoneId='1']", ...enforcementZone2 },
+    })
+
+    verifyResult({
+      enforcementZoneDetails: { searchTerm: "[zoneId='2']", ...enforcementZone3 },
     })
   })
 })

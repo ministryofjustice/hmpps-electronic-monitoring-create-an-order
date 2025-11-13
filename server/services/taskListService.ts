@@ -352,7 +352,9 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.enforcementZoneMonitoring,
-      path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
+      path: FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')
+        ? paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM
+        : paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.exclusionZone,
         STATES.cantBeStarted,

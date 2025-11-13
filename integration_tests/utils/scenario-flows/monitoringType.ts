@@ -1,7 +1,7 @@
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import Page from '../../pages/page'
 import fillInCurfewOrderDetailsWith from './curfew.cy'
-import fillInEnforcementZoneOrderDetailsWith from './enforcement-zone.cy'
+import fillInEnforcementZoneOrderDetailsWith, { fillInEnforcementZoneListItemDetailsWith } from './enforcement-zone.cy'
 import fillInTagAtSourceWith from './installation-location.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from './alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from './trail-monitoring.cy'
@@ -18,6 +18,7 @@ export default function fillInMonitoringTypeWith({
   curfewConditionDetails = undefined,
   curfewTimetable = undefined,
   enforcementZoneDetails = undefined,
+  enforcementZoneListItemDetails = undefined,
   alcoholMonitoringDetails = undefined,
   trailMonitoringDetails = undefined,
   attendanceMonitoringDetails = undefined,
@@ -40,6 +41,10 @@ export default function fillInMonitoringTypeWith({
 
   if (enforcementZoneDetails) {
     fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails)
+  }
+
+  if (enforcementZoneListItemDetails) {
+    fillInEnforcementZoneListItemDetailsWith(enforcementZoneListItemDetails)
   }
 
   if (alcoholMonitoringDetails) {

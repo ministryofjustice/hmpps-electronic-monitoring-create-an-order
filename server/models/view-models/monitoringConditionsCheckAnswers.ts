@@ -379,7 +379,9 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
 }
 
 const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
+  const uri = FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')
+    ? paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id)
+    : paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
   const { questions } = content.pages.exclusionZone
 
   if (order.enforcementZoneConditions.length === 0) {
@@ -392,13 +394,17 @@ const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: Ans
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
       const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
-      return [
+      const items = [
         createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts),
         createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts),
         createAnswer(questions.description.text, enforcementZone.description, zoneUri, answerOpts),
         createAnswer(questions.duration.text, enforcementZone.duration, zoneUri, answerOpts),
         createAnswer(questions.file.text, fileName, zoneUri, answerOpts),
       ]
+      if (enforcementZone.name) {
+        items.push(createAnswer(questions.name.text, enforcementZone.name, zoneUri, answerOpts))
+      }
+      return { item: items, zoneId: enforcementZone.zoneId }
     })
 }
 
