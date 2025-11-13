@@ -127,7 +127,7 @@ const isTagAtSourcePilotPrison = (order: Order): boolean => {
 }
 
 const isTagAtSourceAvailable = (order: Order): boolean => {
-  return isTagAtSourcePilotPrison(order) || order.monitoringConditions.alcohol === true
+  return isTagAtSourcePilotPrison(order) || order.monitoringConditionsAlcohol?.startDate !== undefined
 }
 
 export default class TaskListService {
@@ -295,49 +295,6 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.installationLocation,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
-      state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.installationLocation),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.installationAppointment,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
-      state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order) &&
-          (order.installationLocation?.location === 'PRISON' ||
-            order.installationLocation?.location === 'PROBATION_OFFICE'),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.installationAppointment),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.installationAddress,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
-      state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order) &&
-          (order.installationLocation?.location === 'PRISON' ||
-            order.installationLocation?.location === 'PROBATION_OFFICE'),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isCompletedAddress(order, 'INSTALLATION'),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.curfewReleaseDate,
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
@@ -443,6 +400,46 @@ export default class TaskListService {
         STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
+    })
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationLocation,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
+      state: convertBooleanToEnum<State>(
+        isTagAtSourceAvailable(order),
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.installationLocation),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationAppointment,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.installationAppointment?.appointmentDate),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationAddress,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isCompletedAddress(order, 'INSTALLATION'),
     })
 
     tasks.push({
