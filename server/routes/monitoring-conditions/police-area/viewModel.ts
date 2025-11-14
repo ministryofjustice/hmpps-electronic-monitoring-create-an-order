@@ -6,12 +6,16 @@ import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
 export type PoliceAreaViewModel = ViewModel<Pick<MonitoringConditions, 'policeArea'>> & {
-  items: Option[]
+  items: (Option | Divider)[]
 }
 
 interface Option {
   text: string
   value: string
+}
+
+interface Divider {
+  divider: string
 }
 
 const constructModel = (data: MonitoringConditions, errors: ValidationResult, content: I18n): PoliceAreaViewModel => {
@@ -24,9 +28,16 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult, co
 
 const getItems = (content: I18n) => {
   const entries = Object.entries(content.reference.policeAreas)
-  return entries.map(it => {
+  const divider = { divider: 'or' }
+  const differentPoliceArea = {
+    value: "The device wearer's release address is in a different police force area",
+    text: "The device wearer's release address is in a different police force area",
+  }
+  const mappedPoliceAreas = entries.map(it => {
     return { text: it[1].toString(), value: it[1].toString() }
   })
+
+  return [...mappedPoliceAreas, divider, differentPoliceArea]
 }
 
 export default constructModel

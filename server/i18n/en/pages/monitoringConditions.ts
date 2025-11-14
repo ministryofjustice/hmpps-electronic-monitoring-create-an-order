@@ -54,7 +54,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     },
     policeArea: {
       text: "Which police force area is the device wearer's release address in?",
-      hint: 'To be eligible for the acquisitive crime pilot the device wearer\'s release address must be in an in-scope police area. Use the <a href="https://www.police.uk/pu/your-area/" id="police-area-link" target="_blank" rel="noopener noreferrer" class="govuk-link">police force lookup (opens in a new tab)</a> to check which police force area the device wearer release address is in. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+      hint: 'To be eligible for the acquisitive crime pilot the device wearer\'s release address must be in an in-scope police area. Use the <a href="https://www.police.uk/pu/your-area/" id="police-area-link" target="_blank" rel="noopener noreferrer" class="govuk-link">police force lookup (opens in a new tab)</a> to check which police force area the device wearer release address is in.',
     },
     removeMonitoringType: {
       text: 'Are you sure that you want to delete this electronic monitoring type?',
