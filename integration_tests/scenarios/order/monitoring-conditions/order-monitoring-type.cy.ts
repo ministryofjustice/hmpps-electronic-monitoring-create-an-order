@@ -55,7 +55,7 @@ context('Monitoring type list flow', () => {
   }
 
   const installationLocationDetails = {
-    location: `At a prison`,
+    location: 'At a prison',
   }
 
   const installationAppointmentDetails = {

@@ -150,7 +150,7 @@ context('Monitoring conditions', () => {
           })
         })
 
-        it(`Should continue to check your answer page page`, () => {
+        it(`Should continue to check your answer page`, () => {
           stubGetOrder({
             startDate: '2025-01-01T00:00:00Z',
             endDate: '2025-02-01T00:00:00Z',

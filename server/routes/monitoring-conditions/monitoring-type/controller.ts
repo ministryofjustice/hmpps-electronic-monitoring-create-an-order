@@ -31,8 +31,8 @@ export default class MonitoringTypeController {
       return
     }
 
-    const moniotringConditionPath = this.getMonitoringConditionPath(formData.monitoringType)
-    res.redirect(moniotringConditionPath.replace(':orderId', order.id))
+    const monitoringConditionPath = this.getMonitoringConditionPath(formData.monitoringType)
+    res.redirect(monitoringConditionPath.replace(':orderId', order.id))
   }
 
   getMonitoringConditionPath = (

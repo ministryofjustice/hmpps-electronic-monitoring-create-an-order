@@ -5,7 +5,7 @@ import Page from '../../pages/page'
 export default function removeMonitoringCondition(removeConditionDetials) {
   const page = Page.verifyOnPage(TypesOfMonitoringNeededPage)
 
-  page.actionLinkByLable(removeConditionDetials.conditionLable, 'Delete').click()
+  page.actionLinkByLabel(removeConditionDetials.conditionLable, 'Delete').click()
 
   const confirmDeletePage = Page.verifyOnPage(RemoveMonitoringTypePage)
   confirmDeletePage.confirmRemoveButton().click()
