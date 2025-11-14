@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import EnforcementZonePage from './ExclusionZonePage'
+import EnforcementZoneAddToListPage from './ExclusionZonePage'
 
 const mockOrderId = uuidv4()
 
@@ -14,7 +14,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('Map tool should open in a new tab', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId })
       page.mapToolOpensInNewTab()
     })
   })
@@ -28,7 +28,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('Should display contents', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId })
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
 
@@ -53,7 +53,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
     })
 
     it('Should not allow the user to update the enforcement zone details', () => {
-      const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId })
 
       // Verify the correct buttons are displayed
       page.form.saveAndContinueButton.should('not.exist')

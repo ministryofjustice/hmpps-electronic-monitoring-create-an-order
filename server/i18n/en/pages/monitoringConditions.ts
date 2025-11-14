@@ -21,7 +21,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     },
     monitoringRequired: {
       text: 'What monitoring does the device wearer need?',
-      hint: 'Select all that apply.',
+      hint: 'Select one, if you need to you will be able to add other monitoring types later',
     },
     orderType: {
       text: 'What is the order type?',

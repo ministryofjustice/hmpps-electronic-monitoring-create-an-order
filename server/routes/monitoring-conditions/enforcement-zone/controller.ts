@@ -72,6 +72,13 @@ export default class EnforcementZoneAddToListController {
     }
   }
 
+  new: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+    const zoneIds = order.enforcementZoneConditions?.map(it => (it.zoneId === null ? 0 : it.zoneId))
+    const zoneId = (zoneIds.length === 0 ? 0 : Math.max(...zoneIds) + 1).toString()
+    res.redirect(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id).replace(':zoneId', zoneId))
+  }
+
   view: RequestHandler = async (req: Request, res: Response) => {
     const { zoneId } = req.params
     const order = req.order!

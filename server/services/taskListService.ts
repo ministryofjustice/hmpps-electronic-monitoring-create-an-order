@@ -127,7 +127,7 @@ const isTagAtSourcePilotPrison = (order: Order): boolean => {
 }
 
 const isTagAtSourceAvailable = (order: Order): boolean => {
-  return isTagAtSourcePilotPrison(order) || order.monitoringConditions.alcohol === true
+  return isTagAtSourcePilotPrison(order) || order.monitoringConditionsAlcohol?.startDate !== undefined
 }
 
 export default class TaskListService {
@@ -295,49 +295,6 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.installationLocation,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
-      state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.installationLocation),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.installationAppointment,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
-      state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order) &&
-          (order.installationLocation?.location === 'PRISON' ||
-            order.installationLocation?.location === 'PROBATION_OFFICE'),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.installationAppointment),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.installationAddress,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
-      state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order) &&
-          (order.installationLocation?.location === 'PRISON' ||
-            order.installationLocation?.location === 'PROBATION_OFFICE'),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isCompletedAddress(order, 'INSTALLATION'),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.curfewReleaseDate,
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
@@ -395,7 +352,9 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.enforcementZoneMonitoring,
-      path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
+      path: FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')
+        ? paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM
+        : paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.exclusionZone,
         STATES.cantBeStarted,
@@ -443,6 +402,46 @@ export default class TaskListService {
         STATES.notRequired,
       ),
       completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
+    })
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationLocation,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION,
+      state: convertBooleanToEnum<State>(
+        isTagAtSourceAvailable(order),
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.installationLocation),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationAppointment,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.installationAppointment?.appointmentDate),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.installationAddress,
+      path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
+      state: convertBooleanToEnum<State>(
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE',
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isCompletedAddress(order, 'INSTALLATION'),
     })
 
     tasks.push({
@@ -512,7 +511,6 @@ export default class TaskListService {
     if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
       return this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
     }
-
     // Otherwise, navigate to the next page in the task list.
     return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
   }
@@ -577,19 +575,32 @@ export default class TaskListService {
     return tasks.filter(task => task.section === section)
   }
 
-  isSectionComplete(tasks: Task[]): boolean {
-    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+  isSectionComplete(tasks: Task[], order: Order, section: Section): boolean {
+    const tasksCompleted = tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+    if (section === SECTIONS.electronicMonitoringCondition) {
+      const anyConditionCompleted =
+        order.monitoringConditionsAlcohol?.startDate !== undefined ||
+        order.curfewConditions?.startDate !== undefined ||
+        order.monitoringConditionsTrail?.startDate !== undefined ||
+        order.enforcementZoneConditions?.length !== 0 ||
+        order.mandatoryAttendanceConditions?.length !== 0
+      return tasksCompleted && anyConditionCompleted
+    }
+    return tasksCompleted
   }
 
   incompleteTask(task: Task): boolean {
     return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
 
-  isSectionReady(section: Section, tasks: Task[]): boolean {
+  isSectionReady(section: Section, tasks: Task[], order: Order): boolean {
     if (section === SECTIONS.electronicMonitoringCondition) {
       const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
       const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-      return this.isSectionComplete(contactInformationTasks) && this.isSectionComplete(deviceWearerTasks)
+      return (
+        this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
+        this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
+      )
     }
     return true
   }
@@ -602,7 +613,7 @@ export default class TaskListService {
       .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
-        const completed = this.isSectionComplete(sectionsTasks)
+        const completed = this.isSectionComplete(sectionsTasks, order, section)
         let { path } = sectionsTasks[0]
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
@@ -612,7 +623,7 @@ export default class TaskListService {
           completed,
           checked: checkList[section],
           path: path.replace(':orderId', order.id),
-          isReady: this.isSectionReady(section, tasks),
+          isReady: this.isSectionReady(section, tasks, order),
         }
       })
   }

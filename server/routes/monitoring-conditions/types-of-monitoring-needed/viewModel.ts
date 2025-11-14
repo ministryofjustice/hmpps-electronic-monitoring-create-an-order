@@ -31,6 +31,12 @@ const getItems = (order: Order): Answer[] => {
         MONITORING_TYPE_NAMES.curfew,
         `From ${createDatePreview(order.curfewConditions.startDate)} to ${createDatePreview(order.curfewConditions.endDate)}`,
         paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId),
+        {
+          deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+            ':monitoringTypeId',
+            order.curfewConditions.id!,
+          ),
+        },
       ),
     )
   }
@@ -41,8 +47,17 @@ const getItems = (order: Order): Answer[] => {
         createAnswer(
           MONITORING_TYPE_NAMES.exclusionZone,
           `${zone.name}<br>From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
-          paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', `${zone.zoneId}`),
-          { valueType: 'html' },
+          paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', orderId).replace(
+            ':zoneId',
+            `${zone.zoneId}`,
+          ),
+          {
+            deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+              ':monitoringTypeId',
+              zone.id!,
+            ),
+            valueType: 'html',
+          },
         ),
       )
     })
@@ -54,6 +69,12 @@ const getItems = (order: Order): Answer[] => {
         MONITORING_TYPE_NAMES.trail,
         `From ${createDatePreview(order.monitoringConditionsTrail.startDate)} to ${createDatePreview(order.monitoringConditionsTrail.endDate)}`,
         paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId),
+        {
+          deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+            ':monitoringTypeId',
+            order.monitoringConditionsTrail.id!,
+          ),
+        },
       ),
     )
   }
@@ -64,11 +85,18 @@ const getItems = (order: Order): Answer[] => {
         createAnswer(
           MONITORING_TYPE_NAMES.mandatoryAttendance,
           `${attendance.purpose}<br>From ${createDatePreview(attendance.startDate)} to ${createDatePreview(attendance.endDate)}`,
-          paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId).replace(
+          paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST.replace(':orderId', orderId).replace(
             ':conditionId',
             `${attendance.id}`,
           ),
-          { valueType: 'html' },
+
+          {
+            deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+              ':monitoringTypeId',
+              attendance.id!,
+            ),
+            valueType: 'html',
+          },
         ),
       )
     })
@@ -80,6 +108,12 @@ const getItems = (order: Order): Answer[] => {
         MONITORING_TYPE_NAMES.alcohol,
         `From ${createDatePreview(order.monitoringConditionsAlcohol.startDate)} to ${createDatePreview(order.monitoringConditionsAlcohol.endDate)}`,
         paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId),
+        {
+          deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+            ':monitoringTypeId',
+            order.monitoringConditionsAlcohol.id!,
+          ),
+        },
       ),
     )
   }

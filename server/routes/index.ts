@@ -333,6 +333,7 @@ export default function routes({
   post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
 
   // Exclusion Inclusion Zone Add To List
+  get(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM, zoneControllerAddToList.new)
   get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
   post(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.update)
 

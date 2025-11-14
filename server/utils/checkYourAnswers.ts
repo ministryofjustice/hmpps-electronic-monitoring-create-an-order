@@ -24,6 +24,7 @@ export type Answer = {
 
 export interface AnswerOptions {
   ignoreActions?: boolean
+  deleteUri?: string
   valueType?: 'html' | 'text'
 }
 
@@ -48,6 +49,13 @@ export const createAnswer = (key: string, value: Optional<string>, uri: string, 
     answer.actions.items.push({
       href: uri,
       text: 'Change',
+      visuallyHiddenText: key.toLowerCase(),
+    })
+  }
+  if (opts.deleteUri !== undefined) {
+    answer.actions.items.push({
+      href: opts.deleteUri,
+      text: 'Delete',
       visuallyHiddenText: key.toLowerCase(),
     })
   }

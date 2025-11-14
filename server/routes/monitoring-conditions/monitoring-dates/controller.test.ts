@@ -6,6 +6,8 @@ import constructModel from './viewModel'
 import paths from '../../../constants/paths'
 import MonitoringDatesController from './controller'
 import { validationErrors } from '../../../constants/validationErrors'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
+import RestClient from '../../../data/restClient'
 
 jest.mock('../monitoringConditionsStoreService')
 jest.mock('./viewModel')
@@ -13,7 +15,9 @@ jest.mock('./viewModel')
 describe('MonitoringDatesController', () => {
   let mockDataStore: InMemoryStore
   let mockStore: jest.Mocked<MonitoringConditionsStoreService>
+  let mockService: jest.Mocked<MonitoringConditionsUpdateService>
   let controller: MonitoringDatesController
+  let mockRestClient: jest.Mocked<RestClient>
   let res: Response
   let req: Request
   let next: NextFunction
@@ -23,8 +27,16 @@ describe('MonitoringDatesController', () => {
     jest.restoreAllMocks()
     mockDataStore = new InMemoryStore()
     mockStore = new MonitoringConditionsStoreService(mockDataStore) as jest.Mocked<MonitoringConditionsStoreService>
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+    mockService = new MonitoringConditionsUpdateService(
+      mockRestClient,
+    ) as jest.Mocked<MonitoringConditionsUpdateService>
     mockStore.getMonitoringConditions.mockResolvedValue({})
-    controller = new MonitoringDatesController(mockStore)
+    controller = new MonitoringDatesController(mockStore, mockService)
 
     mockConstructModel.mockReturnValue({
       startDate: { value: { day: '', month: '', year: '', hours: '', minutes: '' } },

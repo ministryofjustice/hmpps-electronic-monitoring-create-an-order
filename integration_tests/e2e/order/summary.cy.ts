@@ -908,7 +908,7 @@ context('Order Summary', () => {
       cy.task('resetFeatureFlags')
     })
 
-    it('should display monitoring condition task as Incomplete', () => {
+    it('should display monitoring condition task as Incomplete when no monitoring condition chosen', () => {
       const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: false }
       cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
@@ -968,6 +968,25 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
+          },
+          monitoringConditions: {
+            orderType: null,
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: false,
+            alcohol: false,
+            orderTypeDescription: null,
+            conditionType: null,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            isValid: true,
+            offenceType: null,
           },
           addresses: [],
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],

@@ -1,14 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
-import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
-import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
-import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
-import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
 
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import CheckYourAnswersPage from '../../../pages/checkYourAnswersPage'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-location'
@@ -154,7 +150,7 @@ context('Monitoring conditions', () => {
           })
         })
 
-        it(`Should continue to exclusionZone page`, () => {
+        it(`Should continue to check your answer page`, () => {
           stubGetOrder({
             startDate: '2025-01-01T00:00:00Z',
             endDate: '2025-02-01T00:00:00Z',
@@ -179,119 +175,7 @@ context('Monitoring conditions', () => {
           }
           page.form.fillInWith(validFormData)
           page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(EnforcementZonePage)
-        })
-
-        it(`Should continue to trail monitoring page`, () => {
-          stubGetOrder({
-            startDate: '2025-01-01T00:00:00Z',
-            endDate: '2025-02-01T00:00:00Z',
-            orderType: 'CIVIL',
-            curfew: false,
-            exclusionZone: false,
-            trail: true,
-            mandatoryAttendance: false,
-            alcohol: false,
-            conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
-            sentenceType: 'IPP',
-            issp: 'YES',
-            hdc: 'NO',
-            prarr: 'UNKNOWN',
-            pilot: '',
-            offenceType: '',
-          })
-          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
-          const validFormData = {
-            location: '10 Downing Street, London, SW1A 2AB',
-          }
-          page.form.fillInWith(validFormData)
-          page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(TrailMonitoringPage)
-        })
-
-        it(`Should continue to alcohol monitoring page`, () => {
-          stubGetOrder({
-            startDate: '2025-01-01T00:00:00Z',
-            endDate: '2025-02-01T00:00:00Z',
-            orderType: 'CIVIL',
-            curfew: false,
-            exclusionZone: false,
-            trail: false,
-            mandatoryAttendance: false,
-            alcohol: true,
-            conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
-            sentenceType: 'IPP',
-            issp: 'YES',
-            hdc: 'NO',
-            prarr: 'UNKNOWN',
-            pilot: '',
-            offenceType: '',
-          })
-          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
-          const validFormData = {
-            location: '10 Downing Street, London, SW1A 2AB',
-          }
-          page.form.fillInWith(validFormData)
-          page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(AlcoholMonitoringPage)
-        })
-
-        it(`Should continue to curfew monitoring page`, () => {
-          stubGetOrder({
-            startDate: '2025-01-01T00:00:00Z',
-            endDate: '2025-02-01T00:00:00Z',
-            orderType: 'CIVIL',
-            curfew: true,
-            exclusionZone: false,
-            trail: false,
-            mandatoryAttendance: false,
-            alcohol: false,
-            conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
-            sentenceType: 'IPP',
-            issp: 'YES',
-            hdc: 'NO',
-            prarr: 'UNKNOWN',
-            pilot: '',
-            offenceType: '',
-          })
-          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
-          const validFormData = {
-            location: '10 Downing Street, London, SW1A 2AB',
-          }
-          page.form.fillInWith(validFormData)
-          page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(CurfewConditionsPage)
-        })
-
-        it(`Should continue to mandatory attendance monitoring page`, () => {
-          stubGetOrder({
-            startDate: '2025-01-01T00:00:00Z',
-            endDate: '2025-02-01T00:00:00Z',
-            orderType: 'CIVIL',
-            curfew: false,
-            exclusionZone: false,
-            trail: false,
-            mandatoryAttendance: true,
-            alcohol: false,
-            conditionType: 'BAIL_ORDER',
-            orderTypeDescription: 'DAPO',
-            sentenceType: 'IPP',
-            issp: 'YES',
-            hdc: 'NO',
-            prarr: 'UNKNOWN',
-            pilot: '',
-            offenceType: '',
-          })
-          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
-          const validFormData = {
-            location: '10 Downing Street, London, SW1A 2AB',
-          }
-          page.form.fillInWith(validFormData)
-          page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(AttendanceMonitoringPage)
+          Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
         })
       })
 
