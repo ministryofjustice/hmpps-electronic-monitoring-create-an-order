@@ -140,25 +140,52 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
-  const monitoringTypes = [
-    { name: 'Curfew', data: data.curfew },
-    { name: 'Exclusion zone monitoring', data: data.exclusionZone },
-    { name: 'Trail monitoring', data: data.trail },
-    { name: 'Mandatory attendance monitoring', data: data.mandatoryAttendance },
-    { name: 'Alcohol monitoring', data: data.alcohol },
-  ]
-  if (monitoringTypes.every(type => type.data !== undefined)) {
-    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+  if (FeatureFlags.getInstance().getValue('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED
+    const typesSelected = []
+    if (order.monitoringConditionsAlcohol?.startDate !== undefined) {
+      typesSelected.push('Alcohol monitoring')
+    }
+    if (order.monitoringConditionsTrail?.startDate !== undefined) {
+      typesSelected.push('Trail monitoring')
+    }
+    if (order.curfewConditions?.startDate !== undefined) {
+      typesSelected.push('Curfew')
+    }
+    if (order.enforcementZoneConditions.length !== 0) {
+      typesSelected.push('Exclusion zone monitoring')
+    }
+    if (order.mandatoryAttendanceConditions.length !== 0) {
+      typesSelected.push('Mandatory attendance monitoring')
+    }
     answers.push(
       createMultipleChoiceAnswer(
         content.pages.monitoringConditions.questions.monitoringRequired.text,
-        monitoringTypes.filter(type => type.data).map(type => type.name),
+        typesSelected,
         monitoringTypesPath.replace(':orderId', order.id),
         answerOpts,
       ),
     )
+  } else {
+    const monitoringTypes = [
+      { name: 'Curfew', data: data.curfew },
+      { name: 'Exclusion zone monitoring', data: data.exclusionZone },
+      { name: 'Trail monitoring', data: data.trail },
+      { name: 'Mandatory attendance monitoring', data: data.mandatoryAttendance },
+      { name: 'Alcohol monitoring', data: data.alcohol },
+    ]
+    if (monitoringTypes.every(type => type.data !== undefined)) {
+      const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+      answers.push(
+        createMultipleChoiceAnswer(
+          content.pages.monitoringConditions.questions.monitoringRequired.text,
+          monitoringTypes.filter(type => type.data).map(type => type.name),
+          monitoringTypesPath.replace(':orderId', order.id),
+          answerOpts,
+        ),
+      )
+    }
   }
-
   if (data.startDate && data.startDate !== null) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
     answers.push(
