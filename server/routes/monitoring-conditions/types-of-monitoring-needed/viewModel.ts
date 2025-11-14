@@ -49,14 +49,14 @@ const getItems = (order: Order): Answer[] => {
           `${zone.name}<br>From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
           paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', orderId).replace(
             ':zoneId',
-            `${zone.zoneId,}`,
+            `${zone.zoneId}`,
           ),
           {
             deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
               ':monitoringTypeId',
               zone.id!,
             ),
-              valueType: 'html'
+            valueType: 'html',
           },
         ),
       )
@@ -95,7 +95,7 @@ const getItems = (order: Order): Answer[] => {
               ':monitoringTypeId',
               attendance.id!,
             ),
-              valueType: 'html'
+            valueType: 'html',
           },
         ),
       )
