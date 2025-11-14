@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import TypesOfMonitoringNeededPage from './TypesOfMonitoringNeededPage'
-import { MonitoringConditions } from '../../../../../../server/routes/monitoring-conditions/model'
+import { MonitoringConditions } from '../../../../../../server/routes/monitoring-conditions/order-type-description/model'
 
 const mockOrderId = uuidv4()
 

@@ -31,10 +31,10 @@ import RedisOrderChecklistStore from '../data/orderChecklistStore/redisOrderChec
 import config from '../config'
 import InMemoryOrderChecklistStore from '../data/orderChecklistStore/inMemoryOrderChecklistStore'
 import IsRejectionService from '../routes/is-rejection/service'
-import MonitoringConditionsStoreService from '../routes/monitoring-conditions/monitoringConditionsStoreService'
-import InMemoryStore from '../routes/monitoring-conditions/store/inMemoryStore'
-import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
-import RedisStore from '../routes/monitoring-conditions/store/redisStore'
+import MonitoringConditionsStoreService from '../routes/monitoring-conditions/order-type-description/monitoringConditionsStoreService'
+import InMemoryStore from '../routes/monitoring-conditions/order-type-description/store/inMemoryStore'
+import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/order-type-description/monitoringConditionsService'
+import RedisStore from '../routes/monitoring-conditions/order-type-description/store/redisStore'
 import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 
 export const services = () => {
