@@ -50,7 +50,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     },
     offenceType: {
       text: 'What type of acquisitive crime offence did the device wearer commit?',
-      hint: 'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+      hint: 'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence.',
     },
     policeArea: {
       text: "Which police force area is the device wearer's release address in?",
