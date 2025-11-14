@@ -42,6 +42,7 @@ const getItems = (order: Order): Answer[] => {
           MONITORING_TYPE_NAMES.exclusionZone,
           `${zone.name}<br>From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
           paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', orderId).replace(':zoneId', `${zone.zoneId}`),
+          { valueType: 'html' },
         ),
       )
     })

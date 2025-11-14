@@ -108,6 +108,7 @@ context('Types of monitoring needed', () => {
         {
           id: '0',
           zoneType: 'EXCLUSION',
+          name: 'Mock Zone Name',
           startDate: '2025-07-15T00:00:00Z',
           endDate: '2025-08-15T00:00:00Z',
           description: null,
@@ -122,7 +123,7 @@ context('Types of monitoring needed', () => {
     const page = Page.visit(TypesOfMonitoringNeededPage, { orderId: mockOrderId })
 
     page.form.summaryList.shouldExist()
-    page.form.summaryList.shouldHaveItem('Exclusion zone monitoring', 'From 15/07/2025 to 15/08/2025')
+    page.form.summaryList.shouldHaveItem('Exclusion zone monitoring', 'Mock Zone NameFrom 15/07/2025 to 15/08/2025')
     page.form.summaryList.shouldNotHaveItem('Curfew')
   })
 
