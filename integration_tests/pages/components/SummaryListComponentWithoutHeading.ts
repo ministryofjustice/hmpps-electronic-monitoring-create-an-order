@@ -11,6 +11,10 @@ export default class SummaryListComponentWithoutHeading {
     this.element.should('exist')
   }
 
+  shouldNotExist() {
+    this.element.should('not.exist')
+  }
+
   shouldHaveItems(items: Array<{ key: string; value: string }>) {
     return items.map(({ key, value }) => this.shouldHaveItem(key, value))
   }
@@ -24,5 +28,14 @@ export default class SummaryListComponentWithoutHeading {
 
   shouldNotHaveItem(key: string) {
     return this.element.contains('.govuk-summary-list__key', key).should('not.exist')
+  }
+
+  shouldHaveItemAtIndex(key: string, value: string, index: number) {
+    return this.element
+      .find('.govuk-summary-list__key')
+      .filter(`:contains("${key}")`)
+      .eq(index)
+      .siblings('.govuk-summary-list__value')
+      .should('contain.text', value)
   }
 }

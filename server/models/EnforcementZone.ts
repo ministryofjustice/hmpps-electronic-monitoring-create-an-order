@@ -2,9 +2,12 @@ import { z } from 'zod'
 import EnforcementZoneTypes from './EnforcementZoneTypes'
 
 const EnforcementZoneModel = z.object({
+  id: z.string().optional(),
   zoneType: z.nativeEnum(EnforcementZoneTypes).nullable(),
   startDate: z.string().datetime().nullable(),
   endDate: z.string().datetime().nullable(),
+  // .optional() to be removed from name field after add-to-list is fully implemented
+  name: z.string().nullable().optional(),
   description: z.string().nullable(),
   duration: z.string().nullable(),
   fileName: z.string().nullable(),

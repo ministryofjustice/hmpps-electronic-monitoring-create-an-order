@@ -13,10 +13,12 @@ import InstallationAndRiskController from '../controllers/installationAndRisk/in
 import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
+import AttendanceMonitoringAddToListController from './monitoring-conditions/attendance-monitoring/controller'
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
+import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
 import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
@@ -35,11 +37,13 @@ import ReceiptController from '../controllers/receiptController'
 import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/order-type-description/router'
+import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 
 export default function routes({
   alcoholMonitoringService,
   attachmentService,
   attendanceMonitoringService,
+  attendanceMonitoringAddToListService,
   auditService,
   contactDetailsService,
   curfewConditionsService,
@@ -59,12 +63,14 @@ export default function routes({
   variationService,
   probationDeliveryUnitService,
   zoneService,
+  zoneAddToListService,
   installationLocationService,
   installationAppointmentService,
   orderChecklistService,
   isRejectionService,
   monitoringConditionsStoreService,
   monitoringConditionsUpdateService,
+  removeMonitoringTypeService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -91,6 +97,9 @@ export default function routes({
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
     taskListService,
+  )
+  const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
+    attendanceMonitoringAddToListService,
   )
   const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(
@@ -129,6 +138,7 @@ export default function routes({
     monitoringConditionsService,
     taskListService,
   )
+  const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
   const notifyingOrganisationController = new InterestedPartiesController(
     auditService,
@@ -144,6 +154,7 @@ export default function routes({
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
   const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
+  const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
     taskListService,
@@ -267,6 +278,9 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
   post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
+  get(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.view)
+  post(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.update)
+
   // Installation location page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.update)
@@ -287,6 +301,12 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.view)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.update)
+
+  // Attendance monitoring page add to list
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.new)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.view)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
 
   // Alcohol monitoring page
   get(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController.view)
@@ -311,6 +331,10 @@ export default function routes({
   // Exclusion Inclusion Zone
   get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
   post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
+
+  // Exclusion Inclusion Zone Add To List
+  get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
+  post(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.update)
 
   // Check your answers
   get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.view)
