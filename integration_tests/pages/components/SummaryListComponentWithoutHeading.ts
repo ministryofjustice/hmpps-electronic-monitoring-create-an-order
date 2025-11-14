@@ -21,13 +21,21 @@ export default class SummaryListComponentWithoutHeading {
 
   shouldHaveItem(key: string, value: string) {
     return this.element
-      .find('.govuk-summary-list__value')
-      .contains(value)
-      .siblings('.govuk-summary-list__key')
-      .should('contain.text', key)
+      .contains('.govuk-summary-list__key', key)
+      .siblings('.govuk-summary-list__value')
+      .should('contain.text', value)
   }
 
   shouldNotHaveItem(key: string) {
     return this.element.contains('.govuk-summary-list__key', key).should('not.exist')
+  }
+
+  shouldHaveItemAtIndex(key: string, value: string, index: number) {
+    return this.element
+      .find('.govuk-summary-list__key')
+      .filter(`:contains("${key}")`)
+      .eq(index)
+      .siblings('.govuk-summary-list__value')
+      .should('contain.text', value)
   }
 }

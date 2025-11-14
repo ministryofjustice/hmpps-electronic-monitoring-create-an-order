@@ -114,7 +114,7 @@ context('Types of monitoring needed', () => {
           duration: null,
           fileName: null,
           fileId: null,
-          zoneId: 1,
+          zoneId: 0,
         },
       ],
     })
@@ -227,7 +227,7 @@ context('Types of monitoring needed', () => {
       },
       mandatoryAttendanceConditions: [
         {
-          id: 'ma-1',
+          id: '0',
           startDate: '2025-09-01T00:00:00Z',
           endDate: '2025-10-01T00:00:00Z',
           purpose: 'mockPurpose1',
@@ -241,7 +241,7 @@ context('Types of monitoring needed', () => {
           postcode: null,
         },
         {
-          id: 'ma-2',
+          id: '1',
           startDate: '2025-11-15T00:00:00Z',
           endDate: '2025-12-15T00:00:00Z',
           purpose: 'mockPurpose2',
@@ -261,7 +261,15 @@ context('Types of monitoring needed', () => {
 
     page.form.summaryList.shouldExist()
     page.form.summaryList.shouldHaveItem('Curfew', 'From 01/01/2025 to 01/02/2025')
-    page.form.summaryList.shouldHaveItem('Mandatory attendance monitoring', 'mockPurpose1From 01/09/2025 to 01/10/2025')
-    page.form.summaryList.shouldHaveItem('Mandatory attendance monitoring', 'mockPurpose2From 15/11/2025 to 15/12/2025')
+    page.form.summaryList.shouldHaveItemAtIndex(
+      'Mandatory attendance monitoring',
+      'mockPurpose1From 01/09/2025 to 01/10/2025',
+      0,
+    )
+    page.form.summaryList.shouldHaveItemAtIndex(
+      'Mandatory attendance monitoring',
+      'mockPurpose2From 15/11/2025 to 15/12/2025',
+      1,
+    )
   })
 })
