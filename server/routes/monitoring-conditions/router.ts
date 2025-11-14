@@ -45,11 +45,14 @@ const createOrderTypeDescriptionRouter = (
   )
   const monitoringTypeController = new MonitoringTypeController(taskListService)
 
-  const monitoringDatesController = new MonitoringDatesController(monitoringConditionsStoreService)
+  const monitoringDatesController = new MonitoringDatesController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+  )
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
 
-  const typesOfMonitoringNeededController = new TypesOfMonitoringNeededController()
+  const typesOfMonitoringNeededController = new TypesOfMonitoringNeededController(taskListService)
 
   router.get('/order-type', asyncMiddleware(orderTypeController.view))
   router.post('/order-type', asyncMiddleware(orderTypeController.update))

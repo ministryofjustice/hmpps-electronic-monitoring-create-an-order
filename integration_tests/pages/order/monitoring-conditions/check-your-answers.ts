@@ -1,5 +1,4 @@
 import paths from '../../../../server/constants/paths'
-import { PageElement } from '../../page'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import SummaryListComponent from '../../components/summaryListComponent'
 
@@ -28,9 +27,15 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     return new SummaryListComponent(label)
   }
 
-  trailMonitoringConditionsSection = (): PageElement => cy.contains('Trail monitoring')
+  trailMonitoringConditionsSection(): SummaryListComponent {
+    const label = 'Trail monitoring'
+    return new SummaryListComponent(label)
+  }
 
-  alcoholMonitoringConditionsSection = (): PageElement => cy.contains('Alcohol monitoring')
+  alcoholMonitoringConditionsSection(): SummaryListComponent {
+    const label = 'Alcohol monitoring'
+    return new SummaryListComponent(label)
+  }
 
   installationLocationSection(): SummaryListComponent {
     const label = 'Installation location'
@@ -45,5 +50,15 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
   installationAddressSection(): SummaryListComponent {
     const label = 'Installation address'
     return new SummaryListComponent(label)
+  }
+
+  attendanceMonitoringSections(searchTerm = undefined): SummaryListComponent {
+    const label = 'Mandatory attendance monitoring'
+    return new SummaryListComponent(label, true, searchTerm)
+  }
+
+  exclusionZoneMonitoringSections(searchTerm = undefined): SummaryListComponent {
+    const label = 'Exclusion zone monitoring'
+    return new SummaryListComponent(label, true, searchTerm)
   }
 }

@@ -36,19 +36,14 @@ export default class AlcoholMonitoringFormComponent extends FormComponent {
     if (data.monitoringType) {
       this.monitoringTypeField.set(data.monitoringType)
     }
-
     if (data.startDate) {
       this.startDateField.set(data.startDate, false)
     }
-
     if (data.endDate) {
       this.endDateField.set(data.endDate, false)
     }
-
     // agreed address
-
     // probation office name
-
     // prison name
   }
 

@@ -61,7 +61,10 @@
           text: "Exclusion zone monitoring"
         }
       },
-      rows: item
+      rows: item.item,
+      attributes: {
+          "zoneId": item.zoneId
+        }
     }) }}
   {% endfor %}
 
@@ -85,7 +88,10 @@
             text: "Attendance monitoring"
           }
         },
-        rows: item
+        rows: item,
+      attributes: {
+          "attendance": loop.index
+        }
       }) }}
     {% endfor %}
   {% endif %}

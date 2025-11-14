@@ -140,25 +140,52 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
-  const monitoringTypes = [
-    { name: 'Curfew', data: data.curfew },
-    { name: 'Exclusion zone monitoring', data: data.exclusionZone },
-    { name: 'Trail monitoring', data: data.trail },
-    { name: 'Mandatory attendance monitoring', data: data.mandatoryAttendance },
-    { name: 'Alcohol monitoring', data: data.alcohol },
-  ]
-  if (monitoringTypes.every(type => type.data !== undefined)) {
-    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+  if (FeatureFlags.getInstance().getValue('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED
+    const typesSelected = []
+    if (order.monitoringConditionsAlcohol?.startDate !== undefined) {
+      typesSelected.push('Alcohol monitoring')
+    }
+    if (order.monitoringConditionsTrail?.startDate !== undefined) {
+      typesSelected.push('Trail monitoring')
+    }
+    if (order.curfewConditions?.startDate !== undefined) {
+      typesSelected.push('Curfew')
+    }
+    if (order.enforcementZoneConditions.length !== 0) {
+      typesSelected.push('Exclusion zone monitoring')
+    }
+    if (order.mandatoryAttendanceConditions.length !== 0) {
+      typesSelected.push('Mandatory attendance monitoring')
+    }
     answers.push(
       createMultipleChoiceAnswer(
         content.pages.monitoringConditions.questions.monitoringRequired.text,
-        monitoringTypes.filter(type => type.data).map(type => type.name),
+        typesSelected,
         monitoringTypesPath.replace(':orderId', order.id),
         answerOpts,
       ),
     )
+  } else {
+    const monitoringTypes = [
+      { name: 'Curfew', data: data.curfew },
+      { name: 'Exclusion zone monitoring', data: data.exclusionZone },
+      { name: 'Trail monitoring', data: data.trail },
+      { name: 'Mandatory attendance monitoring', data: data.mandatoryAttendance },
+      { name: 'Alcohol monitoring', data: data.alcohol },
+    ]
+    if (monitoringTypes.every(type => type.data !== undefined)) {
+      const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+      answers.push(
+        createMultipleChoiceAnswer(
+          content.pages.monitoringConditions.questions.monitoringRequired.text,
+          monitoringTypes.filter(type => type.data).map(type => type.name),
+          monitoringTypesPath.replace(':orderId', order.id),
+          answerOpts,
+        ),
+      )
+    }
   }
-
   if (data.startDate && data.startDate !== null) {
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
     answers.push(
@@ -282,8 +309,7 @@ const groupTimetableByAddress = (timetable: CurfewTimetable) =>
 const createCurfewTimetableAnswers = (order: Order, answerOpts: AnswerOptions) => {
   const timetable = order.curfewTimeTable
   const uri = paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id)
-
-  if (!order.monitoringConditions.curfew) {
+  if (order.curfewConditions?.startDate === undefined) {
     return []
   }
 
@@ -312,7 +338,7 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
   const { questions } = content.pages.curfewReleaseDate
 
-  if (!order.monitoringConditions.curfew) {
+  if (order.curfewConditions?.startDate === undefined) {
     return []
   }
 
@@ -350,7 +376,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
   const { questions } = content.pages.curfewConditions
   const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
 
-  if (!order.monitoringConditions.curfew) {
+  if (order.curfewConditions?.startDate === undefined) {
     return []
   }
   const answers = [
@@ -379,10 +405,12 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
 }
 
 const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
+  const uri = FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')
+    ? paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id)
+    : paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
   const { questions } = content.pages.exclusionZone
 
-  if (!order.monitoringConditions.exclusionZone) {
+  if (order.enforcementZoneConditions.length === 0) {
     return []
   }
 
@@ -392,13 +420,17 @@ const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: Ans
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
       const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
-      return [
+      const items = [
         createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts),
         createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts),
         createAnswer(questions.description.text, enforcementZone.description, zoneUri, answerOpts),
         createAnswer(questions.duration.text, enforcementZone.duration, zoneUri, answerOpts),
         createAnswer(questions.file.text, fileName, zoneUri, answerOpts),
       ]
+      if (enforcementZone.name) {
+        items.push(createAnswer(questions.name.text, enforcementZone.name, zoneUri, answerOpts))
+      }
+      return { item: items, zoneId: enforcementZone.zoneId }
     })
 }
 
@@ -406,7 +438,7 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
   const uri = paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id)
   const { questions } = content.pages.trailMonitoring
 
-  if (!order.monitoringConditions.trail) {
+  if (order.monitoringConditionsTrail?.startDate === undefined) {
     return []
   }
 
@@ -417,7 +449,7 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
 }
 
 const createAttendanceAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  if (!order.monitoringConditions.mandatoryAttendance) {
+  if (order.mandatoryAttendanceConditions.length === 0) {
     return []
   }
 
@@ -459,7 +491,7 @@ const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   )
   const { questions } = content.pages.alcohol
 
-  if (!order.monitoringConditions.alcohol) {
+  if (order.monitoringConditionsAlcohol?.startDate == null) {
     return []
   }
   return [

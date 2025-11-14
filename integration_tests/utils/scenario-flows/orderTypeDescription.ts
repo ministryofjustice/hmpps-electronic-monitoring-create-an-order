@@ -27,7 +27,7 @@ export default function fillInOrderTypeDescriptionsWith({
   prarr = undefined,
   monitoringStartDate,
   monitoringEndDate,
-  monitoringCondition,
+  monitoringCondition = undefined,
 }): void {
   // Order type page
   if (orderType) {
@@ -84,6 +84,8 @@ export default function fillInOrderTypeDescriptionsWith({
   monitoringDatePage.form.continueButton.click()
 
   // Monitoring conditions
-  const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
-  fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
+  if (monitoringCondition) {
+    const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+    fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
+  }
 }

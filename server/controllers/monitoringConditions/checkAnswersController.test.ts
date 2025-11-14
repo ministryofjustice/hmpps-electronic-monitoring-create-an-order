@@ -635,180 +635,186 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
         ],
         exclusionZone: [
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/11/2024',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/12/2024',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'zone.png',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
+            ],
+            zoneId: 0,
+          },
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Description here',
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'No file selected',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'zone.png',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
-              },
-              value: {
-                text: '11/11/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
-              },
-              value: {
-                text: '11/12/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
-              },
-              value: {
-                text: 'Description here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
-              },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'No file selected',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
+            ],
+            zoneId: 1,
+          },
         ],
         trail: [
           {
@@ -1523,180 +1529,186 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
         ],
         exclusionZone: [
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/11/2024',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/12/2024',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'zone.png',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
+            ],
+            zoneId: 0,
+          },
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Description here',
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'No file selected',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'zone.png',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
-              },
-              value: {
-                text: '11/11/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
-              },
-              value: {
-                text: '11/12/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
-              },
-              value: {
-                text: 'Description here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
-              },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'No file selected',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
+            ],
+            zoneId: 1,
+          },
         ],
         trail: [
           {
@@ -2445,180 +2457,186 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
         ],
         exclusionZone: [
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/11/2024',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/12/2024',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'zone.png',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
+            ],
+            zoneId: 0,
+          },
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Description here',
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'No file selected',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'zone.png',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
-              },
-              value: {
-                text: '11/11/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
-              },
-              value: {
-                text: '11/12/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
-              },
-              value: {
-                text: 'Description here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
-              },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'No file selected',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
+            ],
+            zoneId: 1,
+          },
         ],
         trail: [
           {

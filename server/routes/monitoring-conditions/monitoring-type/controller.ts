@@ -31,8 +31,26 @@ export default class MonitoringTypeController {
       return
     }
 
-    // hack to get routing working without saving to DB
-    order.monitoringConditions[formData.monitoringType] = true
-    res.redirect(this.taskListService.getNextPage('MONITORING_CONDITIONS', order))
+    const monitoringConditionPath = this.getMonitoringConditionPath(formData.monitoringType)
+    res.redirect(monitoringConditionPath.replace(':orderId', order.id))
+  }
+
+  getMonitoringConditionPath = (
+    condition: 'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol',
+  ): string => {
+    switch (condition) {
+      case 'alcohol':
+        return paths.MONITORING_CONDITIONS.ALCOHOL
+      case 'curfew':
+        return paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE
+      case 'exclusionZone':
+        return paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM
+      case 'trail':
+        return paths.MONITORING_CONDITIONS.TRAIL
+      case 'mandatoryAttendance':
+        return paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST
+      default:
+        return ''
+    }
   }
 }

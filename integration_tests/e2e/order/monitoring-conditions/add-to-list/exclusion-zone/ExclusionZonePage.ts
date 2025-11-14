@@ -3,7 +3,7 @@ import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
 import EnforcementZoneAddToListFormComponent from './ExclusionZoneComponent'
 
-export default class EnforcementZonePage extends AppFormPage {
+export default class EnforcementZoneAddToListPage extends AppFormPage {
   public form = new EnforcementZoneAddToListFormComponent()
 
   constructor() {

@@ -129,7 +129,7 @@ context('Scenarios', () => {
           interestedParties,
           installationAndRisk,
           monitoringConditions,
-          installationAddressDetails: fakePrimaryAddress,
+          installationAddressDetails: undefined,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
           alcoholMonitoringDetails,

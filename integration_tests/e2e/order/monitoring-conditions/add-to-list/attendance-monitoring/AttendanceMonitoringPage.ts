@@ -2,7 +2,7 @@ import AttendanceMonitoringAddToListFormComponent from './AttendanceMonitoringCo
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
 
-export default class AttendanceMonitoringPage extends AppFormPage {
+export default class AttendanceMonitoringAddToListPage extends AppFormPage {
   public form = new AttendanceMonitoringAddToListFormComponent()
 
   constructor() {

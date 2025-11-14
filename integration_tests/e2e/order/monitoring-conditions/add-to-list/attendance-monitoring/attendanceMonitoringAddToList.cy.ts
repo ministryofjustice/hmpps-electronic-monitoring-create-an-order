@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../../../mockApis/cemo'
 import Page from '../../../../../pages/page'
-import AttendanceMonitoringPage from './AttendanceMonitoringPage'
+import AttendanceMonitoringAddToListPage from './AttendanceMonitoringPage'
 import TypesOfMonitoringNeededPage from '../../order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 import ErrorPage from '../../../../../pages/error'
 
@@ -104,7 +104,7 @@ context('Attendance monitoring', () => {
 
     it('Should display the form', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance`)
-      const page = Page.verifyOnPage(AttendanceMonitoringPage)
+      const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
     })
@@ -122,7 +122,7 @@ context('Attendance monitoring', () => {
 
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance/${mockConditionId}`)
-      const page = Page.verifyOnPage(AttendanceMonitoringPage)
+      const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
       page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
@@ -157,7 +157,7 @@ context('Attendance monitoring', () => {
 
     it('Should correctly display the unsubmitted data in enabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance/${mockConditionId}`)
-      const page = Page.verifyOnPage(AttendanceMonitoringPage)
+      const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       cy.root().should('not.contain', 'You are viewing a submitted order.')
       page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
       page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
@@ -205,7 +205,7 @@ context('Attendance monitoring', () => {
         ],
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance`)
-      const page = Page.verifyOnPage(AttendanceMonitoringPage)
+      const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       page.form.saveAndContinueButton.click()
       page.form.startDateField.shouldHaveValidationMessage('You must enter a valid date')
       page.form.endDateField.shouldHaveValidationMessage('You must enter a valid date')
@@ -224,7 +224,7 @@ context('Attendance monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance`)
 
-      const page = Page.verifyOnPage(AttendanceMonitoringPage)
+      const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
@@ -257,11 +257,11 @@ context('Attendance monitoring', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance`)
 
-      const page = Page.verifyOnPage(AttendanceMonitoringPage)
+      const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       page.form.fillInWith({ ...validFormData })
       page.form.saveAndContinueButton.click()
 
-      const secondPage = Page.verifyOnPage(AttendanceMonitoringPage)
+      const secondPage = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
       secondPage.form.fillInWith(validFormData)
       secondPage.form.saveAndContinueButton.click()
 
