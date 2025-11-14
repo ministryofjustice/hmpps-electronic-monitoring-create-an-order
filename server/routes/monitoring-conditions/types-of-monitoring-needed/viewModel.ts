@@ -67,6 +67,7 @@ const getItems = (order: Order): Answer[] => {
             ':conditionId',
             `${attendance.id}`,
           ),
+          { valueType: 'html' },
         ),
       )
     })
