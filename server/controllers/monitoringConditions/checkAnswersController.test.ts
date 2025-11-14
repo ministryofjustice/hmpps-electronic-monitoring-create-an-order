@@ -77,7 +77,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -381,7 +381,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -1309,7 +1309,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(
                     ':orderId',
                     order.id,
                   ),

@@ -148,7 +148,7 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     { name: 'Alcohol monitoring', data: data.alcohol },
   ]
   if (monitoringTypes.every(type => type.data !== undefined)) {
-    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
+    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED
     answers.push(
       createMultipleChoiceAnswer(
         content.pages.monitoringConditions.questions.monitoringRequired.text,
