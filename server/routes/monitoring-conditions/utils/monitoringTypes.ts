@@ -65,4 +65,14 @@ export const findMonitoringTypeById = (order: Order, monitoringTypeId: string): 
   return allMatches.find(match => match !== undefined)
 }
 
+export const getAllMonitoringTypes = (order: Order): MonitoringType[] => {
+  return [
+    order.curfewConditions,
+    order.monitoringConditionsTrail,
+    order.monitoringConditionsAlcohol,
+    ...order.enforcementZoneConditions,
+    ...order.mandatoryAttendanceConditions,
+  ].filter(type => type !== null && type !== undefined)
+}
+
 export default findMonitoringTypeById

@@ -7,15 +7,14 @@ import {
   getMockOrder,
 } from '../../../../test/mocks/mockOrder'
 import { Order } from '../../../models/Order'
-import { findMonitoringTypeById } from './monitoringTypes'
+import { findMonitoringTypeById, getAllMonitoringTypes } from './monitoringTypes'
 
 describe('monitoring type utils', () => {
+  let order: Order
+  beforeEach(() => {
+    order = getMockOrder()
+  })
   describe('findMonitoringTypeFromId', () => {
-    let order: Order
-    beforeEach(() => {
-      order = getMockOrder()
-    })
-
     it('returns undefined if there is no match', () => {
       const match = findMonitoringTypeById(order, 'some id')
       expect(match).toBeUndefined()
@@ -51,6 +50,37 @@ describe('monitoring type utils', () => {
       order.mandatoryAttendanceConditions.push(mandatoryAttendance)
       const match = findMonitoringTypeById(order, 'attendanceId')
       expect(match).toEqual({ monitoringType: mandatoryAttendance, type: 'Mandatory attendance monitoring' })
+    })
+  })
+  describe('findAllMatchingMonitoringTypes', () => {
+    it('returns an empty array if there are no matches', () => {
+      const matches = getAllMonitoringTypes(order)
+      expect(matches).toEqual([])
+    })
+
+    it('returns one monitoring type', () => {
+      order.curfewConditions = createCurfewConditions({ id: 'curfewId' })
+      const matches = getAllMonitoringTypes(order)
+      expect(matches).toEqual([order.curfewConditions])
+    })
+    it('returns all monitoring types', () => {
+      order.curfewConditions = createCurfewConditions({ id: 'curfewId' })
+      order.monitoringConditionsTrail = createMonitoringConditionsTrail({ id: 'trailId' })
+      order.monitoringConditionsAlcohol = createMonitoringConditionsAlcohol({ id: 'alcoholId' })
+      const exclusionZone = createEnforcementZoneCondition({ id: 'exlcusionId' })
+      order.enforcementZoneConditions.push(exclusionZone)
+      const mandatoryAttendance = createMonitoringConditionsAttendance({ id: 'attendanceId' })
+      order.mandatoryAttendanceConditions.push(mandatoryAttendance)
+
+      const matches = getAllMonitoringTypes(order)
+
+      expect(matches).toEqual([
+        order.curfewConditions,
+        order.monitoringConditionsTrail,
+        order.monitoringConditionsAlcohol,
+        exclusionZone,
+        mandatoryAttendance,
+      ])
     })
   })
 })
