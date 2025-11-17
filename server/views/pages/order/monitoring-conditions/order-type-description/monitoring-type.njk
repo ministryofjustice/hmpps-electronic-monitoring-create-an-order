@@ -9,16 +9,29 @@
 {% block formInputs %}
 
 {% if message %}
-  {{ govukInsetText({
-    text: message
-  }) }}
+  {% set questionHeadingHtml%}
+    <h1 class="govuk-fieldset__heading">
+      {{questions.monitoringRequired.text}}
+    </h1> 
+    {{     
+      govukInsetText({
+        text: message
+      }) 
+    }}
+  {% endset %}
+{% else %}
+  {% set questionHeadingHtml%}
+    <h1 class="govuk-fieldset__heading">
+      {{questions.monitoringRequired.text}}
+    </h1>   
+  {% endset %}
 {% endif %}
 
 {{ govukRadios({
   name: "monitoringType",
   fieldset: {
     legend: {
-      text: questions.monitoringRequired.text,
+      html: questionHeadingHtml,
       classes: "govuk-fieldset__legend--l"
     }
   },
