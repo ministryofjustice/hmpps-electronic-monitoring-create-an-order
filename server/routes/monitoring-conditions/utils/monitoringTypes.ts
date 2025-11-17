@@ -12,16 +12,6 @@ export type MonitoringType =
   | EnforcementZone
   | AlcoholMonitoring
 
-const MONITORING_TYPE_KEYS = [
-  'curfewConditions',
-  'enforcementZoneConditions',
-  'monitoringConditionsTrail',
-  'mandatoryAttendanceConditions',
-  'monitoringConditionsAlcohol',
-] as const
-
-type MonitoringKey = (typeof MONITORING_TYPE_KEYS)[number]
-
 export type MonitoringTypeText =
   | 'Curfew'
   | 'Mandatory attendance monitoring'
@@ -29,46 +19,50 @@ export type MonitoringTypeText =
   | 'Exclusion zone monitoring'
   | 'Alcohol monitoring'
 
-const MONITORING_KEY_TO_TYPE: Record<MonitoringKey, MonitoringTypeText> = {
-  curfewConditions: 'Curfew',
-  enforcementZoneConditions: 'Exclusion zone monitoring',
-  monitoringConditionsTrail: 'Trail monitoring',
-  mandatoryAttendanceConditions: 'Mandatory attendance monitoring',
-  monitoringConditionsAlcohol: 'Alcohol monitoring',
-}
-
 export type MonitoringTypeData = {
   type: MonitoringTypeText
   monitoringType: MonitoringType
 }
 
+const findMatchingCurfew = (order: Order, monitoringTypeId: string) =>
+  order.curfewConditions?.id === monitoringTypeId ? order.curfewConditions : undefined
+
+const findMatchingTrail = (order: Order, monitoringTypeId: string) =>
+  order.monitoringConditionsTrail?.id === monitoringTypeId ? order.monitoringConditionsTrail : undefined
+
+const findMatchingAlcohol = (order: Order, monitoringTypeId: string) =>
+  order.monitoringConditionsAlcohol?.id === monitoringTypeId ? order.monitoringConditionsAlcohol : undefined
+
+const findMatchingMandatoryAttendance = (order: Order, monitoringTypeId: string) =>
+  order.mandatoryAttendanceConditions.find(condition => condition.id === monitoringTypeId)
+
+const findMatchingExclusionZone = (order: Order, monitoringTypeId: string) =>
+  order.enforcementZoneConditions.find(condition => condition.id === monitoringTypeId)
+
 export const findMonitoringTypeById = (order: Order, monitoringTypeId: string): MonitoringTypeData | undefined => {
-  const allPossibleMatches = MONITORING_TYPE_KEYS.map(key => {
-    const propertyValue = order[key]
+  const matchingStategies: {
+    type: MonitoringTypeText
+    find: (order: Order, id: string) => MonitoringType | undefined
+  }[] = [
+    { type: 'Curfew', find: findMatchingCurfew },
+    { type: 'Trail monitoring', find: findMatchingTrail },
+    { type: 'Alcohol monitoring', find: findMatchingAlcohol },
+    { type: 'Mandatory attendance monitoring', find: findMatchingMandatoryAttendance },
+    { type: 'Exclusion zone monitoring', find: findMatchingExclusionZone },
+  ]
 
-    if (!propertyValue) {
-      return undefined
-    }
-
-    let match: MonitoringType | undefined
-
-    if (Array.isArray(propertyValue)) {
-      match = propertyValue.find(type => type.id === monitoringTypeId)
-    } else if (propertyValue.id === monitoringTypeId) {
-      match = propertyValue
-    }
-
+  const allMatches = matchingStategies.map(strategy => {
+    const match = strategy.find(order, monitoringTypeId)
     if (match) {
       return {
-        type: MONITORING_KEY_TO_TYPE[key],
         monitoringType: match,
+        type: strategy.type,
       }
     }
-
     return undefined
   })
 
-  return allPossibleMatches.find(item => item !== undefined)
+  return allMatches.find(match => match !== undefined)
 }
 
 export default findMonitoringTypeById

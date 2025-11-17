@@ -2,7 +2,7 @@ import { Handler, Request, Response } from 'express'
 import Model from './viewModel'
 import RemoveMonitoringTypeService from './service'
 import paths from '../../../constants/paths'
-import findMonitoringType from '../utils/monitoringTypes'
+import { findMonitoringTypeById } from '../utils/monitoringTypes'
 
 export default class RemoveMonitoringTypeController {
   constructor(private readonly service: RemoveMonitoringTypeService) {}
@@ -15,7 +15,7 @@ export default class RemoveMonitoringTypeController {
       return
     }
 
-    const monitoringTypeData = findMonitoringType(order, monitoringTypeId)
+    const monitoringTypeData = findMonitoringTypeById(order, monitoringTypeId)
 
     if (monitoringTypeData === undefined) {
       res.status(404).send(`No matching monitoring type: ${monitoringTypeId}`)
