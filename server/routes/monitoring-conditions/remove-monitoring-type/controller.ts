@@ -1,8 +1,8 @@
 import { Handler, Request, Response } from 'express'
-import Model, { MonitoringTypeData, MonitoringType } from './viewModel'
-import { Order } from '../../../models/Order'
+import Model from './viewModel'
 import RemoveMonitoringTypeService from './service'
 import paths from '../../../constants/paths'
+import { findMonitoringTypeById, getAllMonitoringTypes } from '../utils/monitoringTypes'
 
 export default class RemoveMonitoringTypeController {
   constructor(private readonly service: RemoveMonitoringTypeService) {}
@@ -15,7 +15,7 @@ export default class RemoveMonitoringTypeController {
       return
     }
 
-    const monitoringTypeData = this.findMonitoringType(order, monitoringTypeId)
+    const monitoringTypeData = findMonitoringTypeById(order, monitoringTypeId)
 
     if (monitoringTypeData === undefined) {
       res.status(404).send(`No matching monitoring type: ${monitoringTypeId}`)
@@ -44,55 +44,13 @@ export default class RemoveMonitoringTypeController {
       })
     }
 
+    const remainingMonitoringTypes = getAllMonitoringTypes(order).filter(type => type.id !== monitoringTypeId)
+    if (remainingMonitoringTypes.length === 0) {
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
+      return
+    }
     res.redirect(
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
     )
   }
-
-  private findMonitoringType = (order: Order, monitoringTypeId: string): MonitoringTypeData | undefined => {
-    const allPossibleMatches = MONITORING_TYPE_KEYS.map(key => {
-      const propertyValue = order[key]
-
-      if (!propertyValue) {
-        return undefined
-      }
-
-      let match: MonitoringType | undefined
-
-      if (Array.isArray(propertyValue)) {
-        match = propertyValue.find(type => type.id === monitoringTypeId)
-      } else if (propertyValue.id === monitoringTypeId) {
-        match = propertyValue
-      }
-
-      if (match) {
-        return {
-          type: MONITORING_KEY_TO_TYPE[key],
-          monitoringType: match,
-        }
-      }
-
-      return undefined
-    })
-
-    return allPossibleMatches.find(item => item !== undefined)
-  }
-}
-
-const MONITORING_TYPE_KEYS = [
-  'curfewConditions',
-  'enforcementZoneConditions',
-  'monitoringConditionsTrail',
-  'mandatoryAttendanceConditions',
-  'monitoringConditionsAlcohol',
-] as const
-
-type MonitoringKey = (typeof MONITORING_TYPE_KEYS)[number]
-
-const MONITORING_KEY_TO_TYPE: Record<MonitoringKey, MonitoringTypeData['type']> = {
-  curfewConditions: 'Curfew',
-  enforcementZoneConditions: 'Exclusion zone monitoring',
-  monitoringConditionsTrail: 'Trail monitoring',
-  mandatoryAttendanceConditions: 'Mandatory attendance monitoring',
-  monitoringConditionsAlcohol: 'Alcohol monitoring',
 }
