@@ -41,7 +41,6 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
 
 const isCurfewComplete = (order: Order) => {
   return (
-    order.monitoringConditions.curfew === true &&
     isNotNullOrUndefined(order.curfewConditions) &&
     isNotNullOrUndefined(order.curfewReleaseDateConditions) &&
     isNotNullOrUndefined(order.curfewTimeTable)
@@ -49,11 +48,11 @@ const isCurfewComplete = (order: Order) => {
 }
 
 const isTrailComplete = (order: Order) => {
-  return order.monitoringConditions.trail === true && isNotNullOrUndefined(order.monitoringConditionsTrail)
+  return isNotNullOrUndefined(order.monitoringConditionsTrail)
 }
 
 const isAlcoholComplete = (order: Order) => {
-  return order.monitoringConditions.alcohol === true && isNotNullOrUndefined(order.monitoringConditionsAlcohol)
+  return isNotNullOrUndefined(order.monitoringConditionsAlcohol)
 }
 
 const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message?: string } => {
