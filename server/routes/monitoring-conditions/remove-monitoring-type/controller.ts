@@ -42,13 +42,14 @@ export default class RemoveMonitoringTypeController {
         monitoringTypeId,
         accessToken: res.locals.user.token,
       })
+      const remainingMonitoringTypes = getAllMonitoringTypes(order).filter(type => type.id !== monitoringTypeId)
+      if (remainingMonitoringTypes.length === 0) {
+        await this.service.removeTagAtSource({ orderId: order.id, accessToken: res.locals.user.token })
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
+        return
+      }
     }
 
-    const remainingMonitoringTypes = getAllMonitoringTypes(order).filter(type => type.id !== monitoringTypeId)
-    if (remainingMonitoringTypes.length === 0) {
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
-      return
-    }
     res.redirect(
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
     )
