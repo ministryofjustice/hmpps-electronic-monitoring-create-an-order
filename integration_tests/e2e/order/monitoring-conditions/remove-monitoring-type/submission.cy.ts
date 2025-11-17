@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import RemoveMonitoringTypePage from './RemoveMonitoringTypePage'
 import Page from '../../../../pages/page'
 import TypesOfMonitoringNeededPage from '../order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
+import MonitoringTypePage from '../order-type-description/monitoring-type/MonitoringTypesPage'
 
 const mockOrderId = uuidv4()
 
@@ -9,10 +10,15 @@ context('Confirm delete', () => {
   const mockOrder = {
     curfewConditions: {
       curfewAddress: 'PRIMARY,SECONDARY',
-      endDate: '2024-11-11T00:00:00Z',
       startDate: '2024-11-11T00:00:00Z',
+      endDate: '2024-11-11T00:00:00Z',
       curfewAdditionalDetails: 'some additional details',
       id: 'curfewId',
+    },
+    monitoringConditionsTrail: {
+      startDate: '2024-11-11T00:00:00Z',
+      endDate: '2024-11-11T00:00:00Z',
+      id: 'trailId',
     },
   }
   const path = `/monitoring-conditions/monitoring-type/${mockOrder.curfewConditions.id}`
@@ -42,5 +48,15 @@ context('Confirm delete', () => {
       method: 'DELETE',
       body: '',
     }).should('be.true')
+  })
+
+  it('routes to list view when remove button is clicked and last type is removed', () => {
+    let page = Page.visit(RemoveMonitoringTypePage, { orderId: mockOrderId, monitoringTypeId: 'curfewId' })
+    page.confirmRemoveButton().click()
+    Page.verifyOnPage(TypesOfMonitoringNeededPage)
+
+    page = Page.visit(RemoveMonitoringTypePage, { orderId: mockOrderId, monitoringTypeId: 'trailId' })
+    page.confirmRemoveButton().click()
+    Page.verifyOnPage(MonitoringTypePage)
   })
 })
