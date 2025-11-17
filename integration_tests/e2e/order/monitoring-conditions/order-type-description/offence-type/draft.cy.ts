@@ -50,8 +50,7 @@ context('offence type', () => {
     page.form.offenceTypeField.shouldHaveOption('Robbery')
     page.form.offenceTypeField.shouldHaveOption('They did not commit one of these offences')
 
-    const hintText =
-      'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence. It needs to be their longest or equal longest sentence.'
+    const hintText = 'The acquisitive crime offence needs to be their longest or equal longest sentence.'
     const redundantCOMText = 'Any queries around pilot eligibility need to be raised with the appropriate COM.'
     page.form.offenceTypeField.element.contains(hintText)
     page.form.offenceTypeField.element.contains(redundantCOMText).should('not.exist')
