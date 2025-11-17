@@ -298,7 +298,7 @@ export default class TaskListService {
       name: PAGES.curfewReleaseDate,
       path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
+        order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -311,7 +311,7 @@ export default class TaskListService {
       name: PAGES.curfewConditions,
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
+        order.monitoringConditions.curfew && order.curfewConditions?.startDate === undefined,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -325,7 +325,7 @@ export default class TaskListService {
         name: PAGES.curfewAdditionalDetails,
         path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
         state: convertBooleanToEnum<State>(
-          order.monitoringConditions.curfew,
+          order.monitoringConditions.curfew && order.curfewConditions?.startDate === undefined,
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
@@ -341,7 +341,8 @@ export default class TaskListService {
       name: PAGES.curfewTimetable,
       path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
+        order.monitoringConditions.curfew &&
+          (order.curfewTimeTable?.length === 0 || order.curfewTimeTable === undefined),
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -356,7 +357,7 @@ export default class TaskListService {
         ? paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM
         : paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.exclusionZone,
+        order.monitoringConditions.exclusionZone && order.enforcementZoneConditions?.length === 0,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -369,7 +370,7 @@ export default class TaskListService {
       name: PAGES.trailMonitoring,
       path: paths.MONITORING_CONDITIONS.TRAIL,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.trail,
+        order.monitoringConditions.trail && order.monitoringConditionsTrail?.startDate === undefined,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -382,7 +383,7 @@ export default class TaskListService {
       name: PAGES.attendanceMonitoring,
       path: paths.MONITORING_CONDITIONS.ATTENDANCE,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.mandatoryAttendance,
+        order.monitoringConditions.mandatoryAttendance && order.mandatoryAttendanceConditions?.length === 0,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -396,7 +397,7 @@ export default class TaskListService {
       name: PAGES.alcoholMonitoring,
       path: paths.MONITORING_CONDITIONS.ALCOHOL,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.alcohol,
+        order.monitoringConditions.alcohol && order.monitoringConditionsAlcohol?.startDate === undefined,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
