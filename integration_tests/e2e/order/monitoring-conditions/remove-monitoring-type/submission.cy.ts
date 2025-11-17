@@ -51,11 +51,11 @@ context('Confirm delete', () => {
   })
 
   it('routes to list view when remove button is clicked and last type is removed', () => {
-    let page = Page.visit(RemoveMonitoringTypePage, { orderId: mockOrderId, monitoringTypeId: 'curfewId' })
-    page.confirmRemoveButton().click()
-    Page.verifyOnPage(TypesOfMonitoringNeededPage)
+    mockOrder.monitoringConditionsTrail = null
 
-    page = Page.visit(RemoveMonitoringTypePage, { orderId: mockOrderId, monitoringTypeId: 'trailId' })
+    cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: mockOrder })
+
+    const page = Page.visit(RemoveMonitoringTypePage, { orderId: mockOrderId, monitoringTypeId: 'curfewId' })
     page.confirmRemoveButton().click()
     Page.verifyOnPage(MonitoringTypePage)
   })

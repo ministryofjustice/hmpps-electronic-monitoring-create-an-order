@@ -2,7 +2,7 @@ import { Handler, Request, Response } from 'express'
 import Model from './viewModel'
 import RemoveMonitoringTypeService from './service'
 import paths from '../../../constants/paths'
-import { findMonitoringTypeById } from '../utils/monitoringTypes'
+import { findMonitoringTypeById, getAllMonitoringTypes } from '../utils/monitoringTypes'
 
 export default class RemoveMonitoringTypeController {
   constructor(private readonly service: RemoveMonitoringTypeService) {}
@@ -44,6 +44,11 @@ export default class RemoveMonitoringTypeController {
       })
     }
 
+    const remainingMonitoringTypes = getAllMonitoringTypes(order).filter(type => type.id !== monitoringTypeId)
+    if (remainingMonitoringTypes.length === 0) {
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
+      return
+    }
     res.redirect(
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
     )
