@@ -21,6 +21,7 @@ describe('remove monitoring type controller', () => {
     }) as jest.Mocked<RestClient>
     mockService = new RemoveMonitoringTypeService(mockRestClient) as jest.Mocked<RemoveMonitoringTypeService>
     mockService.removeMonitoringType = jest.fn()
+    mockService.shouldRemoveTagAtSource = jest.fn()
 
     controller = new RemoveMonitoringTypeController(mockService)
 
