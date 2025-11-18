@@ -21,13 +21,15 @@ context('Confirm delete', () => {
       id: 'trailId',
     },
   }
-  const path = `/monitoring-conditions/monitoring-type/${mockOrder.curfewConditions.id}`
+  const removeMonitoringTypePath = `/monitoring-conditions/monitoring-type/${mockOrder.curfewConditions.id}`
+  const removeTagAtSourcePath = '/monitoring-conditions/tag-at-source'
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: mockOrder })
 
-    cy.task('stubDeleteOrder', { httpStatus: 200, id: mockOrderId, subPath: path, response: {} })
+    cy.task('stubDeleteOrder', { httpStatus: 200, id: mockOrderId, subPath: removeMonitoringTypePath, response: {} })
+    cy.task('stubDeleteOrder', { httpStatus: 200, id: mockOrderId, subPath: removeTagAtSourcePath, response: {} })
 
     cy.signIn()
   })
@@ -44,13 +46,13 @@ context('Confirm delete', () => {
     Page.verifyOnPage(TypesOfMonitoringNeededPage)
 
     cy.task('stubCemoVerifyRequestReceived', {
-      uri: `/orders/${mockOrderId}${path}`,
+      uri: `/orders/${mockOrderId}${removeMonitoringTypePath}`,
       method: 'DELETE',
       body: '',
     }).should('be.true')
   })
 
-  it('routes to list view when remove button is clicked and last type is removed', () => {
+  it('removing the last condition', () => {
     mockOrder.monitoringConditionsTrail = null
 
     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: mockOrder })
@@ -58,5 +60,11 @@ context('Confirm delete', () => {
     const page = Page.visit(RemoveMonitoringTypePage, { orderId: mockOrderId, monitoringTypeId: 'curfewId' })
     page.confirmRemoveButton().click()
     Page.verifyOnPage(MonitoringTypePage)
+
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${removeTagAtSourcePath}`,
+      method: 'DELETE',
+      body: '',
+    }).should('be.true')
   })
 })
