@@ -48,6 +48,10 @@ export default class RemoveMonitoringTypeController {
         res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
         return
       }
+
+      if (this.service.shouldRemoveTagAtSource(order, monitoringTypeId)) {
+        await this.service.removeTagAtSource({ orderId: order.id, accessToken: res.locals.user.token })
+      }
     }
 
     res.redirect(
