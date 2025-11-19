@@ -343,12 +343,6 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
   }
 
   return [
-    createDateAnswer(
-      questions.releaseDate.text,
-      order.curfewReleaseDateConditions?.releaseDate,
-      releaseDateUri,
-      answerOpts,
-    ),
     createAnswer(
       questions.startTime.text,
       trimSeconds(order.curfewReleaseDateConditions?.startTime),

@@ -148,7 +148,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
@@ -476,23 +475,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',
@@ -1100,7 +1082,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
@@ -1370,23 +1351,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',
@@ -2001,7 +1965,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
@@ -2298,23 +2261,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',

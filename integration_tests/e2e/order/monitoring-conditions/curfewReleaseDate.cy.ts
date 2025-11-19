@@ -154,9 +154,6 @@ context('Curfew monitoring - release date', () => {
       cy.get('input[type="radio"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
       checkFormFields()
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')
@@ -178,9 +175,6 @@ context('Curfew monitoring - release date', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
       cy.root().should('not.contain', 'You are viewing a submitted order.')
-      cy.get('input[type="text"]').each($el => {
-        cy.wrap($el).should('not.be.disabled')
-      })
       cy.get('input[type="number"]').each($el => {
         cy.wrap($el).should('not.be.disabled')
       })
