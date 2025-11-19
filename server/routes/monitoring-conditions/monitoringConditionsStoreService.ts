@@ -14,6 +14,7 @@ export default class MonitoringConditionsStoreService {
     'pilot',
     'offenceType',
     'policeArea',
+    'hardStop',
     'issp',
     'prarr',
   ]

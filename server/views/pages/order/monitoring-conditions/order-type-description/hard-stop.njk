@@ -1,0 +1,25 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set section = content.pages.hardStop.section %}
+{% set heading = content.pages.hardStop.title %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form class="form" method="post">
+
+        <p>To be eligible for the acquisitive crime pilot the device wearer must have commited an acquisitive crime.</p>
+        <p>You can't continue and must contact the appropriate Community Offender Manager in probation.</p>
+
+        {{ govukButton({
+          text: "Return to form",
+          classes: "govuk-button--secondary"
+        }) }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
