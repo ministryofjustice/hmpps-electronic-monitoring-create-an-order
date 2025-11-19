@@ -151,7 +151,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -558,23 +557,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what date does the curfew end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
                 },
               ],
             },
@@ -1085,7 +1067,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -1434,23 +1415,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what date does the curfew end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
                 },
               ],
             },
@@ -1968,7 +1932,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -2344,23 +2307,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what date does the curfew end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
                 },
               ],
             },

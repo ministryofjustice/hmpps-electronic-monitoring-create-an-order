@@ -16,7 +16,6 @@ import {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
-  createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
   createAnswer,
   AnswerOptions,
@@ -376,12 +375,6 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
   const answers = [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
-    createMultipleAddressAnswer(
-      questions.addresses.text,
-      order.addresses.filter(({ addressType }) => (order.curfewConditions?.curfewAddress || '').includes(addressType)),
-      conditionsUri,
-      answerOpts,
-    ),
   ]
 
   if (order.dataDictionaryVersion === 'DDV5') {
