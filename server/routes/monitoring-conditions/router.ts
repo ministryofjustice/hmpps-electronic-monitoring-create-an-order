@@ -24,9 +24,15 @@ const createOrderTypeDescriptionRouter = (
 
   const { monitoringConditionsStoreService, monitoringConditionsUpdateService, taskListService } = services
 
-  const orderTypeController = new OrderTypeController(monitoringConditionsStoreService)
+  const orderTypeController = new OrderTypeController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+  )
 
-  const sentenceTypeController = new SentenceTypeController(monitoringConditionsStoreService)
+  const sentenceTypeController = new SentenceTypeController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+  )
 
   const hdcController = new HdcController(monitoringConditionsStoreService)
 
@@ -34,9 +40,9 @@ const createOrderTypeDescriptionRouter = (
 
   const offenceTypeController = new OffenceTypeController(monitoringConditionsStoreService)
 
-  const isspController = new IsspController(monitoringConditionsStoreService)
+  const isspController = new IsspController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
 
-  const prarrController = new PrarrController(monitoringConditionsStoreService)
+  const prarrController = new PrarrController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
 
   const monitoringTypesController = new MonitoringTypesController(
     monitoringConditionsStoreService,

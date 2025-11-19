@@ -5,6 +5,8 @@ import MonitoringConditionsStoreService from '../monitoringConditionsStoreServic
 import InMemoryStore from '../store/inMemoryStore'
 import constructModel from './viewModel'
 import paths from '../../../constants/paths'
+import RestClient from '../../../data/restClient'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 
 jest.mock('../monitoringConditionsStoreService')
 jest.mock('./viewModel')
@@ -18,12 +20,23 @@ describe('prarr controller', () => {
   let next: NextFunction
   const mockConstructModel = jest.mocked(constructModel)
 
+  let mockRestClient: jest.Mocked<RestClient>
+  let mockService: jest.Mocked<MonitoringConditionsUpdateService>
+
   beforeEach(() => {
     jest.restoreAllMocks()
     mockDataStore = new InMemoryStore()
     mockStore = new MonitoringConditionsStoreService(mockDataStore) as jest.Mocked<MonitoringConditionsStoreService>
     mockStore.getMonitoringConditions.mockResolvedValue({})
-    controller = new PrarrController(mockStore)
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+    mockService = new MonitoringConditionsUpdateService(
+      mockRestClient,
+    ) as jest.Mocked<MonitoringConditionsUpdateService>
+    controller = new PrarrController(mockStore, mockService)
 
     mockConstructModel.mockReturnValue({ errorSummary: null, items: [] })
 
@@ -66,7 +79,7 @@ describe('prarr controller', () => {
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', req.order!.id),
       )
     })
     it('validates', async () => {

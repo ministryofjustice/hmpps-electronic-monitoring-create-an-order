@@ -15,9 +15,10 @@ jest.mock('./viewModel')
 describe('MonitoringDatesController', () => {
   let mockDataStore: InMemoryStore
   let mockStore: jest.Mocked<MonitoringConditionsStoreService>
+  let mockRestClient: jest.Mocked<RestClient>
   let mockService: jest.Mocked<MonitoringConditionsUpdateService>
   let controller: MonitoringDatesController
-  let mockRestClient: jest.Mocked<RestClient>
+
   let res: Response
   let req: Request
   let next: NextFunction
@@ -113,7 +114,7 @@ describe('MonitoringDatesController', () => {
       )
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', req.order!.id),
       )
     })
 

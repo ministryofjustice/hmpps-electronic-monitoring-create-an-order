@@ -6,12 +6,15 @@ import { MonitoringDatesFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import FeatureFlags from '../../../utils/featureFlags'
 import MonitoringConditionsUpdateService from '../monitoringConditionsService'
+import MonitoringConditionsBaseController from '../base/monitoringConditionBaseController'
 
-export default class MonitoringDatesController {
+export default class MonitoringDatesController extends MonitoringConditionsBaseController {
   constructor(
-    private readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
-    private readonly monitoringConditionsService: MonitoringConditionsUpdateService,
-  ) {}
+    readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
+    readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+  ) {
+    super(montoringConditionsStoreService, monitoringConditionsService)
+  }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -32,26 +35,15 @@ export default class MonitoringDatesController {
         field: issue.path[0].toString(),
       }))
       req.flash('validationErrors', validationErrors)
-      return res.redirect(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
-      )
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+      return
     }
     await this.montoringConditionsStoreService.updateMonitoringDates(order, formData.data)
 
     if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-      const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)
-      await this.monitoringConditionsService.updateMonitoringConditions({
-        data,
-        accessToken: res.locals.user.token,
-        orderId: order.id,
-      })
-      return res.redirect(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id),
-      )
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+      return
     }
-
-    return res.redirect(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id),
-    )
+    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
   }
 }

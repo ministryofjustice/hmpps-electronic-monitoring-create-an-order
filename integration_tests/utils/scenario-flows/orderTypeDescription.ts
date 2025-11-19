@@ -25,8 +25,8 @@ export default function fillInOrderTypeDescriptionsWith({
   typeOfAcquistiveCrime = undefined,
   policeForceArea = undefined,
   prarr = undefined,
-  monitoringStartDate,
-  monitoringEndDate,
+  monitoringStartDate = undefined,
+  monitoringEndDate = undefined,
   monitoringCondition = undefined,
 }): void {
   // Order type page
@@ -76,12 +76,14 @@ export default function fillInOrderTypeDescriptionsWith({
     fillinSingleQuestionFormWith(prarrPage.form, prarr)
   }
   // Monitoring Dates
-  const monitoringDatePage = Page.verifyOnPage(MonitoringDatesPage)
-  monitoringDatePage.form.fillInWithInput({
-    startDate: monitoringStartDate,
-    endDate: monitoringEndDate,
-  })
-  monitoringDatePage.form.continueButton.click()
+  if (monitoringStartDate) {
+    const monitoringDatePage = Page.verifyOnPage(MonitoringDatesPage)
+    monitoringDatePage.form.fillInWithInput({
+      startDate: monitoringStartDate,
+      endDate: monitoringEndDate,
+    })
+    monitoringDatePage.form.continueButton.click()
+  }
 
   // Monitoring conditions
   if (monitoringCondition) {
