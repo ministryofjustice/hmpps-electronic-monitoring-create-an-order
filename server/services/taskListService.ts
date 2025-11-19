@@ -286,9 +286,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.monitoringConditions,
-      path: FeatureFlags.getInstance().get('ORDER_TYPE_DESCRIPTION_FLOW_ENABLED')
-        ? paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
-        : paths.MONITORING_CONDITIONS.BASE_URL,
+      path: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE,
       state: STATES.required,
       completed: order.monitoringConditions.isValid,
     })
