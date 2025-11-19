@@ -2,11 +2,10 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../models/form-data/curfewReleaseDate'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertBackendErrorToValidationError } from '../utils/errors'
-import { serialiseDate, serialiseTime } from '../utils/utils'
-import DateValidator from '../utils/validators/dateValidator'
+import { serialiseTime } from '../utils/utils'
 
 type CurfewReleaseDateInput = AuthenticatedRequestInput & {
   orderId: string
@@ -17,16 +16,6 @@ export default class CurfewReleaseDateService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: CurfewReleaseDateInput): Promise<undefined | ValidationResult> {
-    const isReleaseDateValid = DateValidator.isValidDateFormat(
-      input.data.releaseDateDay,
-      input.data.releaseDateMonth,
-      input.data.releaseDateYear,
-      'releaseDate',
-    )
-    if (isReleaseDateValid.result === false) {
-      return ValidationResultModel.parse([isReleaseDateValid.error])
-    }
-
     try {
       await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-release-date`,
@@ -46,7 +35,6 @@ export default class CurfewReleaseDateService {
 
   private createApiModelFromFormData(formData: CurfewReleaseDateFormData): CurfewReleaseDate {
     return {
-      releaseDate: serialiseDate(formData.releaseDateYear, formData.releaseDateMonth, formData.releaseDateDay),
       startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
       endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
       curfewAddress: formData.curfewAddress ?? null,
