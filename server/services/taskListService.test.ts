@@ -23,7 +23,6 @@ import { Order } from '../models/Order'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
-import FeatureFlags from '../utils/featureFlags'
 
 describe('TaskListService', () => {
   const mockOrderChecklistService = {
@@ -31,9 +30,7 @@ describe('TaskListService', () => {
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
 
-  const monitoringConditionsPath = FeatureFlags.getInstance().get('ORDER_TYPE_DESCRIPTION_FLOW_ENABLED')
-    ? paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH
-    : paths.MONITORING_CONDITIONS.BASE_URL
+  const monitoringConditionsPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
   describe('getNextPage', () => {
     it('should return idenity numbers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
       // Given
