@@ -41,6 +41,5 @@ export default class PrarrController extends MonitoringConditionsBaseController 
     await this.montoringConditionsStoreService.updateField(order, 'prarr', formData.prarr)
 
     await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
-   
   }
 }

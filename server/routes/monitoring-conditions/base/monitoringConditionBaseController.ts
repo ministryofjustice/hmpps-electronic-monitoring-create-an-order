@@ -11,7 +11,7 @@ export default abstract class MonitoringConditionsBaseController {
   ) {}
 
   async UpdateMonitoringConditionAndGoToMonitoringTypePage(order: Order, res: Response) {
-    const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)   
+    const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)
     await this.monitoringConditionsService.updateMonitoringConditions({
       data,
       accessToken: res.locals.user.token,

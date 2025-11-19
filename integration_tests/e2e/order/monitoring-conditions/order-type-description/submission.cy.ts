@@ -35,24 +35,29 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
 }
 
 const stubPutMonitoringConditions = () => {
-  cy.task('stubCemoSubmitOrder', { httpStatus: 200, id: mockOrderId, subPath: apiPath, response: {
-    orderType: 'POST_RELEASE',
-    orderTypeDescription: null,
-    conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
-    curfew: null,
-    exclusionZone: null,
-    trail: false,
-    mandatoryAttendance: null,
-    alcohol: true,
-    startDate: '2024-10-10T11:00:00.000Z',
-    endDate: '2024-10-11T11:00:00.000Z',
-    sentenceType: 'EPP',
-    issp: 'YES',
-    hdc: 'NO',
-    prarr: 'UNKNOWN',
-    pilot: '',
-    offenceType: '',
-  } })
+  cy.task('stubCemoSubmitOrder', {
+    httpStatus: 200,
+    id: mockOrderId,
+    subPath: apiPath,
+    response: {
+      orderType: 'POST_RELEASE',
+      orderTypeDescription: null,
+      conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+      curfew: null,
+      exclusionZone: null,
+      trail: false,
+      mandatoryAttendance: null,
+      alcohol: true,
+      startDate: '2024-10-10T11:00:00.000Z',
+      endDate: '2024-10-11T11:00:00.000Z',
+      sentenceType: 'EPP',
+      issp: 'YES',
+      hdc: 'NO',
+      prarr: 'UNKNOWN',
+      pilot: '',
+      offenceType: '',
+    },
+  })
 }
 
 context('Order type descriptions', () => {
