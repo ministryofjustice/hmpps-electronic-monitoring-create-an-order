@@ -3,6 +3,7 @@ import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
+import FeatureFlags from '../../../utils/featureFlags'
 
 export default abstract class MonitoringConditionsBaseController {
   constructor(
@@ -17,6 +18,10 @@ export default abstract class MonitoringConditionsBaseController {
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-    res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
+    if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
+    } else {
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
+    }
   }
 }

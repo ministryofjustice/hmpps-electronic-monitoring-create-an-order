@@ -56,6 +56,7 @@ describe('order type controller', () => {
     mockService = new MonitoringConditionsUpdateService(
       mockRestClient,
     ) as jest.Mocked<MonitoringConditionsUpdateService>
+    mockService.updateMonitoringConditions = jest.fn()
     req = createMockRequest()
     req.order = mockOrder
     req.flash = jest.fn()

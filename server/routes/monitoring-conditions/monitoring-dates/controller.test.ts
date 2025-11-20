@@ -36,6 +36,7 @@ describe('MonitoringDatesController', () => {
     mockService = new MonitoringConditionsUpdateService(
       mockRestClient,
     ) as jest.Mocked<MonitoringConditionsUpdateService>
+    mockService.updateMonitoringConditions = jest.fn()
     mockStore.getMonitoringConditions.mockResolvedValue({})
     controller = new MonitoringDatesController(mockStore, mockService)
 

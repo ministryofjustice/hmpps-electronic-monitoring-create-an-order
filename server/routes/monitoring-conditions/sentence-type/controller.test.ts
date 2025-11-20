@@ -45,6 +45,7 @@ describe('SentenceTypeController', () => {
     mockService = new MonitoringConditionsUpdateService(
       mockRestClient,
     ) as jest.Mocked<MonitoringConditionsUpdateService>
+    mockService.updateMonitoringConditions = jest.fn()
   })
 
   describe('view', () => {

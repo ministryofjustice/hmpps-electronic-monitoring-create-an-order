@@ -39,7 +39,7 @@ describe('prarr controller', () => {
     controller = new PrarrController(mockStore, mockService)
 
     mockConstructModel.mockReturnValue({ errorSummary: null, items: [] })
-
+    mockService.updateMonitoringConditions = jest.fn()
     req = createMockRequest()
     req.flash = jest.fn()
     res = createMockResponse()
