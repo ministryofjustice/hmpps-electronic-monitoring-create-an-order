@@ -1,13 +1,23 @@
-import { ValidationResult } from '../../../models/Validation'
-import { ViewModel } from '../../../models/view-models/utils'
 import { MonitoringConditions } from '../model'
+import { Order } from '../../../models/Order'
 
-export type HardStopModel = ViewModel<Pick<MonitoringConditions, 'hardStop'>>
+export type HardStopModel = {
+  hardStopText: string
+  order: {
+    id: string
+  }
+}
 
-const constructModel = (data: MonitoringConditions, errors: ValidationResult): HardStopModel => {
+const constructModel = (order: Order, data: MonitoringConditions): HardStopModel => {
+  const hardStopText: string = data.offenceType
+    ? "To be eligible for the acquisitive crime pilot the device wearer's release address must be in an in-scope police force area."
+    : 'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence.'
+
   return {
-    hardStop: { value: '' },
-    errorSummary: null,
+    hardStopText,
+    order: {
+      id: order.id,
+    },
   }
 }
 

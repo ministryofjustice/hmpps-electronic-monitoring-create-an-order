@@ -1,25 +1,23 @@
 {% extends "../../../../partials/form-layout.njk" %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set section = content.pages.hardStop.section %}
-{% set heading = content.pages.hardStop.title %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% set section = "Electronic monitoring required" %}
+{% set heading = "Device wearer is not eligible for the acquisitive crime pilot" %}
 
 {% block content %}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">{{ section }}</span>
+      <h1 class="govuk-heading-l">{{ heading }}</h1>
 
-      <form class="form" method="post">
+      <p>{{ hardStopText }}</p>
+      <p>You can't continue and must contact the appropriate Community Offender Manager in probation.</p>
 
-        <p>To be eligible for the acquisitive crime pilot the device wearer must have commited an acquisitive crime.</p>
-        <p>You can't continue and must contact the appropriate Community Offender Manager in probation.</p>
+    {{ govukButton({
+      text: "Return to form",
+      classes: "govuk-button--secondary",
+      id: "return-button",
+      href: "/order/" + order.id + "/summary"
+    }) }}
 
-        {{ govukButton({
-          text: "Return to form",
-          classes: "govuk-button--secondary"
-        }) }}
-
-      </form>
-    </div>
-  </div>
 {% endblock %}

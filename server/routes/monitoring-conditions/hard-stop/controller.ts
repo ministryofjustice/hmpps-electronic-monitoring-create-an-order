@@ -1,7 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import constructModel from './viewModel'
-import { ValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
 
 export default class HardStopController {
@@ -10,9 +9,7 @@ export default class HardStopController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const monitoringConditions = await this.monitoringConditionsStoreService.getMonitoringConditions(order)
-    const errors = req.flash('validationErrors') as unknown as ValidationResult
-
-    const model = constructModel(monitoringConditions, errors)
+    const model = constructModel(order, monitoringConditions)
 
     res.render('pages/order/monitoring-conditions/order-type-description/hard-stop', model)
   }

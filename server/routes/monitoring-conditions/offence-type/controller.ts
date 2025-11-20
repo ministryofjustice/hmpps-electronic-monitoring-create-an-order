@@ -36,7 +36,7 @@ export default class OffenceTypeController {
       return
     }
 
-    if (formData.offenceType === 'They did not commit one of these offences.') {
+    if (formData.offenceType === 'They did not commit one of these offences') {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HARD_STOP.replace(':orderId', order.id))
       return
     }
