@@ -21,6 +21,7 @@ describe('remove monitoring type controller', () => {
     }) as jest.Mocked<RestClient>
     mockService = new RemoveMonitoringTypeService(mockRestClient) as jest.Mocked<RemoveMonitoringTypeService>
     mockService.removeMonitoringType = jest.fn()
+    mockService.shouldRemoveTagAtSource = jest.fn()
 
     controller = new RemoveMonitoringTypeController(mockService)
 
@@ -53,7 +54,7 @@ describe('remove monitoring type controller', () => {
       await controller.view(req, res, jest.fn())
 
       expect(res.render).toHaveBeenCalledWith(expect.anything(), {
-        monitoringTypeText: 'Curfew from 11/11/2024 to 11/11/2024',
+        monitoringTypeReadable: 'Curfew from 11/11/2024 to 11/11/2024',
       })
     })
 
