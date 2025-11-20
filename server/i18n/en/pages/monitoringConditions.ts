@@ -54,7 +54,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     },
     policeArea: {
       text: "Which police force area is the device wearer's release address in?",
-      hint: 'Enter the full postcode of the device wearer release address in the <a href="https://www.police.uk/pu/your-area/" id="police-area-link" target="_blank" rel="noopener noreferrer" class="govuk-link">police force lookup (opens in a new tab)</a> to find the area.',
+      hint: 'Enter the full postcode of the device wearer release address in the <a href="https://www.police.uk/pu/find-a-police-force/" id="police-force-link" target="_blank" rel="noopener noreferrer" class="govuk-link">police force lookup (opens in a new tab)</a> to find the area.',
     },
     removeMonitoringType: {
       text: 'Are you sure that you want to delete this electronic monitoring type?',
