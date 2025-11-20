@@ -38,6 +38,7 @@ export default class OffenceTypeController {
 
     if (formData.offenceType === 'They did not commit one of these offences') {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HARD_STOP.replace(':orderId', order.id))
+      await this.store.updateField(order, 'offenceType', formData.offenceType)
       return
     }
 

@@ -35,5 +35,8 @@ context('police area', () => {
 
     Page.verifyOnPage(HardStopPage)
     cy.contains('Device wearer is not eligible for the acquisitive crime pilot').should('exist')
+    cy.contains(
+      "To be eligible for the acquisitive crime pilot the device wearer's release address must be in an in-scope police force area.",
+    ).should('exist')
   })
 })
