@@ -401,7 +401,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -421,7 +421,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -441,7 +441,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -461,7 +461,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -1335,7 +1335,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
                     ':orderId',
                     order.id,
                   ),
@@ -1355,7 +1355,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
                     ':orderId',
                     order.id,
                   ),
