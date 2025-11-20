@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderTypePage from './OrderTypePage'
 import Page from '../../../../../pages/page'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
-import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
+import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -46,6 +46,6 @@ context('orderType', () => {
     sentenceTypePage.form.fillInWith('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
-    Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
+    Page.verifyOnPage(MonitoringTypePage)
   })
 })

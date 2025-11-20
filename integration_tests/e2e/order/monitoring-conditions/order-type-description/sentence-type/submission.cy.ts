@@ -5,7 +5,7 @@ import SentenceTypePage from './SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
 import PrarrPage from '../prarr/PrarrPage'
-import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
+import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -60,13 +60,6 @@ context('sentenceType form submission', () => {
     const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
     prarrPage.form.fillInWith('Yes')
     prarrPage.form.continueButton.click()
-
-    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
-    monitoringDatesPage.form.fillInWith({
-      startDate: { day: '15', month: '11', year: '2025' },
-      endDate: { day: '16', month: '11', year: '2026' },
-    })
-    monitoringDatesPage.form.continueButton.click()
   })
 
   it('Should submit the form and display the correct answers for a Community journey', () => {
@@ -78,13 +71,6 @@ context('sentenceType form submission', () => {
     sentenceTypePage.form.fillInWith('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
-    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
-    monitoringDatesPage.form.fillInWith({
-      startDate: { day: '15', month: '11', year: '2025' },
-      endDate: { day: '16', month: '11', year: '2026' },
-    })
-    monitoringDatesPage.form.continueButton.click()
-
-    Page.verifyOnPage(MonitoringDatesPage, 'Monitoring dates')
+    Page.verifyOnPage(MonitoringTypePage)
   })
 })
