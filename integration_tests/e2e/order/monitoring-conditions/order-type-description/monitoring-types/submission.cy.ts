@@ -80,8 +80,8 @@ context('pilot', () => {
         trail: false,
         mandatoryAttendance: false,
         alcohol: true,
-        startDate: '2024-02-27T00:00:00.000Z',
-        endDate: `${currentDate.getFullYear() + 1}-03-08T23:59:00.000Z`,
+        startDate: null,
+        endDate: null,
       },
     }).should('be.true')
 

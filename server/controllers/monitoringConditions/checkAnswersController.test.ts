@@ -391,7 +391,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-        
         ],
         installationAppointment: [],
         installationLocation: [],
@@ -1245,7 +1244,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 },
               ],
             },
-          },         
+          },
         ],
         installationAppointment: [],
         installationLocation: [],
