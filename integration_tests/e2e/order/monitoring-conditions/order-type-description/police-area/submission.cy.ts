@@ -12,7 +12,6 @@ context('police area', () => {
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,
-      monitoringConditions: { offenceType: 'Theft from a Vehicle' },
     })
 
     cy.signIn()
