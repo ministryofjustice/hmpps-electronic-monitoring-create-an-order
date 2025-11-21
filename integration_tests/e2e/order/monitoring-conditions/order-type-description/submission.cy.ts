@@ -4,7 +4,7 @@ import OrderTypePage from './order-type/OrderTypePage'
 import Page from '../../../../pages/page'
 
 const mockOrderId = uuidv4()
-const currentDate = new Date()
+const apiPath = '/monitoring-conditions'
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -33,6 +33,33 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
     },
   })
 }
+
+const stubPutMonitoringConditions = () => {
+  cy.task('stubCemoSubmitOrder', {
+    httpStatus: 200,
+    id: mockOrderId,
+    subPath: apiPath,
+    response: {
+      orderType: 'POST_RELEASE',
+      orderTypeDescription: null,
+      conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+      curfew: null,
+      exclusionZone: null,
+      trail: null,
+      mandatoryAttendance: null,
+      alcohol: null,
+      startDate: '2024-10-10T11:00:00.000Z',
+      endDate: '2024-10-11T11:00:00.000Z',
+      sentenceType: 'EPP',
+      issp: 'YES',
+      hdc: 'NO',
+      prarr: 'UNKNOWN',
+      pilot: '',
+      offenceType: '',
+    },
+  })
+}
+
 context('Order type descriptions', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -41,7 +68,7 @@ context('Order type descriptions', () => {
     cy.signIn()
 
     const testFlags = { DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES' }
-
+    stubPutMonitoringConditions()
     cy.task('setFeatureFlags', testFlags)
   })
 
@@ -54,8 +81,6 @@ context('Order type descriptions', () => {
       typeOfAcquistiveCrime: 'Aggravated Burglary',
       policeForceArea: 'Kent',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
     Page.visit(OrderTypePage, { orderId: mockOrderId })
@@ -71,8 +96,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
         hdc: 'YES',
         pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         offenceType: 'Aggravated Burglary in a Dwelling',
@@ -87,8 +112,6 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       sentenceType: 'Extended Determinate Sentence',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -105,8 +128,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
         prarr: 'YES',
       },
     }).should('be.true')
@@ -117,8 +140,6 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       sentenceType: 'Section 250 / Section 91',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -135,8 +156,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
         hdc: 'YES',
         prarr: 'YES',
       },
@@ -149,8 +170,6 @@ context('Order type descriptions', () => {
       sentenceType: 'Detention and Training Order',
       issp: 'Yes',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -167,8 +186,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
         prarr: 'YES',
         issp: 'YES',
       },
@@ -183,8 +202,6 @@ context('Order type descriptions', () => {
       hdc: 'No',
       prarr: 'Yes',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -201,8 +218,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
         prarr: 'YES',
         hdc: 'NO',
         pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
@@ -216,8 +233,6 @@ context('Order type descriptions', () => {
       orderType: 'Community',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
       issp: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -234,8 +249,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
         issp: 'YES',
       },
     }).should('be.true')
@@ -246,8 +261,6 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Suspended Sentence',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -264,8 +277,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
       },
     }).should('be.true')
   })
@@ -273,8 +286,6 @@ context('Order type descriptions', () => {
   it('Notification org is home office', () => {
     stubGetOrder('HOME_OFFICE')
     const monitoringOrderTypeDescription = {
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -290,8 +301,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
       },
     }).should('be.true')
   })
@@ -300,8 +311,6 @@ context('Order type descriptions', () => {
     stubGetOrder('CIVIL_COUNTY_COURT')
     const monitoringOrderTypeDescription = {
       orderType: 'Civil',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -317,8 +326,8 @@ context('Order type descriptions', () => {
         trail: true,
         mandatoryAttendance: false,
         alcohol: false,
-        startDate: monitoringOrderTypeDescription.monitoringStartDate,
-        endDate: monitoringOrderTypeDescription.monitoringEndDate,
+        startDate: null,
+        endDate: null,
       },
     }).should('be.true')
   })
