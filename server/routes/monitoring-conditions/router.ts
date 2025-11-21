@@ -85,7 +85,6 @@ const createOrderTypeDescriptionRouter = (
   router.post('/police-area', asyncMiddleware(policeAreaController.update))
 
   router.get('/hard-stop', asyncMiddleware(hardStopController.view))
-  router.post('/hard-stop', asyncMiddleware(hardStopController.update))
 
   router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
   router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
