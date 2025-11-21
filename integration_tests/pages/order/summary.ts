@@ -156,8 +156,8 @@ export default class OrderTasksPage extends AppPage {
     if (curfewReleaseDetails) {
       this.fillInCurfewOrderDetailsWith(
         {
-          curfewReleaseDetails,
           curfewConditionDetails,
+          curfewReleaseDetails,
           curfewTimetable,
         },
         false,
@@ -249,8 +249,8 @@ export default class OrderTasksPage extends AppPage {
     })
 
     this.fillInCurfewOrderDetailsWith({
-      curfewReleaseDetails,
       curfewConditionDetails,
+      curfewReleaseDetails,
       curfewTimetable,
     })
 
