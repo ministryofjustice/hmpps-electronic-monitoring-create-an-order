@@ -58,6 +58,11 @@ describe('offence type view model', () => {
           value: 'Robbery',
           text: 'Robbery',
         },
+        { divider: 'or' },
+        {
+          value: 'They did not commit one of these offences',
+          text: 'They did not commit one of these offences',
+        },
       ],
       errorSummary: null,
     }
