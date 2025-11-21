@@ -35,20 +35,23 @@
   }) }}
 
   {% if ddVersion5 %}
-      {{ govukTextarea({
-	name: "offenceAdditionalDetails",
-	id: "offenceAdditionalDetails",
-	value: offenceAdditionalDetails.value,
-	errorMessage: offenceAdditionalDetails.error,
-	disabled: not isOrderEditable,
-	label: {
-	  text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.text,
-	  classes: "govuk-label--s"
-	},
-	hint: {
-	  text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.hint
-	}
-      }) }}
+
+   {{ govukCharacterCount({
+    name: "offenceAdditionalDetails",
+    id: "offenceAdditionalDetails",
+    maxlength: 100,
+    label: {
+      text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.text,
+      classes: "govuk-label--s",
+      isPageHeading: false
+    },
+    hint: {
+      text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.hint
+    },
+    value: offenceAdditionalDetails.value,
+    errorMessage: offenceAdditionalDetails.error,
+    attributes: isDisabled
+  }) }}     
   {% endif %}
 
     {{ govukCheckboxes({

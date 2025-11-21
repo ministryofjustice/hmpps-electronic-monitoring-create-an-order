@@ -3,7 +3,6 @@ import MonitoringTypesPage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
-import MonitoringDatesPage from '../monitoring-dates/MonitoringDatesPage'
 import InstallationLocationPage from '../../../../../pages/order/monitoring-conditions/installation-location'
 
 const currentDate = new Date()
@@ -66,13 +65,6 @@ context('pilot', () => {
     sentenceTypePage.form.fillInWith('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
-    const monitoringDatesPage = Page.verifyOnPage(MonitoringDatesPage, { orderId: mockOrderId })
-    monitoringDatesPage.form.fillInWithInput({
-      startDate: new Date('2024-02-27T00:00:00Z'),
-      endDate: new Date(`${currentDate.getFullYear() + 1}-03-08T23:59:00Z`),
-    })
-    monitoringDatesPage.form.continueButton.click()
-
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringTypesPage.form.fillInWith('Alcohol')
     monitoringTypesPage.form.continueButton.click()
@@ -88,8 +80,8 @@ context('pilot', () => {
         trail: false,
         mandatoryAttendance: false,
         alcohol: true,
-        startDate: '2024-02-27T00:00:00.000Z',
-        endDate: `${currentDate.getFullYear() + 1}-03-08T23:59:00.000Z`,
+        startDate: null,
+        endDate: null,
       },
     }).should('be.true')
 

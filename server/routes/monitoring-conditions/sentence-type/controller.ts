@@ -5,9 +5,16 @@ import { ValidationResult } from '../../../models/Validation'
 import { SentenceTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
+import MonitoringConditionsBaseController from '../base/monitoringConditionBaseController'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 
-export default class SentenceTypeController {
-  constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
+export default class SentenceTypeController extends MonitoringConditionsBaseController {
+  constructor(
+    readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
+    readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+  ) {
+    super(montoringConditionsStoreService, monitoringConditionsService)
+  }
 
   view: RequestHandler = async (req: Request, res: Response): Promise<void> => {
     const order = req.order!
@@ -70,10 +77,7 @@ export default class SentenceTypeController {
             res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
             return
           default:
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id),
-            )
-
+            await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
             return
         }
       }
@@ -83,7 +87,7 @@ export default class SentenceTypeController {
         return
       }
 
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
     }
   }
 }

@@ -10,7 +10,6 @@ import PrarrController from './prarr/controller'
 import MonitoringTypesController from './monitoring-types/controller'
 import MonitoringTypeController from './monitoring-type/controller'
 import OffenceTypeController from './offence-type/controller'
-import MonitoringDatesController from './monitoring-dates/controller'
 import PoliceAreaController from './police-area/controller'
 import TypesOfMonitoringNeededController from './types-of-monitoring-needed/controller'
 import HardStopController from './hard-stop/controller'
@@ -25,9 +24,15 @@ const createOrderTypeDescriptionRouter = (
 
   const { monitoringConditionsStoreService, monitoringConditionsUpdateService, taskListService } = services
 
-  const orderTypeController = new OrderTypeController(monitoringConditionsStoreService)
+  const orderTypeController = new OrderTypeController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+  )
 
-  const sentenceTypeController = new SentenceTypeController(monitoringConditionsStoreService)
+  const sentenceTypeController = new SentenceTypeController(
+    monitoringConditionsStoreService,
+    monitoringConditionsUpdateService,
+  )
 
   const hdcController = new HdcController(monitoringConditionsStoreService)
 
@@ -35,11 +40,11 @@ const createOrderTypeDescriptionRouter = (
 
   const offenceTypeController = new OffenceTypeController(monitoringConditionsStoreService)
 
+  const isspController = new IsspController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
+
   const hardStopController = new HardStopController(monitoringConditionsStoreService)
 
-  const isspController = new IsspController(monitoringConditionsStoreService)
-
-  const prarrController = new PrarrController(monitoringConditionsStoreService)
+  const prarrController = new PrarrController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
 
   const monitoringTypesController = new MonitoringTypesController(
     monitoringConditionsStoreService,
@@ -47,11 +52,6 @@ const createOrderTypeDescriptionRouter = (
     taskListService,
   )
   const monitoringTypeController = new MonitoringTypeController(taskListService)
-
-  const monitoringDatesController = new MonitoringDatesController(
-    monitoringConditionsStoreService,
-    monitoringConditionsUpdateService,
-  )
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
 
@@ -86,9 +86,6 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/hard-stop', asyncMiddleware(hardStopController.view))
   router.post('/hard-stop', asyncMiddleware(hardStopController.update))
-
-  router.get('/monitoring-dates', asyncMiddleware(monitoringDatesController.view))
-  router.post('/monitoring-dates', asyncMiddleware(monitoringDatesController.update))
 
   router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
   router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
