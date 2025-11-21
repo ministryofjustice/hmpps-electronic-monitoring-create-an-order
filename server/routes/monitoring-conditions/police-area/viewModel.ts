@@ -33,8 +33,8 @@ const getItems = (content: I18n) => {
     value: "The device wearer's release address is in a different police force area",
     text: "The device wearer's release address is in a different police force area",
   }
-  const mappedPoliceAreas = entries.map(it => {
-    return { text: it[1].toString(), value: it[1].toString() }
+  const mappedPoliceAreas = entries.map(policeArea => {
+    return { text: policeArea[1].toString(), value: policeArea[1].toString() }
   })
 
   return [...mappedPoliceAreas, divider, differentPoliceArea]
