@@ -104,8 +104,8 @@ export default class OrderTasksPage extends AppPage {
     })
 
     this.fillInCurfewOrderDetailsWith({
-      curfewReleaseDetails,
       curfewConditionDetails,
+      curfewReleaseDetails,
       curfewTimetable,
     })
 
@@ -561,10 +561,10 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInCurfewOrderDetailsWith(
-    { curfewReleaseDetails, curfewConditionDetails, curfewTimetable },
+    { curfewConditionDetails, curfewReleaseDetails, curfewTimetable },
     checkYourAnswerPage = true,
   ): void {
-    fillInCurfewOrderDetailsWith({ curfewReleaseDetails, curfewConditionDetails, curfewTimetable })
+    fillInCurfewOrderDetailsWith({ curfewConditionDetails, curfewReleaseDetails, curfewTimetable })
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,

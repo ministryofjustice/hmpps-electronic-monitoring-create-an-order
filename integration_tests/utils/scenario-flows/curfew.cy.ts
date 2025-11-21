@@ -7,17 +7,17 @@ import CurfewTimetablePage from '../../pages/order/monitoring-conditions/curfew-
 import Page from '../../pages/page'
 
 export default function fillInCurfewOrderDetailsWith({
-  curfewReleaseDetails,
   curfewConditionDetails,
+  curfewReleaseDetails,
   curfewTimetable,
 }): void {
-  const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-  curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-  curfewReleaseDatePage.form.saveAndContinueButton.click()
-
   const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
   curfewConditionsPage.form.fillInWith(curfewConditionDetails)
   curfewConditionsPage.form.saveAndContinueButton.click()
+
+  const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+  curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+  curfewReleaseDatePage.form.saveAndContinueButton.click()
 
   const curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
   curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
