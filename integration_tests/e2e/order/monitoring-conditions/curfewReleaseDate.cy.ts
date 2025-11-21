@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import { NotFoundErrorPage } from '../../../pages/error'
-import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import Page from '../../../pages/page'
+import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
 
 const mockOrderId = uuidv4()
 
@@ -76,6 +76,12 @@ const mockEmptyCurfewReleaseDate = {
     orderId: mockOrderId,
     startTime: null,
     endTime: null,
+  },
+  curfewConditions: {
+    startDate: '2025-03-27T00:00:00.000Z',
+    orderId: mockOrderId,
+    endDate: '2026-04-28T00:00:00.000Z',
+    curfewAdditionalDetails: '',
   },
   status: 'IN_PROGRESS',
   id: mockOrderId,
@@ -242,10 +248,11 @@ context('Curfew monitoring - release date', () => {
             startTime: '18:15:00',
             endTime: '19:30:00',
             curfewAddress: 'SECONDARY',
+            releaseDate: '2025-03-27T00:00:00.000Z',
           })
         },
       )
-      Page.verifyOnPage(CurfewConditionsPage)
+      Page.verifyOnPage(CurfewTimetablePage)
     })
   })
 

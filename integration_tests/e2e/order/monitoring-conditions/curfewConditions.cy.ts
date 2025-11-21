@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
-import CurfewTimetablePage from '../../../pages/order/monitoring-conditions/curfew-timetable'
 import Page from '../../../pages/page'
+import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 
 const mockOrderId = uuidv4()
 
@@ -177,7 +177,7 @@ context('Curfew conditions', () => {
           endDate: '2026-04-28T22:59:00.000Z',
         })
       })
-      Page.verifyOnPage(CurfewTimetablePage)
+      Page.verifyOnPage(CurfewReleaseDatePage)
     })
   })
 
