@@ -11,6 +11,7 @@ export type InstallationAndRiskFormData = {
   riskDetails?: string
   mappaLevel?: string
   mappaCaseType?: string
+  offenceAdditionalDetails?: string
 }
 
 export default class InstallationAndRiskFormComponent extends FormComponent {
@@ -112,6 +113,10 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
 
     if (profile.mappaCaseType) {
       this.mappaCaseTypeField.set(profile.mappaCaseType)
+    }
+
+    if (profile.offenceAdditionalDetails) {
+      this.offenceAdditionalDetailsField.set(profile.offenceAdditionalDetails)
     }
   }
 
