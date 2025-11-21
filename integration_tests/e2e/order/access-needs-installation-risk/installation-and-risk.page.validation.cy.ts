@@ -13,7 +13,12 @@ context('Access needs and installation risk information', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
           id: mockOrderId,
@@ -106,6 +111,38 @@ context('Access needs and installation risk information', () => {
           'Any other risks to be aware of must be 200 characters or less',
         )
         page.errorSummary.shouldHaveError('Any other risks to be aware of must be 200 characters or less')
+      })
+
+      it('should display error message when offence additional details is longer than 100 characters', () => {
+        const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
+
+        const validFormData = {
+          offence: 'Robbery',
+          riskCategory: 'History of substance abuse',
+          riskDetails: faker.string.fromCharacters(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            101,
+          ),
+          offenceAdditionalDetails: faker.string.fromCharacters(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            101,
+          ),
+          mappaLevel: 'MAPPA 1',
+          mappaCaseType: 'Serious Organised Crime',
+          possibleRisk: 'Sex offender',
+        }
+
+        page.form.fillInWith(validFormData)
+        page.form.offenceAdditionalDetailsField.shouldHaveValidationMessage('You have 1 character too many')
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(InstallationAndRiskPage)
+        page.form.offenceAdditionalDetailsField.shouldHaveValidationMessage(
+          'Any other information to be aware of about the offence committed must be 100 characters or less',
+        )
+        page.errorSummary.shouldHaveError(
+          'Any other information to be aware of about the offence committed must be 100 characters or less',
+        )
       })
     })
   })
