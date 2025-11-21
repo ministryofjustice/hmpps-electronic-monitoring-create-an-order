@@ -37,7 +37,6 @@ context('Monitoring type list flow', () => {
     riskDetails: 'No risk',
   }
   const testFlags = {
-    ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: true,
     LIST_MONITORING_CONDITION_FLOW_ENABLED: true,
   }
 

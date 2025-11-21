@@ -35,7 +35,7 @@ export default class MonitoringConditionsController {
     if (isValidationResult(updateMonitoringConditionsResult)) {
       req.flash('formData', formData)
       req.flash('validationErrors', updateMonitoringConditionsResult)
-      res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
       res.redirect(
         this.taskListService.getNextPage('MONITORING_CONDITIONS', {

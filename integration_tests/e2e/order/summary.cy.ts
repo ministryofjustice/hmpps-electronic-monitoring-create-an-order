@@ -461,8 +461,11 @@ context('Order Summary', () => {
   })
 
   context('Complete order, submitted', () => {
+    const testFlags = { CREATE_NEW_ORDER_VERSION_ENABLED: true }
+
     beforeEach(() => {
       cy.task('reset')
+      cy.task('setFeatureFlags', testFlags)
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       // Create an order with all fields present (even though they're not valid)
@@ -642,6 +645,10 @@ context('Order Summary', () => {
       })
 
       cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
     it('Submit order form should exist', () => {
@@ -831,8 +838,6 @@ context('Order Summary', () => {
     })
 
     it('should display monitoring condition task as Incomplete, link to order type description flow', () => {
-      const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -909,8 +914,6 @@ context('Order Summary', () => {
     })
 
     it('should display monitoring condition task as Incomplete when no monitoring condition chosen', () => {
-      const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: false }
-      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -996,7 +999,11 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
-      page.electronicMonitoringTask.link.should('have.attr', 'href', `/order/${mockOrderId}/monitoring-conditions`)
+      page.electronicMonitoringTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/monitoring-conditions/order-type-description/order-type`,
+      )
       page.submitOrderButton.should('be.disabled')
       cy.task('resetFeatureFlags')
     })
