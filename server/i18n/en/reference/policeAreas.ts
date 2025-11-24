@@ -20,6 +20,7 @@ const policeAreas: PoliceAreas = {
   NOTTINGHAMSHIRE: 'Nottinghamshire',
   SUSSEX: 'Sussex',
   WEST_MIDLANDS: 'West Midlands',
+  DIFFERENT_POLICE_AREA: "The device wearer's release address is in a different police force area",
 }
 
 export default policeAreas

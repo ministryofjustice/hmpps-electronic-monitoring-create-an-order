@@ -20,6 +20,7 @@ type PoliceAreas = ReferenceData<
   | 'NOTTINGHAMSHIRE'
   | 'SUSSEX'
   | 'WEST_MIDLANDS'
+  | 'DIFFERENT_POLICE_AREA'
 >
 
 export default PoliceAreas

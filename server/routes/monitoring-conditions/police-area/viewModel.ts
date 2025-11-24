@@ -29,15 +29,12 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult, co
 const getItems = (content: I18n) => {
   const entries = Object.entries(content.reference.policeAreas)
   const divider = { divider: 'or' }
-  const differentPoliceArea = {
-    value: "The device wearer's release address is in a different police force area",
-    text: "The device wearer's release address is in a different police force area",
-  }
+
   const mappedPoliceAreas = entries.map(policeArea => {
     return { text: policeArea[1].toString(), value: policeArea[1].toString() }
   })
 
-  return [...mappedPoliceAreas, divider, differentPoliceArea]
+  return [...mappedPoliceAreas.slice(0, -1), divider, ...mappedPoliceAreas.slice(-1)]
 }
 
 export default constructModel
