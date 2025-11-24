@@ -1,11 +1,20 @@
 {% extends "../../../../partials/form-layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% set section = "Electronic monitoring required" %}
 {% set singleQuestionPage = true %}
 {% set questions = content.pages.monitoringConditions.questions %}
 {% set questionName = "Monitoring Type"%}
+{% if allconditionsDisabled == true %}
+  {% set additionalButton = {
+                text: "Return to monitoring your have added",
+                classes: "govuk-button--secondary",
+                name: "action",
+                value: "back"
+            }%}
+  {% set continueDisabled =true%}
+{% endif %}
 {% block formInputs %}
 
 {% if message %}
@@ -26,6 +35,8 @@
     </h1>   
   {% endset %}
 {% endif %}
+
+
 
 {{ govukRadios({
   name: "monitoringType",
@@ -83,5 +94,5 @@
   errorMessage: error,
   disabled: not isOrderEditable
 }) }}
-
+ 
 {% endblock %}

@@ -90,11 +90,12 @@
                 name: "action",
                 value: "returnToSummary"
               }) }}
-	  {% elseif singleQuestionPage %}
+	        {% elseif singleQuestionPage %}
             {{ govukButton({
                 text: "Continue",
                 name: "action",
-                value: "continue"
+                value: "continue",
+                disabled: continueDisabled
               }) }}
           {% elseif isOrderEditable %}
             {{ govukButton({
@@ -114,6 +115,11 @@
                 Return back to form section menu
             </a>
           {% endif %}
+
+          {% if additionalButton %} 
+              {{  govukButton(additionalButton)}} 
+          {% endif %}
+        
         </div>
       </form>
     </div>

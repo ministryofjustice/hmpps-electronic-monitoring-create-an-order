@@ -41,7 +41,7 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
     model[it] = { disabled: isConditionDisabled(order, it) || !enabled.options.includes(it) }
   })
 
-  model.allconditionsDisabled = MonitoringTypesKeys.some(it => model[it]?.disabled)
+  model.allconditionsDisabled = MonitoringTypesKeys.every(it => model[it]?.disabled)
   return model
 }
 

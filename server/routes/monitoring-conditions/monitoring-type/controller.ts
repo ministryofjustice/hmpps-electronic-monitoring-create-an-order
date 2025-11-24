@@ -23,6 +23,12 @@ export default class MonitoringTypeController {
 
     const formData = MonitoringTypesFormDataModel.parse(req.body)
 
+    if (formData.action === 'back') {
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
+      )
+    }
+
     if (formData.monitoringType === undefined || formData.monitoringType === null) {
       req.flash('validationErrors', [
         { error: validationErrors.monitoringConditions.monitoringTypeRequired, field: 'monitoringType' },
