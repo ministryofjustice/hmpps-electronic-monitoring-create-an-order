@@ -349,14 +349,17 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
   ]
 
   if (order.dataDictionaryVersion === 'DDV5') {
-    answers.push(
-      createAnswer(
-        curfewAdditionalDetailsQuestions.provideDetails.text,
-        order.curfewConditions?.curfewAdditionalDetails,
-        curfewAdditionalDetailsUri,
-        answerOpts,
-      ),
-    )
+    const curfewAdditionalDetails = order.curfewConditions?.curfewAdditionalDetails
+    if (curfewAdditionalDetails !== null && curfewAdditionalDetails.length > 0) {
+      answers.push(
+        createAnswer(
+          curfewAdditionalDetailsQuestions.provideDetails.text,
+          order.curfewConditions?.curfewAdditionalDetails,
+          curfewAdditionalDetailsUri,
+          answerOpts,
+        ),
+      )
+    }
   }
 
   return answers
