@@ -9,7 +9,7 @@ export default class OrderTypeComponent extends SingleQuestionFormComponent {
   }
 
   get ReturnToMonitoringListPageButton(): PageElement {
-    return this.form.contains('Return to monitoring your have added')
+    return this.form.contains('Return to monitoring you have added')
   }
 
   get message(): PageElement {

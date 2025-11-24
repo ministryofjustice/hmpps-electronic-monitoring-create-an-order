@@ -37,11 +37,11 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
     errorSummary: createGovukErrorSummary(errors),
   }
 
-  MonitoringTypesKeys.forEach(it => {
-    model[it] = { disabled: isConditionDisabled(order, it) || !enabled.options.includes(it) }
+  MonitoringTypesKeys.forEach(condition => {
+    model[condition] = { disabled: isConditionDisabled(order, condition) || !enabled.options.includes(condition) }
   })
 
-  if (MonitoringTypesKeys.every(it => model[it]?.disabled)) {
+  if (MonitoringTypesKeys.every(condition => model[condition]?.disabled)) {
     model.allconditionsDisabled = true
     model.message = 'There are no additional eligible monitoring types available to add'
   }
