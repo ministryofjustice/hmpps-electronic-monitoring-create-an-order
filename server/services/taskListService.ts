@@ -1,7 +1,7 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
@@ -36,8 +36,8 @@ const PAGES = {
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
-  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewConditions: 'CURFEW_CONDITIONS',
+  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewAdditionalDetails: 'CURFEW_ADDITIONAL_DETAILS',
   curfewTimetable: 'CURFEW_TIMETABLE',
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
@@ -295,19 +295,6 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewReleaseDate,
-      path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.curfewConditions,
       path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
       state: convertBooleanToEnum<State>(
@@ -319,20 +306,33 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.curfewConditions),
     })
 
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.curfewReleaseDate,
+      path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
+    })
+
     if (order.dataDictionaryVersion === 'DDV5') {
       tasks.push({
         section: SECTIONS.electronicMonitoringCondition,
         name: PAGES.curfewAdditionalDetails,
         path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
         state: convertBooleanToEnum<State>(
-          order.monitoringConditions.curfew && order.curfewConditions?.startDate === undefined,
+          order.monitoringConditions.curfew && isNullOrUndefined(order.curfewConditions?.curfewAdditionalDetails),
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(
-          order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null,
-        ),
+        completed:
+          isNotNullOrUndefined(order.curfewConditions) &&
+          isNotNullOrUndefined(order.curfewConditions.curfewAdditionalDetails),
       })
     }
 

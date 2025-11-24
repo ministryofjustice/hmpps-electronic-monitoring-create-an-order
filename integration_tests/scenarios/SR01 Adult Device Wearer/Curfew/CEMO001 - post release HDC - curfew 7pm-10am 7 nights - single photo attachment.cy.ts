@@ -173,7 +173,6 @@ context('Scenarios', () => {
       pilot: 'They are not part of any of these pilots',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
@@ -181,7 +180,6 @@ context('Scenarios', () => {
     const curfewConditionDetails = {
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
       endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
-      addresses: [/Main address/],
     }
     const curfewNights = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
     const curfewTimetable = curfewNights.flatMap((day: string) => [
@@ -189,7 +187,7 @@ context('Scenarios', () => {
         day,
         startTime: '19:00:00',
         endTime: '07:00:00',
-        addresses: curfewConditionDetails.addresses,
+        addresses: [curfewReleaseDetails.address],
       },
     ])
 
@@ -358,7 +356,7 @@ context('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+              conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
               conditional_release_start_time: '19:00:00',
               conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',

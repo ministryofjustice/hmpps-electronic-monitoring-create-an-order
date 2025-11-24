@@ -7,17 +7,17 @@ import CurfewTimetablePage from '../../pages/order/monitoring-conditions/curfew-
 import Page from '../../pages/page'
 
 export default function fillInCurfewOrderDetailsWith({
-  curfewReleaseDetails,
   curfewConditionDetails,
+  curfewReleaseDetails,
   curfewTimetable,
 }): void {
-  const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-  curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-  curfewReleaseDatePage.form.saveAndContinueButton.click()
-
   const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
   curfewConditionsPage.form.fillInWith(curfewConditionDetails)
   curfewConditionsPage.form.saveAndContinueButton.click()
+
+  const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+  curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+  curfewReleaseDatePage.form.saveAndContinueButton.click()
 
   const curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
   curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
@@ -39,10 +39,6 @@ export function verifyCurfewInCheckYourAnswersPage({
   if (curfewReleaseDetails) {
     page.curfewOnDayOfReleaseSection.shouldExist()
     page.curfewOnDayOfReleaseSection.shouldHaveItems([
-      {
-        key: 'What date is the device wearer released from custody?',
-        value: curfewReleaseDetails.releaseDate.toLocaleDateString('en-GB'),
-      },
       {
         key: 'On the day of release, what time does the curfew start?',
         value: `${curfewReleaseDetails.startTime.hours}:${curfewReleaseDetails.startTime.minutes}`,
@@ -70,10 +66,6 @@ export function verifyCurfewInCheckYourAnswersPage({
       {
         key: 'What date does the curfew end?',
         value: curfewConditionDetails.endDate.toLocaleDateString('en-GB'),
-      },
-      {
-        key: 'Where will the device wearer be during curfew hours?',
-        value: createAddressPreview(mainAddress),
       },
     ])
     if (curfewConditionDetails.curfewAdditionalDetails) {

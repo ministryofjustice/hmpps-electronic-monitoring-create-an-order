@@ -14,8 +14,8 @@ export default function fillInMonitoringTypeWith({
   installationAddressDetails = undefined,
   installationLocation = undefined,
   installationAppointment = undefined,
-  curfewReleaseDetails = undefined,
   curfewConditionDetails = undefined,
+  curfewReleaseDetails = undefined,
   curfewTimetable = undefined,
   enforcementZoneDetails = undefined,
   enforcementZoneListItemDetails = undefined,
@@ -35,8 +35,8 @@ export default function fillInMonitoringTypeWith({
     monitoringTypePage.form.continueButton.click()
   }
 
-  if (curfewReleaseDetails) {
-    fillInCurfewOrderDetailsWith({ curfewReleaseDetails, curfewConditionDetails, curfewTimetable })
+  if (curfewConditionDetails) {
+    fillInCurfewOrderDetailsWith({ curfewConditionDetails, curfewReleaseDetails, curfewTimetable })
   }
 
   if (enforcementZoneDetails) {

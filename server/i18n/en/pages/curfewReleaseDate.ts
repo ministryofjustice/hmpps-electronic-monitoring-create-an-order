@@ -12,10 +12,6 @@ const curfewReleaseDatePageContent: CurfewReleaseDatePageContent = {
       text: 'On the day after release, what time does the curfew end?',
       hint: 'Enter time using a 24 hour clock. For example 19:00 instead of 7:00pm.',
     },
-    releaseDate: {
-      text: 'What date is the device wearer released from custody?',
-      hint: 'For example, 21 05 2025',
-    },
     startTime: {
       text: 'On the day of release, what time does the curfew start?',
       hint: 'Enter time using a 24 hour clock. For example 19:00 instead of 7:00pm.',
