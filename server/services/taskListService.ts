@@ -1,7 +1,7 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
@@ -325,7 +325,7 @@ export default class TaskListService {
         name: PAGES.curfewAdditionalDetails,
         path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
         state: convertBooleanToEnum<State>(
-          order.monitoringConditions.curfew && order.curfewConditions?.curfewAdditionalDetails === null,
+          order.monitoringConditions.curfew && isNullOrUndefined(order.curfewConditions?.curfewAdditionalDetails),
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,

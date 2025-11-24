@@ -44,7 +44,7 @@ export default class CurfewConditionsController {
 
     if (formData.action === 'continue') {
       if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', orderId))
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
         return
       }
       res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
