@@ -17,7 +17,7 @@ describe('model', () => {
       mandatoryAttendance: { disabled: false },
       alcohol: { disabled: false },
       errorSummary: null,
-      allconditionsDisabled:false
+      allconditionsDisabled: false,
     }
 
     expect(model).toEqual(expected)
@@ -35,7 +35,7 @@ describe('model', () => {
       alcohol: { disabled: false },
       error: { text: 'some error' },
       errorSummary: { errorList: [{ href: '#monitoringType', text: 'some error' }], titleText: 'There is a problem' },
-      allconditionsDisabled: false
+      allconditionsDisabled: false,
     }
 
     expect(model).toEqual(expected)
