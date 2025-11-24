@@ -35,6 +35,7 @@ describe('monitoring type controller', () => {
 
   describe('view', () => {
     it('renders the correct view', async () => {
+      req.flash= jest.fn().mockResolvedValue([])
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
