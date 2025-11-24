@@ -8,7 +8,6 @@ import ContactDetailsPage from './contact-information/contact-details'
 import NoFixedAbodePage from './contact-information/no-fixed-abode'
 import PrimaryAddressPage from './contact-information/primary-address'
 import InterestedPartiesPage from './contact-information/interested-parties'
-import MonitoringConditionsPage from './monitoring-conditions'
 import InstallationAndRiskPage from './installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from './installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from './attachments/summary'
@@ -83,7 +82,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     curfewReleaseDetails,
     curfewConditionDetails,
     curfewTimetable,
@@ -99,7 +98,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -123,7 +122,6 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
     installationAddressDetails,
     curfewReleaseDetails,
     curfewConditionDetails,
@@ -148,7 +146,6 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
       probationDeliveryUnit,
       tertiaryAddressDetails,
       monitoringOrderTypeDescription,
@@ -226,7 +223,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     curfewReleaseDetails,
     curfewConditionDetails,
     curfewTimetable,
@@ -244,7 +241,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -268,7 +265,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     enforcementZoneDetails,
     files,
     probationDeliveryUnit,
@@ -282,7 +279,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -305,7 +302,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     enforcementZoneDetails,
     files,
     probationDeliveryUnit,
@@ -321,7 +318,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -343,7 +340,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     installationAddressDetails,
     alcoholMonitoringDetails,
     files,
@@ -358,7 +355,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -382,7 +379,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     installationAddressDetails,
     alcoholMonitoringDetails,
     files,
@@ -399,7 +396,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -422,7 +419,7 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails,
     interestedParties,
     installationAndRisk,
-    monitoringConditions,
+    monitoringOrderTypeDescription,
     trailMonitoringDetails,
     files,
     probationDeliveryUnit,
@@ -436,7 +433,7 @@ export default class OrderTasksPage extends AppPage {
       secondaryAddressDetails,
       interestedParties,
       installationAndRisk,
-      monitoringConditions,
+      monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
 
@@ -470,7 +467,6 @@ export default class OrderTasksPage extends AppPage {
     secondaryAddressDetails = undefined,
     interestedParties = undefined,
     installationAndRisk = undefined,
-    monitoringConditions = undefined,
     probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
     monitoringOrderTypeDescription = undefined,
@@ -550,11 +546,6 @@ export default class OrderTasksPage extends AppPage {
       installationAndRiskCheckYourAnswersPage.continueButton().click()
     }
 
-    if (monitoringConditions) {
-      const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-    }
     if (monitoringOrderTypeDescription) {
       fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
     }
