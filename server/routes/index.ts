@@ -19,7 +19,6 @@ import CurfewReleaseDateController from '../controllers/monitoringConditions/cur
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
 import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
-import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
 import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
@@ -54,7 +53,6 @@ export default function routes({
   deviceWearerResponsibleAdultService,
   deviceWearerService,
   installationAndRiskService,
-  monitoringConditionsService,
   interestedPartiesService,
   orderService,
   orderSearchService,
@@ -133,10 +131,6 @@ export default function routes({
     auditService,
     taskListService,
     orderChecklistService,
-  )
-  const monitoringConditionsController = new MonitoringConditionsController(
-    monitoringConditionsService,
-    taskListService,
   )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
@@ -275,8 +269,8 @@ export default function routes({
    */
 
   // Main monitoring conditions page
-  get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
-  post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
+  // get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
+  // post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
 
   get(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.view)
   post(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.update)
