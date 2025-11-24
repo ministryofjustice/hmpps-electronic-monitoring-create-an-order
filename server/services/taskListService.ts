@@ -325,14 +325,14 @@ export default class TaskListService {
         name: PAGES.curfewAdditionalDetails,
         path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
         state: convertBooleanToEnum<State>(
-          order.monitoringConditions.curfew && order.curfewConditions?.startDate === undefined,
+          order.monitoringConditions.curfew && order.curfewConditions?.curfewAdditionalDetails === null,
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(
-          order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null,
-        ),
+        completed:
+          isNotNullOrUndefined(order.curfewConditions) &&
+          isNotNullOrUndefined(order.curfewConditions.curfewAdditionalDetails),
       })
     }
 
