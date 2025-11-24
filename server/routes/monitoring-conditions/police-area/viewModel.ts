@@ -31,7 +31,7 @@ const getItems = (content: I18n) => {
   const divider = { divider: 'or' }
 
   const mappedPoliceAreas = entries.map(policeArea => {
-    return { text: policeArea[1].toString(), value: policeArea[1].toString() }
+    return { text: policeArea[1].toString(), value: policeArea[0].toString() }
   })
 
   return [...mappedPoliceAreas.slice(0, -1), divider, ...mappedPoliceAreas.slice(-1)]

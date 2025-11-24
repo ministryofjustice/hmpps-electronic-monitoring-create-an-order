@@ -36,7 +36,7 @@ export default class PoliceAreaController {
       return
     }
 
-    if (formData.policeArea === "The device wearer's release address is in a different police force area") {
+    if (formData.policeArea === 'DIFFERENT_POLICE_AREA') {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HARD_STOP.replace(':orderId', order.id))
       await this.store.updateField(order, 'policeArea', formData.policeArea)
       return
