@@ -141,15 +141,29 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
-      const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
+      const interestedParties = createFakeInterestedParties(
+        'Prison',
+        'Probation',
+        'Liverpool Prison',
+        'Kent, Surrey & Sussex',
+      )
+
+      const currentDate = new Date()
+
+      const monitoringOrderTypeDescription = {
+        monitoringStartDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 10), // 10 days
+        monitoringEndDate: new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate() + 40,
+          23,
+          59,
+        ), // 40 days
+        // orderType: 'Post Release',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: 'Trail monitoring',
+        monitoringCondition: 'Trail monitoring',
         pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-        issp: 'No',
+        // issp: 'No',
         hdc: 'No',
         prarr: 'No',
       }
@@ -157,7 +171,7 @@ context('Scenarios', () => {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
         endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
       }
-      const probationDeliveryUnit = { unit: 'Blackburn' }
+      const probationDeliveryUnit = { unit: 'East Kent' }
 
       const installationAndRisk = {
         offence: 'Sexual offences',
@@ -179,7 +193,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription,
           trailMonitoringDetails,
           files,
           probationDeliveryUnit,
@@ -287,18 +301,18 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
                 order_variation_details: '',
                 order_variation_req_received_date: '',
                 order_variation_type: '',
-                pdu_responsible: 'Blackburn',
+                pdu_responsible: 'East Kent',
                 pdu_responsible_email: '',
                 planned_order_end_date: '',
                 responsible_officer_details_received: '',
@@ -329,7 +343,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',
