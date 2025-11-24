@@ -4,6 +4,7 @@ const CurfewConditionsModel = z.object({
   id: z.string().optional(),
   startDate: z.string().nullable(),
   endDate: z.string().nullable(),
+  curfewAddress: z.string().nullable().optional(),
   curfewAdditionalDetails: z.string().nullable(),
 })
 
