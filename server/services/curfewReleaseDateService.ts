@@ -35,6 +35,11 @@ export default class CurfewReleaseDateService {
   }
 
   private createApiModelFromFormData(formData: CurfewReleaseDateFormData, order: Order): CurfewReleaseDate {
+    if (order.curfewConditions?.startDate === null || order.curfewConditions?.startDate === undefined) {
+      throw new Error(
+        `Start date is undefined for order: ${order.id}. Order must have a curfew start date before setting release date`,
+      )
+    }
     return {
       startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
       endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
