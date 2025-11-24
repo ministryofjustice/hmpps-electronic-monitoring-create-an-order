@@ -146,6 +146,7 @@ describe('CurfewReleaseDateController', () => {
         orderId: mockId,
         startTime: '19:00:00',
         endTime: '22:00:00',
+        releaseDate: null,
       }
       req.order = getMockOrder({
         id: mockId,
