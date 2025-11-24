@@ -41,7 +41,11 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
     model[it] = { disabled: isConditionDisabled(order, it) || !enabled.options.includes(it) }
   })
 
-  model.allconditionsDisabled = MonitoringTypesKeys.every(it => model[it]?.disabled)
+  if (MonitoringTypesKeys.every(it => model[it]?.disabled)) {
+    model.allconditionsDisabled = true
+    model.message = 'There are no additional eligible monitoring types available to add'
+  }
+
   return model
 }
 

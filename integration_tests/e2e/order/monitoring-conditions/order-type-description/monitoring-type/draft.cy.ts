@@ -276,6 +276,8 @@ context('monitoring types', () => {
       page.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
       page.form.ReturnToMonitoringListPageButton.should('exist')
       page.form.continueButton.should('be.disabled')
+
+      page.form.message.contains('There are no additional eligible monitoring types available to add')
     })
   })
 })
