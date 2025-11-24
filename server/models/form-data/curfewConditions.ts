@@ -18,23 +18,14 @@ const CurfewConditionsFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  addresses: z
-    .union([z.string(), z.array(z.string()).default([])])
-    .transform(val => (Array.isArray(val) ? val : [val])),
 })
 
 export type CurfewConditionsFormData = z.infer<typeof CurfewConditionsFormDataModel>
 
-const CurfewConditionsFormDataValidator = z
-  .object({
-    startDate: DateTimeInputModel(validationErrors.curfewConditions.startDateTime),
-    endDate: DateTimeInputModel(validationErrors.curfewConditions.endDateTime),
-    addresses: z.array(z.string()).min(1, validationErrors.curfewConditions.addressesRequired),
-  })
-  .transform(({ addresses, ...formData }) => ({
-    curfewAddress: addresses.join(',') ?? '',
-    ...formData,
-  }))
+const CurfewConditionsFormDataValidator = z.object({
+  startDate: DateTimeInputModel(validationErrors.curfewConditions.startDateTime),
+  endDate: DateTimeInputModel(validationErrors.curfewConditions.endDateTime),
+})
 
 type CurfewConditionsApiRequestBody = z.infer<typeof CurfewConditionsFormDataValidator>
 
