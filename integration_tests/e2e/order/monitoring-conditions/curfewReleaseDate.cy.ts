@@ -14,6 +14,7 @@ const mockSubmittedCurfewReleaseDate = {
     orderId: mockOrderId,
     startTime: '09:15:00',
     endTime: '17:30:00',
+    releaseDate: null,
   },
   addresses: [
     {
@@ -76,6 +77,7 @@ const mockEmptyCurfewReleaseDate = {
     orderId: mockOrderId,
     startTime: null,
     endTime: null,
+    releaseDate: null,
   },
   curfewConditions: {
     startDate: '2025-03-27T00:00:00.000Z',
