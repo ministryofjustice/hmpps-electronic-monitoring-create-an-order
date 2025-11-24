@@ -42,7 +42,7 @@ export default class MonitoringTypeController {
       case 'alcohol':
         return paths.MONITORING_CONDITIONS.ALCOHOL
       case 'curfew':
-        return paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE
+        return paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS
       case 'exclusionZone':
         return paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM
       case 'trail':
