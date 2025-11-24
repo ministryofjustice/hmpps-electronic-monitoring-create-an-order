@@ -124,7 +124,6 @@ context('Mandatory fields only', () => {
       prarr: 'No',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
@@ -132,7 +131,6 @@ context('Mandatory fields only', () => {
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
-      addresses: [/Main address/],
       curfewAdditionalDetails: '',
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -141,7 +139,7 @@ context('Mandatory fields only', () => {
         day,
         startTime: '19:00:00',
         endTime: '07:00:00',
-        addresses: curfewConditionDetails.addresses,
+        addresses: [curfewReleaseDetails.address],
       },
     ])
     const primaryEnforcementZoneDetails = {
@@ -254,32 +252,32 @@ context('Mandatory fields only', () => {
       if (takeScreenshots)
         cy.screenshot('11. installationAndRiskCheckYourAnswersPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
-      if (takeScreenshots) cy.screenshot('11. installationAndRiskCheckYourAnswersPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('12. installationAndRiskCheckYourAnswersPage - minimum', { overwrite: true })
       installationAndRiskCheckYourAnswersPage.continueButton().click()
 
       let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
       monitoringConditionsPage.form.saveAndContinueButton.click()
       monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('13. monitoringConditionsPage - validation', { overwrite: true })
       monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('13. monitoringConditionsPage - minimum', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
-
-      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage - validation', { overwrite: true })
-      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage - minimum', { overwrite: true })
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
 
       let curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
       curfewConditionsPage.form.saveAndContinueButton.click()
       curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - validation', { overwrite: true })
       curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - minimum', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
+
+      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
+      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - validation', { overwrite: true })
+      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - minimum', { overwrite: true })
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
 
       let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
       curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
@@ -417,7 +415,6 @@ context('Mandatory fields only', () => {
       prarr: 'No',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
@@ -425,7 +422,6 @@ context('Mandatory fields only', () => {
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
-      addresses: [/Main address/],
       curfewAdditionalDetails: '',
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -434,7 +430,7 @@ context('Mandatory fields only', () => {
         day,
         startTime: '19:00:00',
         endTime: '07:00:00',
-        addresses: curfewConditionDetails.addresses,
+        addresses: [curfewReleaseDetails.address],
       },
     ])
     const primaryEnforcementZoneDetails = {
@@ -568,21 +564,21 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - minimum', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
-      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage - validation', { overwrite: true })
-      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage - minimum', { overwrite: true })
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-
       let curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
       curfewConditionsPage.form.saveAndContinueButton.click()
       curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - validation', { overwrite: true })
       curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - minimum', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
+
+      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
+      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - validation', { overwrite: true })
+      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - minimum', { overwrite: true })
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
 
       let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
       curfewAdditionalDetailsPage.form.saveAndContinueButton.click()

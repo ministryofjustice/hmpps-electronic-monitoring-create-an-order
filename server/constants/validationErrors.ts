@@ -58,7 +58,6 @@ interface ValidationErrors {
     pduRequired: string
   }
   curfewConditions: {
-    addressesRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
@@ -246,7 +245,6 @@ const validationErrors: ValidationErrors = {
     pduRequired: "Select the Responsible Organisation's PDU",
   },
   curfewConditions: {
-    addressesRequired: 'Select where the device wearer will be during curfew hours',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
   },

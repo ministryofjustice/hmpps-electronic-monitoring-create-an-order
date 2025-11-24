@@ -109,7 +109,6 @@ context('The kitchen sink', () => {
       offenceType: '',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
@@ -285,21 +284,21 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage', { overwrite: true })
       monitoringConditionsPage.form.saveAndContinueButton.click()
 
-      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage - validation', { overwrite: true })
-      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage', { overwrite: true })
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-
       let curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
       curfewConditionsPage.form.saveAndContinueButton.click()
       curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - validation', { overwrite: true })
       curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
+
+      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
+      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - validation', { overwrite: true })
+      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage', { overwrite: true })
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
 
       let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
       curfewAdditionalDetailsPage.form.saveAndContinueButton.click()

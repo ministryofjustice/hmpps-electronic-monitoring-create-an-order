@@ -13,79 +13,39 @@
 {% block formInputs %}
 
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
-
- {{dateTimeInput({
-      id: "startDate",
-      name: "startDate",
-      date: startDate.value,
-      dateLabel:  questions.startDate.text,
-      dateHint: questions.startDate.hint,
-      errorMessages: {
-        field: startDate.error,
-        date: errors.dateError,
-        time: errors.timeError
-      },
-      disabled: not isOrderEditable,
-      timesEnabled: false,
-      defaultHours: "00",
-      defaultMinutes: "00"
-    })}}
-
+ 
   {{dateTimeInput({
-      id: "endDate",
-      name: "endDate",
-      date: endDate.value,
-      dateLabel:  questions.endDate.text,
-      dateHint: questions.endDate.hint,
-      errorMessages: {
-        field: endDate.error,
-        date: errors.dateError,
-        time: errors.timeError
-      },
-      disabled: not isOrderEditable,
-      timesEnabled: false,
-      defaultHours: 23,
-      defaultMinutes: 59
-    })}}
-
-  {% call govukFieldset({
-    legend: {
-      text: "Curfew addresses",
-      classes: "govuk-fieldset__legend--m",
-      isPageHeading: false
-    }
-  }) %}
-    {{ govukCheckboxes({
-      name: "addresses",
-      fieldset: {
-        legend: {
-          text: questions.addresses.text,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      hint: {
-        text: questions.addresses.hint
-      },
-      items: [
-        {
-          value: "PRIMARY",
-          text: "Main address (not provided)" if not primaryAddressView.value else "Main address - "+primaryAddressView.value,
-          disabled: not isOrderEditable or not primaryAddressView.value
-        },
-        {
-          value: "SECONDARY",
-          text: "Second address (not provided)" if not secondaryAddressView.value else "Second address - "+secondaryAddressView.value,
-          disabled: not isOrderEditable or not secondaryAddressView.value
-        },
-        {
-          value: "TERTIARY",
-          text: "Third address (not provided)" if not tertiaryAddressView.value else "Third address - "+tertiaryAddressView.value,
-          disabled: not isOrderEditable or not tertiaryAddressView.value
-        }
-      ],
-      errorMessage: addresses.error,
-      values: addresses.values
-    }) }}
-  {% endcall %}
+       id: "startDate",
+       name: "startDate",
+       date: startDate.value,
+       dateLabel:  questions.startDate.text,
+       dateHint: questions.startDate.hint,
+       errorMessages: {
+         field: startDate.error,
+         date: errors.dateError,
+         time: errors.timeError
+       },
+       disabled: not isOrderEditable,
+       timesEnabled: false,
+       defaultHours: "00",
+       defaultMinutes: "00"
+     })}}
+ 
+   {{dateTimeInput({
+       id: "endDate",
+       name: "endDate",
+       date: endDate.value,
+       dateLabel:  questions.endDate.text,
+       dateHint: questions.endDate.hint,
+       errorMessages: {
+         field: endDate.error,
+         date: errors.dateError,
+         time: errors.timeError
+       },
+       disabled: not isOrderEditable,
+       timesEnabled: false,
+       defaultHours: 23,
+       defaultMinutes: 59
+     })}}
 
 {% endblock %}
