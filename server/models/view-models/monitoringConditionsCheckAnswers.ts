@@ -185,35 +185,6 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
       )
     }
   }
-  if (data.startDate && data.startDate !== null) {
-    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
-    answers.push(
-      createDateAnswer('What is the date for the first day of all monitoring?', data.startDate, path, answerOpts),
-    )
-    if (config.monitoringConditionTimes.enabled)
-      answers.push(
-        createTimeAnswer(
-          content.pages.monitoringConditions.questions.startTime.text,
-          order.monitoringConditions.startDate,
-          path,
-          answerOpts,
-        ),
-      )
-  }
-
-  if (data.endDate && data.endDate !== null) {
-    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
-    answers.push(createDateAnswer('What is the date when all monitoring ends?', data.endDate, path))
-    if (config.monitoringConditionTimes.enabled)
-      answers.push(
-        createTimeAnswer(
-          content.pages.monitoringConditions.questions.endTime.text,
-          order.monitoringConditions.endDate,
-          path,
-          answerOpts,
-        ),
-      )
-  }
 
   return answers
 }

@@ -101,6 +101,7 @@ interface ValidationErrors {
     possibleRiskRequired: string
     riskDetailsRequired: string
     riskDetailsTooLong: string
+    offenceAdditionalDetailsTooLong: string
   }
   isRejection: {
     isRejectionRequired: string
@@ -309,6 +310,8 @@ const validationErrors: ValidationErrors = {
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
     riskDetailsRequired: 'Enter any other risks to be aware of',
     riskDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
+    offenceAdditionalDetailsTooLong:
+      'Any other information to be aware of about the offence committed must be 100 characters or less',
   },
   isRejection: {
     isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",

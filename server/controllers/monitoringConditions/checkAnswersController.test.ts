@@ -389,86 +389,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the start time on the first day of monitoring?',
-            },
-            value: {
-              text: '01:01',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the end time on the last day of monitoring? (optional)',
-            },
-            value: {
-              text: '01:01',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
-                },
-              ],
-            },
-          },
         ],
         installationAppointment: [],
         installationLocation: [],
@@ -1283,46 +1203,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
                 },
               ],
             },
