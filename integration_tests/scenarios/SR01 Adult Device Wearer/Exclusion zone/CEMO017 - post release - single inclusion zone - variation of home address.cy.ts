@@ -91,10 +91,10 @@ context('Scenarios', () => {
         // orderType: 'Post Release',
         conditionType: 'License condition',
         monitoringCondition: 'Exclusion zone monitoring',
-        sentenceType: 'Standard Determinate Sentence',
-        pilot: 'They are not part of any of these pilots',
+        sentenceType: 'Extended Determinate Sentence',
+        // pilot: 'They are not part of any of these pilots',
         // issp: 'No',
-        hdc: 'No',
+        // hdc: 'No',
         prarr: 'No',
       }
       const enforcementZoneDetails = {
@@ -314,7 +314,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Standard Determinate Sentence',
+                sentence_type: 'Extended Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
