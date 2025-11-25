@@ -43,7 +43,7 @@ export default class IsspController extends MonitoringConditionsBaseController {
       const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
       if (monitoringConditions.sentenceType === 'DTO')
         res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
-      else await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+      else await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
     }
   }
 }
