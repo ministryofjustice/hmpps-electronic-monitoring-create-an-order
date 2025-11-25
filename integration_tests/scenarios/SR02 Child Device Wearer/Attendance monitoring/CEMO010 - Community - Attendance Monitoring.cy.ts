@@ -65,7 +65,6 @@ context('Scenarios', () => {
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'North West')
 
-      const currentDate = new Date()
       const monitoringOrderTypeDescription = {
         // orderType: 'Post Release',
         monitoringCondition: 'Mandatory attendance monitoring',
