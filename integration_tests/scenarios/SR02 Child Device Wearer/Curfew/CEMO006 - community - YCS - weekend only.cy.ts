@@ -167,7 +167,7 @@ context.skip('Scenarios', () => {
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
-    const monitoringConditions = {
+    const monitoringOrderTypeDescription = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
@@ -215,7 +215,7 @@ context.skip('Scenarios', () => {
         secondaryAddressDetails: undefined,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
@@ -325,11 +325,11 @@ context.skip('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.endDate),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.startDate),
+              order_type: monitoringOrderTypeDescription.orderType,
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -354,7 +354,7 @@ context.skip('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: monitoringConditions.sentenceType,
+              sentence_type: monitoringOrderTypeDescription.sentenceType,
               // sentence_type: monitoringConditions.sentenceType,
               tag_at_source: '',
               tag_at_source_details: '',
@@ -368,7 +368,7 @@ context.skip('Scenarios', () => {
               conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
