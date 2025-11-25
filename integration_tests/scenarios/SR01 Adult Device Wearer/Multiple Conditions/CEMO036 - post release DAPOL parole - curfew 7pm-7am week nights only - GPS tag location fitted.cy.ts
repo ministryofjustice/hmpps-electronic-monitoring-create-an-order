@@ -8,8 +8,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
-// SKIP not in phase 4 scenario pack
-context.skip('Scenarios', () => {
+context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -61,14 +60,12 @@ context.skip('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime Home Detention Curfew',
+        pilot: 'GPS acquisitive crime (EMAC)',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Trail monitoring'],
-        issp: 'No',
-        hdc: 'No',
+        typeOfAcquistiveCrime: 'Aggravated Burglary',
+        policeForceArea: 'Kent',
+        monitoringCondition: ['Curfew', 'Trail monitoring'],
+        hdc: 'Yes',
         prarr: 'No',
       }
       const curfewReleaseDetails = {
@@ -118,7 +115,7 @@ context.skip('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription: monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
@@ -238,13 +235,14 @@ context.skip('Scenarios', () => {
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
-                offence_additional_details: '',
+                offence_additional_details:
+                  'Acquisitive crime offence is Aggravated Burglary in a Dwelling. Device wearer’s release address is in police force area: Kent',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -273,7 +271,7 @@ context.skip('Scenarios', () => {
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                released_under_prarr: 'false',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
@@ -282,7 +280,7 @@ context.skip('Scenarios', () => {
                 conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -335,7 +333,7 @@ context.skip('Scenarios', () => {
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
-                hdc: 'No',
+                hdc: 'Yes',
                 order_status: 'Not Started',
                 pilot: 'GPS Acquisitive Crime Home Detention Curfew',
               },
