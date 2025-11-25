@@ -7,7 +7,6 @@ export default class ConfrimAddressController {
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/WIP', {
       pageName: 'Confirm Address',
-
       errorSummary: null,
     })
   }

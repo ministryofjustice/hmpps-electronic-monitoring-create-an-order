@@ -2,7 +2,7 @@ import { Router } from 'express'
 import FindAddressController from './find-address/controller'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import AddressResultController from './address-result/controller'
-import ConfrimAddressController from './confirm-address/controller'
+import ConfirmAddressController from './confirm-address/controller'
 import AddressListController from './address-list/controller'
 import EnterAddressController from './enter-address/controller'
 
@@ -11,7 +11,7 @@ const createPostcodeLookupRouter = (): Router => {
 
   const findAddressController = new FindAddressController()
   const addressResultController = new AddressResultController()
-  const confrimAddressController = new ConfrimAddressController()
+  const confrimAddressController = new ConfirmAddressController()
   const addressListController = new AddressListController()
   const enterAddressController = new EnterAddressController()
   router.get('/find-address/:addressType', asyncMiddleware(findAddressController.view))

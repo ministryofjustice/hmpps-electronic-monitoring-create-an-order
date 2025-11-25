@@ -1,9 +1,9 @@
 import paths from '../../../../../server/constants/paths'
 import AppFormPage from '../../../../pages/appFormPage'
-import FindAddressComponet from './findAddressComponent'
+import FindAddressComponent from './findAddressComponent'
 
 export default class FindAddressPage extends AppFormPage {
-  public form = new FindAddressComponet()
+  public form = new FindAddressComponent()
 
   constructor() {
     super('WIP Find Address', paths.POSTCODE_LOOKUP.FIND_ADDRESS)

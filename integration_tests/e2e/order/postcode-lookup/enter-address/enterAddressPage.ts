@@ -1,9 +1,9 @@
 import paths from '../../../../../server/constants/paths'
 import AppFormPage from '../../../../pages/appFormPage'
-import EnterAddressComponet from './enterAddressComponent'
+import EnterAddressComponent from './enterAddressComponent'
 
 export default class EnterAddressPage extends AppFormPage {
-  public form = new EnterAddressComponet()
+  public form = new EnterAddressComponent()
 
   constructor() {
     super('WIP Enter Address ', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
