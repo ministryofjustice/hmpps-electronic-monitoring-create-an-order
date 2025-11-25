@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 
-export default class ConfrimAddressController {
+export default class ConfirmAddressController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
