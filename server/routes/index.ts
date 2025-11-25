@@ -38,6 +38,8 @@ import AttachmentHavePhotoController from '../controllers/attachments/attachment
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
+import PostCodeSearchController from './address-finder/controller'
+import AddressSearch from './address-finder/AddressSearch'
 
 export default function routes({
   alcoholMonitoringService,
@@ -365,6 +367,11 @@ export default function routes({
       taskListService,
     }),
   )
+
+  const addressSearch = new AddressSearch()
+  const pcsController = new PostCodeSearchController(addressSearch)
+  get('/postcode', pcsController.view)
+  post('/postcode', pcsController.update)
 
   return router
 }
