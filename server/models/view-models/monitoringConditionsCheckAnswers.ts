@@ -19,7 +19,6 @@ import {
   AnswerOptions,
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
-import config from '../../config'
 import FeatureFlags from '../../utils/featureFlags'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {

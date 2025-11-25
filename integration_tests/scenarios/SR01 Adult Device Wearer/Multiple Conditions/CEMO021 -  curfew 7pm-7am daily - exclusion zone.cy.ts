@@ -62,8 +62,7 @@ context('Scenarios', () => {
       interestedParties.responsibleOrganisationEmailAddress = 'responsible-org@example.com'
       interestedParties.responsibleOfficerName = 'Darin Murphy'
       const probationDeliveryUnit = { unit: 'Blackburn' }
-      const monitoringConditions = { 
-      
+      const monitoringConditions = {
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',
         monitoringCondition: ['Curfew', 'Trail monitoring'],
@@ -117,7 +116,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringOrderTypeDescription:monitoringConditions,
+          monitoringOrderTypeDescription: monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
@@ -239,10 +238,10 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate,23,59),
+                order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate,0,0),
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',

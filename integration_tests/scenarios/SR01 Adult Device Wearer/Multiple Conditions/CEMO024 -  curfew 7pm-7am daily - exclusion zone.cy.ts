@@ -60,14 +60,8 @@ context('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Fosse Way Prison', 'East Midlands')
       const probationDeliveryUnit = { unit: 'Derby City' }
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        pilot: 'They are not part of any of these pilots',
         sentenceType: 'Life Sentence',
-        monitoringRequired: ['Curfew', 'Exclusion zone monitoring'],
-        hdc: 'Yes',
-        issp: 'No',
+        monitoringCondition: ['Curfew', 'Exclusion zone monitoring'],
         prarr: 'No',
       }
       const curfewReleaseDetails = {
@@ -93,7 +87,7 @@ context('Scenarios', () => {
       ]
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        startDate: new Date(new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
         description: 'Exclusion from Bolton town centre',
@@ -122,7 +116,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription: monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails: undefined,
           enforcementZoneDetails,
@@ -221,8 +215,8 @@ context('Scenarios', () => {
                   },
                   {
                     condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                    start_date: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -244,11 +238,11 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -286,7 +280,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(enforcementZoneDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -356,7 +350,7 @@ context('Scenarios', () => {
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
                 issp: 'No',
-                hdc: 'Yes',
+                hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
               },
