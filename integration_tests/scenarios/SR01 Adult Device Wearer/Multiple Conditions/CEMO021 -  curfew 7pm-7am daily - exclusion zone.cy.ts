@@ -62,15 +62,12 @@ context('Scenarios', () => {
       interestedParties.responsibleOrganisationEmailAddress = 'responsible-org@example.com'
       interestedParties.responsibleOfficerName = 'Darin Murphy'
       const probationDeliveryUnit = { unit: 'Blackburn' }
-      const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
+      const monitoringConditions = { 
+      
         pilot: 'They are not part of any of these pilots',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Trail monitoring'],
+        monitoringCondition: ['Curfew', 'Trail monitoring'],
         hdc: 'Yes',
-        issp: 'No',
         prarr: 'No',
       }
       const curfewReleaseDetails = {
@@ -95,8 +92,8 @@ context('Scenarios', () => {
         ]),
       ]
       const trailMonitoringDetails = {
-        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
-        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).setHours(0, 0, 0, 0)), // 35 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 16).setHours(0, 0, 0, 0)), // 16 days
+        endDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 40).setHours(0, 0, 0, 0)), // 40 days
       }
 
       const installationAndRisk = {
@@ -120,7 +117,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription:monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
@@ -242,11 +239,11 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate,23,59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate,0,0),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -284,7 +281,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(trailMonitoringDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
