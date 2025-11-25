@@ -88,7 +88,7 @@ context('The kitchen sink', () => {
       hasAnotherAddress: 'Yes',
     }
     const tertiaryAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
       pilot: 'GPS acquisitive crime (EMAC)',
