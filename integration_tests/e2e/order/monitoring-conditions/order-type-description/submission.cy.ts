@@ -72,6 +72,10 @@ context('Order type descriptions', () => {
     cy.task('setFeatureFlags', testFlags)
   })
 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
   it('Notification org is prison, full HDC and pilot flow', () => {
     stubGetOrder('PRISON')
     const monitoringOrderTypeDescription = {

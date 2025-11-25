@@ -77,7 +77,7 @@ export default class SentenceTypeController extends MonitoringConditionsBaseCont
             res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
             return
           default:
-            await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+            await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
             return
         }
       }
@@ -87,7 +87,7 @@ export default class SentenceTypeController extends MonitoringConditionsBaseCont
         return
       }
 
-      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
     }
   }
 }
