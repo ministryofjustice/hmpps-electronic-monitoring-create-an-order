@@ -34,7 +34,7 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
     }
     if (notifyingOrganisation === 'HOME_OFFICE') {
       await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'IMMIGRATION' })
-      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
       return
     }
 
@@ -69,7 +69,7 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
         return
       case 'IMMIGRATION':
       case 'CIVIL':
-        await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, res)
+        await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
         return
       default:
         res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))

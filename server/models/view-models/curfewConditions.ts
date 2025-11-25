@@ -1,36 +1,22 @@
 import { deserialiseDateTime, getError } from '../../utils/utils'
 import { CurfewConditions } from '../CurfewConditions'
 import { ValidationResult } from '../Validation'
-import { DateTimeField, MultipleChoiceField, AddressViewsViewModel, getAddressViews, AddressViews } from './utils'
+import { DateTimeField, ViewModel } from './utils'
 import { CurfewConditionsFormData } from '../form-data/curfewConditions'
 import { createGovukErrorSummary } from '../../utils/errors'
-import { Address } from '../Address'
 
-type CurfewConditionsViewModel = AddressViewsViewModel<
-  Omit<CurfewConditions, 'curfewAddress' | 'startDate' | 'endDate' | 'curfewAdditionalDetails'>
+type CurfewConditionsViewModel = ViewModel<
+  Omit<CurfewConditions, 'startDate' | 'endDate' | 'curfewAdditionalDetails'>
 > & {
-  addresses: MultipleChoiceField
   startDate: DateTimeField
   endDate: DateTimeField
 }
 
 const createViewModelFromFormData = (
-  addressViews: AddressViews,
   formData: CurfewConditionsFormData,
   validationErrors: ValidationResult,
 ): CurfewConditionsViewModel => {
-  let addresses: string[] = []
-  if (Array.isArray(formData.addresses)) {
-    addresses = formData.addresses
-  } else if (formData.addresses) {
-    addresses = [formData.addresses]
-  }
-
   return {
-    addresses: {
-      values: addresses,
-      error: getError(validationErrors, 'curfewAddress') || getError(validationErrors, 'addresses'),
-    },
     startDate: {
       value: {
         day: formData.startDate.day,
@@ -51,40 +37,30 @@ const createViewModelFromFormData = (
       },
       error: getError(validationErrors, 'endDate'),
     },
-    primaryAddressView: { value: addressViews.primaryAddressView },
-    secondaryAddressView: { value: addressViews.secondaryAddressView },
-    tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
 const createViewModelFromCurfewConditions = (
-  addressViews: AddressViews,
   curfewConditions: CurfewConditions | undefined | null,
 ): CurfewConditionsViewModel => {
   return {
-    addresses: { values: curfewConditions?.curfewAddress?.split(',') ?? [] },
     startDate: { value: deserialiseDateTime(curfewConditions?.startDate) },
     endDate: { value: deserialiseDateTime(curfewConditions?.endDate) },
-    primaryAddressView: { value: addressViews.primaryAddressView },
-    secondaryAddressView: { value: addressViews.secondaryAddressView },
-    tertiaryAddressView: { value: addressViews.tertiaryAddressView },
     errorSummary: null,
   }
 }
 
 const construct = (
   curfewConditions: CurfewConditions | undefined | null,
-  addresses: Address[],
   validationErrors: ValidationResult,
   formData: [CurfewConditionsFormData],
 ): CurfewConditionsViewModel => {
-  const addressViews = getAddressViews(addresses)
   if (validationErrors.length > 0 && formData.length > 0) {
-    return createViewModelFromFormData(addressViews, formData[0], validationErrors)
+    return createViewModelFromFormData(formData[0], validationErrors)
   }
 
-  return createViewModelFromCurfewConditions(addressViews, curfewConditions)
+  return createViewModelFromCurfewConditions(curfewConditions)
 }
 
 export default {

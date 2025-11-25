@@ -131,6 +131,8 @@ context('monitoring types', () => {
     page.form.monitoringTypesField.shouldHaveOption('Alcohol monitoring')
 
     page.form.continueButton.should('exist')
+
+    page.form.ReturnToMonitoringListPageButton.should('not.exist')
   })
 
   it('hdc no, pilot unknown', () => {
@@ -249,5 +251,33 @@ context('monitoring types', () => {
     const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
 
     page.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+  })
+
+  context('No condition available', () => {
+    it('should disable continue button', () => {
+      stubGetOrder({
+        monitoringConditions: createMonitoringConditions({ alcohol: true, hdc: 'NO', pilot: 'UNKNOWN' }),
+        monitoringConditionsAlcohol: {
+          endDate: null,
+          installationLocation: null,
+          monitoringType: null,
+          prisonName: null,
+          probationOfficeName: null,
+          startDate: null,
+        },
+      })
+
+      const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+      page.form.ReturnToMonitoringListPageButton.should('exist')
+      page.form.continueButton.should('be.disabled')
+
+      page.form.message.contains('There are no additional eligible monitoring types available to add')
+    })
   })
 })

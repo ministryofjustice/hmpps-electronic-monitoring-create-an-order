@@ -10,11 +10,18 @@ type MonitoringTypes = Pick<
   MonitoringConditions,
   'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol'
 >
-
+const MonitoringTypesKeys: (keyof MonitoringTypes)[] = [
+  'curfew',
+  'exclusionZone',
+  'trail',
+  'mandatoryAttendance',
+  'alcohol',
+]
 export type MonitoringTypeModel = {
   errorSummary: ErrorSummary | null
   error?: ErrorMessage
   message?: string
+  allconditionsDisabled?: boolean
 } & {
   [K in keyof MonitoringTypes]: {
     disabled?: boolean
@@ -23,36 +30,40 @@ export type MonitoringTypeModel = {
 
 const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeModel => {
   const enabled = getEnabled(order)
-  const isDisabled = (monitoringType: keyof MonitoringTypes): boolean => {
-    return !enabled.options.includes(monitoringType)
-  }
 
-  return {
-    curfew: { disabled: isCurfewComplete(order) || isDisabled('curfew') },
-    exclusionZone: { disabled: isDisabled('exclusionZone') },
-    trail: { disabled: isTrailComplete(order) || isDisabled('trail') },
-    mandatoryAttendance: { disabled: isDisabled('mandatoryAttendance') },
-    alcohol: { disabled: isAlcoholComplete(order) || isDisabled('alcohol') },
+  const model: MonitoringTypeModel = {
     message: enabled.message,
     error: getError(errors, 'monitoringType'),
     errorSummary: createGovukErrorSummary(errors),
   }
+
+  MonitoringTypesKeys.forEach(condition => {
+    model[condition] = { disabled: isConditionDisabled(order, condition) || !enabled.options.includes(condition) }
+  })
+
+  if (MonitoringTypesKeys.every(condition => model[condition]?.disabled)) {
+    model.allconditionsDisabled = true
+    model.message = 'There are no additional eligible monitoring types available to add'
+  }
+
+  return model
 }
 
-const isCurfewComplete = (order: Order) => {
-  return (
-    isNotNullOrUndefined(order.curfewConditions) &&
-    isNotNullOrUndefined(order.curfewReleaseDateConditions) &&
-    isNotNullOrUndefined(order.curfewTimeTable)
-  )
-}
-
-const isTrailComplete = (order: Order) => {
-  return isNotNullOrUndefined(order.monitoringConditionsTrail)
-}
-
-const isAlcoholComplete = (order: Order) => {
-  return isNotNullOrUndefined(order.monitoringConditionsAlcohol)
+const isConditionDisabled = (order: Order, condition: keyof MonitoringTypes) => {
+  switch (condition) {
+    case 'alcohol':
+      return isNotNullOrUndefined(order.monitoringConditionsAlcohol)
+    case 'curfew':
+      return (
+        isNotNullOrUndefined(order.curfewConditions) &&
+        isNotNullOrUndefined(order.curfewReleaseDateConditions) &&
+        isNotNullOrUndefined(order.curfewTimeTable)
+      )
+    case 'trail':
+      return isNotNullOrUndefined(order.monitoringConditionsTrail)
+    default:
+      return false
+  }
 }
 
 const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message?: string } => {

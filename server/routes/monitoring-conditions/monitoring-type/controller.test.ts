@@ -35,6 +35,7 @@ describe('monitoring type controller', () => {
 
   describe('view', () => {
     it('renders the correct view', async () => {
+      req.flash = jest.fn().mockResolvedValue([])
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -57,7 +58,7 @@ describe('monitoring type controller', () => {
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', req.order!.id),
       )
     })
 
