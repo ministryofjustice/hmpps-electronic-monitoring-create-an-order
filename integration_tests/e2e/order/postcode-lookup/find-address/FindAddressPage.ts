@@ -1,6 +1,6 @@
 import paths from '../../../../../server/constants/paths'
 import AppFormPage from '../../../../pages/appFormPage'
-import FindAddressComponenet from './FindAddressComponent'
+import FindAddressComponenet from './findAddressComponent'
 
 export default class FindAddressPage extends AppFormPage {
   public form = new FindAddressComponenet()
