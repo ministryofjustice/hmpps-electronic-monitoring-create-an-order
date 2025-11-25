@@ -7,7 +7,6 @@ export default class AddressListController {
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/WIP', {
       pageName: 'Address List',
-
       errorSummary: null,
     })
   }

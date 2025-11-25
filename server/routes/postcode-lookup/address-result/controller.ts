@@ -7,7 +7,6 @@ export default class AddressResultController {
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/WIP', {
       pageName: 'Address Result',
-
       errorSummary: null,
     })
   }

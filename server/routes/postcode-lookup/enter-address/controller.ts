@@ -7,7 +7,6 @@ export default class EnterAddressController {
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/WIP', {
       pageName: 'Enter Address',
-
       errorSummary: null,
     })
   }
