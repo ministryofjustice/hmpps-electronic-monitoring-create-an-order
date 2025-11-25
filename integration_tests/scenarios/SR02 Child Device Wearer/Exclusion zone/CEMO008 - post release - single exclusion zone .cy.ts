@@ -89,7 +89,7 @@ context('Scenarios', () => {
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
         description: 'Exclusion from Bolton town centre',
@@ -203,8 +203,8 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(enforcementZoneDetails.startDate, 23, 59),
-                    end_date: formatAsFmsDateTime(enforcementZoneDetails.endDate, 0, 0),
+                    start_date: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -226,10 +226,10 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(enforcementZoneDetails.endDate, 0, 0),
+                order_end: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(enforcementZoneDetails.startDate, 23, 59),
+                order_start: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
                 order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',

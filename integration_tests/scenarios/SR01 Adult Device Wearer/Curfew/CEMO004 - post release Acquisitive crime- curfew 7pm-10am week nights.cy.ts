@@ -322,7 +322,7 @@ context('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
               order_id: orderId,
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),

@@ -89,7 +89,7 @@ context('Scenarios', () => {
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
         description: 'Exclusion from football grounds',

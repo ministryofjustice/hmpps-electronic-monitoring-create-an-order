@@ -72,7 +72,7 @@ context('Scenarios', () => {
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Trail monitoring', 'Alcohol monitoring'],
+        monitoringCondition: ['Curfew', 'Trail monitoring', 'Alcohol monitoring'],
         pilot: 'They are not part of any of these pilots',
         hdc: 'Yes',
         prarr: 'No',
