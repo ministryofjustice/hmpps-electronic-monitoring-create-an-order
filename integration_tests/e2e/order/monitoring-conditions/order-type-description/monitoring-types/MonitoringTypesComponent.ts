@@ -12,7 +12,7 @@ export default class OrderTypeComponent extends SingleQuestionFormComponent {
     return cy.get('.govuk-inset-text')
   }
 
-  fillInWith(value: string) {
+  fillInWith(value: string | string[]) {
     if (value) {
       this.monitoringTypesField.set(value)
     }
