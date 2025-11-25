@@ -43,5 +43,15 @@ context('Postcode Lookup', () => {
     })
 
     fillinAddress({ findAddress: 'Search' })
+    // TODO Check answer
+  })
+
+  it('Should able to enter address manually', () => {
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+    })
+
+    fillinAddress({ findAddress: 'Manual' })
+    // TODO Check answer
   })
 })

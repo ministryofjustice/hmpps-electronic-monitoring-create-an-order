@@ -1,7 +1,7 @@
 import SingleQuestionFormComponent from '../../../../pages/components/SingleQuestionFormComponent'
 import FormRadiosComponent from '../../../../pages/components/formRadiosComponent'
 
-export default class FindAddressComponenet extends SingleQuestionFormComponent {
+export default class FindAddressComponet extends SingleQuestionFormComponent {
   get branchField(): FormRadiosComponent {
     const label = 'WIP Find Address'
     return new FormRadiosComponent(this.form, label, [])
