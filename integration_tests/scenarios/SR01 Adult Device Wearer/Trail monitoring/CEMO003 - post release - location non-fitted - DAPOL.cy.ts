@@ -148,17 +148,7 @@ context('Scenarios', () => {
         'Kent, Surrey & Sussex',
       )
 
-      const currentDate = new Date()
-
       const monitoringOrderTypeDescription = {
-        monitoringStartDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 10), // 10 days
-        monitoringEndDate: new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate() + 40,
-          23,
-          59,
-        ), // 40 days
         // orderType: 'Post Release',
         sentenceType: 'Standard Determinate Sentence',
         monitoringCondition: 'Trail monitoring',
@@ -301,10 +291,10 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
+                order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
+                order_start: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
                 order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
@@ -343,7 +333,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
+                service_end_date: formatAsFmsDate(trailMonitoringDetails.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',

@@ -168,8 +168,6 @@ context.skip('Scenarios', () => {
       mappaCaseType: 'Serious Organised Crime',
     }
     const monitoringOrderTypeDescription = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
       orderType: 'Post Release',
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
@@ -324,10 +322,10 @@ context.skip('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.endDate),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.startDate),
+              order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
               order_type: monitoringOrderTypeDescription.orderType,
               order_type_description: null,
               order_type_detail: '',
@@ -367,7 +365,7 @@ context.skip('Scenarios', () => {
               conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.endDate),
+              service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

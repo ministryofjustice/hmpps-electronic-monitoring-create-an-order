@@ -145,7 +145,6 @@ context('Scenarios', () => {
   })
 
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
-    const currentDate = new Date()
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO001'),
       interpreterRequired: true,
@@ -163,14 +162,6 @@ context('Scenarios', () => {
       mappaCaseType: 'Serious Organised Crime',
     }
     const monitoringOrderTypeDescription = {
-      monitoringStartDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 10), // 10 days
-      monitoringEndDate: new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate() + 40,
-        23,
-        59,
-      ), // 40 days
       // orderType: 'Post Release',
       monitoringCondition: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
@@ -325,10 +316,10 @@ context('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate, 23, 59),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate, 0, 0),
+              order_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
@@ -367,7 +358,7 @@ context('Scenarios', () => {
               conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
+              service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

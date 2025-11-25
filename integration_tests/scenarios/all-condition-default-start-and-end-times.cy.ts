@@ -61,8 +61,6 @@ context('The kitchen sink', () => {
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
 
     const monitoringOrderTypeDescription = {
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'Yes',
       prarr: 'Yes',
@@ -247,8 +245,8 @@ context('The kitchen sink', () => {
               },
               {
                 condition: 'EM Exclusion / Inclusion Zone',
-                start_date: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate, 0, 0),
-                end_date: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate, 23, 59),
+                start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+                end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
               },
             ],
             exclusion_allday: '',
@@ -271,10 +269,10 @@ context('The kitchen sink', () => {
             offence_additional_details:
               'Acquisitive crime offence is Burglary in a Dwelling - Indictable only. Device wearer’s release address is in police force area: Avon and Somerset',
             offence_date: '',
-            order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
+            order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
             order_id: orderId,
             order_request_type: 'New Order',
-            order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
+            order_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
             order_type: 'Post Release',
             order_type_description: null,
             order_type_detail: '',
@@ -313,7 +311,7 @@ context('The kitchen sink', () => {
             conditional_release_end_time: '07:00:00',
             reason_for_order_ending_early: '',
             business_unit: '',
-            service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
+            service_end_date: formatAsFmsDate(trailMonitoringOrder.endDate),
             curfew_description: '',
             curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
             curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

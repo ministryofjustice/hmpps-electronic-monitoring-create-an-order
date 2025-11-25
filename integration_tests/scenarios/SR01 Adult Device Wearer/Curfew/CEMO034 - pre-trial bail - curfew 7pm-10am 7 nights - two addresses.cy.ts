@@ -60,16 +60,7 @@ context.skip('Scenarios', () => {
     const fakeSecondaryAddress = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'York Crown Court')
 
-    const currentDate = new Date()
     const monitoringOrderTypeDescription = {
-      monitoringStartDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 10), // 10 days
-      monitoringEndDate: new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate() + 40,
-        23,
-        59,
-      ), // 40 days
       // orderType: 'Post Release',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
@@ -224,10 +215,10 @@ context.skip('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
+              order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
               order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
@@ -266,7 +257,7 @@ context.skip('Scenarios', () => {
               conditional_release_end_time: '10:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
+              service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

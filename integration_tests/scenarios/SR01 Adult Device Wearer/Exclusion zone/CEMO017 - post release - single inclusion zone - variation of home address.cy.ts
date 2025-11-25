@@ -77,17 +77,7 @@ context('Scenarios', () => {
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
-
-      const currentDate = new Date()
       const monitoringOrderTypeDescription = {
-        monitoringStartDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1), // 1 day
-        monitoringEndDate: new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate() + 120,
-          23,
-          59,
-        ), // 120 days
         // orderType: 'Post Release',
         conditionType: 'License condition',
         monitoringCondition: 'Exclusion zone monitoring',
@@ -262,8 +252,8 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
-                    end_date: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
+                    start_date: formatAsFmsDateTime(enforcementZoneDetails.startDate, 23, 59),
+                    end_date: formatAsFmsDateTime(enforcementZoneDetails.endDate, 0, 0),
                   },
                 ],
                 exclusion_allday: '',
@@ -285,10 +275,10 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
+                order_end: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'Variation',
-                order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
+                order_start: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
                 order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
@@ -327,7 +317,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
+                service_end_date: formatAsFmsDate(enforcementZoneDetails.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',
