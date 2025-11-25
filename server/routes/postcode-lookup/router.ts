@@ -11,7 +11,7 @@ const createPostcodeLookupRouter = (): Router => {
 
   const findAddressController = new FindAddressController()
   const addressResultController = new AddressResultController()
-  const confrimAddressController = new ConfirmAddressController()
+  const confirmAddressController = new ConfirmAddressController()
   const addressListController = new AddressListController()
   const enterAddressController = new EnterAddressController()
   router.get('/find-address/:addressType', asyncMiddleware(findAddressController.view))
@@ -20,8 +20,8 @@ const createPostcodeLookupRouter = (): Router => {
   router.get('/address-result/:addressType', asyncMiddleware(addressResultController.view))
   router.post('/address-result/:addressType', asyncMiddleware(addressResultController.update))
 
-  router.get('/confirm-address/:addressType', asyncMiddleware(confrimAddressController.view))
-  router.post('/confirm-address/:addressType', asyncMiddleware(confrimAddressController.update))
+  router.get('/confirm-address/:addressType', asyncMiddleware(confirmAddressController.view))
+  router.post('/confirm-address/:addressType', asyncMiddleware(confirmAddressController.update))
 
   router.get('/enter-address/:addressType', asyncMiddleware(enterAddressController.view))
   router.post('/enter-address/:addressType', asyncMiddleware(enterAddressController.update))
