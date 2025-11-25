@@ -98,7 +98,6 @@ context('Scenarios', () => {
         prarr: 'No',
       }
       const curfewReleaseDetails = {
-        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
         startTime: { hours: '19', minutes: '00' },
         endTime: { hours: '10', minutes: '00' },
         address: /Main address/,
@@ -272,7 +271,7 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+                conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
                 conditional_release_start_time: '19:00:00',
                 conditional_release_end_time: '10:00:00',
                 reason_for_order_ending_early: '',

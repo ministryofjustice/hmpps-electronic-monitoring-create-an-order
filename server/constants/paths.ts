@@ -66,7 +66,7 @@ const paths = {
       ISSP: '/order/:orderId/monitoring-conditions/order-type-description/issp',
       PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
       POLICE_AREA: '/order/:orderId/monitoring-conditions/order-type-description/police-area',
-      MONITORING_DATES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-dates',
+
       PILOT: '/order/:orderId/monitoring-conditions/order-type-description/pilot',
       MONITORING_TYPES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-types',
       MONITORING_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-type',

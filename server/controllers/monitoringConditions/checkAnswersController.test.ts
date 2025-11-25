@@ -140,11 +140,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -383,108 +381,11 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the start time on the first day of monitoring?',
-            },
-            value: {
-              text: '01:01',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the end time on the last day of monitoring? (optional)',
-            },
-            value: {
-              text: '01:01',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
-                },
-              ],
-            },
-          },
         ],
         installationAppointment: [],
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',
@@ -568,23 +469,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what date does the curfew end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
                 },
               ],
             },
@@ -1092,11 +976,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -1317,68 +1199,11 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(
-                    ':orderId',
-                    order.id,
-                  ),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
         ],
         installationAppointment: [],
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',
@@ -1462,23 +1287,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what date does the curfew end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
                 },
               ],
             },

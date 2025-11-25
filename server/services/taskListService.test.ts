@@ -359,7 +359,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return curfew conditions if current page is curfew release date', () => {
+    it('should return curfew timetable if current page is curfew release date', () => {
       // Given
       const currentPage = 'CURFEW_RELEASE_DATE'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -373,10 +373,10 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
     })
 
-    it('should return curfew additional details if current page is curfew conitions', () => {
+    it('should return curfew release date if current page is curfew conitions', () => {
       // Given
       const currentPage = 'CURFEW_CONDITIONS'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -390,7 +390,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id))
     })
 
     // skipped test as currently the additonal details page is disabled

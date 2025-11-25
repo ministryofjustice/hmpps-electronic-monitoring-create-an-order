@@ -32,7 +32,6 @@ describe('remove monitoring type controller', () => {
     req.order!.curfewConditions = {
       startDate: '2024-11-11T00:00:00Z',
       endDate: '2024-11-11T00:00:00Z',
-      curfewAddress: null,
       curfewAdditionalDetails: null,
       id: 'some id',
     }

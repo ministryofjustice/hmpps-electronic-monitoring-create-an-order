@@ -14,7 +14,6 @@ import {
   createAddressAnswer,
   createDateAnswer,
   createTimeAnswer,
-  createMultipleAddressAnswer,
   createMultipleChoiceAnswer,
   createAnswer,
   AnswerOptions,
@@ -181,35 +180,6 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
       )
     }
   }
-  if (data.startDate && data.startDate !== null) {
-    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
-    answers.push(
-      createDateAnswer('What is the date for the first day of all monitoring?', data.startDate, path, answerOpts),
-    )
-    if (config.monitoringConditionTimes.enabled)
-      answers.push(
-        createTimeAnswer(
-          content.pages.monitoringConditions.questions.startTime.text,
-          order.monitoringConditions.startDate,
-          path,
-          answerOpts,
-        ),
-      )
-  }
-
-  if (data.endDate && data.endDate !== null) {
-    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id)
-    answers.push(createDateAnswer('What is the date when all monitoring ends?', data.endDate, path, answerOpts))
-    if (config.monitoringConditionTimes.enabled)
-      answers.push(
-        createTimeAnswer(
-          content.pages.monitoringConditions.questions.endTime.text,
-          order.monitoringConditions.endDate,
-          path,
-          answerOpts,
-        ),
-      )
-  }
 
   return answers
 }
@@ -290,12 +260,6 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
   }
 
   return [
-    createDateAnswer(
-      questions.releaseDate.text,
-      order.curfewReleaseDateConditions?.releaseDate,
-      releaseDateUri,
-      answerOpts,
-    ),
     createAnswer(
       questions.startTime.text,
       trimSeconds(order.curfewReleaseDateConditions?.startTime),
@@ -329,23 +293,20 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
   const answers = [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
-    createMultipleAddressAnswer(
-      questions.addresses.text,
-      order.addresses.filter(({ addressType }) => (order.curfewConditions?.curfewAddress || '').includes(addressType)),
-      conditionsUri,
-      answerOpts,
-    ),
   ]
 
   if (order.dataDictionaryVersion === 'DDV5') {
-    answers.push(
-      createAnswer(
-        curfewAdditionalDetailsQuestions.provideDetails.text,
-        order.curfewConditions?.curfewAdditionalDetails,
-        curfewAdditionalDetailsUri,
-        answerOpts,
-      ),
-    )
+    const curfewAdditionalDetails = order.curfewConditions?.curfewAdditionalDetails
+    if (curfewAdditionalDetails !== null && curfewAdditionalDetails.length > 0) {
+      answers.push(
+        createAnswer(
+          curfewAdditionalDetailsQuestions.provideDetails.text,
+          order.curfewConditions?.curfewAdditionalDetails,
+          curfewAdditionalDetailsUri,
+          answerOpts,
+        ),
+      )
+    }
   }
 
   return answers

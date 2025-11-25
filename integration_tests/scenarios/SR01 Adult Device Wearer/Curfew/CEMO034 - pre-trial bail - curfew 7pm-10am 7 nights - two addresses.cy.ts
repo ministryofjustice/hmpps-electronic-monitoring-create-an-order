@@ -59,10 +59,18 @@ context.skip('Scenarios', () => {
     const fakePrimaryAddress = createFakeAddress()
     const fakeSecondaryAddress = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'York Crown Court')
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
+
+    const currentDate = new Date()
+    const monitoringOrderTypeDescription = {
+      monitoringStartDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 10), // 10 days
+      monitoringEndDate: new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() + 40,
+        23,
+        59,
+      ), // 40 days
+      // orderType: 'Post Release',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
       pilot: 'They are not part of any of these pilots',
@@ -71,7 +79,6 @@ context.skip('Scenarios', () => {
       prarr: 'No',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '10', minutes: '00' },
       address: /Main address/,
@@ -112,7 +119,7 @@ context.skip('Scenarios', () => {
         secondaryAddressDetails: fakeSecondaryAddress,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
@@ -186,7 +193,7 @@ context.skip('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              condition_type: monitoringOrderTypeDescription.conditionType,
               court: '',
               court_order_email: '',
               device_type: '',
@@ -217,11 +224,11 @@ context.skip('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringEndDate),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(monitoringOrderTypeDescription.monitoringStartDate),
+              order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -254,12 +261,12 @@ context.skip('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+              conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
               conditional_release_start_time: '19:00:00',
               conditional_release_end_time: '10:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(monitoringOrderTypeDescription.monitoringEndDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

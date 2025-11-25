@@ -5,9 +5,16 @@ import { OrderTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
 import { validationErrors } from '../../../constants/validationErrors'
+import MonitoringConditionsBaseController from '../base/monitoringConditionBaseController'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 
-export default class OrderTypeController {
-  constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
+export default class OrderTypeController extends MonitoringConditionsBaseController {
+  constructor(
+    readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
+    readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+  ) {
+    super(montoringConditionsStoreService, monitoringConditionsService)
+  }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -26,8 +33,8 @@ export default class OrderTypeController {
       return
     }
     if (notifyingOrganisation === 'HOME_OFFICE') {
-      this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'IMMIGRATION' })
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
+      await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'IMMIGRATION' })
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
       return
     }
 
@@ -62,7 +69,7 @@ export default class OrderTypeController {
         return
       case 'IMMIGRATION':
       case 'CIVIL':
-        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', order.id))
+        await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
         return
       default:
         res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))

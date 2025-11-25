@@ -119,19 +119,6 @@ context('Order type descriptions', () => {
       monitoringOrderTypeDescription.prarr,
     )
 
-    // Monitoring Dates
-
-    page.monitoringConditionsSection.shouldHaveItems([
-      {
-        key: 'What is the date for the first day of all monitoring?',
-        value: monitoringOrderTypeDescription.monitoringStartDate.toLocaleDateString('en-GB'),
-      },
-      {
-        key: 'What is the date when all monitoring ends?',
-        value: monitoringOrderTypeDescription.monitoringEndDate.toLocaleDateString('en-GB'),
-      },
-    ])
-
     // Monitoring conditions
     verifyValueInCheckYourAnswerPage(
       page,
@@ -149,8 +136,6 @@ context('Order type descriptions', () => {
       typeOfAcquistiveCrime: 'Aggravated Burglary',
       policeForceArea: 'Kent',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -170,8 +155,6 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       sentenceType: 'Extended Determinate Sentence',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -190,8 +173,6 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       sentenceType: 'Section 250 / Section 91',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -211,8 +192,6 @@ context('Order type descriptions', () => {
       sentenceType: 'Detention and Training Order',
       issp: 'Yes',
       prarr: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -242,8 +221,6 @@ context('Order type descriptions', () => {
       hdc: 'No',
       prarr: 'Yes',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -264,8 +241,6 @@ context('Order type descriptions', () => {
       orderType: 'Community',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
       issp: 'Yes',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -285,8 +260,6 @@ context('Order type descriptions', () => {
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Suspended Sentence',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -303,8 +276,6 @@ context('Order type descriptions', () => {
   it('Notification org is home office', () => {
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -327,8 +298,6 @@ context('Order type descriptions', () => {
     )
     const monitoringOrderTypeDescription = {
       orderType: 'Civil',
-      monitoringStartDate: new Date(currentDate.getFullYear(), 0, 1, 11, 11),
-      monitoringEndDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59),
       monitoringCondition: 'Trail monitoring',
     }
 

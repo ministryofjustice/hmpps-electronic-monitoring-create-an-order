@@ -8,6 +8,10 @@ export default class OrderTypeComponent extends SingleQuestionFormComponent {
     return new FormRadiosComponent(this.form, label, [])
   }
 
+  get ReturnToMonitoringListPageButton(): PageElement {
+    return this.form.contains('Return to monitoring you have added')
+  }
+
   get message(): PageElement {
     return cy.get('.govuk-inset-text')
   }

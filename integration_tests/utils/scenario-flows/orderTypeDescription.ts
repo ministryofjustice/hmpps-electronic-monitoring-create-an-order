@@ -1,6 +1,5 @@
 import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
-import MonitoringDatesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-dates/MonitoringDatesPage'
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
 import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
@@ -25,8 +24,6 @@ export default function fillInOrderTypeDescriptionsWith({
   typeOfAcquistiveCrime = undefined,
   policeForceArea = undefined,
   prarr = undefined,
-  monitoringStartDate,
-  monitoringEndDate,
   monitoringCondition = undefined,
 }): void {
   // Order type page
@@ -75,13 +72,6 @@ export default function fillInOrderTypeDescriptionsWith({
     const prarrPage = Page.verifyOnPage(PrarrPage)
     fillinSingleQuestionFormWith(prarrPage.form, prarr)
   }
-  // Monitoring Dates
-  const monitoringDatePage = Page.verifyOnPage(MonitoringDatesPage)
-  monitoringDatePage.form.fillInWithInput({
-    startDate: monitoringStartDate,
-    endDate: monitoringEndDate,
-  })
-  monitoringDatePage.form.continueButton.click()
 
   // Monitoring conditions
   if (monitoringCondition) {
