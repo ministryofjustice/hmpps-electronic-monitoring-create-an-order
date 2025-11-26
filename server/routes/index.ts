@@ -37,6 +37,7 @@ import AttachmentHavePhotoController from '../controllers/attachments/attachment
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
+import createPostcodeLookupRouter from './postcode-lookup/router'
 
 export default function routes({
   alcoholMonitoringService,
@@ -355,6 +356,8 @@ export default function routes({
       taskListService,
     }),
   )
+
+  router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
   return router
 }

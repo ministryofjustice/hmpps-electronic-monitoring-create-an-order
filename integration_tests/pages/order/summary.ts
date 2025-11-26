@@ -495,44 +495,48 @@ export default class OrderTasksPage extends AppPage {
     noFixedAbode.form.fillInWith(deviceWearerDetails)
     noFixedAbode.form.saveAndContinueButton.click()
 
-    const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-    primaryAddressPage.form.fillInWith({
-      ...primaryAddressDetails,
-      hasAnotherAddress: secondaryAddressDetails === undefined ? 'No' : 'Yes',
-    })
-    primaryAddressPage.form.saveAndContinueButton.click()
-
-    if (secondaryAddressDetails !== undefined) {
-      const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage)
-      secondaryAddressPage.form.fillInWith({
-        ...secondaryAddressDetails,
-        hasAnotherAddress: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+    if (primaryAddressDetails) {
+      const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+      primaryAddressPage.form.fillInWith({
+        ...primaryAddressDetails,
+        hasAnotherAddress: secondaryAddressDetails === undefined ? 'No' : 'Yes',
       })
-      secondaryAddressPage.form.saveAndContinueButton.click()
+      primaryAddressPage.form.saveAndContinueButton.click()
+
+      if (secondaryAddressDetails !== undefined) {
+        const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage)
+        secondaryAddressPage.form.fillInWith({
+          ...secondaryAddressDetails,
+          hasAnotherAddress: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+        })
+        secondaryAddressPage.form.saveAndContinueButton.click()
+      }
+
+      if (tertiaryAddressDetails !== undefined) {
+        const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage)
+        tertiaryAddressPage.form.fillInWith({
+          ...tertiaryAddressDetails,
+        })
+        tertiaryAddressPage.form.saveAndContinueButton.click()
+      }
     }
 
-    if (tertiaryAddressDetails !== undefined) {
-      const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage)
-      tertiaryAddressPage.form.fillInWith({
-        ...tertiaryAddressDetails,
-      })
-      tertiaryAddressPage.form.saveAndContinueButton.click()
-    }
+    if (interestedParties) {
+      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      interestedPartiesPage.form.fillInWith(interestedParties)
+      interestedPartiesPage.form.saveAndContinueButton.click()
 
-    const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-    interestedPartiesPage.form.fillInWith(interestedParties)
-    interestedPartiesPage.form.saveAndContinueButton.click()
-
-    if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
-      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
-      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
-      probationDeliveryUnitPage.form.saveAndContinueButton.click()
+      if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
+        const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+        probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+        probationDeliveryUnitPage.form.saveAndContinueButton.click()
+      }
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        'Check your answer',
+      )
+      contactInformationCheckYourAnswersPage.continueButton().click()
     }
-    const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-      ContactInformationCheckYourAnswersPage,
-      'Check your answer',
-    )
-    contactInformationCheckYourAnswersPage.continueButton().click()
 
     if (installationAndRisk) {
       const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)

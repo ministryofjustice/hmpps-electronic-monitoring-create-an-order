@@ -1,5 +1,6 @@
 const paths = {
   ORDER: {
+    BASE_URL: '/order/:orderId',
     CREATE: '/order/create',
     DELETE: '/order/:orderId/delete',
     DELETE_FAILED: '/order/delete/failed',
@@ -35,6 +36,14 @@ const paths = {
   INSTALLATION_AND_RISK: {
     INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
     CHECK_YOUR_ANSWERS: '/order/:orderId/installation-and-risk/check-your-answers',
+  },
+
+  POSTCODE_LOOKUP: {
+    FIND_ADDRESS: '/order/:orderId/find-address/:addressType',
+    ADDRESS_RESULT: '/order/:orderId/address-result/:addressType',
+    CONFIRM_ADDRESS: '/order/:orderId/confirm-address/:addressType',
+    ENTER_ADDRESS: '/order/:orderId/enter-address/:addressType',
+    ADDRESS_LIST: '/order/:orderId/address-list',
   },
 
   MONITORING_CONDITIONS: {

@@ -196,45 +196,59 @@ export default class TaskListService {
       state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
     })
+    if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.primaryAddress,
+        path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'primary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.required,
+        ),
+        completed: isCompletedAddress(order, 'PRIMARY'),
+      })
+    } else {
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.primaryAddress,
+        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.required,
+        ),
+        completed: isCompletedAddress(order, 'PRIMARY'),
+      })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.primaryAddress,
-      path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.noFixedAbode,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.required,
-      ),
-      completed: isCompletedAddress(order, 'PRIMARY'),
-    })
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.secondaryAddress,
+        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.optional,
+        ),
+        completed: isCompletedAddress(order, 'SECONDARY'),
+      })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.secondaryAddress,
-      path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.noFixedAbode,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.optional,
-      ),
-      completed: isCompletedAddress(order, 'SECONDARY'),
-    })
-
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.tertiaryAddress,
-      path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.noFixedAbode,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.optional,
-      ),
-      completed: isCompletedAddress(order, 'TERTIARY'),
-    })
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.tertiaryAddress,
+        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.optional,
+        ),
+        completed: isCompletedAddress(order, 'TERTIARY'),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.contactInformation,
