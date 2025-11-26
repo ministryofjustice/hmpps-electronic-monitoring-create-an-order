@@ -1,0 +1,25 @@
+{% extends "../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questionName = "WIP"%}
+{% set isOrderEditable = true %}
+{% block formInputs %}
+    {# {% if items %} #}
+
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "branch",    
+      fieldset: {
+        legend: {
+          text: "WIP "+pageName,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: items
+    }) }}
+
+   {# {% endif %} #}
+{% endblock %}
