@@ -78,13 +78,9 @@ context('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringOrderTypeDescription = {
-        // orderType: 'Post Release',
         conditionType: 'License condition',
         monitoringCondition: 'Exclusion zone monitoring',
         sentenceType: 'Extended Determinate Sentence',
-        // pilot: 'They are not part of any of these pilots',
-        // issp: 'No',
-        // hdc: 'No',
         prarr: 'No',
       }
       const enforcementZoneDetails = {

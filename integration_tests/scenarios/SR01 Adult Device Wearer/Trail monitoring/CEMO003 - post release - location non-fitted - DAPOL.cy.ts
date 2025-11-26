@@ -149,11 +149,9 @@ context('Scenarios', () => {
       )
 
       const monitoringOrderTypeDescription = {
-        // orderType: 'Post Release',
         sentenceType: 'Standard Determinate Sentence',
         monitoringCondition: 'Trail monitoring',
         pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-        // issp: 'No',
         hdc: 'No',
         prarr: 'No',
       }

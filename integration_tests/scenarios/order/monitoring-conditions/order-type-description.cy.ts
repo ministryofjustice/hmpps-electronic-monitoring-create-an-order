@@ -32,7 +32,6 @@ context('Order type descriptions', () => {
     endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
   }
   beforeEach(() => {
-    // cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 

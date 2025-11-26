@@ -67,8 +67,29 @@ context('Screenshots', () => {
 
     // monitoring conditions
 
-    cy.visit(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', mockOrderId))
-    cy.screenshot('MonitoringConditionsPage', { overwrite: true })
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', mockOrderId))
+    cy.screenshot('OrderTypePage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrderId))
+    cy.screenshot('SentenceTypePage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', mockOrderId))
+    cy.screenshot('HdcPage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', mockOrderId))
+    cy.screenshot('PilotPage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', mockOrderId))
+    cy.screenshot('OffenceTypePage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA.replace(':orderId', mockOrderId))
+    cy.screenshot('PoliceAreaPage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', mockOrderId))
+    cy.screenshot('PrarrPage', { overwrite: true })
+
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', mockOrderId))
+    cy.screenshot('MonitoringTypesPage', { overwrite: true })
 
     cy.visit(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', mockOrderId))
     cy.screenshot('AlcoholPage', { overwrite: true })

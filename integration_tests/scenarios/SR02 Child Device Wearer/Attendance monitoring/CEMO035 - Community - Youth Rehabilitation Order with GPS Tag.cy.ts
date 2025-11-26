@@ -14,7 +14,7 @@ import ContactDetailsPage from '../../../pages/order/contact-information/contact
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
+import MonitoringConditionsPage from '../../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
@@ -29,6 +29,7 @@ import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 import SearchPage from '../../../pages/search'
+import fillInOrderTypeDescriptionsWith from '../../../utils/scenario-flows/orderTypeDescription'
 
 // test disabled as community YRO is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -93,12 +94,12 @@ context.skip('Scenarios', () => {
       )
       const monitoringConditions = {
         orderType: 'Community',
-        monitoringRequired: 'Mandatory attendance monitoring',
-        pilot: 'They are not part of any of these pilots',
+        monitoringCondition: 'Mandatory attendance monitoring',
+        // pilot: 'They are not part of any of these pilots',
         // sentenceType: 'Community YRO',
-        issp: 'No',
-        hdc: 'No',
-        prarr: 'No',
+        // issp: 'No',
+        // hdc: 'No',
+        // prarr: 'No',
       }
 
       const attendanceMonitoringOrder = {
@@ -185,7 +186,8 @@ context.skip('Scenarios', () => {
         installationAndRiskCheckYourAnswersPage.continueButton().click()
 
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-        monitoringConditionsPage.form.fillInWith(monitoringConditions)
+        fillInOrderTypeDescriptionsWith(monitoringConditions)
+
         monitoringConditionsPage.form.saveAndContinueButton.click()
 
         const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)

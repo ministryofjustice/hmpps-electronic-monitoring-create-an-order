@@ -71,12 +71,8 @@ context('Scenarios', () => {
     const probationDeliveryUnit = { unit: 'Blackburn' }
 
     const monitoringOrderTypeDescription = {
-      // orderType: 'Post Release',
       monitoringCondition: 'Exclusion zone monitoring',
       sentenceType: 'Imprisonment for Public Protection (IPP)',
-      // pilot: 'They are not part of any of these pilots',
-      // issp: 'No',
-      // hdc: 'No',
       prarr: 'No',
     }
     const enforcementZoneDetails = {

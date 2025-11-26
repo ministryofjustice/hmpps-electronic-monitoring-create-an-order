@@ -155,12 +155,10 @@ context('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
 
       const monitoringOrderTypeDescription = {
-        // orderType: 'Post Release',
         sentenceType: 'Standard Determinate Sentence',
         monitoringCondition: 'Trail monitoring',
         pilot: 'GPS acquisitive crime (EMAC)',
         typeOfAcquistiveCrime: 'Aggravated Burglary in a Dwelling',
-        // issp: 'No',
         hdc: 'No',
         prarr: 'No',
         policeForceArea: 'Avon and Somerset',

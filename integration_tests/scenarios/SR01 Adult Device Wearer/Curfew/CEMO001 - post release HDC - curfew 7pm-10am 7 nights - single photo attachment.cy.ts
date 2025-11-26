@@ -162,11 +162,9 @@ context('Scenarios', () => {
       mappaCaseType: 'Serious Organised Crime',
     }
     const monitoringOrderTypeDescription = {
-      // orderType: 'Post Release',
       monitoringCondition: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'Yes',
-      // issp: 'No',
       prarr: 'No',
       pilot: 'They are not part of any of these pilots',
     }

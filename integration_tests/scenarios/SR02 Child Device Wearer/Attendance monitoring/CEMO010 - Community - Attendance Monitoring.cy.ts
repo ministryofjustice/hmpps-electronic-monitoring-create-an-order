@@ -66,13 +66,9 @@ context('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Youth Custody Service', 'YJS', 'London', 'North West')
 
       const monitoringOrderTypeDescription = {
-        // orderType: 'Post Release',
         monitoringCondition: 'Mandatory attendance monitoring',
-        // pilot: 'They are not part of any of these pilots',
         sentenceType: 'Detention and Training Order (DTO)',
-        // sentenceType: 'Community YRO',
         issp: 'No',
-        // hdc: 'No',
         prarr: 'No',
       }
 

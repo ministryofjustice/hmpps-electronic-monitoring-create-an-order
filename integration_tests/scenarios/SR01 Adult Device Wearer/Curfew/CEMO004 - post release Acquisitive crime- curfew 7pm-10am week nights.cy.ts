@@ -167,11 +167,9 @@ context('Scenarios', () => {
       mappaCaseType: 'Serious Organised Crime',
     }
     const monitoringOrderTypeDescription = {
-      // orderType: 'Post Release',
       monitoringCondition: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-      // issp: 'No',
       hdc: 'Yes',
       prarr: 'No',
     }

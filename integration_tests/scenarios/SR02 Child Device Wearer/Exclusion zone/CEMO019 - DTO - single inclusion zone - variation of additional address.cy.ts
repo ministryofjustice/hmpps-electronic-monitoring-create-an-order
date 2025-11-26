@@ -95,12 +95,9 @@ context('Scenarios', () => {
       const probationDeliveryUnit = { unit: 'Brent' }
 
       const monitoringOrderTypeDescription = {
-        // orderType: 'Post Release',
         monitoringCondition: 'Exclusion zone monitoring',
         sentenceType: 'Detention and Training Order (DTO)',
-        // pilot: 'They are not part of any of these pilots',
         issp: 'No',
-        // hdc: 'No',
         prarr: 'No',
       }
       const enforcementZoneDetails = {

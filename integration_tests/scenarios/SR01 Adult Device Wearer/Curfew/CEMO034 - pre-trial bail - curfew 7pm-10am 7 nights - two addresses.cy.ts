@@ -61,7 +61,6 @@ context.skip('Scenarios', () => {
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'York Crown Court')
 
     const monitoringOrderTypeDescription = {
-      // orderType: 'Post Release',
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
       pilot: 'They are not part of any of these pilots',

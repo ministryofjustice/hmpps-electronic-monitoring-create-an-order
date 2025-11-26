@@ -59,11 +59,9 @@ context('Scenarios', () => {
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringOrderTypeDescription = {
-      // orderType: 'Post Release',
       monitoringCondition: 'Alcohol monitoring',
       pilot: 'They are not part of any of these pilots',
       sentenceType: 'Standard Determinate Sentence',
-      // issp: 'No',
       hdc: 'No',
       prarr: 'No',
     }

@@ -268,10 +268,6 @@ export default function routes({
    * MONITORING CONDITIONS
    */
 
-  // Main monitoring conditions page
-  // get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
-  // post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
-
   get(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.view)
   post(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.update)
 
