@@ -83,7 +83,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
         'What pilot project is the device wearer part of?',
-        'GPS Acquisitive Crime',
+        'GPS acquisitive crime (EMAC)',
       )
       page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
@@ -590,7 +590,7 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
-            pilot: '',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             offenceType: '',
           },
           curfewReleaseDateConditions: {
@@ -630,7 +630,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
         'What pilot project is the device wearer part of?',
-        'GPS Acquisitive Crime',
+        'GPS acquisitive crime (EMAC)',
       )
     })
   })

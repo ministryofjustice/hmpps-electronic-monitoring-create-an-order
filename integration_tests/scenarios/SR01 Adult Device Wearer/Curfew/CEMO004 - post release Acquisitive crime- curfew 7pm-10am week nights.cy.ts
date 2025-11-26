@@ -152,7 +152,12 @@ context('Scenarios', () => {
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
+    const interestedParties = createFakeInterestedParties(
+      'Prison',
+      'Probation',
+      'Bedford Prison',
+      'Kent, Surrey & Sussex',
+    )
 
     const installationAndRisk = {
       offence: 'Robbery',
@@ -161,14 +166,10 @@ context('Scenarios', () => {
       mappaLevel: 'MAPPA 1',
       mappaCaseType: 'Serious Organised Crime',
     }
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
-      monitoringRequired: 'Curfew',
+    const monitoringOrderTypeDescription = {
+      monitoringCondition: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-      issp: 'No',
       hdc: 'Yes',
       prarr: 'No',
     }
@@ -192,7 +193,7 @@ context('Scenarios', () => {
       },
     ])
 
-    const probationDeliveryUnit = { unit: 'Blackburn' }
+    const probationDeliveryUnit = { unit: 'East Kent' }
 
     it('Should successfully submit the order to the FMS API', () => {
       cy.signIn()
@@ -209,7 +210,7 @@ context('Scenarios', () => {
         secondaryAddressDetails: undefined,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
@@ -319,18 +320,18 @@ context('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+              order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
               order_variation_req_received_date: '',
               order_variation_type: '',
-              pdu_responsible: 'Blackburn',
+              pdu_responsible: 'East Kent',
               pdu_responsible_email: '',
               planned_order_end_date: '',
               responsible_officer_details_received: '',
@@ -348,7 +349,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: monitoringConditions.sentenceType,
+              sentence_type: monitoringOrderTypeDescription.sentenceType,
               // sentence_type: monitoringConditions.sentenceType,
               tag_at_source: '',
               tag_at_source_details: '',
@@ -362,7 +363,7 @@ context('Scenarios', () => {
               conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -417,7 +418,7 @@ context('Scenarios', () => {
               issp: 'No',
               hdc: 'Yes',
               order_status: 'Not Started',
-              pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+              pilot: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
             },
           })
           .should('be.true')

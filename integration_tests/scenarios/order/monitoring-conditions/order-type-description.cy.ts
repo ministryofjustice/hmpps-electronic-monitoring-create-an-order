@@ -7,7 +7,6 @@ import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monit
 
 context('Order type descriptions', () => {
   const currentDate = new Date()
-  const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: true }
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
     interpreterRequired: false,
@@ -33,7 +32,6 @@ context('Order type descriptions', () => {
     endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
   }
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 

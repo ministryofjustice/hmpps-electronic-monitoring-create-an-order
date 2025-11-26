@@ -14,7 +14,7 @@ import ContactDetailsPage from '../../../pages/order/contact-information/contact
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../../../pages/order/monitoring-conditions'
+import MonitoringConditionsPage from '../../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
@@ -29,6 +29,7 @@ import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 import SearchPage from '../../../pages/search'
+import fillInOrderTypeDescriptionsWith from '../../../utils/scenario-flows/orderTypeDescription'
 
 // test disabled as community YRO is not currently a valid sentence type
 context.skip('Scenarios', () => {
@@ -92,15 +93,13 @@ context.skip('Scenarios', () => {
         'North West',
       )
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
         orderType: 'Community',
-        monitoringRequired: 'Mandatory attendance monitoring',
-        pilot: 'They are not part of any of these pilots',
+        monitoringCondition: 'Mandatory attendance monitoring',
+        // pilot: 'They are not part of any of these pilots',
         // sentenceType: 'Community YRO',
-        issp: 'No',
-        hdc: 'No',
-        prarr: 'No',
+        // issp: 'No',
+        // hdc: 'No',
+        // prarr: 'No',
       }
 
       const attendanceMonitoringOrder = {
@@ -187,7 +186,8 @@ context.skip('Scenarios', () => {
         installationAndRiskCheckYourAnswersPage.continueButton().click()
 
         const monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-        monitoringConditionsPage.form.fillInWith(monitoringConditions)
+        fillInOrderTypeDescriptionsWith(monitoringConditions)
+
         monitoringConditionsPage.form.saveAndContinueButton.click()
 
         const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
@@ -292,8 +292,8 @@ context.skip('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'Attendance Requirement',
-                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                    start_date: formatAsFmsDateTime(attendanceMonitoringOrder.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(attendanceMonitoringOrder.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -315,10 +315,10 @@ context.skip('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(attendanceMonitoringOrder.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
+                order_start: formatAsFmsDateTime(attendanceMonitoringOrder.startDate, 0, 0),
                 order_type: 'Community',
                 order_type_description: null,
                 order_type_detail: '',
@@ -358,7 +358,7 @@ context.skip('Scenarios', () => {
                 conditional_release_end_time: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(attendanceMonitoringOrder.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',

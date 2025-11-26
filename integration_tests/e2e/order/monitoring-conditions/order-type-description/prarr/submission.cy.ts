@@ -110,7 +110,7 @@ context('order type', () => {
   })
 
   it('Should redirect to list monitoring page when no monitoring condition is available', () => {
-    const testFlags = { ORDER_TYPE_DESCRIPTION_FLOW_ENABLED: true, LIST_MONITORING_CONDITION_FLOW_ENABLED: true }
+    const testFlags = { LIST_MONITORING_CONDITION_FLOW_ENABLED: true }
     cy.task('setFeatureFlags', testFlags)
     stubGetOrder({
       monitoringConditions: createMonitoringConditions({ alcohol: true, hdc: 'NO', pilot: 'UNKNOWN' }),
