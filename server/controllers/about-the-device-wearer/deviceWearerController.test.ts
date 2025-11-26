@@ -462,6 +462,70 @@ describe('DeviceWearerController', () => {
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
     })
+
+    it('should trim whitespace from name fields before calling the service', async () => {
+      // Given
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          firstName: ' new ',
+          lastName: ' name ',
+          alias: 'new',
+          dateOfBirth: {
+            day: '02',
+            month: '03',
+            year: '1990',
+          },
+          adultAtTimeOfInstallation: 'true',
+          sex: 'FEMALE',
+          gender: 'FEMALE',
+          disabilities: ['VISION', 'MOBILITY'],
+          interpreterRequired: 'true',
+          language: 'British Sign',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateDeviceWearer.mockResolvedValue({
+        nomisId: null,
+        pncId: null,
+        deliusId: null,
+        prisonNumber: null,
+        homeOfficeReferenceNumber: null,
+        firstName: 'tester',
+        lastName: 'testington',
+        alias: 'test',
+        dateOfBirth: '1980-01-01T00:00:00.000Z',
+        adultAtTimeOfInstallation: true,
+        sex: 'FEMALE',
+        gender: 'FEMALE',
+        disabilities: ['VISION', 'MOBILITY'],
+        noFixedAbode: null,
+        interpreterRequired: true,
+        language: 'British Sign',
+      })
+      taskListService.getNextPage = jest.fn().mockReturnValue('/next-page')
+
+      // When
+      await deviceWearerController.updateDeviceWearer(req, res, next)
+
+      // Then
+      expect(mockDeviceWearerService.updateDeviceWearer).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            firstName: 'new',
+            lastName: 'name',
+          }),
+        }),
+      )
+    })
   })
 
   describe('viewIdentityNumbers', () => {
@@ -620,6 +684,75 @@ describe('DeviceWearerController', () => {
       // Then
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
+    })
+
+    it('should trim whitespace from identity numbers before calling the service', async () => {
+      // Given
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          nomisId: ' nomis ',
+          pncId: ' pnc ',
+          deliusId: ' delius ',
+          prisonNumber: ' prison ',
+          homeOfficeReferenceNumber: ' homeoffice ',
+          firstName: 'new',
+          lastName: 'name',
+          alias: 'new',
+          dateOfBirth: {
+            day: '02',
+            month: '03',
+            year: '1990',
+          },
+          adultAtTimeOfInstallation: 'true',
+          sex: 'FEMALE',
+          gender: 'FEMALE',
+          disabilities: ['VISION', 'MOBILITY'],
+          interpreterRequired: 'true',
+          language: 'British Sign',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        nomisId: 'nomis',
+        pncId: 'pnc',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+        homeOfficeReferenceNumber: 'homeoffice',
+        firstName: 'tester',
+        lastName: 'testington',
+        alias: 'test',
+        dateOfBirth: '1980-01-01T00:00:00.000Z',
+        adultAtTimeOfInstallation: true,
+        sex: 'MALE',
+        gender: 'MALE',
+        disabilities: ['VISION', 'MOBILITY'],
+        noFixedAbode: null,
+        interpreterRequired: true,
+        language: 'British Sign',
+      })
+      taskListService.getNextPage = jest.fn().mockReturnValue('/next-page')
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(mockDeviceWearerService.updateIdentityNumbers).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'homeoffice',
+          }),
+        }),
+      )
     })
   })
 })

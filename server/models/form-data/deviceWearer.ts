@@ -5,8 +5,8 @@ import { validationErrors } from '../../constants/validationErrors'
 
 // Parse html form data to ensure basic type safety at runtime
 const DeviceWearerFormDataParser = FormDataModel.extend({
-  firstName: z.string(),
-  lastName: z.string(),
+  firstName: z.string().trim(),
+  lastName: z.string().trim(),
   alias: z.string(),
   dateOfBirth: z.object({
     day: z.string(),
@@ -55,11 +55,11 @@ const DeviceWearerFormDataValidator = z.object({
 type DeviceWearerApiRequestBody = z.infer<typeof DeviceWearerFormDataValidator>
 
 const IdentityNumbersFormDataModel = FormDataModel.extend({
-  nomisId: z.string(),
-  pncId: z.string(),
-  deliusId: z.string(),
-  prisonNumber: z.string(),
-  homeOfficeReferenceNumber: z.string(),
+  nomisId: z.string().trim(),
+  pncId: z.string().trim(),
+  deliusId: z.string().trim(),
+  prisonNumber: z.string().trim(),
+  homeOfficeReferenceNumber: z.string().trim(),
 })
 
 type IdentityNumbersFormData = Omit<z.infer<typeof IdentityNumbersFormDataModel>, 'action'>
