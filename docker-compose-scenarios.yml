@@ -42,7 +42,7 @@ services:
 
   cemo-db:
     container_name: cemo-db
-    image: postgres:17
+    image: postgres:18
     restart: always
     networks:
       - hmpps_integration
