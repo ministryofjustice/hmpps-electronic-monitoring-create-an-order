@@ -89,27 +89,81 @@
       </a>
       {% endset %}
 
+      {# {% set row = [
+        {
+          html: name
+        },
+        {
+          text: order.dob
+        }
+        {
+          html: order.pins | join('<\br>')
+        }, 
+        {
+          text: order.location
+        }, 
+         {
+          text: order.startDate
+        }, 
+        {
+          text: order.endDate
+        }, 
+        {
+          text: order.lastUpdated
+        }
+      ] %} #}
+
       {% set row = [
         {
           html: name
-        }, {
+        },
+        {
           text: order.dob
-        }, {
+        },
+        {
           html: order.pins | join('<\br>')
-        }, {
+        }, 
+        {
           text: order.location
-        }, {
-          text: order.startDate
-        }, {
-          text: order.endDate
-        }, {
+        },         
+        {
           text: order.lastUpdated
         }
       ] %}
       {% set tableRows = (tableRows.push(row), tableRows) %}
     {% endfor %}
 
-    {{ govukTable({
+    {# {{ govukTable({
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: "Name"
+      },
+      {
+        text: "Date of birth"
+      },
+      {
+        text: "Personal ID number"
+      },
+      {
+        text: "Town or city"
+      },
+ 
+      {
+        text: "Start date"
+      },
+      {
+        text: "End date"
+      }, 
+
+      {
+        text: "Last updated"
+      }
+    ],
+    rows: tableRows
+  }) }} #}
+
+  {{ govukTable({
     firstCellIsHeader: false,
     head: [
       {
@@ -125,18 +179,11 @@
         text: "Town or city"
       },
       {
-        text: "Start date"
-      },
-      {
-        text: "End date"
-      },
-      {
         text: "Last updated"
       }
     ],
     rows: tableRows
   }) }}
-
   {% else %}
     {{ govukDetails({
       summaryText: "What's a personal identity number?",
