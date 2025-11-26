@@ -153,16 +153,15 @@ context('Scenarios', () => {
       }
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
-      const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
+
+      const monitoringOrderTypeDescription = {
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: 'Trail monitoring',
-        pilot: 'GPS Acquisitive Crime Home Detention Curfew',
-        issp: 'No',
+        monitoringCondition: 'Trail monitoring',
+        pilot: 'GPS acquisitive crime (EMAC)',
+        typeOfAcquistiveCrime: 'Aggravated Burglary in a Dwelling',
         hdc: 'No',
         prarr: 'No',
+        policeForceArea: 'Avon and Somerset',
       }
       const trailMonitoringDetails = {
         startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)), // 15 days
@@ -201,7 +200,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription,
           installationAddressDetails,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
@@ -316,13 +315,14 @@ context('Scenarios', () => {
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
-                offence_additional_details: '',
+                offence_additional_details:
+                  'Acquisitive crime offence is Aggravated Burglary in a Dwelling. Device wearer’s release address is in police force area: Avon and Somerset',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(trailMonitoringDetails.startDate, 0, 0),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -362,7 +362,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(trailMonitoringDetails.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',
@@ -385,7 +385,7 @@ context('Scenarios', () => {
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
-                pilot: 'GPS Acquisitive Crime Home Detention Curfew',
+                pilot: 'GPS Acquisitive Crime Parole',
               },
             })
             .should('be.true')

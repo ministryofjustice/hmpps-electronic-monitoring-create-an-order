@@ -62,14 +62,10 @@ context('Scenarios', () => {
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
-      monitoringRequired: 'Alcohol monitoring',
+    const monitoringOrderTypeDescription = {
+      monitoringCondition: 'Alcohol monitoring',
       pilot: 'They are not part of any of these pilots',
       sentenceType: 'Standard Determinate Sentence',
-      issp: 'No',
       hdc: 'No',
       prarr: 'No',
     }
@@ -108,7 +104,7 @@ context('Scenarios', () => {
         secondaryAddressDetails: undefined,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         installationAddressDetails,
         trailMonitoringDetails: undefined,
         enforcementZoneDetails: undefined,
@@ -225,11 +221,11 @@ context('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
+              order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -268,7 +264,7 @@ context('Scenarios', () => {
               conditional_release_end_time: '',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(alcoholMonitoringDetails.endDate),
               curfew_description: '',
               curfew_start: '',
               curfew_end: '',

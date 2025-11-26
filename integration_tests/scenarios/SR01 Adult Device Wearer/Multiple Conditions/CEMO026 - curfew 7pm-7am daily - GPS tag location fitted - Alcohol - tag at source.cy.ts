@@ -71,14 +71,10 @@ context('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        issp: 'Yes',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Trail monitoring', 'Alcohol monitoring'],
+        monitoringCondition: ['Curfew', 'Trail monitoring', 'Alcohol monitoring'],
         pilot: 'They are not part of any of these pilots',
-        hdc: 'No',
+        hdc: 'Yes',
         prarr: 'No',
       }
       const curfewReleaseDetails = {
@@ -143,7 +139,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription: monitoringConditions,
           installationAddressDetails,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
@@ -270,11 +266,11 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -314,7 +310,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -376,8 +372,8 @@ context('Scenarios', () => {
                 installation_address_post_code: installationAddressDetails.postcode,
                 crown_court_case_reference_number: '',
                 magistrate_court_case_reference_number: '',
-                issp: 'Yes',
-                hdc: 'No',
+                issp: 'No',
+                hdc: 'Yes',
                 order_status: 'Not Started',
                 pilot: '',
               },

@@ -14,7 +14,6 @@ import DeviceWearerService from './deviceWearerService'
 import EnforcementZoneService from './enforcementZoneServices'
 import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
 import InstallationAndRiskService from './installationAndRiskService'
-import MonitoringConditionsService from './monitoringConditionsService'
 import InterestedPartiesService from './interestedPartiesService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
@@ -53,7 +52,6 @@ export const services = () => {
   const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
-  const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
   const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
   const zoneService = new EnforcementZoneService(cemoApiClient)
   const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
@@ -92,7 +90,6 @@ export const services = () => {
     deviceWearerResponsibleAdultService,
     deviceWearerService,
     installationAndRiskService,
-    monitoringConditionsService,
     interestedPartiesService,
     orderSearchService,
     orderService,
@@ -128,7 +125,6 @@ export {
   EnforcementZoneService,
   EnforcementZoneAddToListService,
   InstallationAndRiskService,
-  MonitoringConditionsService,
   OrderSearchService,
   OrderService,
   TrailMonitoringService,
