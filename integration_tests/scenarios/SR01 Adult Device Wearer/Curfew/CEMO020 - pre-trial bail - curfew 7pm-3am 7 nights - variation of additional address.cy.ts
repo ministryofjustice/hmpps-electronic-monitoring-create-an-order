@@ -17,7 +17,7 @@ import InterestedPartiesPage from '../../../pages/order/contact-information/inte
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import SecondaryAddressPage from '../../../pages/order/contact-information/secondary-address'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import monitoringOrderTypeDescriptionCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -85,9 +85,7 @@ context.skip('Scenarios', () => {
         'Kent, Surrey & Sussex',
       )
       const probationDeliveryUnit = { unit: 'East Kent' }
-      const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+      const monitoringOrderTypeDescription = {
         orderType: 'Post Release',
         monitoringRequired: 'Curfew',
         hdc: 'Yes',
@@ -160,7 +158,7 @@ context.skip('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
@@ -211,7 +209,7 @@ context.skip('Scenarios', () => {
         Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
 
         // Note: The curfew times should be updated in this scenaro. This needs to be implemented.
-        Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(monitoringOrderTypeDescriptionCheckYourAnswersPage, 'Check your answers').continue()
         Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
 
         orderSummaryPage.submitOrderButton.click()
@@ -319,10 +317,10 @@ context.skip('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
                 order_id: orderId,
                 order_request_type: 'Variation',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
                 order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
@@ -361,7 +359,7 @@ context.skip('Scenarios', () => {
                 conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(variationCurfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),

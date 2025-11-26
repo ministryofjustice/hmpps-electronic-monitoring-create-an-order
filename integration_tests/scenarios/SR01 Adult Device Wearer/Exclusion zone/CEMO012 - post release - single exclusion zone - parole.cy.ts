@@ -69,20 +69,15 @@ context('Scenarios', () => {
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
-      orderType: 'Post Release',
-      monitoringRequired: 'Exclusion zone monitoring',
+
+    const monitoringOrderTypeDescription = {
+      monitoringCondition: 'Exclusion zone monitoring',
       sentenceType: 'Imprisonment for Public Protection (IPP)',
-      pilot: 'They are not part of any of these pilots',
-      issp: 'No',
-      hdc: 'No',
       prarr: 'No',
     }
     const enforcementZoneDetails = {
       zoneType: 'Exclusion zone',
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+      startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
       uploadFile: files.licence,
       description: 'Exclusion from Bolton town centre',
@@ -111,7 +106,7 @@ context('Scenarios', () => {
         secondaryAddressDetails: undefined,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         enforcementZoneDetails,
         files,
         probationDeliveryUnit,
@@ -196,8 +191,8 @@ context('Scenarios', () => {
               enforceable_condition: [
                 {
                   condition: 'EM Exclusion / Inclusion Zone',
-                  start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                  end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                  start_date: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+                  end_date: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                 },
               ],
               exclusion_allday: '',
@@ -219,11 +214,11 @@ context('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+              order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -261,7 +256,7 @@ context('Scenarios', () => {
               conditional_release_end_time: '',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(enforcementZoneDetails.endDate),
               curfew_description: '',
               curfew_start: '',
               curfew_end: '',
