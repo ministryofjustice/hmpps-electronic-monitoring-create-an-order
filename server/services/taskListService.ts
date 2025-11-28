@@ -449,7 +449,9 @@ export default class TaskListService {
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
-          order.installationLocation?.location === 'PROBATION_OFFICE',
+          order.installationLocation?.location === 'PROBATION_OFFICE' ||
+          order.installationLocation?.location === 'ANOTHER_ADDRESS',
+
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,

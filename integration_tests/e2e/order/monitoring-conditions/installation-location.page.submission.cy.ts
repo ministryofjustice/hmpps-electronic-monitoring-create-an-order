@@ -5,6 +5,7 @@ import InstallationAppointmentPage from '../../../pages/order/monitoring-conditi
 
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import CheckYourAnswersPage from '../../../pages/checkYourAnswersPage'
+import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-location'
@@ -214,6 +215,42 @@ context('Monitoring conditions', () => {
           page.form.fillInWith(validFormData)
           page.form.saveAndContinueButton.click()
           Page.verifyOnPage(InstallationAppointmentPage)
+        })
+
+        it('no selecting at another address', () => {
+          const orderWithoutFixedAddress = { ...mockDefaultOrder }
+          orderWithoutFixedAddress.addresses = []
+          orderWithoutFixedAddress.deviceWearer.noFixedAbode = true
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: orderWithoutFixedAddress,
+          })
+
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              location: 'ANOTHER_ADDRESS',
+            },
+          })
+
+          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
+          const validFormData = {
+            location: 'At another address',
+          }
+          page.form.fillInWith(validFormData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(InstallationAddressPage)
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              location: 'ANOTHER_ADDRESS',
+            },
+          }).should('be.true')
         })
       })
 
