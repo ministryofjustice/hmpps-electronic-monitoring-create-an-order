@@ -315,8 +315,7 @@ context('Scenarios', () => {
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
-                offence_additional_details:
-                  'Acquisitive crime offence is Aggravated Burglary in a Dwelling. Device wearer’s release address is in police force area: Avon and Somerset',
+                offence_additional_details: 'AC Offence: Aggravated Burglary in a Dwelling. PFA: Avon and Somerset',
                 offence_date: '',
                 order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                 order_id: orderId,
