@@ -450,7 +450,7 @@ export default class TaskListService {
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
           order.installationLocation?.location === 'PROBATION_OFFICE' ||
-          order.installationLocation?.location === 'ANOTHER_ADDRESS',
+          order.installationLocation?.location === 'INSTALLATION',
 
         STATES.cantBeStarted,
         STATES.required,

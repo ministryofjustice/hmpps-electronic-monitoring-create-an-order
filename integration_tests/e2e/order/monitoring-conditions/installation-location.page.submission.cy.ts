@@ -233,7 +233,7 @@ context('Monitoring conditions', () => {
             id: mockOrderId,
             subPath: apiPath,
             response: {
-              location: 'ANOTHER_ADDRESS',
+              location: 'INSTALLATION',
             },
           })
 
@@ -248,7 +248,7 @@ context('Monitoring conditions', () => {
           cy.task('stubCemoVerifyRequestReceived', {
             uri: `/orders/${mockOrderId}${apiPath}`,
             body: {
-              location: 'ANOTHER_ADDRESS',
+              location: 'INSTALLATION',
             },
           }).should('be.true')
         })
