@@ -49,6 +49,14 @@
           disabled: not isOrderEditable
         }
     ] %}
+  {% if not fixedAddressExist %}
+    {% set items = items.concat([{
+      value: "ANOTHER_ADDRESS",
+      text: "At another address",
+      disabled: not isOrderEditable
+    }]) %}
+  {% endif %}
+
   {{ govukRadios({
     name: "location",
     fieldset: {

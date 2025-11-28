@@ -331,6 +331,35 @@ context('Monitoring conditions', () => {
         page.form.locationField.shouldHaveOption('At a prison')
         page.form.locationField.shouldHaveOption('At a probation office')
       })
+
+      it('should show at another address option', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({
+          ...mockDefaultOrder,
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: false,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+            offenceType: '',
+          },
+        })
+        const page = Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+        page.form.locationField.shouldHaveOption('At another address')
+      })
     })
   })
 })
