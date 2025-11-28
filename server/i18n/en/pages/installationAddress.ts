@@ -1,7 +1,7 @@
 import AddressPageContent from '../../../types/i18n/pages/address'
 
 const installationAddressPageContent: AddressPageContent = {
-  helpText: '',
+  helpText: 'For installation at source this is the address of the prison or probation office.',
   legend: '',
   questions: {
     hasAnotherAddress: {

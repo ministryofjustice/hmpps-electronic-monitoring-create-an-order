@@ -266,8 +266,7 @@ context('The kitchen sink', () => {
             no_name: interestedParties.notifyingOrganisationName,
             no_phone_number: '',
             offence: installationAndRisk.offence,
-            offence_additional_details:
-              'Acquisitive crime offence is Burglary in a Dwelling - Indictable only. Device wearer’s release address is in police force area: Avon and Somerset',
+            offence_additional_details: 'AC Offence: Burglary in a Dwelling - Indictable only. PFA: Avon and Somerset',
             offence_date: '',
             order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
             order_id: orderId,
