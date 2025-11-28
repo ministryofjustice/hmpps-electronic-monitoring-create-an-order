@@ -33,6 +33,8 @@ context('Monitoring conditions', () => {
           log: false,
         }).should('not.exist')
 
+        page.hasHint('For installation at source this is the address of the prison or probation office.')
+
         page.form.addressLine1Field.shouldHaveValue('')
         page.form.addressLine2Field.shouldHaveValue('')
         page.form.addressLine3Field.shouldHaveValue('')
