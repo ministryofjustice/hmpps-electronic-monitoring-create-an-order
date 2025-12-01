@@ -458,6 +458,12 @@ context('Order Summary', () => {
 
       page.submitOrderButton.should('not.be.disabled')
     })
+
+    it('does not show the timeline', () => {
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.moj-timeline').should('not.exist')
+    })
   })
 
   context('Complete order, submitted', () => {

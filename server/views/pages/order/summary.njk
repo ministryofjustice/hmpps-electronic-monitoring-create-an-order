@@ -137,24 +137,24 @@
     </div>
 
     <div class="govuk-grid-column-one-thirds">
-
-	{{ mojTimeline({
-          items: [
-            {
-              label: {
-                text: "Form submitted"
-              },
-              datetime: {
-                timestamp: order.fmsResultDate,
-                type: "datetime"
-              },
-              byline: {
-                text: order.submittedBy
+	{% if order.status=='SUBMITTED' %}
+	  {{ mojTimeline({
+            items: [
+              {
+                label: {
+                  text: "Form submitted"
+                },
+                datetime: {
+                  timestamp: order.fmsResultDate,
+                  type: "datetime"
+                },
+                byline: {
+                  text: order.submittedBy
+                }
               }
-            }
-	  ]
-        })}}
-
+	    ]
+          })}}
+	{% endif %}
     </div>
   </div>
 {% endblock %}
