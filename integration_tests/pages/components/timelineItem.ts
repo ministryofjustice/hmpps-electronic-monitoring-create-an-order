@@ -16,4 +16,8 @@ export default class TimelineItem {
   usernameIs(username: string) {
     this.element.get('.moj-timeline__byline').contains(username)
   }
+
+  resultDateIs(time: string) {
+    this.element.get('.moj-timeline__date').contains(time)
+  }
 }

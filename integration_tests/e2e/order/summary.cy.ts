@@ -476,7 +476,8 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'SUBMITTED',
-          username: 'John Smith',
+          submittedBy: 'John Smith',
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -727,7 +728,8 @@ context('Order Summary', () => {
 
       page.timeline.element.should('exist')
       page.timeline.formSubmittedComponent.element.should('exist')
-      // page.timeline.formSubmittedComponent.usernameIs('John Smith')
+      page.timeline.formSubmittedComponent.usernameIs('John Smith')
+      page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
 
