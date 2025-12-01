@@ -10,6 +10,7 @@ const expectedValidationErrors = {
   is18: 'Select yes if a responsible adult is required',
   sex: "Select the device wearer's sex, or select 'Not able to provide this information'",
   gender: "Select the device wearer's gender, or select 'Not able to provide this information'",
+  disabilities: 'Select if the device wearer has any disability or health conditions',
   interpreter: 'Select yes if the device wearer requires an interpreter',
 }
 
@@ -46,6 +47,7 @@ context('About the device wearer', () => {
         page.form.responsibleAdultRequiredField.shouldHaveValidationMessage(expectedValidationErrors.is18)
         page.form.sexField.shouldHaveValidationMessage(expectedValidationErrors.sex)
         page.form.genderIdentityField.shouldHaveValidationMessage(expectedValidationErrors.gender)
+        page.form.disabilityField.shouldHaveValidationMessage(expectedValidationErrors.disabilities)
         page.form.interpreterRequiredField.shouldHaveValidationMessage(expectedValidationErrors.interpreter)
       })
     })
