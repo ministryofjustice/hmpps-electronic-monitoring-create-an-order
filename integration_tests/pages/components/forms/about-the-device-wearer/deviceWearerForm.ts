@@ -92,6 +92,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
       'Health condition affecting stamina, breathing or causing fatigue',
       'Conditions affecting social skills and behaviour',
       'The device wearer has a disability or health condition not listed',
+      'The device wearer does not have any of the disabilities or health conditions listed',
       'Not able to provide this information',
     ])
   }
@@ -110,6 +111,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
       'Health condition affecting stamina, breathing or causing fatigue',
       'Conditions affecting social skills and behaviour',
       'The device wearer has a disability or health condition not listed',
+      'The device wearer does not have any of the disabilities or health conditions listed',
       'Not able to provide this information',
     ])
   }
