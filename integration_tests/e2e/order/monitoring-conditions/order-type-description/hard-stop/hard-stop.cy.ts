@@ -27,7 +27,7 @@ context('hard stop page', () => {
     cy.get('#return-button').contains('Return to form')
   })
 
-  it('Should go to hard stop page from offence type page if they did not commit one of these offences', () => {
+  it('Should go to hard stop page from offence type page if did not commit one of these offences', () => {
     const page = Page.visit(OffenceTypePage, { orderId: mockOrderId })
 
     page.form.fillInWith('They did not commit one of these offences')
