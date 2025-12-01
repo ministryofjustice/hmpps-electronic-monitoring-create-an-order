@@ -476,6 +476,7 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'SUBMITTED',
+          username: 'John Smith',
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -719,6 +720,14 @@ context('Order Summary', () => {
       page.makeChangesButton.click()
 
       Page.verifyOnPage(ConfirmVariationPage)
+    })
+
+    it('should show timeline component', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formSubmittedComponent.element.should('exist')
+      // page.timeline.formSubmittedComponent.usernameIs('John Smith')
     })
   })
 
