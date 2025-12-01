@@ -16,7 +16,7 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
       text: "What is the device wearer's date of birth?",
     },
     disabilities: {
-      text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+      text: 'Does the device wearer have any of the disabilities or health conditions listed?',
       hint: 'Select all that apply',
     },
     firstName: {

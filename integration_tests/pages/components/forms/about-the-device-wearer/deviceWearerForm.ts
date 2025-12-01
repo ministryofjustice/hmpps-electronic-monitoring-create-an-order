@@ -80,7 +80,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // Disabilities
 
   get disabilityField(): FormRadiosComponent {
-    const label = 'Does the device wearer have any of the disabilities or health conditions listed? (optional)'
+    const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
     return new FormRadiosComponent(this.form, label, [
       'Visual impairment or blindness not corrected by wearing glasses',
       'Deafness or serious hearing impairment',
@@ -97,7 +97,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get disabilityFieldDDv5(): FormRadiosComponent {
-    const label = 'Does the device wearer have any of the disabilities or health conditions listed? (optional)'
+    const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
     return new FormRadiosComponent(this.form, label, [
       'Visual impairment or blindness not corrected by wearing glasses',
       'Deafness or serious hearing impairment',
