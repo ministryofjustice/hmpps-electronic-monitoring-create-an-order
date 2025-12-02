@@ -38,7 +38,6 @@ export default class OrderController {
     const sections = await this.taskListService.getSections(req.order!)
     const error = req.flash('submissionError')
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
-
     res.render('pages/order/summary', {
       order: req.order,
       sections,
