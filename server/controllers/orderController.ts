@@ -5,6 +5,7 @@ import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
+import { Order } from '../models/Order'
 
 export default class OrderController {
   constructor(
@@ -37,7 +38,7 @@ export default class OrderController {
 
     const timeline = {
       showTimeline: order.status === 'SUBMITTED' || order.status === 'ERROR',
-      timelineText: order.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit',
+      timelineText: this.getTimelineText(order),
     }
 
     res.render('pages/order/summary', {
@@ -138,5 +139,12 @@ export default class OrderController {
       orderId,
       orderType,
     })
+  }
+
+  private getTimelineText = (order: Order) => {
+    if (order.type === 'VARIATION') {
+      return 'Changes submitted'
+    }
+    return order.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
   }
 }

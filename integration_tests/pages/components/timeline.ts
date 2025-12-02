@@ -21,4 +21,8 @@ export default class Timeline {
   get formFailedComponent(): TimelineItem {
     return new TimelineItem('Failed to submit')
   }
+
+  get formVariationComponent(): TimelineItem {
+    return new TimelineItem('Changes submitted')
+  }
 }

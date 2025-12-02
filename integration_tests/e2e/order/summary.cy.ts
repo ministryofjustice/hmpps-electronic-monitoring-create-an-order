@@ -814,7 +814,6 @@ context('Order Summary', () => {
               postcode: '',
             },
           ],
-          contactDetails: { contactNumber: '' },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -1027,196 +1026,22 @@ context('Order Summary', () => {
   })
 
   context('Complete order, failed to submit', () => {
-    const testFlags = { CREATE_NEW_ORDER_VERSION_ENABLED: true }
-
     beforeEach(() => {
       cy.task('reset')
-      cy.task('setFeatureFlags', testFlags)
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      // Create an order with all fields present (even though they're not valid)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
-        status: 'SUBMITTED',
         order: {
           id: mockOrderId,
           status: 'ERROR',
           submittedBy: 'John Smith',
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
-          deviceWearer: {
-            nomisId: '',
-            pncId: null,
-            deliusId: null,
-            prisonNumber: null,
-            homeOfficeReferenceNumber: null,
-            firstName: 'Joe',
-            lastName: 'Bloggs',
-            alias: null,
-            dateOfBirth: null,
-            adultAtTimeOfInstallation: false,
-            sex: null,
-            gender: null,
-            disabilities: '',
-            noFixedAbode: false,
-            interpreterRequired: null,
-          },
-          deviceWearerResponsibleAdult: {
-            contactNumber: null,
-            fullName: null,
-            otherRelationshipDetails: null,
-            relationship: null,
-          },
-          contactDetails: { contactNumber: '' },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
-          interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: '',
-            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
-            responsibleOrganisationAddress: {
-              addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationPhoneNumber: '',
-            responsibleOrganisationRegion: '',
-          },
-          enforcementZoneConditions: [
-            {
-              description: null,
-              duration: null,
-              endDate: null,
-              fileId: null,
-              fileName: null,
-              startDate: null,
-              zoneId: null,
-              zoneType: null,
-            },
-          ],
-          addresses: [
-            {
-              addressType: 'PRIMARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'SECONDARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'TERTIARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'INSTALLATION',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-          ],
-          additionalDocuments: [],
-          monitoringConditions: {
-            orderType: null,
-            curfew: true,
-            exclusionZone: true,
-            trail: true,
-            mandatoryAttendance: true,
-            alcohol: true,
-            orderTypeDescription: null,
-            conditionType: null,
-            startDate: null,
-            endDate: null,
-            sentenceType: null,
-            issp: null,
-            hdc: null,
-            prarr: null,
-            pilot: null,
-            isValid: true,
-            offenceType: null,
-          },
-          monitoringConditionsTrail: { startDate: null, endDate: null },
-          monitoringConditionsAlcohol: {
-            endDate: null,
-            installationLocation: null,
-            monitoringType: null,
-            prisonName: null,
-            probationOfficeName: null,
-            startDate: null,
-          },
-          isValid: false,
-          mandatoryAttendanceConditions: [
-            {
-              addressLine1: null,
-              addressLine2: null,
-              addressLine3: null,
-              addressLine4: null,
-              appointmentDay: null,
-              endDate: null,
-              endTime: null,
-              postcode: null,
-              purpose: null,
-              startDate: null,
-              startTime: null,
-            },
-          ],
-          curfewReleaseDateConditions: {
-            curfewAddress: null,
-            endTime: null,
-            orderId: null,
-            releaseDate: null,
-            startTime: null,
-          },
-          curfewConditions: {
-            curfewAddress: null,
-            endDate: null,
-            orderId: null,
-            startDate: null,
-            curfewAdditionalDetails: null,
-          },
-          curfewTimeTable: [
-            {
-              curfewAddress: '',
-              dayOfWeek: '',
-              endTime: '',
-              orderId: '',
-              startTime: '',
-            },
-          ],
         },
       })
 
       cy.signIn()
-    })
-
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
     })
 
     it('should show timeline component', () => {
@@ -1226,6 +1051,36 @@ context('Order Summary', () => {
       page.timeline.formFailedComponent.element.should('exist')
       page.timeline.formFailedComponent.usernameIs('John Smith')
       page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
+    })
+  })
+
+  context('Complete order, variation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          id: mockOrderId,
+          status: 'SUBMITTED',
+          submittedBy: 'John Smith',
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+          type: 'VARIATION',
+        },
+      })
+
+      cy.signIn()
+    })
+
+    it('should show timeline component', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formVariationComponent.element.should('exist')
+      page.timeline.formVariationComponent.usernameIs('John Smith')
+      page.timeline.formVariationComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
 
