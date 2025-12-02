@@ -24,7 +24,6 @@ const VariationDetailsModel = z.object({
   variationType: VariationTypeEnum,
   variationDate: z.string().datetime(),
   variationDetails: z.string(),
-  serviceRequestType: z.string().optional(),
 })
 
 export type VariationDetails = z.infer<typeof VariationDetailsModel>

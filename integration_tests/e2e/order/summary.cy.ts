@@ -112,19 +112,13 @@ context('Order Summary', () => {
       page.submitOrderButton.should('be.disabled')
     })
 
-    it('should have hint text for Making a change', () => {
+    it('should have hint text for Variation', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
           type: 'VARIATION',
-          variationDetails: {
-            variationType: 'CHANGE_TO_ADDRESS',
-            variationDate: '2024-01-01T00:00:00.000Z',
-            variationDetails: 'Change to curfew hours',
-            serviceRequestType: 'MAKING_A_CHANGE',
-          },
         },
       })
 
@@ -139,13 +133,7 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          type: 'VARIATION',
-          variationDetails: {
-            variationType: 'CHANGE_TO_ADDRESS',
-            variationDate: '2024-01-01T00:00:00.000Z',
-            variationDetails: 'Change to curfew hours',
-            serviceRequestType: 'REVOCATION',
-          },
+          type: 'REVOCATION',
         },
       })
 
@@ -160,13 +148,7 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          type: 'VARIATION',
-          variationDetails: {
-            variationType: 'CHANGE_TO_ADDRESS',
-            variationDate: '2024-01-01T00:00:00.000Z',
-            variationDetails: 'Change to curfew hours',
-            serviceRequestType: 'REINSTALL_DEVICE',
-          },
+          type: 'REINSTALL_DEVICE',
         },
       })
 
@@ -183,13 +165,7 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          type: 'VARIATION',
-          variationDetails: {
-            variationType: 'CHANGE_TO_ADDRESS',
-            variationDate: '2024-01-01T00:00:00.000Z',
-            variationDetails: 'Change to curfew hours',
-            serviceRequestType: 'REINSTALL_AT_DIFFERENT_ADDRESS',
-          },
+          type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
         },
       })
 
