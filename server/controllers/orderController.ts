@@ -33,12 +33,19 @@ export default class OrderController {
     const sections = await this.taskListService.getSections(req.order!)
     const error = req.flash('submissionError')
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
+    const order = req.order!
+
+    const timeline = {
+      showTimeline: order.status === 'SUBMITTED' || order.status === 'ERROR',
+      timelineText: order.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit',
+    }
 
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled,
+      timeline,
     })
   }
 

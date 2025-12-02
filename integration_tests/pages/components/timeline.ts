@@ -15,6 +15,10 @@ export default class Timeline {
   }
 
   get formSubmittedComponent(): TimelineItem {
-    return new TimelineItem('submitted')
+    return new TimelineItem('Form submitted')
+  }
+
+  get formFailedComponent(): TimelineItem {
+    return new TimelineItem('Failed to submit')
   }
 }

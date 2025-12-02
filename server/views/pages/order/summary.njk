@@ -137,12 +137,12 @@
     </div>
 
     <div class="govuk-grid-column-one-thirds">
-	{% if order.status=='SUBMITTED' %}
+	{% if timeline.showTimeline %}
 	  {{ mojTimeline({
             items: [
               {
                 label: {
-                  text: "Form submitted"
+                  text: timeline.timelineText
                 },
                 datetime: {
                   timestamp: order.fmsResultDate,

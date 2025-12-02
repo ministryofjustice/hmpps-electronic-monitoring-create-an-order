@@ -4,8 +4,8 @@ import { PageElement } from '../page'
 export default class TimelineItem {
   private elementCacheId: string = uuidv4()
 
-  constructor(status: string) {
-    cy.contains('.moj-timeline__title', status).parents('.moj-timeline__item').as(`${this.elementCacheId}-element`)
+  constructor(title: string) {
+    cy.contains('.moj-timeline__title', title).parents('.moj-timeline__item').as(`${this.elementCacheId}-element`)
     this.element.should('exist')
   }
 
