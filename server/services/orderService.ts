@@ -57,6 +57,17 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
+  async getVersions(input: OrderRequestInput): Promise<Order[]> {
+    const result = await this.apiClient
+      .get({
+        path: `/api/orders/${input.orderId}/versions`,
+        token: input.accessToken,
+      })
+      .then(res => res.map(res => OrderModel.parse(res)))
+
+    return result
+  }
+
   async deleteOrder(input: OrderRequestInput): Promise<Result<void, string>> {
     try {
       await this.apiClient.delete({
