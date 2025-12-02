@@ -3,7 +3,15 @@ import Page from '../../../pages/page'
 import VariationDetailsPage from '../../../pages/order/variation/variationDetails'
 
 const mockOrderId = uuidv4()
-
+const stubOrder = (type: string = 'VARIATION', dataDictionaryVersion: string = 'DDV5') => {
+  cy.task('stubCemoGetOrder', {
+    httpStatus: 200,
+    id: mockOrderId,
+    status: 'IN_PROGRESS',
+    type,
+    order: { type, dataDictionaryVersion },
+  })
+}
 context('Variation', () => {
   context('Variation Details', () => {
     context('Viewing a draft order', () => {
@@ -11,7 +19,7 @@ context('Variation', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        stubOrder()
 
         cy.signIn()
       })
@@ -25,6 +33,7 @@ context('Variation', () => {
 
         // Verify form elements present and editable
         page.form.variationDetailsField.element.should('exist')
+        cy.get('form').find('legend').contains('What have you changed in the form?').should('exist')
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
@@ -34,14 +43,15 @@ context('Variation', () => {
         page.checkIsAccessible()
       })
 
+      it('Should not show what have changed if type is REVOCATION', () => {
+        stubOrder('REVOCATION')
+        Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+        Page.verifyOnPage(VariationDetailsPage)
+        cy.get('form').find('legend').contains('What have you changed in the form?').should('not.exist')
+      })
       context('DDv5', () => {
         beforeEach(() => {
-          cy.task('stubCemoGetOrder', {
-            httpStatus: 200,
-            id: mockOrderId,
-            status: 'IN_PROGRESS',
-            order: { dataDictionaryVersion: 'DDV5' },
-          })
+          stubOrder()
         })
 
         it('Should have DDv5 options only', () => {
@@ -68,12 +78,7 @@ context('Variation', () => {
 
       context('DDv4', () => {
         beforeEach(() => {
-          cy.task('stubCemoGetOrder', {
-            httpStatus: 200,
-            id: mockOrderId,
-            status: 'IN_PROGRESS',
-            order: { dataDictionaryVersion: 'DDV4' },
-          })
+          stubOrder('VARIATION', 'DDV4')
         })
 
         it('Should have DDv4 options only', () => {

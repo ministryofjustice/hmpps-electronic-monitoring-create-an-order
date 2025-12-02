@@ -55,7 +55,7 @@
     ],
     errorMessage: variationDate.error
   }) }}
-
+{% if type === 'VARIATION'%}
   {{ govukRadios({
     name: "variationType",
     fieldset: {
@@ -69,7 +69,7 @@
     errorMessage: variationType.error,
     items: content.reference.variationTypes | toOptions(not isOrderEditable)| removeOptions(['CHANGE_TO_DEVICE_TYPE'])
   }) }}
-
+{% endif %}
 
   {{ govukCharacterCount({
     name: "variationDetails",
