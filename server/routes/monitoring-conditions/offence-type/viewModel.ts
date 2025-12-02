@@ -5,12 +5,16 @@ import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
 export type OffenceTypeViewModel = ViewModel<Pick<MonitoringConditions, 'offenceType'>> & {
-  items: Option[]
+  items: (Option | Divider)[]
 }
 
 interface Option {
   text: string
   value: string
+}
+
+interface Divider {
+  divider: string
 }
 
 const constructModel = (data: MonitoringConditions, errors: ValidationResult): OffenceTypeViewModel => {
@@ -62,6 +66,13 @@ const getItems = () => {
     {
       value: 'Robbery',
       text: 'Robbery',
+    },
+    {
+      divider: 'or',
+    },
+    {
+      value: 'They did not commit one of these offences',
+      text: 'They did not commit one of these offences',
     },
   ]
 }

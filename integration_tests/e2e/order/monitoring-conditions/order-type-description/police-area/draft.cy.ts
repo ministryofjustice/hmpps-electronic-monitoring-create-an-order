@@ -37,8 +37,12 @@ context('police area', () => {
     const page = Page.visit(PoliceAreaPage, { orderId: mockOrderId })
 
     const hintText =
-      "To be eligible for the acquisitive crime pilot the device wearer's release address must be in an in-scope police area."
+      'Enter the full postcode of the device wearer release address in the police force lookup (opens in a new tab) to find the area.'
+    const redundantCOMText = 'Any queries around pilot eligibility need to be raised with the appropriate COM.'
+
     page.form.policeAreaField.element.contains(hintText)
+    page.form.policeAreaField.element.contains('a', 'police force lookup (opens in a new tab)')
+    page.form.policeAreaField.element.contains(redundantCOMText).should('not.exist')
 
     page.form.policeAreaField.shouldHaveOption('Avon and Somerset')
     page.form.policeAreaField.shouldHaveOption('Bedfordshire')
@@ -59,5 +63,8 @@ context('police area', () => {
     page.form.policeAreaField.shouldHaveOption('Nottinghamshire')
     page.form.policeAreaField.shouldHaveOption('Sussex')
     page.form.policeAreaField.shouldHaveOption('West Midlands')
+    page.form.policeAreaField.shouldHaveOption(
+      "The device wearer's release address is in a different police force area",
+    )
   })
 })
