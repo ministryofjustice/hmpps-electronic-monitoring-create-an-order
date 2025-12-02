@@ -198,7 +198,6 @@
 
     {% if disability.value == 'OTHER' %}
       {% set disabilityOptions = (
-        disabilityOptions.push({divider: "or"}),
         disabilityOptions.push({
           value: disability.value,
           text: disability.text,
@@ -210,6 +209,12 @@
           }
         }),
         disabilityOptions
+      ) %}
+
+    {% elif disability.value == 'NO_LISTED_CONDITION' %}
+      {% set disabilityOptions = (
+        disabilityOptions.push({divider: "or"}),
+        disabilityOptions.push(disability), disabilityOptions
       ) %}
 
     {% elif disability.value == 'NONE' %}
