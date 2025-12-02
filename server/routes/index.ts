@@ -27,7 +27,7 @@ import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
-import type { Services } from '../services'
+import { type Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
@@ -71,6 +71,7 @@ export default function routes({
   monitoringConditionsStoreService,
   monitoringConditionsUpdateService,
   removeMonitoringTypeService,
+  serviceRequestTypeService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -359,6 +360,6 @@ export default function routes({
   )
 
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
-  router.use(paths.ORDER.BASE_URL, createVariationRouter())
+  router.use(paths.ORDER.BASE_URL, createVariationRouter({ serviceRequestTypeService }))
   return router
 }
