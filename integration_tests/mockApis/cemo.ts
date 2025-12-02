@@ -23,7 +23,12 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+type ApiOrder = Omit<Order, 'deviceWearer'> & {
+  deviceWearer: Omit<Order['deviceWearer'], 'disabilities'> & {
+    disabilities: string
+  }
+}
+export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS'): ApiOrder => ({
   id: uuidv4(),
   status,
   type: 'REQUEST',
@@ -41,7 +46,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     adultAtTimeOfInstallation: null,
     sex: null,
     gender: null,
-    disabilities: null,
+    disabilities: '',
     noFixedAbode: null,
     interpreterRequired: null,
   },
@@ -55,8 +60,6 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
   additionalDocuments: [],
   monitoringConditions: {
     orderType: null,
-    acquisitiveCrime: null,
-    dapol: null,
     curfew: null,
     exclusionZone: null,
     trail: null,
@@ -72,6 +75,7 @@ export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
     prarr: null,
     pilot: null,
     offenceType: null,
+    isValid: false,
   },
   monitoringConditionsTrail: null,
   monitoringConditionsAlcohol: null,
@@ -180,6 +184,29 @@ const searchOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions)
       status: options.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       jsonBody: options.httpStatus === 200 ? options.orders : null,
+    },
+  })
+
+type GetVersionsStubOptions = {
+  httpStatus: number
+  versions?: object[]
+}
+
+const defaultGetVersionsOptions = {
+  httpStatus: 200,
+  versions: [mockApiOrder('SUBMITTED')],
+}
+
+const getVersions = (options: GetVersionsStubOptions = defaultGetVersionsOptions): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/cemo/api/orders/versions',
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? options.versions : null,
     },
   })
 
@@ -695,6 +722,7 @@ export default {
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoSearchOrders: searchOrders,
+  stubCemoGetVersions: getVersions,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
