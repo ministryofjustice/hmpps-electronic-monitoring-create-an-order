@@ -5,20 +5,22 @@ import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import ServiceRequestTypeService from './service'
+import getContent from '../../../i18n'
+import { Locales } from '../../../types/i18n/locale'
 
 export default class ServiceRequestTypeController {
   constructor(private readonly service: ServiceRequestTypeService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-
+    if (res.locals.content === undefined) res.locals.content = getContent(Locales.en, 'DDV5')
     res.render('pages/order/variation/service-request-type', {
       errorSummary: createGovukErrorSummary(errors),
     })
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
+    const { order } = req
     const formData = ServiceRequestTypeFormDataModel.parse(req.body)
 
     if (formData.serviceRequestType === undefined) {
@@ -29,15 +31,24 @@ export default class ServiceRequestTypeController {
           focusTarget: 'serviceRequestType',
         },
       ])
-      res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', order.id))
+      if (order !== undefined) res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', order.id))
+      else res.redirect(paths.VARIATION.CREATE_VARIATION)
       return
     }
 
-    await this.service.createVariationFromExisting({
-      orderId: order.id,
-      accessToken: res.locals.user.token,
-      serviceRequestType: formData.serviceRequestType!,
-    })
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    if (order !== undefined) {
+      await this.service.createVariationFromExisting({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+        serviceRequestType: formData.serviceRequestType!,
+      })
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    } else {
+      const newOrder = await this.service.createVariation({
+        accessToken: res.locals.user.token,
+        serviceRequestType: formData.serviceRequestType!,
+      })
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', newOrder.id))
+    }
   }
 }

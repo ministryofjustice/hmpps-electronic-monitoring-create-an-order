@@ -15,6 +15,11 @@ export default class OrderController {
 
   create: RequestHandler = async (req: Request, res: Response) => {
     const formData = CreateOrderFormDataParser.parse(req.body)
+    if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED') && formData.type === 'VARIATION') {
+      res.redirect(paths.VARIATION.CREATE_VARIATION)
+      return
+    }
+
     const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
 
     res.redirect(`/order/${order.id}/summary`)

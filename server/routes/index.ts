@@ -38,7 +38,7 @@ import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
-import createVariationRouter from './variations/router'
+import ServiceRequestTypeController from './variations/service-request-type/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -187,6 +187,8 @@ export default function routes({
   )
 
   const isRejectionController = new IsRejectionController(isRejectionService)
+
+  const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -349,6 +351,9 @@ export default function routes({
    */
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
+  get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
+  post(paths.VARIATION.SERVICE_REQUEST_TYPE, asyncMiddleware(serviceRequestTypeController.update))
+  get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
@@ -360,6 +365,6 @@ export default function routes({
   )
 
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
-  router.use(paths.ORDER.BASE_URL, createVariationRouter({ serviceRequestTypeService }))
+
   return router
 }
