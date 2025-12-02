@@ -67,6 +67,7 @@ describe('VariationDetailsController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
         errorSummary: null,
+        type: 'VARIATION',
         variationDate: {
           value: {
             day: '',
@@ -121,6 +122,7 @@ describe('VariationDetailsController', () => {
         variationDetails: {
           value: 'Change to curfew hours',
         },
+        type: 'VARIATION',
         errorSummary: null,
       })
     })
@@ -180,6 +182,7 @@ describe('VariationDetailsController', () => {
             text: 'Enter information on what you have changed',
           },
         },
+        type: 'VARIATION',
         errorSummary: {
           titleText: 'There is a problem',
           errorList: [
