@@ -121,7 +121,7 @@ const doesOrderHavePhotoId = (order: Order): boolean => {
 const isTagAtSourcePilotPrison = (order: Order): boolean => {
   if (order.interestedParties?.notifyingOrganisation === 'PRISON') {
     const prisons = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
-    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName) !== -1
+    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName ?? '') !== -1
   }
   return false
 }
@@ -255,7 +255,11 @@ export default class TaskListService {
       name: PAGES.interestParties,
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       state: STATES.required,
-      completed: isNotNullOrUndefined(order.interestedParties),
+      completed:
+        isNotNullOrUndefined(order.interestedParties) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisation) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationName) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
     })
 
     if (order.dataDictionaryVersion === 'DDV5') {
