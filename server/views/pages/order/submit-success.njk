@@ -7,7 +7,7 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% if orderType == 'VARIATION' %}
+{% if isVariation %}
   {% set titleText = "Changes to the form successfully submitted" %}
 {% else %}
   {% set titleText = "Application form successfully submitted" %}

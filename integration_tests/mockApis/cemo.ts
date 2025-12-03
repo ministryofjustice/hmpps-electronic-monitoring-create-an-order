@@ -23,10 +23,10 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-export const mockApiOrder = (status: string = 'IN_PROGRESS') => ({
+export const mockApiOrder = (status: string = 'IN_PROGRESS', type: string = 'REQUEST') => ({
   id: uuidv4(),
   status,
-  type: 'REQUEST',
+  type,
   dataDictionaryVersion: 'DDV4',
   deviceWearer: {
     nomisId: null,

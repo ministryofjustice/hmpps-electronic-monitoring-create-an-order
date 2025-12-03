@@ -21,11 +21,29 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if order.status === 'SUBMITTED' else "Electronic Monitoring application form" %}
+      {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if (order.status === 'SUBMITTED') or (order.deviceWearer.firstName)  else "Electronic Monitoring application form" %}
 
       <h1 class="govuk-heading-l">
         {{ heading }}
       </h1>
+      {% if order.type ==='VARIATION' %}
+       <div id="waste-hint" class="govuk-hint">
+          You are making changes to a submitted form.
+       </div>
+      {% elif order.type ==='REVOCATION'%}
+       <div id="waste-hint" class="govuk-hint">
+          You are ending all monitoring for the device wearer.
+       </div>
+      {% elif order.type ==='REINSTALL_DEVICE'%}
+       <div id="waste-hint" class="govuk-hint">
+          You are requesting monitoring equipment to be reinstalled or checked.
+       </div>
+      {% elif order.type ==='REINSTALL_AT_DIFFERENT_ADDRESS'%}
+       <div id="waste-hint" class="govuk-hint">
+          You are requesting monitoring equipment to be installed at a new address.
+       </div>
+      {% endif %}
+
 
       {% if order.status === "ERROR" %}
         {% set insetHtml %}

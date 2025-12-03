@@ -94,6 +94,8 @@ const paths = {
 
   VARIATION: {
     VARIATION_DETAILS: '/order/:orderId/variation/details',
+    SERVICE_REQUEST_TYPE: '/order/:orderId/service-request-type',
+    CREATE_VARIATION: '/order/create-variation',
   },
 }
 

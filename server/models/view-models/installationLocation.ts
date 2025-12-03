@@ -17,7 +17,7 @@ type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
 const getPilotPrisonStatus = (order: Order): boolean => {
   if (order.interestedParties?.notifyingOrganisation === 'PRISON') {
     const prisons = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
-    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName) !== -1
+    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName ?? '') !== -1
   }
   return false
 }

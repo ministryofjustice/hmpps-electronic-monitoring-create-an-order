@@ -21,7 +21,16 @@ const createOrderStatusAnswers = (order: Order) => {
   return answers
 }
 
-const getOrderTypeName = (type: 'REQUEST' | 'VARIATION' | 'REJECTED' | 'AMEND_ORIGINAL_REQUEST') => {
+const getOrderTypeName = (
+  type:
+    | 'REQUEST'
+    | 'VARIATION'
+    | 'REJECTED'
+    | 'AMEND_ORIGINAL_REQUEST'
+    | 'REINSTALL_AT_DIFFERENT_ADDRESS'
+    | 'REINSTALL_DEVICE'
+    | 'REVOCATION',
+) => {
   switch (type) {
     case 'REQUEST': {
       return 'New order'
@@ -34,6 +43,15 @@ const getOrderTypeName = (type: 'REQUEST' | 'VARIATION' | 'REJECTED' | 'AMEND_OR
     }
     case 'AMEND_ORIGINAL_REQUEST': {
       return 'New order (original order was rejected)'
+    }
+    case 'REINSTALL_AT_DIFFERENT_ADDRESS': {
+      return 'Reinstall at different address'
+    }
+    case 'REINSTALL_DEVICE': {
+      return 'Reinstall device'
+    }
+    case 'REVOCATION': {
+      return 'End all monitoring'
     }
     default: {
       return ''

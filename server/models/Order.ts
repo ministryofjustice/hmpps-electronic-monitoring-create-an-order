@@ -21,7 +21,14 @@ import InstallationAppointmentModel from './InstallationAppointment'
 import OrderParametersModel from './OrderParametersModel'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
-export const OrderTypeEnum = z.enum(['REQUEST', 'VARIATION', 'REJECTED', 'AMEND_ORIGINAL_REQUEST'])
+export const VariationTypesEnum = z.enum([
+  'VARIATION',
+  'REINSTALL_AT_DIFFERENT_ADDRESS',
+  'REINSTALL_DEVICE',
+  'REVOCATION',
+])
+export const OrderTypeEnum = z.enum(['REQUEST', 'REJECTED', 'AMEND_ORIGINAL_REQUEST', ...VariationTypesEnum.options])
+
 export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5'])
 const OrderModel = z.object({
   id: z.string().uuid(),

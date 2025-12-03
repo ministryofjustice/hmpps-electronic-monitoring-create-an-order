@@ -27,7 +27,7 @@ import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
-import type { Services } from '../services'
+import { type Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
@@ -38,6 +38,7 @@ import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
+import ServiceRequestTypeController from './variations/service-request-type/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -70,6 +71,7 @@ export default function routes({
   monitoringConditionsStoreService,
   monitoringConditionsUpdateService,
   removeMonitoringTypeService,
+  serviceRequestTypeService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -185,6 +187,8 @@ export default function routes({
   )
 
   const isRejectionController = new IsRejectionController(isRejectionService)
+
+  const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -347,6 +351,10 @@ export default function routes({
    */
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
+  get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
+  post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
+  get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
+  post(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,

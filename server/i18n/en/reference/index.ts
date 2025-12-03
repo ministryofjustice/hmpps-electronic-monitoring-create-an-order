@@ -41,6 +41,7 @@ import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
 import pilots from './pilots'
 import policeAreas from './policeAreas'
+import serviceRequestTypes from './serviceRequestTypes'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -69,6 +70,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  serviceRequestTypes,
 }
 
 const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
@@ -105,6 +107,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  serviceRequestTypes,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {

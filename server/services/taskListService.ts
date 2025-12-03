@@ -5,6 +5,7 @@ import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '.
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
+import isVariationType from '../utils/isVariationType'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -121,7 +122,7 @@ const doesOrderHavePhotoId = (order: Order): boolean => {
 const isTagAtSourcePilotPrison = (order: Order): boolean => {
   if (order.interestedParties?.notifyingOrganisation === 'PRISON') {
     const prisons = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
-    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName) !== -1
+    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName ?? '') !== -1
   }
   return false
 }
@@ -140,7 +141,7 @@ export default class TaskListService {
       section: SECTIONS.variationDetails,
       name: PAGES.variationDetails,
       path: paths.VARIATION.VARIATION_DETAILS,
-      state: order.type === 'VARIATION' ? STATES.required : STATES.disabled,
+      state: isVariationType(order.type) ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
     })
 
@@ -255,7 +256,11 @@ export default class TaskListService {
       name: PAGES.interestParties,
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       state: STATES.required,
-      completed: isNotNullOrUndefined(order.interestedParties),
+      completed:
+        isNotNullOrUndefined(order.interestedParties) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisation) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationName) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
     })
 
     if (order.dataDictionaryVersion === 'DDV5') {
@@ -625,7 +630,7 @@ export default class TaskListService {
     const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
 
     return Object.values(SECTIONS)
-      .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
+      .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)
