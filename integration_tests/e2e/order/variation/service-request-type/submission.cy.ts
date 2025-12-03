@@ -31,7 +31,7 @@ context('order type', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
       body: {
-        serviceRequestType: 'REINSTALL_AT_DIFFERENT_ADDRESS',
+        type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
       },
     }).should('be.true')
   })
@@ -44,7 +44,7 @@ context('order type', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
       body: {
-        serviceRequestType: 'REINSTALL_DEVICE',
+        type: 'REINSTALL_DEVICE',
       },
     }).should('be.true')
   })
@@ -57,7 +57,7 @@ context('order type', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
       body: {
-        serviceRequestType: 'REVOCATION',
+        type: 'REVOCATION',
       },
     }).should('be.true')
   })
@@ -70,7 +70,7 @@ context('order type', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
       body: {
-        serviceRequestType: 'MAKING_A_CHANGE',
+        type: 'VARIATION',
       },
     }).should('be.true')
   })
