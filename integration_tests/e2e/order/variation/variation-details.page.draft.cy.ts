@@ -43,7 +43,7 @@ context('Variation', () => {
         page.checkIsAccessible()
       })
 
-      it('Should not show what have changed if type is REVOCATION', () => {
+      it('Should not show what has changed if type is REVOCATION', () => {
         stubOrder('REVOCATION')
         Page.visit(VariationDetailsPage, { orderId: mockOrderId })
         Page.verifyOnPage(VariationDetailsPage)
