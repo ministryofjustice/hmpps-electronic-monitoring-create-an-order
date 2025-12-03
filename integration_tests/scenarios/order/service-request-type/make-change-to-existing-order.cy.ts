@@ -16,6 +16,10 @@ import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import ReceiptPage from '../../../pages/order/receipt'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
+import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
+import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -116,6 +120,45 @@ context('Service-Request-Types', () => {
 
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
   }
+
+  const fillInVariations = (variationType: string, receptType: string, variation = variationDetails) => {
+    const page = Page.verifyOnPage(ServiceRequestTypePage)
+    page.form.fillInWith(variationType)
+    page.form.continueButton.click()
+
+    orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
+    const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+    contactDetailsPage.form.saveAndContinueButton.click()
+
+    const noFixedAbodePage = Page.verifyOnPage(NoFixedAbodePage)
+    noFixedAbodePage.form.saveAndContinueButton.click()
+
+    const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+    primaryAddressPage.form.saveAndContinueButton.click()
+
+    const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+
+    interestedPartiesPage.form.fillInWith({
+      notifyingOrganisation: interestedParties.notifyingOrganisation,
+      prison: interestedParties.notifyingOrganisationName,
+      notifyingOrganisationEmailAddress: interestedParties.notifyingOrganisationEmailAddress,
+    })
+
+    interestedPartiesPage.form.saveAndContinueButton.click()
+    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
+    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
+    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+    Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
+
+    orderSummaryPage.submitOrderButton.click()
+    const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
+    variationSubmitSuccessPage.receiptButton().click()
+    const receptPage = Page.verifyOnPage(ReceiptPage)
+    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: receptType }])
+  }
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
@@ -158,91 +201,24 @@ context('Service-Request-Types', () => {
   })
 
   it('Should able to make REINSTALL_AT_DIFFERENT_ADDRESS change', () => {
-    const page = Page.verifyOnPage(ServiceRequestTypePage)
-    page.form.fillInWith('I need monitoring equipment installed at a new address')
-    page.form.continueButton.click()
-
-    orderSummaryPage.fillInVariationsDetails({ variationDetails })
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
-
-    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
-
-    orderSummaryPage.submitOrderButton.click()
-    const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-    variationSubmitSuccessPage.receiptButton().click()
-    const receptPage = Page.verifyOnPage(ReceiptPage)
-    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Reinstall at different address' }])
+    fillInVariations('I need monitoring equipment installed at a new address', 'Reinstall at different address')
   })
 
   it('Should able to make REINSTALL_DEVICE change', () => {
-    const page = Page.verifyOnPage(ServiceRequestTypePage)
-    page.form.fillInWith('I need monitoring equipment reinstalled or checked')
-    page.form.continueButton.click()
-
-    orderSummaryPage.fillInVariationsDetails({ variationDetails })
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
-
-    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
-
-    orderSummaryPage.submitOrderButton.click()
-    const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-    variationSubmitSuccessPage.receiptButton().click()
-    const receptPage = Page.verifyOnPage(ReceiptPage)
-    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Reinstall device' }])
+    fillInVariations('I need monitoring equipment reinstalled or checked', 'Reinstall device')
   })
 
   it('Should able to make REVOCATION change', () => {
-    const page = Page.verifyOnPage(ServiceRequestTypePage)
-    page.form.fillInWith('I need to end all monitoring for the device wearer')
-    page.form.continueButton.click()
-
-    orderSummaryPage.fillInVariationsDetails({ variationDetails })
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
-
-    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
-
-    orderSummaryPage.submitOrderButton.click()
-    const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-    variationSubmitSuccessPage.receiptButton().click()
-    const receptPage = Page.verifyOnPage(ReceiptPage)
-    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'End all monitoring' }])
+    fillInVariations('I need to end all monitoring for the device wearer', 'End all monitoring')
   })
 
   it('Should able to make VARIATION change', () => {
-    const page = Page.verifyOnPage(ServiceRequestTypePage)
-    page.form.fillInWith('I need to change something else in the form')
-    page.form.continueButton.click()
-
     const fullVariationDetails = {
       variationType: 'The curfew hours',
       variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       variationDetails: 'Change to address',
     }
-    orderSummaryPage.fillInVariationsDetails({ variationDetails: fullVariationDetails })
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
-
-    orderSummaryPage.submitOrderButton.click()
-    const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
-    variationSubmitSuccessPage.receiptButton().click()
-    const receptPage = Page.verifyOnPage(ReceiptPage)
-    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Change to an order' }])
+    fillInVariations('I need to change something else in the form', 'Change to an order', fullVariationDetails)
   })
 })
