@@ -1002,6 +1002,12 @@ describe('TaskListService', () => {
           adultAtTimeOfInstallation: false,
           noFixedAbode: false,
         }),
+        interestedParties: {
+          ...createInterestedParties(),
+          notifyingOrganisation: null,
+          notifyingOrganisationName: null,
+          notifyingOrganisationEmail: null,
+        },
         monitoringConditions: createMonitoringConditions({
           curfew: true,
           alcohol: true,
