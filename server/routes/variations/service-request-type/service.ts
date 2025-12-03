@@ -3,7 +3,7 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import OrderModel, { Order } from '../../../models/Order'
 
 type CreateOrderInput = AuthenticatedRequestInput & {
-  serviceRequestType: string
+  type: string
 }
 
 type OrderRequestInput = CreateOrderInput & {
@@ -16,7 +16,7 @@ export default class ServiceRequestTypeService {
   async createVariationFromExisting(input: OrderRequestInput): Promise<void> {
     return this.apiClient.post({
       path: `/api/orders/${input.orderId}/amend-order`,
-      data: { serviceRequestType: input.serviceRequestType },
+      data: { type: input.type },
       token: input.accessToken,
     })
   }
@@ -24,10 +24,7 @@ export default class ServiceRequestTypeService {
   async createVariation(input: CreateOrderInput): Promise<Order> {
     const result = this.apiClient.post({
       path: `/api/orders`,
-      data: {
-        type: 'VARIATION',
-        serviceRequestType: input.serviceRequestType,
-      },
+      data: { type: input.type },
       token: input.accessToken,
     })
     return OrderModel.parse(result)

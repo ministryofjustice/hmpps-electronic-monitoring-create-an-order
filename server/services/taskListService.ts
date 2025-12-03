@@ -5,6 +5,7 @@ import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '.
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
+import isVariationType from '../utils/isVariationType'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -140,7 +141,7 @@ export default class TaskListService {
       section: SECTIONS.variationDetails,
       name: PAGES.variationDetails,
       path: paths.VARIATION.VARIATION_DETAILS,
-      state: order.type === 'VARIATION' ? STATES.required : STATES.disabled,
+      state: isVariationType(order.type) ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
     })
 
@@ -625,7 +626,7 @@ export default class TaskListService {
     const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
 
     return Object.values(SECTIONS)
-      .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
+      .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)

@@ -40,13 +40,13 @@ export default class ServiceRequestTypeController {
       await this.service.createVariationFromExisting({
         orderId: order.id,
         accessToken: res.locals.user.token,
-        serviceRequestType: formData.serviceRequestType!,
+        type: formData.serviceRequestType!,
       })
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     } else {
       const newOrder = await this.service.createVariation({
         accessToken: res.locals.user.token,
-        serviceRequestType: formData.serviceRequestType!,
+        type: formData.serviceRequestType!,
       })
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', newOrder.id))
     }

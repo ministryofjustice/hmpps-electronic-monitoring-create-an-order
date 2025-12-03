@@ -5,6 +5,7 @@ import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
+import isVariationType from '../utils/isVariationType'
 
 export default class OrderController {
   constructor(
@@ -133,7 +134,7 @@ export default class OrderController {
 
     res.render('pages/order/submit-success', {
       orderId,
-      orderType,
+      isVariation: isVariationType(orderType),
     })
   }
 }
