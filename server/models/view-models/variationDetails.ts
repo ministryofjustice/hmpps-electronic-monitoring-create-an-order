@@ -8,11 +8,13 @@ import { Order } from '../Order'
 
 type VariationDetailsViewModel = ViewModel<Omit<VariationDetails, 'variationDate'>> & {
   variationDate: DateField
+  type: string
 }
 
 const createViewModelFromFormData = (
   formData: VariationDetailsFormData,
   validationErrors: ValidationResult,
+  order: Order,
 ): VariationDetailsViewModel => {
   return {
     variationType: {
@@ -27,6 +29,7 @@ const createViewModelFromFormData = (
       value: formData.variationDetails,
       error: getError(validationErrors, 'variationDetails'),
     },
+    type: order.type,
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -42,6 +45,7 @@ const createViewModelFromEntity = (order: Order): VariationDetailsViewModel => {
     variationDetails: {
       value: order.variationDetails?.variationDetails ?? '',
     },
+    type: order.type,
     errorSummary: null,
   }
 }
@@ -52,7 +56,7 @@ const createViewModel = (
   errors: ValidationResult,
 ): VariationDetailsViewModel => {
   if (errors.length > 0) {
-    return createViewModelFromFormData(formData, errors)
+    return createViewModelFromFormData(formData, errors, order)
   }
 
   return createViewModelFromEntity(order)

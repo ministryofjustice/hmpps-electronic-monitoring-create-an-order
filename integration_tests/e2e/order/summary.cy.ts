@@ -112,6 +112,70 @@ context('Order Summary', () => {
       page.submitOrderButton.should('be.disabled')
     })
 
+    it('should have hint text for Variation', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          type: 'VARIATION',
+        },
+      })
+
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-hint').contains('You are making changes to a submitted form.').should('exist')
+    })
+
+    it('should have hint text for REVOCATION', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          type: 'REVOCATION',
+        },
+      })
+
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-hint').contains('You are ending all monitoring for the device wearer.').should('exist')
+    })
+
+    it('should have hint text for REINSTALL_DEVICE', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          type: 'REINSTALL_DEVICE',
+        },
+      })
+
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-hint')
+        .contains('You are requesting monitoring equipment to be reinstalled or checked.')
+        .should('exist')
+    })
+
+    it('should have hint text for REINSTALL_AT_DIFFERENT_ADDRESS', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
+        },
+      })
+
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-hint')
+        .contains('You are requesting monitoring equipment to be installed at a new address.')
+        .should('exist')
+    })
+
     it('Should be accessible', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.checkIsAccessible()
