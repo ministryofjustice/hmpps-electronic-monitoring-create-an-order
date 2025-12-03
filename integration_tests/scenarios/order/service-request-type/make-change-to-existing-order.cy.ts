@@ -121,7 +121,7 @@ context('Service-Request-Types', () => {
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
   }
 
-  const fillInVariations = (variationType: string, receptType: string, variation = variationDetails) => {
+  const fillInVariations = (variationType: string, receiptType: string, variation = variationDetails) => {
     const page = Page.verifyOnPage(ServiceRequestTypePage)
     page.form.fillInWith(variationType)
     page.form.continueButton.click()
@@ -156,8 +156,8 @@ context('Service-Request-Types', () => {
     orderSummaryPage.submitOrderButton.click()
     const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
     variationSubmitSuccessPage.receiptButton().click()
-    const receptPage = Page.verifyOnPage(ReceiptPage)
-    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: receptType }])
+    const receiptPage = Page.verifyOnPage(ReceiptPage)
+    receiptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: receiptType }])
   }
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)

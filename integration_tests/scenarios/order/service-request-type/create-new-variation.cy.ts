@@ -103,8 +103,8 @@ context('Service-Request-Types', () => {
     orderSummaryPage.submitOrderButton.click()
     const variationSubmitSuccessPage = Page.verifyOnPage(VariationSubmitSuccessPage)
     variationSubmitSuccessPage.receiptButton().click()
-    const receptPage = Page.verifyOnPage(ReceiptPage)
-    receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: type }])
+    const receiptPage = Page.verifyOnPage(ReceiptPage)
+    receiptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: type }])
   }
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)

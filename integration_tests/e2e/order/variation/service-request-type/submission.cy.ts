@@ -23,7 +23,7 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should call amend endpoint with service reuqest type of REINSTALL_AT_DIFFERENT_ADDRESS', () => {
+  it('Should call amend endpoint with service request type of REINSTALL_AT_DIFFERENT_ADDRESS', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
     page.form.fillInWith('I need monitoring equipment installed at a new address')
@@ -36,7 +36,7 @@ context('order type', () => {
     }).should('be.true')
   })
 
-  it('Should call amend endpoint with service reuqest type of REINSTALL_DEVICE', () => {
+  it('Should call amend endpoint with service request type of REINSTALL_DEVICE', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
     page.form.fillInWith('I need monitoring equipment reinstalled or checked')
@@ -49,7 +49,7 @@ context('order type', () => {
     }).should('be.true')
   })
 
-  it('Should call amend endpoint with service reuqest type of REVOCATION', () => {
+  it('Should call amend endpoint with service request type of REVOCATION', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
     page.form.fillInWith('I need to end all monitoring for the device wearer')
@@ -62,7 +62,7 @@ context('order type', () => {
     }).should('be.true')
   })
 
-  it('Should call amend endpoint with service reuqest type of MAKING_A_CHANGE', () => {
+  it('Should call amend endpoint with service request type of MAKING_A_CHANGE', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
     page.form.fillInWith('I need to change something else in the form')

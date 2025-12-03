@@ -123,7 +123,7 @@ context('Search', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    context('Servcie Request Type Enabled', () => {
+    context('Service Request Type Enabled', () => {
       const testFlags = { SERVICE_REQUEST_TYPE_ENABLED: true }
       beforeEach(() => {
         cy.task('setFeatureFlags', testFlags)

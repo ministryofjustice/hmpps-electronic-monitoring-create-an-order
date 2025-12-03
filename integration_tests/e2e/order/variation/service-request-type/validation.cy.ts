@@ -14,7 +14,7 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should show errors no answer selected', () => {
+  it('Should show errors when no answer selected', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
     page.header.userName().should('contain.text', 'J. Smith')
