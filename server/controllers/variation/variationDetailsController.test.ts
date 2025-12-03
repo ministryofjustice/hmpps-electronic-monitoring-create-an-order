@@ -316,6 +316,7 @@ describe('VariationDetailsController', () => {
           day: '',
         },
         variationDetails: '',
+        orderType: 'VARIATION',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
