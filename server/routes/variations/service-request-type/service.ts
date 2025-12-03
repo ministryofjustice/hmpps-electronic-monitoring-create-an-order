@@ -22,7 +22,7 @@ export default class ServiceRequestTypeService {
   }
 
   async createVariation(input: CreateOrderInput): Promise<Order> {
-    const result = this.apiClient.post({
+    const result = await this.apiClient.post({
       path: `/api/orders`,
       data: { type: input.type },
       token: input.accessToken,

@@ -352,8 +352,9 @@ export default function routes({
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
   get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
-  post(paths.VARIATION.SERVICE_REQUEST_TYPE, asyncMiddleware(serviceRequestTypeController.update))
+  post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
   get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
+  post(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,

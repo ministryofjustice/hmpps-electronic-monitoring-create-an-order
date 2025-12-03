@@ -220,7 +220,7 @@ context('Service-Request-Types', () => {
     receptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'End all monitoring' }])
   })
 
-  it('Should able to make REVOCATION change', () => {
+  it('Should able to make VARIATION change', () => {
     const page = Page.verifyOnPage(ServiceRequestTypePage)
     page.form.fillInWith('I need to change something else in the form')
     page.form.continueButton.click()
