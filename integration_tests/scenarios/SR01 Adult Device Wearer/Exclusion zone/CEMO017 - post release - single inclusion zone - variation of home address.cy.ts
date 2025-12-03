@@ -16,6 +16,10 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/instal
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
+import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
+import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -153,6 +157,31 @@ context('Scenarios', () => {
         orderSummaryPage.aboutTheDeviceWearerTask.click()
 
         Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
+
+        const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+        contactDetailsPage.form.saveAndContinueButton.click()
+
+        const noFixedAbodePage = Page.verifyOnPage(NoFixedAbodePage)
+        noFixedAbodePage.form.saveAndContinueButton.click()
+
+        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+        primaryAddressPage.form.saveAndContinueButton.click()
+
+        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+
+        interestedPartiesPage.form.fillInWith({
+          notifyingOrganisation: interestedParties.notifyingOrganisation,
+          prison: interestedParties.notifyingOrganisationName,
+          notifyingOrganisationEmailAddress: interestedParties.notifyingOrganisationEmailAddress,
+        })
+
+        interestedPartiesPage.form.saveAndContinueButton.click()
+
+        const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+
+        probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+
+        probationDeliveryUnitPage.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(
           ContactInformationCheckYourAnswersPage,
