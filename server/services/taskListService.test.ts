@@ -1124,6 +1124,28 @@ describe('TaskListService', () => {
         },
       ])
     })
+    it('should return contact information section as incomplete if interested parties exists but notifying organisation fields are null', async () => {
+      // Given
+      const order = getMockOrder({
+        deviceWearer: createDeviceWearer({ noFixedAbode: true }),
+        contactDetails: createContactDetails(),
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: null,
+          notifyingOrganisationName: null,
+          notifyingOrganisationEmail: null,
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const contactInformationSection = sections.find(section => section.name === 'CONTACT_INFORMATION')
+
+      expect(contactInformationSection?.completed).toBe(false)
+    })
   })
   describe('getNextCheckYourAnswersPage', () => {
     let order: Order

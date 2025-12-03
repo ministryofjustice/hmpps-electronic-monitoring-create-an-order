@@ -358,7 +358,9 @@ context('Monitoring conditions', () => {
         const page = Page.visit(InstallationLocationPage, {
           orderId: mockOrderId,
         })
-        page.form.locationField.shouldHaveOption('At another address')
+        page.form.locationField.shouldHaveOption(
+          "At another address (for example, a relatives address they don't live at)",
+        )
       })
     })
   })

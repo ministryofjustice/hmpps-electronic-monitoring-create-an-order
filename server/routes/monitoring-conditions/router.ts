@@ -12,6 +12,7 @@ import MonitoringTypeController from './monitoring-type/controller'
 import OffenceTypeController from './offence-type/controller'
 import PoliceAreaController from './police-area/controller'
 import TypesOfMonitoringNeededController from './types-of-monitoring-needed/controller'
+import HardStopController from './hard-stop/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<
@@ -40,6 +41,8 @@ const createOrderTypeDescriptionRouter = (
   const offenceTypeController = new OffenceTypeController(monitoringConditionsStoreService)
 
   const isspController = new IsspController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
+
+  const hardStopController = new HardStopController(monitoringConditionsStoreService)
 
   const prarrController = new PrarrController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
 
@@ -80,6 +83,8 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/police-area', asyncMiddleware(policeAreaController.view))
   router.post('/police-area', asyncMiddleware(policeAreaController.update))
+
+  router.get('/hard-stop', asyncMiddleware(hardStopController.view))
 
   router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
   router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
