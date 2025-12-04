@@ -4,6 +4,7 @@ import { getMockOrder } from '../../test/mocks/mockOrder'
 import RestClient from '../data/restClient'
 import { SanitisedError } from '../sanitisedError'
 import OrderService from './orderService'
+import { VersionInformation } from '../models/VersionInformation'
 
 jest.mock('../data/restClient')
 
@@ -191,14 +192,26 @@ describe('Order Service', () => {
     })
   })
   describe('get versions', () => {
+    const createVersionInformation = (override: Partial<VersionInformation> = {}): VersionInformation => {
+      return {
+        type: 'REQUEST',
+        status: 'SUBMITTED',
+        versionId: uuidv4(),
+        versionNumber: 0,
+        orderId: uuidv4(),
+        submittedBy: 'John Doe',
+        fmsResultDate: new Date().toISOString(),
+        ...override,
+      }
+    }
     const mockAccessToken = 'ABC'
     const mockOrderId = '123456'
 
     it('should get versions from api', async () => {
       mockRestClient.get.mockResolvedValue([])
-
       const orderService = new OrderService(mockRestClient)
-      await orderService.getVersions({
+
+      await orderService.getCompleteVersions({
         accessToken: mockAccessToken,
         orderId: mockOrderId,
       })
@@ -207,6 +220,22 @@ describe('Order Service', () => {
         path: `/api/orders/${mockOrderId}/versions`,
         token: mockAccessToken,
       })
+    })
+
+    it('should only return submitted and failed versions', async () => {
+      const versions = (['SUBMITTED', 'ERROR', 'IN_PROGRESS'] as const).map(status =>
+        createVersionInformation({ status }),
+      )
+      mockRestClient.get.mockResolvedValue(versions)
+      const orderService = new OrderService(mockRestClient)
+
+      const results = await orderService.getCompleteVersions({
+        accessToken: mockAccessToken,
+        orderId: mockOrderId,
+      })
+
+      expect(results.length).toBe(2)
+      expect(results).toEqual([versions[0], versions[1]])
     })
   })
 })

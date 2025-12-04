@@ -37,7 +37,7 @@ describe('OrderController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
-    mockOrderService.getVersions = jest.fn().mockResolvedValue([])
+    mockOrderService.getCompleteVersions = jest.fn().mockResolvedValue([])
     taskListService = {
       getSections: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<TaskListService>

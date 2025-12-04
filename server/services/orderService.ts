@@ -58,13 +58,13 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async getVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
+  async getCompleteVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
     const result = await this.apiClient.get({
       path: `/api/orders/${input.orderId}/versions`,
       token: input.accessToken,
     })
 
-    return VersionInformationList.parse(result)
+    return VersionInformationList.parse(result).filter(v => v.status !== 'IN_PROGRESS')
   }
 
   async deleteOrder(input: OrderRequestInput): Promise<Result<void, string>> {

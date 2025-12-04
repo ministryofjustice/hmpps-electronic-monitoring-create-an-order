@@ -36,7 +36,7 @@ export default class OrderController {
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const order = req.order!
 
-    const versions = await this.orderService.getVersions({
+    const versions = await this.orderService.getCompleteVersions({
       orderId: order.id,
       accessToken: res.locals.user.token,
     })
