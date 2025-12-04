@@ -43,7 +43,7 @@ export default class OrderController {
 
     const [sections, completedOrderVersions] = await Promise.all([
       this.taskListService.getSections(order),
-      await this.orderService.getCompleteVersions({
+      this.orderService.getCompleteVersions({
         orderId: order.id,
         accessToken: res.locals.user.token,
       }),

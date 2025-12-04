@@ -1,3 +1,4 @@
+import logger from '../../logger'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import Result from '../interfaces/result'
@@ -59,12 +60,16 @@ export default class OrderService {
   }
 
   async getCompleteVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
-    const result = await this.apiClient.get({
-      path: `/api/orders/${input.orderId}/versions`,
-      token: input.accessToken,
-    })
-
-    return VersionInformationList.parse(result).filter(v => v.status !== 'IN_PROGRESS')
+    try {
+      const result = await this.apiClient.get({
+        path: `/api/orders/${input.orderId}/versions`,
+        token: input.accessToken,
+      })
+      return VersionInformationList.parse(result).filter(version => version.status !== 'IN_PROGRESS')
+    } catch {
+      logger.error(`No versions found for orderId: ${input.orderId}`)
+      return []
+    }
   }
 
   async deleteOrder(input: OrderRequestInput): Promise<Result<void, string>> {
