@@ -75,6 +75,8 @@ context('The kitchen sink', () => {
   context('Fill in everything "including the kitchen sink" and screenshot', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
+      disabilities: 'Not able to provide this information',
+      otherDisability: null,
       interpreterRequired: true,
       language: 'Flemish (Dutch)',
       hasFixedAddress: 'Yes',

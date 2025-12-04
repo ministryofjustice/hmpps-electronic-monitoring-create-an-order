@@ -45,8 +45,8 @@ context('About the device wearer', () => {
       it('should include screen reader accessibility hint for radio button with secondary input', () => {
         Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
-        cy.get('#disabilities-11-item-hint').find('span').should('have.class', 'govuk-visually-hidden')
-        cy.get('#disabilities-11-item-hint').find('span').contains('Selecting this will reveal an additional input')
+        cy.get('#disabilities-10-item-hint').find('span').should('have.class', 'govuk-visually-hidden')
+        cy.get('#disabilities-10-item-hint').find('span').contains('Selecting this will reveal an additional input')
       })
 
       it('should continue to the identity numbers page', () => {
@@ -62,6 +62,7 @@ context('About the device wearer', () => {
           is18: true,
           sex: 'Male',
           genderIdentity: 'Male',
+          disabilities: 'Not able to provide this information',
           interpreterRequired: true,
           language: 'British Sign',
         }
@@ -79,7 +80,7 @@ context('About the device wearer', () => {
             sex: 'MALE',
             gender: 'MALE',
             dateOfBirth: '1970-01-01T00:00:00.000Z',
-            disabilities: '',
+            disabilities: 'NONE',
             otherDisability: '',
             interpreterRequired: true,
             language: 'British Sign',
@@ -107,7 +108,7 @@ context('About the device wearer', () => {
             sex: 'MALE',
             gender: 'MALE',
             dateOfBirth: '2020-01-01T00:00:00.000Z',
-            disabilities: '',
+            disabilities: 'NONE',
             otherDisability: '',
             noFixedAbode: null,
             interpreterRequired: false,
@@ -126,6 +127,7 @@ context('About the device wearer', () => {
           is18: false,
           sex: 'Male',
           genderIdentity: 'Male',
+          disabilities: 'Not able to provide this information',
           interpreterRequired: false,
         }
 
@@ -142,7 +144,7 @@ context('About the device wearer', () => {
             sex: 'MALE',
             gender: 'MALE',
             dateOfBirth: '2020-01-01T00:00:00.000Z',
-            disabilities: '',
+            disabilities: 'NONE',
             otherDisability: '',
             interpreterRequired: false,
             language: '',
@@ -170,7 +172,7 @@ context('About the device wearer', () => {
             sex: 'MALE',
             gender: 'MALE',
             dateOfBirth: '2020-01-01T00:00:00.000Z',
-            disabilities: '',
+            disabilities: 'NONE',
             otherDisability: '',
             noFixedAbode: null,
             interpreterRequired: false,
@@ -230,6 +232,7 @@ context('About the device wearer', () => {
           is18: true,
           sex: 'Male',
           genderIdentity: 'Male',
+          disabilities: 'Not able to provide this information',
           interpreterRequired: true,
           language: 'British Sign',
         }
