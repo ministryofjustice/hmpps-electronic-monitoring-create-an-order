@@ -1127,32 +1127,6 @@ context('Order Summary', () => {
     })
   })
 
-  context('Complete order, failed to submit', () => {
-    beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        order: {
-          id: mockOrderId,
-          status: 'ERROR',
-          submittedBy: 'John Smith',
-          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
-        },
-      })
-
-      cy.task('stubCemoGetVersions', {
-        httpStatus: 200,
-        versions: [],
-        orderId: mockOrderId,
-      })
-
-      cy.signIn()
-    })
-  })
-
   const versionInformation = (override: Order) => {
     return {
       orderId: uuidv4(),
