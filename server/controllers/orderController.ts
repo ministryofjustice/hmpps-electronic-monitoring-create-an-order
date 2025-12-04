@@ -6,6 +6,7 @@ import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
+import TimelineModel from '../models/view-models/timelineModel'
 
 export default class OrderController {
   constructor(
@@ -36,14 +37,24 @@ export default class OrderController {
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
-    const sections = await this.taskListService.getSections(req.order!)
-    const error = req.flash('submissionError')
+    const order = req.order!
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
+    const error = req.flash('submissionError')
+
+    const [sections, completedOrderVersions] = await Promise.all([
+      this.taskListService.getSections(order),
+      this.orderService.getCompleteVersions({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+      }),
+    ])
+
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled,
+      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions),
     })
   }
 

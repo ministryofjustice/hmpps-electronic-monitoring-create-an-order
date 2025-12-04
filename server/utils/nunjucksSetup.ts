@@ -3,6 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
+import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
 import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
@@ -103,4 +104,8 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
   njkEnv.addFilter('addDivider', addDivider)
   njkEnv.addFilter('removeOptions', removeOptions)
+  Object.entries(mojFilters()).forEach(([name, filter]) => {
+    // @ts-expect-error/filter is unknown as import does not have typing
+    njkEnv.addFilter(name, filter)
+  })
 }

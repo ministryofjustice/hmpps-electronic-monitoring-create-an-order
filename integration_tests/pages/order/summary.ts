@@ -29,6 +29,7 @@ import fillInEnforcementZoneOrderDetailsWith from '../../utils/scenario-flows/en
 import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendance-monitoring.cy'
+import Timeline from '../components/timeline'
 
 export default class OrderTasksPage extends AppPage {
   constructor() {
@@ -73,6 +74,10 @@ export default class OrderTasksPage extends AppPage {
 
   get viewAndDownloadButton(): PageElement {
     return cy.get('#view-and-download-button')
+  }
+
+  get timeline(): Timeline {
+    return new Timeline()
   }
 
   fillInNewCurfewOrderWith({
