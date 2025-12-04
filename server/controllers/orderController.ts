@@ -5,7 +5,7 @@ import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
-import { Order } from '../models/Order'
+import { VersionInformation } from '../models/VersionInformation'
 
 export default class OrderController {
   constructor(
@@ -36,9 +36,26 @@ export default class OrderController {
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const order = req.order!
 
+    const versions = await this.orderService.getVersions({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
+
+    const timelineItems = versions.map(v => ({
+      label: {
+        text: this.getTimelineText(v),
+      },
+      datetime: {
+        timestamp: v.fmsResultDate,
+        type: 'datetime',
+      },
+      byline: {
+        text: v.submittedBy,
+      },
+    }))
+
     const timeline = {
-      showTimeline: order.status === 'SUBMITTED' || order.status === 'ERROR',
-      timelineText: this.getTimelineText(order),
+      items: timelineItems,
     }
 
     res.render('pages/order/summary', {
@@ -141,10 +158,10 @@ export default class OrderController {
     })
   }
 
-  private getTimelineText = (order: Order) => {
-    if (order.type === 'VARIATION') {
+  private getTimelineText = (versionInformation: VersionInformation) => {
+    if (versionInformation.type === 'VARIATION') {
       return 'Changes submitted'
     }
-    return order.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
+    return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
   }
 }

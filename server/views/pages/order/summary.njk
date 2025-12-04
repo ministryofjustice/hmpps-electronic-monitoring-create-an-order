@@ -137,24 +137,11 @@
     </div>
 
     <div class="govuk-grid-column-one-thirds">
-	{% if timeline.showTimeline %}
-	  {{ mojTimeline({
-            items: [
-              {
-                label: {
-                  text: timeline.timelineText
-                },
-                datetime: {
-                  timestamp: order.fmsResultDate,
-                  type: "datetime"
-                },
-                byline: {
-                  text: order.submittedBy
-                }
-              }
-	    ]
-          })}}
-	{% endif %}
+      {% if timeline.items | length %}
+	{{ mojTimeline({
+          items: timeline.items
+        })}}
+      {% endif %}
     </div>
   </div>
 {% endblock %}

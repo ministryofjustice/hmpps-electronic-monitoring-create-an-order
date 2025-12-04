@@ -189,19 +189,20 @@ const searchOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions)
 
 type GetVersionsStubOptions = {
   httpStatus: number
+  orderId: string
   versions?: object[]
 }
 
 const defaultGetVersionsOptions = {
   httpStatus: 200,
-  versions: [mockApiOrder('SUBMITTED')],
+  orderId: uuidv4(),
 }
 
-const getVersions = (options: GetVersionsStubOptions = defaultGetVersionsOptions): SuperAgentRequest =>
+const getVersionInformation = (options: GetVersionsStubOptions = defaultGetVersionsOptions): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/cemo/api/orders/versions',
+      urlPattern: `/cemo/api/orders/${options.orderId}/versions`,
     },
     response: {
       status: options.httpStatus,
@@ -722,7 +723,7 @@ export default {
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoSearchOrders: searchOrders,
-  stubCemoGetVersions: getVersions,
+  stubCemoGetVersions: getVersionInformation,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,

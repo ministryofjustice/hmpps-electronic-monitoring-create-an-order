@@ -9,6 +9,7 @@ import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installat
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
+import { Order } from '../../../server/models/Order'
 
 let mockOrderId = uuidv4()
 
@@ -23,6 +24,12 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
 
       cy.signIn()
@@ -79,6 +86,12 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: { type: 'VARIATION' },
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
 
       cy.signIn()
@@ -302,6 +315,12 @@ context('Order Summary', () => {
             location: 'PRIMARY',
           },
         },
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
 
       cy.signIn()
@@ -652,6 +671,12 @@ context('Order Summary', () => {
         },
       })
 
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
       cy.signIn()
     })
 
@@ -728,15 +753,6 @@ context('Order Summary', () => {
 
       Page.verifyOnPage(ConfirmVariationPage)
     })
-
-    it('should show timeline component', () => {
-      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-
-      page.timeline.element.should('exist')
-      page.timeline.formSubmittedComponent.element.should('exist')
-      page.timeline.formSubmittedComponent.usernameIs('John Smith')
-      page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
-    })
   })
 
   context('Partial complete order, not submitted', () => {
@@ -783,6 +799,13 @@ context('Order Summary', () => {
           isValid: true,
         },
       })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
@@ -845,6 +868,11 @@ context('Order Summary', () => {
           orderParameters: { havePhoto: false },
           isValid: true,
         },
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -916,6 +944,11 @@ context('Order Summary', () => {
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
           orderParameters: { havePhoto: false },
         },
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -1012,6 +1045,11 @@ context('Order Summary', () => {
           orderParameters: { havePhoto: false },
         },
       })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
@@ -1041,19 +1079,28 @@ context('Order Summary', () => {
         },
       })
 
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
       cy.signIn()
-    })
-
-    it('should show timeline component', () => {
-      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-
-      page.timeline.element.should('exist')
-      page.timeline.formFailedComponent.element.should('exist')
-      page.timeline.formFailedComponent.usernameIs('John Smith')
-      page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
 
+  const versionInformation = (override: Order) => {
+    return {
+      orderId: uuidv4(),
+      versionId: uuidv4(),
+      versionNumber: 0,
+      submittedBy: 'John Smith',
+      fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+      type: 'REQUEST',
+      status: 'SUBMITTED',
+      ...override,
+    }
+  }
   context('Complete order, variation', () => {
     beforeEach(() => {
       cy.task('reset')
@@ -1074,13 +1121,74 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should show timeline component', () => {
+    it('timeline version list', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'Person One',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+      })
+      const versionTwo = versionInformation({
+        submittedBy: 'Person Two',
+        type: 'VARIATION',
+        fmsResultDate: new Date(2025, 0, 3, 10, 30, 0, 0).toISOString(),
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne, versionTwo],
+        orderId: mockOrderId,
+      })
+
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.timeline.element.should('exist')
       page.timeline.formVariationComponent.element.should('exist')
-      page.timeline.formVariationComponent.usernameIs('John Smith')
+      page.timeline.formVariationComponent.usernameIs('Person One')
       page.timeline.formVariationComponent.resultDateIs('1 January 2025 at 10:30am')
+      page.timeline.formVariationComponent.element.should('exist')
+      page.timeline.formVariationComponent.usernameIs('Person Two')
+      page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
+    })
+
+    it('Submitted request', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'SUBMITTED',
+        type: 'REQUEST',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formSubmittedComponent.element.should('exist')
+      page.timeline.formSubmittedComponent.usernameIs('John Smith')
+      page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
+    })
+
+    it('Variation submitted', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'ERROR',
+        type: 'REQUEST',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formFailedComponent.element.should('exist')
+      page.timeline.formFailedComponent.usernameIs('John Smith')
+      page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
 

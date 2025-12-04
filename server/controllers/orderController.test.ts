@@ -37,6 +37,7 @@ describe('OrderController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
+    mockOrderService.getVersions = jest.fn().mockResolvedValue([])
     taskListService = {
       getSections: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<TaskListService>
@@ -51,6 +52,7 @@ describe('OrderController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
+
       // When
       await orderController.summary(req, res, next)
 

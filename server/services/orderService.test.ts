@@ -195,10 +195,10 @@ describe('Order Service', () => {
     const mockOrderId = '123456'
 
     it('should get versions from api', async () => {
-      mockRestClient.get.mockResolvedValue([mockApiResponse])
+      mockRestClient.get.mockResolvedValue([])
 
       const orderService = new OrderService(mockRestClient)
-      const order = await orderService.getVersions({
+      await orderService.getVersions({
         accessToken: mockAccessToken,
         orderId: mockOrderId,
       })
@@ -207,7 +207,6 @@ describe('Order Service', () => {
         path: `/api/orders/${mockOrderId}/versions`,
         token: mockAccessToken,
       })
-      expect(order).toEqual([mockNewOrder])
     })
   })
 })

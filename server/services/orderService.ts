@@ -4,6 +4,7 @@ import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
 import { CreateOrderFormData } from '../models/form-data/order'
 import OrderModel, { Order } from '../models/Order'
+import { VersionInformation, VersionInformationList } from '../models/VersionInformation'
 import { SanitisedError } from '../sanitisedError'
 
 type CreateOrderRequest = AuthenticatedRequestInput & {
@@ -57,15 +58,13 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async getVersions(input: OrderRequestInput): Promise<Order[]> {
-    const result = await this.apiClient
-      .get({
-        path: `/api/orders/${input.orderId}/versions`,
-        token: input.accessToken,
-      })
-      .then(res => res.map(res => OrderModel.parse(res)))
+  async getVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
+    const result = await this.apiClient.get({
+      path: `/api/orders/${input.orderId}/versions`,
+      token: input.accessToken,
+    })
 
-    return result
+    return VersionInformationList.parse(result)
   }
 
   async deleteOrder(input: OrderRequestInput): Promise<Result<void, string>> {
