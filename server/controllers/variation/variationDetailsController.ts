@@ -31,7 +31,7 @@ export default class VariationDetailsController {
     const { orderId } = req.params
     const order = req.order!
     const { action, ...formData } = VariationDetailsFormDataParser.parse(req.body)
-
+    formData.orderType = order.type
     const result = await this.variationDetailsService.updateVariationDetails({
       accessToken: res.locals.user.token,
       orderId,

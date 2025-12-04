@@ -28,10 +28,10 @@ type ApiOrder = Omit<Order, 'deviceWearer'> & {
     disabilities: string
   }
 }
-export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS'): ApiOrder => ({
+export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Order['type'] = 'REQUEST'): ApiOrder => ({
   id: uuidv4(),
   status,
-  type: 'REQUEST',
+  type,
   dataDictionaryVersion: 'DDV4',
   deviceWearer: {
     nomisId: null,

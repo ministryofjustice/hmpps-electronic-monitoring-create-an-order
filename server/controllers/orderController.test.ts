@@ -374,7 +374,7 @@ describe('OrderController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', {
         orderId: '123456789',
-        orderType: 'REQUEST',
+        isVariation: false,
       })
     })
   })

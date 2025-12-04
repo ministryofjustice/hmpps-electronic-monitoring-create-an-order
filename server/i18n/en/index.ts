@@ -31,6 +31,7 @@ import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
 import isRejectionPageContent from './pages/isRejection'
+import serviceRequestTypePageContent from './pages/serviceRequestType'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -65,6 +66,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       installationLocation: installationLocationPageContent,
       installationAppointment: installationAppointmentPageContent,
       isRejection: isRejectionPageContent,
+      serviceRequestType: serviceRequestTypePageContent,
     },
     reference: getReferenceData(ddVersion),
   }

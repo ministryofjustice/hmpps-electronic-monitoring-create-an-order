@@ -52,7 +52,6 @@ const paths = {
     INSTALLATION_ADDRESS: '/order/:orderId/monitoring-conditions/:addressType(installation)',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
     ZONE: '/order/:orderId/monitoring-conditions/zone/:zoneId',
-
     ZONE_NEW_ITEM: '/order/:orderId/monitoring-conditions/add-to-list/zone',
     ZONE_ADD_TO_LIST: '/order/:orderId/monitoring-conditions/add-to-list/zone/:zoneId',
     ATTENDANCE: '/order/:orderId/monitoring-conditions/attendance',
@@ -81,6 +80,7 @@ const paths = {
       TYPES_OF_MONITORING_NEEDED:
         '/order/:orderId/monitoring-conditions/order-type-description/types-of-monitoring-needed',
       OFFENCE_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/offence-type',
+      HARD_STOP: '/order/:orderId/monitoring-conditions/order-type-description/hard-stop',
     },
   },
 
@@ -94,6 +94,8 @@ const paths = {
 
   VARIATION: {
     VARIATION_DETAILS: '/order/:orderId/variation/details',
+    SERVICE_REQUEST_TYPE: '/order/:orderId/service-request-type',
+    CREATE_VARIATION: '/order/create-variation',
   },
 }
 

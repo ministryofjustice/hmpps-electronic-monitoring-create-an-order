@@ -106,6 +106,9 @@ interface ValidationErrors {
   isRejection: {
     isRejectionRequired: string
   }
+  serviceRequestType: {
+    serviceRequestTypeRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -315,6 +318,9 @@ const validationErrors: ValidationErrors = {
   },
   isRejection: {
     isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
+  },
+  serviceRequestType: {
+    serviceRequestTypeRequired: 'Select why you are making changes to the form',
   },
 }
 

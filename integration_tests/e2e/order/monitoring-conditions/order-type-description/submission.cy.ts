@@ -106,7 +106,7 @@ context('Order type descriptions', () => {
         pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         offenceType: 'Aggravated Burglary in a Dwelling',
         prarr: 'YES',
-        policeArea: 'Kent',
+        policeArea: 'KENT',
       },
     }).should('be.true')
   })

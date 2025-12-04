@@ -1,7 +1,7 @@
 import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import { VariationDetailsFormData, VariationDetailsFormDataValidator } from '../models/form-data/variationDetails'
+import { VariationDetailsFormData, validateVariationDetailsFormData } from '../models/form-data/variationDetails'
 import VariationDetailsModel, { VariationDetails } from '../models/VariationDetails'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
@@ -17,7 +17,7 @@ export default class VariationService {
 
   async updateVariationDetails(input: UpdateVariationDetailsRequest): Promise<VariationDetails | ValidationResult> {
     try {
-      const requestBody = VariationDetailsFormDataValidator.parse(input.data)
+      const requestBody = validateVariationDetailsFormData(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/variation`,
         data: requestBody,

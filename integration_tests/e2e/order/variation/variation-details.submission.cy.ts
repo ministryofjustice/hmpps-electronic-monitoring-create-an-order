@@ -23,6 +23,7 @@ context('Variation', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          type: 'VARIATION',
           order: { dataDictionaryVersion: 'DDV4' },
         })
         cy.task('stubCemoSubmitOrder', {

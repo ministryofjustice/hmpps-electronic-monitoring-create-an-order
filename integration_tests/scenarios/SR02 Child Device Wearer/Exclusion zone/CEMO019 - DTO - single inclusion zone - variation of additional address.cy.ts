@@ -24,6 +24,8 @@ import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import SecondaryAddressPage from '../../../pages/order/contact-information/secondary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
+import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 
 context('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
@@ -171,14 +173,31 @@ context('Scenarios', () => {
 
         Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
 
+        const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+        contactDetailsPage.form.saveAndContinueButton.click()
+
+        const noFixedAbodePage = Page.verifyOnPage(NoFixedAbodePage)
+        noFixedAbodePage.form.saveAndContinueButton.click()
+
+        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+        primaryAddressPage.form.saveAndContinueButton.click()
+
+        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+        interestedPartiesPage.form.fillInWith({
+          notifyingOrganisation: interestedParties.notifyingOrganisation,
+          prison: interestedParties.notifyingOrganisationName,
+          notifyingOrganisationEmailAddress: interestedParties.notifyingOrganisationEmailAddress,
+        })
+        interestedPartiesPage.form.saveAndContinueButton.click()
+
         Page.verifyOnPage(
           ContactInformationCheckYourAnswersPage,
           'Check your answers',
         ).deviceWearerAddressesSection.changeAnswer("What is the device wearer's main address?")
 
-        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-        primaryAddressPage.hasAnotherAddress(true)
-        primaryAddressPage.saveAndContinue()
+        const primaryAddressPageVar = Page.verifyOnPage(PrimaryAddressPage)
+        primaryAddressPageVar.hasAnotherAddress(true)
+        primaryAddressPageVar.saveAndContinue()
 
         Page.verifyOnPage(SecondaryAddressPage).clearAndRepopulate({
           hasAnotherAddress: 'No',

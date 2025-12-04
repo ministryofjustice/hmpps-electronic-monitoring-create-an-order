@@ -37,7 +37,7 @@ export default class RemoveMonitoringTypeService {
 
     const prisonsInPilot = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
 
-    if (prisonsInPilot?.indexOf(order.interestedParties.notifyingOrganisationName) === -1) {
+    if (prisonsInPilot?.indexOf(order.interestedParties.notifyingOrganisationName ?? '') === -1) {
       const match = findMonitoringTypeById(order, monitoringTypeId)
       return match !== undefined && match.type === 'Alcohol monitoring'
     }

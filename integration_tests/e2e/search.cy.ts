@@ -4,6 +4,7 @@ import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
 import OrderTasksPage from '../pages/order/summary'
 import IndexPage from '../pages'
+import ServiceRequestTypePage from './order/variation/service-request-type/serviceRequestTypePage'
 
 const mockOrderId = uuidv4()
 
@@ -118,6 +119,32 @@ context('Search', () => {
       page.searchButton.click()
 
       page.variationFormButton.should('exist').should('contain.text', 'Tell us about a change to a form sent by email')
+      page.variationFormButton.click()
+      Page.verifyOnPage(OrderTasksPage)
+    })
+
+    context('Service Request Type Enabled', () => {
+      const testFlags = { SERVICE_REQUEST_TYPE_ENABLED: true }
+      beforeEach(() => {
+        cy.task('setFeatureFlags', testFlags)
+      })
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      it('should show "Tell us about a change.." button when there are no results and go to service request type page', () => {
+        cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
+
+        const page = Page.visit(SearchPage)
+
+        page.searchBox.type('Unknown name')
+        page.searchButton.click()
+
+        page.variationFormButton
+          .should('exist')
+          .should('contain.text', 'Tell us about a change to a form sent by email')
+        page.variationFormButton.click()
+        Page.verifyOnPage(ServiceRequestTypePage)
+      })
     })
 
     it('should create a new variation order when the "Tell us about.." button is clicked', () => {

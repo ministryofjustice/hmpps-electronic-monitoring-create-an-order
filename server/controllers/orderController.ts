@@ -6,6 +6,7 @@ import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
 import { VersionInformation } from '../models/VersionInformation'
+import isVariationType from '../utils/isVariationType'
 
 export default class OrderController {
   constructor(
@@ -16,6 +17,11 @@ export default class OrderController {
 
   create: RequestHandler = async (req: Request, res: Response) => {
     const formData = CreateOrderFormDataParser.parse(req.body)
+    if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED') && formData.type === 'VARIATION') {
+      res.redirect(paths.VARIATION.CREATE_VARIATION)
+      return
+    }
+
     const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
 
     res.redirect(`/order/${order.id}/summary`)
@@ -137,7 +143,7 @@ export default class OrderController {
 
     res.render('pages/order/submit-success', {
       orderId,
-      orderType,
+      isVariation: isVariationType(orderType),
     })
   }
 
