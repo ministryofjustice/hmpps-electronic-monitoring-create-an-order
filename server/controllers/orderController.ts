@@ -5,8 +5,8 @@ import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
-import { VersionInformation } from '../models/VersionInformation'
 import isVariationType from '../utils/isVariationType'
+import TimelineModel from '../models/view-models/timelineModel'
 
 export default class OrderController {
   constructor(
@@ -38,21 +38,23 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const sections = await this.taskListService.getSections(order)
-    const error = req.flash('submissionError')
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
+    const error = req.flash('submissionError')
 
-    const completedOrderVersions = await this.orderService.getCompleteVersions({
-      orderId: order.id,
-      accessToken: res.locals.user.token,
-    })
+    const [sections, completedOrderVersions] = await Promise.all([
+      this.taskListService.getSections(order),
+      await this.orderService.getCompleteVersions({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+      }),
+    ])
 
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled,
-      timelineItems: completedOrderVersions.map(this.mapToTimelineItem),
+      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions),
     })
   }
 
@@ -145,27 +147,5 @@ export default class OrderController {
       orderId,
       isVariation: isVariationType(orderType),
     })
-  }
-
-  private getTimelineText = (versionInformation: VersionInformation) => {
-    if (versionInformation.type === 'VARIATION') {
-      return 'Changes submitted'
-    }
-    return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
-  }
-
-  private mapToTimelineItem = (version: VersionInformation) => {
-    return {
-      label: {
-        text: this.getTimelineText(version),
-      },
-      datetime: {
-        timestamp: version.fmsResultDate,
-        type: 'datetime',
-      },
-      byline: {
-        text: version.submittedBy,
-      },
-    }
   }
 }
