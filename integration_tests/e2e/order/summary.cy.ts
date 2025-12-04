@@ -1149,10 +1149,6 @@ context('Order Summary', () => {
         id: mockOrderId,
         order: {
           id: mockOrderId,
-          status: 'SUBMITTED',
-          submittedBy: 'John Smith',
-          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
-          type: 'VARIATION',
         },
       })
 
