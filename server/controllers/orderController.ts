@@ -31,39 +31,22 @@ export default class OrderController {
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
-    const sections = await this.taskListService.getSections(req.order!)
+    const order = req.order!
+    const sections = await this.taskListService.getSections(order)
     const error = req.flash('submissionError')
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
-    const order = req.order!
 
-    const versions = await this.orderService.getCompleteVersions({
+    const completedOrderVersions = await this.orderService.getCompleteVersions({
       orderId: order.id,
       accessToken: res.locals.user.token,
     })
-
-    const timelineItems = versions.map(v => ({
-      label: {
-        text: this.getTimelineText(v),
-      },
-      datetime: {
-        timestamp: v.fmsResultDate,
-        type: 'datetime',
-      },
-      byline: {
-        text: v.submittedBy,
-      },
-    }))
-
-    const timeline = {
-      items: timelineItems,
-    }
 
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled,
-      timeline,
+      timelineItems: completedOrderVersions.map(this.mapToTimelineItem),
     })
   }
 
@@ -163,5 +146,20 @@ export default class OrderController {
       return 'Changes submitted'
     }
     return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
+  }
+
+  private mapToTimelineItem = (version: VersionInformation) => {
+    return {
+      label: {
+        text: this.getTimelineText(version),
+      },
+      datetime: {
+        timestamp: version.fmsResultDate,
+        type: 'datetime',
+      },
+      byline: {
+        text: version.submittedBy,
+      },
+    }
   }
 }
