@@ -1,5 +1,9 @@
 import DataDictionaryVersion, { DataDictionaryVersions } from '../../../types/i18n/dataDictionaryVersion'
-import ReferenceCatalog, { ReferenceCatalogDDv4, ReferenceCatalogDDv5 } from '../../../types/i18n/reference'
+import ReferenceCatalog, {
+  ReferenceCatalogDDv4,
+  ReferenceCatalogDDv5,
+  ReferenceCatalogDDv6,
+} from '../../../types/i18n/reference'
 import alcoholMonitoringTypes from './alcoholMonitoringTypes'
 import conditionTypes from './conditionTypes'
 import crownCourts from './crownCourts'
@@ -42,6 +46,8 @@ import possibleRisks from './possibleRisks'
 import pilots from './pilots'
 import policeAreas from './policeAreas'
 import serviceRequestTypes from './serviceRequestTypes'
+import probationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
+import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnits'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -110,9 +116,49 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   serviceRequestTypes,
 }
 
+const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
+  alcoholMonitoringTypes,
+  civilCountyCourts,
+  conditionTypes,
+  crownCourts: crownCourtsDDv5,
+  disabilities: disabilitiesDDv5,
+  familyCourts,
+  gender,
+  magistratesCourts: magistratesCourtsDDv5,
+  mappaCaseType,
+  mappaLevel,
+  militaryCourts,
+  notifyingOrganisations: notifyingOrganisationsDDv5,
+  offences,
+  orderTypeDescriptions,
+  orderTypes,
+  pilots: pilotsDDv5,
+  prisons: prisonsDDv5,
+  probationRegions,
+  probationDeliveryUnits: probationDeliveryUnitsDDv6,
+  relationship,
+  responsibleOrganisations,
+  riskCategories: riskCategoriesDDv5,
+  sentenceTypes,
+  sex,
+  variationTypes: variationTypesDDv5,
+  yesNoUnknown,
+  youthCourts,
+  youthCustodyServiceRegions,
+  youthJusticeServiceRegions,
+  probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
+  installationLocations,
+  possibleRisks,
+  policeAreas,
+  serviceRequestTypes,
+}
+
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
   if (ddVersion === DataDictionaryVersions.DDV5) {
     return referenceCatalogDDv5
+  }
+  if (ddVersion === DataDictionaryVersions.DDV6) {
+    return referenceCatalogDDv6
   }
   return referenceCatalogDDv4
 }

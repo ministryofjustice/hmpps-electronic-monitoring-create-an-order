@@ -20,6 +20,7 @@ import {
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
@@ -295,7 +296,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
     createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
   ]
 
-  if (order.dataDictionaryVersion === 'DDV5') {
+  if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
     const curfewAdditionalDetails = order.curfewConditions?.curfewAdditionalDetails
     if (curfewAdditionalDetails !== null && curfewAdditionalDetails.length > 0) {
       answers.push(

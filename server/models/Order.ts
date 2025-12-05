@@ -29,7 +29,7 @@ export const VariationTypesEnum = z.enum([
 ])
 export const OrderTypeEnum = z.enum(['REQUEST', 'REJECTED', 'AMEND_ORIGINAL_REQUEST', ...VariationTypesEnum.options])
 
-export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5'])
+export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5', 'DDV6'])
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,

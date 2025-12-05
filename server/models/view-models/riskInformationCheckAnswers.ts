@@ -4,6 +4,7 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import config from '../../config'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -18,7 +19,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answerOpts,
     ),
   )
-  if (order.dataDictionaryVersion === 'DDV5') {
+  if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
     answers.push(
       createAnswer(
         questions.offenceAdditionalDetails.text,

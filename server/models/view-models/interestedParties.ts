@@ -1,3 +1,4 @@
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import { createSortedGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
@@ -92,7 +93,7 @@ const constructFromFormData = (
       error: getError(validationErrors, fieldNames.responsibleOrganisationEmail),
     },
     errorSummary: createSortedGovukErrorSummary(validationErrors, Object.values(fieldNames)),
-    DDv5: order.dataDictionaryVersion === 'DDV5',
+    DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 
@@ -124,7 +125,7 @@ const constructFromEntity = (order: Order): InterestedPartiesViewModel => {
       value: interestedParties?.responsibleOrganisationEmail ?? '',
     },
     errorSummary: null,
-    DDv5: order.dataDictionaryVersion === 'DDV5',
+    DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 
