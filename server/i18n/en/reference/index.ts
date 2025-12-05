@@ -146,7 +146,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   youthCourts,
   youthCustodyServiceRegions,
   youthJusticeServiceRegions,
-  probationRegionDeliveryUnits:probationRegionDeliveryUnitsDDv6,
+  probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
   installationLocations,
   possibleRisks,
   policeAreas,
@@ -158,7 +158,6 @@ const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog =>
     return referenceCatalogDDv5
   }
   if (ddVersion === DataDictionaryVersions.DDV6) {
-  
     return referenceCatalogDDv6
   }
   return referenceCatalogDDv4

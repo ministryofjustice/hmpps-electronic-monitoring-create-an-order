@@ -252,7 +252,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
 
   const { questions } = content.pages.probationDeliveryUnit
   const result = []
-  if (order.dataDictionaryVersion === 'DDV5' && order.interestedParties?.responsibleOrganisation === 'PROBATION') {
+  if (order.dataDictionaryVersion !== 'DDV4' && order.interestedParties?.responsibleOrganisation === 'PROBATION') {
     result.push(
       createAnswer(
         questions.unit.text,

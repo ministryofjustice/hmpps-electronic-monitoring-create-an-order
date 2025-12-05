@@ -252,8 +252,7 @@ context('Contact information', () => {
       })
     })
 
-    context('DDV6',()=>{
-
+    context('DDV6', () => {
       const stubGetOrderForRegion = regionName => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
@@ -273,10 +272,9 @@ context('Contact information', () => {
             },
           },
         })
-
       }
 
-      beforeEach(() => {      
+      beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         cy.signIn()
@@ -287,12 +285,10 @@ context('Contact information', () => {
         stubGetOrderForRegion('WEST_MIDLANDS')
         const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
-       
         page.form.unitField.element.get('Staffordshire and Stoke').should('not.exist')
         page.form.unitField.shouldHaveOption('Staffordshire North')
         page.form.unitField.shouldHaveOption('Staffordshire South')
         page.form.unitField.shouldHaveOption('Personality Disorder Prosper (West Mids)')
-
       })
 
       // GREATER_MANCHESTER

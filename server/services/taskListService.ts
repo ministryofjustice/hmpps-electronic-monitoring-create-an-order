@@ -263,7 +263,7 @@ export default class TaskListService {
         isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
     })
 
-    if (order.dataDictionaryVersion === 'DDV5') {
+    if (order.dataDictionaryVersion !== 'DDV5') {
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.probationDeliveryUnit,

@@ -32,9 +32,9 @@ export default class ProbationDeliveryUnitController {
       probationDeliveryUnit,
       formData[0] as never,
       errors as never,
-    )   
-      
-    const content = <ReferenceCatalogDDv5|ReferenceCatalogDDv6>res.locals.content?.reference
+    )
+
+    const content = <ReferenceCatalogDDv5 | ReferenceCatalogDDv6>res.locals.content?.reference
     res.locals.unitList = this.getDeliveryUnitsForProbationRegion(
       content.probationRegionDeliveryUnits,
       <keyof ProbationRegionDeliveryUnits>interestedParties?.responsibleOrganisationRegion,
