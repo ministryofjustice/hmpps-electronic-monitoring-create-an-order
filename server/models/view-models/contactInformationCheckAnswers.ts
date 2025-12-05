@@ -4,6 +4,7 @@ import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 
 const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
@@ -95,7 +96,7 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
     ]
   }
 
-  if (order.dataDictionaryVersion === 'DDV5') {
+  if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
     if ('civilCountyCourts' in content.reference && notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
       return [
         createAnswer(

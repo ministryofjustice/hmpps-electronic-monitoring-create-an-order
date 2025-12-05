@@ -6,6 +6,7 @@ import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
+import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -263,7 +264,7 @@ export default class TaskListService {
         isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
     })
 
-    if (order.dataDictionaryVersion !== 'DDV5') {
+    if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.probationDeliveryUnit,
@@ -336,7 +337,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
     })
 
-    if (order.dataDictionaryVersion === 'DDV5') {
+    if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
       tasks.push({
         section: SECTIONS.electronicMonitoringCondition,
         name: PAGES.curfewAdditionalDetails,
