@@ -251,5 +251,61 @@ context('Contact information', () => {
         page.form.unitField.shouldHaveOption('York')
       })
     })
+
+    context('DDV6',()=>{
+
+      const stubGetOrderForRegion = regionName => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            dataDictionaryVersion: 'DDV6',
+            interestedParties: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+              notifyingOrganisationEmail: 'test@test.com',
+              responsibleOfficerName: 'John Smith',
+              responsibleOfficerPhoneNumber: '01234567890',
+              responsibleOrganisation: 'PROBATION',
+              responsibleOrganisationRegion: regionName,
+              responsibleOrganisationEmail: 'test2@test.com',
+            },
+          },
+        })
+
+      }
+
+      beforeEach(() => {      
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.signIn()
+      })
+
+      // WEST_MIDLANDS
+      it('Should display delivery units for region WEST_MIDLANDS', () => {
+        stubGetOrderForRegion('WEST_MIDLANDS')
+        const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+
+       
+        page.form.unitField.element.get('Staffordshire and Stoke').should('not.exist')
+        page.form.unitField.shouldHaveOption('Staffordshire North')
+        page.form.unitField.shouldHaveOption('Staffordshire South')
+        page.form.unitField.shouldHaveOption('Personality Disorder Prosper (West Mids)')
+
+      })
+
+      // GREATER_MANCHESTER
+      it('Should display delivery units for region GREATER_MANCHESTER', () => {
+        stubGetOrderForRegion('GREATER_MANCHESTER')
+        const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+
+        page.form.unitField.shouldHaveOption('Stockport and Tameside')
+        page.form.unitField.shouldHaveOption('Salford and Trafford')
+        page.form.unitField.element.get('Salford').should('not.exist')
+        page.form.unitField.element.get('Stockport and Trafford').should('not.exist')
+        page.form.unitField.element.get('Tameside').should('not.exist')
+      })
+    })
   })
 })

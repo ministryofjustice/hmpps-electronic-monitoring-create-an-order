@@ -6,7 +6,7 @@ import ProbationDeliveryUnitFormDataModel from '../../models/form-data/probation
 import probationDeliveryUnitViewModel from '../../models/view-models/probationDeliveryUnit'
 import TaskListService from '../../services/taskListService'
 import ProbationDeliveryUnitService from '../../services/probationDeliveryUnitService'
-import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
+import { ReferenceCatalogDDv5, ReferenceCatalogDDv6 } from '../../types/i18n/reference'
 import ProbationRegionDeliveryUnits from '../../types/i18n/reference/probationRegionDeliveryUnits'
 import ReferenceData from '../../types/i18n/reference/reference'
 
@@ -32,8 +32,9 @@ export default class ProbationDeliveryUnitController {
       probationDeliveryUnit,
       formData[0] as never,
       errors as never,
-    )
-    const content = <ReferenceCatalogDDv5>res.locals.content?.reference
+    )   
+      
+    const content = <ReferenceCatalogDDv5|ReferenceCatalogDDv6>res.locals.content?.reference
     res.locals.unitList = this.getDeliveryUnitsForProbationRegion(
       content.probationRegionDeliveryUnits,
       <keyof ProbationRegionDeliveryUnits>interestedParties?.responsibleOrganisationRegion,
