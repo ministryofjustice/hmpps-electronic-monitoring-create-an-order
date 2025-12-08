@@ -44,7 +44,7 @@ context('Probation-Deliever-Units', () => {
       cy.signIn()
     })
 
-    it('Should able to select Staffordshire North as PUD', () => {
+    it('Should able to select Staffordshire North as PDU', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'West Midlands')
       const probationDeliveryUnit = { unit: 'Staffordshire North' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
@@ -57,7 +57,7 @@ context('Probation-Deliever-Units', () => {
       ])
     })
 
-    it('Should able to select Staffordshire South as PUD', () => {
+    it('Should able to select Staffordshire South as PDU', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'West Midlands')
       const probationDeliveryUnit = { unit: 'Staffordshire South' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
@@ -70,7 +70,7 @@ context('Probation-Deliever-Units', () => {
       ])
     })
 
-    it('Should able to select Personality Disorder Prosper (West Mids)  as PUD', () => {
+    it('Should able to select Personality Disorder Prosper (West Mids)  as PDU', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'West Midlands')
       const probationDeliveryUnit = { unit: 'Personality Disorder Prosper (West Mids)' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
@@ -86,7 +86,7 @@ context('Probation-Deliever-Units', () => {
       ])
     })
 
-    it('Should able to select Stockport and Tameside as PUD', () => {
+    it('Should able to select Stockport and Tameside as PDU', () => {
       const interestedParties = createFakeInterestedParties(
         'Prison',
         'Probation',
@@ -107,7 +107,7 @@ context('Probation-Deliever-Units', () => {
       ])
     })
 
-    it('Should able to select Salford and Trafford as PUD', () => {
+    it('Should able to select Salford and Trafford as PDU', () => {
       const interestedParties = createFakeInterestedParties(
         'Prison',
         'Probation',
