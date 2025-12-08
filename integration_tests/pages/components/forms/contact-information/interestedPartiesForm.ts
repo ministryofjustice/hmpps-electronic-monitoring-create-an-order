@@ -22,8 +22,6 @@ export type InterestedPartiesFormData = {
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
 
-  youthCustodyServiceRegion?: string
-  notifyingOrgProbationRegion?: string
   civilCountyCourt?: string
 }
 

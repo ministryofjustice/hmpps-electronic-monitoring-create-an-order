@@ -68,7 +68,6 @@ export type InterestedParties = {
   familyCourt?: string
   magistratesCourt?: string
   militaryCourt?: string
-  notifyingOrgProbationRegion?: string
   prison?: string
   ycsRegion?: string
   youthCourt?: string
@@ -84,7 +83,6 @@ export type InterestedParties = {
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
-  youthCustodyServiceRegion?: string
 }
 
 export type PersonOfInterest = {
@@ -183,9 +181,7 @@ export const createFakeInterestedParties = (
   let familyCourt = ''
   let magistratesCourt = ''
   let militaryCourt = ''
-  let notifyingOrgProbationRegion = ''
   let prison = ''
-  let youthCustodyServiceRegion = ''
   let youthCourt = ''
   let probationRegion = ''
   let yjsRegion = ''
@@ -217,7 +213,6 @@ export const createFakeInterestedParties = (
 
   if (notifyingOrganisation === 'Probation Service') {
     notifyingOrganisationName = 'Probation Board'
-    notifyingOrgProbationRegion = ''
   }
 
   if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
@@ -232,7 +227,6 @@ export const createFakeInterestedParties = (
 
   if (notifyingOrganisation === 'Youth Custody Service') {
     notifyingOrganisationName = ''
-    youthCustodyServiceRegion = ''
   }
 
   if (responsibleOrganisation === 'Probation') {
@@ -256,7 +250,6 @@ export const createFakeInterestedParties = (
     civilCountyCourt,
     militaryCourt,
     youthCourt,
-    notifyingOrgProbationRegion,
     responsibleOfficerName: officerName,
     responsibleOfficerContactNumber: officerContactNumber,
     responsibleOrganisation,
@@ -264,7 +257,6 @@ export const createFakeInterestedParties = (
     responsibleOrganisationEmailAddress,
     probationRegion,
     yjsRegion,
-    youthCustodyServiceRegion,
   }
 }
 
