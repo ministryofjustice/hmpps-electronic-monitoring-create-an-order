@@ -64,4 +64,5 @@ const OrderModel = z.object({
 export type Order = z.infer<typeof OrderModel>
 export type OrderStatus = z.infer<typeof OrderStatusEnum>
 export type DataDictionaryVersion = z.infer<typeof DataDictionaryVersionEnum>
+export type OrderType = z.infer<typeof OrderTypeEnum>
 export default OrderModel

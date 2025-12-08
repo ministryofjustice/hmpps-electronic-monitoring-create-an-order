@@ -20,4 +20,8 @@ export default class TimelineItem {
   resultDateIs(time: string) {
     this.element.get('.moj-timeline__date').contains(time)
   }
+
+  variationTextIs(text: string) {
+    cy.get('.moj-timeline__description').contains(text)
+  }
 }

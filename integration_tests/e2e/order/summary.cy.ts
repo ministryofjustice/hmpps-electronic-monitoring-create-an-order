@@ -1175,12 +1175,13 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.timeline.element.should('exist')
-      page.timeline.formVariationComponent.element.should('exist')
-      page.timeline.formVariationComponent.usernameIs('Person One')
-      page.timeline.formVariationComponent.resultDateIs('1 January 2025 at 10:30am')
+      page.timeline.formSubmittedComponent.element.should('exist')
+      page.timeline.formSubmittedComponent.usernameIs('Person One')
+      page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
       page.timeline.formVariationComponent.element.should('exist')
       page.timeline.formVariationComponent.usernameIs('Person Two')
       page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
+      page.timeline.formVariationComponent.variationTextIs('Change to an order')
     })
 
     it('Submitted request', () => {
@@ -1204,7 +1205,7 @@ context('Order Summary', () => {
       page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
 
-    it('Variation submitted', () => {
+    it('Order failed to submit', () => {
       const versionOne = versionInformation({
         submittedBy: 'John Smith',
         fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
@@ -1223,6 +1224,27 @@ context('Order Summary', () => {
       page.timeline.formFailedComponent.element.should('exist')
       page.timeline.formFailedComponent.usernameIs('John Smith')
       page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
+    })
+
+    it('order rejected', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'SUBMITTED',
+        type: 'REJECTED',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formRejectedComponent.element.should('exist')
+      page.timeline.formRejectedComponent.usernameIs('John Smith')
+      page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
 

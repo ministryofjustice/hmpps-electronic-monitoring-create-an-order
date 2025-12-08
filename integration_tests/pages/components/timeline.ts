@@ -22,6 +22,10 @@ export default class Timeline {
     return new TimelineItem('Failed to submit')
   }
 
+  get formRejectedComponent(): TimelineItem {
+    return new TimelineItem('Order rejected')
+  }
+
   get formVariationComponent(): TimelineItem {
     return new TimelineItem('Changes submitted')
   }

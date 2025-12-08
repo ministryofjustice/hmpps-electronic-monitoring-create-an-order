@@ -16,7 +16,7 @@ describe('TimelineModel', () => {
   describe('mapToTimelineItems', () => {
     it('map to timeline items', () => {
       const versions = [
-        createMockVersion({ submittedBy: 'Alice', type: 'VARIATION' }),
+        createMockVersion({ submittedBy: 'Alice', type: 'REVOCATION' }),
         createMockVersion({
           submittedBy: 'Bob',
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
@@ -31,6 +31,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
+        text: 'End all monitoring',
       })
 
       expect(result[1]).toEqual({
@@ -43,6 +44,14 @@ describe('TimelineModel', () => {
     it('returns an empty array if no versions are provided', () => {
       const result = TimelineModel.mapToTimelineItems([])
       expect(result).toEqual([])
+    })
+
+    it('returns correct timeline text if type is variation', () => {
+      const versions = [createMockVersion({ submittedBy: 'Alice', type: 'REVOCATION' })]
+
+      const result = TimelineModel.mapToTimelineItems(versions)
+
+      expect(result[0].text).toBe('End all monitoring')
     })
   })
 })
