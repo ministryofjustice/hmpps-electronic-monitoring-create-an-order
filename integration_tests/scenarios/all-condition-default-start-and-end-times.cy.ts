@@ -358,6 +358,7 @@ context('The kitchen sink', () => {
             hdc: 'Yes',
             order_status: 'Not Started',
             pilot: 'GPS Acquisitive Crime Home Detention Curfew',
+            subcategory: '',
           },
         }).should('be.true')
       })
