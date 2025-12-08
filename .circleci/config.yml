@@ -194,7 +194,12 @@ jobs:
             fi
       - run:
           name: Archive requests
-          command: tar -czf integration_tests/requests.tar.gz integration_tests/requests
+          command:|
+            if [ -d integration_tests/requests ]; then
+              tar -czf integration_tests/requests.tar.gz integration_tests/requests
+            else
+              echo "No requests to archive"
+            fi 
       - store_test_results:
           path: test_results
       - store_artifacts:
