@@ -53,7 +53,7 @@ executors:
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
-          SETTINGS_DATA_DICTIONARY_VERSION: DDV5
+          SETTINGS_DATA_DICTIONARY_VERSION: DDV6
 
   intgration-testing:
      docker:
@@ -194,7 +194,12 @@ jobs:
             fi
       - run:
           name: Archive requests
-          command: tar -czf integration_tests/requests.tar.gz integration_tests/requests
+          command: |
+            if [ -d integration_tests/requests ]; then
+              tar -czf integration_tests/requests.tar.gz integration_tests/requests
+            else
+              echo "No requests to archive"
+            fi 
       - store_test_results:
           path: test_results
       - store_artifacts:

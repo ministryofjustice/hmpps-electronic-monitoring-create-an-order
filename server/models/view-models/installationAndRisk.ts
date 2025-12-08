@@ -8,6 +8,7 @@ import { MultipleChoiceField, ViewModel } from './utils'
 import possibleRisks from '../../i18n/en/reference/possibleRisks'
 import riskCategories from '../../i18n/en/reference/riskCategories'
 import { Order } from '../Order'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 
 type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk'>> & {
   riskCategory: MultipleChoiceField
@@ -52,7 +53,7 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(validationErrors),
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: order.dataDictionaryVersion === 'DDV5',
+    ddVersion5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 
@@ -82,7 +83,7 @@ const createFromEntity = (order: Order): InstallationAndRiskViewModel => {
     },
     errorSummary: null,
     mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: order.dataDictionaryVersion === 'DDV5',
+    ddVersion5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 
