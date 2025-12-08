@@ -353,6 +353,7 @@ context('Scenarios', () => {
               hdc: 'No',
               order_status: 'Not Started',
               pilot: '',
+              subcategory: '',
             },
           })
           .should('be.true')

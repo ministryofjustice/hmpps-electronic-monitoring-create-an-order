@@ -385,6 +385,7 @@ context('Scenarios', () => {
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: 'GPS Acquisitive Crime Parole',
+                subcategory: '',
               },
             })
             .should('be.true')
