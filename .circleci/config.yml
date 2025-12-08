@@ -194,7 +194,7 @@ jobs:
             fi
       - run:
           name: Archive requests
-          command:|
+          command: |
             if [ -d integration_tests/requests ]; then
               tar -czf integration_tests/requests.tar.gz integration_tests/requests
             else
