@@ -21,6 +21,9 @@ export default class TimelineModel {
   }
 
   private static getTimelineText = (versionInformation: VersionInformation) => {
+    if (versionInformation.type === 'REVOCATION') {
+      return 'Monitoring ended'
+    }
     if (Object.keys(VariationTypesEnum.Values).includes(versionInformation.type)) {
       return 'Changes submitted'
     }
@@ -56,9 +59,6 @@ export default class TimelineModel {
       }
       case 'REINSTALL_DEVICE': {
         return 'Reinstall device'
-      }
-      case 'REVOCATION': {
-        return 'End all monitoring'
       }
       default: {
         return undefined

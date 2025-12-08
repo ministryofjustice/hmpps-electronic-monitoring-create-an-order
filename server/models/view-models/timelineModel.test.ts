@@ -1,3 +1,4 @@
+import { OrderType } from '../Order'
 import { VersionInformation } from '../VersionInformation'
 import TimelineModel from './timelineModel'
 
@@ -16,7 +17,7 @@ describe('TimelineModel', () => {
   describe('mapToTimelineItems', () => {
     it('map to timeline items', () => {
       const versions = [
-        createMockVersion({ submittedBy: 'Alice', type: 'REVOCATION' }),
+        createMockVersion({ submittedBy: 'Alice', type: 'VARIATION' }),
         createMockVersion({
           submittedBy: 'Bob',
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
@@ -31,7 +32,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'End all monitoring',
+        text: 'Change to an order',
       })
 
       expect(result[1]).toEqual({
@@ -46,12 +47,31 @@ describe('TimelineModel', () => {
       expect(result).toEqual([])
     })
 
-    it('returns correct timeline text if type is variation', () => {
-      const versions = [createMockVersion({ submittedBy: 'Alice', type: 'REVOCATION' })]
+    it('returns correct item when order is rejected', () => {
+      const versions = [
+        createMockVersion({
+          submittedBy: 'Bob',
+          type: 'REJECTED',
+        }),
+      ]
+      const result = TimelineModel.mapToTimelineItems(versions)
+      expect(result[0]).toEqual({
+        label: { text: 'Order rejected' },
+        datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
+        byline: { text: 'Bob' },
+      })
+    })
+
+    it.each<[OrderType, string]>([
+      ['VARIATION', 'Change to an order'],
+      ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Reinstall at different address'],
+      ['REINSTALL_DEVICE', 'Reinstall device'],
+    ])('returns correct timeline text if type is $type', (type, text) => {
+      const versions = [createMockVersion({ submittedBy: 'Alice', type })]
 
       const result = TimelineModel.mapToTimelineItems(versions)
 
-      expect(result[0].text).toBe('End all monitoring')
+      expect(result[0].text).toBe(text)
     })
   })
 })
