@@ -1,7 +1,7 @@
 import { VersionInformation } from '../VersionInformation'
 import TimelineModel from './timelineModel'
 
-describe('TimelinePresenter', () => {
+describe('TimelineModel', () => {
   const createMockVersion = (overrides: Partial<VersionInformation> = {}): VersionInformation => ({
     orderId: '123',
     fmsResultDate: '2023-10-05T10:00:00Z',
