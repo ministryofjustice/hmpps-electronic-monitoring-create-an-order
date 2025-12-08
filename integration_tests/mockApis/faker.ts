@@ -7,7 +7,6 @@ import prisons from '../../server/i18n/en/reference/ddv5/prisons'
 import probationRegions from '../../server/i18n/en/reference/probationRegions'
 import militaryCourts from '../../server/i18n/en/reference/ddv5/militaryCourts'
 import youthCourts from '../../server/i18n/en/reference/ddv5/youthCourts'
-import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv5/youthCustodyServiceRegions'
 import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegions'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
@@ -23,7 +22,6 @@ const familyCourtTypes = extractValues(Object.values(familyCourts))
 const magistratesCourtTypes = extractValues(Object.values(magistratesCourts))
 const militaryCourtTypes = extractValues(Object.values(militaryCourts))
 const prisonTypes = extractValues(Object.values(prisons)).filter(it => it !== 'Cookham Wood Young Offender Institution')
-const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
 const youthCourtTypes = extractValues(Object.values(youthCourts))
 const probationRegionTypes = extractValues(Object.values(probationRegions))
 const yjsRegionTypes = extractValues(Object.values(yjsRegions))
@@ -218,8 +216,8 @@ export const createFakeInterestedParties = (
   }
 
   if (notifyingOrganisation === 'Probation Service') {
-    notifyingOrgProbationRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(probationRegionTypes)
-    notifyingOrganisationName = notifyingOrgProbationRegion
+    notifyingOrganisationName = 'Probation Board'
+    notifyingOrgProbationRegion = ''
   }
 
   if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
@@ -233,8 +231,8 @@ export const createFakeInterestedParties = (
   }
 
   if (notifyingOrganisation === 'Youth Custody Service') {
-    youthCustodyServiceRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(ycsRegionTypes)
-    notifyingOrganisationName = youthCustodyServiceRegion
+    notifyingOrganisationName = ''
+    youthCustodyServiceRegion = ''
   }
 
   if (responsibleOrganisation === 'Probation') {
