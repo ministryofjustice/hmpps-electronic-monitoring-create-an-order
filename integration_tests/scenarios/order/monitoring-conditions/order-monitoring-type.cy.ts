@@ -20,6 +20,8 @@ context('Monitoring type list flow', () => {
   const currentDate = new Date()
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
+    disabilities: 'Not able to provide this information',
+    otherDisability: null,
     interpreterRequired: false,
     language: '',
     hasFixedAddress: 'Yes',

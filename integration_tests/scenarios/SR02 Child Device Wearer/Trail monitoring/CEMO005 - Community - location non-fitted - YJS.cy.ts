@@ -140,6 +140,8 @@ context('Scenarios', () => {
   context('Community, Location Monitoring, Community YRO, ISSPp, YCS', () => {
     const deviceWearerDetails = {
       ...createFakeYouthDeviceWearer('CEMO005'),
+      disabilities: 'Not able to provide this information',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
@@ -204,7 +206,11 @@ context('Scenarios', () => {
             .replace('Not able to provide this information', '')
             .replace('Self identify', 'Prefer to self-describe')
             .replace('Non binary', 'Non-Binary'),
-          disability: [],
+          disability: [
+            {
+              disability: 'None of the above',
+            },
+          ],
           address_1: fakePrimaryAddress.addressLine1,
           address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
           address_3: fakePrimaryAddress.addressLine3,

@@ -53,6 +53,8 @@ context.skip('Scenarios', () => {
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am at two addresses', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
+      disabilities: 'Not able to provide this information',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
@@ -136,7 +138,11 @@ context.skip('Scenarios', () => {
             .replace('Not able to provide this information', '')
             .replace('Self identify', 'Prefer to self-describe')
             .replace('Non binary', 'Non-Binary'),
-          disability: [],
+          disability: [
+            {
+              disability: 'None of the above',
+            },
+          ],
           address_1: fakePrimaryAddress.addressLine1,
           address_2: 'N/A',
           address_3: fakePrimaryAddress.addressLine3,

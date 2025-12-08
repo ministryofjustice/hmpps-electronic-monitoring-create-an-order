@@ -29,6 +29,8 @@ context('Service-Request-Types', () => {
   const currentDate = new Date()
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
+    disabilities: 'Not able to provide this information',
+    otherDisability: null,
     interpreterRequired: false,
     language: '',
     hasFixedAddress: 'Yes',
