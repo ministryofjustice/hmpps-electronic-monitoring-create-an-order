@@ -2,7 +2,7 @@ import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
 import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
-import FormSelectComponent from '../../formSelectComponent'
+import FormAutocompleteComponent from '../../formAutocompleteComponent'
 
 export type AboutDeviceWearerFormData = {
   firstNames?: string
@@ -127,8 +127,8 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
-  get languageField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What language does the interpreter need to use?', [
+  get languageField(): FormAutocompleteComponent {
+    return new FormAutocompleteComponent(this.form, 'What language does the interpreter need to use?', [
       'British Sign',
       'Lipspeak (English)',
       'Palantypists',

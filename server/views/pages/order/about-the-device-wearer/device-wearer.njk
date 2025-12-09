@@ -137,6 +137,7 @@
     ],
     value: language.value,
     errorMessage: language.error,
+    disabled: not isOrderEditable,
     nonce: cspNonce
   }) }}
 {% endset %}
@@ -403,6 +404,9 @@
         {
           value: "true",
           text: "Yes",
+          hint: {
+            html: visuallyHiddenHint
+          },
           conditional: {
             html: languageHtml
           },
