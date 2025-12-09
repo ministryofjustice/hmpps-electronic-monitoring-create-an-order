@@ -32,6 +32,7 @@ import InstallationLocations from './installationLocations'
 import PossibleRisks from './possibleRisks'
 import PoliceAreas from './policeAreas'
 import ServiceRequestTypes from './serviceRequestTypes'
+import ProbationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -100,8 +101,45 @@ type ReferenceCatalogDDv5 = {
   serviceRequestTypes: ServiceRequestTypes
 }
 
-type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5
+type ReferenceCatalogDDv6 = {
+  alcoholMonitoringTypes: AlcoholMonitoringTypes
+  civilCountyCourts: CivilCountyCourts
+  conditionTypes: ConditionTypes
+  crownCourts: CrownCourtsDDv5
+  disabilities: DisabilitiesDDv5
+  familyCourts: FamilyCourts
+  gender: Gender
+  magistratesCourts: MagistratesCourtsDDv5
+  mappaCaseType: MappaCaseType
+  mappaLevel: MappaLevel
+  militaryCourts: MilitaryCourts
+  notifyingOrganisations: NotifyingOrganisationsDDv5
+  offences: Offences
+  orderTypeDescriptions: OrderTypeDescriptions
+  orderTypes: OrderTypes
+  pilots: Pilots
+  prisons: PrisonsDDv5
+  probationRegions: ProbationRegions
+  probationDeliveryUnits: ProbationDeliveryUnitsDDv6
+  probationRegionDeliveryUnits: ProbationRegionDeliveryUnits
+  relationship: Relationship
+  responsibleOrganisations: ResponsibleOrganisations
+  riskCategories: RiskCategoriesDDv5
+  sentenceTypes: SentenceTypes
+  sex: Sex
+  variationTypes: VariationTypesDDv5
+  yesNoUnknown: YesNoUnknown
+  youthCourts: YouthCourts
+  youthCustodyServiceRegions: YouthCustodyServiceRegions
+  youthJusticeServiceRegions: YouthJusticeServiceRegions
+  installationLocations: InstallationLocations
+  possibleRisks: PossibleRisks
+  policeAreas: PoliceAreas
+  serviceRequestTypes: ServiceRequestTypes
+}
+
+type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5 | ReferenceCatalogDDv6
 
 export default ReferenceCatalog
 
-export { ReferenceCatalogDDv4, ReferenceCatalogDDv5 }
+export { ReferenceCatalogDDv4, ReferenceCatalogDDv5, ReferenceCatalogDDv6 }

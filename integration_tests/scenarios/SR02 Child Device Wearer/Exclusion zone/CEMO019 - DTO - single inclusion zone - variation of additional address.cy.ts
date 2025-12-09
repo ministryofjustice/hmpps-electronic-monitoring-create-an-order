@@ -397,6 +397,7 @@ context('Scenarios', () => {
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
+                subcategory: 'SR08 - Amend monitoring requirements',
               },
             })
             .should('be.true')

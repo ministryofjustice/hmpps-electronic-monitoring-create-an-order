@@ -9,6 +9,7 @@ import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installat
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
+import { Order } from '../../../server/models/Order'
 
 let mockOrderId = uuidv4()
 
@@ -23,6 +24,12 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
 
       cy.signIn()
@@ -79,6 +86,12 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: { type: 'VARIATION' },
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
 
       cy.signIn()
@@ -368,6 +381,12 @@ context('Order Summary', () => {
         },
       })
 
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
       cy.signIn()
     })
 
@@ -522,6 +541,12 @@ context('Order Summary', () => {
 
       page.submitOrderButton.should('not.be.disabled')
     })
+
+    it('does not show the timeline', () => {
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.moj-timeline').should('not.exist')
+    })
   })
 
   context('Complete order, submitted', () => {
@@ -540,6 +565,8 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'SUBMITTED',
+          submittedBy: 'John Smith',
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -708,6 +735,12 @@ context('Order Summary', () => {
         },
       })
 
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
       cy.signIn()
     })
 
@@ -830,6 +863,13 @@ context('Order Summary', () => {
           isValid: true,
         },
       })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
@@ -861,7 +901,6 @@ context('Order Summary', () => {
               postcode: '',
             },
           ],
-          contactDetails: { contactNumber: '' },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -893,6 +932,11 @@ context('Order Summary', () => {
           orderParameters: { havePhoto: false },
           isValid: true,
         },
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -964,6 +1008,11 @@ context('Order Summary', () => {
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
           orderParameters: { havePhoto: false },
         },
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
       })
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -1060,6 +1109,11 @@ context('Order Summary', () => {
           orderParameters: { havePhoto: false },
         },
       })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
@@ -1070,6 +1124,127 @@ context('Order Summary', () => {
       )
       page.submitOrderButton.should('be.disabled')
       cy.task('resetFeatureFlags')
+    })
+  })
+
+  const versionInformation = (override: Order) => {
+    return {
+      orderId: uuidv4(),
+      versionId: uuidv4(),
+      versionNumber: 0,
+      submittedBy: 'John Smith',
+      fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+      type: 'REQUEST',
+      status: 'SUBMITTED',
+      ...override,
+    }
+  }
+  context('Complete order, variation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          id: mockOrderId,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    it('timeline version list', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'Person One',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+      })
+      const versionTwo = versionInformation({
+        submittedBy: 'Person Two',
+        type: 'VARIATION',
+        fmsResultDate: new Date(2025, 0, 3, 10, 30, 0, 0).toISOString(),
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne, versionTwo],
+        orderId: mockOrderId,
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formSubmittedComponent.element.should('exist')
+      page.timeline.formSubmittedComponent.usernameIs('Person One')
+      page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
+      page.timeline.formVariationComponent.element.should('exist')
+      page.timeline.formVariationComponent.usernameIs('Person Two')
+      page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
+      page.timeline.formVariationComponent.variationTextIs('Change to an order')
+    })
+
+    it('Submitted request', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'SUBMITTED',
+        type: 'REQUEST',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formSubmittedComponent.element.should('exist')
+      page.timeline.formSubmittedComponent.usernameIs('John Smith')
+      page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
+    })
+
+    it('Order failed to submit', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'ERROR',
+        type: 'REQUEST',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formFailedComponent.element.should('exist')
+      page.timeline.formFailedComponent.usernameIs('John Smith')
+      page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
+    })
+
+    it('order rejected', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'SUBMITTED',
+        type: 'REJECTED',
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.element.should('exist')
+      page.timeline.formRejectedComponent.element.should('exist')
+      page.timeline.formRejectedComponent.usernameIs('John Smith')
+      page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
 

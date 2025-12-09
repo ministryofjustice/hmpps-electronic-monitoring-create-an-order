@@ -284,6 +284,7 @@ context('Scenarios', () => {
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              subcategory: '',
             },
           })
           .should('be.true')

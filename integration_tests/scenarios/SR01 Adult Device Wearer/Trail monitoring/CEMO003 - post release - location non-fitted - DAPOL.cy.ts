@@ -361,6 +361,7 @@ context('Scenarios', () => {
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+                subcategory: '',
               },
             })
             .should('be.true')
