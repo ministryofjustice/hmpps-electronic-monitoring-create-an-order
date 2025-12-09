@@ -9,6 +9,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{%- from "moj/components/timeline/macro.njk" import mojTimeline -%}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -151,6 +152,14 @@
         </div>
       {% endif %}
   
+    </div>
+
+    <div class="govuk-grid-column-one-thirds">
+      {% if timelineItems | length %}
+	{{ mojTimeline({
+          items: timelineItems
+        })}}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
