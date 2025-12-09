@@ -49,11 +49,27 @@ export default class OrderController {
       }),
     ])
 
+    const { versionId } = req.params
+
+    // TODO: test and refactor
+    // Move to task service(?)
+    let versionSections
+    if (versionId) {
+      versionSections = sections.map(section => {
+        const parts = section.path.split('/')
+        const index = parts.indexOf('order') + 2
+        return {
+          ...section,
+          path: [...parts.slice(0, index), [`version/${versionId}`], ...parts.slice(index)].join('/'),
+        }
+      })
+    }
+
     res.render('pages/order/summary', {
       order: req.order,
-      sections,
+      sections: versionSections || sections,
       error: error && error.length > 0 ? error[0] : undefined,
-      createNewOrderVersionEnabled,
+      createNewOrderVersionEnabled: createNewOrderVersionEnabled && !versionId,
       timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions),
     })
   }

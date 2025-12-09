@@ -32,8 +32,8 @@ import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/at
 import Timeline from '../components/timeline'
 
 export default class OrderTasksPage extends AppPage {
-  constructor() {
-    super('Electronic Monitoring application form', paths.ORDER.SUMMARY, '')
+  constructor(path: string = paths.ORDER.SUMMARY) {
+    super('Electronic Monitoring application form', path, '')
   }
 
   get variationDetailsTask(): Task {

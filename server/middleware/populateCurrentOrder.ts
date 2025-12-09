@@ -12,9 +12,16 @@ const populateOrder =
   async (req: Request, res: Response, next: NextFunction, orderId: string) => {
     try {
       const { token } = res.locals.user
-      if (orderId && validate(orderId)) {
-        const order = await orderService.getOrder({ accessToken: token, orderId })
+      const { versionId } = req.params
 
+      if (orderId && validate(orderId)) {
+        let order
+
+        if (versionId && validate(versionId)) {
+          order = await orderService.getVersion({ accessToken: token, orderId, versionId })
+        } else {
+          order = await orderService.getOrder({ accessToken: token, orderId })
+        }
         req.order = order
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status

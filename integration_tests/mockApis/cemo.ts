@@ -251,6 +251,40 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
   })
 }
 
+type GetVersionStubOptions = GetOrderStubOptions & {
+  versionId: string
+}
+
+const defaultGetVersionOptions = {
+  ...defaultGetOrderOptions,
+  versionId: uuidv4(),
+}
+
+const getSpecificVersion = (options: GetVersionStubOptions = defaultGetVersionOptions): SuperAgentRequest => {
+  const stubOptions = { ...defaultGetOrderOptions, ...options }
+
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${stubOptions.id}/versions/${stubOptions.versionId}`,
+    },
+    response: {
+      status: stubOptions.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        stubOptions.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: stubOptions.id,
+              status: stubOptions.status,
+              type: stubOptions.type,
+              ...(stubOptions.order ? stubOptions.order : {}),
+            }
+          : null,
+    },
+  })
+}
+
 type CreateOrderStubOptions = {
   httpStatus: number
   id?: string
@@ -720,6 +754,7 @@ export default {
   stubCemoCreateOrder: createOrder,
   stubCemoCreateVariation: createVariation,
   stubCemoGetOrder: getOrder,
+  stubCemoGetVersion: getSpecificVersion,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoSearchOrders: searchOrders,

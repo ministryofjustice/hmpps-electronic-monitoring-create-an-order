@@ -10,6 +10,7 @@ import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitori
 import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 import { Order } from '../../../server/models/Order'
+import paths from '../../../server/constants/paths'
 
 let mockOrderId = uuidv4()
 
@@ -1245,6 +1246,234 @@ context('Order Summary', () => {
       page.timeline.formRejectedComponent.element.should('exist')
       page.timeline.formRejectedComponent.usernameIs('John Smith')
       page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
+    })
+  })
+
+  context('viewing an old version of the order', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.signIn()
+    })
+
+    it('old sumbitted request version', () => {
+      const mockVersionId = uuidv4()
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        order: {
+          id: mockOrderId,
+          status: 'SUBMITTED',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: { contactNumber: '' },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          enforcementZoneConditions: [
+            {
+              description: null,
+              duration: null,
+              endDate: null,
+              fileId: null,
+              fileName: null,
+              startDate: null,
+              zoneId: null,
+              zoneType: null,
+            },
+          ],
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+          monitoringConditions: {
+            orderType: null,
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            orderTypeDescription: null,
+            conditionType: null,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            isValid: true,
+            offenceType: null,
+          },
+          monitoringConditionsTrail: { startDate: null, endDate: null },
+          monitoringConditionsAlcohol: {
+            endDate: null,
+            installationLocation: null,
+            monitoringType: null,
+            prisonName: null,
+            probationOfficeName: null,
+            startDate: null,
+          },
+          isValid: true,
+          mandatoryAttendanceConditions: [
+            {
+              addressLine1: null,
+              addressLine2: null,
+              addressLine3: null,
+              addressLine4: null,
+              appointmentDay: null,
+              endDate: null,
+              endTime: null,
+              postcode: null,
+              purpose: null,
+              startDate: null,
+              startTime: null,
+            },
+          ],
+          curfewReleaseDateConditions: {
+            curfewAddress: null,
+            endTime: null,
+            orderId: null,
+            releaseDate: null,
+            startTime: null,
+          },
+          curfewConditions: {
+            curfewAddress: null,
+            endDate: null,
+            orderId: null,
+            startDate: null,
+            curfewAdditionalDetails: null,
+          },
+          curfewTimeTable: [
+            {
+              curfewAddress: '',
+              dayOfWeek: '',
+              endTime: '',
+              orderId: '',
+              startTime: '',
+            },
+          ],
+          installationLocation: {
+            location: 'PRIMARY',
+          },
+        },
+      })
+
+      const page = Page.visit(
+        OrderTasksPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        paths.ORDER.SUMMARY_VERSION,
+      )
+
+      const convertToExpectedPath = (path: string) => {
+        return path.replace(':orderId', mockOrderId).replace(':versionId', mockVersionId)
+      }
+      page.aboutTheDeviceWearerTask.link.should(
+        'have.attr',
+        'href',
+        convertToExpectedPath(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION),
+      )
+      page.contactInformationTask.link.should(
+        'have.attr',
+        'href',
+        convertToExpectedPath(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION),
+      )
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        convertToExpectedPath(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION),
+      )
+      page.electronicMonitoringTask.link.should(
+        'have.attr',
+        'href',
+        convertToExpectedPath(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION),
+      )
+      page.additionalDocumentsTask.link.should(
+        'have.attr',
+        'href',
+        convertToExpectedPath(paths.ATTACHMENT.ATTACHMENTS_VERSION),
+      )
     })
   })
 
