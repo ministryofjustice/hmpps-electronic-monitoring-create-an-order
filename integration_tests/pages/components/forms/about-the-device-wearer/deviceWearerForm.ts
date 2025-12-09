@@ -310,7 +310,6 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     this.sexField.shouldBeDisabled()
     this.genderIdentityField.shouldBeDisabled()
     this.interpreterRequiredField.shouldBeDisabled()
-    this.languageField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {

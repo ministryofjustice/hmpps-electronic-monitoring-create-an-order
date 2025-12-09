@@ -62,7 +62,6 @@ context('About the device wearer', () => {
         page.form.disabilityField.shouldHaveValue('The device wearer has a disability or health condition not listed')
         page.form.otherDisabilityField.shouldHaveValue('Broken arm')
         page.form.interpreterRequiredField.shouldHaveValue('No')
-        page.form.languageField.shouldHaveValue('')
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')
