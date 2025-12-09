@@ -211,10 +211,6 @@ export const createFakeInterestedParties = (
     notifyingOrganisationName = militaryCourt
   }
 
-  if (notifyingOrganisation === 'Probation Service') {
-    notifyingOrganisationName = 'Probation Board'
-  }
-
   if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
     prison = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(prisonTypes)
     notifyingOrganisationName = prison

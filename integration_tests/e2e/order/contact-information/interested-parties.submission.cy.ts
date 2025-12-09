@@ -156,7 +156,7 @@ context('Contact information', () => {
           }).should('be.true')
         })
 
-        it('should hide region input for Probation Service and submit "Probation Board" to API', () => {
+        it('should hide region input for Probation Service and submit empty string to API', () => {
           cy.task('stubCemoGetOrder', {
             httpStatus: 200,
             id: mockOrderId,
@@ -182,7 +182,7 @@ context('Contact information', () => {
             subPath: apiPath,
             response: {
               notifyingOrganisation: 'PROBATION',
-              notifyingOrganisationName: 'Probation Board',
+              notifyingOrganisationName: '',
               notifyingOrganisationEmail: 'notifying@example.com',
               responsibleOrganisation: 'POLICE',
               responsibleOrganisationEmail: 'responsible@example.com',
@@ -213,7 +213,7 @@ context('Contact information', () => {
             uri: `/orders/${mockOrderId}${apiPath}`,
             body: {
               notifyingOrganisation: 'PROBATION',
-              notifyingOrganisationName: 'Probation Board',
+              notifyingOrganisationName: '',
               notifyingOrganisationEmail: 'notifying@example.com',
               responsibleOrganisation: 'POLICE',
               responsibleOrganisationEmail: 'responsible@example.com',

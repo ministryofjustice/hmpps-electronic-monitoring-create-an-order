@@ -671,7 +671,7 @@ context('Contact Information - check your answers', () => {
             },
             interestedParties: {
               notifyingOrganisation: 'PROBATION',
-              notifyingOrganisationName: 'Probation Board',
+              notifyingOrganisationName: '',
               notifyingOrganisationEmail: 'notifying@organisation',
               responsibleOrganisation: 'PROBATION',
               responsibleOrganisationEmail: 'responsible@organisation',

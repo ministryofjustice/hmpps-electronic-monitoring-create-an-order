@@ -31,7 +31,6 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
     MAGISTRATES_COURT: formData.magistratesCourt,
     MILITARY_COURT: formData.militaryCourt,
     PRISON: formData.prison,
-    PROBATION: 'Probation Board',
     YOUTH_COURT: formData.youthCourt,
   }
 

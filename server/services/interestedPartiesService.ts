@@ -44,7 +44,6 @@ export default class InterestedPartiesService {
       MAGISTRATES_COURT: data.magistratesCourt,
       MILITARY_COURT: data.militaryCourt,
       PRISON: data.prison,
-      PROBATION: 'Probation Board',
       YOUTH_COURT: data.youthCourt,
     }
 
