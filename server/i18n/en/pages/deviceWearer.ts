@@ -28,10 +28,9 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     },
     interpreterRequired: {
       text: 'Is an interpreter needed?',
-      hint: "Interpreter's are required when the device wearer's main language isn't English",
     },
     language: {
-      text: 'What language does the interpreter need to use? (optional)',
+      text: 'What language does the interpreter need to use?',
       hint: 'Select the language the device wearer is most comfortable using.',
     },
     lastName: {

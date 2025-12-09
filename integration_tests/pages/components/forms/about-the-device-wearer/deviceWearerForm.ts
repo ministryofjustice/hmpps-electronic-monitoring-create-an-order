@@ -128,7 +128,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get languageField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What language does the interpreter need to use? (optional)', [
+    return new FormSelectComponent(this.form, 'What language does the interpreter need to use?', [
       'British Sign',
       'Lipspeak (English)',
       'Palantypists',

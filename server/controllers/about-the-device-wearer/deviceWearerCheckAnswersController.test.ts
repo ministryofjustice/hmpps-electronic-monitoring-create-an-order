@@ -216,7 +216,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'What language does the interpreter need to use? (optional)',
+            text: 'What language does the interpreter need to use?',
           },
           value: {
             text: '',
@@ -226,7 +226,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
               },
             ],
           },
@@ -491,7 +491,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'What language does the interpreter need to use? (optional)',
+            text: 'What language does the interpreter need to use?',
           },
           value: {
             text: '',
@@ -501,7 +501,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
               },
             ],
           },
@@ -766,7 +766,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'What language does the interpreter need to use? (optional)',
+            text: 'What language does the interpreter need to use?',
           },
           value: {
             text: '',
@@ -776,7 +776,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
               },
             ],
           },
