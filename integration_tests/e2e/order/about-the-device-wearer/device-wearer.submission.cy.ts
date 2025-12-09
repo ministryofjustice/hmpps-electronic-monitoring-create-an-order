@@ -52,7 +52,8 @@ context('About the device wearer', () => {
           .should('contain.text', 'Selecting this will reveal an additional input')
           .and('have.class', 'govuk-visually-hidden')
 
-        // yes if interpreter required
+        cy.get('#interpreterRequired-item-hint').find('span').should('have.class', 'govuk-visually-hidden')
+        cy.get('#interpreterRequired-item-hint').find('span').contains('Selecting this will reveal an additional input')
       })
 
       it('should continue to the identity numbers page', () => {
@@ -362,7 +363,7 @@ context('About the device wearer', () => {
             deliusId: '1234567',
             prisonNumber: '1234567',
             homeOfficeReferenceNumber: '1234567',
-            firstName: 'Saad',
+            firstName: 'Nadir',
             lastName: 'Adnan',
             alias: '',
             adultAtTimeOfInstallation: false,
@@ -380,7 +381,7 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Saad',
+          firstNames: 'Nadir',
           lastName: 'Adnan',
           alias: '',
           dob: new Date('2020-01-01T00:00:00.000Z'),
