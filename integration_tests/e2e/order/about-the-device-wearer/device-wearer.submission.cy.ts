@@ -51,6 +51,8 @@ context('About the device wearer', () => {
           .find('span')
           .should('contain.text', 'Selecting this will reveal an additional input')
           .and('have.class', 'govuk-visually-hidden')
+
+        // yes if interpreter required
       })
 
       it('should continue to the identity numbers page', () => {
@@ -215,6 +217,202 @@ context('About the device wearer', () => {
             dateOfBirth: '2020-01-01T00:00:00.000Z',
             disabilities: 'OTHER',
             otherDisability: 'Test disabilities',
+            interpreterRequired: false,
+            language: '',
+          },
+        }).should('be.true')
+
+        Page.verifyOnPage(ResponsibleAdultPage)
+      })
+
+      it('should pass interpreter required as false', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            homeOfficeReferenceNumber: '1234567',
+            firstName: 'Sigmund',
+            lastName: 'Ora',
+            alias: 'Sig',
+            adultAtTimeOfInstallation: false,
+            sex: 'MALE',
+            gender: 'MALE',
+            dateOfBirth: '2020-01-01T00:00:00.000Z',
+            disabilities: 'NONE',
+            otherDisability: '',
+            noFixedAbode: null,
+            interpreterRequired: false,
+          },
+        })
+
+        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+        const validFormData = {
+          firstNames: 'Sigmund',
+          lastName: 'Ora',
+          alias: 'Sig',
+          dob: new Date('2020-01-01T00:00:00.000Z'),
+          is18: false,
+          sex: 'Male',
+          disabilities: 'Not able to provide this information',
+          genderIdentity: 'Male',
+          interpreterRequired: false,
+        }
+
+        page.form.fillInWith(validFormData)
+        page.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            firstName: 'Sigmund',
+            lastName: 'Ora',
+            alias: 'Sig',
+            adultAtTimeOfInstallation: false,
+            sex: 'MALE',
+            gender: 'MALE',
+            dateOfBirth: '2020-01-01T00:00:00.000Z',
+            disabilities: 'NONE',
+            otherDisability: '',
+            interpreterRequired: false,
+            language: '',
+          },
+        }).should('be.true')
+
+        Page.verifyOnPage(ResponsibleAdultPage)
+      })
+
+      it('should pass interpreter required as true', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            homeOfficeReferenceNumber: '1234567',
+            firstName: 'Sebastien',
+            lastName: 'Eden',
+            alias: 'Bastien',
+            adultAtTimeOfInstallation: false,
+            sex: 'MALE',
+            gender: 'MALE',
+            dateOfBirth: '2020-01-01T00:00:00.000Z',
+            disabilities: 'NONE',
+            otherDisability: '',
+            noFixedAbode: null,
+            interpreterRequired: true,
+            language: 'French',
+          },
+        })
+
+        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+        const validFormData = {
+          firstNames: 'Sebastien',
+          lastName: 'Eden',
+          alias: 'Bastien',
+          dob: new Date('2020-01-01T00:00:00.000Z'),
+          is18: false,
+          sex: 'Male',
+          genderIdentity: 'Male',
+          interpreterRequired: true,
+          language: 'French',
+          disabilities: 'Not able to provide this information',
+        }
+
+        page.form.fillInWith(validFormData)
+        page.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            firstName: 'Sebastien',
+            lastName: 'Eden',
+            alias: 'Bastien',
+            adultAtTimeOfInstallation: false,
+            sex: 'MALE',
+            gender: 'MALE',
+            dateOfBirth: '2020-01-01T00:00:00.000Z',
+            disabilities: 'NONE',
+            otherDisability: '',
+            interpreterRequired: true,
+            language: 'French',
+          },
+        }).should('be.true')
+
+        Page.verifyOnPage(ResponsibleAdultPage)
+      })
+
+      it('should pass interpreter required as false when initial choice yes then no', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            nomisId: '1234567',
+            pncId: '1234567',
+            deliusId: '1234567',
+            prisonNumber: '1234567',
+            homeOfficeReferenceNumber: '1234567',
+            firstName: 'Saad',
+            lastName: 'Adnan',
+            alias: '',
+            adultAtTimeOfInstallation: false,
+            sex: 'MALE',
+            gender: 'MALE',
+            dateOfBirth: '2020-01-01T00:00:00.000Z',
+            disabilities: 'NONE',
+            otherDisability: '',
+            noFixedAbode: null,
+            interpreterRequired: false,
+            language: '',
+          },
+        })
+
+        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+        const validFormData = {
+          firstNames: 'Saad',
+          lastName: 'Adnan',
+          alias: '',
+          dob: new Date('2020-01-01T00:00:00.000Z'),
+          is18: false,
+          sex: 'Male',
+          genderIdentity: 'Male',
+          disabilities: 'Not able to provide this information',
+          interpreterRequired: true,
+          language: 'Arabic',
+        }
+
+        const changeInterpreterRequired = {
+          interpreterRequired: false,
+          language: '',
+        }
+
+        page.form.fillInWith(validFormData)
+        page.form.fillInWith(changeInterpreterRequired)
+        page.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            firstName: 'Nadir',
+            lastName: 'Adnan',
+            alias: '',
+            adultAtTimeOfInstallation: false,
+            sex: 'MALE',
+            gender: 'MALE',
+            dateOfBirth: '2020-01-01T00:00:00.000Z',
+            disabilities: 'NONE',
+            otherDisability: '',
             interpreterRequired: false,
             language: '',
           },
