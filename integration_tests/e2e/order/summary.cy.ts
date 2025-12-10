@@ -1173,7 +1173,7 @@ context('Order Summary', () => {
 
       cy.task('stubCemoGetVersions', {
         httpStatus: 200,
-        versions: [versionOne, versionTwo],
+        versions: [versionTwo, versionOne],
         orderId: mockOrderId,
       })
 
@@ -1262,7 +1262,8 @@ context('Order Summary', () => {
   })
 
   context('viewing an old version of the order', () => {
-    const mockVersionId = uuidv4()
+    const versionOneId = uuidv4()
+    const versionTwoId = uuidv4()
 
     beforeEach(() => {
       cy.task('reset')
@@ -1271,7 +1272,7 @@ context('Order Summary', () => {
       cy.task('stubCemoGetVersion', {
         httpStatus: 200,
         id: mockOrderId,
-        versionId: mockVersionId,
+        versionId: versionOneId,
         order: {
           id: mockOrderId,
           status: 'SUBMITTED',
@@ -1447,17 +1448,35 @@ context('Order Summary', () => {
         },
       })
 
+      const versionOne = versionInformation({
+        submittedBy: 'Person One',
+        versionId: versionOneId,
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+      })
+      const versionTwo = versionInformation({
+        submittedBy: 'Person Two',
+        versionId: versionTwoId,
+        type: 'VARIATION',
+        fmsResultDate: new Date(2025, 0, 3, 10, 30, 0, 0).toISOString(),
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionTwo, versionOne],
+        orderId: mockOrderId,
+      })
+
       cy.signIn()
     })
 
     const convertToExpectedPath = (path: string) => {
-      return path.replace(':orderId', mockOrderId).replace(':versionId', mockVersionId)
+      return path.replace(':orderId', mockOrderId).replace(':versionId', versionOneId)
     }
 
     it('has correct section links', () => {
       const page = Page.visit(
         OrderTasksPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
+        { orderId: mockOrderId, versionId: versionOneId },
         {},
         paths.ORDER.SUMMARY_VERSION,
       )
@@ -1489,16 +1508,20 @@ context('Order Summary', () => {
       )
     })
 
-    it('buttons are correct', () => {
+    it('content is correct', () => {
       const page = Page.visit(
         OrderTasksPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
+        { orderId: mockOrderId, versionId: versionOneId },
         {},
         paths.ORDER.SUMMARY_VERSION,
       )
 
       page.makeChangesButton.should('not.exist')
       page.viewAndDownloadButton.should('have.attr', 'href', convertToExpectedPath(paths.ORDER.RECEIPT_VERSION))
+
+      cy.get('.govuk-label-s').contains(
+        "You can't make changes to this form because there are more recent versions of it.",
+      )
     })
   })
 

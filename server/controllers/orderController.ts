@@ -66,13 +66,18 @@ export default class OrderController {
     }
 
     const currentVersion = versionId || order.versionId
+    let isMostRecentVersion: boolean = true
+    if (versionId && completedOrderVersions.length > 0) {
+      isMostRecentVersion = currentVersion === completedOrderVersions[0].versionId
+    }
 
     res.render('pages/order/summary', {
       order: req.order,
       sections: versionSections || sections,
       error: error && error.length > 0 ? error[0] : undefined,
-      createNewOrderVersionEnabled: createNewOrderVersionEnabled && !versionId,
+      createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
       timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
+      isMostRecentVersion,
     })
   }
 
