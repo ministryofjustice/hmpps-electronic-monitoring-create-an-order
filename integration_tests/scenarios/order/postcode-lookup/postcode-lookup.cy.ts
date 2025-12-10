@@ -10,7 +10,7 @@ context('Postcode Lookup', () => {
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
-    disabilities: 'Not able to provide this information',
+    disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
     otherDisability: null,
     interpreterRequired: false,
     language: '',

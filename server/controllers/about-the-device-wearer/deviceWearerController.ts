@@ -34,10 +34,6 @@ export default class DeviceWearerController {
     const { orderId } = req.params
     const { action, ...formData } = DeviceWearerFormDataParser.parse(req.body)
 
-    if (formData.interpreterRequired === 'false') {
-      formData.language = ''
-    }
-
     const result = await this.deviceWearerService.updateDeviceWearer({
       accessToken: res.locals.user.token,
       orderId,

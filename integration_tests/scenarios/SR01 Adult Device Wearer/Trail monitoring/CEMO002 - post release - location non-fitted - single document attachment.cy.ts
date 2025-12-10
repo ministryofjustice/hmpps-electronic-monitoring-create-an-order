@@ -148,7 +148,7 @@ context('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer('CEMO002'),
-        disabilities: 'Not able to provide this information',
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
         otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
@@ -236,11 +236,7 @@ context('Scenarios', () => {
               .replace('Not able to provide this information', '')
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
-            disability: [
-              {
-                disability: 'None of the above',
-              },
-            ],
+            disability: [],
             address_1: fakePrimaryAddress.addressLine1,
             address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
             address_3: fakePrimaryAddress.addressLine3,

@@ -49,7 +49,7 @@ context('The kitchen sink', () => {
     const currentDate = new Date()
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
-      disabilities: 'Not able to provide this information',
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
       otherDisability: null,
       interpreterRequired: false,
       language: '',
@@ -171,11 +171,7 @@ context('The kitchen sink', () => {
             .replace('Not able to provide this information', '')
             .replace('Self identify', 'Prefer to self-describe')
             .replace('Non binary', 'Non-Binary'),
-          disability: [
-            {
-              disability: 'None of the above',
-            },
-          ],
+          disability: [],
           address_1: primaryAddressDetails.addressLine1,
           address_2: primaryAddressDetails.addressLine2 === '' ? 'N/A' : primaryAddressDetails.addressLine2,
           address_3: primaryAddressDetails.addressLine3,
