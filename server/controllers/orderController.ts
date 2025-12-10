@@ -65,12 +65,14 @@ export default class OrderController {
       })
     }
 
+    const currentVersion = versionId || order.versionId
+
     res.render('pages/order/summary', {
       order: req.order,
       sections: versionSections || sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled: createNewOrderVersionEnabled && !versionId,
-      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions),
+      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
     })
   }
 

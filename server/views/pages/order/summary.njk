@@ -142,12 +142,21 @@
                 href: "/order/" + order.id + "/edit"
               }) }}
             {% endif %}
-            {{ govukButton({
-              text: "View and download form",
-	      id: "view-and-download-button",
-              href: "/order/" + orderId + "/receipt",
-              classes: "govuk-button--secondary"
-            }) }}
+	    {% if versionId %}
+	      {{ govukButton({
+                text: "View and download form",
+	        id: "view-and-download-button",
+                href: "/order/" + orderId + "/version/" + versionId + "/receipt",
+                classes: "govuk-button--secondary"
+              }) }}
+	    {% else %}
+              {{ govukButton({
+                text: "View and download form",
+	        id: "view-and-download-button",
+                href: "/order/" + orderId + "/receipt",
+                classes: "govuk-button--secondary"
+              }) }}
+	    {% endif %}
 	  </div>
         </div>
       {% endif %}
@@ -156,8 +165,28 @@
 
     <div class="govuk-grid-column-one-thirds">
       {% if timelineItems | length %}
+        {% set processedTimeLineItems = [] %}
+	{% for item in timelineItems %}
+	  {% if item.href %}
+	    {% set itemHtml %}
+	      {{ item.text if item.text }}
+	      <div class="govuk-!-margin-top-2">
+	        <a href="{{ item.href }}">View submitted form</a>
+	      </div>
+	    {% endset %}
+	    {% set processedItem = {
+	      label: item.label,
+	      datetime: item.datetime,
+	      byline: item.byline,
+	      html: itemHtml
+	    } %}
+	  {% else %}
+	    {% set processedItem = item %}
+	  {% endif %}
+	  {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
+	{% endfor %}
 	{{ mojTimeline({
-          items: timelineItems
+          items: processedTimeLineItems
         })}}
       {% endif %}
     </div>

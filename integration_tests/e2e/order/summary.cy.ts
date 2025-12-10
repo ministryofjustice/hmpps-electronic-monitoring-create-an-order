@@ -1088,7 +1088,6 @@ context('Order Summary', () => {
           },
           monitoringConditions: {
             orderType: null,
-            curfew: false,
             exclusionZone: false,
             trail: false,
             mandatoryAttendance: false,
@@ -1141,6 +1140,8 @@ context('Order Summary', () => {
     }
   }
   context('Complete order, variation', () => {
+    const versionOneId = uuidv4()
+    const versionTwoId = uuidv4()
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -1150,6 +1151,7 @@ context('Order Summary', () => {
         id: mockOrderId,
         order: {
           id: mockOrderId,
+          versionId: versionTwoId,
         },
       })
 
@@ -1159,10 +1161,12 @@ context('Order Summary', () => {
     it('timeline version list', () => {
       const versionOne = versionInformation({
         submittedBy: 'Person One',
+        versionId: versionOneId,
         fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
       })
       const versionTwo = versionInformation({
         submittedBy: 'Person Two',
+        versionId: versionTwoId,
         type: 'VARIATION',
         fmsResultDate: new Date(2025, 0, 3, 10, 30, 0, 0).toISOString(),
       })
@@ -1179,6 +1183,13 @@ context('Order Summary', () => {
       page.timeline.formSubmittedComponent.element.should('exist')
       page.timeline.formSubmittedComponent.usernameIs('Person One')
       page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
+      page.timeline.formSubmittedComponent.description
+        .contains('View submitted form')
+        .should(
+          'have.attr',
+          'href',
+          paths.ORDER.SUMMARY_VERSION.replace(':orderId', mockOrderId).replace(':versionId', versionOne.versionId),
+        )
       page.timeline.formVariationComponent.element.should('exist')
       page.timeline.formVariationComponent.usernameIs('Person Two')
       page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
@@ -1250,15 +1261,11 @@ context('Order Summary', () => {
   })
 
   context('viewing an old version of the order', () => {
+    const mockVersionId = uuidv4()
+
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-      cy.signIn()
-    })
-
-    it('old sumbitted request version', () => {
-      const mockVersionId = uuidv4()
 
       cy.task('stubCemoGetVersion', {
         httpStatus: 200,
@@ -1439,6 +1446,14 @@ context('Order Summary', () => {
         },
       })
 
+      cy.signIn()
+    })
+
+    const convertToExpectedPath = (path: string) => {
+      return path.replace(':orderId', mockOrderId).replace(':versionId', mockVersionId)
+    }
+
+    it('has correct section links', () => {
       const page = Page.visit(
         OrderTasksPage,
         { orderId: mockOrderId, versionId: mockVersionId },
@@ -1446,9 +1461,6 @@ context('Order Summary', () => {
         paths.ORDER.SUMMARY_VERSION,
       )
 
-      const convertToExpectedPath = (path: string) => {
-        return path.replace(':orderId', mockOrderId).replace(':versionId', mockVersionId)
-      }
       page.aboutTheDeviceWearerTask.link.should(
         'have.attr',
         'href',
@@ -1474,6 +1486,18 @@ context('Order Summary', () => {
         'href',
         convertToExpectedPath(paths.ATTACHMENT.ATTACHMENTS_VERSION),
       )
+    })
+
+    it('buttons are correct', () => {
+      const page = Page.visit(
+        OrderTasksPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        paths.ORDER.SUMMARY_VERSION,
+      )
+
+      page.makeChangesButton.should('not.exist')
+      page.viewAndDownloadButton.should('have.attr', 'href', convertToExpectedPath(paths.ORDER.RECEIPT_VERSION))
     })
   })
 
