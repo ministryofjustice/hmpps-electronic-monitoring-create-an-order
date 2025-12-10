@@ -90,7 +90,7 @@ context('About the device wearer', () => {
             disabilities: 'NO_LISTED_CONDITION',
             otherDisability: '',
             interpreterRequired: true,
-            language: 'British Sign',
+            language: 'BRITISH_SIGN',
           },
         }).should('be.true')
 
@@ -310,7 +310,7 @@ context('About the device wearer', () => {
             otherDisability: '',
             noFixedAbode: null,
             interpreterRequired: true,
-            language: 'French',
+            language: 'FRENCH',
           },
         })
 
@@ -345,7 +345,7 @@ context('About the device wearer', () => {
             disabilities: 'NO_LISTED_CONDITION',
             otherDisability: '',
             interpreterRequired: true,
-            language: 'French',
+            language: 'FRENCH',
           },
         }).should('be.true')
 
