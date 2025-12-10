@@ -40,7 +40,6 @@ import sex from './sex'
 import variationTypes from './variationTypes'
 import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
-import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
@@ -110,7 +109,6 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
-  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits,
   installationLocations,
@@ -148,7 +146,6 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
-  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
   installationLocations,

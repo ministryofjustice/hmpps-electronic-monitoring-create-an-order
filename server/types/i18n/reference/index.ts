@@ -28,7 +28,6 @@ import YesNoUnknown from './yesNoUnknown'
 import YouthCourts from './youthCourts'
 import YouthJusticeServiceRegions from './youthJusticeServiceRegions'
 import ProbationRegionDeliveryUnits from './probationRegionDeliveryUnits'
-import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
 import InstallationLocations from './installationLocations'
 import PossibleRisks from './possibleRisks'
 import PoliceAreas from './policeAreas'
@@ -96,7 +95,6 @@ type ReferenceCatalogDDv5 = {
   variationTypes: VariationTypesDDv5
   yesNoUnknown: YesNoUnknown
   youthCourts: YouthCourts
-  youthCustodyServiceRegions: YouthCustodyServiceRegions
   youthJusticeServiceRegions: YouthJusticeServiceRegions
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks
@@ -134,7 +132,6 @@ type ReferenceCatalogDDv6 = {
   variationTypes: VariationTypesDDv5
   yesNoUnknown: YesNoUnknown
   youthCourts: YouthCourts
-  youthCustodyServiceRegions: YouthCustodyServiceRegions
   youthJusticeServiceRegions: YouthJusticeServiceRegions
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks
