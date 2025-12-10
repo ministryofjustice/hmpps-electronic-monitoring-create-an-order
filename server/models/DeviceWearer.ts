@@ -12,6 +12,7 @@ export const DisabilityEnum = z.enum([
   'STAMINA_BREATHING_FATIGUE',
   'SOCIAL_BEHAVIOURAL',
   'OTHER',
+  'NO_LISTED_CONDITION',
   'NONE',
   'PREFER_NOT_TO_SAY',
 ])

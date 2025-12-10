@@ -5,6 +5,7 @@ import CrownCourts, { CrownCourtsDDv5 } from './crownCourts'
 import Disabilities, { DisabilitiesDDv5 } from './disabilities'
 import FamilyCourts from './familyCourts'
 import Gender from './gender'
+import Languages from './languages'
 import MagistratesCourts, { MagistratesCourtsDDv5 } from './magistratesCourts'
 import MappaCaseType from './mappaCaseType'
 import MappaLevel from './mappaLevel'
@@ -39,6 +40,7 @@ type ReferenceCatalogDDv4 = {
   crownCourts: CrownCourts
   disabilities: Disabilities
   gender: Gender
+  languages: Languages
   magistratesCourts: MagistratesCourts
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel
@@ -71,6 +73,7 @@ type ReferenceCatalogDDv5 = {
   disabilities: DisabilitiesDDv5
   familyCourts: FamilyCourts
   gender: Gender
+  languages: Languages
   magistratesCourts: MagistratesCourtsDDv5
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel
@@ -107,6 +110,7 @@ type ReferenceCatalogDDv6 = {
   disabilities: DisabilitiesDDv5
   familyCourts: FamilyCourts
   gender: Gender
+  languages: Languages
   magistratesCourts: MagistratesCourtsDDv5
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel

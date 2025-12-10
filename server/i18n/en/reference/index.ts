@@ -21,6 +21,7 @@ import variationTypesDDv5 from './ddv5/variationTypes'
 import youthCourts from './ddv5/youthCourts'
 import disabilities from './disabilities'
 import gender from './gender'
+import languages from './languages'
 import magistratesCourts from './magistratesCourts'
 import mappaCaseType from './mappaCaseType'
 import mappaLevel from './mappaLevel'
@@ -54,6 +55,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   crownCourts,
   disabilities,
   gender,
+  languages,
   magistratesCourts,
   mappaCaseType,
   mappaLevel,
@@ -86,6 +88,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   disabilities: disabilitiesDDv5,
   familyCourts,
   gender,
+  languages,
   magistratesCourts: magistratesCourtsDDv5,
   mappaCaseType,
   mappaLevel,
@@ -122,6 +125,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   disabilities: disabilitiesDDv5,
   familyCourts,
   gender,
+  languages,
   magistratesCourts: magistratesCourtsDDv5,
   mappaCaseType,
   mappaLevel,

@@ -83,6 +83,8 @@ context('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeYouthDeviceWearer('CEMO019'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }

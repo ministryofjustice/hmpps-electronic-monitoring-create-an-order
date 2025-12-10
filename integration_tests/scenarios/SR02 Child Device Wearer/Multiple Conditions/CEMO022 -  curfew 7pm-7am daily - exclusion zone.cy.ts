@@ -56,6 +56,8 @@ context('Scenarios', () => {
   context('Curfew and exclusion zone', () => {
     const deviceWearerDetails = {
       ...createFakeYouthDeviceWearer('CEMO022'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }

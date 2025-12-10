@@ -140,6 +140,8 @@ context('Scenarios', () => {
   context('Community, Location Monitoring, Community YRO, ISSPp, YCS', () => {
     const deviceWearerDetails = {
       ...createFakeYouthDeviceWearer('CEMO005'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }

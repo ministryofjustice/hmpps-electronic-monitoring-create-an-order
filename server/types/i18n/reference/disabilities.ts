@@ -11,6 +11,7 @@ type Disabilities = ReferenceData<
   | 'STAMINA_BREATHING_FATIGUE'
   | 'SOCIAL_BEHAVIOURAL'
   | 'OTHER'
+  | 'NO_LISTED_CONDITION'
   | 'NONE'
 >
 
@@ -26,6 +27,7 @@ type DisabilitiesDDv5 = ReferenceData<
   | 'SOCIAL_BEHAVIOURAL'
   | 'SKIN_CONDITION'
   | 'OTHER'
+  | 'NO_LISTED_CONDITION'
   | 'NONE'
 >
 

@@ -53,6 +53,8 @@ context.skip('Scenarios', () => {
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am at two addresses', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }

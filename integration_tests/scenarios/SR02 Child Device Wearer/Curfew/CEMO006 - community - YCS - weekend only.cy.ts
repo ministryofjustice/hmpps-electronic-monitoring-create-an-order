@@ -153,6 +153,8 @@ context.skip('Scenarios', () => {
   context('Community curfew weekend only', () => {
     const deviceWearerDetails = {
       ...createFakeYouthDeviceWearer('CEMO005'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
