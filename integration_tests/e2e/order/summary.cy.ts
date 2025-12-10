@@ -832,7 +832,7 @@ context('Order Summary', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
-        status: 'SUBMITTED',
+        status: 'IN_PROGRESS',
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
@@ -1088,6 +1088,7 @@ context('Order Summary', () => {
           },
           monitoringConditions: {
             orderType: null,
+            curfew: false,
             exclusionZone: false,
             trail: false,
             mandatoryAttendance: false,
