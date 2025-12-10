@@ -278,7 +278,7 @@ context('Scenarios', () => {
           prison_number: deviceWearerDetails.prisonNumber,
           home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
           interpreter_required: 'true',
-          language: 'French',
+          language: 'FRENCH',
         },
       }).should('be.true')
 
