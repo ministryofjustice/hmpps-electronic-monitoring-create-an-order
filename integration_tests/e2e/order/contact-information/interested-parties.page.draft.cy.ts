@@ -104,9 +104,8 @@ context('Contact information', () => {
           page.form.youthCourtField.shouldHaveOption('Llwynypia Youth Court')
           page.form.youthCourtField.shouldHaveOption('Wrexham Youth Court')
 
-          page.form.youthCustodyServiceField.shouldHaveOption('Central')
-          page.form.youthCustodyServiceField.shouldHaveOption('North East and Cumbria')
-          page.form.youthCustodyServiceField.shouldHaveOption('Wales')
+          cy.get('#notifyingOrgProbationRegion').should('not.exist')
+          cy.get('#youthCustodyServiceRegion').should('not.exist')
 
           page.checkIsAccessible()
         })
