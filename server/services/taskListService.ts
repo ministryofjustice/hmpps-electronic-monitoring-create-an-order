@@ -513,27 +513,38 @@ export default class TaskListService {
     return tasks
   }
 
-  getNextPage(currentPage: Page, order: Order, formData: FormData = {}): string {
+  getNextPage(
+    currentPage: Page,
+    order: Order,
+    formData: FormData = {},
+    versionId: string | undefined = undefined,
+  ): string {
     const availableTasks = this.getAvailableTasks(this.getTasks(order), formData, currentPage)
     const availableCurrentSectionTasks = this.getCurrentSectionTasks(availableTasks, currentPage)
     const availableNextSectionTasks = this.getNextSectionTasks(availableTasks, currentPage)
     const currentTaskIndex = this.getCurrentTaskIndex(availableTasks, currentPage)
     const nextCheckYourAnswersPageIndex = this.getNextCheckYourAnswersPageIndex(availableTasks, currentPage)
 
+    let path: string
     // If on a CYA page or the variation details page, and the next section is complete, navigate to the next section's CYA page
     if (
       (currentPage.startsWith(CYA_PREFIX) || currentPage === PAGES.variationDetails) &&
       availableNextSectionTasks.every(task => task.completed)
     ) {
-      return availableTasks[nextCheckYourAnswersPageIndex].path.replace(':orderId', order.id)
+      path = availableTasks[nextCheckYourAnswersPageIndex].path.replace(':orderId', order.id)
+    } else if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
+      // If not on a CYA page or the variation details page, and the current section is complete, navigate to the current section's CYA page
+      path = this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
+    } else {
+      // Otherwise, navigate to the next page in the task list.
+      path = availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
     }
 
-    // If not on a CYA page or the variation details page, and the current section is complete, navigate to the current section's CYA page
-    if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
-      return this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
+    if (versionId) {
+      path = path.replace(`/order/${order.id}/`, `/order/${order.id}/version/${versionId}/`)
     }
-    // Otherwise, navigate to the next page in the task list.
-    return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+
+    return path
   }
 
   getCurrentTaskIndex(tasks: Task[], currentPage: Page): number {
@@ -569,7 +580,7 @@ export default class TaskListService {
     return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
   }
 
-  getNextCheckYourAnswersPage(currentPage: Page, order: Order) {
+  getNextCheckYourAnswersPage(currentPage: Page, order: Order, versionId?: string) {
     const tasks = this.getTasks(order)
 
     const checkYourAnswersTasks = tasks.filter(
@@ -578,11 +589,18 @@ export default class TaskListService {
 
     const currentTaskIndex = this.getCurrentTaskIndex(checkYourAnswersTasks, currentPage)
 
+    let path: string
     if (currentTaskIndex === -1 || currentTaskIndex + 1 >= checkYourAnswersTasks.length) {
-      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+      path = paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    } else {
+      path = checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
     }
 
-    return checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    if (versionId) {
+      path = path.replace(`/order/${order.id}/`, `/order/${order.id}/version/${versionId}/`)
+    }
+
+    return path
   }
 
   getNextCheckYourAnswersPageIndex(tasks: Task[], currentPage: Page): number {

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'
@@ -537,6 +538,60 @@ context('Device wearer - check your answers', () => {
       page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
+    })
+  })
+
+  context('Viewing an old version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'ho',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'MALE',
+            gender: 'MALE',
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
+            noFixedAbode: null,
+            interpreterRequired: false,
+          },
+          DeviceWearerResponsibleAdult: null,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'View answers'
+
+    it('navigates correctly', () => {
+      const page = Page.visit(
+        CheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.returnButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
     })
   })
 

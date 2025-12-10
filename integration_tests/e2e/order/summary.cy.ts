@@ -1475,12 +1475,7 @@ context('Order Summary', () => {
     }
 
     it('has correct section links', () => {
-      const page = Page.visit(
-        OrderTasksPage,
-        { orderId: mockOrderId, versionId: versionOneId },
-        {},
-        paths.ORDER.SUMMARY_VERSION,
-      )
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId, versionId: versionOneId }, {}, true)
 
       page.aboutTheDeviceWearerTask.link.should(
         'have.attr',
@@ -1510,12 +1505,7 @@ context('Order Summary', () => {
     })
 
     it('content is correct', () => {
-      const page = Page.visit(
-        OrderTasksPage,
-        { orderId: mockOrderId, versionId: versionOneId },
-        {},
-        paths.ORDER.SUMMARY_VERSION,
-      )
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId, versionId: versionOneId }, {}, true)
 
       page.makeChangesButton.should('not.exist')
       page.viewAndDownloadButton.should('have.attr', 'href', convertToExpectedPath(paths.ORDER.RECEIPT_VERSION))

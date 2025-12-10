@@ -32,7 +32,11 @@ import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/at
 import Timeline from '../components/timeline'
 
 export default class OrderTasksPage extends AppPage {
-  constructor(path: string = paths.ORDER.SUMMARY) {
+  constructor(isOldVersionPage: boolean = false) {
+    let path: string = paths.ORDER.SUMMARY
+    if (isOldVersionPage) {
+      path = paths.ORDER.SUMMARY_VERSION
+    }
     super('Electronic Monitoring application form', path, '')
   }
 

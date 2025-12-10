@@ -21,7 +21,7 @@ const populateOrder =
           order = await orderService.getVersion({ accessToken: token, orderId, versionId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id).replace(
             `order/${order.id}/`,
-            `order/${order.id}/version/${versionId}`,
+            `order/${order.id}/version/${versionId}/`,
           )
           res.locals.versionId = versionId
         } else {
