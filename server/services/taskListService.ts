@@ -626,7 +626,7 @@ export default class TaskListService {
     return true
   }
 
-  async getSections(order: Order): Promise<SectionBlock[]> {
+  async getSections(order: Order, versionId?: string): Promise<SectionBlock[]> {
     const tasks = this.getTasks(order)
     const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
 
@@ -639,11 +639,18 @@ export default class TaskListService {
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         }
+
+        path = path.replace(':orderId', order.id)
+
+        if (versionId) {
+          path = path.replace(`order/${order.id}`, `order/${order.id}/version/${versionId}`)
+        }
+
         return {
           name: section,
           completed,
           checked: checkList[section],
-          path: path.replace(':orderId', order.id),
+          path,
           isReady: this.isSectionReady(section, tasks, order),
         }
       })

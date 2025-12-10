@@ -38,32 +38,17 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')
 
     const [sections, completedOrderVersions] = await Promise.all([
-      this.taskListService.getSections(order),
+      this.taskListService.getSections(order, versionId),
       this.orderService.getCompleteVersions({
         orderId: order.id,
         accessToken: res.locals.user.token,
       }),
     ])
-
-    const { versionId } = req.params
-
-    // TODO: test and refactor
-    // Move to task service(?)
-    let versionSections
-    if (versionId) {
-      versionSections = sections.map(section => {
-        const parts = section.path.split('/')
-        const index = parts.indexOf('order') + 2
-        return {
-          ...section,
-          path: [...parts.slice(0, index), [`version/${versionId}`], ...parts.slice(index)].join('/'),
-        }
-      })
-    }
 
     const currentVersion = versionId || order.versionId
     let isMostRecentVersion: boolean = true
@@ -73,7 +58,7 @@ export default class OrderController {
 
     res.render('pages/order/summary', {
       order: req.order,
-      sections: versionSections || sections,
+      sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
       timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
