@@ -1194,6 +1194,7 @@ context('Order Summary', () => {
       page.timeline.formVariationComponent.usernameIs('Person Two')
       page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
       page.timeline.formVariationComponent.variationTextIs('Change to an order')
+      page.timeline.formVariationComponent.description.contains('You are viewing this version of the form')
     })
 
     it('Submitted request', () => {

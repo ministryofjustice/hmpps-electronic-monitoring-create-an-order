@@ -174,15 +174,20 @@
 	        <a href="{{ item.href }}">View submitted form</a>
 	      </div>
 	    {% endset %}
-	    {% set processedItem = {
-	      label: item.label,
-	      datetime: item.datetime,
-	      byline: item.byline,
-	      html: itemHtml
-	    } %}
 	  {% else %}
-	    {% set processedItem = item %}
+	    {% set itemHtml %}
+	      {{ item.text if item.text }}
+	      <div class="govuk-!-margin-top-2">
+	        <p>You are viewing this version of the form</p>
+	      </div>
+	    {% endset %}
 	  {% endif %}
+	  {% set processedItem = {
+	    label: item.label,
+	    datetime: item.datetime,
+	    byline: item.byline,
+	    html: itemHtml
+	  } %}
 	  {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
 	{% endfor %}
 	{{ mojTimeline({
