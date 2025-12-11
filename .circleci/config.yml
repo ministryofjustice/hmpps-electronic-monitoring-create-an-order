@@ -24,7 +24,7 @@ parameters:
 executors:
   scenario-testing:
     docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:20.19.0-browsers
       - image: postgres:14
         environment:
           POSTGRES_PASSWORD: postgres
@@ -57,7 +57,7 @@ executors:
 
   intgration-testing:
      docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:20.19.0-browsers
       - image: redis:7.2
       - image: wiremock/wiremock:latest
         environment:
