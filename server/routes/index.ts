@@ -362,6 +362,8 @@ export default function routes({
    */
   get(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.update)
+  get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
+  post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
   get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
   post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
   get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
