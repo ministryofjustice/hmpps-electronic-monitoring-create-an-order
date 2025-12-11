@@ -163,6 +163,29 @@ context('monitoring types', () => {
     )
   })
 
+  it('no fixed address, sds, hdc no, pilot GPS', () => {
+    const deviceWearerNoFixedAbode = { ...createDevicerWearer(false), noFixedAbode: true }
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      deviceWearer: deviceWearerNoFixedAbode,
+      monitoringConditions: createMonitoringConditions({
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'NO',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+      }),
+    })
+    const monitoringTypesPage = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+    monitoringTypesPage.form.message.contains(
+      'No monitoring types can be selected because the device wearer is not on a Home Detention Curfew (HDC) and has no fixed address.',
+    )
+  })
+
   it('no fixed address', () => {
     stubGetOrder({ notifyingOrg: 'PROBATION', addresses: createAddresses(true) })
     const monitoringTypesPage = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })

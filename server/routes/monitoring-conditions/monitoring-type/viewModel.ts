@@ -41,7 +41,7 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
     model[condition] = { disabled: isConditionDisabled(order, condition) || !enabled.options.includes(condition) }
   })
 
-  if (MonitoringTypesKeys.every(condition => model[condition]?.disabled)) {
+  if (MonitoringTypesKeys.every(condition => model[condition]?.disabled) && order.deviceWearer.noFixedAbode === false) {
     model.allconditionsDisabled = true
     model.message = 'There are no additional eligible monitoring types available to add'
   }
@@ -76,6 +76,13 @@ const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message
       }
     }
     if (order.monitoringConditions.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {
+      if (order.deviceWearer.noFixedAbode === true) {
+        return {
+          options: [],
+          message:
+            'No monitoring types can be selected because the device wearer is not on a Home Detention Curfew (HDC) and has no fixed address.',
+        }
+      }
       return {
         options: ['trail'],
         message:
