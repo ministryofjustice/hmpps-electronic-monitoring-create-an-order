@@ -62,10 +62,17 @@
 	{% endif %}
 
 	<div class="govuk-button-group">
+	    {% if versionId %}
+	    {{ govukButton({
+	      text: "Save and return to main form menu",
+	      href: "/order/" + orderId + "/version/" + versionId + "/summary"
+	    }) }}
+	    {% else %}
 	    {{ govukButton({
 	      text: "Save and return to main form menu",
 	      href: "/order/" + orderId + "/summary"
 	    }) }}
+	    {% endif %}
 	</div>
       </form>
     </div>

@@ -357,6 +357,35 @@ const getOrderWithAttachments = (
     },
   })
 
+type GetVersionWithAttachmentStubOptions = GetOrderWithAttachmentStubOptions & {
+  versionId: string
+}
+
+const getVersionWithAttachments = (
+  options: GetVersionWithAttachmentStubOptions = defaultGetVersionOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${options.id}/versions/${options.versionId}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: options.id,
+              status: options.status,
+              additionalDocuments: options.attachments,
+              orderParameters: options.orderParameters,
+              fmsResultDate: options.fmsResultDate,
+            }
+          : null,
+    },
+  })
+
 type SubmitOrderStubOptions = {
   httpStatus: number
   method?: string
@@ -760,6 +789,7 @@ export default {
   stubCemoSearchOrders: searchOrders,
   stubCemoGetVersions: getVersionInformation,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubCemoGetVersionWithAttachments: getVersionWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
   stubCemoSubmitOrder: submitOrder,
