@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 const mockOrderId = uuidv4()
 
@@ -307,7 +308,7 @@ context('installation and risk - check your answers', () => {
 
     const pageHeading = 'View answers'
 
-    it('navigates correctly', () => {
+    it('navigates correctly to summary', () => {
       const page = Page.visit(
         InstallationAndRiskCheckYourAnswersPage,
         { orderId: mockOrderId, versionId: mockVersionId },
@@ -319,6 +320,26 @@ context('installation and risk - check your answers', () => {
       page.returnButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
     })
   })
 
