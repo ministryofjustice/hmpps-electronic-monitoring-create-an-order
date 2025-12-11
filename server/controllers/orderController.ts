@@ -50,7 +50,7 @@ export default class OrderController {
       }),
     ])
 
-    const currentVersion = versionId || order.versionId
+    const currentVersion = order.versionId
     let isMostRecentVersion: boolean = true
     if (versionId && completedOrderVersions.length > 0) {
       isMostRecentVersion = currentVersion === completedOrderVersions[0].versionId
