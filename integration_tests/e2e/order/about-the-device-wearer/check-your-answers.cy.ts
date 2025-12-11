@@ -3,6 +3,7 @@ import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'
@@ -580,7 +581,7 @@ context('Device wearer - check your answers', () => {
 
     const pageHeading = 'View answers'
 
-    it('navigates correctly', () => {
+    it('navigates correctly back to summary page', () => {
       const page = Page.visit(
         CheckYourAnswersPage,
         { orderId: mockOrderId, versionId: mockVersionId },
@@ -592,6 +593,26 @@ context('Device wearer - check your answers', () => {
       page.returnButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        CheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
     })
   })
 
