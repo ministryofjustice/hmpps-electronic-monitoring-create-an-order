@@ -56,6 +56,8 @@ context('Scenarios', () => {
   context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO015'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }

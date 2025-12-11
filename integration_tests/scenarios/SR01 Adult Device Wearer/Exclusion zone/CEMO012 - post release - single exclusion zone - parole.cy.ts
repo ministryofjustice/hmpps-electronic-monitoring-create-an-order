@@ -63,6 +63,8 @@ context('Scenarios', () => {
   context('Single exclusion zone ', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO012'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }

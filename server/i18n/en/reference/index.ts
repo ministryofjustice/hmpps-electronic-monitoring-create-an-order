@@ -21,6 +21,7 @@ import variationTypesDDv5 from './ddv5/variationTypes'
 import youthCourts from './ddv5/youthCourts'
 import disabilities from './disabilities'
 import gender from './gender'
+import languages from './languages'
 import magistratesCourts from './magistratesCourts'
 import mappaCaseType from './mappaCaseType'
 import mappaLevel from './mappaLevel'
@@ -39,7 +40,6 @@ import sex from './sex'
 import variationTypes from './variationTypes'
 import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
-import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
@@ -55,6 +55,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   crownCourts,
   disabilities,
   gender,
+  languages,
   magistratesCourts,
   mappaCaseType,
   mappaLevel,
@@ -87,6 +88,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   disabilities: disabilitiesDDv5,
   familyCourts,
   gender,
+  languages,
   magistratesCourts: magistratesCourtsDDv5,
   mappaCaseType,
   mappaLevel,
@@ -107,7 +109,6 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
-  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits,
   installationLocations,
@@ -124,6 +125,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   disabilities: disabilitiesDDv5,
   familyCourts,
   gender,
+  languages,
   magistratesCourts: magistratesCourtsDDv5,
   mappaCaseType,
   mappaLevel,
@@ -144,7 +146,6 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
-  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
   installationLocations,

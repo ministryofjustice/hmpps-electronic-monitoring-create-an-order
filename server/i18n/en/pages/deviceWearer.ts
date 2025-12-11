@@ -16,7 +16,7 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
       text: "What is the device wearer's date of birth?",
     },
     disabilities: {
-      text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+      text: 'Does the device wearer have any of the disabilities or health conditions listed?',
       hint: 'Select all that apply',
     },
     firstName: {
@@ -28,10 +28,9 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     },
     interpreterRequired: {
       text: 'Is an interpreter needed?',
-      hint: "Interpreter's are required when the device wearer's main language isn't English",
     },
     language: {
-      text: 'What language does the interpreter need to use? (optional)',
+      text: 'What language does the interpreter need to use?',
       hint: 'Select the language the device wearer is most comfortable using.',
     },
     lastName: {

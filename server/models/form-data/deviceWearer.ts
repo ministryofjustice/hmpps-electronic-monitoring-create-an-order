@@ -20,6 +20,11 @@ const DeviceWearerFormDataParser = FormDataModel.extend({
   gender: z.string().default(''),
   disabilities: MultipleChoiceInputModel.pipe(z.array(DisabilityEnum)),
   otherDisability: z.string().optional(),
+}).transform(data => {
+  if (data.interpreterRequired === 'false') {
+    return { ...data, language: '' }
+  }
+  return data
 })
 
 type DeviceWearerFormData = Omit<z.infer<typeof DeviceWearerFormDataParser>, 'action'>
@@ -42,7 +47,9 @@ const DeviceWearerFormDataValidator = z.object({
   ),
   sex: z.string().min(1, validationErrors.deviceWearer.sexRequired),
   gender: z.string().min(1, validationErrors.deviceWearer.genderRequired),
-  disabilities: MultipleChoiceInputModel.pipe(z.array(DisabilityEnum)).transform(val => val.join(',')),
+  disabilities: MultipleChoiceInputModel.pipe(
+    z.array(DisabilityEnum).min(1, validationErrors.deviceWearer.disabilitiesRequired),
+  ).transform(val => val.join(',')),
   otherDisability: z.string().optional(),
   interpreterRequired: BooleanInputModel.pipe(
     z.boolean({

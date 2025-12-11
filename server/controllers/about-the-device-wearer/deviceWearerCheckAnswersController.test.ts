@@ -199,7 +199,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+            text: 'Does the device wearer have any of the disabilities or health conditions listed?',
           },
           value: {
             html: '',
@@ -209,15 +209,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText:
-                  'does the device wearer have any of the disabilities or health conditions listed? (optional)',
+                visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'What language does the interpreter need to use? (optional)',
+            text: 'What language does the interpreter need to use?',
           },
           value: {
             text: '',
@@ -227,7 +226,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
               },
             ],
           },
@@ -475,7 +474,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+            text: 'Does the device wearer have any of the disabilities or health conditions listed?',
           },
           value: {
             html: 'Visual impairment or blindness not corrected by wearing glasses<br/>Physical disability or mobility issue',
@@ -485,15 +484,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText:
-                  'does the device wearer have any of the disabilities or health conditions listed? (optional)',
+                visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'What language does the interpreter need to use? (optional)',
+            text: 'What language does the interpreter need to use?',
           },
           value: {
             text: '',
@@ -503,7 +501,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
               },
             ],
           },
@@ -751,7 +749,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+            text: 'Does the device wearer have any of the disabilities or health conditions listed?',
           },
           value: {
             html: 'Visual impairment or blindness not corrected by wearing glasses<br/>Physical disability or mobility issue',
@@ -761,15 +759,14 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText:
-                  'does the device wearer have any of the disabilities or health conditions listed? (optional)',
+                visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
               },
             ],
           },
         },
         {
           key: {
-            text: 'What language does the interpreter need to use? (optional)',
+            text: 'What language does the interpreter need to use?',
           },
           value: {
             text: '',
@@ -779,7 +776,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'what language does the interpreter need to use? (optional)',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
               },
             ],
           },

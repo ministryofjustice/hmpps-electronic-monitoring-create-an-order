@@ -22,8 +22,6 @@ export type InterestedPartiesFormData = {
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
 
-  youthCustodyServiceRegion?: string
-  notifyingOrgProbationRegion?: string
   civilCountyCourt?: string
 }
 
@@ -65,24 +63,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
-  get notifyingOrgProbationField(): FormAutocompleteComponent {
-    const label = 'Select the Probation Service region'
-    return new FormAutocompleteComponent(this.form, label, [
-      'North East',
-      'North West',
-      'Yorkshire and the Humber',
-      'Greater Manchester',
-      'East Midlands',
-      'Wales',
-      'West Midlands',
-      'East of England',
-      'South West',
-      'South Central',
-      'London',
-      'Kent, Surrey & Sussex',
-    ])
-  }
-
   get civilCountyCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Civil and County Court'
     return new FormAutocompleteComponent(this.form, label, [])
@@ -110,11 +90,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get youthCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Youth Court'
-    return new FormAutocompleteComponent(this.form, label, [])
-  }
-
-  get youthCustodyServiceField(): FormAutocompleteComponent {
-    const label = 'Select the YCS region'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
@@ -228,14 +203,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       this.responsibleOfficerContactNumberField.set(profile.responsibleOfficerContactNumber)
     }
 
-    if (profile.youthCustodyServiceRegion) {
-      this.youthCustodyServiceField.set(profile.youthCustodyServiceRegion)
-    }
-
-    if (profile.notifyingOrgProbationRegion) {
-      this.notifyingOrgProbationField.set(profile.notifyingOrgProbationRegion)
-    }
-
     if (profile.civilCountyCourt) {
       this.civilCountyCourtField.set(profile.civilCountyCourt)
     }
@@ -285,7 +252,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   shouldHaveAllDDV5Options(): void {
     this.notifyingOrganisationFieldDDV5.shouldHaveAllOptions()
     this.responsibleOrganisationField.shouldHaveAllOptions()
-    this.notifyingOrgProbationField.shouldHaveAllOptions()
     this.responsibleOrgProbationField.shouldHaveAllOptions()
     this.yjsRegionField.shouldHaveAllOptions()
   }

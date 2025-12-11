@@ -644,7 +644,7 @@ context('Contact Information - check your answers', () => {
         ])
       })
 
-      it('Should show the notifying organisation probation service region', () => {
+      it('Should not show the notifying organisation probation service region', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -673,7 +673,7 @@ context('Contact Information - check your answers', () => {
             },
             interestedParties: {
               notifyingOrganisation: 'PROBATION',
-              notifyingOrganisationName: 'YORKSHIRE_AND_THE_HUMBER',
+              notifyingOrganisationName: '',
               notifyingOrganisationEmail: 'notifying@organisation',
               responsibleOrganisation: 'PROBATION',
               responsibleOrganisationEmail: 'responsible@organisation',
@@ -691,7 +691,6 @@ context('Contact Information - check your answers', () => {
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldHaveItems([
           { key: 'What organisation or related organisation are you part of?', value: 'Probation Service' },
-          { key: 'Select the Probation Service region', value: 'Yorkshire and the Humber' },
         ])
         page.deviceWearerAddressesSection.shouldNotHaveItems([
           'Select the name of the Civil and County Court',
@@ -699,6 +698,7 @@ context('Contact Information - check your answers', () => {
           'Select the name of the Family Court',
           'Select the name of the Military Court',
           'Select the name of the Prison',
+          'Select the Probation Service region',
           'Select the YCS region',
           'Select the name of the Youth Court',
         ])
@@ -764,7 +764,7 @@ context('Contact Information - check your answers', () => {
         ])
       })
 
-      it('Should show the youth custody service (YCS) region', () => {
+      it('Should not show the youth custody service (YCS) region', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -793,7 +793,7 @@ context('Contact Information - check your answers', () => {
             },
             interestedParties: {
               notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
-              notifyingOrganisationName: 'MIDLANDS',
+              notifyingOrganisationName: '',
               notifyingOrganisationEmail: 'notifying@organisation',
               responsibleOrganisation: 'PROBATION',
               responsibleOrganisationEmail: 'responsible@organisation',
@@ -811,7 +811,6 @@ context('Contact Information - check your answers', () => {
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldHaveItems([
           { key: 'What organisation or related organisation are you part of?', value: 'Youth Custody Service (YCS)' },
-          { key: 'Select the YCS region', value: 'Midlands' },
         ])
         page.deviceWearerAddressesSection.shouldNotHaveItems([
           'Select the name of the Civil and County Court',
@@ -821,6 +820,7 @@ context('Contact Information - check your answers', () => {
           'Select the Probation Service region',
           'Select the name of the Prison',
           'Select the name of the Youth Court',
+          'Select the YCS region',
         ])
       })
 

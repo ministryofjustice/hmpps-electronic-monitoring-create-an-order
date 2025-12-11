@@ -5,6 +5,7 @@ import CrownCourts, { CrownCourtsDDv5 } from './crownCourts'
 import Disabilities, { DisabilitiesDDv5 } from './disabilities'
 import FamilyCourts from './familyCourts'
 import Gender from './gender'
+import Languages from './languages'
 import MagistratesCourts, { MagistratesCourtsDDv5 } from './magistratesCourts'
 import MappaCaseType from './mappaCaseType'
 import MappaLevel from './mappaLevel'
@@ -27,7 +28,6 @@ import YesNoUnknown from './yesNoUnknown'
 import YouthCourts from './youthCourts'
 import YouthJusticeServiceRegions from './youthJusticeServiceRegions'
 import ProbationRegionDeliveryUnits from './probationRegionDeliveryUnits'
-import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
 import InstallationLocations from './installationLocations'
 import PossibleRisks from './possibleRisks'
 import PoliceAreas from './policeAreas'
@@ -40,6 +40,7 @@ type ReferenceCatalogDDv4 = {
   crownCourts: CrownCourts
   disabilities: Disabilities
   gender: Gender
+  languages: Languages
   magistratesCourts: MagistratesCourts
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel
@@ -72,6 +73,7 @@ type ReferenceCatalogDDv5 = {
   disabilities: DisabilitiesDDv5
   familyCourts: FamilyCourts
   gender: Gender
+  languages: Languages
   magistratesCourts: MagistratesCourtsDDv5
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel
@@ -93,7 +95,6 @@ type ReferenceCatalogDDv5 = {
   variationTypes: VariationTypesDDv5
   yesNoUnknown: YesNoUnknown
   youthCourts: YouthCourts
-  youthCustodyServiceRegions: YouthCustodyServiceRegions
   youthJusticeServiceRegions: YouthJusticeServiceRegions
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks
@@ -109,6 +110,7 @@ type ReferenceCatalogDDv6 = {
   disabilities: DisabilitiesDDv5
   familyCourts: FamilyCourts
   gender: Gender
+  languages: Languages
   magistratesCourts: MagistratesCourtsDDv5
   mappaCaseType: MappaCaseType
   mappaLevel: MappaLevel
@@ -130,7 +132,6 @@ type ReferenceCatalogDDv6 = {
   variationTypes: VariationTypesDDv5
   yesNoUnknown: YesNoUnknown
   youthCourts: YouthCourts
-  youthCustodyServiceRegions: YouthCustodyServiceRegions
   youthJusticeServiceRegions: YouthJusticeServiceRegions
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks

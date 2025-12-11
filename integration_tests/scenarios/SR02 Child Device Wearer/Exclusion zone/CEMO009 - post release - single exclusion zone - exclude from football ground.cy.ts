@@ -70,6 +70,8 @@ context('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeYouthDeviceWearer('CEMO009'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -223,7 +225,7 @@ context('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: interestedParties.youthCustodyServiceRegion,
+                no_name: '',
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',

@@ -147,6 +147,8 @@ context('Scenarios', () => {
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am, plus photo attachment', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO001'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: true,
       language: 'French',
       hasFixedAddress: 'Yes',
@@ -270,7 +272,7 @@ context('Scenarios', () => {
           prison_number: deviceWearerDetails.prisonNumber,
           home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
           interpreter_required: 'true',
-          language: 'French',
+          language: 'FRENCH',
         },
       }).should('be.true')
 
