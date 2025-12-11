@@ -149,21 +149,14 @@
                 href: "/order/" + order.id + "/edit"
               }) }}
             {% endif %}
-	    {% if versionId %}
-	      {{ govukButton({
-                text: "View and download form",
-	        id: "view-and-download-button",
-                href: "/order/" + orderId + "/version/" + versionId + "/receipt",
-                classes: "govuk-button--secondary"
-              }) }}
-	    {% else %}
-              {{ govukButton({
-                text: "View and download form",
-	        id: "view-and-download-button",
-                href: "/order/" + orderId + "/receipt",
-                classes: "govuk-button--secondary"
-              }) }}
-	    {% endif %}
+	    {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
+	      if versionId else "/order/" + orderId + "/receipt" %}
+	    {{ govukButton({
+	      text: "View and download form",
+	      id: "view-and-download-button",
+	      href: receiptUrl,
+	      classes: "govuk-button--secondary"
+	    }) }}
 	  </div>
         </div>
       {% endif %}
