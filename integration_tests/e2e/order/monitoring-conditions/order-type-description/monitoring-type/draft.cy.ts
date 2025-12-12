@@ -111,7 +111,7 @@ context('monitoring types', () => {
     cy.signIn()
   })
 
-  it('Page accessisble', () => {
+  it('Page accessible', () => {
     const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })
@@ -164,10 +164,9 @@ context('monitoring types', () => {
   })
 
   it('no fixed address, sds, hdc no, pilot GPS', () => {
-    const deviceWearerNoFixedAbode = { ...createDevicerWearer(false), noFixedAbode: true }
     stubGetOrder({
       notifyingOrg: 'PROBATION',
-      deviceWearer: deviceWearerNoFixedAbode,
+      addresses: createAddresses(true),
       monitoringConditions: createMonitoringConditions({
         sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
         hdc: 'NO',
