@@ -17,7 +17,7 @@ export default class MonitoringTypeController {
     const model = constructModel(order, errors)
     const redirect = req.flash('redirect') as unknown as string[]
 
-    if (redirect.length !== 0 && redirect[0] === 'true' && model.allconditionsDisabled) {
+    if (redirect.length !== 0 && redirect[0] === 'true' && model.allconditionsDisabled && model.exception !== true) {
       res.redirect(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
       )
@@ -33,6 +33,7 @@ export default class MonitoringTypeController {
       res.redirect(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
       )
+      return
     }
 
     if (formData.monitoringType === undefined || formData.monitoringType === null) {

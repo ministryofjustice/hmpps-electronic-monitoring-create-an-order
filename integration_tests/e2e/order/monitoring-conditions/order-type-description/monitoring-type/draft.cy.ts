@@ -111,7 +111,7 @@ context('monitoring types', () => {
     cy.signIn()
   })
 
-  it('Page accessisble', () => {
+  it('Page accessible', () => {
     const page = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })
@@ -160,6 +160,28 @@ context('monitoring types', () => {
     monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
     monitoringTypesPage.form.message.contains(
       "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC).",
+    )
+  })
+
+  it('no fixed address, sds, hdc no, pilot GPS', () => {
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      addresses: createAddresses(true),
+      monitoringConditions: createMonitoringConditions({
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'NO',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+      }),
+    })
+    const monitoringTypesPage = Page.visit(MonitoringTypesPage, { orderId: mockOrderId })
+
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+    monitoringTypesPage.form.message.contains(
+      'No monitoring types can be selected because the device wearer is not on a Home Detention Curfew (HDC) and has no fixed address.',
     )
   })
 
