@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Page from '../../../pages/page'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 const mockOrderIdWithAttachments = uuidv4()
@@ -86,6 +87,48 @@ context('Attachments', () => {
       it('Should be accessible', () => {
         const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'Check your answers')
         page.checkIsAccessible()
+      })
+    })
+
+    context('viewing a previous version', () => {
+      const mockVersionId = uuidv4()
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoListOrders')
+        cy.task('stubCemoGetVersion', {
+          httpStatus: 200,
+          id: mockOrderId,
+          versionId: mockVersionId,
+          status: 'IN_PROGRESS',
+        })
+        cy.task('stubCemoGetVersionWithAttachments', {
+          httpStatus: 200,
+          id: mockOrderIdWithAttachments,
+          status: 'IN_PROGRESS',
+          versionId: mockVersionId,
+          attachments: [
+            { id: uuidv4(), orderId: mockOrderIdWithAttachments, fileName: 'Licence.jpeg', fileType: 'LICENCE' },
+            { id: uuidv4(), orderId: mockOrderIdWithAttachments, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
+          ],
+          orderParameters: {
+            havePhoto: true,
+          },
+        })
+        cy.signIn()
+      })
+      it('navigates correctly back to summary page', () => {
+        const page = Page.visit(
+          AttachmentSummaryPage,
+          { orderId: mockOrderId, versionId: mockVersionId },
+          {},
+          'Check your answers',
+          true,
+        )
+
+        page.saveAndReturnButton.click()
+
+        Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
       })
     })
   })

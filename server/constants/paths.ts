@@ -6,11 +6,13 @@ const paths = {
     DELETE_FAILED: '/order/delete/failed',
     DELETE_SUCCESS: '/order/delete/success',
     SUMMARY: '/order/:orderId/summary',
+    SUMMARY_VERSION: '/order/:orderId/version/:versionId/summary',
     SUBMIT: '/order/:orderId/submit',
     SUBMIT_FAILED: '/order/:orderId/submit/failed',
     SUBMIT_PATIAL_SUCCESS: '/order/:orderId/submit/partial-success',
     SUBMIT_SUCCESS: '/order/:orderId/submit/success',
     RECEIPT: '/order/:orderId/receipt',
+    RECEIPT_VERSION: '/order/:orderId/version/:versionId/receipt',
     RECEIPT_DOWNLOAD: '/order/:orderId/pdf',
     EDIT: '/order/:orderId/edit',
     IS_REJECTION: '/order/:orderId/is-rejection',
@@ -19,6 +21,7 @@ const paths = {
 
   ABOUT_THE_DEVICE_WEARER: {
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/about-the-device-wearer/check-your-answers',
     DEVICE_WEARER: '/order/:orderId/about-the-device-wearer',
     RESPONSIBLE_ADULT: '/order/:orderId/about-the-device-wearer/responsible-adult',
     IDENTITY_NUMBERS: '/order/:orderId/about-the-device-wearer/identity-numbers',
@@ -26,6 +29,7 @@ const paths = {
 
   CONTACT_INFORMATION: {
     CHECK_YOUR_ANSWERS: '/order/:orderId/contact-information/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/contact-information/check-your-answers',
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
     NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
     ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType(primary|secondary|tertiary)',
@@ -36,6 +40,7 @@ const paths = {
   INSTALLATION_AND_RISK: {
     INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
     CHECK_YOUR_ANSWERS: '/order/:orderId/installation-and-risk/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/installation-and-risk/check-your-answers',
   },
 
   POSTCODE_LOOKUP: {
@@ -64,6 +69,7 @@ const paths = {
     CURFEW_ADDITIONAL_DETAILS: '/order/:orderId/monitoring-conditions/curfew/additional-details',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
     CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/monitoring-conditions/check-your-answers',
     REMOVE_MONITORING_TYPE: '/order/:orderId/monitoring-condtions/remove-monitoring-type/:monitoringTypeId',
     ORDER_TYPE_DESCRIPTION: {
       BASE_PATH: '/order/:orderId/monitoring-conditions/order-type-description',
@@ -86,6 +92,7 @@ const paths = {
 
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
+    ATTACHMENTS_VERSION: '/order/:orderId/version/:versionId/attachments',
     FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence)',
     DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/:filename',
     DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/delete',
@@ -94,6 +101,7 @@ const paths = {
 
   VARIATION: {
     VARIATION_DETAILS: '/order/:orderId/variation/details',
+    VARIATION_DETAILS_VERSION: '/order/:orderId/version/:versionId/variation/details',
     SERVICE_REQUEST_TYPE: '/order/:orderId/service-request-type',
     CREATE_VARIATION: '/order/create-variation',
   },

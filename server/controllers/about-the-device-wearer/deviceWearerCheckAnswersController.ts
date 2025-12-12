@@ -3,7 +3,6 @@ import { z } from 'zod'
 import { AuditService } from '../../services'
 import createViewModel from '../../models/view-models/deviceWearerCheckAnswers'
 import TaskListService from '../../services/taskListService'
-import paths from '../../constants/paths'
 import OrderChecklistService from '../../services/orderChecklistService'
 
 const CheckYourAnswersFormModel = z.object({
@@ -25,17 +24,18 @@ export default class DeviceWearerCheckAnswersController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     await this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ABOUT_THE_DEVICE_WEARER')
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
-        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order))
+        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order, versionId))
       } else {
-        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_DEVICE_WEARER', order))
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_DEVICE_WEARER', order, {}, versionId))
       }
     } else {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      res.redirect(res.locals.orderSummaryUri)
     }
   }
 }

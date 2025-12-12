@@ -1,3 +1,4 @@
+import paths from '../../constants/paths'
 import { VariationTypesEnum, OrderType } from '../Order'
 import { VersionInformation } from '../VersionInformation'
 
@@ -13,11 +14,16 @@ type TimelineItem = {
     text: string | null | undefined
   }
   text?: string
+  href?: string
 }
 
 export default class TimelineModel {
-  public static mapToTimelineItems = (versions: VersionInformation[]): TimelineItem[] => {
-    return versions.map(this.mapSingleItem)
+  public static mapToTimelineItems = (
+    versions: VersionInformation[],
+    orderId?: string,
+    currentVersionId?: string,
+  ): TimelineItem[] => {
+    return versions.map(version => this.mapSingleItem(version, orderId, currentVersionId))
   }
 
   private static getTimelineText = (versionInformation: VersionInformation) => {
@@ -33,8 +39,12 @@ export default class TimelineModel {
     return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
   }
 
-  private static mapSingleItem = (version: VersionInformation): TimelineItem => {
-    return {
+  private static mapSingleItem = (
+    version: VersionInformation,
+    orderId?: string,
+    currentVersionId?: string,
+  ): TimelineItem => {
+    const item: TimelineItem = {
       label: {
         text: this.getTimelineText(version),
       },
@@ -47,6 +57,12 @@ export default class TimelineModel {
         text: version.submittedBy,
       },
     }
+
+    if (orderId && currentVersionId && currentVersionId !== version.versionId) {
+      item.href = paths.ORDER.SUMMARY_VERSION.replace(':orderId', orderId).replace(':versionId', version.versionId)
+    }
+
+    return item
   }
 
   private static getVariationText = (type: OrderType): string | undefined => {

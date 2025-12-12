@@ -3,8 +3,15 @@ import SummaryListComponent from '../../components/summaryListComponent'
 import CheckYourAnswersPage from '../../checkYourAnswersPage'
 
 export default class DeviceWearerCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor(heading: string) {
-    super(heading, paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, 'About the device wearer')
+  constructor(heading: string, isOldVersion?: boolean) {
+    let path: string
+    if (isOldVersion) {
+      path = paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION
+    } else {
+      path = paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS
+    }
+
+    super(heading, path, 'About the device wearer')
   }
 
   // SECTIONS

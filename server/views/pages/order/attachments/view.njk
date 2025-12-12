@@ -60,12 +60,13 @@
 	    {% set continueButton = "Save and go to next section" %}
 	    {% set secondaryButton = "Save as draft" %}
 	{% endif %}
-
 	<div class="govuk-button-group">
-	    {{ govukButton({
-	      text: "Save and return to main form menu",
-	      href: "/order/" + orderId + "/summary"
-	    }) }}
+	  {% set returnLink = "/order/" + orderId + "/version/" + versionId + "/summary" 
+	      if versionId else "/order/" + orderId + "/summary" %}
+	  {{ govukButton({
+	    text: "Save and return to main form menu",
+	    href: returnLink
+	  }) }}
 	</div>
       </form>
     </div>

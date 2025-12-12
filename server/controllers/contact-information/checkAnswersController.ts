@@ -2,7 +2,6 @@ import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import { AuditService } from '../../services'
 import TaskListService from '../../services/taskListService'
-import paths from '../../constants/paths'
 import createViewModel from '../../models/view-models/contactInformationCheckAnswers'
 import OrderChecklistService from '../../services/orderChecklistService'
 
@@ -24,17 +23,20 @@ export default class CheckAnswersController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'CONTACT_INFORMATION')
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
-        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_CONTACT_INFORMATION', order))
+        res.redirect(
+          this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_CONTACT_INFORMATION', order, versionId),
+        )
       } else {
-        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_CONTACT_INFORMATION', order))
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_CONTACT_INFORMATION', order, {}, versionId))
       }
     } else {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      res.redirect(res.locals.orderSummaryUri)
     }
   }
 }

@@ -3,8 +3,15 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import SummaryListComponent from '../../components/summaryListComponent'
 
 export default class ContactInformationCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor(heading: string) {
-    super(heading, paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, 'Contact information')
+  constructor(heading: string, isOldVersion?: boolean) {
+    let path: string
+    if (isOldVersion) {
+      path = paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION
+    } else {
+      path = paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS
+    }
+
+    super(heading, path, 'Contact information')
   }
 
   // SECTIONS

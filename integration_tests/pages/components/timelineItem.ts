@@ -21,7 +21,15 @@ export default class TimelineItem {
     this.element.get('.moj-timeline__date').contains(time)
   }
 
+  get description(): PageElement {
+    return cy.get('.moj-timeline__description')
+  }
+
   variationTextIs(text: string) {
     cy.get('.moj-timeline__description').contains(text)
+  }
+
+  hasLink(href: string) {
+    cy.get('.moj-timeline__description').should('have.attr', 'href', href)
   }
 }

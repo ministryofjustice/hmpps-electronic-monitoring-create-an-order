@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -563,6 +564,97 @@ context('Check your answers', () => {
       page.returnButton().contains('Return to main form menu')
     })
   })
+
+  context('Viewing an old version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+            offenceType: '',
+          },
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '10 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
+          fmsResultDate: new Date('2024 12 14'),
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'View answers'
+
+    it('navigates correctly to summary', () => {
+      const page = Page.visit(
+        CheckYourAnswers,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.returnButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        CheckYourAnswers,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+  })
+
   context('when ddv4 order', () => {
     const pageHeading = 'Check your answers'
     beforeEach(() => {

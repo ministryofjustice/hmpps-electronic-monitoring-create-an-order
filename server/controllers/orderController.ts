@@ -38,23 +38,31 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')
 
     const [sections, completedOrderVersions] = await Promise.all([
-      this.taskListService.getSections(order),
+      this.taskListService.getSections(order, versionId),
       this.orderService.getCompleteVersions({
         orderId: order.id,
         accessToken: res.locals.user.token,
       }),
     ])
 
+    const currentVersion = order.versionId
+    let isMostRecentVersion: boolean = true
+    if (versionId && completedOrderVersions.length > 0) {
+      isMostRecentVersion = currentVersion === completedOrderVersions[0].versionId
+    }
+
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
-      createNewOrderVersionEnabled,
-      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions),
+      createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
+      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
+      isMostRecentVersion,
     })
   }
 

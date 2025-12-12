@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import OrderTasksPage from '../../../pages/order/summary'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 const pagePath = '/contact-information/check-your-answers'
@@ -1354,6 +1356,91 @@ context('Contact Information - check your answers', () => {
       page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
+    })
+  })
+
+  context('Viewing an old version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+          },
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            dateOfBirth: null,
+            disabilities: null,
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'View answers'
+
+    it('navigates correctly back to summary page', () => {
+      const page = Page.visit(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.returnButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
     })
   })
 
