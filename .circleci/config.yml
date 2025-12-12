@@ -19,12 +19,12 @@ parameters:
 
   node-version:
     type: string
-    default: 20.17-browsers
+    default: 20.19-browsers
 
 executors:
   scenario-testing:
     docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:20.19.0-browsers
       - image: postgres:14
         environment:
           POSTGRES_PASSWORD: postgres
@@ -57,7 +57,7 @@ executors:
 
   intgration-testing:
      docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:20.19.0-browsers
       - image: redis:7.2
       - image: wiremock/wiremock:latest
         environment:
@@ -82,7 +82,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: npm run setup --no-audit
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -135,7 +135,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: npm run setup --no-audit
       - run:
           command: npm run build
       - run:
@@ -171,7 +171,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: npm run setup --no-audit
       - run:
           command: npm run build
       - run:
