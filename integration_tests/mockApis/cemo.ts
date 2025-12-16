@@ -251,6 +251,40 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
   })
 }
 
+type GetVersionStubOptions = GetOrderStubOptions & {
+  versionId: string
+}
+
+const defaultGetVersionOptions = {
+  ...defaultGetOrderOptions,
+  versionId: uuidv4(),
+}
+
+const getSpecificVersion = (options: GetVersionStubOptions = defaultGetVersionOptions): SuperAgentRequest => {
+  const stubOptions = { ...defaultGetOrderOptions, ...options }
+
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${stubOptions.id}/versions/${stubOptions.versionId}`,
+    },
+    response: {
+      status: stubOptions.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        stubOptions.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: stubOptions.id,
+              status: stubOptions.status,
+              type: stubOptions.type,
+              ...(stubOptions.order ? stubOptions.order : {}),
+            }
+          : null,
+    },
+  })
+}
+
 type CreateOrderStubOptions = {
   httpStatus: number
   id?: string
@@ -305,6 +339,35 @@ const getOrderWithAttachments = (
     request: {
       method: 'GET',
       urlPattern: `/cemo/api/orders/${options.id}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: options.id,
+              status: options.status,
+              additionalDocuments: options.attachments,
+              orderParameters: options.orderParameters,
+              fmsResultDate: options.fmsResultDate,
+            }
+          : null,
+    },
+  })
+
+type GetVersionWithAttachmentStubOptions = GetOrderWithAttachmentStubOptions & {
+  versionId: string
+}
+
+const getVersionWithAttachments = (
+  options: GetVersionWithAttachmentStubOptions = defaultGetVersionOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${options.id}/versions/${options.versionId}`,
     },
     response: {
       status: options.httpStatus,
@@ -720,11 +783,13 @@ export default {
   stubCemoCreateOrder: createOrder,
   stubCemoCreateVariation: createVariation,
   stubCemoGetOrder: getOrder,
+  stubCemoGetVersion: getSpecificVersion,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoSearchOrders: searchOrders,
   stubCemoGetVersions: getVersionInformation,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubCemoGetVersionWithAttachments: getVersionWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
   stubCemoSubmitOrder: submitOrder,

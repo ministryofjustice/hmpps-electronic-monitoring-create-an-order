@@ -12,14 +12,26 @@ const populateOrder =
   async (req: Request, res: Response, next: NextFunction, orderId: string) => {
     try {
       const { token } = res.locals.user
-      if (orderId && validate(orderId)) {
-        const order = await orderService.getOrder({ accessToken: token, orderId })
+      const { versionId } = req.params
 
+      if (orderId && validate(orderId)) {
+        let order
+
+        if (versionId && validate(versionId)) {
+          order = await orderService.getVersion({ accessToken: token, orderId, versionId })
+          res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id).replace(
+            `order/${order.id}/`,
+            `order/${order.id}/version/${versionId}/`,
+          )
+          res.locals.versionId = versionId
+        } else {
+          order = await orderService.getOrder({ accessToken: token, orderId })
+          res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
+        }
         req.order = order
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status
         res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
-        res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
         res.locals.content = getContent(Locales.en, order.dataDictionaryVersion)
       }
 
