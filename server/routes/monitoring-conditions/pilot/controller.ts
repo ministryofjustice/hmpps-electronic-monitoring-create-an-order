@@ -47,12 +47,14 @@ export default class PilotController {
 
     if (isAcquisitiveCrime) {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', order.id))
+      return
     }
 
     if (isDapol && isProbation && isDDv6OrNewer) {
       res.redirect(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.DAPOL_MISSED_IN_ERROR.replace(':orderId', order.id),
       )
+      return
     }
 
     res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
