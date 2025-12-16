@@ -38,8 +38,22 @@ const getDapolPilotProbationRegionStatus = (order: Order): boolean => {
   return false
 }
 
-const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
+const getDapolMessage = (order: Order): string => {
+  const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
   if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
+    if (isDapolPilotProbationRegion) {
+      return ''
+    }
+    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.`
+  }
+  return ''
+}
+
+const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
+  if (
+    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
+    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+  ) {
     if (order.interestedParties?.responsibleOrganisationRegion) {
       const listOfProbationRegions = FeatureFlags.getInstance()
         .getValue('LICENCE_VARIATION_PROBATION_REGIONS')
@@ -48,6 +62,20 @@ const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
     }
   }
   return false
+}
+
+const getLicenceMessage = (order: Order): string => {
+  const isLicencePilotProbationRegion = getLicencePilotProbationRegionStatus(order)
+  if (
+    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
+    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+  ) {
+    if (isLicencePilotProbationRegion) {
+      return ''
+    }
+    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.`
+  }
+  return ''
 }
 
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
@@ -64,12 +92,8 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
       order.interestedParties?.notifyingOrganisation,
     ),
     errorSummary: null,
-    dapolMessage: isDapolPilotProbationRegion
-      ? ''
-      : `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.`,
-    licenceMessage: isLicenceProbationRegion
-      ? ''
-      : `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.`,
+    dapolMessage: getDapolMessage(order),
+    licenceMessage: getLicenceMessage(order),
   }
   if (errors && errors.length > 0) {
     model.pilot!.error = getError(errors, 'pilot')
@@ -80,7 +104,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
 
 const getItems = (
   isDapolPilotProbationRegion: boolean,
-  isLicenceProbationRegion: boolean,
+  isLicencePilotProbationRegion: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
 ): Item[] => {
@@ -125,7 +149,7 @@ const getItems = (
       conditional: {
         html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
       },
-      disabled: !isLicenceProbationRegion,
+      disabled: !isLicencePilotProbationRegion,
     })
   }
 
