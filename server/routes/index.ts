@@ -199,6 +199,7 @@ export default function routes({
   get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
   get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
   get(paths.ORDER.SUMMARY, orderController.summary)
+  get(paths.ORDER.SUMMARY_VERSION, orderController.summary)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
   get(paths.ORDER.IS_REJECTION, isRejectionController.view)
   post(paths.ORDER.IS_REJECTION, isRejectionController.update)
@@ -210,6 +211,7 @@ export default function routes({
   get(paths.ORDER.SUBMIT_PATIAL_SUCCESS, orderController.submitPartialSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
   get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
+  get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
 
   /**
@@ -231,6 +233,8 @@ export default function routes({
   // Check your answers
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.update)
+  get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.update)
 
   /**
    * CONTACT INFORMATION
@@ -259,6 +263,8 @@ export default function routes({
   // Check your answers
   get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
   post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
+  get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.view)
+  post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.update)
 
   /**
    * INSTALLATION AND RISK
@@ -268,6 +274,8 @@ export default function routes({
 
   get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.view)
   post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.update)
+  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.view)
+  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.update)
 
   /**
    * MONITORING CONDITIONS
@@ -335,11 +343,14 @@ export default function routes({
   // Check your answers
   get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.view)
   post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.update)
+  get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.view)
+  post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.update)
 
   /**
    * ATTACHMENTS
    */
   get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
+  get(paths.ATTACHMENT.ATTACHMENTS_VERSION, attachmentsController.view)
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
@@ -349,6 +360,8 @@ export default function routes({
   /**
    * VARIATIONS
    */
+  get(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.view)
+  post(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.update)
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
   get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)

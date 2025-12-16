@@ -1130,6 +1130,83 @@ describe('TaskListService', () => {
         },
       ])
     })
+
+    it('return links to version cya pages for old versions', async () => {
+      // Given
+      const order = getMockOrder({
+        status: 'SUBMITTED',
+        deviceWearer: createDeviceWearer({
+          firstName: '',
+          adultAtTimeOfInstallation: false,
+          noFixedAbode: false,
+        }),
+        monitoringConditions: createMonitoringConditions({
+          curfew: true,
+          alcohol: true,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: true,
+        }),
+      })
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order, 'someVersionId')
+
+      expect(sections).toEqual([
+        {
+          checked: false,
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: false,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+      ])
+    })
+
     it('should return contact information section as incomplete if interested parties exists but notifying organisation fields are null', async () => {
       // Given
       const order = getMockOrder({

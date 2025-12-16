@@ -73,5 +73,44 @@ describe('TimelineModel', () => {
 
       expect(result[0].text).toBe(text)
     })
+
+    it('returns href for other versions', () => {
+      const versions = [
+        createMockVersion({
+          orderId: 'someOrderId',
+          versionId: 'version1',
+          versionNumber: 0,
+          submittedBy: 'Alice',
+          type: 'REQUEST',
+        }),
+        createMockVersion({
+          orderId: 'someOrderId',
+          versionId: 'version2',
+          versionNumber: 1,
+          submittedBy: 'Bob',
+          type: 'VARIATION',
+        }),
+      ]
+
+      const result = TimelineModel.mapToTimelineItems(versions, 'someOrderId', 'version2')
+
+      expect(result[0].href).toBe('/order/someOrderId/version/version1/summary')
+      expect(result[1].href).toBeUndefined()
+    })
+
+    it('no href when current version is not provided', () => {
+      const versions = [
+        createMockVersion({
+          orderId: 'someOrderId',
+          versionId: 'version1',
+          versionNumber: 0,
+        }),
+      ]
+
+      const result = TimelineModel.mapToTimelineItems(versions)
+
+      expect(result[0].href).toBeUndefined()
+      expect(result[0].label.text).toBeDefined()
+    })
   })
 })

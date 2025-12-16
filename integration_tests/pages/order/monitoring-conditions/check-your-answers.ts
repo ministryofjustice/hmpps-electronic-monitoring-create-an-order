@@ -3,8 +3,15 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import SummaryListComponent from '../../components/summaryListComponent'
 
 export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor(heading: string) {
-    super(heading, paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS)
+  constructor(heading: string, isOldVersion?: boolean) {
+    let path: string
+    if (isOldVersion) {
+      path = paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION
+    } else {
+      path = paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS
+    }
+
+    super(heading, path)
   }
 
   get monitoringConditionsSection(): SummaryListComponent {
