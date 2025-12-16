@@ -219,5 +219,88 @@ describe('pilot controller', () => {
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', req.order!.id),
       )
     })
+
+    it('redirects to DAPOL error missed page when conditions are met (ddv6, notifyOrg is probation, DAPOL pilot)', async () => {
+      req.order = {
+        ...mockOrder,
+        dataDictionaryVersion: 'DDV6',
+        interestedParties: {
+          notifyingOrganisation: 'PROBATION',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'notifying@organisation',
+          responsibleOrganisation: 'PROBATION',
+          responsibleOrganisationEmail: 'responsible@organisation',
+          responsibleOrganisationRegion: 'NORTH_EAST',
+          responsibleOfficerName: 'name',
+          responsibleOfficerPhoneNumber: '01234567891',
+        },
+      }
+
+      req.body = {
+        action: 'continue',
+        pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+      }
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.DAPOL_MISSED_IN_ERROR.replace(':orderId', req.order!.id),
+      )
+    })
+
+    it('redirects to PRARR if DAPOL pilot selected but not ddv6 order', async () => {
+      req.order = {
+        ...mockOrder,
+        interestedParties: {
+          notifyingOrganisation: 'PROBATION',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'notifying@organisation',
+          responsibleOrganisation: 'PROBATION',
+          responsibleOrganisationEmail: 'responsible@organisation',
+          responsibleOrganisationRegion: 'NORTH_EAST',
+          responsibleOfficerName: 'name',
+          responsibleOfficerPhoneNumber: '01234567891',
+        },
+      }
+
+      req.body = {
+        action: 'continue',
+        pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+      }
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', req.order!.id),
+      )
+    })
+
+    it('redirects to PRARR if DAPOL pilot selected but notify org is not probation', async () => {
+      req.order = {
+        ...mockOrder,
+        dataDictionaryVersion: 'DDV6',
+        interestedParties: {
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+          notifyingOrganisationEmail: 'test@test.com',
+          responsibleOfficerName: 'John Smith',
+          responsibleOfficerPhoneNumber: '01234567890',
+          responsibleOrganisation: 'PROBATION',
+          responsibleOrganisationRegion: 'NORTH_EAST',
+          responsibleOrganisationEmail: 'test2@test.com',
+        },
+      }
+
+      req.body = {
+        action: 'continue',
+        pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+      }
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', req.order!.id),
+      )
+    })
   })
 })
