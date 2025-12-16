@@ -29,9 +29,9 @@
       </h1>
       
       {% if not isMostRecentVersion %}
-	<p class="govuk-label-s">
-	    You can't make changes to this form because there are more recent versions of it.
-	</p>
+      <p class="govuk-label-s">
+          You can't make changes to this form because there are more recent versions of it.
+      </p>
       {% endif %}
 
       {% if order.type ==='VARIATION' %}
@@ -141,59 +141,59 @@
 
       {% if order.status == "SUBMITTED" %}
         <div class="govuk-!-margin-top-5">
-	  <div class="govuk-button-group">
-            {% if createNewOrderVersionEnabled %}
-              {{ govukButton({
-                text: "Make changes to this form",
-                id: "make-changes-button",
-                href: "/order/" + order.id + "/edit"
-              }) }}
-            {% endif %}
-	    {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
-	      if versionId else "/order/" + orderId + "/receipt" %}
-	    {{ govukButton({
-	      text: "View and download form",
-	      id: "view-and-download-button",
-	      href: receiptUrl,
-	      classes: "govuk-button--secondary"
-	    }) }}
-	  </div>
+      <div class="govuk-button-group">
+              {% if createNewOrderVersionEnabled %}
+                {{ govukButton({
+                  text: "Make changes to this form",
+                  id: "make-changes-button",
+                  href: "/order/" + order.id + "/edit"
+                }) }}
+              {% endif %}
+        {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
+          if versionId else "/order/" + orderId + "/receipt" %}
+        {{ govukButton({
+          text: "View and download form",
+          id: "view-and-download-button",
+          href: receiptUrl,
+          classes: "govuk-button--secondary"
+        }) }}
+      </div>
         </div>
       {% endif %}
   
     </div>
 
-    <div class="govuk-grid-column-one-thirds">
-      {% if timelineItems | length %}
-        {% set processedTimeLineItems = [] %}
-	{% for item in timelineItems %}
-	  {% if item.href %}
-	    {% set itemHtml %}
-	      {{ item.text if item.text }}
-	      <div class="govuk-!-margin-top-2">
-	        <a href="{{ item.href }}">View submitted form</a>
-	      </div>
-	    {% endset %}
-	  {% else %}
-	    {% set itemHtml %}
-	      {{ item.text if item.text }}
-	      <div class="govuk-!-margin-top-2">
-	        <p>You are viewing this version of the form</p>
-	      </div>
-	    {% endset %}
-	  {% endif %}
-	  {% set processedItem = {
-	    label: item.label,
-	    datetime: item.datetime,
-	    byline: item.byline,
-	    html: itemHtml
-	  } %}
-	  {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
-	{% endfor %}
-	{{ mojTimeline({
-          items: processedTimeLineItems
-        })}}
-      {% endif %}
+    <div class="govuk-grid-column-one-third">
+        {% if timelineItems | length %}
+          {% set processedTimeLineItems = [] %}
+        {% for item in timelineItems %}
+          {% if item.href %}
+            {% set itemHtml %}
+              {{ item.text if item.text }}
+              <div class="govuk-!-margin-top-2">
+                <a href="{{ item.href }}">View submitted form</a>
+              </div>
+            {% endset %}
+          {% else %}
+            {% set itemHtml %}
+              {{ item.text if item.text }}
+              <div class="govuk-!-margin-top-2">
+                <p>You are viewing this version of the form</p>
+              </div>
+            {% endset %}
+          {% endif %}
+          {% set processedItem = {
+            label: item.label,
+            datetime: item.datetime,
+            byline: item.byline,
+            html: itemHtml
+          } %}
+          {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
+        {% endfor %}
+        {{ mojTimeline({
+            items: processedTimeLineItems
+          })}}
+        {% endif %}
+      </div>
     </div>
-  </div>
 {% endblock %}
