@@ -469,6 +469,7 @@ context.skip('Scenarios', () => {
                 order_status: 'Not Started',
                 pilot: '',
                 subcategory: 'SR08 - Amend monitoring requirements',
+                dapol_missed_in_error: '',
               },
             })
             .should('be.true')

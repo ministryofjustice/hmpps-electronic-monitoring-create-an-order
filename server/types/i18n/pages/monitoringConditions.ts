@@ -16,6 +16,7 @@ type MonitoringConditionsPageContent = QuestionPageContent<
   | 'offenceType'
   | 'policeArea'
   | 'removeMonitoringType'
+  | 'dapolMissedInError'
 >
 
 export default MonitoringConditionsPageContent
