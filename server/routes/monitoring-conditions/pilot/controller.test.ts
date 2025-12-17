@@ -31,13 +31,13 @@ describe('pilot controller', () => {
     mockOrder = {
       ...mockOrder,
       interestedParties: {
-        notifyingOrganisation: 'PRISON',
-        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+        notifyingOrganisation: 'PROBATION',
+        notifyingOrganisationName: '',
         notifyingOrganisationEmail: 'test@test.com',
         responsibleOfficerName: 'John Smith',
         responsibleOfficerPhoneNumber: '01234567890',
         responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOrganisationRegion: 'GREATER_MANCHESTER',
         responsibleOrganisationEmail: 'test2@test.com',
       },
     }
@@ -102,6 +102,14 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
+              disabled: true,
+              text: 'Licence Variation Project',
+              value: 'LICENCE_VARIATION_PROJECT',
+              conditional: {
+                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+              },
+            },
+            {
               divider: 'or',
             },
             {
@@ -109,11 +117,14 @@ describe('pilot controller', () => {
               value: 'UNKNOWN',
             },
           ],
-          message:
-            'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+          dapolMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+          licenceMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
         }),
       )
     })
+
     it('hdc no questions', async () => {
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
         hdc: 'NO',
@@ -135,6 +146,14 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
+              disabled: true,
+              text: 'Licence Variation Project',
+              value: 'LICENCE_VARIATION_PROJECT',
+              conditional: {
+                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+              },
+            },
+            {
               divider: 'or',
             },
             {
@@ -145,8 +164,10 @@ describe('pilot controller', () => {
               },
             },
           ],
-          message:
-            'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+          dapolMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+          licenceMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
         }),
       )
     })
