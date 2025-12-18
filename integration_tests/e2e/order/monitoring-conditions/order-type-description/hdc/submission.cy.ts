@@ -15,7 +15,7 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should show errors no answer selected', () => {
+  it('Should continue to pilot page', () => {
     const page = Page.visit(HdcPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')

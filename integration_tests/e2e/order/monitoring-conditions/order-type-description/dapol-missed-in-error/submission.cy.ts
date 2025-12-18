@@ -15,7 +15,7 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should show errors no answer selected', () => {
+  it('Should continue to prarr page', () => {
     const page = Page.visit(DapolMissedInErrorPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
