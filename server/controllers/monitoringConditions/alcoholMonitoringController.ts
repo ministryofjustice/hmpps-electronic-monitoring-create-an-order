@@ -15,17 +15,28 @@ export default class AlcoholMonitoringController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsAlcohol } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+
+    // if notif org is court -> hide monitoring type question
+    const isNotifyingOrgACourt = !(
+      order.interestedParties?.notifyingOrganisation === 'PRISON' ||
+      order.interestedParties?.notifyingOrganisation === 'PROBATION'
+    )
+
+    console.log(order)
+    console.log(isNotifyingOrgACourt)
+
     const viewModel = alcoholMonitoringViewModel.construct(
-      monitoringConditionsAlcohol ?? {
+      order.monitoringConditionsAlcohol ?? {
         monitoringType: null,
         startDate: null,
         endDate: null,
       },
       errors as never,
       formData as never,
+      isNotifyingOrgACourt,
     )
 
     res.render(`pages/order/monitoring-conditions/alcohol-monitoring`, viewModel)
@@ -33,7 +44,18 @@ export default class AlcoholMonitoringController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
+    const order = req.order!
     const formData = AlcoholMonitoringFormDataModel.parse(req.body)
+
+    // if notif org is court -> set formdata.monitoringType to 'ALCOHOL_ABSTINENCE'
+
+    const isNotifyingOrgACourt = !(
+      order.interestedParties?.notifyingOrganisation === 'PRISON' ||
+      order.interestedParties?.notifyingOrganisation === 'PROBATION'
+    )
+    if (isNotifyingOrgACourt) {
+      formData.monitoringType = 'ALCOHOL_ABSTINENCE'
+    }
 
     const updateResult = await this.alcoholMonitoringService.update({
       accessToken: res.locals.user.token,
