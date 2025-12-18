@@ -34,6 +34,7 @@ const PAGES = {
   interestParties: 'INTERESTED_PARTIES',
   probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+  offence: 'OFFENCE',
   installationAndRisk: 'INSTALLATION_AND_RISK',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
@@ -286,6 +287,21 @@ export default class TaskListService {
       state: STATES.hidden,
       completed: true,
     })
+
+    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.offence,
+        path: paths.INSTALLATION_AND_RISK.OFFENCE,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.installationAndRisk),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.riskInformation,

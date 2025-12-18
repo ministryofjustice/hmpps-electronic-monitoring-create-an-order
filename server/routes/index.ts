@@ -39,6 +39,7 @@ import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
 import ServiceRequestTypeController from './variations/service-request-type/controller'
+import createInstallationAdnRiskRouter from './installation-and-risk/router'
 
 export default function routes({
   alcoholMonitoringService,
@@ -380,5 +381,6 @@ export default function routes({
 
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
+  router.use(paths.INSTALLATION_AND_RISK.BASE_URL, createInstallationAdnRiskRouter())
   return router
 }
