@@ -358,6 +358,7 @@ context('Scenarios', () => {
                 order_status: 'Not Started',
                 pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
                 subcategory: '',
+                dapol_missed_in_error: '',
               },
             })
             .should('be.true')

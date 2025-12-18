@@ -1,3 +1,4 @@
+import DapolMissedInErrorPage from '../../e2e/order/monitoring-conditions/order-type-description/dapol-missed-in-error/dapolMissedInErrorPage'
 import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
@@ -25,6 +26,7 @@ export default function fillInOrderTypeDescriptionsWith({
   policeForceArea = undefined,
   prarr = undefined,
   monitoringCondition = undefined,
+  dapolMissedInError = undefined,
 }): void {
   // Order type page
   if (orderType) {
@@ -65,6 +67,12 @@ export default function fillInOrderTypeDescriptionsWith({
   if (issp) {
     const isspPage = Page.verifyOnPage(IsspPage)
     fillinSingleQuestionFormWith(isspPage.form, issp)
+  }
+
+  // Dapol missed in error
+  if (dapolMissedInError) {
+    const dapolMissedInErrorPage = Page.verifyOnPage(DapolMissedInErrorPage)
+    fillinSingleQuestionFormWith(dapolMissedInErrorPage.form, dapolMissedInError)
   }
 
   // PRARR

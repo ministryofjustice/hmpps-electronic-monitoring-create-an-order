@@ -11,7 +11,7 @@ describe('store service', () => {
   const mockOrderId = uuidv4()
   let mockOrder: Order
 
-  const emptyMoinitoringCondition = {
+  const emptyMonitoringCondition = {
     alcohol: null,
     conditionType: null,
     curfew: null,
@@ -23,6 +23,7 @@ describe('store service', () => {
     offenceType: null,
     orderType: null,
     pilot: null,
+    dapolMissedInError: null,
     prarr: null,
     sentenceType: null,
     startDate: null,
@@ -51,6 +52,7 @@ describe('store service', () => {
         hdc: 'NO',
         prarr: 'NO',
         pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
+        dapolMissedInError: 'YES',
         offenceType: '',
         isValid: true,
       }
@@ -71,6 +73,7 @@ describe('store service', () => {
         hdc: 'NO',
         prarr: 'NO',
         pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
+        dapolMissedInError: 'YES',
         offenceType: '',
       })
     })
@@ -78,7 +81,7 @@ describe('store service', () => {
     it('will create new instance if not in cache and order monitoring condition is null', async () => {
       const result = await service.getMonitoringConditions(mockOrder)
 
-      expect(result).toEqual(emptyMoinitoringCondition)
+      expect(result).toEqual(emptyMonitoringCondition)
     })
   })
 
@@ -95,7 +98,7 @@ describe('store service', () => {
     it('correctly updates the order type value in the store', async () => {
       const initial = await service.getMonitoringConditions(mockOrder)
 
-      expect(initial).toEqual(emptyMoinitoringCondition)
+      expect(initial).toEqual(emptyMonitoringCondition)
 
       await service.updateOrderType(mockOrder, { orderType: 'COMMUNITY' })
 
@@ -194,6 +197,7 @@ describe('store service', () => {
       await service.updateField(mockOrder, 'sentenceType', 'STANDARD_DETERMINATE_SENTENCE')
       await service.updateField(mockOrder, 'hdc', 'YES')
       await service.updateField(mockOrder, 'pilot', 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW')
+      await service.updateField(mockOrder, 'dapolMissedInError', 'YES')
       await service.updateField(mockOrder, 'offenceType', 'Burglary in a Dwelling - Indictable only')
       await service.updateField(mockOrder, 'issp', 'YES')
       await service.updateField(mockOrder, 'prarr', 'YES')
@@ -258,6 +262,23 @@ describe('store service', () => {
       const newData = await service.getMonitoringConditions(mockOrder)
 
       expect(newData).toEqual(oldData)
+    })
+
+    it('pilot', async () => {
+      await service.updateField(mockOrder, 'pilot', 'GPS_ACQUISITIVE_CRIME_PAROLE')
+
+      const newData = await service.getMonitoringConditions(mockOrder)
+
+      const expectedData: MonitoringConditions = {
+        ...oldData,
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+        dapolMissedInError: undefined,
+        offenceType: undefined,
+        issp: undefined,
+        prarr: undefined,
+      }
+
+      expect(newData).toEqual(expectedData)
     })
 
     it('offenceType', async () => {

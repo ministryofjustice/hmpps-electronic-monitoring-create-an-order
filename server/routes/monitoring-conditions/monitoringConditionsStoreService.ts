@@ -12,6 +12,7 @@ export default class MonitoringConditionsStoreService {
     'sentenceType',
     'hdc',
     'pilot',
+    'dapolMissedInError',
     'offenceType',
     'policeArea',
     'issp',

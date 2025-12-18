@@ -5,6 +5,7 @@ import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
 import { PilotFormDataModel } from './formModel'
+import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
 
 export default class PilotController {
   constructor(private readonly store: MonitoringConditionsStoreService) {}
@@ -32,13 +33,30 @@ export default class PilotController {
 
     await this.store.updateField(order, 'pilot', formData.pilot)
 
-    if (
+    const isAcquisitiveCrime =
       formData.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE' ||
       formData.pilot === 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW'
-    ) {
+
+    const isDapol =
+      formData.pilot === 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL' ||
+      formData.pilot === 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC'
+
+    const isProbation = order.interestedParties?.notifyingOrganisation === 'PROBATION'
+
+    const isDDv6OrNewer = isOrderDataDictionarySameOrAbove('DDV6', order)
+
+    if (isAcquisitiveCrime) {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', order.id))
       return
     }
+
+    if (isDapol && isProbation && isDDv6OrNewer) {
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.DAPOL_MISSED_IN_ERROR.replace(':orderId', order.id),
+      )
+      return
+    }
+
     res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
   }
 }

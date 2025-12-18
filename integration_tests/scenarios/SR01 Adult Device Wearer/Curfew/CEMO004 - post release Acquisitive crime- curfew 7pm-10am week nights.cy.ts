@@ -422,6 +422,7 @@ context('Scenarios', () => {
               order_status: 'Not Started',
               pilot: 'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
               subcategory: '',
+              dapol_missed_in_error: '',
             },
           })
           .should('be.true')

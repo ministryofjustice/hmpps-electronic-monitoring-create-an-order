@@ -74,6 +74,7 @@ export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Orde
     hdc: null,
     prarr: null,
     pilot: null,
+    dapolMissedInError: null,
     offenceType: null,
     isValid: false,
   },

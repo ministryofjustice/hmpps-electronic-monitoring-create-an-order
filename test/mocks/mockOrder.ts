@@ -114,6 +114,7 @@ export const createMonitoringConditions = (
   prarr: null,
   isValid: false,
   pilot: null,
+  dapolMissedInError: null,
   offenceType: null,
   ...overrideProperties,
 })
