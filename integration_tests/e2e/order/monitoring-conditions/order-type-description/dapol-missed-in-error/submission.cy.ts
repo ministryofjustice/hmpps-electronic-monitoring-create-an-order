@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import HdcPage from './hdcPage'
-import PilotPage from '../pilot/PilotPage'
+import DapolMissedInErrorPage from './dapolMissedInErrorPage'
+import PrarrPage from '../prarr/PrarrPage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -15,12 +15,12 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should continue to pilot page', () => {
-    const page = Page.visit(HdcPage, { orderId: mockOrderId })
+  it('Should continue to prarr page', () => {
+    const page = Page.visit(DapolMissedInErrorPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
     page.form.continueButton.click()
 
-    Page.verifyOnPage(PilotPage)
+    Page.verifyOnPage(PrarrPage)
   })
 })

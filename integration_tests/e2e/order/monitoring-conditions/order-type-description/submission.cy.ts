@@ -5,7 +5,7 @@ import Page from '../../../../pages/page'
 
 const mockOrderId = uuidv4()
 const apiPath = '/monitoring-conditions'
-const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
+const stubGetOrder = (notifyingOrg: string = 'PROBATION', ddVersion = 'DDV5') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
@@ -30,6 +30,7 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
           postcode: '',
         },
       ],
+      dataDictionaryVersion: ddVersion,
     },
   })
 }
@@ -337,5 +338,42 @@ context('Order type descriptions', () => {
         endDate: null,
       },
     }).should('be.true')
+  })
+
+  context('DDv6', () => {
+    it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+      stubGetOrder('PROBATION', 'DDV6')
+      const monitoringOrderTypeDescription = {
+        orderType: 'Release from prison',
+        sentenceType: 'Standard Determinate Sentence',
+        hdc: 'No',
+        prarr: 'Yes',
+        pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+        monitoringCondition: 'Trail monitoring',
+        dapolMissedInError: 'Yes',
+      }
+
+      Page.visit(OrderTypePage, { orderId: mockOrderId })
+      fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/monitoring-conditions`,
+        body: {
+          orderType: 'POST_RELEASE',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+          sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+          curfew: false,
+          exclusionZone: false,
+          trail: true,
+          mandatoryAttendance: false,
+          alcohol: false,
+          startDate: null,
+          endDate: null,
+          prarr: 'YES',
+          hdc: 'NO',
+          pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+          dapolMissedInError: 'YES',
+        },
+      }).should('be.true')
+    })
   })
 })

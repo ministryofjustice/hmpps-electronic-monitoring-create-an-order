@@ -13,6 +13,7 @@ import OffenceTypeController from './offence-type/controller'
 import PoliceAreaController from './police-area/controller'
 import TypesOfMonitoringNeededController from './types-of-monitoring-needed/controller'
 import HardStopController from './hard-stop/controller'
+import DapolMissedInErrorController from './dapol-missed-in-error/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<
@@ -37,6 +38,8 @@ const createOrderTypeDescriptionRouter = (
   const hdcController = new HdcController(monitoringConditionsStoreService)
 
   const pilotController = new PilotController(monitoringConditionsStoreService)
+
+  const dapolMissedInErrorController = new DapolMissedInErrorController(monitoringConditionsStoreService)
 
   const offenceTypeController = new OffenceTypeController(monitoringConditionsStoreService)
 
@@ -68,6 +71,9 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
+
+  router.get('/dapol-missed-in-error', asyncMiddleware(dapolMissedInErrorController.view))
+  router.post('/dapol-missed-in-error', asyncMiddleware(dapolMissedInErrorController.update))
 
   router.get('/offence-type', asyncMiddleware(offenceTypeController.view))
   router.post('/offence-type', asyncMiddleware(offenceTypeController.update))

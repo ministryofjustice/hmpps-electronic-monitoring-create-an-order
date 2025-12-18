@@ -388,6 +388,7 @@ context('Scenarios', () => {
                 order_status: 'Not Started',
                 pilot: 'GPS Acquisitive Crime Parole',
                 subcategory: '',
+                dapol_missed_in_error: '',
               },
             })
             .should('be.true')

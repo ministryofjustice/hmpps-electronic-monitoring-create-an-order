@@ -126,6 +126,13 @@ context('Order type descriptions', () => {
       'What monitoring does the device wearer need?',
       monitoringOrderTypeDescription.monitoringCondition,
     )
+
+    // Dapol missed in error
+    verifyValueInCheckYourAnswerPage(
+      page,
+      'Are you submitting this form becasue DAPOL was missed in error at point of release?',
+      monitoringOrderTypeDescription.dapolMissedInError,
+    )
   }
 
   it('Notification org is prison, full HDC and pilot flow', () => {
@@ -223,6 +230,7 @@ context('Order type descriptions', () => {
       prarr: 'Yes',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
       monitoringCondition: 'Trail monitoring',
+      dapolMissedInError: 'Yes',
     }
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
