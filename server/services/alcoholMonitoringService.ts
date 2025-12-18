@@ -6,6 +6,8 @@ import { AlcoholMonitoringFormData, AlcoholMonitoringFormDataValidator } from '.
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
+import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
+import { isNullOrUndefined } from '../utils/utils'
 
 type AlcoholMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
@@ -36,5 +38,12 @@ export default class AlcoholMonitoringService {
 
       throw e
     }
+  }
+
+  isNotifyingOrgACourt(notifyingOrg: NotifyingOrganisation | null | undefined) {
+    if (isNullOrUndefined(notifyingOrg)) {
+      return false
+    }
+    return !(notifyingOrg === 'PRISON' || notifyingOrg === 'PROBATION')
   }
 }

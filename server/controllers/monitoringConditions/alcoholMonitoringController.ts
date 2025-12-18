@@ -19,14 +19,9 @@ export default class AlcoholMonitoringController {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
-    // if notif org is court -> hide monitoring type question
-    const isNotifyingOrgACourt = !(
-      order.interestedParties?.notifyingOrganisation === 'PRISON' ||
-      order.interestedParties?.notifyingOrganisation === 'PROBATION'
+    const isNotifyingOrgACourt = this.alcoholMonitoringService.isNotifyingOrgACourt(
+      order.interestedParties?.notifyingOrganisation,
     )
-
-    console.log(order)
-    console.log(isNotifyingOrgACourt)
 
     const viewModel = alcoholMonitoringViewModel.construct(
       order.monitoringConditionsAlcohol ?? {
@@ -47,13 +42,7 @@ export default class AlcoholMonitoringController {
     const order = req.order!
     const formData = AlcoholMonitoringFormDataModel.parse(req.body)
 
-    // if notif org is court -> set formdata.monitoringType to 'ALCOHOL_ABSTINENCE'
-
-    const isNotifyingOrgACourt = !(
-      order.interestedParties?.notifyingOrganisation === 'PRISON' ||
-      order.interestedParties?.notifyingOrganisation === 'PROBATION'
-    )
-    if (isNotifyingOrgACourt) {
+    if (this.alcoholMonitoringService.isNotifyingOrgACourt(order.interestedParties?.notifyingOrganisation)) {
       formData.monitoringType = 'ALCOHOL_ABSTINENCE'
     }
 
