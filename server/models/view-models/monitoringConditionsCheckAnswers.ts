@@ -3,6 +3,7 @@ import {
   convertToTitleCase,
   createAddressPreview,
   formatDateTime,
+  isNotNullOrUndefined,
   isNullOrUndefined,
   lookup,
   trimSeconds,
@@ -21,6 +22,7 @@ import {
 import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
+import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
@@ -419,6 +421,17 @@ const createAlcoholAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   if (order.monitoringConditionsAlcohol?.startDate == null) {
     return []
   }
+
+  if (
+    isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
+    (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
+  ) {
+    return [
+      createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri, answerOpts),
+      createDateAnswer(questions.endDate.text, order.monitoringConditionsAlcohol?.endDate, uri, answerOpts),
+    ]
+  }
+
   return [
     createAnswer(questions.monitoringType.text, monitoringType, uri, answerOpts),
     createDateAnswer(questions.startDate.text, order.monitoringConditionsAlcohol?.startDate, uri, answerOpts),

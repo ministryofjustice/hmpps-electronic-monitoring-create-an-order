@@ -8,10 +8,12 @@ import { DateTimeField, ViewModel } from './utils'
 type AlcoholMonitoringViewModel = ViewModel<Pick<AlcoholMonitoring, 'monitoringType'>> & {
   startDate: DateTimeField
   endDate: DateTimeField
+  isNotifyingOrgACourt: boolean
 }
 
 const createViewModelFromAlcoholMonitoring = (
   monitoringConditionsAlcohol: AlcoholMonitoring,
+  isNotifyingOrgACourt: boolean,
 ): AlcoholMonitoringViewModel => {
   const startDate = deserialiseDateTime(monitoringConditionsAlcohol?.startDate)
   const endDate = deserialiseDateTime(monitoringConditionsAlcohol?.endDate)
@@ -21,12 +23,14 @@ const createViewModelFromAlcoholMonitoring = (
     startDate: { value: startDate },
     endDate: { value: endDate },
     errorSummary: null,
+    isNotifyingOrgACourt,
   }
 }
 
 const createViewModelFromFormData = (
   formData: AlcoholMonitoringFormData,
   validationErrors: ValidationResult,
+  isNotifyingOrgACourt: boolean,
 ): AlcoholMonitoringViewModel => {
   return {
     monitoringType: { value: formData.monitoringType ?? '', error: getError(validationErrors, 'monitoringType') },
@@ -51,6 +55,7 @@ const createViewModelFromFormData = (
       error: getError(validationErrors, 'endDate'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
+    isNotifyingOrgACourt,
   }
 }
 
@@ -58,12 +63,13 @@ const construct = (
   monitoringConditionsAlcohol: AlcoholMonitoring,
   validationErrors: ValidationResult,
   formData: [AlcoholMonitoringFormData],
+  isNotifyingOrgACourt: boolean,
 ): AlcoholMonitoringViewModel => {
   if (validationErrors.length > 0 && formData.length > 0) {
-    return createViewModelFromFormData(formData[0], validationErrors)
+    return createViewModelFromFormData(formData[0], validationErrors, isNotifyingOrgACourt)
   }
 
-  return createViewModelFromAlcoholMonitoring(monitoringConditionsAlcohol)
+  return createViewModelFromAlcoholMonitoring(monitoringConditionsAlcohol, isNotifyingOrgACourt)
 }
 
 export default {
