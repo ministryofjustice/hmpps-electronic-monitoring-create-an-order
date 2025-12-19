@@ -11,6 +11,7 @@
 
 {% block formInputs %}
 
+{% if not isNotifyingOrgACourt %}
   {{ govukRadios({
     name: "monitoringType",
     fieldset: {
@@ -38,6 +39,8 @@
     value: monitoringType.value,
     errorMessage: monitoringType.error
   }) }}
+
+  {% endif %}
 
   {% set disabled = {} if isOrderEditable else { disabled:true } %}
 

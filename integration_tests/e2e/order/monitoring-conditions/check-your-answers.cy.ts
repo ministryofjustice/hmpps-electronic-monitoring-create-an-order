@@ -367,6 +367,34 @@ context('Check your answers', () => {
         },
       ])
     })
+
+    it('notifying org is court', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          interestedParties: {
+            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.alcoholMonitoringConditionsSection().shouldExist()
+      page
+        .alcoholMonitoringConditionsSection()
+        .shouldNotHaveItem('What alcohol monitoring does the device wearer need?')
+    })
   })
 
   context('Application status is submitted', () => {
