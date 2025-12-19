@@ -381,6 +381,6 @@ export default function routes({
 
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
-  router.use(paths.INSTALLATION_AND_RISK.BASE_URL, createInstallationAdnRiskRouter())
+  router.use(paths.INSTALLATION_AND_RISK.BASE_URL, createInstallationAndRiskRouter())
   return router
 }
