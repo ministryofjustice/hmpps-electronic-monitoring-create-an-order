@@ -4,6 +4,9 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
+import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offenc-list/offenceListPage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -15,6 +18,13 @@ context('offences', () => {
     interpreterRequired: false,
     language: '',
     hasFixedAddress: 'No',
+  }
+
+  const installationAndRisk = {
+    offence: 'Sexual offences',
+    possibleRisk: 'Sex offender',
+    riskCategory: 'Children under the age of 18 are living at the property',
+    riskDetails: 'No risk',
   }
 
   beforeEach(() => {
@@ -53,8 +63,11 @@ context('offences', () => {
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.continueButton.click()
     // Should go to details for installation page
-
+    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+    installationAndRiskPage.form.fillInWith(installationAndRisk)
+    installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
+    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 
   it('Notifying organization is civil court, multiple offences flow', () => {
@@ -65,19 +78,28 @@ context('offences', () => {
     })
 
     // Should go to offence page
-    const offencePage = Page.verifyOnPage(OffencePage)
+    let offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.continueButton.click()
     // Should go to offence add to list page
-
+    let offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.fillInWith('Add')
+    offenceList.form.continueButton.click()
     // Should go to offence page
-
+    offencePage = Page.verifyOnPage(OffencePage)
+    offencePage.form.continueButton.click()
     // Should go to offence add to list page
-
+    offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.fillInWith('Next')
+    offenceList.form.continueButton.click()
     // Should go to offence other inromation page
-
+    const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
+    offenceOtherInfoPage.form.continueButton.click()
     // Should go to details for installation page
-
+    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+    installationAndRiskPage.form.fillInWith(installationAndRisk)
+    installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
+    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 
   it.skip('Notifying organization is family court, multiple offences flow', () => {
