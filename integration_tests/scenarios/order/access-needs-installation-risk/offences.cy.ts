@@ -3,6 +3,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
+import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -49,7 +50,8 @@ context('offences', () => {
     const offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.continueButton.click()
     // Should go to offence other inromation page
-
+    const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
+    offenceOtherInfoPage.form.continueButton.click()
     // Should go to details for installation page
 
     // CYA page

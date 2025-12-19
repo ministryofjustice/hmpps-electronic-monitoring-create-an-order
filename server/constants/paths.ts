@@ -43,6 +43,7 @@ const paths = {
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/installation-and-risk/check-your-answers',
     BASE_URL: '/order/:orderId/installation-and-risk',
     OFFENCE: '/order/:orderId/installation-and-risk/offence',
+    OFFENCE_OTHER_INFO: '/order/:orderId/installation-and-risk/offence-other-info',
   },
 
   POSTCODE_LOOKUP: {
