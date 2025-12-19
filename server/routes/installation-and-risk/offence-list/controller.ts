@@ -34,11 +34,14 @@ export default class OffenceListController {
       } else {
         res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id))
       }
-    } else if (formData.branch === 'Next')
+    } else if (formData.branch === 'Next') {
       if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
         res.redirect(paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id))
       } else {
         res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id))
       }
+    } else if (formData.branch === 'Delete') {
+      res.redirect(paths.INSTALLATION_AND_RISK.DELETE.replace(':orderId', order.id))
+    }
   }
 }

@@ -6,8 +6,9 @@ import OffencePage from '../../../e2e/order/access-needs-installation-risk/offen
 import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offenc-list/offenceListPage'
+import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/dapoPage'
+import OffenceListDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/offenceListDeletePage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -130,5 +131,33 @@ context('offences', () => {
     installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+  })
+
+  it('Should able to delete dapo', () => {
+    const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+    })
+
+    // Should go to dapo and date page
+    let dapoPage = Page.verifyOnPage(DapoPage)
+    dapoPage.form.continueButton.click()
+    // Should go to offence add to list page
+    let offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.fillInWith('Add')
+    offenceList.form.continueButton.click()
+    // Should go to dapo and date page
+    dapoPage = Page.verifyOnPage(DapoPage)
+    dapoPage.form.continueButton.click()
+    // Should go to offence add to list page
+    offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.fillInWith('Delete')
+    offenceList.form.continueButton.click()
+    // Should go to offence list delete page
+    const offenceListDeletePage = Page.verifyOnPage(OffenceListDeletePage)
+    offenceListDeletePage.form.continueButton.click()
+    // Should go to offence add to list page
+    Page.verifyOnPage(OffenceListPage)
   })
 })
