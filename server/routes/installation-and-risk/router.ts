@@ -26,4 +26,4 @@ const createInstallationAndRiskRouter = (): Router => {
   return router
 }
 
-export default createInstallationAdnRiskRouter
+export default createInstallationAndRiskRouter
