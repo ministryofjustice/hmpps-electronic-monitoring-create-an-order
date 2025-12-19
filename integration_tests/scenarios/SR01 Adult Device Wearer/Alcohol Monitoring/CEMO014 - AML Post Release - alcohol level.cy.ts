@@ -281,6 +281,7 @@ context('Scenarios', () => {
               hdc: 'No',
               order_status: 'Not Started',
               subcategory: '',
+              dapol_missed_in_error: '',
             },
           })
           .should('be.true')

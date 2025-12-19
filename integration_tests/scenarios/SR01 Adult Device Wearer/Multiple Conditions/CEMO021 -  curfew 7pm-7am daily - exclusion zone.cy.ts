@@ -349,6 +349,7 @@ context('Scenarios', () => {
                 order_status: 'Not Started',
                 pilot: '',
                 subcategory: '',
+                dapol_missed_in_error: '',
               },
             })
             .should('be.true')

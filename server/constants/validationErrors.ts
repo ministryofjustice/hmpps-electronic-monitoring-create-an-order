@@ -32,6 +32,7 @@ interface ValidationErrors {
     pilotRequired: string
     isspRequired: string
     hdcRequired: string
+    dapolMissedRequired: string
     prarrRequired: string
     offenceTypeRequired: string
     policeAreaRequired: string
@@ -219,6 +220,7 @@ const validationErrors: ValidationErrors = {
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeDescriptionRequired: 'Select the type of pilot the device wearer is part of',
     pilotRequired: 'Select the type of pilot the device wearer is part of',
+    dapolMissedRequired: 'Select Yes if DAPOL was missed in error at the point of release',
     orderTypeRequired: 'Select the order type',
     sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
     isspRequired: 'Select Yes if the device wearer is on the ISSP',

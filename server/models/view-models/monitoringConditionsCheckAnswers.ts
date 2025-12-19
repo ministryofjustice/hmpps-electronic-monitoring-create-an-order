@@ -135,6 +135,22 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
+  if (
+    data.dapolMissedInError !== undefined &&
+    data.dapolMissedInError !== null &&
+    data.dapolMissedInError !== 'UNKNOWN'
+  ) {
+    const dapolMissedInErrorPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.DAPOL_MISSED_IN_ERROR
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.dapolMissedInError.text,
+        lookup(content.reference.yesNoUnknown, data.dapolMissedInError),
+        dapolMissedInErrorPath.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
+
   if (FeatureFlags.getInstance().getValue('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
     const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED
     const typesSelected = []

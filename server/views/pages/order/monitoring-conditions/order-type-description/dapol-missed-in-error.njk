@@ -1,0 +1,37 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+{% set questionName = "Dapol Missed In Error"%}
+{% block formInputs %}
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "dapolMissedInError",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: questions.dapolMissedInError.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: [
+        {
+          value: "YES",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "NO",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: dapolMissedInError.value,
+      errorMessage: dapolMissedInError.error
+    }) }}
+
+
+{% endblock %}
