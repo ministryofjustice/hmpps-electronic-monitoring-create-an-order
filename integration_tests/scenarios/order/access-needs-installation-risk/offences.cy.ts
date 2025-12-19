@@ -7,6 +7,7 @@ import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-r
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offenc-list/offenceListPage'
+import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/dapoPage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -102,7 +103,7 @@ context('offences', () => {
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 
-  it.skip('Notifying organization is family court, multiple offences flow', () => {
+  it('Notifying organization is family court, multiple offences flow', () => {
     const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -110,13 +111,24 @@ context('offences', () => {
     })
 
     // Should go to dapo and date page
-
+    let dapoPage = Page.verifyOnPage(DapoPage)
+    dapoPage.form.continueButton.click()
     // Should go to offence add to list page
-
+    let offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.fillInWith('Add')
+    offenceList.form.continueButton.click()
     // Should go to dapo and date page
-
+    dapoPage = Page.verifyOnPage(DapoPage)
+    dapoPage.form.continueButton.click()
+    // Should go to offence add to list page
+    offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.fillInWith('Next')
+    offenceList.form.continueButton.click()
     // Should go to details for installation page
-
+    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
+    installationAndRiskPage.form.fillInWith(installationAndRisk)
+    installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
+    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 })

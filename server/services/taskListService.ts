@@ -35,6 +35,7 @@ const PAGES = {
   probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
   offence: 'OFFENCE',
+  dapo: 'DAPO',
   installationAndRisk: 'INSTALLATION_AND_RISK',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
@@ -295,6 +296,19 @@ export default class TaskListService {
         path: paths.INSTALLATION_AND_RISK.OFFENCE,
         state: convertBooleanToEnum<State>(
           order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.installationAndRisk),
+      })
+
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.dapo,
+        path: paths.INSTALLATION_AND_RISK.DAPO,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT',
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
