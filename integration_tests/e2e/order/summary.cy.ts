@@ -190,6 +190,33 @@ context('Order Summary', () => {
         .should('exist')
     })
 
+    it('in progress order and can not see timeline', () => {
+      const versionOneId = uuidv4()
+      const versionTwoId = uuidv4()
+
+      const versionOne = versionInformation({
+        submittedBy: 'Person One',
+        versionId: versionOneId,
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+      })
+      const versionTwo = versionInformation({
+        submittedBy: 'Person Two',
+        versionId: versionTwoId,
+        type: 'VARIATION',
+        fmsResultDate: new Date(2025, 0, 3, 10, 30, 0, 0).toISOString(),
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionTwo, versionOne],
+        orderId: mockOrderId,
+      })
+
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.moj-timeline').should('not.exist')
+    })
+
     it('Should be accessible', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.checkIsAccessible()
@@ -1153,6 +1180,7 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           versionId: versionTwoId,
+          status: 'SUBMITTED',
         },
       })
 
