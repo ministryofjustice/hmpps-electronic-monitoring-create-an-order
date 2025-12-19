@@ -6,7 +6,7 @@ import { AlcoholMonitoringFormData, AlcoholMonitoringFormDataValidator } from '.
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
-import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
+import { NotifyingOrganisation, notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 import { isNullOrUndefined } from '../utils/utils'
 
 type AlcoholMonitoringInput = AuthenticatedRequestInput & {
@@ -44,6 +44,6 @@ export default class AlcoholMonitoringService {
     if (isNullOrUndefined(notifyingOrg)) {
       return false
     }
-    return !(notifyingOrg === 'PRISON' || notifyingOrg === 'PROBATION')
+    return (notifyingOrganisationCourts as readonly string[]).includes(notifyingOrg)
   }
 }
