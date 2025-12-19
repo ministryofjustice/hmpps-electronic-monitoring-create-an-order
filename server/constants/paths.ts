@@ -41,6 +41,12 @@ const paths = {
     INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
     CHECK_YOUR_ANSWERS: '/order/:orderId/installation-and-risk/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/installation-and-risk/check-your-answers',
+    BASE_URL: '/order/:orderId/installation-and-risk',
+    OFFENCE: '/order/:orderId/installation-and-risk/offence',
+    OFFENCE_OTHER_INFO: '/order/:orderId/installation-and-risk/offence-other-info',
+    OFFENCE_LIST: '/order/:orderId/installation-and-risk/offence-list',
+    DAPO: '/order/:orderId/installation-and-risk/dapo',
+    DELETE: '/order/:orderId/installation-and-risk/delete',
   },
 
   POSTCODE_LOOKUP: {
