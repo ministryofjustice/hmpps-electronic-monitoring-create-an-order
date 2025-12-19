@@ -34,24 +34,25 @@
       </p>
       {% endif %}
 
-      {% if order.type ==='VARIATION' %}
-       <div id="waste-hint" class="govuk-hint">
-          You are making changes to a submitted form.
-       </div>
-      {% elif order.type ==='REVOCATION'%}
-       <div id="waste-hint" class="govuk-hint">
-          You are ending all monitoring for the device wearer.
-       </div>
-      {% elif order.type ==='REINSTALL_DEVICE'%}
-       <div id="waste-hint" class="govuk-hint">
-          You are requesting monitoring equipment to be reinstalled or checked.
-       </div>
-      {% elif order.type ==='REINSTALL_AT_DIFFERENT_ADDRESS'%}
-       <div id="waste-hint" class="govuk-hint">
-          You are requesting monitoring equipment to be installed at a new address.
-       </div>
+      {% if order.status == 'IN_PROGRESS' %}
+        {% if order.type ==='VARIATION' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are making changes to a submitted form.
+         </div>
+        {% elif order.type ==='REVOCATION' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are ending all monitoring for the device wearer.
+         </div>
+        {% elif order.type ==='REINSTALL_DEVICE' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are requesting monitoring equipment to be reinstalled or checked.
+         </div>
+        {% elif order.type ==='REINSTALL_AT_DIFFERENT_ADDRESS' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are requesting monitoring equipment to be installed at a new address.
+         </div>
+        {% endif %}
       {% endif %}
-
 
       {% if order.status === "ERROR" %}
         {% set insetHtml %}
@@ -164,35 +165,37 @@
     </div>
 
     <div class="govuk-grid-column-one-third">
-        {% if timelineItems | length %}
-          {% set processedTimeLineItems = [] %}
-        {% for item in timelineItems %}
-          {% if item.href %}
-            {% set itemHtml %}
-              {{ item.text if item.text }}
-              <div class="govuk-!-margin-top-2">
-                <a href="{{ item.href }}">View submitted form</a>
-              </div>
-            {% endset %}
-          {% else %}
-            {% set itemHtml %}
-              {{ item.text if item.text }}
-              <div class="govuk-!-margin-top-2">
-                <p>You are viewing this version of the form</p>
-              </div>
-            {% endset %}
+        {% if order.status != 'IN_PROGRESS' %}
+          {% if timelineItems | length %}
+            {% set processedTimeLineItems = [] %}
+          {% for item in timelineItems %}
+            {% if item.href %}
+              {% set itemHtml %}
+                {{ item.text if item.text }}
+                <div class="govuk-!-margin-top-2">
+                  <a href="{{ item.href }}">View submitted form</a>
+                </div>
+              {% endset %}
+            {% else %}
+              {% set itemHtml %}
+                {{ item.text if item.text }}
+                <div class="govuk-!-margin-top-2">
+                  <p>You are viewing this version of the form</p>
+                </div>
+              {% endset %}
+            {% endif %}
+            {% set processedItem = {
+              label: item.label,
+              datetime: item.datetime,
+              byline: item.byline,
+              html: itemHtml
+            } %}
+            {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
+          {% endfor %}
+          {{ mojTimeline({
+              items: processedTimeLineItems
+            })}}
           {% endif %}
-          {% set processedItem = {
-            label: item.label,
-            datetime: item.datetime,
-            byline: item.byline,
-            html: itemHtml
-          } %}
-          {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
-        {% endfor %}
-        {{ mojTimeline({
-            items: processedTimeLineItems
-          })}}
         {% endif %}
       </div>
     </div>
