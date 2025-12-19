@@ -5,7 +5,7 @@ import OffenceListController from './offence-list/controller'
 import DapoController from './dapo/controller'
 import OffenceListDeleteController from './delete/controller'
 
-const createInstallationAdnRiskRouter = (): Router => {
+const createInstallationAndRiskRouter = (): Router => {
   const router = Router()
 
   const offenceController = new OffenceController()
