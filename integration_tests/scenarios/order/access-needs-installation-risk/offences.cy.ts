@@ -51,7 +51,7 @@ context('offences', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('Notifying organization is Prsion, single offence flow', () => {
+  it('Notifying organization is Prison, single offence flow', () => {
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -61,10 +61,10 @@ context('offences', () => {
     // Should go to offence page
     const offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.continueButton.click()
-    // Should go to offence other inromation page
+    // Should go to offence other information page
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.continueButton.click()
-    // Should go to details for installation page
+    // Should go to risk and installation page
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
@@ -93,10 +93,10 @@ context('offences', () => {
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Next')
     offenceList.form.continueButton.click()
-    // Should go to offence other inromation page
+    // Should go to offence other information page
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.continueButton.click()
-    // Should go to details for installation page
+    // Should go to risk and installation page
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
@@ -104,7 +104,7 @@ context('offences', () => {
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 
-  it('Notifying organization is family court, multiple offences flow', () => {
+  it('Notifying organization is family court, multiple dapo flow', () => {
     const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -125,7 +125,7 @@ context('offences', () => {
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Next')
     offenceList.form.continueButton.click()
-    // Should go to details for installation page
+    // Should go to risk and installation page
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
