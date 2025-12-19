@@ -51,7 +51,7 @@ context('offences', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('Notifying organization is Prison, single offence flow', () => {
+  it('Notifying organisation is Prison, single offence flow', () => {
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -72,7 +72,7 @@ context('offences', () => {
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 
-  it('Notifying organization is civil court, multiple offences flow', () => {
+  it('Notifying organisation is civil court, multiple offences flow', () => {
     const interestedParties = createFakeInterestedParties('Civil & County Court', 'Home Office', null, null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -104,7 +104,7 @@ context('offences', () => {
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
   })
 
-  it('Notifying organization is family court, multiple dapo flow', () => {
+  it('Notifying organisation is family court, multiple dapo flow', () => {
     const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
