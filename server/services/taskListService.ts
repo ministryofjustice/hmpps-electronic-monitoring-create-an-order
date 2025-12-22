@@ -506,7 +506,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'licence'),
       state: STATES.required,
       completed: doesOrderHaveLicence(order),
     })
@@ -522,7 +522,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'photo_Id'),
       state: convertBooleanToEnum<State>(
         order.orderParameters?.havePhoto || null,
         STATES.cantBeStarted,

@@ -25,6 +25,7 @@ import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
+import HaveCourtOrderPageContent from './pages/haveCourtOrder'
 
 type I18n = {
   pages: {
@@ -40,6 +41,7 @@ type I18n = {
     editConfirm: ConfirmationPageContent
     exclusionZone: ExclusionZonePageContent
     havePhoto: HavePhotoPageContent
+    haveCourtOrder: HaveCourtOrderPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent

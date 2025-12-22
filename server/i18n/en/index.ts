@@ -32,6 +32,7 @@ import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
 import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
+import haveCourtOrderPageContent from './pages/haveCourtOrder'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -61,6 +62,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
       havePhoto: havePhotoPageContent,
+      haveCourtOrder: haveCourtOrderPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       installationLocation: installationLocationPageContent,
