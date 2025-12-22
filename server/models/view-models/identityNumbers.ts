@@ -6,7 +6,7 @@ import { ValidationResult } from '../Validation'
 import { ViewModel } from './utils'
 
 type DeviceWearerViewModel = ViewModel<
-  Pick<DeviceWearer, 'nomisId' | 'deliusId' | 'pncId' | 'prisonNumber' | 'homeOfficeReferenceNumber'>
+  Pick<DeviceWearer, 'nomisId' | 'deliusId' | 'pncId' | 'prisonNumber' | 'ceprId' | 'ccrnId'>
 >
 
 const constructFromFormData = (
@@ -30,9 +30,13 @@ const constructFromFormData = (
       value: formData.prisonNumber,
       error: getError(validationErrors, 'prisonNumber'),
     },
-    homeOfficeReferenceNumber: {
-      value: formData.homeOfficeReferenceNumber,
-      error: getError(validationErrors, 'homeOfficeReferenceNumber'),
+    ceprId: {
+      value: formData.ceprId,
+      error: getError(validationErrors, 'ceprId'),
+    },
+    ccrnId: {
+      value: formData.ccrnId,
+      error: getError(validationErrors, 'ccrnId'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
@@ -52,8 +56,11 @@ const createFromEntity = (deviceWearer: DeviceWearer): DeviceWearerViewModel => 
     prisonNumber: {
       value: deviceWearer.prisonNumber || '',
     },
-    homeOfficeReferenceNumber: {
-      value: deviceWearer.homeOfficeReferenceNumber || '',
+    ceprId: {
+      value: deviceWearer.ceprId || '',
+    },
+    ccrnId: {
+      value: deviceWearer.ccrnId || '',
     },
     errorSummary: null,
   }

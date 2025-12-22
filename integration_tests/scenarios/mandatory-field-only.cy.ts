@@ -98,7 +98,8 @@ context('Mandatory fields only', () => {
       deliusId: fullDeviceWearerDetails.deliusId,
       pncId: fullDeviceWearerDetails.pncId,
       prisonNumber: fullDeviceWearerDetails.prisonNumber,
-      homeOfficeReferenceNumber: fullDeviceWearerDetails.homeOfficeReferenceNumber,
+      cepr_id: fullDeviceWearerDetails.ceprId,
+      ccrn_id: fullDeviceWearerDetails.ccrnId,
     }
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
@@ -408,7 +409,8 @@ context('Mandatory fields only', () => {
       deliusId: fullDeviceWearerDetails.deliusId,
       pncId: fullDeviceWearerDetails.pncId,
       prisonNumber: fullDeviceWearerDetails.prisonNumber,
-      homeOfficeReferenceNumber: fullDeviceWearerDetails.homeOfficeReferenceNumber,
+      ceprId: fullDeviceWearerDetails.ceprId,
+      ccrnId: fullDeviceWearerDetails.ccrnId,
     }
     const fakeAdult = createFakeResponsibleAdult()
     const responsibleAdultDetails = {

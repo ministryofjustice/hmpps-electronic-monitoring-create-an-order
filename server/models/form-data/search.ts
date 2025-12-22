@@ -44,8 +44,8 @@ const formatDateTime = (dateToFormat: string): string => {
 }
 
 const getIdList = (order: Order) => {
-  const { nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber } = order.deviceWearer
-  const idList = [nomisId, pncId, deliusId, homeOfficeReferenceNumber, prisonNumber].filter(id => id && id?.length > 0)
+  const { nomisId, pncId, deliusId, ceprId, ccrnId, prisonNumber } = order.deviceWearer
+  const idList = [nomisId, pncId, deliusId, ceprId, ccrnId, prisonNumber].filter(id => id && id?.length > 0)
   return idList as string[]
 }
 

@@ -50,7 +50,8 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
+          ceprId: 'cepr',
+          ccrnId: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
@@ -63,7 +64,8 @@ context('About the device wearer', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'homeoffice',
+            ceprId: 'cepr',
+            ccrnId: 'ccrn',
           },
         }).should('be.true')
       })
@@ -76,7 +78,8 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
+          ceprId: 'cepr',
+          ccrnId: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
@@ -93,7 +96,8 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
+          ceprId: 'cepr',
+          ccrnId: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)

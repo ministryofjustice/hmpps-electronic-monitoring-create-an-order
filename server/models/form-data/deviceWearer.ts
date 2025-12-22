@@ -66,7 +66,8 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
   pncId: z.string(),
   deliusId: z.string(),
   prisonNumber: z.string(),
-  homeOfficeReferenceNumber: z.string(),
+  ceprId: z.string(),
+  ccrnId: z.string(),
 })
 
 type IdentityNumbersFormData = Omit<z.infer<typeof IdentityNumbersFormDataModel>, 'action'>

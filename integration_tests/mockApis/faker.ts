@@ -90,7 +90,8 @@ export type PersonOfInterest = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
-  homeOfficeReferenceNumber?: string
+  ceprId?: string
+  ccrnId?: string
 
   firstName: string
   firstNames: string
@@ -280,14 +281,17 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // IMPORTANT: check format of ceprId and ccrnId as not sure
+  const ceprId = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const ccrnId = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
     nomisId,
     pncId,
     deliusId,
     prisonNumber,
-    homeOfficeReferenceNumber,
+    ceprId,
+    ccrnId,
     ...fakeAdult,
   } as PersonOfInterest
 }
@@ -298,14 +302,17 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  const homeOfficeReferenceNumber = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // IMPORTANT: check format of ceprId and ccrnId as not sure
+  const ceprId = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const ccrnId = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
     nomisId,
     pncId,
     deliusId,
     prisonNumber,
-    homeOfficeReferenceNumber,
+    ceprId,
+    ccrnId,
     ...fakeYouth,
   } as PersonOfInterest
 }

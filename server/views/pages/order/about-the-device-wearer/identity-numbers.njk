@@ -62,17 +62,4 @@
     disabled: not isOrderEditable
   }) }}
 
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
-      classes: "govuk-fieldset__legend--s"
-    },
-    classes: "govuk-input--width-10",
-    id: "homeOfficeReferenceNumber",
-    name: "homeOfficeReferenceNumber",
-    value: homeOfficeReferenceNumber.value,
-    errorMessage: homeOfficeReferenceNumber.error,
-    disabled: not isOrderEditable
-  }) }}
-
 {% endblock %}
