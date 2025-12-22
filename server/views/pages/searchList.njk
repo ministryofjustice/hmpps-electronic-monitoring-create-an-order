@@ -1,95 +1,96 @@
 {% set detailsHtml %}
-<p class="govuk-body">A personal identity number is:</p>
-<ul class="govuk-list govuk-list--bullet">
-  <li>National Offender Management Information System (NOMIS)</li>
-  <li>Police National Computer (PNC)</li>
-  <li>NDelius ID</li>
-  <li>Prison Number</li>
-  <li>Home Office Reference Number</li>
-</ul>
+    <p class="govuk-body">A personal identity number is:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>Police National Computer (PNC)</li>
+        <li>National Offender Management Information System (NOMIS)</li>
+        <li>Prison Number</li>
+        <li>NDelius ID</li>
+        <li>Compliance and Enforcement Person Reference (CEPR)</li>
+        <li>Court Case Reference Number (CCRN)</li>
+    </ul>
 {% endset %}
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    {{ search({
-      action: '#',
-      method: 'get',
-      input: {
-        id: 'search',
-        name: 'searchTerm',
-        value: searchTerm
-      },
-      label: {
-        text: 'Search for a submitted form',
-        classes: "govuk-!-font-weight-bold"
-      },
-      hint: {
-        text: 'Enter the device wearer\'s full name or personal identity number. For example Bob Smith C4365JN.'
-      },
-      button: {
-        text: 'Search',
-	classes: "govuk-button--secondary"
-      }
-    }) }}
+    <div class="govuk-grid-column-two-thirds">
+        {{ search({
+            action: '#',
+            method: 'get',
+            input: {
+                id: 'search',
+                name: 'searchTerm',
+                value: searchTerm
+            },
+            label: {
+                text: 'Search for a submitted form',
+                classes: "govuk-!-font-weight-bold"
+            },
+            hint: {
+                text: 'Enter the device wearer\'s full name or personal identity number. For example Bob Smith C4365JN.'
+            },
+            button: {
+                text: 'Search',
+                classes: "govuk-button--secondary"
+            }
+        }) }}
 
-  </div>
+    </div>
 </div>
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
 <div id="ordersList">
-  {% if emptySearch %}
-<h2 class="govuk-heading-m">You have not entered any search terms</h2>
-<p>Try searching using the device wearer's:</p>
-<ul class="govuk-list govuk-list--bullet">
-  <li>first name and surname</li>
-  <li>personal ID number</li>
-  <li>full name and personal ID number</li>
-</ul>
-<p>Check spelling is correct and numbers are in the right place.</p>
+    {% if emptySearch %}
+        <h2 class="govuk-heading-m">You have not entered any search terms</h2>
+        <p>Try searching using the device wearer's:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>first name and surname</li>
+            <li>personal ID number</li>
+            <li>full name and personal ID number</li>
+        </ul>
+        <p>Check spelling is correct and numbers are in the right place.</p>
 
-{{ govukDetails({
-  summaryText: "What's a personal identity number?",
-  html: detailsHtml
-}) }}
+        {{ govukDetails({
+            summaryText: "What's a personal identity number?",
+            html: detailsHtml
+        }) }}
 
-  {% elif noResults %}
-    <h2 class="govuk-heading-m">No results found for '{{ searchTerm }}'</h2>
+        {% elif noResults %}
+        <h2 class="govuk-heading-m">No results found for '{{ searchTerm }}'</h2>
 
-    <p>Check spelling is correct and numbers are in the right place.</p>
+        <p>Check spelling is correct and numbers are in the right place.</p>
 
-    <p>Try searching using the device wearer's personal ID number, full name or both.</p>
+        <p>Try searching using the device wearer's personal ID number, full name or both.</p>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-visually-hidden">Warning</span>
-        <h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
-        If the form is not listed in the search results, it may be an emailed form so not available online.
-        <br>
-        <form action="/order/create" method="post" class="govuk-!-margin-top-3">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            {{ govukButton({
-              text: "Tell us about a change to a form sent by email",
-              name: "type",
-              value: "VARIATION",
-              classes: "govuk-button--secondary"
-            }) }}
-        </form>
-      </strong>
-    </div>
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                <span class="govuk-visually-hidden">Warning</span>
+                <h2 class="govuk-heading-s">Can't find what you are looking for?</h2>
+                If the form is not listed in the search results, it may be an emailed form so not available online.
+                <br>
+                <form action="/order/create" method="post" class="govuk-!-margin-top-3">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                    {{ govukButton({
+                        text: "Tell us about a change to a form sent by email",
+                        name: "type",
+                        value: "VARIATION",
+                        classes: "govuk-button--secondary"
+                    }) }}
+                </form>
+            </strong>
+        </div>
 
-  {% elif orders.length > 0 %}
-    {% set tableRows = [] %}
-    {% for order in orders %}
+        {% elif orders.length > 0 %}
+        {% set tableRows = [] %}
+        {% for order in orders %}
 
-      {% set name %}
-      <a class="govuk-link" href="{{ order.href }}">
-        {{ order.name }}
-      </a>
-      {% endset %}
+            {% set name %}
+                <a class="govuk-link" href="{{ order.href }}">
+                    {{ order.name }}
+                </a>
+            {% endset %}
 
-      {# {% set row = [
+            {# {% set row = [
         {
           html: name
         },
@@ -113,27 +114,27 @@
         }
       ] %} #}
 
-      {% set row = [
-        {
-          html: name
-        },
-        {
-          text: order.dob
-        },
-        {
-          html: order.pins | join('<\br>')
-        }, 
-        {
-          text: order.location
-        },         
-        {
-          text: order.lastUpdated
-        }
-      ] %}
-      {% set tableRows = (tableRows.push(row), tableRows) %}
-    {% endfor %}
+            {% set row = [
+                {
+                    html: name
+                },
+                {
+                    text: order.dob
+                },
+                {
+                    html: order.pins | join('<\br>')
+                },
+                {
+                    text: order.location
+                },
+                {
+                    text: order.lastUpdated
+                }
+            ] %}
+            {% set tableRows = (tableRows.push(row), tableRows) %}
+        {% endfor %}
 
-    {# {{ govukTable({
+        {# {{ govukTable({
     firstCellIsHeader: false,
     head: [
       {
@@ -163,30 +164,30 @@
     rows: tableRows
   }) }} #}
 
-  {{ govukTable({
-    firstCellIsHeader: false,
-    head: [
-      {
-        text: "Name"
-      },
-      {
-        text: "Date of birth"
-      },
-      {
-        text: "Personal ID number"
-      },
-      {
-        text: "Town or city"
-      },
-      {
-        text: "Last updated"
-      }
-    ],
-    rows: tableRows
-  }) }}
-  {% else %}
-    {{ govukDetails({
-      summaryText: "What's a personal identity number?",
-      html: detailsHtml
-    }) }}
-  {% endif %}
+        {{ govukTable({
+            firstCellIsHeader: false,
+            head: [
+                {
+                    text: "Name"
+                },
+                {
+                    text: "Date of birth"
+                },
+                {
+                    text: "Personal ID number"
+                },
+                {
+                    text: "Town or city"
+                },
+                {
+                    text: "Last updated"
+                }
+            ],
+            rows: tableRows
+        }) }}
+    {% else %}
+        {{ govukDetails({
+            summaryText: "What's a personal identity number?",
+            html: detailsHtml
+        }) }}
+    {% endif %}

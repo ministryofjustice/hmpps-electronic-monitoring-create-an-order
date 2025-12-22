@@ -47,11 +47,12 @@ context('Search', () => {
       // Details
       page.detailsSummary.contains("What's a personal identity number?")
       page.detailsSummary.click()
-      page.detailsList.contains('National Offender Management Information System (NOMIS)')
       page.detailsList.contains('Police National Computer (PNC)')
-      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('National Offender Management Information System (NOMIS)')
       page.detailsList.contains('Prison Number')
-      page.detailsList.contains('Home Office Reference Number')
+      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('Compliance and Enforcement Person Reference (CEPR)')
+      page.detailsList.contains('Court Case Reference Number (CCRN)')
     })
 
     it('should navigate to index when the draft forms nav link is clicked', () => {
@@ -85,11 +86,12 @@ context('Search', () => {
       // Details
       page.detailsSummary.contains("What's a personal identity number?")
       page.detailsSummary.click()
-      page.detailsList.contains('National Offender Management Information System (NOMIS)')
       page.detailsList.contains('Police National Computer (PNC)')
-      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('National Offender Management Information System (NOMIS)')
       page.detailsList.contains('Prison Number')
-      page.detailsList.contains('Home Office Reference Number')
+      page.detailsList.contains('NDelius ID')
+      page.detailsList.contains('Compliance and Enforcement Person Reference (CEPR)')
+      page.detailsList.contains('Court Case Reference Number (CCRN)')
     })
 
     it('should show a message when there are no results', () => {

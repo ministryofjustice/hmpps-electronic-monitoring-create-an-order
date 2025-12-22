@@ -43,7 +43,8 @@ describe('OrderSearchController', () => {
         pncId: 'some id number',
         deliusId: null,
         prisonNumber: null,
-        homeOfficeReferenceNumber: null,
+        ceprId: null,
+        ccrnId: null,
         firstName: 'first',
         lastName: 'last',
         alias: null,
@@ -187,7 +188,8 @@ describe('OrderSearchController', () => {
       mockSubmittedOrder.deviceWearer.nomisId = 'nomisId'
       mockSubmittedOrder.deviceWearer.pncId = 'pncId'
       mockSubmittedOrder.deviceWearer.deliusId = 'deliusId'
-      mockSubmittedOrder.deviceWearer.homeOfficeReferenceNumber = 'hoRefNum'
+      mockSubmittedOrder.deviceWearer.ceprId = 'ceprId'
+      mockSubmittedOrder.deviceWearer.ccrnId = 'ccrnId'
       mockSubmittedOrder.deviceWearer.prisonNumber = 'prisNum'
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
       req.query = { searchTerm: 'firstName' }
