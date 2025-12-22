@@ -1,31 +1,17 @@
 {% extends "../../../partials/form-layout.njk" %}
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set section = content.pages.identityNumbers.section %}
-{% set heading = content.pages.identityNumbers.title %}
-{% set legend = content.pages.identityNumbers.legend %}
-{% set helpText = content.pages.identityNumbers.helpText %}
+{% set singleQuestionPage = true %}
 
 {% block formInputs %}
 
+  {% set pncIdHtml %}
   {{ govukInput({
     label: {
-      text: content.pages.identityNumbers.questions.nomisId.text,
-      classes: "govuk-fieldset__legend--s"
-
-    },
-    classes: "govuk-input--width-10",
-    id: "nomisId",
-    name: "nomisId",
-    value: nomisId.value,
-    errorMessage: nomisId.error,
-    disabled: not isOrderEditable
-  }) }}
-
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.pncId.text,
+      text: content.pages.identityNumbers.questions.pncId.hint,
       classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
@@ -35,10 +21,42 @@
     errorMessage: pncId.error,
     disabled: not isOrderEditable
   }) }}
+  {% endset %}
 
+  {% set nomisIdHtml %}
   {{ govukInput({
     label: {
-      text: content.pages.identityNumbers.questions.deliusId.text,
+      text: content.pages.identityNumbers.questions.nomisId.hint,
+      classes: "govuk-fieldset__legend--s"
+    },
+    classes: "govuk-input--width-10",
+    id: "nomisId",
+    name: "nomisId",
+    value: nomisId.value,
+    errorMessage: nomisId.error,
+    disabled: not isOrderEditable
+  }) }}
+  {% endset %}
+
+  {% set prisonNumberHtml %}
+  {{ govukInput({
+    label: {
+      text: content.pages.identityNumbers.questions.prisonNumber.hint,
+      classes: "govuk-fieldset__legend--s"
+    },
+    classes: "govuk-input--width-10",
+    id: "prisonNumber",
+    name: "prisonNumber",
+    value: prisonNumber.value,
+    errorMessage: prisonNumber.error,
+    disabled: not isOrderEditable
+  }) }}
+  {% endset %}
+
+  {% set deliusIdHtml %}
+  {{ govukInput({
+    label: {
+      text: content.pages.identityNumbers.questions.deliusId.hint,
       classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
@@ -48,18 +66,106 @@
     errorMessage: deliusId.error,
     disabled: not isOrderEditable
   }) }}
+  {% endset %}
 
+  {% set ceprIdHtml %}
   {{ govukInput({
     label: {
-      text: content.pages.identityNumbers.questions.prisonNumber.text,
+      text: content.pages.identityNumbers.questions.ceprId.hint,
       classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
-    id: "prisonNumber",
-    name: "prisonNumber",
-    value: prisonNumber.value,
-    errorMessage: prisonNumber.error,
+    id: "ceprId",
+    name: "ceprId",
+    value: ceprId.value,
+    errorMessage: ceprId.error,
     disabled: not isOrderEditable
+  }) }}
+  {% endset %}
+
+  {% set ccrnIdHtml %}
+  {{ govukInput({
+    label: {
+      text: content.pages.identityNumbers.questions.ccrnId.hint,
+      classes: "govuk-fieldset__legend--s"
+    },
+    classes: "govuk-input--width-10",
+    id: "ccrnId",
+    name: "ccrnId",
+    value: ccrnId.value,
+    errorMessage: ccrnId.error,
+    disabled: not isOrderEditable
+  }) }}
+  {% endset %}
+
+  {{ govukCheckboxes({
+    name: "identityNumbers",
+    fieldset: {
+      legend: {
+        text: content.pages.identityNumbers.legend,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: content.pages.identityNumbers.helpText
+    },
+    items: [
+      {
+        value: "pncId",
+        text: content.pages.identityNumbers.questions.pncId.text,
+        conditional: {
+          html: pncIdHtml
+        },
+        checked: pncId.value,
+        disabled: pncId.disabled
+      },
+      {
+        value: "nomisId",
+        text: content.pages.identityNumbers.questions.nomisId.text,
+        conditional: {
+          html: nomisIdHtml
+        },
+        checked: nomisId.value,
+        disabled: nomisId.disabled
+      },
+      {
+        value: "prisonNumber",
+        text: content.pages.identityNumbers.questions.prisonNumber.text,
+        conditional: {
+          html: prisonNumberHtml
+        },
+        checked: prisonNumber.value,
+        disabled: prisonNumber.disabled
+      },
+      {
+        value: "deliusId",
+        text: content.pages.identityNumbers.questions.deliusId.text,
+        conditional: {
+          html: deliusIdHtml
+        },
+        checked: deliusId.value,
+        disabled: deliusId.disabled
+      },
+      {
+        value: "ceprId",
+        text: content.pages.identityNumbers.questions.ceprId.text,
+        conditional: {
+          html: ceprIdHtml
+        },
+        checked: ceprId.value,
+        disabled: ceprId.disabled
+      },
+      {
+        value: "ccrnId",
+        text: content.pages.identityNumbers.questions.ccrnId.text,
+        conditional: {
+          html: ccrnIdHtml
+        },
+        checked: ccrnId.value,
+        disabled: ccrnId.disabled
+      }
+    ]
   }) }}
 
 {% endblock %}
