@@ -36,12 +36,12 @@ export default class HaveCourtOrderController {
     } else if (formData.action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     } else {
-      res.redirect(
-        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-          'court_order',
-        ),
-      )
+      if (!order.orderParameters) {
+        order.orderParameters = { havePhoto: null }
+      }
+      order.orderParameters.haveCourtOrder = formData.fileRequired === 'yes'
+      const nextPage = this.taskListService.getNextPage('ATTACHMENTS_HAVE_COURT_ORDER', order)
+      res.redirect(nextPage)
     }
   }
 }

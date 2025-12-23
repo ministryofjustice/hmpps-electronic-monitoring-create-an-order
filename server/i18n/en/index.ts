@@ -33,6 +33,8 @@ import havePhotoPageContent from './pages/havePhoto'
 import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
 import haveCourtOrderPageContent from './pages/haveCourtOrder'
+import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
+import uploadGrantOfBailPageContent from './pages/uploadGrantOfBail'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -61,6 +63,8 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       trailMonitoring: trailMonitoringPageContent,
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
+      uploadCourtOrder: uploadCourtOrderPageContent,
+      uploadGrantOfBail: uploadGrantOfBailPageContent,
       havePhoto: havePhotoPageContent,
       haveCourtOrder: haveCourtOrderPageContent,
       variationDetails: variationDetailsPageContent,

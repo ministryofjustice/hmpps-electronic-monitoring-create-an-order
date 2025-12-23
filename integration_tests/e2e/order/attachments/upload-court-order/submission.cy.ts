@@ -1,19 +1,23 @@
 import { v4 as uuidv4 } from 'uuid'
+
 import Page from '../../../../pages/page'
-import CourtOrderDocumentPage from './courtOrderDocumentPage'
+
+import UploadPhotoIdPage from '../../../../pages/order/attachments/uploadPhotoId'
+import UploadCourtOrderPage from './uploadCourtOrderPage'
 
 const mockOrderId = uuidv4()
+const fileContent = 'This is an image'
+
 context('Attachments', () => {
-  context('Have Court Order', () => {
-    context('when viewing a draft order', () => {
+  context('Upload court order', () => {
+    context('Submitting a valid file', () => {
       beforeEach(() => {
-        // cy.task('reset')
+        cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         cy.task('stubCemoListOrders')
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
-          status: 'IN_PROGRESS',
           order: {
             interestedParties: {
               notifyingOrganisation: 'FAMILY_COURT',
@@ -36,24 +40,34 @@ context('Attachments', () => {
             },
           },
         })
+        cy.task('stubUploadAttachment', { httpStatus: 200, id: mockOrderId, type: 'COURT_ORDER' })
         cy.signIn()
       })
 
-      it('should render the have court order page', () => {
-        const page = Page.visit(CourtOrderDocumentPage, { orderId: mockOrderId })
+      it('Should allow the user to upload a court order', () => {
+        const page = Page.visit(UploadCourtOrderPage, { orderId: mockOrderId })
 
-        page.header.userName().should('contain.text', 'J. Smith')
-        page.header.phaseBanner().should('contain.text', 'dev')
+        page.form.fillInWith({
+          file: {
+            fileName: 'profile.jpeg',
+            contents: fileContent,
+          },
+        })
+        page.form.saveAndContinueButton.click()
 
-        page.form.haveCourtOrderField.shouldNotBeDisabled()
-        page.form.haveCourtOrderField.element.contains('Do you have a court order document to upload?')
-        page.form.haveCourtOrderField.shouldHaveOption('Yes')
-        page.form.haveCourtOrderField.shouldHaveOption('No')
+        Page.verifyOnPage(UploadPhotoIdPage)
 
-        page.form.saveAndContinueButton.should('exist')
-        page.form.saveAsDraftButton.should('exist')
-
-        page.checkIsAccessible()
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/document-type/COURT_ORDER`,
+          fileContents: [
+            {
+              name: 'file',
+              filename: 'profile.jpeg',
+              contentType: 'image/jpeg',
+              contents: fileContent,
+            },
+          ],
+        }).should('be.true')
       })
     })
   })

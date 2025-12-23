@@ -58,6 +58,8 @@ type I18n = {
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
+    uploadCourtOrder: UploadDocumentPageContent
+    uploadGrantOfBail: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
     serviceRequestType: ServiceRequestTypePageContent
