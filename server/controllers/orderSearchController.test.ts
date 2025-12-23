@@ -204,7 +204,7 @@ describe('OrderSearchController', () => {
               name: 'first last',
               href: `/order/${mockSubmittedOrder.id}/summary`,
               dob: '20/11/2000',
-              pins: ['nomisId', 'pncId', 'deliusId', 'hoRefNum', 'prisNum'],
+              pins: ['nomisId', 'pncId', 'deliusId', 'ceprId', 'ccrnId', 'prisNum'],
               location: 'Glossop',
               startDate: '20/11/2000',
               endDate: '20/11/2000',

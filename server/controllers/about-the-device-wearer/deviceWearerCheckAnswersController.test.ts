@@ -616,7 +616,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Compliance and Enforcement Person Reference (CEPR)',
           },
           value: {
-            text: '',
+            text: 'cepr',
           },
           actions: {
             items: [
@@ -633,7 +633,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Court Case Reference Number (CCRN)',
           },
           value: {
-            text: '',
+            text: 'ccrn',
           },
           actions: {
             items: [
@@ -908,7 +908,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Compliance and Enforcement Person Reference (CEPR)',
           },
           value: {
-            text: '',
+            text: 'cepr',
           },
           actions: {
             items: [
@@ -925,7 +925,7 @@ describe('DeviceWearerCheckAnswersController', () => {
             text: 'Court Case Reference Number (CCRN)',
           },
           value: {
-            text: '',
+            text: 'ccrn',
           },
           actions: {
             items: [

@@ -84,8 +84,8 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: 
       answerOpts,
     ),
     createAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri, answerOpts),
-    createAnswer(content.pages.identityNumbers.questions.ceprId.text, order.deviceWearer.ccrnId, uri, answerOpts),
-    createAnswer(content.pages.identityNumbers.questions.ccrnId.text, order.deviceWearer.ceprId, uri, answerOpts),
+    createAnswer(content.pages.identityNumbers.questions.ceprId.text, order.deviceWearer.ceprId, uri, answerOpts),
+    createAnswer(content.pages.identityNumbers.questions.ccrnId.text, order.deviceWearer.ccrnId, uri, answerOpts),
   ]
 }
 
