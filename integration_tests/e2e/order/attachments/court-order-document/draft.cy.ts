@@ -20,10 +20,10 @@ context('Attachments', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        page.form.havePhotoField.shouldNotBeDisabled()
-        page.form.havePhotoField.element.contains('Do you have a court order document to upload?')
-        page.form.havePhotoField.shouldHaveOption('Yes')
-        page.form.havePhotoField.shouldHaveOption('No')
+        page.form.haveCourtOrderField.shouldNotBeDisabled()
+        page.form.haveCourtOrderField.element.contains('Do you have a court order document to upload?')
+        page.form.haveCourtOrderField.shouldHaveOption('Yes')
+        page.form.haveCourtOrderField.shouldHaveOption('No')
 
         page.form.saveAndContinueButton.should('exist')
         page.form.saveAsDraftButton.should('exist')

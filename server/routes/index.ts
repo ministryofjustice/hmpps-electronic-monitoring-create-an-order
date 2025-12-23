@@ -383,6 +383,12 @@ export default function routes({
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
   router.use(paths.INSTALLATION_AND_RISK.BASE_URL, createInstallationAndRiskRouter())
-  router.use(paths.ATTACHMENT.ATTACHMENTS, createAttachmentRouter())
+  router.use(
+    paths.ATTACHMENT.ATTACHMENTS,
+    createAttachmentRouter({
+      attachmentService,
+      taskListService,
+    }),
+  )
   return router
 }

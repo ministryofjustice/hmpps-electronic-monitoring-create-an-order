@@ -1,12 +1,14 @@
 import { Readable } from 'stream'
+import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
 import { SanitisedError } from '../sanitisedError'
 import Result from '../interfaces/result'
 import { validationErrors } from '../constants/validationErrors'
-import { convertBackendErrorToValidationError } from '../utils/errors'
+import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../utils/errors'
 import { HavePhotoFormData } from '../models/view-models/havePhoto'
+import { FileRequiredFormData, FileRequiredFormDataValidator } from '../routes/attachments/fileRequiredFormModel'
 
 type AttachmentRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -18,6 +20,12 @@ type UploadAttachmentRequestInput = AttachmentRequestInput & {
 type AttachmentHavePhotoInput = AuthenticatedRequestInput & {
   orderId: string
   data: HavePhotoFormData
+}
+
+type FileRequiredFormInput = AuthenticatedRequestInput & {
+  orderId: string
+  fileType: string
+  data: FileRequiredFormData
 }
 
 export default class AttachmentService {
@@ -93,6 +101,28 @@ export default class AttachmentService {
       })
       return result
     } catch (e) {
+      const sanitisedError = e as SanitisedError
+      if (sanitisedError.status === 400) {
+        return convertBackendErrorToValidationError(sanitisedError)
+      }
+
+      throw e
+    }
+  }
+
+  async updateFileRequired(input: FileRequiredFormInput) {
+    try {
+      const requestBody = FileRequiredFormDataValidator.parse(input.data)
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/attachments/${input.fileType}`,
+        data: requestBody,
+        token: input.accessToken,
+      })
+      return result
+    } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
         return convertBackendErrorToValidationError(sanitisedError)
