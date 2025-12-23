@@ -48,7 +48,8 @@ context('The kitchen sink', () => {
   context('Fill in everything ', () => {
     const currentDate = new Date()
     const deviceWearerDetails = {
-      ...createFakeAdultDeviceWearer(),
+      // figure out how to pass ID options properly line below might not work
+      ...createFakeAdultDeviceWearer('PNC'),
       disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
       otherDisability: null,
       interpreterRequired: false,

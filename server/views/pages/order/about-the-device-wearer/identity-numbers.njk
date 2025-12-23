@@ -1,12 +1,15 @@
 {% extends "../../../partials/form-layout.njk" %}
+
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set section = content.pages.identityNumbers.section %}
 {% set singleQuestionPage = true %}
+{% set isIdentityPage = true %}
 {% set questions = content.pages.identityNumbers.questions %}
 {% set questionName = "Identity numbers"%}
 
+{% block formInputs %}
   {% set pncIdHtml %}
   {{ govukInput({
     label: {
@@ -97,7 +100,6 @@
   }) }}
   {% endset %}
 
-{% block formInputs %}
   {{ govukCheckboxes({
     name: "identityNumbers",
     fieldset: {

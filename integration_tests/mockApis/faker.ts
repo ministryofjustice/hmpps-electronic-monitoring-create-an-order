@@ -275,17 +275,19 @@ export const createFakeAdult = (firstName?: string): PersonOfInterest => {
   } as PersonOfInterest
 }
 
-export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInterest => {
+export const createFakeAdultDeviceWearer = (personalId?: string, firstName?: string): PersonOfInterest => {
+  // check to see if we need personalId or personalIdName or both
   const fakeAdult = createFakeAdult(firstName)
   const nomisId = faker.helpers.replaceSymbols('?####??')
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  // IMPORTANT: check format of ceprId and ccrnId as not sure
+  // IMPORTANT: check format of ceprId and ccrnId as not sure i.e. each ID has specific format
   const ceprId = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
   const ccrnId = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
+    personalId,
     nomisId,
     pncId,
     deliusId,

@@ -90,7 +90,7 @@
                 name: "action",
                 value: "returnToSummary"
               }) }}
-	        {% elseif singleQuestionPage %}
+	        {% elseif singleQuestionPage and not isIdentityPage %}
             {{ govukButton({
                 text: "Continue",
                 name: "action",

@@ -3,6 +3,8 @@ import FormInputComponent from '../../formInputComponent'
 import FormSelectComponent from '../../formSelectComponent'
 
 export type IdentityNumbersFormData = {
+  personalId?: string
+  // check this addition to see if it makes sense (personalId)
   pncId?: string
   nomisId?: string
   prisonNumber?: string
@@ -16,6 +18,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
 
   get personalIdField(): FormSelectComponent {
     const label = 'Select and enter all identity numbers that you have for the device wearer.'
+    // need to figure out how to look for a hint rather than label here
     return new FormSelectComponent(this.form, label, [
       'Police National Computer (PNC)',
       'National Offender Management Information System (NOMIS)',
@@ -27,38 +30,42 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   get pncIdField(): FormInputComponent {
-    const label = 'Enter PNC'
+    const label = 'Police National Computer (PNC)'
     return new FormInputComponent(this.form, label)
   }
 
   get nomisIdField(): FormInputComponent {
-    const label = 'Enter NOMIS'
+    const label = 'National Offender Management Information System (NOMIS)'
     return new FormInputComponent(this.form, label)
   }
 
   get prisonNumberField(): FormInputComponent {
-    const label = 'Enter prison number'
+    const label = 'Prison number'
     return new FormInputComponent(this.form, label)
   }
 
   get deliusIdField(): FormInputComponent {
-    const label = 'Enter NDelius ID'
+    const label = 'NDelius ID'
     return new FormInputComponent(this.form, label)
   }
 
   get ceprIdField(): FormInputComponent {
-    const label = 'Enter CEPR'
+    const label = 'Compliance and Enforcement Person Reference (CEPR)'
     return new FormInputComponent(this.form, label)
   }
 
   get ccrnIdField(): FormInputComponent {
-    const label = 'Enter CCRN'
+    const label = 'Court Case Reference Number (CCRN)'
     return new FormInputComponent(this.form, label)
   }
 
   // FORM HELPERS
 
-  fillInWith = (profile: IdentityNumbersFormData): undefined => {
+  fillInWith = (profile: IdentityNumbersFormData): void => {
+    if (profile.personalId) {
+      this.personalIdField.set(profile.personalId)
+    }
+
     if (profile.pncId) {
       this.pncIdField.set(profile.pncId)
     }
@@ -85,6 +92,8 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   shouldBeValid(): void {
+    this.personalIdField.shouldNotHaveValidationMessage()
+    this.pncIdField.shouldNotHaveValidationMessage()
     this.pncIdField.shouldNotHaveValidationMessage()
     this.nomisIdField.shouldNotHaveValidationMessage()
     this.prisonNumberField.shouldNotHaveValidationMessage()
@@ -94,6 +103,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   shouldBeDisabled(): void {
+    this.personalIdField.shouldBeDisabled()
     this.pncIdField.shouldBeDisabled()
     this.nomisIdField.shouldBeDisabled()
     this.prisonNumberField.shouldBeDisabled()
@@ -103,6 +113,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   shouldNotBeDisabled(): void {
+    this.personalIdField.shouldNotBeDisabled()
     this.pncIdField.shouldNotBeDisabled()
     this.nomisIdField.shouldNotBeDisabled()
     this.prisonNumberField.shouldNotBeDisabled()
