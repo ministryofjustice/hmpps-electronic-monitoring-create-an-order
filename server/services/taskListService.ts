@@ -510,7 +510,7 @@ export default class TaskListService {
         name: PAGES.haveGrantOfBail,
         path: paths.ATTACHMENT.HAVE_GRANT_OF_BAIL,
         state: STATES.required,
-        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
+        completed: isNotNullOrUndefined(order.orderParameters?.haveGrantOfBail),
       })
 
       tasks.push({
@@ -518,11 +518,12 @@ export default class TaskListService {
         name: PAGES.grantOfBailUpload,
         path: paths.ATTACHMENT.FILE_VIEW.replace(
           ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-          'court_order',
+          'grant_of_bail',
         ),
         state: STATES.required,
         completed:
-          doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) || order.orderParameters?.haveCourtOrder === false,
+          doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) ||
+          order.orderParameters?.haveGrantOfBail === false,
       })
     } else if (
       isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&

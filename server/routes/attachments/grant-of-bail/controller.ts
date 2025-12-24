@@ -7,7 +7,7 @@ import TaskListService, { PAGES } from '../../../services/taskListService'
 import contructModel from './viewModel'
 import AttachmentType from '../../../models/AttachmentType'
 
-export default class HaveCourtOrderController {
+export default class HaveGrantOfBailController {
   constructor(
     private readonly attachmentService: AttachmentService,
     private readonly taskListService: TaskListService,
@@ -27,13 +27,13 @@ export default class HaveCourtOrderController {
     const result = await this.attachmentService.updateFileRequired({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      fileType: AttachmentType.COURT_ORDER,
+      fileType: AttachmentType.GRANT_OF_BAIL,
       data: formData,
     })
     if (isValidationResult(result)) {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
-      res.redirect(paths.ATTACHMENT.HAVE_COURT_ORDER.replace(':orderId', order.id))
+      res.redirect(paths.ATTACHMENT.HAVE_GRANT_OF_BAIL.replace(':orderId', order.id))
     } else if (formData.action === 'back') {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     } else {
@@ -41,7 +41,7 @@ export default class HaveCourtOrderController {
         order.orderParameters = {}
       }
       order.orderParameters.haveCourtOrder = formData.fileRequired === 'yes'
-      const nextPage = this.taskListService.getNextPage(PAGES.haveCourtOrder, order)
+      const nextPage = this.taskListService.getNextPage(PAGES.haveGrantOfBail, order)
       res.redirect(nextPage)
     }
   }

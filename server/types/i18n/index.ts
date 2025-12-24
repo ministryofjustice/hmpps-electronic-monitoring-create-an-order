@@ -26,6 +26,7 @@ import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
 import HaveCourtOrderPageContent from './pages/haveCourtOrder'
+import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
 
 type I18n = {
   pages: {
@@ -42,6 +43,7 @@ type I18n = {
     exclusionZone: ExclusionZonePageContent
     havePhoto: HavePhotoPageContent
     haveCourtOrder: HaveCourtOrderPageContent
+    haveGrantOfBail: HaveGrantOfBailPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent

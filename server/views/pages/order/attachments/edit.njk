@@ -11,11 +11,11 @@
 
   {% set pageContent = content.pages.uploadLicense %}
 
-{% elif (fileType) == "court order" %}
+{% elif (fileType) == "court_order" %}
 
   {% set pageContent = content.pages.uploadCourtOrder %}
 
-{% elif (fileType) == "grant of bail" %}
+{% elif (fileType) === "grant_of_bail" %}
 
   {% set pageContent = content.pages.uploadGrantOfBail %}
 {% else %}

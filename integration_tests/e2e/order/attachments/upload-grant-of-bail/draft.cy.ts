@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 import Page from '../../../../pages/page'
-import UploadCourtOrderPage from './uploadCourtOrderPage'
+import UploadGrantOfBailPage from './uploadGrantOfBailPage'
 
 const mockOrderId = uuidv4()
 
@@ -17,8 +17,8 @@ context('Attachments', () => {
         cy.signIn()
       })
 
-      it('Should render the upload court order page', () => {
-        const page = Page.visit(UploadCourtOrderPage, { orderId: mockOrderId })
+      it('Should render the upload grant of bail page', () => {
+        const page = Page.visit(UploadGrantOfBailPage, { orderId: mockOrderId })
 
         // Header
         page.header.userName().should('contain.text', 'J. Smith')
@@ -27,9 +27,9 @@ context('Attachments', () => {
         // Form
         page.form.shouldHaveEncType('multipart/form-data')
         page.form.shouldNotBeDisabled()
-        page.form.uploadField.shouldHaveLabel('Upload a copy of the licence or court order document')
+        page.form.uploadField.shouldHaveLabel('Upload a copy of the Grant of Bail document')
         page.form.uploadField.shouldHaveHint(
-          'Upload a scanned copy or photo of the original licence or court order document. If the licence is draft upload a copy of that. You will be able to change the order once you have the final version of the licence. The file must be a PDF or Word document and under 25MB in size.',
+          'Upload a scanned copy or photo of the Grant of Bail document. The file must be a PDF and under 10MB in size. For Secretary of state immigration bail cases you do not need to upload a document.',
         )
 
         // Buttons

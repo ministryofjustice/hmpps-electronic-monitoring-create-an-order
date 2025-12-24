@@ -35,6 +35,7 @@ import serviceRequestTypePageContent from './pages/serviceRequestType'
 import haveCourtOrderPageContent from './pages/haveCourtOrder'
 import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
 import uploadGrantOfBailPageContent from './pages/uploadGrantOfBail'
+import haveGrantOfBailPageContent from './pages/haveGrantOfBail'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -67,6 +68,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadGrantOfBail: uploadGrantOfBailPageContent,
       havePhoto: havePhotoPageContent,
       haveCourtOrder: haveCourtOrderPageContent,
+      haveGrantOfBail: haveGrantOfBailPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       installationLocation: installationLocationPageContent,

@@ -30,7 +30,7 @@ export default class AttachmentsController {
     if (error.userMessage != null) {
       res.render(`pages/order/attachments/edit`, {
         orderId,
-        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
+        fileType: fileType.toLocaleLowerCase(),
         error: { text: error.userMessage },
       })
     } else {
@@ -61,12 +61,13 @@ export default class AttachmentsController {
   uploadFileView: RequestHandler = async (req: Request, res: Response) => {
     const { fileType } = req.params
     const order = req.order!
+
     if (order.status === 'SUBMITTED') {
       res.redirect(`/order/${order.id}/attachments`)
     } else {
       res.render(`pages/order/attachments/edit`, {
         orderId: order.id,
-        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
+        fileType: fileType.toLocaleLowerCase(),
       })
     }
   }
