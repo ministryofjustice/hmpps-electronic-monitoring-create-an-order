@@ -1,0 +1,38 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = 'Additional documents' %}
+
+{% set questionName = title%}
+{% block formInputs %}
+
+  {{ govukRadios({
+  classes: "govuk-radios--inline",
+  name: "fileRequired",
+  errorMessage: fileRequired.error,
+  value: fileRequired.value,
+  fieldset: {
+    legend: {
+      text: question.text,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: question.hint
+  },
+  items: [
+    {
+      value: "yes",
+      text: "Yes",
+      disabled: not isOrderEditable
+    },
+    {
+      value: "no",
+      text: "No",
+      disabled: not isOrderEditable
+    }
+  ]
+}) }}
+
+{% endblock %}

@@ -2,7 +2,7 @@ import { Request, RequestHandler, Response } from 'express'
 import { AttachmentService, AuditService, OrderService } from '../../services'
 import AttachmentType from '../../models/AttachmentType'
 import paths from '../../constants/paths'
-import TaskListService from '../../services/taskListService'
+import TaskListService, { PAGES, Page } from '../../services/taskListService'
 import { formatDateTime } from '../../utils/utils'
 import createViewModel from '../../models/view-models/additionalDocumentsCheckAnswers'
 import OrderChecklistService from '../../services/orderChecklistService'
@@ -30,11 +30,11 @@ export default class AttachmentsController {
     if (error.userMessage != null) {
       res.render(`pages/order/attachments/edit`, {
         orderId,
-        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
+        fileType: fileType.toLocaleLowerCase(),
         error: { text: error.userMessage },
       })
     } else {
-      const currentPage = fileType.toUpperCase() === AttachmentType.LICENCE ? 'LICENCE_ATTACHMENT' : 'PHOTO_ATTACHMENT'
+      const currentPage = this.getCurrentPage(fileType.toUpperCase() as AttachmentType)
       res.redirect(this.taskListService.getNextPage(currentPage, req.order!))
       this.auditService.logAuditEvent({
         who: res.locals.user.username,
@@ -44,15 +44,30 @@ export default class AttachmentsController {
     }
   }
 
+  getCurrentPage = (attachmentType: AttachmentType): Page => {
+    switch (attachmentType) {
+      case AttachmentType.COURT_ORDER:
+        return PAGES.courtOrderUpload
+      case AttachmentType.GRANT_OF_BAIL:
+        return PAGES.grantOfBailUpload
+      case AttachmentType.LICENCE:
+        return PAGES.licenceUpload
+      case AttachmentType.PHOTO_ID:
+      default:
+        return PAGES.photoUpload
+    }
+  }
+
   uploadFileView: RequestHandler = async (req: Request, res: Response) => {
     const { fileType } = req.params
     const order = req.order!
+
     if (order.status === 'SUBMITTED') {
       res.redirect(`/order/${order.id}/attachments`)
     } else {
       res.render(`pages/order/attachments/edit`, {
         orderId: order.id,
-        fileType: fileType.toLocaleLowerCase().replace('_', ' '),
+        fileType: fileType.toLocaleLowerCase(),
       })
     }
   }
