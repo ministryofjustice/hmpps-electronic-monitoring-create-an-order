@@ -783,7 +783,7 @@ describe('TaskListService', () => {
         deviceWearerResponsibleAdult: createResponsibleAdult(),
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
-        interestedParties: createInterestedParties(),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
@@ -858,7 +858,7 @@ describe('TaskListService', () => {
         deviceWearerResponsibleAdult: createResponsibleAdult(),
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
-        interestedParties: createInterestedParties(),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
