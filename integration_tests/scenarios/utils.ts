@@ -28,7 +28,7 @@ export const formatAsFmsPhoneNumber = (phoneNumber: string) => {
   return `${prefix}${countryCode}${nationalSignificantNumber}`
 }
 
-export function stubAttachments(
+export function stubPdfAttachments(
   files: {
     licence: { fileName: string; contents: string }
   },

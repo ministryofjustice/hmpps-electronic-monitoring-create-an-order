@@ -5,7 +5,7 @@ import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 import UploadPhotoIdPage from '../../../pages/order/attachments/uploadPhotoId'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/fileRequired'
+const apiPath = '/attachments/file-required'
 
 context('Attachments', () => {
   context('Have photo', () => {
@@ -33,7 +33,7 @@ context('Attachments', () => {
         Page.verifyOnPage(UploadPhotoIdPage)
 
         cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}/attachments/fileRequired`,
+          uri: `/orders/${mockOrderId}/attachments/file-required`,
           body: {
             fileType: 'PHOTO_ID',
             fileRequired: true,

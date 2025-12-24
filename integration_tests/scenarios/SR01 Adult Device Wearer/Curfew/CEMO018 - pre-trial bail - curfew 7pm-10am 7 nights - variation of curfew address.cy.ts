@@ -6,7 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
@@ -67,7 +67,7 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
+    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
   context(
@@ -352,7 +352,7 @@ context('Scenarios', () => {
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
-                subcategory: 'SR08 - Amend monitoring requirements',
+                subcategory: 'SR08-Amend monitoring requirements',
                 dapol_missed_in_error: '',
               },
             })

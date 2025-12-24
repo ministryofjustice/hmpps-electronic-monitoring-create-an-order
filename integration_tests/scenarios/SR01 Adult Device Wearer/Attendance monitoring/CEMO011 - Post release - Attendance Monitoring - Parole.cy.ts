@@ -5,7 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
 context('Scenarios', () => {
@@ -45,7 +45,7 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context('Adult mandatory attendance', () => {

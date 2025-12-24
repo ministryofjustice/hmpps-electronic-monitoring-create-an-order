@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
-import CourtOrderDocumentPage from './courtOrderDocumentPage'
+import HaveCourtOrderPage from './courtOrderDocumentPage'
 
 const mockOrderId = uuidv4()
 
@@ -46,7 +46,7 @@ context('order type', () => {
   })
 
   it('Should show errors no answer selected', () => {
-    const page = Page.visit(CourtOrderDocumentPage, { orderId: mockOrderId })
+    const page = Page.visit(HaveCourtOrderPage, { orderId: mockOrderId })
 
     page.header.userName().should('contain.text', 'J. Smith')
     page.header.phaseBanner().should('contain.text', 'dev')

@@ -113,7 +113,7 @@ export default class AttachmentService {
     try {
       const requestBody = FileRequiredFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/attachments/fileRequired`,
+        path: `/api/orders/${input.orderId}/attachments/file-required`,
         data: requestBody,
         token: input.accessToken,
       })

@@ -5,7 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 import { createAddressPreview } from '../../../../server/utils/utils'
 
@@ -46,7 +46,7 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context(

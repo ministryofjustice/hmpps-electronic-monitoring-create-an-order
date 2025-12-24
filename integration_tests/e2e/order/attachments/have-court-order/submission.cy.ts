@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
-import CourtOrderDocumentPage from './courtOrderDocumentPage'
+import HaveCourtOrderPage from './courtOrderDocumentPage'
 import UploadCourtOrderPage from '../upload-court-order/uploadCourtOrderPage'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/fileRequired'
+const apiPath = '/attachments/file-required'
 context('order type', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -44,13 +44,13 @@ context('order type', () => {
   })
 
   it('Should continue to upload court order page', () => {
-    const page = Page.visit(CourtOrderDocumentPage, { orderId: mockOrderId })
+    const page = Page.visit(HaveCourtOrderPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
     page.form.saveAndContinueButton.click()
 
     cy.task('stubCemoVerifyRequestReceived', {
-      uri: `/orders/${mockOrderId}/attachments/fileRequired`,
+      uri: `/orders/${mockOrderId}/attachments/file-required`,
       body: {
         fileType: 'COURT_ORDER',
         fileRequired: true,

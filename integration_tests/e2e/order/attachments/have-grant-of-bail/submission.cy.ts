@@ -4,7 +4,7 @@ import HaveGrantOfBailPage from './haveGrantOfBailPage'
 import UploadGrantOfBailPage from '../upload-grant-of-bail/uploadGrantOfBailPage'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/fileRequired'
+const apiPath = '/attachments/file-required'
 context('order type', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -50,7 +50,7 @@ context('order type', () => {
     page.form.saveAndContinueButton.click()
 
     cy.task('stubCemoVerifyRequestReceived', {
-      uri: `/orders/${mockOrderId}/attachments/fileRequired`,
+      uri: `/orders/${mockOrderId}/attachments/file-required`,
       body: {
         fileType: 'GRANT_OF_BAIL',
         fileRequired: true,

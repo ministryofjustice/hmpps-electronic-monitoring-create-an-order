@@ -3,7 +3,7 @@ import Page from '../../../pages/page'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/fileRequired'
+const apiPath = '/attachments/file-required'
 
 context('Attachments - have photo', () => {
   context('Submitting an invalid request', () => {
