@@ -43,12 +43,19 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should continue to pilot page', () => {
+  it('Should continue to upload court order page', () => {
     const page = Page.visit(CourtOrderDocumentPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
     page.form.saveAndContinueButton.click()
 
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}/attachments/fileRequired`,
+      body: {
+        fileType: 'COURT_ORDER',
+        fileRequired: true,
+      },
+    }).should('be.true')
     Page.verifyOnPage(UploadCourtOrderPage)
   })
 })

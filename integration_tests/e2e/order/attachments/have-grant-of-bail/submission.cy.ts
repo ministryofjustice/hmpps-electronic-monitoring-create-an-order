@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import HaveGrantOfBailPage from './haveGrantOfBailPage'
-import UploadCourtOrderPage from '../upload-court-order/uploadCourtOrderPage'
+import UploadGrantOfBailPage from '../upload-grant-of-bail/uploadGrantOfBailPage'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/GRANT_OF_BAIL'
+const apiPath = '/attachments/fileRequired'
 context('order type', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -43,12 +43,19 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should continue to pilot page', () => {
+  it('Should continue to upload grant of bail page', () => {
     const page = Page.visit(HaveGrantOfBailPage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
     page.form.saveAndContinueButton.click()
 
-    Page.verifyOnPage(UploadCourtOrderPage)
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}/attachments/fileRequired`,
+      body: {
+        fileType: 'GRANT_OF_BAIL',
+        fileRequired: true,
+      },
+    }).should('be.true')
+    Page.verifyOnPage(UploadGrantOfBailPage)
   })
 })

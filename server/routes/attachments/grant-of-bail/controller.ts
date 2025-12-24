@@ -23,11 +23,10 @@ export default class HaveGrantOfBailController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const formData = FileRequiredFormDataModel.parse(req.body)
-
+    formData.fileType = AttachmentType.GRANT_OF_BAIL
     const result = await this.attachmentService.updateFileRequired({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      fileType: AttachmentType.GRANT_OF_BAIL,
       data: formData,
     })
     if (isValidationResult(result)) {

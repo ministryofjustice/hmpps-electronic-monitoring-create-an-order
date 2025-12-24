@@ -24,7 +24,6 @@ type AttachmentHavePhotoInput = AuthenticatedRequestInput & {
 
 type FileRequiredFormInput = AuthenticatedRequestInput & {
   orderId: string
-  fileType: string
   data: FileRequiredFormData
 }
 
@@ -114,7 +113,7 @@ export default class AttachmentService {
     try {
       const requestBody = FileRequiredFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/attachments/${input.fileType}`,
+        path: `/api/orders/${input.orderId}/attachments/fileRequired`,
         data: requestBody,
         token: input.accessToken,
       })

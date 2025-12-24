@@ -23,11 +23,10 @@ export default class HaveCourtOrderController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const formData = FileRequiredFormDataModel.parse(req.body)
-
+    formData.fileType = AttachmentType.COURT_ORDER
     const result = await this.attachmentService.updateFileRequired({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      fileType: AttachmentType.COURT_ORDER,
       data: formData,
     })
     if (isValidationResult(result)) {
