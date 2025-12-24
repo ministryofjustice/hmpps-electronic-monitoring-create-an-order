@@ -3,7 +3,7 @@ import Page from '../../../pages/page'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/have-photo'
+const apiPath = '/attachments/fileRequired'
 
 context('Attachments - have photo', () => {
   context('Submitting an invalid request', () => {
@@ -24,13 +24,25 @@ context('Attachments - have photo', () => {
           httpStatus: 400,
           id: mockOrderId,
           subPath: apiPath,
-          response: [{ field: 'havePhoto', error: expectedValidationErrorMessage }],
+          response: [{ field: 'fileRequired', error: expectedValidationErrorMessage }],
         })
+      })
+
+      it('Should show errors no answer selected', () => {
+        const page = Page.visit(HavePhotoPage, { orderId: mockOrderId })
+
+        page.header.userName().should('contain.text', 'J. Smith')
+        page.header.phaseBanner().should('contain.text', 'dev')
+
+        page.form.saveAndContinueButton.click()
+
+        page.errorSummary.shouldExist()
+        page.form.havePhotoField.validationMessage.contains('Select Yes if you have a document to upload')
       })
 
       it('Should display validation error messages', () => {
         const page = Page.visit(HavePhotoPage, { orderId: mockOrderId })
-
+        page.form.havePhotoField.set('Yes')
         page.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(HavePhotoPage)

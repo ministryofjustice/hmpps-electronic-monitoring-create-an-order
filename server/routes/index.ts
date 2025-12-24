@@ -33,7 +33,6 @@ import VariationDetailsController from '../controllers/variation/variationDetail
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
-import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
@@ -91,11 +90,6 @@ export default function routes({
     attachmentService,
     taskListService,
     orderChecklistService,
-  )
-  const attachmentsHavePhotoController = new AttachmentHavePhotoController(
-    attachmentService,
-    taskListService,
-    orderService,
   )
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
@@ -356,8 +350,6 @@ export default function routes({
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
-  get(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.view)
-  post(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.update)
 
   /**
    * VARIATIONS
