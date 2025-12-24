@@ -29,7 +29,7 @@ import ProbationDeliveryUnitPage from '../pages/order/contact-information/probat
 import CurfewAdditionalDetailsPage from '../pages/order/monitoring-conditions/curfew-additional-details'
 import UploadLicencePage from '../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../pages/order/attachments/havePhoto'
-import { stubPdfAttachments } from './utils'
+import { stubAttachments } from './utils'
 import SearchPage from '../pages/search'
 import SentenceTypePage from '../e2e/order/monitoring-conditions/order-type-description/sentence-type/SentenceTypePage'
 import HdcPage from '../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
@@ -69,7 +69,7 @@ context('The kitchen sink', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context('Fill in everything "including the kitchen sink" and screenshot', () => {

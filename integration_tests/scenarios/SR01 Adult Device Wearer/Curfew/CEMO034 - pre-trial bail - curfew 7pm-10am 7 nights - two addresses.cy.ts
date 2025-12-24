@@ -5,7 +5,7 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
 // test skipped as Bail is not currently a valid sentence type
@@ -47,7 +47,7 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId, true)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am at two addresses', () => {

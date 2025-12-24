@@ -3,7 +3,7 @@ import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
-import { stubPdfAttachments } from '../../utils'
+import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import SearchPage from '../../../pages/search'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
@@ -191,7 +191,7 @@ context('Service-Request-Types', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId, true)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
 
     cy.signIn()
 

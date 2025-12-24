@@ -12,7 +12,7 @@ import {
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
 context('Scenarios', () => {
@@ -69,7 +69,7 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId, true)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
   context('Single exclusion zone ', () => {

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
-import { stubPdfAttachments } from '../../utils'
+import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages'
@@ -37,7 +37,7 @@ context('Service-Request-Types', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId, true)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
 
     cy.signIn()
   })

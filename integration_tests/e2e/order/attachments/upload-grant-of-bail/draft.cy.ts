@@ -6,7 +6,7 @@ import UploadGrantOfBailPage from './uploadGrantOfBailPage'
 const mockOrderId = uuidv4()
 
 context('Attachments', () => {
-  context('Upload court order document', () => {
+  context('Upload grant of bail document', () => {
     context('Viewing a draft order', () => {
       beforeEach(() => {
         cy.task('reset')

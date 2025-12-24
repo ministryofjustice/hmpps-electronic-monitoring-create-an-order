@@ -4,7 +4,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import Page from '../pages/page'
 import IndexPage from '../pages/index'
 import OrderSummaryPage from '../pages/order/summary'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubPdfAttachments } from './utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from './utils'
 
 context('The kitchen sink', () => {
   const fmsCaseId: string = uuidv4()
@@ -42,7 +42,7 @@ context('The kitchen sink', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context('Fill in everything ', () => {

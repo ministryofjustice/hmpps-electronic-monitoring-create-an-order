@@ -6,7 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createKnownAddress } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
-import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
+import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
@@ -66,7 +66,7 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId, true)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
   context(

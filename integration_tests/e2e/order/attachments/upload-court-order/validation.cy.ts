@@ -18,7 +18,7 @@ context('Attachments', () => {
         cy.signIn()
       })
 
-      it('Should show an error if the api rejects the photo id', () => {
+      it('Should show an error if the api rejects the court order', () => {
         const page = Page.visit(UploadCourtOrderPage, { orderId: mockOrderId })
 
         page.form.fillInWith({

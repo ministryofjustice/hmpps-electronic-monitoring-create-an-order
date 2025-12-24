@@ -10,7 +10,7 @@ import {
   createKnownAddress,
 } from '../../../mockApis/faker'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
-import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
+import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
 context('Scenarios', () => {
@@ -50,7 +50,7 @@ context('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context(

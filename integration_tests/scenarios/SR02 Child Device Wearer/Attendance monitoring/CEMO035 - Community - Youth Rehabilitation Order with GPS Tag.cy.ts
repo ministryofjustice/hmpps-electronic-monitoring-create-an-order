@@ -20,7 +20,7 @@ import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubPdfAttachments } from '../../utils'
+import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
@@ -69,7 +69,7 @@ context.skip('Scenarios', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    stubPdfAttachments(files, fmsCaseId, hmppsDocumentId)
+    stubAttachments(files, fmsCaseId, hmppsDocumentId)
   })
 
   context(

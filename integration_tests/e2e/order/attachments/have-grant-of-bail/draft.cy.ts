@@ -39,7 +39,7 @@ context('Attachments', () => {
         cy.signIn()
       })
 
-      it('should render the have court order page', () => {
+      it('should render the have grant of bail page', () => {
         const page = Page.visit(HaveGrantOfBailPage, { orderId: mockOrderId })
 
         page.header.userName().should('contain.text', 'J. Smith')

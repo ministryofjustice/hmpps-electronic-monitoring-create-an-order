@@ -9,7 +9,7 @@ const mockOrderId = uuidv4()
 const fileContent = 'This is an image'
 
 context('Attachments', () => {
-  context('Upload court order', () => {
+  context('Upload grant of bail', () => {
     context('Submitting a valid file', () => {
       beforeEach(() => {
         cy.task('reset')
@@ -44,7 +44,7 @@ context('Attachments', () => {
         cy.signIn()
       })
 
-      it('Should allow the user to upload a court order', () => {
+      it('Should allow the user to upload a grant of bail', () => {
         const page = Page.visit(UploadGrantOfBailPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
