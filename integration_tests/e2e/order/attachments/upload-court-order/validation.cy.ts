@@ -7,7 +7,7 @@ const mockOrderId = uuidv4()
 const fileContent = 'This is an image'
 
 context('Attachments', () => {
-  context('Upload photo id', () => {
+  context('Upload  court order', () => {
     context('Submitting an invalid file', () => {
       beforeEach(() => {
         cy.task('reset')
