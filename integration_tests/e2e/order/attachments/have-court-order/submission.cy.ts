@@ -4,7 +4,7 @@ import CourtOrderDocumentPage from './courtOrderDocumentPage'
 import UploadCourtOrderPage from '../upload-court-order/uploadCourtOrderPage'
 
 const mockOrderId = uuidv4()
-const apiPath = '/attachments/COURT_ORDER'
+const apiPath = '/attachments/fileRequired'
 context('order type', () => {
   beforeEach(() => {
     cy.task('reset')
