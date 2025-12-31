@@ -30,6 +30,10 @@ import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/
 import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendance-monitoring.cy'
 import Timeline from '../components/timeline'
+import HaveCourtOrderPage from '../../e2e/order/attachments/have-court-order/courtOrderDocumentPage'
+import UploadCourtOrderPage from '../../e2e/order/attachments/upload-court-order/uploadCourtOrderPage'
+import HaveGrantOfBailPage from '../../e2e/order/attachments/have-grant-of-bail/haveGrantOfBailPage'
+import UploadGrantOfBailPage from '../../e2e/order/attachments/upload-grant-of-bail/uploadGrantOfBailPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -618,11 +622,41 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInAttachmentDetailsWith({ files }): void {
-    const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
-    uploadLicencePage.form.fillInWith({
-      file: files.licence,
-    })
-    uploadLicencePage.form.saveAndContinueButton.click()
+    if (files.licence !== undefined) {
+      const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
+      uploadLicencePage.form.fillInWith({
+        file: files.licence,
+      })
+      uploadLicencePage.form.saveAndContinueButton.click()
+    }
+
+    if (files.courtOrder !== undefined) {
+      const haveCourtOrderPage = Page.verifyOnPage(HaveCourtOrderPage)
+      haveCourtOrderPage.form.fillInWith(files.courtOrder.fileRequired)
+      haveCourtOrderPage.form.saveAndContinueButton.click()
+
+      if (files.courtOrder.fileRequired === 'Yes') {
+        const uploadCourtOrderPage = Page.verifyOnPage(UploadCourtOrderPage)
+        uploadCourtOrderPage.form.fillInWith({
+          file: files.courtOrder,
+        })
+        uploadCourtOrderPage.form.saveAndContinueButton.click()
+      }
+    }
+
+    if (files.grantOfBail !== undefined) {
+      const haveGrantOfBailPage = Page.verifyOnPage(HaveGrantOfBailPage)
+      haveGrantOfBailPage.form.fillInWith(files.grantOfBail.fileRequired)
+      haveGrantOfBailPage.form.saveAndContinueButton.click()
+
+      if (files.grantOfBail.fileRequired === 'Yes') {
+        const uploadGrantOfBail = Page.verifyOnPage(UploadGrantOfBailPage)
+        uploadGrantOfBail.form.fillInWith({
+          file: files.grantOfBail,
+        })
+        uploadGrantOfBail.form.saveAndContinueButton.click()
+      }
+    }
 
     if (files && files.photoId !== undefined) {
       const havePhotoPage = Page.verifyOnPage(HavePhotoPage)

@@ -270,7 +270,7 @@ context('Order Summary', () => {
             offenceAdditionalDetails: null,
           },
           interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: '',
             responsibleOfficerName: '',

@@ -2,6 +2,7 @@ interface ValidationErrors {
   attachments: {
     licenceRequired: string
     photoIdentityRequired: string
+    haveFileRequired: string
   }
   address: {
     addressLine1Required: string
@@ -185,6 +186,7 @@ const validationErrors: ValidationErrors = {
   attachments: {
     licenceRequired: 'Upload a licence or court document',
     photoIdentityRequired: 'Select the photo identification document',
+    haveFileRequired: 'Select Yes if you have a document to upload',
   },
   address: {
     addressLine1Required: 'Enter address line 1, typically the building and street',

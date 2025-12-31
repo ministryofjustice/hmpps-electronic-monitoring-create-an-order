@@ -132,6 +132,14 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
+
+        const attachmentFiles = {
+          courtOrder: {
+            fileName: files.licence.fileName,
+            contents: files.licence.contents,
+            fileRequired: 'Yes',
+          },
+        }
         orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
@@ -143,7 +151,7 @@ context('Scenarios', () => {
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
-          files,
+          files: attachmentFiles,
           probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -352,7 +360,7 @@ context('Scenarios', () => {
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
-                subcategory: 'SR08 - Amend monitoring requirements',
+                subcategory: 'SR08-Amend monitoring requirements',
                 dapol_missed_in_error: '',
               },
             })
