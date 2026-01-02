@@ -10,7 +10,7 @@ const uploadPhotoIdPageContent: UploadDocumentPageContent = {
     },
   },
   section: 'Additional documents',
-  title: '',
+  title: 'Upload a photo of the device wearer',
 }
 
 export default uploadPhotoIdPageContent
