@@ -70,32 +70,32 @@
   }) }}
   {% endset %}
 
-  {% set ceprIdHtml %}
+  {% set complianceAndEnforcementPersonReferenceHtml %}
   {{ govukInput({
     label: {
-      text: questions.ceprId.hint,
+      text: questions.complianceAndEnforcementPersonReference.hint,
       classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
-    id: "ceprId",
-    name: "ceprId",
-    value: ceprId.value,
-    errorMessage: ceprId.error,
+    id: "complianceAndEnforcementPersonReference",
+    name: "complianceAndEnforcementPersonReference",
+    value: complianceAndEnforcementPersonReference.value,
+    errorMessage: complianceAndEnforcementPersonReference.error,
     disabled: not isOrderEditable
   }) }}
   {% endset %}
 
-  {% set ccrnIdHtml %}
+  {% set courtCaseReferenceNumberHtml %}
   {{ govukInput({
     label: {
-      text: questions.ccrnId.hint,
+      text: questions.courtCaseReferenceNumber.hint,
       classes: "govuk-fieldset__legend--s"
     },
     classes: "govuk-input--width-10",
-    id: "ccrnId",
-    name: "ccrnId",
-    value: ccrnId.value,
-    errorMessage: ccrnId.error,
+    id: "courtCaseReferenceNumber",
+    name: "courtCaseReferenceNumber",
+    value: courtCaseReferenceNumber.value,
+    errorMessage: courtCaseReferenceNumber.error,
     disabled: not isOrderEditable
   }) }}
   {% endset %}
@@ -150,22 +150,22 @@
         disabled: deliusId.disabled
       },
       {
-        value: "ceprId",
-        text: questions.ceprId.text,
+        value: "complianceAndEnforcementPersonReference",
+        text: questions.complianceAndEnforcementPersonReference.text,
         conditional: {
-          html: ceprIdHtml
+          html: complianceAndEnforcementPersonReferenceHtml
         },
-        checked: ceprId.value,
-        disabled: ceprId.disabled
+        checked: complianceAndEnforcementPersonReference.value,
+        disabled: complianceAndEnforcementPersonReference.disabled
       },
       {
-        value: "ccrnId",
-        text: questions.ccrnId.text,
+        value: "courtCaseReferenceNumber",
+        text: questions.courtCaseReferenceNumber.text,
         conditional: {
-          html: ccrnIdHtml
+          html: courtCaseReferenceNumberHtml
         },
-        checked: ccrnId.value,
-        disabled: ccrnId.disabled
+        checked: courtCaseReferenceNumber.value,
+        disabled: courtCaseReferenceNumber.disabled
       }
     ]
   }) }}

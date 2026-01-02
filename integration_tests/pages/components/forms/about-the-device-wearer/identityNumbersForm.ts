@@ -9,8 +9,8 @@ export type IdentityNumbersFormData = {
   nomisId?: string
   prisonNumber?: string
   deliusId?: string
-  ceprId?: string
-  ccrnId?: string
+  complianceAndEnforcementPersonReference?: string
+  courtCaseReferenceNumber?: string
 }
 
 export default class IdentityNumbersFormComponent extends FormComponent {
@@ -49,12 +49,12 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     return new FormInputComponent(this.form, label)
   }
 
-  get ceprIdField(): FormInputComponent {
+  get complianceAndEnforcementPersonReferenceField(): FormInputComponent {
     const label = 'Compliance and Enforcement Person Reference (CEPR)'
     return new FormInputComponent(this.form, label)
   }
 
-  get ccrnIdField(): FormInputComponent {
+  get courtCaseReferenceNumberField(): FormInputComponent {
     const label = 'Court Case Reference Number (CCRN)'
     return new FormInputComponent(this.form, label)
   }
@@ -82,12 +82,12 @@ export default class IdentityNumbersFormComponent extends FormComponent {
       this.deliusIdField.set(profile.deliusId)
     }
 
-    if (profile.ceprId) {
-      this.ceprIdField.set(profile.ceprId)
+    if (profile.complianceAndEnforcementPersonReference) {
+      this.complianceAndEnforcementPersonReferenceField.set(profile.complianceAndEnforcementPersonReference)
     }
 
-    if (profile.ccrnId) {
-      this.ccrnIdField.set(profile.ccrnId)
+    if (profile.courtCaseReferenceNumber) {
+      this.courtCaseReferenceNumberField.set(profile.courtCaseReferenceNumber)
     }
   }
 
@@ -98,8 +98,8 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     this.nomisIdField.shouldNotHaveValidationMessage()
     this.prisonNumberField.shouldNotHaveValidationMessage()
     this.deliusIdField.shouldNotHaveValidationMessage()
-    this.ceprIdField.shouldNotHaveValidationMessage()
-    this.ccrnIdField.shouldNotHaveValidationMessage()
+    this.complianceAndEnforcementPersonReferenceField.shouldNotHaveValidationMessage()
+    this.courtCaseReferenceNumberField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
@@ -108,8 +108,8 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     this.nomisIdField.shouldBeDisabled()
     this.prisonNumberField.shouldBeDisabled()
     this.deliusIdField.shouldBeDisabled()
-    this.ceprIdField.shouldBeDisabled()
-    this.ccrnIdField.shouldBeDisabled()
+    this.complianceAndEnforcementPersonReferenceField.shouldBeDisabled()
+    this.courtCaseReferenceNumberField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
@@ -118,7 +118,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     this.nomisIdField.shouldNotBeDisabled()
     this.prisonNumberField.shouldNotBeDisabled()
     this.deliusIdField.shouldNotBeDisabled()
-    this.ceprIdField.shouldNotBeDisabled()
-    this.ccrnIdField.shouldNotBeDisabled()
+    this.complianceAndEnforcementPersonReferenceField.shouldNotBeDisabled()
+    this.courtCaseReferenceNumberField.shouldNotBeDisabled()
   }
 }

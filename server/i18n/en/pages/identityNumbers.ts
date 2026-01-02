@@ -20,11 +20,11 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
       text: 'NDelius ID',
       hint: 'Enter NDelius ID',
     },
-    ceprId: {
+    complianceAndEnforcementPersonReference: {
       text: 'Compliance and Enforcement Person Reference (CEPR)',
       hint: 'Enter CEPR',
     },
-    ccrnId: {
+    courtCaseReferenceNumber: {
       text: 'Court Case Reference Number (CCRN)',
       hint: 'Enter CCRN',
     },

@@ -43,8 +43,8 @@ describe('OrderSearchController', () => {
         pncId: 'some id number',
         deliusId: null,
         prisonNumber: null,
-        ceprId: null,
-        ccrnId: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'first',
         lastName: 'last',
         alias: null,
@@ -188,8 +188,9 @@ describe('OrderSearchController', () => {
       mockSubmittedOrder.deviceWearer.nomisId = 'nomisId'
       mockSubmittedOrder.deviceWearer.pncId = 'pncId'
       mockSubmittedOrder.deviceWearer.deliusId = 'deliusId'
-      mockSubmittedOrder.deviceWearer.ceprId = 'ceprId'
-      mockSubmittedOrder.deviceWearer.ccrnId = 'ccrnId'
+      mockSubmittedOrder.deviceWearer.complianceAndEnforcementPersonReference =
+        'complianceAndEnforcementPersonReference'
+      mockSubmittedOrder.deviceWearer.courtCaseReferenceNumber = 'courtCaseReferenceNumber'
       mockSubmittedOrder.deviceWearer.prisonNumber = 'prisNum'
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
       req.query = { searchTerm: 'firstName' }
@@ -204,7 +205,14 @@ describe('OrderSearchController', () => {
               name: 'first last',
               href: `/order/${mockSubmittedOrder.id}/summary`,
               dob: '20/11/2000',
-              pins: ['nomisId', 'pncId', 'deliusId', 'ceprId', 'ccrnId', 'prisNum'],
+              pins: [
+                'nomisId',
+                'pncId',
+                'deliusId',
+                'complianceAndEnforcementPersonReference',
+                'courtCaseReferenceNumber',
+                'prisNum',
+              ],
               location: 'Glossop',
               startDate: '20/11/2000',
               endDate: '20/11/2000',

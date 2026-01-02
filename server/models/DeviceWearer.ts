@@ -25,8 +25,8 @@ const DeviceWearerModel = z.object({
   deliusId: z.string().nullable(),
   prisonNumber: z.string().nullable(),
   // following two fields to be optional until API changes for ELM-4263 are merged
-  ceprId: z.string().nullable().optional(),
-  ccrnId: z.string().nullable().optional(),
+  complianceAndEnforcementPersonReference: z.string().nullable().optional(),
+  courtCaseReferenceNumber: z.string().nullable().optional(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
   alias: z.string().nullable(),

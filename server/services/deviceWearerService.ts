@@ -19,7 +19,15 @@ type UpdateNoFixedAbodeRequest = AuthenticatedRequestInput & {
 
 type UpdateIdentityNumbersRequest = AuthenticatedRequestInput & {
   orderId: string
-  data: Pick<DeviceWearer, 'nomisId' | 'pncId' | 'deliusId' | 'prisonNumber' | 'ceprId' | 'ccrnId'>
+  data: Pick<
+    DeviceWearer,
+    | 'nomisId'
+    | 'pncId'
+    | 'deliusId'
+    | 'prisonNumber'
+    | 'complianceAndEnforcementPersonReference'
+    | 'courtCaseReferenceNumber'
+  >
 }
 
 export default class DeviceWearerService {

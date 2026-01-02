@@ -90,8 +90,8 @@ export type PersonOfInterest = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
-  ceprId?: string
-  ccrnId?: string
+  complianceAndEnforcementPersonReference?: string
+  courtCaseReferenceNumber?: string
 
   firstName: string
   firstNames: string
@@ -282,9 +282,9 @@ export const createFakeAdultDeviceWearer = (personalId?: string, firstName?: str
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  // IMPORTANT: check format of ceprId and ccrnId as not sure i.e. each ID has specific format
-  const ceprId = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
-  const ccrnId = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // IMPORTANT: check format of complianceAndEnforcementPersonReference and courtCaseReferenceNumber as not sure i.e. each ID has specific format
+  const complianceAndEnforcementPersonReference = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const courtCaseReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
     personalId,
@@ -292,8 +292,8 @@ export const createFakeAdultDeviceWearer = (personalId?: string, firstName?: str
     pncId,
     deliusId,
     prisonNumber,
-    ceprId,
-    ccrnId,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
     ...fakeAdult,
   } as PersonOfInterest
 }
@@ -304,17 +304,17 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  // IMPORTANT: check format of ceprId and ccrnId as not sure
-  const ceprId = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
-  const ccrnId = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // IMPORTANT: check format of complianceAndEnforcementPersonReference and courtCaseReferenceNumber as not sure
+  const complianceAndEnforcementPersonReference = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const courtCaseReferenceNumber = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
 
   return {
     nomisId,
     pncId,
     deliusId,
     prisonNumber,
-    ceprId,
-    ccrnId,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
     ...fakeYouth,
   } as PersonOfInterest
 }

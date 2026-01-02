@@ -24,8 +24,8 @@ context('About the device wearer', () => {
             pncId: null,
             deliusId: null,
             prisonNumber: null,
-            ceprId: null,
-            ccrnId: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -50,8 +50,8 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          ceprId: 'cepr',
-          ccrnId: 'ccrn',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
@@ -64,8 +64,8 @@ context('About the device wearer', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            ceprId: 'cepr',
-            ccrnId: 'ccrn',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
           },
         }).should('be.true')
       })
@@ -78,8 +78,8 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          ceprId: 'cepr',
-          ccrnId: 'ccrn',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
@@ -96,8 +96,8 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          ceprId: 'cepr',
-          ccrnId: 'ccrn',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
