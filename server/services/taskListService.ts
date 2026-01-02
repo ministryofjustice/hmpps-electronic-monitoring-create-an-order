@@ -151,6 +151,15 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
+      name: PAGES.identityNumbers,
+      path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
+      state: STATES.optional,
+      // TODO: FIX COMPLETED BELOW!
+      completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
+    })
+
+    tasks.push({
+      section: SECTIONS.aboutTheDeviceWearer,
       name: PAGES.deviceWearer,
       path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER,
       state: STATES.required,
@@ -168,14 +177,6 @@ export default class TaskListService {
         STATES.required,
       ),
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
-    })
-
-    tasks.push({
-      section: SECTIONS.aboutTheDeviceWearer,
-      name: PAGES.identityNumbers,
-      path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
-      state: STATES.optional,
-      completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
     })
 
     tasks.push({

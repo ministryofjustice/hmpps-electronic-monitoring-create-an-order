@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 
 const mockOrderId = uuidv4()
 const apiPath = '/device-wearer/identity-numbers'
@@ -25,6 +25,8 @@ context('About the device wearer', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -50,6 +52,8 @@ context('About the device wearer', () => {
           deliusId: 'delius',
           prisonNumber: 'prison',
           homeOfficeReferenceNumber: 'homeoffice',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
@@ -58,16 +62,27 @@ context('About the device wearer', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
+            identityNumbers: [
+              'NOMIS',
+              'PNC',
+              'DELIUS',
+              'PRISON_NUMBER',
+              'HOME_OFFICE',
+              'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
+              'COURT_CASE_REFERENCE_NUMBER',
+            ],
             nomisId: 'nomis',
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
             homeOfficeReferenceNumber: 'homeoffice',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
           },
         }).should('be.true')
       })
 
-      it('should continue to the check your answers page', () => {
+      it('should continue to personal details page', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
         const validFormData = {
@@ -76,12 +91,14 @@ context('About the device wearer', () => {
           deliusId: 'delius',
           prisonNumber: 'prison',
           homeOfficeReferenceNumber: 'homeoffice',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers')
+        Page.verifyOnPage(AboutDeviceWearerPage, 'About the device wearer')
       })
 
       it('should return to the summary page', () => {
@@ -93,6 +110,8 @@ context('About the device wearer', () => {
           deliusId: 'delius',
           prisonNumber: 'prison',
           homeOfficeReferenceNumber: 'homeoffice',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         }
 
         page.form.fillInWith(validFormData)
