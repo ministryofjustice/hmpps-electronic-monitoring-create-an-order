@@ -208,6 +208,17 @@ describe('authorised user', () => {
         })
     })
   })
+
+  describe('GET /accessibility', () => {
+    it('should render a successful accessibility page', () => {
+      return request(app)
+        .get('/accessibility')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Accessibility statement')
+        })
+    })
+  })
 })
 
 describe('Order Not Found', () => {

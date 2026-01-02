@@ -30,6 +30,9 @@ export default function setUpStaticResources(): Router {
   router.use('/cookies', (req, res) => {
     res.render(`cookies`)
   })
+  router.use('/accessibility', (req, res) => {
+    res.render(`accessibility`)
+  })
 
   router.use('/', (req, res, next) => {
     if (req.user?.token) {
