@@ -7,6 +7,7 @@ import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
+import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -52,6 +53,10 @@ const PAGES = {
   licenceUpload: 'LICENCE_ATTACHMENT',
   photoUpload: 'PHOTO_ATTACHMENT',
   havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
+  courtOrderUpload: 'COURT_ORDER_ATTACHMENT',
+  grantOfBailUpload: 'GRANT_OF_BAIL_ATTACHMENT',
+  haveCourtOrder: 'ATTACHMENTS_HAVE_COURT_ORDER',
+  haveGrantOfBail: 'ATTACHMENTS_HAVE_GRANT_OF_BAIL',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -114,12 +119,8 @@ const isCompletedAddress = (order: Order, addressType: AddressType): boolean => 
   return order.addresses.find(address => address.addressType === addressType) !== undefined
 }
 
-const doesOrderHaveLicence = (order: Order): boolean => {
-  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.LICENCE) !== undefined
-}
-
-const doesOrderHavePhotoId = (order: Order): boolean => {
-  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
+const doesOrderHaveDocument = (order: Order, type: AttachmentType) => {
+  return order.additionalDocuments.find(doc => doc.fileType === type) !== undefined
 }
 
 const isTagAtSourcePilotPrison = (order: Order): boolean => {
@@ -503,13 +504,64 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push({
-      section: SECTIONS.additionalDocuments,
-      name: PAGES.licenceUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
-      state: STATES.required,
-      completed: doesOrderHaveLicence(order),
-    })
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.haveGrantOfBail,
+        path: paths.ATTACHMENT.HAVE_GRANT_OF_BAIL,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveGrantOfBail),
+      })
+
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.grantOfBailUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(
+          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          'grant_of_bail',
+        ),
+        state: STATES.required,
+        completed:
+          doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) ||
+          order.orderParameters?.haveGrantOfBail === false,
+      })
+    } else if (
+      isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
+      (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
+    ) {
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.haveCourtOrder,
+        path: paths.ATTACHMENT.HAVE_COURT_ORDER,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
+      })
+
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.courtOrderUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(
+          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          'court_order',
+        ),
+        state: convertBooleanToEnum<State>(
+          order.orderParameters?.haveCourtOrder || null,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed:
+          doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
+      })
+    } else {
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.licenceUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'licence'),
+        state: STATES.required,
+        completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
@@ -522,14 +574,14 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'photo_Id'),
       state: convertBooleanToEnum<State>(
         order.orderParameters?.havePhoto || null,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
       ),
-      completed: doesOrderHavePhotoId(order) || order.orderParameters?.havePhoto === false,
+      completed: doesOrderHaveDocument(order, AttachmentType.PHOTO_ID) || order.orderParameters?.havePhoto === false,
     })
 
     tasks.push({
@@ -712,4 +764,4 @@ export default class TaskListService {
   }
 }
 
-export { Page }
+export { Page, PAGES }

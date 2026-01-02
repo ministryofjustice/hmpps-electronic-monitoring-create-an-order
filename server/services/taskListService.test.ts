@@ -687,7 +687,10 @@ describe('TaskListService', () => {
 
       // Then
       expect(nextPage).toBe(
-        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(':fileType(photo_Id|licence)', 'licence'),
+        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          'licence',
+        ),
       )
     })
 
@@ -761,7 +764,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence)',
+            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
           isReady: true,
@@ -780,7 +783,7 @@ describe('TaskListService', () => {
         deviceWearerResponsibleAdult: createResponsibleAdult(),
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
-        interestedParties: createInterestedParties(),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
@@ -855,7 +858,7 @@ describe('TaskListService', () => {
         deviceWearerResponsibleAdult: createResponsibleAdult(),
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
-        interestedParties: createInterestedParties(),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
@@ -985,7 +988,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence)',
+            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
           isReady: true,
@@ -1063,7 +1066,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence)',
+            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
           isReady: true,

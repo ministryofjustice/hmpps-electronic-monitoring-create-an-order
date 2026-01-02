@@ -25,6 +25,8 @@ import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
+import HaveCourtOrderPageContent from './pages/haveCourtOrder'
+import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
 
 type I18n = {
   pages: {
@@ -40,6 +42,8 @@ type I18n = {
     editConfirm: ConfirmationPageContent
     exclusionZone: ExclusionZonePageContent
     havePhoto: HavePhotoPageContent
+    haveCourtOrder: HaveCourtOrderPageContent
+    haveGrantOfBail: HaveGrantOfBailPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
@@ -56,6 +60,8 @@ type I18n = {
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
+    uploadCourtOrder: UploadDocumentPageContent
+    uploadGrantOfBail: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
     serviceRequestType: ServiceRequestTypePageContent
