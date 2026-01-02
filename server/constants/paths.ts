@@ -9,7 +9,7 @@ const paths = {
     SUMMARY_VERSION: '/order/:orderId/version/:versionId/summary',
     SUBMIT: '/order/:orderId/submit',
     SUBMIT_FAILED: '/order/:orderId/submit/failed',
-    SUBMIT_PATIAL_SUCCESS: '/order/:orderId/submit/partial-success',
+    SUBMIT_PARTIAL_SUCCESS: '/order/:orderId/submit/partial-success',
     SUBMIT_SUCCESS: '/order/:orderId/submit/success',
     RECEIPT: '/order/:orderId/receipt',
     RECEIPT_VERSION: '/order/:orderId/version/:versionId/receipt',
