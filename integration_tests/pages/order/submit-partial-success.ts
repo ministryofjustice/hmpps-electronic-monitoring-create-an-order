@@ -5,10 +5,10 @@ import { PageElement } from '../page'
 
 export default class SubmitPartialSuccessPage extends AppPage {
   constructor() {
-    super('Failed to submit attachments', paths.ORDER.SUBMIT_FAILED)
+    super('Failed to submit attachments', paths.ORDER.SUBMIT_PARTIAL_SUCCESS)
   }
 
-  heading = (): PageElement => cy.contains('.govuk-heading-s', 'You need to apply a different way')
+  heading = (): PageElement => cy.contains('.govuk-heading-s', "If you can't open your attachments")
 
   receiptButton = (): PageElement => cy.get('#receipt-button')
 
