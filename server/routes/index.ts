@@ -204,7 +204,7 @@ export default function routes({
   post(paths.ORDER.DELETE, orderController.delete)
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
-  get(paths.ORDER.SUBMIT_PATIAL_SUCCESS, orderController.submitPartialSuccess)
+  get(paths.ORDER.SUBMIT_PARTIAL_SUCCESS, orderController.submitPartialSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
   get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
   get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
