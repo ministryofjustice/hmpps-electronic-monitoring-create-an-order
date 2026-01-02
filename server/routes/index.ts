@@ -33,13 +33,13 @@ import VariationDetailsController from '../controllers/variation/variationDetail
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
-import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
 import ServiceRequestTypeController from './variations/service-request-type/controller'
 import createInstallationAndRiskRouter from './installation-and-risk/router'
+import createAttachmentRouter from './attachments/router'
 
 export default function routes({
   alcoholMonitoringService,
@@ -90,11 +90,6 @@ export default function routes({
     attachmentService,
     taskListService,
     orderChecklistService,
-  )
-  const attachmentsHavePhotoController = new AttachmentHavePhotoController(
-    attachmentService,
-    taskListService,
-    orderService,
   )
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
@@ -209,7 +204,7 @@ export default function routes({
   post(paths.ORDER.DELETE, orderController.delete)
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
-  get(paths.ORDER.SUBMIT_PATIAL_SUCCESS, orderController.submitPartialSuccess)
+  get(paths.ORDER.SUBMIT_PARTIAL_SUCCESS, orderController.submitPartialSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
   get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
   get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
@@ -355,8 +350,6 @@ export default function routes({
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
-  get(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.view)
-  post(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.update)
 
   /**
    * VARIATIONS
@@ -382,5 +375,12 @@ export default function routes({
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
   router.use(paths.INSTALLATION_AND_RISK.BASE_URL, createInstallationAndRiskRouter())
+  router.use(
+    paths.ATTACHMENT.ATTACHMENTS,
+    createAttachmentRouter({
+      attachmentService,
+      taskListService,
+    }),
+  )
   return router
 }

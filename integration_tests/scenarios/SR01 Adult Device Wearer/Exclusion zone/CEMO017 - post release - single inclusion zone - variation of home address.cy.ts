@@ -376,7 +376,7 @@ context('Scenarios', () => {
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
-                subcategory: 'SR08 - Amend monitoring requirements',
+                subcategory: 'SR08-Amend monitoring requirements',
                 dapol_missed_in_error: '',
               },
             })

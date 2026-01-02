@@ -11,6 +11,13 @@
 
   {% set pageContent = content.pages.uploadLicense %}
 
+{% elif (fileType) == "court_order" %}
+
+  {% set pageContent = content.pages.uploadCourtOrder %}
+
+{% elif (fileType) === "grant_of_bail" %}
+
+  {% set pageContent = content.pages.uploadGrantOfBail %}
 {% else %}
 
   {% set pageContent = content.pages.uploadPhotoId %}
@@ -18,7 +25,7 @@
 {% endif %}
 
 {% set section = pageContent.section %}
-{% set heading = pageContent.title %}
+{% set questionName = pageContent.title %}
 {% set legend = pageContent.legend %}
 {% set helpText = pageContent.helpText %}
 {% set formEncoding = 'encType=multipart/form-data' %}

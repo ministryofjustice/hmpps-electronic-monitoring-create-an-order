@@ -9,7 +9,7 @@ const paths = {
     SUMMARY_VERSION: '/order/:orderId/version/:versionId/summary',
     SUBMIT: '/order/:orderId/submit',
     SUBMIT_FAILED: '/order/:orderId/submit/failed',
-    SUBMIT_PATIAL_SUCCESS: '/order/:orderId/submit/partial-success',
+    SUBMIT_PARTIAL_SUCCESS: '/order/:orderId/submit/partial-success',
     SUBMIT_SUCCESS: '/order/:orderId/submit/success',
     RECEIPT: '/order/:orderId/receipt',
     RECEIPT_VERSION: '/order/:orderId/version/:versionId/receipt',
@@ -99,10 +99,12 @@ const paths = {
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
     ATTACHMENTS_VERSION: '/order/:orderId/version/:versionId/attachments',
-    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence)',
-    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/:filename',
-    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/delete',
+    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)',
+    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)/:filename',
+    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)/delete',
     HAVE_PHOTO: '/order/:orderId/attachments/have-photo',
+    HAVE_COURT_ORDER: '/order/:orderId/attachments/have-court-order',
+    HAVE_GRANT_OF_BAIL: '/order/:orderId/attachments/have-grant-of-bail',
   },
 
   VARIATION: {

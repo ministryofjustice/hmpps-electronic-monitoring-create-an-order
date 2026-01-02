@@ -10,7 +10,7 @@ const uploadLicencePageContent: UploadDocumentPageContent = {
     },
   },
   section: 'Additional documents',
-  title: '',
+  title: 'Upload a copy of the licence or court order document',
 }
 
 export default uploadLicencePageContent
