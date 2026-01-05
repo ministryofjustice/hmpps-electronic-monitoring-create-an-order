@@ -14,6 +14,8 @@ const paths = {
     RECEIPT: '/order/:orderId/receipt',
     RECEIPT_VERSION: '/order/:orderId/version/:versionId/receipt',
     RECEIPT_DOWNLOAD: '/order/:orderId/pdf',
+    DOWNLOAD_FMS_DW_REQUEST: '/order/:orderId/fmsDwRequests',
+    DOWNLOAD_FMS_MO_REQUEST: '/order/:orderId/fmsMoRequests',
     EDIT: '/order/:orderId/edit',
     IS_REJECTION: '/order/:orderId/is-rejection',
     VARIATION: '/order/:orderId/variation',

@@ -13,6 +13,10 @@ export default class ReceiptPage extends AppPage {
 
   pdfDownloadButton = (): PageElement => cy.get('#download-pdf')
 
+  fmsDwRequestDownloadButton = (): PageElement => cy.get('#download-fms-dw-requests')
+
+  fmsMoRequestDownloadButton = (): PageElement => cy.get('#download-fms-mo-requests')
+
   get orderStatusSection(): SummaryListComponent {
     const label = 'Form details'
     return new SummaryListComponent(label)

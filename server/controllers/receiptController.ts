@@ -1,8 +1,11 @@
 import { RequestHandler } from 'express'
 import config from '../config'
 import createViewModel from '../models/view-models/receipt'
+import { FmsRequestService } from '../services'
 
 export default class ReceiptController {
+  constructor(private readonly fmsRequestService: FmsRequestService) {}
+
   viewReceipt: RequestHandler = async (req, res) => {
     res.render('pages/order/receipt/view', createViewModel(req.order!, res.locals.content!))
   }
@@ -22,5 +25,39 @@ export default class ReceiptController {
       filename,
       pdfMargins,
     })
+  }
+
+  downloadFmsDWRequest: RequestHandler = async (req, res) => {
+    const order = req.order!
+
+    if (order.status === 'IN_PROGRESS') {
+      throw new Error('A FMS request can only be download for a completed order.')
+    }
+    const payload = this.fmsRequestService.getFmsDeviceWearerRequest({
+      orderId: order.id,
+      versionId: order.versionId,
+      accessToken: res.locals.user.token,
+    })
+    res.header('Content-Type', 'application/json')
+    res.header('Content-Transfer-Encoding', 'binary')
+    res.header('Content-Disposition', `attachment; filename=${order.id}-fms-dw-request.json`)
+    res.send(payload)
+  }
+
+  downloadFmsMORequest: RequestHandler = async (req, res) => {
+    const order = req.order!
+
+    if (order.status === 'IN_PROGRESS') {
+      throw new Error('A FMS request can only be download for a completed order.')
+    }
+    const payload = this.fmsRequestService.getFmsMonitoringRequest({
+      orderId: order.id,
+      versionId: order.versionId,
+      accessToken: res.locals.user.token,
+    })
+    res.header('Content-Type', 'application/json')
+    res.header('Content-Transfer-Encoding', 'binary')
+    res.header('Content-Disposition', `attachment; filename=${order.id}-fms-mo-request.json`)
+    res.send(payload)
   }
 }

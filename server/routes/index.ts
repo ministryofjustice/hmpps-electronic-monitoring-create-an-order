@@ -73,6 +73,7 @@ export default function routes({
   monitoringConditionsUpdateService,
   removeMonitoringTypeService,
   serviceRequestTypeService,
+  fmsRequestService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -164,7 +165,7 @@ export default function routes({
     taskListService,
     orderChecklistService,
   )
-  const receiptController = new ReceiptController()
+  const receiptController = new ReceiptController(fmsRequestService)
 
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     auditService,
@@ -208,6 +209,9 @@ export default function routes({
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
   get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
   get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
+  get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
+  get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDWRequest)
+  get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMORequest)
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
 
   /**
