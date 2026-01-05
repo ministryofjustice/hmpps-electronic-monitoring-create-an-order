@@ -36,15 +36,13 @@ context('Index', () => {
       page.subNav.contains('Submitted forms').should('not.have.attr', 'aria-current', `page`)
 
       // Order list
-      page.orders.should('exist').should('have.length', 4)
-      page.TableContains('Not supplied', 'Submitted')
-      page.IsAccesible('Not supplied', 0)
+      page.orders.should('exist').should('have.length', 3)
       page.TableContains('test tester', 'Draft')
-      page.IsAccesible('test tester', 1)
+      page.IsAccesible('test tester', 0)
       page.TableContains('Failed request', 'Failed')
-      page.IsAccesible('Failed request', 2)
+      page.IsAccesible('Failed request', 1)
       page.TableContains('vari ation', 'Change to form Draft')
-      page.IsAccesible('vari ation', 3)
+      page.IsAccesible('vari ation', 2)
 
       // A11y
       page.checkIsAccessible()
@@ -87,17 +85,6 @@ context('Index', () => {
 
       // Verify the user was redirected to the task page
       Page.verifyOnPage(OrderTasksPage)
-    })
-  })
-
-  context('Submitting a create variation request', () => {
-    beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoListOrders')
-      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-      cy.signIn()
     })
   })
 
