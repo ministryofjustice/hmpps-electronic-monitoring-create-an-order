@@ -210,8 +210,8 @@ export default function routes({
   get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
   get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
-  get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDWRequest)
-  get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMORequest)
+  get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDeviceWearerRequest)
+  get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMonitoringOrderRequest)
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
 
   /**

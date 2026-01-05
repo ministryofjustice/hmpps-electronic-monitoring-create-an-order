@@ -27,13 +27,13 @@ export default class ReceiptController {
     })
   }
 
-  downloadFmsDWRequest: RequestHandler = async (req, res) => {
+  downloadFmsDeviceWearerRequest: RequestHandler = async (req, res) => {
     const order = req.order!
 
     if (order.status === 'IN_PROGRESS') {
       throw new Error('A FMS request can only be download for a completed order.')
     }
-    const payload = this.fmsRequestService.getFmsDeviceWearerRequest({
+    const payload = await this.fmsRequestService.getFmsDeviceWearerRequest({
       orderId: order.id,
       versionId: order.versionId,
       accessToken: res.locals.user.token,
@@ -44,13 +44,13 @@ export default class ReceiptController {
     res.send(payload)
   }
 
-  downloadFmsMORequest: RequestHandler = async (req, res) => {
+  downloadFmsMonitoringOrderRequest: RequestHandler = async (req, res) => {
     const order = req.order!
 
     if (order.status === 'IN_PROGRESS') {
       throw new Error('A FMS request can only be download for a completed order.')
     }
-    const payload = this.fmsRequestService.getFmsMonitoringRequest({
+    const payload = await this.fmsRequestService.getFmsMonitoringRequest({
       orderId: order.id,
       versionId: order.versionId,
       accessToken: res.locals.user.token,

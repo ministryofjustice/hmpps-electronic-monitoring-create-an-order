@@ -25,15 +25,15 @@
 {% if showDownloadJsonButtons%}
   {{ govukButton({
       text: "Download FMS Device Wearer requests",
-      href: "/order/" + orderId + "/fmsDwRequests",
+      href: "/order/" + orderId + "/fmsDeviceWearerRequests",
       target: '_blank',
-      id: "download-fms-dw-requests"
+      id: "download-fms-device-wearer-requests"
     }) }}
   {{ govukButton({
       text: "Download FMS Monitoring Order requests",
-      href: "/order/" + orderId + "/fmsMoRequests",
+      href: "/order/" + orderId + "/fmsMonitoringOrderRequests",
       target: '_blank',
-      id: "download-fms-mo-requests"
+      id: "download-fms-monitoring-order-requests"
     }) }}
 {% endif %}
 </div>
