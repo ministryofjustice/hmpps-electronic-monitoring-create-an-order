@@ -90,6 +90,52 @@ describe('Search View Model', () => {
         expect(result.orders[0].endDate).toBe('31/12/2024')
       })
 
+      it('should include dates from enforcementZoneConditions array', () => {
+        const earliestDate = new Date(2024, 0, 1).toISOString()
+        const middleDate = new Date(2024, 5, 15).toISOString()
+        const latestDate = new Date(2024, 11, 31).toISOString()
+
+        const order = getMockOrder({
+          status: 'SUBMITTED',
+          monitoringConditions: createMonitoringConditions({
+            startDate: middleDate,
+            endDate: middleDate,
+          }),
+          enforcementZoneConditions: [
+            {
+              id: '0',
+              startDate: earliestDate,
+              endDate: middleDate,
+              zoneId: 0,
+              zoneType: null,
+              description: null,
+              duration: null,
+              fileName: null,
+              fileId: null,
+            },
+            {
+              id: '1',
+              startDate: middleDate,
+              endDate: latestDate,
+              zoneId: 1,
+              zoneType: null,
+              description: null,
+              duration: null,
+              fileName: null,
+              fileId: null,
+            },
+          ],
+          curfewConditions: null,
+          monitoringConditionsTrail: null,
+          monitoringConditionsAlcohol: null,
+        })
+
+        const result = constructSearchViewModel([order], 'test')
+
+        expect(result.orders[0].startDate).toBe('1/1/2024')
+        expect(result.orders[0].endDate).toBe('31/12/2024')
+      })
+
       it('should include dates from mandatoryAttendanceConditions array', () => {
         const earliestDate = new Date(2024, 0, 1).toISOString()
         const middleDate = new Date(2024, 5, 15).toISOString()

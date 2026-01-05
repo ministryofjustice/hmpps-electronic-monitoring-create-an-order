@@ -56,9 +56,10 @@ const getEarliestStartDate = (order: Order): string | null => {
     order.monitoringConditionsTrail?.startDate ?? null,
     order.monitoringConditionsAlcohol?.startDate ?? null,
     ...(order.mandatoryAttendanceConditions?.map(condition => condition.startDate) ?? []),
+    ...(order.enforcementZoneConditions?.map(condition => condition.startDate) ?? []),
   ]
 
-  const validDates = dates.filter((date): date is string => date !== null).map(date => new Date(date))
+  const validDates = dates.filter(date => date !== null).map(date => new Date(date))
 
   if (validDates.length === 0) {
     return null
@@ -75,6 +76,7 @@ const getLatestEndDate = (order: Order): string | null => {
     order.monitoringConditionsTrail?.endDate ?? null,
     order.monitoringConditionsAlcohol?.endDate ?? null,
     ...(order.mandatoryAttendanceConditions?.map(condition => condition.endDate) ?? []),
+    ...(order.enforcementZoneConditions?.map(condition => condition.endDate) ?? []),
   ]
 
   const validDates = dates.filter(date => date !== null && date !== undefined).map(date => new Date(date))
