@@ -49,16 +49,57 @@ const getIdList = (order: Order) => {
   return idList as string[]
 }
 
+const getEarliestStartDate = (order: Order): string | null => {
+  const dates: (string | null)[] = [
+    order.monitoringConditions?.startDate ?? null,
+    order.curfewConditions?.startDate ?? null,
+    order.monitoringConditionsTrail?.startDate ?? null,
+    order.monitoringConditionsAlcohol?.startDate ?? null,
+    ...(order.mandatoryAttendanceConditions?.map(condition => condition.startDate) ?? []),
+  ]
+
+  const validDates = dates.filter((date): date is string => date !== null).map(date => new Date(date))
+
+  if (validDates.length === 0) {
+    return null
+  }
+
+  const earliestDate = new Date(Math.min(...validDates.map(date => date.getTime())))
+  return earliestDate.toISOString()
+}
+
+const getLatestEndDate = (order: Order): string | null => {
+  const dates: (string | null | undefined)[] = [
+    order.monitoringConditions?.endDate ?? null,
+    order.curfewConditions?.endDate ?? null,
+    order.monitoringConditionsTrail?.endDate ?? null,
+    order.monitoringConditionsAlcohol?.endDate ?? null,
+    ...(order.mandatoryAttendanceConditions?.map(condition => condition.endDate) ?? []),
+  ]
+
+  const validDates = dates.filter(date => date !== null && date !== undefined).map(date => new Date(date))
+
+  if (validDates.length === 0) {
+    return null
+  }
+
+  const latestDate = new Date(Math.max(...validDates.map(date => date.getTime())))
+  return latestDate.toISOString()
+}
+
 const createOrderItem = (order: Order) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
+  const earliestStartDate = getEarliestStartDate(order)
+  const latestEndDate = getLatestEndDate(order)
+
   return {
     name: getDisplayName(order),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
     pins: getIdList(order),
     location: currentAddress?.addressLine3 ?? '',
-    startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
-    endDate: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : '',
+    startDate: earliestStartDate ? formatDateTime(earliestStartDate) : '',
+    endDate: latestEndDate ? formatDateTime(latestEndDate) : '',
     lastUpdated: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '',
   }
 }
