@@ -67,7 +67,7 @@ context('Receipt', () => {
       afterEach(() => {
         cy.task('resetFeatureFlags')
       })
-      it('Should have a button to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to true', () => {
+      it('Should have buttons to download fms requests', () => {
         cy.visit(`/order/${mockOrderId}/receipt`)
         const page = Page.verifyOnPage(ReceiptPage)
         page.fmsDwRequestDownloadButton().should('exist')
@@ -112,7 +112,7 @@ context('Receipt', () => {
         cy.readFile(`cypress/downloads/${filename}.json`).should('exist')
       })
 
-      it('Should have a button to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to false', () => {
+      it('Should have not have buttons to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to false', () => {
         cy.task('setFeatureFlags', { DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false })
         cy.visit(`/order/${mockOrderId}/receipt`)
         const page = Page.verifyOnPage(ReceiptPage)
