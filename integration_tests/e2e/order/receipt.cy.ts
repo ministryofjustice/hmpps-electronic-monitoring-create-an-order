@@ -112,7 +112,7 @@ context('Receipt', () => {
         cy.readFile(`cypress/downloads/${filename}.json`).should('exist')
       })
 
-      it('Should have not have buttons to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to false', () => {
+      it('Should not have buttons to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to false', () => {
         cy.task('setFeatureFlags', { DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false })
         cy.visit(`/order/${mockOrderId}/receipt`)
         const page = Page.verifyOnPage(ReceiptPage)
