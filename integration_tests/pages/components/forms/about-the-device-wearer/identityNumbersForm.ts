@@ -7,26 +7,20 @@ export type IdentityNumbersFormData = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
-  homeOfficeReferenceNumber?: string
   complianceAndEnforcementPersonReference?: string
   courtCaseReferenceNumber?: string
 }
 
 export default class IdentityNumbersFormComponent extends FormComponent {
   get checkboxes(): FormCheckboxesComponent {
-    return new FormCheckboxesComponent(
-      this.form,
-      'Select and enter all identity numbers that you have for the device wearer.', // Must match your NJK fieldset legend
-      [
-        'National Offender Management Information System (NOMIS)',
-        'Police National Computer (PNC)',
-        'Prison Number',
-        'NDelius ID',
-        'Compliance and Enforcement Person Reference (CEPR)',
-        'Court Case Reference Number (CCRN)',
-        'Home Office Reference Number',
-      ],
-    )
+    return new FormCheckboxesComponent(this.form, 'What identity numbers do you have for the device wearer?', [
+      'National Offender Management Information System (NOMIS)',
+      'Police National Computer (PNC)',
+      'Prison Number',
+      'NDelius ID',
+      'Compliance and Enforcement Person Reference (CEPR)',
+      'Court Case Reference Number (CCRN)',
+    ])
   }
   // FIELDS
 
@@ -44,10 +38,6 @@ export default class IdentityNumbersFormComponent extends FormComponent {
 
   get prisonNumberField(): FormInputComponent {
     return new FormInputComponent(this.form, 'Enter Prison Number')
-  }
-
-  get homeOfficeReferenceNumberField(): FormInputComponent {
-    return new FormInputComponent(this.form, 'Enter Home Office Reference Number')
   }
 
   get complianceField(): FormInputComponent {
@@ -81,11 +71,6 @@ export default class IdentityNumbersFormComponent extends FormComponent {
       this.prisonNumberField.set(profile.prisonNumber)
     }
 
-    if (profile.homeOfficeReferenceNumber) {
-      this.checkboxes.set('Home Office Reference Number')
-      this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
-    }
-
     if (profile.complianceAndEnforcementPersonReference) {
       this.checkboxes.set('Compliance and Enforcement Person Reference (CEPR)')
       this.complianceField.set(profile.complianceAndEnforcementPersonReference)
@@ -102,7 +87,6 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     this.pncIdField.shouldNotHaveValidationMessage()
     this.deliusIdField.shouldNotHaveValidationMessage()
     this.prisonNumberField.shouldNotHaveValidationMessage()
-    this.homeOfficeReferenceNumberField.shouldNotHaveValidationMessage()
     this.complianceField.shouldNotHaveValidationMessage()
     this.courtCaseField.shouldNotHaveValidationMessage()
   }

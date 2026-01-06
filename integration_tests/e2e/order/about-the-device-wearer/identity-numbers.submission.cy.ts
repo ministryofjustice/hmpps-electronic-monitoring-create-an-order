@@ -51,7 +51,6 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
         }
@@ -63,11 +62,10 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             identityNumbers: [
-              'NOMIS',
               'PNC',
-              'DELIUS',
+              'NOMIS',
               'PRISON_NUMBER',
-              'HOME_OFFICE',
+              'DELIUS',
               'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
               'COURT_CASE_REFERENCE_NUMBER',
             ],
@@ -75,9 +73,9 @@ context('About the device wearer', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'homeoffice',
             complianceAndEnforcementPersonReference: 'cepr',
             courtCaseReferenceNumber: 'ccrn',
+            homeOfficeReferenceNumber: '',
           },
         }).should('be.true')
       })
@@ -90,7 +88,6 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
         }
@@ -109,7 +106,6 @@ context('About the device wearer', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
         }

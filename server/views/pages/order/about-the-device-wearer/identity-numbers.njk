@@ -4,9 +4,6 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set section = content.pages.identityNumbers.section %}
-{% set heading = content.pages.identityNumbers.title %}
-{% set legend = content.pages.identityNumbers.legend %}
-{% set helpText = content.pages.identityNumbers.helpText %}
 
 {% block formInputs %}
 
@@ -82,29 +79,17 @@
     }) }}
   {% endset %}
 
-  {% set homeOfficeHtml %}
-    {{ govukInput({
-      id: "homeOfficeReferenceNumber",
-      name: "homeOfficeReferenceNumber",
-      label: { text: "Enter Home Office Reference Number" },
-      classes: "govuk-!-width-one-half",
-      value: homeOfficeReferenceNumber.value,
-      errorMessage: homeOfficeReferenceNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
-
   {{ govukCheckboxes({
     name: "identityNumbers",
     fieldset: {
       legend: {
-        text: "Select and enter all identity numbers that you have for the device wearer.",
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--m"
+        text: content.pages.identityNumbers.legend,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
       }
     },
     hint: {
-      text: "Select all that apply."
+      text: content.pages.identityNumbers.helpText
     },
     items: [
       {
@@ -147,13 +132,6 @@
         text: content.pages.identityNumbers.questions.courtCaseReferenceNumber.text,
         conditional: { html: courtCaseHtml },
         checked: identityNumbers.values and "COURT_CASE_REFERENCE_NUMBER" in identityNumbers.values,
-        disabled: not isOrderEditable
-      },
-      {
-        value: "HOME_OFFICE",
-        text: content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
-        conditional: { html: homeOfficeHtml },
-        checked: identityNumbers.values and "HOME_OFFICE" in identityNumbers.values,
         disabled: not isOrderEditable
       }
     ],

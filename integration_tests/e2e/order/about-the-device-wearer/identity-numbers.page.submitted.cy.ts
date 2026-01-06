@@ -9,7 +9,7 @@ const mockDeviceWearer = {
   pncId: 'pnc',
   deliusId: 'delius',
   prisonNumber: 'prison',
-  homeOfficeReferenceNumber: 'homeOffice',
+  homeOfficeReferenceNumber: null,
   complianceAndEnforcementPersonReference: 'cepr',
   courtCaseReferenceNumber: 'ccrn',
   firstName: 'test',
@@ -75,7 +75,6 @@ context('About the device wearer', () => {
         page.form.checkboxes.shouldHaveValue('Prison Number')
         page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
         page.form.checkboxes.shouldHaveValue('Court Case Reference Number (CCRN)')
-        page.form.checkboxes.shouldHaveValue('Home Office Reference Number')
 
         page.form.nomisIdField.shouldHaveValue('nomis')
         page.form.pncIdField.shouldHaveValue('pnc')
@@ -83,7 +82,6 @@ context('About the device wearer', () => {
         page.form.prisonNumberField.shouldHaveValue('prison')
         page.form.complianceField.shouldHaveValue('cepr')
         page.form.courtCaseField.shouldHaveValue('ccrn')
-        page.form.homeOfficeReferenceNumberField.shouldHaveValue('homeOffice')
       })
     })
   })

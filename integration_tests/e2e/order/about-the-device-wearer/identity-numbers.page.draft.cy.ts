@@ -56,7 +56,6 @@ context('About the device wearer', () => {
         page.form.checkboxes.shouldHaveOption('NDelius ID')
         page.form.checkboxes.shouldHaveOption('Compliance and Enforcement Person Reference (CEPR)')
         page.form.checkboxes.shouldHaveOption('Court Case Reference Number (CCRN)')
-        page.form.checkboxes.shouldHaveOption('Home Office Reference Number')
       })
 
       it('Should display the correct inputs', () => {

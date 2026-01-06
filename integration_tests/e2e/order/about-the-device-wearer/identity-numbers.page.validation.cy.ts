@@ -11,7 +11,6 @@ const expectedValidationErrors = {
   pncId: 'Enter PNC',
   deliusId: 'Enter NDelius ID',
   prisonNumber: 'Enter Prison Number',
-  homeOfficeReferenceNumber: 'Enter Home Office Reference Number',
   complianceAndEnforcementPersonReference: 'Enter Compliance and Enforcement Person Reference',
   courtCaseReferenceNumber: 'Enter Court Case Reference Number',
 }
@@ -56,7 +55,6 @@ context('About the device wearer', () => {
             { field: 'pncId', error: expectedValidationErrors.pncId },
             { field: 'deliusId', error: expectedValidationErrors.deliusId },
             { field: 'prisonNumber', error: expectedValidationErrors.prisonNumber },
-            { field: 'homeOfficeReferenceNumber', error: expectedValidationErrors.homeOfficeReferenceNumber },
             {
               field: 'complianceAndEnforcementPersonReference',
               error: expectedValidationErrors.complianceAndEnforcementPersonReference,
@@ -72,7 +70,6 @@ context('About the device wearer', () => {
           'Police National Computer (PNC)',
           'NDelius ID',
           'Prison Number',
-          'Home Office Reference Number',
           'Compliance and Enforcement Person Reference (CEPR)',
           'Court Case Reference Number (CCRN)',
         ])
@@ -86,7 +83,6 @@ context('About the device wearer', () => {
         page.errorSummary.shouldHaveError(expectedValidationErrors.pncId)
         page.errorSummary.shouldHaveError(expectedValidationErrors.deliusId)
         page.errorSummary.shouldHaveError(expectedValidationErrors.prisonNumber)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.homeOfficeReferenceNumber)
         page.errorSummary.shouldHaveError(expectedValidationErrors.complianceAndEnforcementPersonReference)
         page.errorSummary.shouldHaveError(expectedValidationErrors.courtCaseReferenceNumber)
 
@@ -94,9 +90,6 @@ context('About the device wearer', () => {
         page.form.pncIdField.shouldHaveValidationMessage(expectedValidationErrors.pncId)
         page.form.deliusIdField.shouldHaveValidationMessage(expectedValidationErrors.deliusId)
         page.form.prisonNumberField.shouldHaveValidationMessage(expectedValidationErrors.prisonNumber)
-        page.form.homeOfficeReferenceNumberField.shouldHaveValidationMessage(
-          expectedValidationErrors.homeOfficeReferenceNumber,
-        )
         page.form.complianceField.shouldHaveValidationMessage(
           expectedValidationErrors.complianceAndEnforcementPersonReference,
         )

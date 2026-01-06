@@ -84,12 +84,6 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: 
       uri,
       answerOpts,
     ),
-    createAnswer(
-      content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
-      order.deviceWearer.homeOfficeReferenceNumber,
-      uri,
-      answerOpts,
-    ),
   ]
 }
 

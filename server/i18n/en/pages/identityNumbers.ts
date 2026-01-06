@@ -7,9 +7,6 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
     deliusId: {
       text: 'NDelius ID',
     },
-    homeOfficeReferenceNumber: {
-      text: 'Home Office Reference Number',
-    },
     nomisId: {
       text: 'National Offender Management Information System (NOMIS)',
     },
@@ -27,7 +24,7 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
     },
   },
   section: 'About the device wearer',
-  title: 'Identity numbers',
+  title: '',
 }
 
 export default identityNumbersPageContent
