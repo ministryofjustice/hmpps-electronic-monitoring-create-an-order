@@ -31,7 +31,7 @@ export default class ReceiptController {
     const order = req.order!
 
     if (order.status === 'IN_PROGRESS') {
-      throw new Error('A FMS request can only be download for a completed order.')
+      throw new Error('A FMS request can only be downloaded for a completed order.')
     }
     const payload = await this.fmsRequestService.getFmsDeviceWearerRequest({
       orderId: order.id,
@@ -48,7 +48,7 @@ export default class ReceiptController {
     const order = req.order!
 
     if (order.status === 'IN_PROGRESS') {
-      throw new Error('A FMS request can only be download for a completed order.')
+      throw new Error('A FMS request can only be downloaded for a completed order.')
     }
     const payload = await this.fmsRequestService.getFmsMonitoringRequest({
       orderId: order.id,
