@@ -23,7 +23,9 @@ const mockOrder = {
     noFixedAbode: true,
     interpreterRequired: false,
   },
+  versionId: uuidv4(),
 }
+
 context('Receipt', () => {
   context('Receipt when app is submitted', () => {
     beforeEach(() => {
@@ -55,6 +57,68 @@ context('Receipt', () => {
       const date = new Date().toISOString().slice(0, 10)
       const filename = `${mockOrder.deviceWearer.firstName}-${mockOrder.deviceWearer.lastName}-${date}`
       cy.readFile(`cypress/downloads/${filename}.pdf`).should('exist')
+    })
+
+    context('Download FMS requests', () => {
+      const testFlags = { DOWNLOAD_FMS_REQUEST_JSON_ENABLED: true }
+      beforeEach(() => {
+        cy.task('setFeatureFlags', testFlags)
+      })
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      it('Should have buttons to download fms requests', () => {
+        cy.visit(`/order/${mockOrderId}/receipt`)
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsDwRequestDownloadButton().should('exist')
+        page.fmsMoRequestDownloadButton().should('exist')
+      })
+
+      it('Should download fms device wearer request as JSON', () => {
+        cy.visit(`/order/${mockOrderId}/receipt`)
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          method: 'GET',
+          subPath: `/versions/${mockOrder.versionId}/fmsDeviceWearerRequest`,
+          response: '{"test":"json"}',
+        })
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsDwRequestDownloadButton().should('exist')
+
+        page.fmsDwRequestDownloadButton().click()
+
+        const filename = `${mockOrderId}-fms-dw-request`
+        cy.readFile(`cypress/downloads/${filename}.json`).should('exist')
+      })
+
+      it('Should download fms monitoring order request as JSON', () => {
+        cy.visit(`/order/${mockOrderId}/receipt`)
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          method: 'GET',
+          subPath: `/versions/${mockOrder.versionId}/fmsMonitoringOrderRequest`,
+          response: '{"test":"json"}',
+        })
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsMoRequestDownloadButton().should('exist')
+
+        page.fmsMoRequestDownloadButton().click()
+
+        const filename = `${mockOrderId}-fms-mo-request`
+        cy.readFile(`cypress/downloads/${filename}.json`).should('exist')
+      })
+
+      it('Should not have buttons to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to false', () => {
+        cy.task('setFeatureFlags', { DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false })
+        cy.visit(`/order/${mockOrderId}/receipt`)
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsDwRequestDownloadButton().should('not.exist')
+        page.fmsMoRequestDownloadButton().should('not.exist')
+      })
     })
 
     it('Should should show all sections', () => {

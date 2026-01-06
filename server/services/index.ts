@@ -36,6 +36,7 @@ import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/m
 import RedisStore from '../routes/monitoring-conditions/store/redisStore'
 import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
+import FmsRequestService from './fmsRequestService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -75,6 +76,8 @@ export const services = () => {
   const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
   const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
+
+  const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -108,6 +111,7 @@ export const services = () => {
     monitoringConditionsUpdateService,
     removeMonitoringTypeService,
     serviceRequestTypeService,
+    fmsRequestService,
   }
 }
 
@@ -138,4 +142,5 @@ export {
   MonitoringConditionsUpdateService,
   RemoveMonitoringTypeService,
   ServiceRequestTypeService,
+  FmsRequestService,
 }

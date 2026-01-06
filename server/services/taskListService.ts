@@ -521,7 +521,12 @@ export default class TaskListService {
           ':fileType(photo_Id|licence|court_order|grant_of_bail)',
           'grant_of_bail',
         ),
-        state: STATES.required,
+        state: convertBooleanToEnum<State>(
+          order.orderParameters?.haveGrantOfBail || null,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
         completed:
           doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) ||
           order.orderParameters?.haveGrantOfBail === false,
