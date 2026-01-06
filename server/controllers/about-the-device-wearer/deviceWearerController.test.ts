@@ -32,7 +32,7 @@ const mockOrder = getMockOrder({
     disabilities: ['VISION', 'MOBILITY'],
     noFixedAbode: null,
     interpreterRequired: true,
-    language: 'BRITISH_SIGN',
+    language: 'British Sign',
   },
 })
 
@@ -115,7 +115,7 @@ describe('DeviceWearerController', () => {
             value: 'true',
           },
           language: {
-            value: 'BRITISH_SIGN',
+            value: 'British Sign',
           },
           errorSummary: null,
         }),
@@ -144,7 +144,7 @@ describe('DeviceWearerController', () => {
               gender: 'FEMALE',
               disabilities: ['VISION', 'MOBILITY'],
               interpreterRequired: 'true',
-              language: 'BRITISH_SIGN',
+              language: 'British Sign',
             },
           ]),
       })
@@ -201,7 +201,7 @@ describe('DeviceWearerController', () => {
             error: undefined,
           },
           language: {
-            value: 'BRITISH_SIGN',
+            value: 'British Sign',
             error: undefined,
           },
           errorSummary: {
@@ -239,7 +239,7 @@ describe('DeviceWearerController', () => {
           gender: 'FEMALE',
           disabilities: ['VISION'],
           interpreterRequired: 'true',
-          language: 'BRITISH_SIGN',
+          language: 'British Sign',
         },
         params: {
           orderId: order.id,
@@ -271,7 +271,7 @@ describe('DeviceWearerController', () => {
         gender: 'FEMALE',
         disabilities: ['VISION'],
         interpreterRequired: 'true',
-        language: 'BRITISH_SIGN',
+        language: 'British Sign',
       })
       expect(req.flash).toHaveBeenNthCalledWith(2, 'validationErrors', [
         {
@@ -307,7 +307,7 @@ describe('DeviceWearerController', () => {
           gender: 'FEMALE',
           disabilities: ['VISION', 'MOBILITY'],
           interpreterRequired: 'true',
-          language: 'BRITISH_SIGN',
+          language: 'British Sign',
         },
         flash: jest.fn(),
       })
@@ -331,7 +331,7 @@ describe('DeviceWearerController', () => {
         disabilities: ['VISION', 'MOBILITY'],
         noFixedAbode: null,
         interpreterRequired: true,
-        language: 'BRITISH_SIGN',
+        language: 'British Sign',
       })
       taskListService.getNextPage = jest
         .fn()
@@ -370,7 +370,7 @@ describe('DeviceWearerController', () => {
           gender: 'FEMALE',
           disabilities: ['VISION', 'MOBILITY'],
           interpreterRequired: 'true',
-          language: 'BRITISH_SIGN',
+          language: 'British Sign',
         },
         flash: jest.fn(),
       })
@@ -394,7 +394,7 @@ describe('DeviceWearerController', () => {
         disabilities: ['VISION', 'MOBILITY'],
         noFixedAbode: null,
         interpreterRequired: true,
-        language: 'BRITISH_SIGN',
+        language: 'British Sign',
       })
       taskListService.getNextPage = jest
         .fn()
@@ -433,7 +433,7 @@ describe('DeviceWearerController', () => {
           gender: 'FEMALE',
           disabilities: ['VISION', 'MOBILITY'],
           interpreterRequired: 'true',
-          language: 'BRITISH_SIGN',
+          language: 'British Sign',
         },
         params: {
           orderId: order.id,
@@ -460,7 +460,7 @@ describe('DeviceWearerController', () => {
         disabilities: ['VISION', 'MOBILITY'],
         noFixedAbode: null,
         interpreterRequired: true,
-        language: 'BRITISH_SIGN',
+        language: 'British Sign',
       })
 
       // When
