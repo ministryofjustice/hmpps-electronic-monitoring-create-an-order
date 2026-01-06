@@ -39,7 +39,7 @@ export default class HaveGrantOfBailController {
       if (!order.orderParameters) {
         order.orderParameters = {}
       }
-      order.orderParameters.haveCourtOrder = formData.fileRequired === 'yes'
+      order.orderParameters.haveGrantOfBail = formData.fileRequired === 'yes'
       const nextPage = this.taskListService.getNextPage(PAGES.haveGrantOfBail, order)
       res.redirect(nextPage)
     }

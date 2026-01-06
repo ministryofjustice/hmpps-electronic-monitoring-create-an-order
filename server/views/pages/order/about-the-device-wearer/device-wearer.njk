@@ -23,7 +23,7 @@
     name: "language",
     label: content.pages.deviceWearer.questions.language.text,
     hint: content.pages.deviceWearer.questions.language.hint,
-    options: content.reference.languages | toOptions(false, true),
+    options: content.reference.languages | toOptions(false, true,'',false,false),
     value: language.value,
     errorMessage: language.error,
     disabled: not isOrderEditable,

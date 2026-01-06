@@ -8,6 +8,7 @@ import { createAnswer, createDateTimeAnswer } from '../../utils/checkYourAnswers
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
@@ -76,6 +77,7 @@ const createViewModel = (order: Order, content: I18n) => {
     ...riskDetails,
     ...variationDetails,
     additionalDocumentDetails,
+    showDownloadJsonButtons: FeatureFlags.getInstance().get('DOWNLOAD_FMS_REQUEST_JSON_ENABLED'),
   }
 }
 
