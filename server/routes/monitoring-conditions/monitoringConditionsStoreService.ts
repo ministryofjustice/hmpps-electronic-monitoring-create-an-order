@@ -36,9 +36,6 @@ export default class MonitoringConditionsStoreService {
         order.monitoringConditions
           ? {
               ...order.monitoringConditions,
-              // clear any existing start and end dates
-              startDate: undefined,
-              endDate: undefined,
             }
           : {},
       )

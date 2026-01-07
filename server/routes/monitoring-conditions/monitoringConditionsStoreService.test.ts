@@ -26,6 +26,8 @@ describe('store service', () => {
     prarr: null,
     sentenceType: null,
     trail: null,
+    endDate: null,
+    startDate: null,
   }
   beforeEach(() => {
     store = new InMemoryStore()
@@ -57,6 +59,8 @@ describe('store service', () => {
       const result = await service.getMonitoringConditions(mockOrder)
 
       expect(result).toEqual({
+        startDate: '2025-01-01T00:00:00Z',
+        endDate: '2025-02-01T00:00:00Z',
         orderType: 'CIVIL',
         curfew: true,
         exclusionZone: true,
