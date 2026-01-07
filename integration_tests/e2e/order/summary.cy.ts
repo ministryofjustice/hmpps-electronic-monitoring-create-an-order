@@ -47,7 +47,11 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
-      page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
+      page.aboutTheDeviceWearerTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/about-the-device-wearer/identity-numbers`,
+      )
 
       page.contactInformationTask.shouldHaveStatus('Incomplete')
       page.contactInformationTask.link.should(
@@ -102,7 +106,11 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
-      page.aboutTheDeviceWearerTask.link.should('have.attr', 'href', `/order/${mockOrderId}/about-the-device-wearer`)
+      page.aboutTheDeviceWearerTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/about-the-device-wearer/identity-numbers`,
+      )
 
       page.contactInformationTask.shouldHaveStatus('Incomplete')
       page.contactInformationTask.link.should(
@@ -243,6 +251,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: 'Joe',
             lastName: 'Bloggs',
             alias: null,
@@ -601,6 +611,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: 'Joe',
             lastName: 'Bloggs',
             alias: null,
@@ -869,6 +881,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: 'Joe',
             lastName: 'Bloggs',
             alias: null,
@@ -987,6 +1001,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: 'Joe',
             lastName: 'Bloggs',
             alias: null,
@@ -1068,6 +1084,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: 'Joe',
             lastName: 'Bloggs',
             alias: null,
@@ -1311,6 +1329,8 @@ context('Order Summary', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: 'Joe',
             lastName: 'Bloggs',
             alias: null,
