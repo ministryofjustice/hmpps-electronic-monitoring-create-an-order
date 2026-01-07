@@ -19,7 +19,7 @@ const adultDeviceWearer = createDeviceWearer({
   pncId: 'pnc',
   deliusId: 'delius',
   prisonNumber: 'prison',
-  homeOfficeReferenceNumber: 'home office',
+  homeOfficeReferenceNumber: '',
   firstName: 'tester',
   lastName: 'testington',
   alias: 'test',
@@ -318,23 +318,6 @@ describe('DeviceWearerCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: 'Home Office Reference Number',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'home office reference number',
-              },
-            ],
-          },
-        },
       ],
       responsibleAdult: [],
     })
@@ -593,23 +576,6 @@ describe('DeviceWearerCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: 'Home Office Reference Number',
-          },
-          value: {
-            text: 'home office',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'home office reference number',
-              },
-            ],
-          },
-        },
       ],
       responsibleAdult: [],
     })
@@ -864,23 +830,6 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Home Office Reference Number',
-          },
-          value: {
-            text: 'home office',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'home office reference number',
               },
             ],
           },
