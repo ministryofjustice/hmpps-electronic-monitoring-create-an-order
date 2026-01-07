@@ -5,6 +5,7 @@ import FormRadiosComponent from '../../formRadiosComponent'
 export type TrailMonitoringFormData = {
   startDate?: Date
   endDate?: Date
+  deviceType?: string
 }
 
 export default class TrailMonitoringFormComponent extends FormComponent {
@@ -34,6 +35,10 @@ export default class TrailMonitoringFormComponent extends FormComponent {
 
     if (data.endDate) {
       this.endDateField.set(data.endDate)
+    }
+
+    if (data.deviceType) {
+      this.deviceTypeField.set(data.deviceType)
     }
   }
 

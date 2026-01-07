@@ -115,6 +115,37 @@ context('Trail monitoring', () => {
       page.form.deviceTypeField.shouldExist()
       page.form.deviceTypeField.shouldHaveAllOptions()
     })
+
+    it('should submit the device type', () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions-trail',
+        response: {
+          ...mockSubmittedTrailMonitoring.monitoringConditionsTrail,
+          deviceType: 'FITTED',
+        },
+      })
+
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        startDate: new Date(2026, 2, 27),
+        endDate: new Date(2026, 3, 28),
+        deviceType: 'A fitted GPS tag',
+      })
+
+      page.form.saveAndContinueButton.click()
+
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-trail`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+        expect(requests[0]).to.deep.equal({
+          startDate: '2026-03-27T00:00:00.000Z',
+          endDate: '2026-04-28T22:59:00.000Z',
+          deviceType: 'FITTED',
+        })
+      })
+    })
   })
 
   context('Submitted Order', () => {

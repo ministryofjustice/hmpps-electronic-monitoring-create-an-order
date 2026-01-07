@@ -24,6 +24,7 @@ const TrailMonitoringFormDataModel = z.object({
 const TrailMonitoringFormDataValidator = z.object({
   startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
   endDate: DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
+  deviceType: z.string().optional(),
 })
 type TrailMonitoringApiRequestBody = z.infer<typeof TrailMonitoringFormDataValidator>
 
