@@ -15,7 +15,6 @@ describe('store service', () => {
     alcohol: null,
     conditionType: null,
     curfew: null,
-    endDate: null,
     exclusionZone: null,
     hdc: null,
     issp: null,
@@ -26,8 +25,9 @@ describe('store service', () => {
     dapolMissedInError: null,
     prarr: null,
     sentenceType: null,
-    startDate: null,
     trail: null,
+    endDate: null,
+    startDate: null,
   }
   beforeEach(() => {
     store = new InMemoryStore()
