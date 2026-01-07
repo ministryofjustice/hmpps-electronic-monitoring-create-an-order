@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
-import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/responsible-adult-details'
 
@@ -26,6 +25,8 @@ context('About the device wearer', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -56,47 +57,6 @@ context('About the device wearer', () => {
         cy.get('#interpreterRequired-item-hint').find('span').contains('Selecting this will reveal an additional input')
       })
 
-      it('should continue to the identity numbers page', () => {
-        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
-
-        const validFormData = {
-          firstNames: 'Barton',
-          lastName: 'Fink',
-          alias: 'Barty',
-
-          dob: new Date('1970-01-01T00:00:00.000Z'),
-
-          is18: true,
-          sex: 'Male',
-          genderIdentity: 'Male',
-          disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
-          interpreterRequired: true,
-          language: 'British Sign',
-        }
-
-        page.form.fillInWith(validFormData)
-        page.form.saveAndContinueButton.click()
-
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders/${mockOrderId}${apiPath}`,
-          body: {
-            firstName: 'Barton',
-            lastName: 'Fink',
-            alias: 'Barty',
-            adultAtTimeOfInstallation: true,
-            sex: 'MALE',
-            gender: 'MALE',
-            dateOfBirth: '1970-01-01T00:00:00.000Z',
-            disabilities: 'NO_LISTED_CONDITION',
-            otherDisability: '',
-            interpreterRequired: true,
-            language: 'British Sign',
-          },
-        }).should('be.true')
-
-        Page.verifyOnPage(IdentityNumbersPage)
-      })
-
       it('should continue to the responsible adult page', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
@@ -108,6 +68,8 @@ context('About the device wearer', () => {
             deliusId: '1234567',
             prisonNumber: '1234567',
             homeOfficeReferenceNumber: '1234567',
+            complianceAndEnforcementPersonReference: '1234567',
+            courtCaseReferenceNumber: '1234567',
             firstName: 'Barton',
             lastName: 'Fink',
             alias: 'Barty',
@@ -172,6 +134,8 @@ context('About the device wearer', () => {
             deliusId: '1234567',
             prisonNumber: '1234567',
             homeOfficeReferenceNumber: '1234567',
+            complianceAndEnforcementPersonReference: '1234567',
+            courtCaseReferenceNumber: '1234567',
             firstName: 'Barton',
             lastName: 'Fink',
             alias: 'Barty',
@@ -237,6 +201,8 @@ context('About the device wearer', () => {
             deliusId: '1234567',
             prisonNumber: '1234567',
             homeOfficeReferenceNumber: '1234567',
+            complianceAndEnforcementPersonReference: '1234567',
+            courtCaseReferenceNumber: '1234567',
             firstName: 'Sigmund',
             lastName: 'Ora',
             alias: 'Sig',
@@ -299,6 +265,8 @@ context('About the device wearer', () => {
             deliusId: '1234567',
             prisonNumber: '1234567',
             homeOfficeReferenceNumber: '1234567',
+            complianceAndEnforcementPersonReference: '1234567',
+            courtCaseReferenceNumber: '1234567',
             firstName: 'Sebastien',
             lastName: 'Eden',
             alias: 'Bastien',
@@ -363,6 +331,8 @@ context('About the device wearer', () => {
             deliusId: '1234567',
             prisonNumber: '1234567',
             homeOfficeReferenceNumber: '1234567',
+            complianceAndEnforcementPersonReference: '1234567',
+            courtCaseReferenceNumber: '1234567',
             firstName: 'Nadir',
             lastName: 'Adnan',
             alias: '',
