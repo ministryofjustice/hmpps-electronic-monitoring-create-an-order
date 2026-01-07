@@ -84,6 +84,18 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: 
       uri,
       answerOpts,
     ),
+    createAnswer(
+      content.pages.identityNumbers.questions.complianceAndEnforcementPersonReference.text,
+      order.deviceWearer.complianceAndEnforcementPersonReference,
+      uri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.identityNumbers.questions.courtCaseReferenceNumber.text,
+      order.deviceWearer.courtCaseReferenceNumber,
+      uri,
+      answerOpts,
+    ),
   ]
 }
 

@@ -20,6 +20,8 @@ const adultDeviceWearer = createDeviceWearer({
   deliusId: 'delius',
   prisonNumber: 'prison',
   homeOfficeReferenceNumber: '',
+  complianceAndEnforcementPersonReference: 'cepr',
+  courtCaseReferenceNumber: 'ccrn',
   firstName: 'tester',
   lastName: 'testington',
   alias: 'test',
@@ -318,6 +320,40 @@ describe('DeviceWearerCheckAnswersController', () => {
             ],
           },
         },
+        {
+          key: {
+            text: 'Compliance and Enforcement Person Reference (CEPR)',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'compliance and enforcement person reference (cepr)',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Court Case Reference Number (CCRN)',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'court case reference number (ccrn)',
+              },
+            ],
+          },
+        },
       ],
       responsibleAdult: [],
     })
@@ -576,6 +612,40 @@ describe('DeviceWearerCheckAnswersController', () => {
             ],
           },
         },
+        {
+          key: {
+            text: 'Compliance and Enforcement Person Reference (CEPR)',
+          },
+          value: {
+            text: 'cepr',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'compliance and enforcement person reference (cepr)',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Court Case Reference Number (CCRN)',
+          },
+          value: {
+            text: 'ccrn',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'court case reference number (ccrn)',
+              },
+            ],
+          },
+        },
       ],
       responsibleAdult: [],
     })
@@ -830,6 +900,40 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Compliance and Enforcement Person Reference (CEPR)',
+          },
+          value: {
+            text: 'cepr',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'compliance and enforcement person reference (cepr)',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Court Case Reference Number (CCRN)',
+          },
+          value: {
+            text: 'ccrn',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'court case reference number (ccrn)',
               },
             ],
           },

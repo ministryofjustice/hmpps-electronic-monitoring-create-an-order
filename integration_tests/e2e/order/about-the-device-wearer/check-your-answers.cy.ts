@@ -110,8 +110,7 @@ context('Device wearer - check your answers', () => {
         { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
         { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'NDelius ID', value: 'delius' },
-        { key: 'Prison number', value: 'prison' },
-        { key: 'Home Office Reference Number', value: 'ho' },
+        { key: 'Prison Number', value: 'prison' },
         { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
         { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
@@ -185,8 +184,9 @@ context('Device wearer - check your answers', () => {
         { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
         { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'NDelius ID', value: 'delius' },
-        { key: 'Prison number', value: 'prison' },
-        { key: 'Home Office Reference Number', value: 'ho' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
@@ -258,8 +258,9 @@ context('Device wearer - check your answers', () => {
         { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
         { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'NDelius ID', value: 'delius' },
-        { key: 'Prison number', value: 'prison' },
-        { key: 'Home Office Reference Number', value: 'ho' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldExist()
       page.responsibleAdultSection.shouldHaveItems([
@@ -337,8 +338,9 @@ context('Device wearer - check your answers', () => {
         { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
         { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'NDelius ID', value: 'delius' },
-        { key: 'Prison number', value: 'prison' },
-        { key: 'Home Office Reference Number', value: 'ho' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldExist()
       page.responsibleAdultSection.shouldHaveItems([
@@ -432,8 +434,9 @@ context('Device wearer - check your answers', () => {
         { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
         { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'NDelius ID', value: 'delius' },
-        { key: 'Prison number', value: 'prison' },
-        { key: 'Home Office Reference Number', value: 'ho' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
@@ -536,8 +539,9 @@ context('Device wearer - check your answers', () => {
         { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
         { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'NDelius ID', value: 'delius' },
-        { key: 'Prison number', value: 'prison' },
-        { key: 'Home Office Reference Number', value: 'ho' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
