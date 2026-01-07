@@ -146,6 +146,21 @@ context('Trail monitoring', () => {
         })
       })
     })
+
+    it('should show validation errors', () => {
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        startDate: new Date(2026, 2, 27),
+        endDate: new Date(2026, 3, 28),
+      })
+
+      page.form.saveAndContinueButton.click()
+
+      page.form.deviceTypeField.shouldHaveValidationMessage('Select what type of device is needed')
+      page.errorSummary.shouldExist()
+      page.errorSummary.shouldHaveError('Select what type of device is needed')
+    })
   })
 
   context('Submitted Order', () => {

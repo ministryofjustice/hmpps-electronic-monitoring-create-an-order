@@ -37,11 +37,14 @@ export default class TrailMonitoringController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = TrailMonitoringFormDataModel.parse(req.body)
+    const { interestedParties } = req.order!
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation ?? null
 
     const updateMonitoringConditionsResult = await this.trailMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
       data: formData,
+      notifyingOrganisation,
     })
 
     if (isValidationResult(updateMonitoringConditionsResult)) {

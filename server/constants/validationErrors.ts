@@ -81,6 +81,7 @@ interface ValidationErrors {
   trailMonitoring: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    deviceTypeRequired: string
   }
   notifyingOrganisation: {
     notifyingOrganisationName: string
@@ -274,6 +275,7 @@ const validationErrors: ValidationErrors = {
   trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', true),
+    deviceTypeRequired: 'Select what type of device is needed',
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',

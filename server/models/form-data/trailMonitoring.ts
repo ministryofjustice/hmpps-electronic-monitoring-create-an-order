@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { DateTimeInputModel } from './formData'
 import { validationErrors } from '../../constants/validationErrors'
+import { NotifyingOrganisation } from '../NotifyingOrganisation'
 
 const TrailMonitoringFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -21,12 +22,17 @@ const TrailMonitoringFormDataModel = z.object({
   deviceType: z.string().optional(),
 })
 
-const TrailMonitoringFormDataValidator = z.object({
-  startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
-  endDate: DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
-  deviceType: z.string().optional(),
-})
-type TrailMonitoringApiRequestBody = z.infer<typeof TrailMonitoringFormDataValidator>
+const TrailMonitoringFormDataValidator = (notifyingOrganisation: NotifyingOrganisation | null) =>
+  z.object({
+    startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
+    endDate: DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
+    deviceType:
+      notifyingOrganisation === 'HOME_OFFICE'
+        ? z.string({ message: validationErrors.trailMonitoring.deviceTypeRequired })
+        : z.string().optional(),
+  })
+
+type TrailMonitoringApiRequestBody = z.infer<ReturnType<typeof TrailMonitoringFormDataValidator>>
 
 export { TrailMonitoringFormDataModel, TrailMonitoringApiRequestBody, TrailMonitoringFormDataValidator }
 export type TrailMonitoringFormData = z.infer<typeof TrailMonitoringFormDataModel>
