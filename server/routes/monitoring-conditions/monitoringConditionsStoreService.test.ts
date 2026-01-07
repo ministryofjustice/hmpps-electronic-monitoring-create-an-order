@@ -15,7 +15,6 @@ describe('store service', () => {
     alcohol: null,
     conditionType: null,
     curfew: null,
-    endDate: null,
     exclusionZone: null,
     hdc: null,
     issp: null,
@@ -26,7 +25,6 @@ describe('store service', () => {
     dapolMissedInError: null,
     prarr: null,
     sentenceType: null,
-    startDate: null,
     trail: null,
   }
   beforeEach(() => {
@@ -59,8 +57,6 @@ describe('store service', () => {
       const result = await service.getMonitoringConditions(mockOrder)
 
       expect(result).toEqual({
-        startDate: '2025-01-01T00:00:00Z',
-        endDate: '2025-02-01T00:00:00Z',
         orderType: 'CIVIL',
         curfew: true,
         exclusionZone: true,

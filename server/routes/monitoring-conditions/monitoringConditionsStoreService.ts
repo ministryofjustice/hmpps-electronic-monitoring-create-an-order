@@ -32,7 +32,16 @@ export default class MonitoringConditionsStoreService {
     let result = await this.dataStore.get(key)
 
     if (result === null) {
-      result = JSON.stringify(order.monitoringConditions ? order.monitoringConditions : {})
+      result = JSON.stringify(
+        order.monitoringConditions
+          ? {
+              ...order.monitoringConditions,
+              // clear any existing start and end dates
+              startDate: undefined,
+              endDate: undefined,
+            }
+          : {},
+      )
     }
     await this.dataStore.set(key, result, 24 * 60 * 60)
 
