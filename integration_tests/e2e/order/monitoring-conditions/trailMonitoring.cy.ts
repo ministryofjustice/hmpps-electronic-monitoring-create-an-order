@@ -47,6 +47,20 @@ const mockEmptyTrailMonitoringWithHomeOffice = {
   },
 }
 
+const mockEmptyTrailMonitoringWithoutHomeOffice = {
+  ...mockEmptyTrailMonitoring,
+  interestedParties: {
+    notifyingOrganisation: 'PROBATION',
+    notifyingOrganisationName: 'Home Office',
+    notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+    responsibleOfficerName: 'Test Officer',
+    responsibleOfficerPhoneNumber: '01234567890',
+    responsibleOrganisation: 'PROBATION',
+    responsibleOrganisationRegion: 'Test Region',
+    responsibleOrganisationEmail: 'test@probation.gov.uk',
+  },
+}
+
 const mockSubmittedTrailMonitoring = {
   monitoringConditionsTrail: {
     startDate: '2024-03-27T00:00:00.000Z',
@@ -160,6 +174,25 @@ context('Trail monitoring', () => {
       page.form.deviceTypeField.shouldHaveValidationMessage('Select what type of device is needed')
       page.errorSummary.shouldExist()
       page.errorSummary.shouldHaveError('Select what type of device is needed')
+    })
+  })
+
+  context('non home office', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: mockEmptyTrailMonitoringWithoutHomeOffice,
+      })
+
+      cy.signIn()
+    })
+
+    it('should not display device type field', () => {
+      Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-radios').should('not.exist')
     })
   })
 
