@@ -97,7 +97,6 @@ type ListOrdersStubOptions = {
 const defaultListOrdersOptions: ListOrdersStubOptions = {
   httpStatus: 200,
   orders: [
-    mockApiOrder('SUBMITTED'),
     {
       ...mockApiOrder(),
       deviceWearer: {

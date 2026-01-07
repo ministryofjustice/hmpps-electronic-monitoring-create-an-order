@@ -14,6 +14,9 @@ export default abstract class MonitoringConditionsBaseController {
   async UpdateMonitoringConditionAndGoToMonitoringTypePage(order: Order, req: Request, res: Response) {
     if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
       const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)
+      // clear any existing start and end date
+      data.startDate = null
+      data.endDate = null
       await this.monitoringConditionsService.updateMonitoringConditions({
         data,
         accessToken: res.locals.user.token,
