@@ -1,5 +1,6 @@
 import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
+import FormRadiosComponent from '../../formRadiosComponent'
 
 export type TrailMonitoringFormData = {
   startDate?: Date
@@ -15,6 +16,13 @@ export default class TrailMonitoringFormComponent extends FormComponent {
 
   get endDateField(): FormDateComponent {
     return new FormDateComponent(this.form, 'What date does trail monitoring end?')
+  }
+
+  get deviceTypeField(): FormRadiosComponent {
+    return new FormRadiosComponent(this.form, 'What type of trail monitoring device is needed?', [
+      'A fitted GPS tag',
+      'A non-fitted device',
+    ])
   }
 
   // FORM HELPERS

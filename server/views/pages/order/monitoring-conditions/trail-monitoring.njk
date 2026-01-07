@@ -1,5 +1,6 @@
 {% extends "../../../partials/form-layout.njk" %}
 {% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set section = content.pages.trailMonitoring.section %}
 {% set heading = content.pages.trailMonitoring.title %}
@@ -43,5 +44,31 @@
       defaultHours: 23,
       defaultMinutes: 59
     })}}
+
+    {% if notifyingOrganisation == 'HOME_OFFICE' %}
+      {{ govukRadios({
+        name: "deviceType",
+        fieldset: {
+          legend: {
+            text: questions.deviceType.text,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: [
+          {
+            value: "FITTED",
+            text: "A fitted GPS tag",
+            disabled: not isOrderEditable
+          },
+          {
+            value: "NON_FITTED",
+            text: "A non-fitted device",
+            disabled: not isOrderEditable
+          }
+        ],
+        value: deviceType.value,
+        errorMessage: deviceType.error
+      }) }}
+  {% endif %}
 
 {% endblock %}

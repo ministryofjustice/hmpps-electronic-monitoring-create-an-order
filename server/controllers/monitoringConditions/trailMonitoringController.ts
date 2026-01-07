@@ -16,9 +16,11 @@ export default class TrailMonitoringController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsTrail } = req.order!
+    const { monitoringConditionsTrail, interestedParties } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation || undefined
+
     const viewModel = trailMonitoringViewModel.construct(
       monitoringConditionsTrail ?? {
         startDate: null,
@@ -26,6 +28,7 @@ export default class TrailMonitoringController {
       },
       errors as never,
       formData as never,
+      notifyingOrganisation,
     )
 
     res.render(`pages/order/monitoring-conditions/trail-monitoring`, viewModel)

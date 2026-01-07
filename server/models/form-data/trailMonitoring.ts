@@ -18,6 +18,7 @@ const TrailMonitoringFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
+  deviceType: z.string().optional(),
 })
 
 const TrailMonitoringFormDataValidator = z.object({

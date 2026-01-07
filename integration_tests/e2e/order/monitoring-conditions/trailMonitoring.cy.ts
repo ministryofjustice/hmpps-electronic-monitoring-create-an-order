@@ -33,6 +33,20 @@ const mockEmptyTrailMonitoring = {
   },
 }
 
+const mockEmptyTrailMonitoringWithHomeOffice = {
+  ...mockEmptyTrailMonitoring,
+  interestedParties: {
+    notifyingOrganisation: 'HOME_OFFICE',
+    notifyingOrganisationName: 'Home Office',
+    notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+    responsibleOfficerName: 'Test Officer',
+    responsibleOfficerPhoneNumber: '01234567890',
+    responsibleOrganisation: 'PROBATION',
+    responsibleOrganisationRegion: 'Test Region',
+    responsibleOrganisationEmail: 'test@probation.gov.uk',
+  },
+}
+
 const mockSubmittedTrailMonitoring = {
   monitoringConditionsTrail: {
     startDate: '2024-03-27T00:00:00.000Z',
@@ -81,6 +95,25 @@ context('Trail monitoring', () => {
       const page = Page.verifyOnPage(TrailMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
+    })
+  })
+
+  context('home office', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: mockEmptyTrailMonitoringWithHomeOffice,
+      })
+      cy.signIn()
+    })
+
+    it('Should display the device type field', () => {
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.deviceTypeField.shouldExist()
+      page.form.deviceTypeField.shouldHaveAllOptions()
     })
   })
 
