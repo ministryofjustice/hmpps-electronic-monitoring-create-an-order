@@ -33,6 +33,34 @@ const mockEmptyTrailMonitoring = {
   },
 }
 
+const mockEmptyTrailMonitoringWithHomeOffice = {
+  ...mockEmptyTrailMonitoring,
+  interestedParties: {
+    notifyingOrganisation: 'HOME_OFFICE',
+    notifyingOrganisationName: 'Home Office',
+    notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+    responsibleOfficerName: 'Test Officer',
+    responsibleOfficerPhoneNumber: '01234567890',
+    responsibleOrganisation: 'PROBATION',
+    responsibleOrganisationRegion: 'Test Region',
+    responsibleOrganisationEmail: 'test@probation.gov.uk',
+  },
+}
+
+const mockEmptyTrailMonitoringWithoutHomeOffice = {
+  ...mockEmptyTrailMonitoring,
+  interestedParties: {
+    notifyingOrganisation: 'PROBATION',
+    notifyingOrganisationName: 'Home Office',
+    notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+    responsibleOfficerName: 'Test Officer',
+    responsibleOfficerPhoneNumber: '01234567890',
+    responsibleOrganisation: 'PROBATION',
+    responsibleOrganisationRegion: 'Test Region',
+    responsibleOrganisationEmail: 'test@probation.gov.uk',
+  },
+}
+
 const mockSubmittedTrailMonitoring = {
   monitoringConditionsTrail: {
     startDate: '2024-03-27T00:00:00.000Z',
@@ -81,6 +109,95 @@ context('Trail monitoring', () => {
       const page = Page.verifyOnPage(TrailMonitoringPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
+    })
+  })
+
+  context('home office', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: mockEmptyTrailMonitoringWithHomeOffice,
+      })
+      cy.signIn()
+    })
+
+    it('Should display the device type field', () => {
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.deviceTypeField.shouldExist()
+      page.form.deviceTypeField.shouldHaveAllOptions()
+    })
+
+    it('should have an optional end date', () => {
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.endDateField.element.contains('(optional)')
+    })
+
+    it('should submit the device type', () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions-trail',
+        response: {
+          ...mockSubmittedTrailMonitoring.monitoringConditionsTrail,
+          deviceType: 'FITTED',
+        },
+      })
+
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        startDate: new Date(2026, 2, 27),
+        deviceType: 'A fitted GPS tag',
+      })
+
+      page.form.saveAndContinueButton.click()
+
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-trail`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+        expect(requests[0]).to.deep.equal({
+          startDate: '2026-03-27T00:00:00.000Z',
+          endDate: '2040-01-01T23:59:59.000Z',
+          deviceType: 'FITTED',
+        })
+      })
+    })
+
+    it('should show validation errors', () => {
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        startDate: new Date(2026, 2, 27),
+        endDate: new Date(2026, 3, 28),
+      })
+
+      page.form.saveAndContinueButton.click()
+
+      page.form.deviceTypeField.shouldHaveValidationMessage('Select what type of device is needed')
+      page.errorSummary.shouldExist()
+      page.errorSummary.shouldHaveError('Select what type of device is needed')
+    })
+  })
+
+  context('non home office', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: mockEmptyTrailMonitoringWithoutHomeOffice,
+      })
+
+      cy.signIn()
+    })
+
+    it('should not display device type field', () => {
+      Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-radios').should('not.exist')
     })
   })
 

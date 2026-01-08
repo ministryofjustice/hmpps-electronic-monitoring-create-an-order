@@ -82,6 +82,11 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  trailMonitoringHomeOffice: {
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+    deviceTypeRequired: string
+  }
   notifyingOrganisation: {
     notifyingOrganisationName: string
     responsibleOrganisation: string
@@ -274,6 +279,11 @@ const validationErrors: ValidationErrors = {
   trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', true),
+  },
+  trailMonitoringHomeOffice: {
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', false),
+    deviceTypeRequired: 'Select what type of device is needed',
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',
