@@ -33,6 +33,7 @@ import PossibleRisks from './possibleRisks'
 import PoliceAreas from './policeAreas'
 import ServiceRequestTypes from './serviceRequestTypes'
 import ProbationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
+import DeviceTypes from './deviceTypes'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -63,6 +64,7 @@ type ReferenceCatalogDDv4 = {
   possibleRisks: PossibleRisks
   policeAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
+  deviceTypes: DeviceTypes
 }
 
 type ReferenceCatalogDDv5 = {
@@ -100,6 +102,7 @@ type ReferenceCatalogDDv5 = {
   possibleRisks: PossibleRisks
   policeAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
+  deviceTypes: DeviceTypes
 }
 
 type ReferenceCatalogDDv6 = {
@@ -137,6 +140,7 @@ type ReferenceCatalogDDv6 = {
   possibleRisks: PossibleRisks
   policeAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
+  deviceTypes: DeviceTypes
 }
 
 type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5 | ReferenceCatalogDDv6

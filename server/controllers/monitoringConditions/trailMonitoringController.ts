@@ -16,9 +16,11 @@ export default class TrailMonitoringController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsTrail } = req.order!
+    const { monitoringConditionsTrail, interestedParties } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation || undefined
+
     const viewModel = trailMonitoringViewModel.construct(
       monitoringConditionsTrail ?? {
         startDate: null,
@@ -26,6 +28,7 @@ export default class TrailMonitoringController {
       },
       errors as never,
       formData as never,
+      notifyingOrganisation,
     )
 
     res.render(`pages/order/monitoring-conditions/trail-monitoring`, viewModel)
@@ -34,11 +37,14 @@ export default class TrailMonitoringController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = TrailMonitoringFormDataModel.parse(req.body)
+    const { interestedParties } = req.order!
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation ?? null
 
     const updateMonitoringConditionsResult = await this.trailMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
       data: formData,
+      notifyingOrganisation,
     })
 
     if (isValidationResult(updateMonitoringConditionsResult)) {
