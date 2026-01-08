@@ -56,7 +56,6 @@ context('Service-Request-Types', () => {
       ...createFakeAddress(),
       hasAnotherAddress: 'No',
     }
-    const installationAddressDetails = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Home Office', 'Probation', null, 'North West')
 
     const monitoringOrderTypeDescription = {
@@ -83,6 +82,15 @@ context('Service-Request-Types', () => {
       grantOfBail: { fileName: files.licence.fileName, contents: files.licence.contents, fileRequired: 'Yes' },
     }
 
+    const installationLocationDetails = {
+      location: 'At an immigration removal centre',
+    }
+
+    const installationAppointmentDetails = {
+      placeName: 'mock immigration removal centre',
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+    }
+    const installationAddress = createFakeAddress()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
 
@@ -96,7 +104,7 @@ context('Service-Request-Types', () => {
       interestedParties,
       installationAndRisk,
       monitoringOrderTypeDescription,
-      installationAddressDetails,
+      installationAddressDetails: installationAddress,
       curfewReleaseDetails: undefined,
       curfewConditionDetails: undefined,
       curfewTimetable: undefined,
@@ -106,8 +114,8 @@ context('Service-Request-Types', () => {
       attendanceMonitoringDetails: undefined,
       files: attachmentFiles,
       probationDeliveryUnit,
-      installationLocation: undefined,
-      installationAppointment: undefined,
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
     })
     orderSummaryPage.submitOrderButton.click()
     const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

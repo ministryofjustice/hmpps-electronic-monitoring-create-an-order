@@ -132,7 +132,11 @@ const isTagAtSourcePilotPrison = (order: Order): boolean => {
 }
 
 const isTagAtSourceAvailable = (order: Order): boolean => {
-  return isTagAtSourcePilotPrison(order) || order.monitoringConditionsAlcohol?.startDate !== undefined
+  return (
+    isTagAtSourcePilotPrison(order) ||
+    order.monitoringConditionsAlcohol?.startDate !== undefined ||
+    order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+  )
 }
 
 export default class TaskListService {
@@ -472,7 +476,8 @@ export default class TaskListService {
       path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
-          order.installationLocation?.location === 'PROBATION_OFFICE',
+          order.installationLocation?.location === 'PROBATION_OFFICE' ||
+          order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE',
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -487,7 +492,8 @@ export default class TaskListService {
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
           order.installationLocation?.location === 'PROBATION_OFFICE' ||
-          order.installationLocation?.location === 'INSTALLATION',
+          order.installationLocation?.location === 'INSTALLATION' ||
+          order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE',
 
         STATES.cantBeStarted,
         STATES.required,
