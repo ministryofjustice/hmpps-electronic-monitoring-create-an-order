@@ -4,6 +4,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import fillInTagAtSourceWith from '../../../utils/scenario-flows/tag-at-source.cy'
 
 context('Order type descriptions', () => {
   const currentDate = new Date()
@@ -66,11 +67,18 @@ context('Order type descriptions', () => {
     }
   }
 
-  const verifyResult = ({ monitoringOrderTypeDescription }) => {
+  const verifyResult = ({
+    monitoringOrderTypeDescription,
+    installationLocation = undefined,
+    installationAppointment = undefined,
+    installationAddressDetails = undefined,
+  }) => {
     const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
     trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
     trailMonitoringPage.form.saveAndContinueButton.click()
-
+    if (installationLocation) {
+      fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
+    }
     const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
     const expectedOrderType =
       monitoringOrderTypeDescription.orderType === 'Release from prison'
@@ -283,6 +291,15 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is home office', () => {
+    const installationLocation = {
+      location: 'At a prison',
+    }
+
+    const installationAppointment = {
+      placeName: 'mock prison',
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+    }
+    const installationAddressDetails = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       monitoringCondition: 'Trail monitoring',
@@ -295,7 +312,12 @@ context('Order type descriptions', () => {
       installationAndRisk,
       monitoringOrderTypeDescription,
     })
-    verifyResult({ monitoringOrderTypeDescription })
+    verifyResult({
+      monitoringOrderTypeDescription,
+      installationLocation,
+      installationAppointment,
+      installationAddressDetails,
+    })
   })
 
   it('Notification org is Civil', () => {

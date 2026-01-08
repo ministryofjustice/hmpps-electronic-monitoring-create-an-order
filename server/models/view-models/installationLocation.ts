@@ -11,6 +11,7 @@ import { createAddressPreview, getError } from '../../utils/utils'
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
   pilotPrison?: boolean
+  showImmigrationRemovalCentre?: boolean
   fixedAddressExist: boolean
 }
 
@@ -32,6 +33,10 @@ const hasFixedAddress = (order: Order): boolean => {
   return primaryAddress !== undefined
 }
 
+const showImmigrationRemovalCente = (order: Order): boolean => {
+  return order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+}
+
 const constructFromFormData = (
   formData: InstallationLocationFormData,
   primaryAddressView: string,
@@ -47,6 +52,7 @@ const constructFromFormData = (
     primaryAddressView: { value: primaryAddressView },
     pilotPrison: getPilotPrisonStatus(order),
     fixedAddressExist: hasFixedAddress(order),
+    showImmigrationRemovalCentre: showImmigrationRemovalCente(order),
   }
 }
 
@@ -63,6 +69,7 @@ const constructFromEntity = (
     errorSummary: null,
     pilotPrison: getPilotPrisonStatus(order),
     fixedAddressExist: hasFixedAddress(order),
+    showImmigrationRemovalCentre: showImmigrationRemovalCente(order),
   }
 }
 
