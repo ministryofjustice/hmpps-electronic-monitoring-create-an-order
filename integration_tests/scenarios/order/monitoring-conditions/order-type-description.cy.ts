@@ -69,12 +69,13 @@ context('Order type descriptions', () => {
 
   const verifyResult = ({
     monitoringOrderTypeDescription,
-    installationLocation = undefined,
+                            trailMonitoring = trailMonitoringOrder,
+                            installationLocation = undefined,
     installationAppointment = undefined,
     installationAddressDetails = undefined,
   }) => {
     const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-    trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+    trailMonitoringPage.form.fillInWith(trailMonitoring)
     trailMonitoringPage.form.saveAndContinueButton.click()
     if (installationLocation) {
       fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
@@ -305,6 +306,12 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
+    const trailMonitoringOrderWithDeviceType = {
+      startDate: new Date(currentDate.getFullYear(), 11, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      deviceType: 'A fitted GPS tag',
+    }
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
@@ -314,7 +321,8 @@ context('Order type descriptions', () => {
     })
     verifyResult({
       monitoringOrderTypeDescription,
-      installationLocation,
+        trailMonitoring : trailMonitoringOrderWithDeviceType,
+        installationLocation,
       installationAppointment,
       installationAddressDetails,
     })

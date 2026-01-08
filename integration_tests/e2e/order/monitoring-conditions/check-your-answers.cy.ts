@@ -54,11 +54,22 @@ context('Check your answers', () => {
       monitoringConditionsTrail: {
         endDate: '2024-11-11T00:00:00Z',
         startDate: '2024-11-11T00:00:00Z',
+        deviceType: 'FITTED',
       },
       monitoringConditionsAlcohol: {
         monitoringType: 'ALCOHOL_ABSTINENCE',
         startDate: '2024-03-27T00:00:00.000Z',
         endDate: '2025-04-28T00:00:00.000Z',
+      },
+      interestedParties: {
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: '',
+        responsibleOfficerName: '',
+        responsibleOfficerPhoneNumber: '',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: '',
+        responsibleOrganisationEmail: '',
       },
       dataDictionaryVersion: 'DDV5',
     }
@@ -101,6 +112,9 @@ context('Check your answers', () => {
       ])
       page.curfewTimetableSection().element.should('exist')
       page.trailMonitoringConditionsSection().shouldExist()
+      page
+        .trailMonitoringConditionsSection()
+        .shouldHaveItem('What type of trail monitoring device is needed?', 'A fitted GPS tag')
       page.alcoholMonitoringConditionsSection().shouldExist()
     })
 

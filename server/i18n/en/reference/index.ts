@@ -5,6 +5,7 @@ import ReferenceCatalog, {
   ReferenceCatalogDDv6,
 } from '../../../types/i18n/reference'
 import alcoholMonitoringTypes from './alcoholMonitoringTypes'
+import deviceTypes from './deviceTypes'
 import conditionTypes from './conditionTypes'
 import crownCourts from './crownCourts'
 import civilCountyCourts from './ddv5/civilCountyCourts'
@@ -51,6 +52,7 @@ import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnit
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
+  deviceTypes,
   conditionTypes,
   crownCourts,
   disabilities,
@@ -82,6 +84,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
 
 const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   alcoholMonitoringTypes,
+  deviceTypes,
   civilCountyCourts,
   conditionTypes,
   crownCourts: crownCourtsDDv5,
@@ -119,6 +122,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
 
 const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   alcoholMonitoringTypes,
+  deviceTypes,
   civilCountyCourts,
   conditionTypes,
   crownCourts: crownCourtsDDv5,
