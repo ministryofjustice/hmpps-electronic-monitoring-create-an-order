@@ -28,11 +28,17 @@
       defaultMinutes: "00"
     })}}
 
+  
+  {%set endDateQuestion = questions.endDate.text %}
+  {% if notifyingOrganisation == 'HOME_OFFICE' %}
+    {% set endDateQuestion = endDateQuestion + ' (optional)' %}
+  {% endif %}
+
   {{dateTimeInput({
       id: "endDate",
       name: "endDate",
       date: endDate.value,
-      dateLabel:  questions.endDate.text,
+      dateLabel:  endDateQuestion,
       dateHint: questions.endDate.hint,
       errorMessages: {
         field: endDate.error,

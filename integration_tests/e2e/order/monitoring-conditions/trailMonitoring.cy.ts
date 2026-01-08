@@ -130,6 +130,12 @@ context('Trail monitoring', () => {
       page.form.deviceTypeField.shouldHaveAllOptions()
     })
 
+    it('should have an optional end date', () => {
+      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
+
+      page.form.endDateField.element.contains('(optional)')
+    })
+
     it('should submit the device type', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
