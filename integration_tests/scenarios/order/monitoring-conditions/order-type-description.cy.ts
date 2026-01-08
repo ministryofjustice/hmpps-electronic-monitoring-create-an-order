@@ -69,8 +69,8 @@ context('Order type descriptions', () => {
 
   const verifyResult = ({
     monitoringOrderTypeDescription,
-                            trailMonitoring = trailMonitoringOrder,
-                            installationLocation = undefined,
+    trailMonitoring = trailMonitoringOrder,
+    installationLocation = undefined,
     installationAppointment = undefined,
     installationAddressDetails = undefined,
   }) => {
@@ -321,8 +321,8 @@ context('Order type descriptions', () => {
     })
     verifyResult({
       monitoringOrderTypeDescription,
-        trailMonitoring : trailMonitoringOrderWithDeviceType,
-        installationLocation,
+      trailMonitoring: trailMonitoringOrderWithDeviceType,
+      installationLocation,
       installationAppointment,
       installationAddressDetails,
     })
