@@ -66,9 +66,9 @@ context('Order type descriptions', () => {
     }
   }
 
-  const verifyResult = ({ monitoringOrderTypeDescription }) => {
+  const verifyResult = ({ monitoringOrderTypeDescription, trailMonitoring = trailMonitoringOrder }) => {
     const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-    trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+    trailMonitoringPage.form.fillInWith(trailMonitoring)
     trailMonitoringPage.form.saveAndContinueButton.click()
 
     const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
@@ -288,6 +288,12 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
+    const trailMonitoringOrderWithDeviceType = {
+      startDate: new Date(currentDate.getFullYear(), 11, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      deviceType: 'A fitted GPS tag',
+    }
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
@@ -295,7 +301,7 @@ context('Order type descriptions', () => {
       installationAndRisk,
       monitoringOrderTypeDescription,
     })
-    verifyResult({ monitoringOrderTypeDescription })
+    verifyResult({ monitoringOrderTypeDescription, trailMonitoring: trailMonitoringOrderWithDeviceType })
   })
 
   it('Notification org is Civil', () => {

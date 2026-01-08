@@ -66,6 +66,7 @@ context('Service-Request-Types', () => {
     const trailMonitoringOrder = {
       startDate: new Date(currentDate.getFullYear(), 11, 1),
       endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      deviceType: 'A fitted GPS tag',
     }
     const probationDeliveryUnit = {
       unit: 'Blackburn',
