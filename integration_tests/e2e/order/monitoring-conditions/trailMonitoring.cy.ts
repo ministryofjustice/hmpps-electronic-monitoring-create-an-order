@@ -151,7 +151,6 @@ context('Trail monitoring', () => {
 
       page.form.fillInWith({
         startDate: new Date(2026, 2, 27),
-        endDate: new Date(2026, 3, 28),
         deviceType: 'A fitted GPS tag',
       })
 
@@ -161,7 +160,7 @@ context('Trail monitoring', () => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           startDate: '2026-03-27T00:00:00.000Z',
-          endDate: '2026-04-28T22:59:00.000Z',
+          endDate: '2040-01-01T23:59:59.000Z',
           deviceType: 'FITTED',
         })
       })

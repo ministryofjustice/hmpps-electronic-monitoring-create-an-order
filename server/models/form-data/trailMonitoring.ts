@@ -25,10 +25,18 @@ const TrailMonitoringFormDataModel = z.object({
 const TrailMonitoringFormDataValidator = (notifyingOrganisation: NotifyingOrganisation | null) =>
   z.object({
     startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
-    endDate: DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
+    endDate:
+      notifyingOrganisation === 'HOME_OFFICE'
+        ? DateTimeInputModel(validationErrors.trailMonitoringHomeOffice.endDateTime).transform(value => {
+            if (value === null) {
+              return new Date(2040, 0, 1, 23, 59, 59).toISOString()
+            }
+            return value
+          })
+        : DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
     deviceType:
       notifyingOrganisation === 'HOME_OFFICE'
-        ? z.string({ message: validationErrors.trailMonitoring.deviceTypeRequired })
+        ? z.string({ message: validationErrors.trailMonitoringHomeOffice.deviceTypeRequired })
         : z.string().optional(),
   })
 
