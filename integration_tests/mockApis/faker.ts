@@ -91,6 +91,8 @@ export type PersonOfInterest = {
   deliusId?: string
   prisonNumber?: string
   homeOfficeReferenceNumber?: string
+  complianceAndEnforcementPersonReference?: string
+  courtCaseReferenceNumber?: string
 
   firstName: string
   firstNames: string
@@ -281,6 +283,9 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
   const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // update when we validate format of cepr, ccrn
+  const complianceAndEnforcementPersonReference = ''
+  const courtCaseReferenceNumber = ''
 
   return {
     nomisId,
@@ -288,6 +293,8 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
     deliusId,
     prisonNumber,
     homeOfficeReferenceNumber,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
     ...fakeAdult,
   } as PersonOfInterest
 }
