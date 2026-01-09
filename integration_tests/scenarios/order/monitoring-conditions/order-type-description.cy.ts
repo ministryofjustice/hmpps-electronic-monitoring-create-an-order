@@ -186,7 +186,7 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is YCS, sentence Section 250', () => {
-    const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
     const monitoringOrderTypeDescription = {
       sentenceType: 'Section 250 / Section 91',
       prarr: 'Yes',
@@ -204,7 +204,7 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is YCS, sentence Section DTO, Issp yes', () => {
-    const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
     const monitoringOrderTypeDescription = {
       sentenceType: 'Detention and Training Order',
       issp: 'Yes',

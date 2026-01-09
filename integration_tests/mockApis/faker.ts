@@ -8,6 +8,7 @@ import probationRegions from '../../server/i18n/en/reference/probationRegions'
 import militaryCourts from '../../server/i18n/en/reference/ddv5/militaryCourts'
 import youthCourts from '../../server/i18n/en/reference/ddv5/youthCourts'
 import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegions'
+import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv6/youthCustodyServiceRegions'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
 
@@ -25,6 +26,7 @@ const prisonTypes = extractValues(Object.values(prisons)).filter(it => it !== 'C
 const youthCourtTypes = extractValues(Object.values(youthCourts))
 const probationRegionTypes = extractValues(Object.values(probationRegions))
 const yjsRegionTypes = extractValues(Object.values(yjsRegions))
+const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
 
 // https://www.ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama
 const validUkPhoneNumbers = [
@@ -83,6 +85,7 @@ export type InterestedParties = {
 
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
+  youthCustodyServiceRegion?: string
 }
 
 export type PersonOfInterest = {
@@ -185,6 +188,7 @@ export const createFakeInterestedParties = (
   let youthCourt = ''
   let probationRegion = ''
   let yjsRegion = ''
+  let youthCustodyServiceRegion = ''
 
   if (notifyingOrganisation === 'Civil & County Court') {
     civilCountyCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(civilCountyCourtTypes)
@@ -222,7 +226,8 @@ export const createFakeInterestedParties = (
   }
 
   if (notifyingOrganisation === 'Youth Custody Service') {
-    notifyingOrganisationName = ''
+    youthCustodyServiceRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(ycsRegionTypes)
+    notifyingOrganisationName = youthCustodyServiceRegion
   }
 
   if (responsibleOrganisation === 'Probation') {
@@ -253,6 +258,7 @@ export const createFakeInterestedParties = (
     responsibleOrganisationEmailAddress,
     probationRegion,
     yjsRegion,
+    youthCustodyServiceRegion,
   }
 }
 

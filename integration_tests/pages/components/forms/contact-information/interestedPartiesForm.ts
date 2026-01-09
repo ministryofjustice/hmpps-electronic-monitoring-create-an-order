@@ -11,18 +11,16 @@ export type InterestedPartiesFormData = {
   crownCourt?: string
   magistratesCourt?: string
   notifyingOrganisationEmailAddress?: string
-
   responsibleOrganisation?: string
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
   probationRegion?: string
   yjsRegion?: string
   responsibleOrganisationAddress?: FormAddressData
-
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
-
   civilCountyCourt?: string
+  youthCustodyServiceRegion?: string
 }
 
 export default class InterestedPartiesFormComponent extends FormComponent {
@@ -106,6 +104,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   get responsibleOfficerContactNumberField(): FormInputComponent {
     const label = "What is the Responsible Officer's telephone number?"
     return new FormInputComponent(this.form, label)
+  }
+
+  get youthCustodyServiceField(): FormAutocompleteComponent {
+    const label = 'Select the YCS region'
+    return new FormAutocompleteComponent(this.form, label, [])
   }
 
   get responsibleOrganisationField(): FormRadiosComponent {
@@ -205,6 +208,9 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
     if (profile.civilCountyCourt) {
       this.civilCountyCourtField.set(profile.civilCountyCourt)
+    }
+    if (profile.youthCustodyServiceRegion) {
+      this.youthCustodyServiceField.set(profile.youthCustodyServiceRegion)
     }
   }
 

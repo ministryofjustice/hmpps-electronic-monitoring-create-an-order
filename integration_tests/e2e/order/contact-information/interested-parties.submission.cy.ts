@@ -224,7 +224,7 @@ context('Contact information', () => {
           }).should('be.true')
         })
 
-        it('should hide region input for YCS and submit empty string to API', () => {
+        it('should show region input for YCS and submit to API', () => {
           cy.task('stubCemoGetOrder', {
             httpStatus: 200,
             id: mockOrderId,
@@ -250,7 +250,7 @@ context('Contact information', () => {
             subPath: apiPath,
             response: {
               notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
-              notifyingOrganisationName: '',
+              notifyingOrganisationName: 'MIDLANDS',
               notifyingOrganisationEmail: 'ycs@example.com',
               responsibleOrganisation: 'POLICE',
               responsibleOrganisationEmail: 'responsible@example.com',
@@ -270,10 +270,11 @@ context('Contact information', () => {
             responsibleOrganisationEmailAddress: 'responsible@example.com',
             responsibleOfficerName: 'YCS Officer',
             responsibleOfficerContactNumber: '01234567891',
+            youthCustodyServiceRegion: 'MIDLANDS',
           }
           page.form.fillInWith(formData)
 
-          cy.get('#youthCustodyServiceRegion').should('not.exist')
+          cy.get('#youthCustodyServiceRegion').should('exist')
 
           page.form.saveAndContinueButton.click()
 
@@ -281,7 +282,7 @@ context('Contact information', () => {
             uri: `/orders/${mockOrderId}${apiPath}`,
             body: {
               notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
-              notifyingOrganisationName: '',
+              notifyingOrganisationName: 'MIDLANDS',
               notifyingOrganisationEmail: 'ycs@example.com',
               responsibleOrganisation: 'POLICE',
               responsibleOrganisationEmail: 'responsible@example.com',

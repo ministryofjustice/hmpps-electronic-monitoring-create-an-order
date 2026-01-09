@@ -19,6 +19,7 @@ const InterestedPartiesFormDataModel = FormDataModel.extend({
   responsibleOrgProbationRegion: z.string().default(''),
   yjsRegion: z.string().default(''),
   responsibleOrganisationEmail: z.string().default(''),
+  youthCustodyServiceRegion: z.string().default(''),
 })
 
 type InterestedPartiesFormData = Omit<z.infer<typeof InterestedPartiesFormDataModel>, 'action'>

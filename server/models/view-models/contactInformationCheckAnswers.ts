@@ -140,6 +140,16 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
         ),
       ]
     }
+    if ('youthCustodyServiceRegions' in content.reference && notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+      return [
+        createAnswer(
+          questions.youthCustodyServiceRegion.text,
+          lookup(content.reference.youthCustodyServiceRegions, order.interestedParties?.notifyingOrganisationName),
+          uri,
+          answerOpts,
+        ),
+      ]
+    }
   }
 
   return []

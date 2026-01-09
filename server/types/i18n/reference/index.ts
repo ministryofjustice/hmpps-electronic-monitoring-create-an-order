@@ -34,6 +34,8 @@ import PoliceAreas from './policeAreas'
 import ServiceRequestTypes from './serviceRequestTypes'
 import ProbationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 import DeviceTypes from './deviceTypes'
+import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
+import YouthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -65,6 +67,7 @@ type ReferenceCatalogDDv4 = {
   policeAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
   deviceTypes: DeviceTypes
+  youthCustodyServiceRegions: YouthCustodyServiceRegions
 }
 
 type ReferenceCatalogDDv5 = {
@@ -103,6 +106,7 @@ type ReferenceCatalogDDv5 = {
   policeAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
   deviceTypes: DeviceTypes
+  youthCustodyServiceRegions: YouthCustodyServiceRegions
 }
 
 type ReferenceCatalogDDv6 = {
@@ -141,6 +145,7 @@ type ReferenceCatalogDDv6 = {
   policeAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
   deviceTypes: DeviceTypes
+  youthCustodyServiceRegions: YouthCustodyServiceRegionsDDv6
 }
 
 type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5 | ReferenceCatalogDDv6

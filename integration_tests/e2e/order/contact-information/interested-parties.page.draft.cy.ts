@@ -105,7 +105,47 @@ context('Contact information', () => {
           page.form.youthCourtField.shouldHaveOption('Wrexham Youth Court')
 
           cy.get('#notifyingOrgProbationRegion').should('not.exist')
-          cy.get('#youthCustodyServiceRegion').should('not.exist')
+          cy.get('#youthCustodyServiceRegion').should('exist')
+
+          page.checkIsAccessible()
+        })
+      })
+
+      context('DDv6', () => {
+        beforeEach(() => {
+          cy.task('reset')
+          cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV6' },
+          })
+          cy.signIn()
+        })
+
+        it('Should display DDV6 content', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+          page.header.userName().should('contain.text', 'J. Smith')
+          page.header.phaseBanner().should('contain.text', 'dev')
+
+          page.form.saveAndContinueButton.should('exist')
+          page.form.saveAsDraftButton.should('exist')
+          page.form.shouldNotBeDisabled()
+          page.errorSummary.shouldNotExist()
+          page.backButton.should('exist')
+
+          page.form.youthCustodyServiceField.shouldHaveOption('East and South East')
+          page.form.youthCustodyServiceField.shouldHaveOption('London')
+          page.form.youthCustodyServiceField.shouldHaveOption('Midlands')
+          page.form.youthCustodyServiceField.shouldHaveOption('North East and Cumbria')
+          page.form.youthCustodyServiceField.shouldHaveOption('North West')
+          page.form.youthCustodyServiceField.shouldHaveOption('South West and South Central')
+          page.form.youthCustodyServiceField.shouldHaveOption('Wales')
+          page.form.youthCustodyServiceField.shouldHaveOption('Yorkshire and Humberside')
+
+          cy.get('#notifyingOrgProbationRegion').should('not.exist')
+          cy.get('#youthCustodyServiceRegion').should('exist')
 
           page.checkIsAccessible()
         })
