@@ -9,7 +9,7 @@ const mockDefaultOrder = {
     pncId: 'pnc',
     deliusId: 'delius',
     prisonNumber: 'prison',
-    homeOfficeReferenceNumber: 'ho',
+    homeOfficeReferenceNumber: '',
     firstName: 'test',
     lastName: 'tester',
     alias: 'tes',
