@@ -268,7 +268,7 @@ export const createFakeYouth = (firstName?: string): PersonOfInterest => {
 }
 
 export const createFakeAdult = (firstName?: string): PersonOfInterest => {
-  const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apprently considered "older"
+  const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apparently considered "older"
 
   return {
     ...createFakePerson(dob, firstName),
@@ -306,6 +306,9 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
   const homeOfficeReferenceNumber = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // update when we validate format of cepr, ccrn
+  const complianceAndEnforcementPersonReference = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const courtCaseReferenceNumber = faker.helpers.replaceSymbols('?####??')
 
   return {
     nomisId,
@@ -313,6 +316,8 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
     deliusId,
     prisonNumber,
     homeOfficeReferenceNumber,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
     ...fakeYouth,
   } as PersonOfInterest
 }

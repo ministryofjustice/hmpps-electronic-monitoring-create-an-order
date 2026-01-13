@@ -210,7 +210,7 @@ context.skip('Scenarios', () => {
 
         Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
 
-        // Note: The curfew times should be updated in this scenaro. This needs to be implemented.
+        // Note: The curfew times should be updated in this scenario. This needs to be implemented.
         Page.verifyOnPage(monitoringOrderTypeDescriptionCheckYourAnswersPage, 'Check your answers').continue()
         Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
 
@@ -273,7 +273,7 @@ context.skip('Scenarios', () => {
             nomis_id: deviceWearerDetails.nomisId,
             delius_id: deviceWearerDetails.deliusId,
             prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
             interpreter_required: 'false',
             language: '',
           },
@@ -463,7 +463,7 @@ context.skip('Scenarios', () => {
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
                 hdc: 'Yes',
                 order_status: 'Not Started',
