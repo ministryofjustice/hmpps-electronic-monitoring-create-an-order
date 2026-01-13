@@ -178,15 +178,15 @@ context('Mandatory fields only', () => {
 
       const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
       identityNumbersPage.form.fillInWith(identityNumbers)
-      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('03. identityNumbersPage', { overwrite: true })
       identityNumbersPage.form.saveAndContinueButton.click()
 
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
       aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('04. aboutDeviceWearerPage - validation', { overwrite: true })
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('04. aboutDeviceWearerPage - minimum', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')

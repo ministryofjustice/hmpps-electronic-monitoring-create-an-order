@@ -137,6 +137,10 @@ context.skip('Scenarios', () => {
         cacheOrderId()
         orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+        identityNumbersPage.form.fillInWith(deviceWearerDetails)
+        identityNumbersPage.form.saveAndContinueButton.click()
+
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
         aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -144,10 +148,6 @@ context.skip('Scenarios', () => {
         const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
         responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
         responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-        identityNumbersPage.form.fillInWith(deviceWearerDetails)
-        identityNumbersPage.form.saveAndContinueButton.click()
 
         const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(
           DeviceWearerCheckYourAnswersPage,
