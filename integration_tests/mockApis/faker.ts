@@ -284,8 +284,8 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
   const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
   // update when we validate format of cepr, ccrn
-  const complianceAndEnforcementPersonReference = ''
-  const courtCaseReferenceNumber = ''
+  const complianceAndEnforcementPersonReference = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const courtCaseReferenceNumber = faker.helpers.replaceSymbols('?####??')
 
   return {
     nomisId,
