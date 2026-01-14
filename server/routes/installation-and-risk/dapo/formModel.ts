@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { DateInputModel } from '../../../models/form-data/formData'
+import { validationErrors } from '../../../constants/validationErrors'
 
 export const DapoFormModel = z.object({
   action: z.string(),
@@ -10,5 +12,10 @@ export const DapoFormModel = z.object({
   }),
 })
 
-export type Dapo = z.infer<typeof DapoFormModel>
+export const DapoFormValidator = z.object({
+  clause: z.string().min(1, validationErrors.dapo.clause),
+  date: DateInputModel(validationErrors.dapo.date),
+})
+
+export type DapoInput = z.infer<typeof DapoFormModel>
 export default DapoFormModel
