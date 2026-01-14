@@ -206,6 +206,8 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   probationDeliveryUnit: null,
   orderParameters: null,
   versionId: randomUUID(),
+  dapoClauses: [],
+  offences: [],
   ...overrideProperties,
 })
 
@@ -263,6 +265,9 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   },
   orderParameters: null,
   versionId: randomUUID(),
+  // TODO: fill in with dummy data
+  dapoClauses: [],
+  offences: [],
   ...overrideProperties,
 })
 

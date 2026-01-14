@@ -6,6 +6,6 @@ export default class DapoPage extends AppFormPage {
   public form = new DapoComponent()
 
   constructor() {
-    super('WIP Dapo and dates', paths.INSTALLATION_AND_RISK.DAPO)
+    super('Add DAPO order clause', paths.INSTALLATION_AND_RISK.DAPO)
   }
 }

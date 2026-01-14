@@ -36,6 +36,7 @@ import haveCourtOrderPageContent from './pages/haveCourtOrder'
 import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
 import uploadGrantOfBailPageContent from './pages/uploadGrantOfBail'
 import haveGrantOfBailPageContent from './pages/haveGrantOfBail'
+import dapoContent from './pages/dapo'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -75,6 +76,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       installationAppointment: installationAppointmentPageContent,
       isRejection: isRejectionPageContent,
       serviceRequestType: serviceRequestTypePageContent,
+      dapo: dapoContent,
     },
     reference: getReferenceData(ddVersion),
   }
