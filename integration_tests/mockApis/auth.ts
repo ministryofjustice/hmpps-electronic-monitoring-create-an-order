@@ -140,6 +140,25 @@ const userCohort = (): Request =>
     },
   })
 
+const stubCohortSenario = (): Request =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/manage-user/users/me/caseloads',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: {
+        username: 'mockUser',
+        active: true,
+        accountType: 'mock account',
+        activeCaseload: { id: 'ABC', name: 'HMP ABC' },
+        caseLoads: [],
+      },
+    },
+  })
+
 const signOut = (): Request =>
   stubFor({
     request: {
@@ -226,27 +245,20 @@ const jwks = async (publicKey: jose.JWK): Promise<Request> => {
 
 const stubSignIn = async (userToken: UserToken) => {
   const accessToken = await createToken(userToken)
-
-  if (userToken.stubCohort === false) {
-    return Promise.all([
-      favicon(),
-      redirect(),
-      signOut(),
-      token(accessToken),
-      tokenVerification.stubVerifyToken(true),
-      jwks(keyPair.publicKey),
-    ])
-  }
-
-  return Promise.all([
+  const taskList = [
     favicon(),
-    userCohort(),
     redirect(),
     signOut(),
     token(accessToken),
     tokenVerification.stubVerifyToken(true),
     jwks(keyPair.publicKey),
-  ])
+  ]
+  if (userToken.stubCohort !== false) {
+    taskList.push(userCohort())
+    taskList.push(stubCohortSenario())
+  }
+
+  return Promise.all(taskList)
 }
 
 const stubUnverifiableSignIn = async (userToken: UserToken) => {
