@@ -37,6 +37,10 @@ import RedisStore from '../routes/monitoring-conditions/store/redisStore'
 import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
 import FmsRequestService from './fmsRequestService'
+import UserCohortService from './userCohortService'
+import RedisCacheService from './cache/redisCacheService'
+import { UserCohort } from '../models/UserCohort'
+import InMemorCacheService from './cache/inMemoryCacheService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -77,6 +81,13 @@ export const services = () => {
   const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
 
+  const userCohortService = new UserCohortService(
+    cemoApiClient,
+    config.redis.enabled
+      ? new RedisCacheService<UserCohort>(createRedisClient(), 'usertoken:')
+      : new InMemorCacheService<UserCohort>(),
+  )
+
   const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
     alcoholMonitoringService,
@@ -112,6 +123,7 @@ export const services = () => {
     removeMonitoringTypeService,
     serviceRequestTypeService,
     fmsRequestService,
+    userCohortService,
   }
 }
 
@@ -143,4 +155,5 @@ export {
   RemoveMonitoringTypeService,
   ServiceRequestTypeService,
   FmsRequestService,
+  UserCohortService,
 }

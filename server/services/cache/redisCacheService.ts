@@ -2,7 +2,7 @@ import logger from '../../../logger'
 import { RedisClient } from '../../data/redisClient'
 import CacheService from './cacheService'
 
-export default class RedisOrderChecklistStore<T> implements CacheService<T> {
+export default class RedisCacheService<T> implements CacheService<T> {
   constructor(
     private readonly client: RedisClient,
     private prefix: string,

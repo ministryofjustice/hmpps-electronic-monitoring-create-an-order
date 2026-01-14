@@ -44,7 +44,7 @@ export default function createApp(services: Services): express.Application {
   app.use(multer().single('file'))
   app.use(setUpCsrf())
   app.use(setUpRenderPdf(new GotenbergClient(config.apis.gotenberg.apiUrl)))
-  app.use(setUpCurrentUser())
+  app.use(setUpCurrentUser(services))
 
   app.use(routes(services))
 

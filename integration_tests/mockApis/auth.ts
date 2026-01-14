@@ -52,13 +52,15 @@ const unverifiableKeyPair: KeyPair = {
 interface UserToken {
   name?: string
   roles?: string[]
+  stubCohort?: boolean
+  userId?: string
 }
 const createToken = async (userToken: UserToken): Promise<string> => {
   // authorities in the session are always prefixed by ROLE.
   const authorities = userToken.roles?.map(role => (role.startsWith('ROLE_') ? role : `ROLE_${role}`)) || []
   const payload = {
     name: userToken.name || 'john smith',
-    user_id: '123456789',
+    user_id: userToken.userId || '123456789',
     user_name: 'USER1',
     scope: ['read'],
     auth_source: 'nomis',
@@ -122,6 +124,19 @@ const redirect = (): Request =>
         Location: 'http://localhost:3007/sign-in/callback?code=codexxxx&state=stateyyyy',
       },
       body: '<html><body>Sign in page<h1>Sign in</h1></body></html>',
+    },
+  })
+
+const userCohort = (): Request =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/cemo/api/user-cohort',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: { cohort: 'PRISON', activeCaseLoad: 'HMP ABC' },
     },
   })
 
@@ -212,8 +227,20 @@ const jwks = async (publicKey: jose.JWK): Promise<Request> => {
 const stubSignIn = async (userToken: UserToken) => {
   const accessToken = await createToken(userToken)
 
+  if (userToken.stubCohort === false) {
+    return Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(accessToken),
+      tokenVerification.stubVerifyToken(true),
+      jwks(keyPair.publicKey),
+    ])
+  }
+
   return Promise.all([
     favicon(),
+    userCohort(),
     redirect(),
     signOut(),
     token(accessToken),

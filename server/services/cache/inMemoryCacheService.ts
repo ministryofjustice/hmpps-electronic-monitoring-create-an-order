@@ -1,6 +1,6 @@
 import CacheService from './cacheService'
 
-export default class InMemoryOrderChecklistStore<T> implements CacheService<T> {
+export default class InMemorCacheService<T> implements CacheService<T> {
   map = new Map<string, { item: string; expiry: Date }>()
 
   public async storeItemToCache(key: string, value: T, durationSeconds: number): Promise<void> {

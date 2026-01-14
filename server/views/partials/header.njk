@@ -13,8 +13,7 @@
         HMPPS
       </a>
 
-      <a class="hmpps-header__link hmpps-header__title__service-name" href="/">{{ applicationName }}</a>
-
+      <a class="hmpps-header__link hmpps-header__title__service-name" href="/">{{ applicationName }}</a> 
       {% if environmentName %}
         <div class="govuk-phase-banner govuk-phase-banner-no-border">
           {{ govukTag({
@@ -27,14 +26,33 @@
     </div>
 
     <nav aria-label="Account navigation">
+    
       <ul class="hmpps-header__navigation">
         {% if user %}
-          <li class="hmpps-header__navigation__item">
+
+         {% if user.cohort %}
+            {% if user.cohort.cohort === 'PRISON' %}
+            <li class="hmpps-header__navigation__item">
+              <img class="header-icon hmpps-header__link govuk-!-padding-right-3" src="https://frontend-components-dev.hmpps.service.justice.gov.uk/assets/images/location.svg" aria-hidden="true" alt="">
+              <a data-qa="changeCaseLoad" class="hmpps-header__link" href="https://digital-dev.prison.service.justice.gov.uk/change-caseload" data-test="change-case-load-link" referrerpolicy="no-referrer-when-downgrade">
+              <span data-qa="userCohort"  class="hmpps-header__link__sub-text" >{{user.cohort.activeCaseLoad}}</span>
+              </a>
+            </li>
+            {% else %}
+              <li class="hmpps-header__navigation__item">
+                <a data-qa="changeCaseLoad" class="hmpps-header__link" href="#" data-test="change-case-load-link" referrerpolicy="no-referrer-when-downgrade">
+                <span data-qa="userCohort"  class="hmpps-header__link__sub-text">{{user.cohort.cohort}}</span>
+                </a>
+              </li>
+            {% endif %}
+           {% endif %}
+         <li class="hmpps-header__navigation__item">
             <a data-qa="manageDetails" class="hmpps-header__link" href="/account-details" data-test="manage-account-link" rel="noopener noreferrer">
               <span data-qa=header-user-name>{{ user.displayName | initialiseName }}</span>
               <span class="hmpps-header__link__sub-text">Manage your details</span>
             </a>
           </li>
+         
 
            <li class="hmpps-header__navigation__item">
             <a data-qa="signOut" class="hmpps-header__link" href="/sign-out">Sign out</a>
