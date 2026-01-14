@@ -220,7 +220,7 @@ context('Scenarios', () => {
                 no_address_3: '',
                 no_address_4: '',
                 no_email: interestedParties.notifyingOrganisationEmailAddress,
-                no_name: '',
+                no_name: interestedParties.youthCustodyServiceRegion,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',

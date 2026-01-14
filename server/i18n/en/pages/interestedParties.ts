@@ -54,6 +54,9 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
     youthCourt: {
       text: 'Select the name of the Youth Court',
     },
+    youthCustodyServiceRegion: {
+      text: 'Select the YCS region',
+    },
   },
   section: 'Contact information',
   title: 'Organisation details',

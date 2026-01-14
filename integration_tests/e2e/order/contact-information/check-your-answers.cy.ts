@@ -819,7 +819,7 @@ context('Contact Information - check your answers', () => {
             },
             interestedParties: {
               notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
-              notifyingOrganisationName: '',
+              notifyingOrganisationName: 'MIDLANDS',
               notifyingOrganisationEmail: 'notifying@organisation',
               responsibleOrganisation: 'PROBATION',
               responsibleOrganisationEmail: 'responsible@organisation',
@@ -837,6 +837,7 @@ context('Contact Information - check your answers', () => {
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldHaveItems([
           { key: 'What organisation or related organisation are you part of?', value: 'Youth Custody Service (YCS)' },
+          { key: 'Select the YCS region', value: 'Midlands' },
         ])
         page.deviceWearerAddressesSection.shouldNotHaveItems([
           'Select the name of the Civil and County Court',
@@ -846,7 +847,6 @@ context('Contact Information - check your answers', () => {
           'Select the Probation Service region',
           'Select the name of the Prison',
           'Select the name of the Youth Court',
-          'Select the YCS region',
         ])
       })
 
