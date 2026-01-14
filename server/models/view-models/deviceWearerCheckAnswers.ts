@@ -75,15 +75,15 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: 
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
   return [
-    createAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri, answerOpts),
     createAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri, answerOpts),
-    createAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri, answerOpts),
+    createAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri, answerOpts),
     createAnswer(
       content.pages.identityNumbers.questions.prisonNumber.text,
       order.deviceWearer.prisonNumber,
       uri,
       answerOpts,
     ),
+    createAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri, answerOpts),
     createAnswer(
       content.pages.identityNumbers.questions.complianceAndEnforcementPersonReference.text,
       order.deviceWearer.complianceAndEnforcementPersonReference,

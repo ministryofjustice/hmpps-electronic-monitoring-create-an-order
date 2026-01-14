@@ -69,10 +69,10 @@ context('About the device wearer', () => {
       it('Should display the submitted values in the disabled form', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
-        page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
-        page.form.checkboxes.shouldHaveValue('NDelius ID')
+        page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveValue('Prison Number')
+        page.form.checkboxes.shouldHaveValue('NDelius ID')
         page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
         page.form.checkboxes.shouldHaveValue('Court Case Reference Number (CCRN)')
 

@@ -50,8 +50,8 @@ context('About the device wearer', () => {
         page.errorSummary.shouldNotExist()
         page.checkIsAccessible()
 
-        page.form.checkboxes.shouldHaveOption('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveOption('Police National Computer (PNC)')
+        page.form.checkboxes.shouldHaveOption('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveOption('Prison Number')
         page.form.checkboxes.shouldHaveOption('NDelius ID')
         page.form.checkboxes.shouldHaveOption('Compliance and Enforcement Person Reference (CEPR)')

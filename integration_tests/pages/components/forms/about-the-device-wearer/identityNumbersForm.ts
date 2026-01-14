@@ -14,8 +14,8 @@ export type IdentityNumbersFormData = {
 export default class IdentityNumbersFormComponent extends FormComponent {
   get checkboxes(): FormCheckboxesComponent {
     return new FormCheckboxesComponent(this.form, 'What identity numbers do you have for the device wearer?', [
-      'National Offender Management Information System (NOMIS)',
       'Police National Computer (PNC)',
+      'National Offender Management Information System (NOMIS)',
       'Prison Number',
       'NDelius ID',
       'Compliance and Enforcement Person Reference (CEPR)',

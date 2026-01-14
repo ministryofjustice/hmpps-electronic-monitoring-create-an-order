@@ -66,10 +66,10 @@ context('About the device wearer', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
         page.form.checkboxes.set([
-          'National Offender Management Information System (NOMIS)',
           'Police National Computer (PNC)',
-          'NDelius ID',
+          'National Offender Management Information System (NOMIS)',
           'Prison Number',
+          'NDelius ID',
           'Compliance and Enforcement Person Reference (CEPR)',
           'Court Case Reference Number (CCRN)',
         ])

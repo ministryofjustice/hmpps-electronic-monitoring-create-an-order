@@ -254,23 +254,6 @@ describe('DeviceWearerCheckAnswersController', () => {
       personIdentifiers: [
         {
           key: {
-            text: 'National Offender Management Information System (NOMIS)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'national offender management information system (nomis)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: 'Police National Computer (PNC)',
           },
           value: {
@@ -288,7 +271,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'NDelius ID',
+            text: 'National Offender Management Information System (NOMIS)',
           },
           value: {
             text: '',
@@ -298,7 +281,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'ndelius id',
+                visuallyHiddenText: 'national offender management information system (nomis)',
               },
             ],
           },
@@ -316,6 +299,23 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'NDelius ID',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'ndelius id',
               },
             ],
           },
@@ -546,23 +546,6 @@ describe('DeviceWearerCheckAnswersController', () => {
       personIdentifiers: [
         {
           key: {
-            text: 'National Offender Management Information System (NOMIS)',
-          },
-          value: {
-            text: 'nomis',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'national offender management information system (nomis)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: 'Police National Computer (PNC)',
           },
           value: {
@@ -580,17 +563,17 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'NDelius ID',
+            text: 'National Offender Management Information System (NOMIS)',
           },
           value: {
-            text: 'delius',
+            text: 'nomis',
           },
           actions: {
             items: [
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'ndelius id',
+                visuallyHiddenText: 'national offender management information system (nomis)',
               },
             ],
           },
@@ -608,6 +591,23 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'NDelius ID',
+          },
+          value: {
+            text: 'delius',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'ndelius id',
               },
             ],
           },
@@ -838,23 +838,6 @@ describe('DeviceWearerCheckAnswersController', () => {
       personIdentifiers: [
         {
           key: {
-            text: 'National Offender Management Information System (NOMIS)',
-          },
-          value: {
-            text: 'nomis',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'national offender management information system (nomis)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: 'Police National Computer (PNC)',
           },
           value: {
@@ -872,17 +855,17 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'NDelius ID',
+            text: 'National Offender Management Information System (NOMIS)',
           },
           value: {
-            text: 'delius',
+            text: 'nomis',
           },
           actions: {
             items: [
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'ndelius id',
+                visuallyHiddenText: 'national offender management information system (nomis)',
               },
             ],
           },
@@ -900,6 +883,23 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'prison number',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'NDelius ID',
+          },
+          value: {
+            text: 'delius',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'ndelius id',
               },
             ],
           },
