@@ -529,7 +529,7 @@ describe('DeviceWearerController', () => {
 
       mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue([
         {
-          field: 'identityNumbers',
+          field: 'identityNumbers.noSelection',
           error: 'Select all identity numbers that you have for the device wearer',
         },
       ])
@@ -543,7 +543,7 @@ describe('DeviceWearerController', () => {
       })
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         {
-          field: 'identityNumbers',
+          field: 'identityNumbers.noSelection',
           error: 'Select all identity numbers that you have for the device wearer',
         },
       ])

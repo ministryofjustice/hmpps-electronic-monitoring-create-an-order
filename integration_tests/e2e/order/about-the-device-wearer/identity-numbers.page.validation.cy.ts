@@ -3,7 +3,6 @@ import Page from '../../../pages/page'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 const mockOrderId = uuidv4()
-const apiPath = '/device-wearer/identity-numbers'
 
 const expectedValidationErrors = {
   noSelection: 'Select all identity numbers that you have for the device wearer',
@@ -28,13 +27,6 @@ context('About the device wearer', () => {
       })
 
       it('Should display error when no checkbox is selected', () => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [{ field: 'identityNumbers', error: expectedValidationErrors.noSelection }],
-        })
-
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
         page.form.saveAndContinueButton.click()
@@ -46,23 +38,6 @@ context('About the device wearer', () => {
       })
 
       it('Should display error when checkbox is selected but input is empty', () => {
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 400,
-          id: mockOrderId,
-          subPath: apiPath,
-          response: [
-            { field: 'nomisId', error: expectedValidationErrors.nomisId },
-            { field: 'pncId', error: expectedValidationErrors.pncId },
-            { field: 'deliusId', error: expectedValidationErrors.deliusId },
-            { field: 'prisonNumber', error: expectedValidationErrors.prisonNumber },
-            {
-              field: 'complianceAndEnforcementPersonReference',
-              error: expectedValidationErrors.complianceAndEnforcementPersonReference,
-            },
-            { field: 'courtCaseReferenceNumber', error: expectedValidationErrors.courtCaseReferenceNumber },
-          ],
-        })
-
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
         page.form.checkboxes.set([
