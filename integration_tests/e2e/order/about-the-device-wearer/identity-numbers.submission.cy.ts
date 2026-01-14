@@ -73,9 +73,9 @@ context('About the device wearer', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
+            homeOfficeReferenceNumber: '',
             complianceAndEnforcementPersonReference: 'cepr',
             courtCaseReferenceNumber: 'ccrn',
-            homeOfficeReferenceNumber: '',
           },
         }).should('be.true')
       })

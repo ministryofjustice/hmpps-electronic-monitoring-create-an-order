@@ -10,6 +10,8 @@ const mockDefaultOrder = {
     deliusId: 'delius',
     prisonNumber: 'prison',
     homeOfficeReferenceNumber: '',
+    complianceAndEnforcementPersonReference: 'cepr',
+    courtCaseReferenceNumber: 'ccrn',
     firstName: 'test',
     lastName: 'tester',
     alias: 'tes',

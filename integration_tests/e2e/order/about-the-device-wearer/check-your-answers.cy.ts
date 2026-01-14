@@ -62,7 +62,6 @@ context('Device wearer - check your answers', () => {
             homeOfficeReferenceNumber: '',
             complianceAndEnforcementPersonReference: 'cepr',
             courtCaseReferenceNumber: 'ccrn',
-
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -136,7 +135,6 @@ context('Device wearer - check your answers', () => {
             homeOfficeReferenceNumber: '',
             complianceAndEnforcementPersonReference: 'cepr',
             courtCaseReferenceNumber: 'ccrn',
-
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',

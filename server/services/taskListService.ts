@@ -115,6 +115,18 @@ const canBeCompleted = (task: Task, formData: FormData): boolean => {
 
 const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === currentPage
 
+const isCompletedIDNumbers = (order: Order): boolean => {
+  return [
+    isNotNullOrUndefined(order.deviceWearer.nomisId),
+    isNotNullOrUndefined(order.deviceWearer.pncId),
+    isNotNullOrUndefined(order.deviceWearer.deliusId),
+    isNotNullOrUndefined(order.deviceWearer.prisonNumber),
+    isNotNullOrUndefined(order.deviceWearer.homeOfficeReferenceNumber),
+    isNotNullOrUndefined(order.deviceWearer.complianceAndEnforcementPersonReference),
+    isNotNullOrUndefined(order.deviceWearer.courtCaseReferenceNumber),
+  ].some(Boolean)
+}
+
 const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
   return order.addresses.find(address => address.addressType === addressType) !== undefined
 }
@@ -158,8 +170,7 @@ export default class TaskListService {
       name: PAGES.identityNumbers,
       path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
       state: STATES.optional,
-      // TODO: FIX COMPLETED BELOW!
-      completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
+      completed: isCompletedIDNumbers(order),
     })
 
     tasks.push({

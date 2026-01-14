@@ -514,7 +514,7 @@ describe('DeviceWearerController', () => {
   })
 
   describe('updateIdentityNumbers', () => {
-    it('should redirect to the form with errors if no identity numbers are selected', async () => {
+    it('should display the form with errors if no identity numbers are selected', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
@@ -550,7 +550,7 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
     })
 
-    it('should redirect to the form with errors if a checkbox is selected but the input is empty', async () => {
+    it('should display the form with errors if a checkbox is selected but the input is empty', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
@@ -632,9 +632,9 @@ describe('DeviceWearerController', () => {
           orderId: order.id,
           data: expect.objectContaining({
             nomisId: 'nomis',
+            prisonNumber: 'prison',
             complianceAndEnforcementPersonReference: 'compliance-ref-123',
             courtCaseReferenceNumber: 'court-ref-456',
-            // pncId ''
             pncId: '',
           }),
         }),
