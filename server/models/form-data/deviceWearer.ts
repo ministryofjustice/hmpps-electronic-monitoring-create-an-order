@@ -3,7 +3,6 @@ import { BooleanInputModel, DateInputModel, FormDataModel, MultipleChoiceInputMo
 import { DisabilityEnum, IdentityNumbersEnum } from '../DeviceWearer'
 import { validationErrors } from '../../constants/validationErrors'
 
-// Parse html form data to ensure basic type safety at runtime
 const DeviceWearerFormDataParser = FormDataModel.extend({
   firstName: z.string(),
   lastName: z.string(),
@@ -84,7 +83,6 @@ const IdentityNumbersFormDataValidator = z
     courtCaseReferenceNumber: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    // at least select 1
     if (data.identityNumbers.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
