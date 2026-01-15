@@ -174,6 +174,11 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
       orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(deviceWearerDetails)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
+
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
       aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
@@ -181,11 +186,6 @@ context('The kitchen sink', () => {
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
-      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()

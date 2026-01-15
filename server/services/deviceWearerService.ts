@@ -2,7 +2,12 @@ import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import DeviceWearerModel, { DeviceWearer } from '../models/DeviceWearer'
-import { DeviceWearerFormDataValidator, DeviceWearerFormData } from '../models/form-data/deviceWearer'
+import {
+  DeviceWearerFormDataValidator,
+  DeviceWearerFormData,
+  IdentityNumbersFormData,
+  IdentityNumbersFormDataValidator,
+} from '../models/form-data/deviceWearer'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
@@ -17,9 +22,9 @@ type UpdateNoFixedAbodeRequest = AuthenticatedRequestInput & {
   data: Pick<DeviceWearer, 'noFixedAbode'>
 }
 
-type UpdateIdentityNumbersRequest = AuthenticatedRequestInput & {
+export type UpdateIdentityNumbersRequest = AuthenticatedRequestInput & {
   orderId: string
-  data: Pick<DeviceWearer, 'nomisId' | 'pncId' | 'deliusId' | 'prisonNumber' | 'homeOfficeReferenceNumber'>
+  data: IdentityNumbersFormData
 }
 
 export default class DeviceWearerService {
@@ -52,9 +57,10 @@ export default class DeviceWearerService {
 
   async updateIdentityNumbers(input: UpdateIdentityNumbersRequest): Promise<DeviceWearer | ValidationResult> {
     try {
+      const requestBody = IdentityNumbersFormDataValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/device-wearer/identity-numbers`,
-        data: input.data,
+        data: requestBody,
         token: input.accessToken,
       })
 
