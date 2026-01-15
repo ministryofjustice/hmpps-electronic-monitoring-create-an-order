@@ -137,6 +137,10 @@ context.skip('Scenarios', () => {
         cacheOrderId()
         orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+        identityNumbersPage.form.fillInWith(deviceWearerDetails)
+        identityNumbersPage.form.saveAndContinueButton.click()
+
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
         aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -144,10 +148,6 @@ context.skip('Scenarios', () => {
         const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
         responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
         responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-        identityNumbersPage.form.fillInWith(deviceWearerDetails)
-        identityNumbersPage.form.saveAndContinueButton.click()
 
         const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(
           DeviceWearerCheckYourAnswersPage,
@@ -271,7 +271,7 @@ context.skip('Scenarios', () => {
             nomis_id: deviceWearerDetails.nomisId,
             delius_id: deviceWearerDetails.deliusId,
             prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
             interpreter_required: 'false',
             language: '',
           },
@@ -393,7 +393,7 @@ ${attendanceMonitoringOrder.address.postcode}
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',

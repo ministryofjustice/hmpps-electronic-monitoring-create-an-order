@@ -44,6 +44,8 @@ describe('OrderSearchController', () => {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'first',
         lastName: 'last',
         alias: null,

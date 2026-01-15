@@ -8,6 +8,10 @@ export default class IdentityNumbersPage extends AppFormPage {
   form = new IdentityNumbersFormComponent()
 
   constructor() {
-    super('Identity numbers', paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, 'About the device wearer')
+    super(
+      'What identity numbers do you have for the device wearer?',
+      paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
+      'About the device wearer',
+    )
   }
 }

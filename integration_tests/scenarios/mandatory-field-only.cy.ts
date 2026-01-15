@@ -98,7 +98,9 @@ context('Mandatory fields only', () => {
       deliusId: fullDeviceWearerDetails.deliusId,
       pncId: fullDeviceWearerDetails.pncId,
       prisonNumber: fullDeviceWearerDetails.prisonNumber,
-      homeOfficeReferenceNumber: fullDeviceWearerDetails.homeOfficeReferenceNumber,
+      homeOfficeReferenceNumber: '',
+      complianceAndEnforcementPersonReference: fullDeviceWearerDetails.complianceAndEnforcementPersonReference,
+      courtCaseReferenceNumber: fullDeviceWearerDetails.courtCaseReferenceNumber,
     }
     const fakeAddress = createFakeAddress()
     const primaryAddressDetails = {
@@ -174,18 +176,18 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
       orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(identityNumbers)
+      if (takeScreenshots) cy.screenshot('03. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
+
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
       aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('04. aboutDeviceWearerPage - validation', { overwrite: true })
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage - minimum', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('04. aboutDeviceWearerPage - minimum', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(identityNumbers)
-      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
-      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()
@@ -408,7 +410,9 @@ context('Mandatory fields only', () => {
       deliusId: fullDeviceWearerDetails.deliusId,
       pncId: fullDeviceWearerDetails.pncId,
       prisonNumber: fullDeviceWearerDetails.prisonNumber,
-      homeOfficeReferenceNumber: fullDeviceWearerDetails.homeOfficeReferenceNumber,
+      homeOfficeReferenceNumber: '',
+      complianceAndEnforcementPersonReference: fullDeviceWearerDetails.complianceAndEnforcementPersonReference,
+      courtCaseReferenceNumber: fullDeviceWearerDetails.courtCaseReferenceNumber,
     }
     const fakeAdult = createFakeResponsibleAdult()
     const responsibleAdultDetails = {
@@ -489,6 +493,11 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
       orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(identityNumbers)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
+
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
       aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
@@ -504,11 +513,6 @@ context('Mandatory fields only', () => {
       responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
       if (takeScreenshots) cy.screenshot('04. responsibleAdultDetailsPage - minimum', { overwrite: true })
       responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(identityNumbers)
-      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
-      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()
