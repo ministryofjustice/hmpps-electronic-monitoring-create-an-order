@@ -177,6 +177,7 @@ context('The kitchen sink', () => {
           address_3: primaryAddressDetails.addressLine3,
           address_4: primaryAddressDetails.addressLine4 === '' ? 'N/A' : primaryAddressDetails.addressLine4,
           address_post_code: primaryAddressDetails.postcode,
+          no_fixed_address: 'false',
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',

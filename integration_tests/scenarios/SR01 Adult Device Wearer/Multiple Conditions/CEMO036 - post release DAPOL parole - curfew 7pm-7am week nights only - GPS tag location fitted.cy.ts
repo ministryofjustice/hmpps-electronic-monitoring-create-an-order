@@ -157,6 +157,7 @@ context('Scenarios', () => {
             address_3: fakePrimaryAddress.addressLine3,
             address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
             address_post_code: fakePrimaryAddress.postcode,
+            no_fixed_address: 'false',
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
