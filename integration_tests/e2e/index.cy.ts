@@ -107,6 +107,72 @@ context('Index', () => {
     })
   })
 
+  context('User cohorts', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubCemoListOrders')
+      cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+    })
+
+    it('Should show prison name if user is in Prison cohort', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456780',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PRISON', activeCaseLoad: 'HMP ABC' },
+      })
+      cy.signIn()
+
+      const page = Page.visit(IndexPage)
+      page.header.cohort().should('contain.text', 'HMP ABC')
+    })
+
+    it('Should show probation as cohort if user is in probation cohort', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456781',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PROBATION' },
+      })
+
+      cy.signIn()
+      const page = Page.visit(IndexPage)
+      page.header.cohort().should('contain.text', 'PROBATION')
+    })
+
+    it('Should show other as cohort if user is in other cohort', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456782',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'OTHER' },
+      })
+
+      cy.signIn()
+      const page = Page.visit(IndexPage)
+      page.header.cohort().should('contain.text', 'OTHER')
+    })
+  })
+
   context('Unhealthy backend', () => {
     beforeEach(() => {
       cy.task('reset')

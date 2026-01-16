@@ -148,3 +148,13 @@
   @include govuk-width-container;
   border: none;
 }
+
+.hmpps-header-change-case-load{
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.hmpps-header-change-case-load svg{
+  margin: 0 15px 0 0;
+}
