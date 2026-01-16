@@ -137,7 +137,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'London',
       'Kent, Surrey & Sussex',
     ])
-    // ,'responsibleOrganisationProbationRegion')
+  }
+
+  get policeAreaField(): FormAutocompleteComponent {
+    const label = 'Select the Police force area'
+    return new FormAutocompleteComponent(this.form, label, [])
   }
 
   get yjsRegionField(): FormSelectComponent {
@@ -220,6 +224,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.notifyOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationField.shouldNotHaveValidationMessage()
     this.responsibleOrgProbationField.shouldNotHaveValidationMessage()
+    this.policeAreaField.shouldNotHaveValidationMessage()
     this.yjsRegionField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOfficerNameField.shouldNotHaveValidationMessage()

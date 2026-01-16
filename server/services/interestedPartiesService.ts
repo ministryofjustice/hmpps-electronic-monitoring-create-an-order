@@ -29,6 +29,10 @@ export default class InterestedPartiesService {
       return data.responsibleOrgProbationRegion
     }
 
+    if (data.responsibleOrganisation === 'POLICE') {
+      return data.policeArea
+    }
+
     if (data.responsibleOrganisation === 'YJS') {
       return data.yjsRegion
     }

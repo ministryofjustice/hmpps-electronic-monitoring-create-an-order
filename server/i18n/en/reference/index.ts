@@ -51,6 +51,7 @@ import probationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnits'
 import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import youthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
+import policeAreasDDv6 from './ddv6/policeAreas'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -158,7 +159,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
   installationLocations,
   possibleRisks,
-  policeAreas,
+  policeAreas: policeAreasDDv6,
   serviceRequestTypes,
   youthCustodyServiceRegions: youthCustodyServiceRegionsDDv6,
 }
