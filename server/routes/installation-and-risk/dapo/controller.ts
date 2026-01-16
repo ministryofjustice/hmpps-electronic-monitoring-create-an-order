@@ -1,17 +1,37 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import ViewModel from './viewModel'
+import DapoService from './service'
+import DapoFormModel, { DapoInput } from './formModel'
+import { isValidationResult, ValidationResult } from '../../../models/Validation'
 
 export default class DapoController {
-  constructor() {}
+  constructor(private readonly service: DapoService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    res.render('pages/order/installation-and-risk/offence/dapo', ViewModel.contructFromOrder(order, '123', []))
+    const formData = req.flash('formData') as unknown as DapoInput[]
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
+
+    // TODO: figure out viewing older versions
+    res.render('pages/order/installation-and-risk/offence/dapo', ViewModel.contruct(order, formData[0], errors, '123'))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+
+    const formData = DapoFormModel.parse(req.body)
+
+    const result = await this.service.updateDapo({ formData, orderId: order.id, accessToken: '123' })
+
+    if (isValidationResult(result)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', result)
+
+      res.redirect(paths.INSTALLATION_AND_RISK.DAPO.replace(':orderId', order.id))
+      return
+    }
+
     res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
   }
 }

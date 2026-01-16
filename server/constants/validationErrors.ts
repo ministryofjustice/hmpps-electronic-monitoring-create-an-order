@@ -110,14 +110,16 @@ interface ValidationErrors {
     riskDetailsRequired: string
     riskDetailsTooLong: string
     offenceAdditionalDetailsTooLong: string
-    dapoClause: string
-    dapoDate: DateErrorMessages
   }
   isRejection: {
     isRejectionRequired: string
   }
   serviceRequestType: {
     serviceRequestTypeRequired: string
+  }
+  dapo: {
+    clause: string
+    date: DateErrorMessages
   }
 }
 
@@ -333,8 +335,15 @@ const validationErrors: ValidationErrors = {
     riskDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
     offenceAdditionalDetailsTooLong:
       'Any other information to be aware of about the offence committed must be 100 characters or less',
-    dapoClause: 'dapo clause number required',
-    dapoDate: {
+  },
+  isRejection: {
+    isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
+  },
+  serviceRequestType: {
+    serviceRequestTypeRequired: 'Select why you are making changes to the form',
+  },
+  dapo: {
+    date: {
       mustBeReal: 'Date of dapo requirement must be a real date',
       mustIncludeDay: 'Date of DAPO requirement must include a day',
       mustIncludeMonth: 'Date of DAPO requirement must include a month',
@@ -342,12 +351,7 @@ const validationErrors: ValidationErrors = {
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
       required: 'Enter date of DAPO requirement',
     },
-  },
-  isRejection: {
-    isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
-  },
-  serviceRequestType: {
-    serviceRequestTypeRequired: 'Select why you are making changes to the form',
+    clause: 'Enter a DAPO order clause number',
   },
 }
 

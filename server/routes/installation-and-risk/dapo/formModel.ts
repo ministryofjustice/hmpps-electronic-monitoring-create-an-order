@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { DateInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
 
-export const DapoFormModel = z.object({
+const DapoFormModel = z.object({
   action: z.string(),
   clause: z.string(),
   date: z.object({

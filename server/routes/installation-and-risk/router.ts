@@ -4,15 +4,19 @@ import OffenceOtherInfoController from './offence-other-info/controller'
 import OffenceListController from './offence-list/controller'
 import DapoController from './dapo/controller'
 import OffenceListDeleteController from './delete/controller'
+import { Services } from '../../services'
 
-const createInstallationAndRiskRouter = (): Router => {
+const createInstallationAndRiskRouter = (services: Pick<Services, 'dapoService'>): Router => {
   const router = Router()
+
+  const { dapoService } = services
 
   const offenceController = new OffenceController()
   const offenceOtherInfoController = new OffenceOtherInfoController()
   const offenceListController = new OffenceListController()
-  const dapoController = new DapoController()
+  const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()
+
   router.get('/offence', offenceController.view)
   router.post('/offence', offenceController.update)
   router.get('/offence-other-info', offenceOtherInfoController.view)
@@ -23,6 +27,7 @@ const createInstallationAndRiskRouter = (): Router => {
   router.post('/dapo', dapoController.update)
   router.get('/delete', deleteController.view)
   router.post('/delete', deleteController.update)
+
   return router
 }
 
