@@ -1,3 +1,5 @@
+import { UserCohort } from '../models/UserCohort'
+
 export type AuthSource = 'nomis' | 'delius' | 'external' | 'azuread'
 
 /**
@@ -11,6 +13,7 @@ export interface BaseUser {
   displayName: string
   userRoles: string[]
   token: string
+  cohort?: UserCohort
 }
 
 /**
