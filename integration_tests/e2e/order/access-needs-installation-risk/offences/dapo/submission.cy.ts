@@ -5,6 +5,7 @@ import OffenceListPage from '../offence-list/offenceListPage'
 import OrderTasksPage from '../../../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
+const clauseId = uuidv4()
 const apiPath = '/dapo'
 
 context('dapo page', () => {
@@ -68,6 +69,47 @@ context('dapo page', () => {
       page.form.saveAsDraftButton.click()
 
       Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('can update dapo data', () => {
+      const mockDate = new Date(2025, 1, 1)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          dapoClauses: [
+            {
+              id: clauseId,
+              clause: 'some clause',
+              date: mockDate,
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(DapoPage, { orderId: mockOrderId, clauseId }, {}, true)
+
+      page.form.clauseNumberField.shouldHaveValue('some clause')
+      page.form.clauseNumberField.clear()
+      page.form.dateField.shouldHaveValue(mockDate)
+      page.form.dateField.day.clear()
+      page.form.dateField.month.clear()
+      page.form.dateField.year.clear()
+
+      const newMockDate = new Date(2026, 2, 3)
+      page.form.fillInWith({ dapoClauseNumber: 'new clause', dapoDate: newMockDate })
+
+      page.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: {
+          clause: 'new clause',
+          date: newMockDate.toISOString(),
+        },
+      }).should('be.true')
     })
   })
 })

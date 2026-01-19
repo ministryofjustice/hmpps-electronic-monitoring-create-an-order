@@ -11,27 +11,6 @@ context('dapo order clause', () => {
       httpStatus: 200,
       id: mockOrderId,
       status: 'IN_PROGRESS',
-      order: {
-        interestedParties: {
-          notifyingOrganisation: 'FAMILY_COURT',
-          notifyingOrganisationName: '',
-          notifyingOrganisationEmail: '',
-          responsibleOfficerName: '',
-          responsibleOfficerPhoneNumber: '',
-          responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
-          responsibleOrganisationAddress: {
-            addressType: 'RESPONSIBLE_ORGANISATION',
-            addressLine1: '',
-            addressLine2: '',
-            addressLine3: '',
-            addressLine4: '',
-            postcode: '',
-          },
-          responsibleOrganisationEmail: '',
-          responsibleOrganisationPhoneNumber: '',
-          responsibleOrganisationRegion: '',
-        },
-      },
     })
 
     cy.signIn()
