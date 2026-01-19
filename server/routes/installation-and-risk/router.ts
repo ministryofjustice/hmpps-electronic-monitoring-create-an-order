@@ -25,6 +25,8 @@ const createInstallationAndRiskRouter = (services: Pick<Services, 'dapoService'>
   router.post('/offence-list', offenceListController.update)
   router.get('/dapo', dapoController.view)
   router.post('/dapo', dapoController.update)
+  router.get('/dapo/:clauseId', dapoController.view)
+  router.post('/dapo/:clauseId', dapoController.update)
   router.get('/delete', deleteController.view)
   router.post('/delete', deleteController.update)
 

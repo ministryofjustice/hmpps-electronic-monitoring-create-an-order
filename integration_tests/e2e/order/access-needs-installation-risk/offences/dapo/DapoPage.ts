@@ -5,7 +5,11 @@ import DapoComponent from './DapoComponent'
 export default class DapoPage extends AppFormPage {
   public form = new DapoComponent()
 
-  constructor() {
-    super('Add DAPO order clause', paths.INSTALLATION_AND_RISK.DAPO)
+  constructor(clauseId?: boolean) {
+    let path = paths.INSTALLATION_AND_RISK.DAPO
+    if (clauseId) {
+      path = paths.INSTALLATION_AND_RISK.DAPO_ID
+    }
+    super('Add DAPO order clause', path)
   }
 }

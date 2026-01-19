@@ -12,9 +12,12 @@ export default class DapoController {
     const order = req.order!
     const formData = req.flash('formData') as unknown as DapoInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
+    const { clauseId } = req.params
 
-    // TODO: figure out viewing older versions
-    res.render('pages/order/installation-and-risk/offence/dapo', ViewModel.contruct(order, formData[0], errors, '123'))
+    res.render(
+      'pages/order/installation-and-risk/offence/dapo',
+      ViewModel.contruct(order, formData[0], errors, clauseId),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
