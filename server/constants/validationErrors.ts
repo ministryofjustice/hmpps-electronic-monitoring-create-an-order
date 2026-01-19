@@ -121,6 +121,10 @@ interface ValidationErrors {
     clause: string
     date: DateErrorMessages
   }
+  offence: {
+    offenceTypeRequired: string
+    offenceDate: DateErrorMessages
+  }
 }
 
 export interface DateErrorMessages {
@@ -352,6 +356,18 @@ const validationErrors: ValidationErrors = {
       required: 'Enter date of DAPO requirement',
     },
     clause: 'Enter a DAPO order clause number',
+  },
+  offence: {
+    offenceTypeRequired: 'Select the type of offence the device wearer committed',
+    offenceDate: {
+      mustBeReal: 'Date of offence the device wearer committed must be a real date',
+      mustIncludeDay: 'Date of offence the device wearer committed must include a day',
+      mustIncludeMonth: 'Date of offence the device wearer committed must include a month',
+      mustIncludeYear: 'Date of offence the device wearer committed must include a year',
+      yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      required: 'Enter date of offence the device wearer committed',
+      mustBeInPast: 'Date of offence the device wearer committed must be in the past',
+    },
   },
 }
 

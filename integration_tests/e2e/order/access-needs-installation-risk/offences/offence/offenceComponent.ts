@@ -2,6 +2,10 @@ import FormComponent from '../../../../../pages/components/formComponent'
 import FormDateComponent from '../../../../../pages/components/formDateComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 
+export type OffenceInput = {
+  offenceType?: string
+  offenceDate?: Date
+}
 export default class OffenceComponent extends FormComponent {
   get offenceTypeField(): FormRadiosComponent {
     const label = 'What type of offence did the device wearer commit?'
@@ -35,8 +39,12 @@ export default class OffenceComponent extends FormComponent {
     this.offenceTypeField.shouldHaveAllOptions()
   }
 
-  fillInWith(value: string) {
-    // TODO implement fillInWith method
-    throw new Error(`Method not implemented.${value}`)
+  fillInWith(value: OffenceInput) {
+    if (value.offenceType) {
+      this.offenceTypeField.set(value.offenceType)
+    }
+    if (value.offenceDate) {
+      this.offenceDateField.set(value.offenceDate)
+    }
   }
 }

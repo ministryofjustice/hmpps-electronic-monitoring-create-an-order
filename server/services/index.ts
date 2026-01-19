@@ -38,6 +38,7 @@ import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-
 import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
 import FmsRequestService from './fmsRequestService'
 import DapoService from '../routes/installation-and-risk/dapo/service'
+import OffenceService from '../routes/installation-and-risk/offence/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -78,6 +79,7 @@ export const services = () => {
   const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
   const dapoService = new DapoService(cemoApiClient)
+  const offenceService = new OffenceService(cemoApiClient)
 
   const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
@@ -115,6 +117,7 @@ export const services = () => {
     serviceRequestTypeService,
     fmsRequestService,
     dapoService,
+    offenceService,
   }
 }
 
@@ -147,4 +150,5 @@ export {
   ServiceRequestTypeService,
   FmsRequestService,
   DapoService,
+  OffenceService,
 }
