@@ -43,6 +43,25 @@ describe('contructFromOrder', () => {
     expect(result.date.value).toEqual({ day: '', hours: '', minutes: '', month: '', year: '' })
   })
 
+  it('should use form data if it exists', () => {
+    const mockOrder = {
+      dapoClauses: [
+        { id: 'other-id', clause: 'other clause', date: '2022-01-01' },
+        { id: mockDapoId, clause: 'test clause value', date: '2023-01-01' },
+      ],
+    } as unknown as Order
+
+    const formData = {
+      clause: 'form clause',
+      date: { day: '03', hours: '00', minutes: '00', month: '02', year: '2025' },
+    } as unknown as DapoInput
+
+    const result = DapoModel.contruct(mockOrder, formData, [], mockDapoId)
+
+    expect(result.clause.value).toBe('form clause')
+    expect(result.date.value).toEqual({ day: '03', hours: '00', minutes: '00', month: '02', year: '2025' })
+  })
+
   it('should return errors correctly', () => {
     const mockErrors: ValidationResult = [
       { error: 'clause error', field: 'clause' },
