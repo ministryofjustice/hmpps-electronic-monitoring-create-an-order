@@ -25,7 +25,7 @@ export default class DapoController {
 
     const formData = DapoFormModel.parse(req.body)
 
-    const result = await this.service.updateDapo({ formData, orderId: order.id, accessToken: '123' })
+    const result = await this.service.updateDapo({ formData, orderId: order.id, accessToken: res.locals.user.token })
 
     if (isValidationResult(result)) {
       req.flash('formData', formData)
