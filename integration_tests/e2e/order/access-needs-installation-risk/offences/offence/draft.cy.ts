@@ -94,5 +94,17 @@ context('Draft Offences', () => {
       cy.get('#offenceDate').should('not.exist')
       page.form.shouldHaveAllOptions()
     })
+
+    it('Should load offence type and offence date from existing offence', () => {
+      const mockOffenceId = uuidv4()
+      stubOrder('PRISON', [
+        {
+          id: mockOffenceId,
+          offenceType: 'SEXUAL_OFFENCES',
+        },
+      ])
+      const page = Page.visit(OffenceExistingItemPage, { orderId: mockOrderId, offenceId: mockOffenceId })
+      page.form.offenceTypeField.shouldHaveValue('Sexual offences')
+    })
   })
 })
