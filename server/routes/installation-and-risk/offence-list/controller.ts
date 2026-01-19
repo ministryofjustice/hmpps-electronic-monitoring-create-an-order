@@ -32,7 +32,7 @@ export default class OffenceListController {
       if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
         res.redirect(paths.INSTALLATION_AND_RISK.DAPO.replace(':orderId', order.id))
       } else {
-        res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id))
+        res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id))
       }
     } else if (formData.branch === 'Next') {
       if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {

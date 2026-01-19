@@ -17,7 +17,8 @@ const createInstallationAndRiskRouter = (services: Pick<Services, 'dapoService'>
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()
 
-  router.get('/offence', offenceController.view)
+  router.get('/offence', offenceController.new)
+  router.get('/offence/:offenceId', offenceController.view)
   router.post('/offence', offenceController.update)
   router.get('/offence-other-info', offenceOtherInfoController.view)
   router.post('/offence-other-info', offenceOtherInfoController.update)

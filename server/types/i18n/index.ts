@@ -28,6 +28,7 @@ import ServiceRequestTypePageContent from './pages/serviceRequestType'
 import HaveCourtOrderPageContent from './pages/haveCourtOrder'
 import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
 import DapoContent from './pages/dapo'
+import OffenceContent from './pages/offence'
 
 type I18n = {
   pages: {
@@ -67,6 +68,7 @@ type I18n = {
     isRejection: IsRejectionPageContent
     serviceRequestType: ServiceRequestTypePageContent
     dapo: DapoContent
+    offence: OffenceContent
   }
   reference: ReferenceData
 }
