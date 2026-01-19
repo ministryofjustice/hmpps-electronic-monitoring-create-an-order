@@ -32,6 +32,10 @@ export default class DapoController {
       return
     }
 
-    res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
+    if (formData.action === 'continue') {
+      res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
+    } else {
+      res.redirect(res.locals.orderSummaryUri)
+    }
   }
 }
