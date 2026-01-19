@@ -12,9 +12,12 @@ export default class DapoController {
     const order = req.order!
     const formData = req.flash('formData') as unknown as DapoInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
+    const { clauseId } = req.params
 
-    // TODO: figure out viewing older versions
-    res.render('pages/order/installation-and-risk/offence/dapo', ViewModel.contruct(order, formData[0], errors, '123'))
+    res.render(
+      'pages/order/installation-and-risk/offence/dapo',
+      ViewModel.contruct(order, formData[0], errors, clauseId),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
@@ -22,7 +25,7 @@ export default class DapoController {
 
     const formData = DapoFormModel.parse(req.body)
 
-    const result = await this.service.updateDapo({ formData, orderId: order.id, accessToken: '123' })
+    const result = await this.service.updateDapo({ formData, orderId: order.id, accessToken: res.locals.user.token })
 
     if (isValidationResult(result)) {
       req.flash('formData', formData)
@@ -32,6 +35,10 @@ export default class DapoController {
       return
     }
 
-    res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
+    if (formData.action === 'continue') {
+      res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
+    } else {
+      res.redirect(res.locals.orderSummaryUri)
+    }
   }
 }

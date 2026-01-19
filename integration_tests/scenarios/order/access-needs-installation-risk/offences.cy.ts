@@ -113,14 +113,16 @@ context('offences', () => {
 
     // Should go to dapo and date page
     let dapoPage = Page.verifyOnPage(DapoPage)
-    dapoPage.form.continueButton.click()
+    dapoPage.form.fillInWith({ dapoClauseNumber: 'some clause', dapoDate: new Date() })
+    dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     let offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Add')
     offenceList.form.continueButton.click()
     // Should go to dapo and date page
     dapoPage = Page.verifyOnPage(DapoPage)
-    dapoPage.form.continueButton.click()
+    dapoPage.form.fillInWith({ dapoClauseNumber: 'some clause', dapoDate: new Date() })
+    dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Next')
