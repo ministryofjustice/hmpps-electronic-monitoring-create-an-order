@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import OffencePage from './offencePage'
+import OffenceListPage from '../offence-list/offenceListPage'
+import OffenceOtherInfoPage from '../offence-other-info/offenceOtherInfoPage'
 
+const apiPath = '/offence'
 const mockOrderId = uuidv4()
 const stubOrder = (notifyingOrganisation = 'CROWN_COURT') => {
   cy.task('stubCemoGetOrder', {
@@ -31,51 +34,74 @@ const stubOrder = (notifyingOrganisation = 'CROWN_COURT') => {
     },
   })
 }
-context('Offence validations', () => {
+context('Offence submissions', () => {
   context('Notifying organisation is court', () => {
     beforeEach(() => {
+      cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       stubOrder()
+
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: apiPath,
+        response: {
+          offenceType: 'THEFT_OFFENCES',
+          offenceDate: '2020-01-01T00:00:00Z',
+        },
+      })
       cy.signIn()
     })
 
-    it('Should show errors when submit empty form', () => {
-      const page = Page.visit(OffencePage, { orderId: mockOrderId })
-
-      page.form.saveAndContinueButton.click()
-      page.form.offenceTypeField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
-      page.form.offenceDateField.shouldHaveValidationMessage('Enter date of offence the device wearer committed')
-    })
-
-    it('Should show error when offence date is not in the past', () => {
+    it('Submitting valid offence', () => {
       const page = Page.visit(OffencePage, { orderId: mockOrderId })
       page.form.fillInWith({
         offenceType: 'Theft Offences',
-        offenceDate: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        offenceDate: new Date(2025, 0, 1),
       })
       page.form.saveAndContinueButton.click()
-      page.form.offenceDateField.shouldHaveValidationMessage(
-        'Date of offence the device wearer committed must be in the past',
-      )
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: {
+          offenceType: 'THEFT_OFFENCES',
+          offenceDate: '2025-01-01T00:00:00.000Z',
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OffenceListPage)
     })
   })
 
   context('Notifying organisation is prison', () => {
     beforeEach(() => {
+      cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       stubOrder('PRISON')
+
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: apiPath,
+        response: {
+          offenceType: 'THEFT_OFFENCES',
+          offenceDate: '2020-01-01T00:00:00Z',
+        },
+      })
       cy.signIn()
     })
 
-    it('Should show errors when submit empty form', () => {
+    it('Submitting valid offence', () => {
       const page = Page.visit(OffencePage, { orderId: mockOrderId })
-
+      page.form.fillInWith({
+        offenceType: 'Theft Offences',
+      })
       page.form.saveAndContinueButton.click()
-
-      page.errorSummary.shouldExist()
-      page.errorSummary.shouldHaveError('Select the type of offence the device wearer committed')
-      page.errorSummary.shouldNotHaveError('Enter date of offence the device wearer committed')
-      page.form.offenceTypeField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: {
+          offenceType: 'THEFT_OFFENCES',
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OffenceOtherInfoPage)
     })
   })
 })
