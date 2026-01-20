@@ -39,6 +39,10 @@ import ServiceRequestTypeService from '../routes/variations/service-request-type
 import FmsRequestService from './fmsRequestService'
 import DapoService from '../routes/installation-and-risk/dapo/service'
 import OffenceService from '../routes/installation-and-risk/offence/service'
+import UserCohortService from './userCohortService'
+import RedisCacheService from './cache/redisCacheService'
+import { UserCohort } from '../models/UserCohort'
+import InMemorCacheService from './cache/inMemoryCacheService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -81,6 +85,13 @@ export const services = () => {
   const dapoService = new DapoService(cemoApiClient)
   const offenceService = new OffenceService(cemoApiClient)
 
+  const userCohortService = new UserCohortService(
+    cemoApiClient,
+    config.redis.enabled
+      ? new RedisCacheService<UserCohort>(createRedisClient(), 'usertoken:')
+      : new InMemorCacheService<UserCohort>(),
+  )
+
   const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
     alcoholMonitoringService,
@@ -118,6 +129,7 @@ export const services = () => {
     fmsRequestService,
     dapoService,
     offenceService,
+    userCohortService,
   }
 }
 
@@ -151,4 +163,5 @@ export {
   FmsRequestService,
   DapoService,
   OffenceService,
+  UserCohortService,
 }

@@ -22,6 +22,8 @@ export default class PageHeaderComponent {
 
   signOut = (): PageElement => this.element.get('[data-qa=signOut]')
 
+  cohort = (): PageElement => this.element.get('[data-qa=userCohort]')
+
   manageDetails = (): PageElement => this.element.get('[data-qa=manageDetails]')
 
   userName = (): PageElement => this.element.get('[data-qa=header-user-name]')

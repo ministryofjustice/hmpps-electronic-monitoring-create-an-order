@@ -399,7 +399,7 @@ const getVersionWithAttachments = (
 type SubmitOrderStubOptions = {
   httpStatus: number
   method?: string
-  id: string
+  id?: string
   subPath?: string
   response: Record<string, unknown>
 }
@@ -417,6 +417,18 @@ const submitOrder = (options: SubmitOrderStubOptions) =>
     },
   })
 
+const stubCemoRequest = (options: SubmitOrderStubOptions) =>
+  stubFor({
+    request: {
+      method: options.method || 'GET',
+      urlPattern: `/cemo/api/${options.subPath ?? '/'}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.response,
+    },
+  })
 type DeleteOrderStubOptions = {
   httpStatus: number
   id: string
@@ -813,4 +825,5 @@ export default {
   stubCemoVerifyRequestReceived,
   stubDeleteOrder: deleteOrder,
   resetDB,
+  stubCemoRequest,
 }

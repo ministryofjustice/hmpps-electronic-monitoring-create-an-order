@@ -46,7 +46,7 @@ context('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -173,6 +173,7 @@ context('Scenarios', () => {
           address_3: fakePrimaryAddress.addressLine3,
           address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
           address_post_code: fakePrimaryAddress.postcode,
+          no_fixed_address: 'false',
           secondary_address_1: fakeSecondaryAddress.addressLine1,
           secondary_address_2: fakeSecondaryAddress.addressLine2 === '' ? 'N/A' : fakeSecondaryAddress.addressLine2,
           secondary_address_3: fakeSecondaryAddress.addressLine3,

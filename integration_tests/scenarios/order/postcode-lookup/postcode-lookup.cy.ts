@@ -24,7 +24,7 @@ context('Postcode Lookup', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)

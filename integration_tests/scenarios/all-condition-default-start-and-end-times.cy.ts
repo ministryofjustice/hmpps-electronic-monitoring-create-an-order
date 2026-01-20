@@ -29,7 +29,7 @@ context('The kitchen sink', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -177,6 +177,7 @@ context('The kitchen sink', () => {
           address_3: primaryAddressDetails.addressLine3,
           address_4: primaryAddressDetails.addressLine4 === '' ? 'N/A' : primaryAddressDetails.addressLine4,
           address_post_code: primaryAddressDetails.postcode,
+          no_fixed_address: 'false',
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
