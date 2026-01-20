@@ -6,13 +6,14 @@ import { formatDateTime, lookup } from '../../utils/utils'
 import config from '../../config'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import paths from '../../constants/paths'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = []
-  if (isOrderDataDictionarySameOrAbove('DDV6', order)) {
+  if (isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
     if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
       answers.push(
         createMultipleChoiceAnswer(
