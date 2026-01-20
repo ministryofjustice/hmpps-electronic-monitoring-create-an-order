@@ -15,6 +15,7 @@ export type InterestedPartiesFormData = {
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
   probationRegion?: string
+  policeArea?: string
   yjsRegion?: string
   responsibleOrganisationAddress?: FormAddressData
   responsibleOfficerName?: string
@@ -192,6 +193,10 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
     if (profile.probationRegion) {
       this.responsibleOrgProbationField.set(profile.probationRegion)
+    }
+
+    if (profile.policeArea) {
+      this.policeAreaField.set(profile.policeArea)
     }
 
     if (profile.yjsRegion) {

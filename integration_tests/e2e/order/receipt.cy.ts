@@ -169,7 +169,7 @@ context('Receipt', () => {
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOrganisationAddress: {
               addressType: 'RESPONSIBLE_ORGANISATION',
               addressLine1: 'addressLine1',
@@ -281,7 +281,7 @@ context('Receipt', () => {
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOrganisationAddress: {
               addressType: 'RESPONSIBLE_ORGANISATION',
               addressLine1: 'addressLine1',

@@ -92,7 +92,7 @@ context('Contact Information - check your answers', () => {
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
@@ -122,6 +122,7 @@ context('Contact Information - check your answers', () => {
         { key: "What is the Responsible Officer's full name?", value: 'name' },
         { key: "What is the Responsible Officer's telephone number?", value: '01234567891' },
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+        { key: 'Select the Police force area', value: 'Cheshire' },
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
       ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
@@ -169,7 +170,7 @@ context('Contact Information - check your answers', () => {
             responsibleOrganisation: 'POLICE',
             responsibleOfficerPhoneNumber: '01234567891',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
           },
         },
@@ -223,7 +224,7 @@ context('Contact Information - check your answers', () => {
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
@@ -960,6 +961,61 @@ context('Contact Information - check your answers', () => {
       page.organisationDetailsSection.shouldHaveItems([
         { key: "What is the Responsible Officer's organisation?", value: 'Youth Justice Service (YJS)' },
         { key: 'Select the Youth Justice Service region', value: 'Yorkshire and Humberside' },
+      ])
+      page.deviceWearerAddressesSection.shouldNotHaveItems([
+        'Select the name of the Prison',
+        'Select the name of the Crown Court',
+        'Select the name of the Court',
+      ])
+    })
+
+    it('should show Police area', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          contactDetails: {
+            contactNumber: '01234567890',
+          },
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            dateOfBirth: null,
+            disabilities: null,
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'NATIONAL_CRIME_AGENCY',
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+        },
+      })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.organisationDetailsSection.shouldExist()
+      page.organisationDetailsSection.shouldHaveItems([
+        { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+        { key: 'Select the Police force area', value: 'National Crime Agency' },
       ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
         'Select the name of the Prison',

@@ -17,6 +17,10 @@ const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) =
     return formData.responsibleOrgProbationRegion
   }
 
+  if (formData.responsibleOrganisation === 'POLICE') {
+    return formData.policeArea
+  }
+
   if (formData.responsibleOrganisation === 'YJS') {
     return formData.yjsRegion
   }
