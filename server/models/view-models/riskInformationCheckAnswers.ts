@@ -1,24 +1,58 @@
-import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer, createDatePreview, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import config from '../../config'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
+import paths from '../../constants/paths'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = []
-  answers.push(
-    createAnswer(
-      questions.offence.text,
-      lookup(content.reference.offences, order.installationAndRisk?.offence),
-      uri,
-      answerOpts,
-    ),
-  )
+  if (isOrderDataDictionarySameOrAbove('DDV6', order)) {
+    if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
+      answers.push(
+        createMultipleChoiceAnswer(
+          'DAPO order clauses',
+          order.dapoClauses.map(clause => `${clause.clause} on ${createDatePreview(clause.date)}`),
+          paths.INSTALLATION_AND_RISK.OFFENCE_LIST,
+        ),
+      )
+    } else if (order.interestedParties?.notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
+      answers.push(
+        createMultipleChoiceAnswer(
+          'Offences',
+          order.offences.map(
+            offence =>
+              `${lookup(content.reference.offences, offence.offenceType)} on ${createDatePreview(offence.offenceDate)}`,
+          ),
+          paths.INSTALLATION_AND_RISK.OFFENCE_LIST,
+        ),
+      )
+    } else {
+      answers.push(
+        createAnswer(
+          questions.offence.text,
+          lookup(content.reference.offences, order.offences[0].offenceType),
+          uri,
+          answerOpts,
+        ),
+      )
+    }
+  } else {
+    answers.push(
+      createAnswer(
+        questions.offence.text,
+        lookup(content.reference.offences, order.installationAndRisk?.offence),
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+
   if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
     answers.push(
       createAnswer(

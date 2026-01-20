@@ -391,4 +391,74 @@ context('installation and risk - check your answers', () => {
       )
     })
   })
+
+  context('DDV6', () => {
+    const pageHeading = 'Check your answers'
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
+
+    it('family court dapo clauses', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          dapoClauses: [
+            {
+              clause: '12345',
+              date: new Date(2025, 1, 1),
+            },
+            {
+              clause: '56789',
+              date: new Date(2025, 2, 2),
+            },
+          ],
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'DAPO order clauses', value: '12345 on 01/02/2025' },
+        { key: 'DAPO order clauses', value: '56789 on 02/03/2025' },
+      ])
+      page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
+    })
+
+    it('Civil court offences', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          offences: [
+            {
+              offenceType: 'first',
+              offenceDate: new Date(2025, 1, 1),
+            },
+            {
+              offenceType: 'second',
+              offenceDate: new Date(2025, 2, 2),
+            },
+          ],
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'Offences', value: 'first on 01/02/2025' },
+        { key: 'Offences', value: 'second on 02/03/2025' },
+      ])
+      page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
+    })
+  })
 })
