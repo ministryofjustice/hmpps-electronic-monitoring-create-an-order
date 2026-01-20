@@ -410,6 +410,16 @@ context('installation and risk - check your answers', () => {
         httpStatus: 200,
         id: mockOrderId,
         order: {
+          interestedParties: {
+            notifyingOrganisation: 'FAMILY_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
           dapoClauses: [
             {
               clause: '12345',
@@ -438,13 +448,23 @@ context('installation and risk - check your answers', () => {
         httpStatus: 200,
         id: mockOrderId,
         order: {
+          interestedParties: {
+            notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
           offences: [
             {
-              offenceType: 'first',
+              offenceType: 'SEXUAL_OFFENCES',
               offenceDate: new Date(2025, 1, 1),
             },
             {
-              offenceType: 'second',
+              offenceType: 'CRIMINAL_DAMAGE_AND_ARSON',
               offenceDate: new Date(2025, 2, 2),
             },
           ],
@@ -455,8 +475,8 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'Offences', value: 'first on 01/02/2025' },
-        { key: 'Offences', value: 'second on 02/03/2025' },
+        { key: 'Offences', value: 'Sexual offences on 01/02/2025' },
+        { key: 'Offences', value: 'Criminal damage and arson on 02/03/2025' },
       ])
       page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
     })
