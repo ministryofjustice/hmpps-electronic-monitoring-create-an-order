@@ -119,7 +119,7 @@ describe('store service', () => {
       },
       {
         orderType: 'COMMUNITY',
-        orderTypeConditions: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        orderTypeConditions: 'REQUIREMENT_OF_COMMUNITY_ORDER',
       },
       {
         orderType: 'CIVIL',
@@ -243,7 +243,7 @@ describe('store service', () => {
 
       const expectedData: MonitoringConditions = {
         orderType: 'COMMUNITY',
-        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        conditionType: 'REQUIREMENT_OF_COMMUNITY_ORDER',
         sentenceType: 'COMMUNITY',
         curfew: true,
         exclusionZone: true,
