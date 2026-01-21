@@ -7,7 +7,7 @@ import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-r
 import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
-import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/dapoPage'
+import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import OffenceListDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/offenceListDeletePage'
 
 context('offences', () => {
@@ -60,7 +60,8 @@ context('offences', () => {
 
     // Should go to offence page
     const offencePage = Page.verifyOnPage(OffencePage)
-    offencePage.form.continueButton.click()
+    offencePage.form.fillInWith({ offenceType: 'Criminal damage and arson' })
+    offencePage.form.saveAndContinueButton.click()
     // Should go to offence other information page
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.continueButton.click()
@@ -69,7 +70,11 @@ context('offences', () => {
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldHaveItem(
+      'What type of offence did the device wearer commit?',
+      'Criminal damage and arson',
+    )
   })
 
   it('Notifying organisation is civil court, multiple offences flow', () => {
@@ -79,16 +84,23 @@ context('offences', () => {
       interestedParties,
     })
 
+    const offences = [
+      { offenceType: 'Criminal damage and arson', offenceDate: new Date(2025, 1, 1) },
+      { offenceType: 'Sexual offences', offenceDate: new Date(2025, 2, 2) },
+    ]
+
     // Should go to offence page
     let offencePage = Page.verifyOnPage(OffencePage)
-    offencePage.form.continueButton.click()
+    offencePage.form.fillInWith(offences[0])
+    offencePage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     let offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Add')
     offenceList.form.continueButton.click()
     // Should go to offence page
     offencePage = Page.verifyOnPage(OffencePage)
-    offencePage.form.continueButton.click()
+    offencePage.form.fillInWith(offences[1])
+    offencePage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Next')
@@ -101,7 +113,11 @@ context('offences', () => {
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldHaveItems([
+      { key: 'Offences', value: 'Criminal damage and arson on 01/02/2025' },
+      { key: 'Offences', value: 'Sexual offences on 02/03/2025' },
+    ])
   })
 
   it('Notifying organisation is family court, multiple dapo flow', () => {
@@ -111,16 +127,23 @@ context('offences', () => {
       interestedParties,
     })
 
+    const dapoClauses = [
+      { dapoClauseNumber: '1234', dapoDate: new Date(2025, 1, 1) },
+      { dapoClauseNumber: '5678', dapoDate: new Date(2025, 2, 2) },
+    ]
+
     // Should go to dapo and date page
     let dapoPage = Page.verifyOnPage(DapoPage)
-    dapoPage.form.continueButton.click()
+    dapoPage.form.fillInWith(dapoClauses[0])
+    dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     let offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Add')
     offenceList.form.continueButton.click()
     // Should go to dapo and date page
     dapoPage = Page.verifyOnPage(DapoPage)
-    dapoPage.form.continueButton.click()
+    dapoPage.form.fillInWith(dapoClauses[1])
+    dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Next')
@@ -130,7 +153,12 @@ context('offences', () => {
     installationAndRiskPage.form.fillInWith(installationAndRisk)
     installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldExist()
+    cyaPage.installationRiskSection.shouldHaveItems([
+      { key: 'DAPO order clauses', value: '1234 on 01/02/2025' },
+      { key: 'DAPO order clauses', value: '5678 on 02/03/2025' },
+    ])
   })
 
   it('Should able to delete dapo', () => {
@@ -142,14 +170,16 @@ context('offences', () => {
 
     // Should go to dapo and date page
     let dapoPage = Page.verifyOnPage(DapoPage)
-    dapoPage.form.continueButton.click()
+    dapoPage.form.fillInWith({ dapoClauseNumber: '1234', dapoDate: new Date(2025, 1, 1) })
+    dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     let offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Add')
     offenceList.form.continueButton.click()
     // Should go to dapo and date page
     dapoPage = Page.verifyOnPage(DapoPage)
-    dapoPage.form.continueButton.click()
+    dapoPage.form.fillInWith({ dapoClauseNumber: '5678', dapoDate: new Date(2025, 2, 2) })
+    dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Delete')

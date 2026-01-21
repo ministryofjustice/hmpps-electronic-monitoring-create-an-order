@@ -37,6 +37,8 @@ import RedisStore from '../routes/monitoring-conditions/store/redisStore'
 import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
 import FmsRequestService from './fmsRequestService'
+import DapoService from '../routes/installation-and-risk/dapo/service'
+import OffenceService from '../routes/installation-and-risk/offence/service'
 import UserCohortService from './userCohortService'
 import RedisCacheService from './cache/redisCacheService'
 import { UserCohort } from '../models/UserCohort'
@@ -80,6 +82,8 @@ export const services = () => {
   const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
   const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
+  const dapoService = new DapoService(cemoApiClient)
+  const offenceService = new OffenceService(cemoApiClient)
 
   const userCohortService = new UserCohortService(
     cemoApiClient,
@@ -123,6 +127,8 @@ export const services = () => {
     removeMonitoringTypeService,
     serviceRequestTypeService,
     fmsRequestService,
+    dapoService,
+    offenceService,
     userCohortService,
   }
 }
@@ -155,5 +161,7 @@ export {
   RemoveMonitoringTypeService,
   ServiceRequestTypeService,
   FmsRequestService,
+  DapoService,
+  OffenceService,
   UserCohortService,
 }

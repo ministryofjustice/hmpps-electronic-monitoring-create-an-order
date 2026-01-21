@@ -391,4 +391,98 @@ context('installation and risk - check your answers', () => {
       )
     })
   })
+
+  context('DDV6', () => {
+    const pageHeading = 'Check your answers'
+    beforeEach(() => {
+      cy.task('reset')
+
+      const testFlags = { OFFENCE_FLOW_ENABLED: 'true' }
+      cy.task('setFeatureFlags', testFlags)
+
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
+
+    it('family court dapo clauses', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'FAMILY_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+          dapoClauses: [
+            {
+              clause: '12345',
+              date: new Date(2025, 1, 1),
+            },
+            {
+              clause: '56789',
+              date: new Date(2025, 2, 2),
+            },
+          ],
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'DAPO order clauses', value: '12345 on 01/02/2025' },
+        { key: 'DAPO order clauses', value: '56789 on 02/03/2025' },
+      ])
+      page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
+    })
+
+    it('Civil court offences', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              offenceType: 'SEXUAL_OFFENCES',
+              offenceDate: new Date(2025, 1, 1),
+            },
+            {
+              offenceType: 'CRIMINAL_DAMAGE_AND_ARSON',
+              offenceDate: new Date(2025, 2, 2),
+            },
+          ],
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'Offences', value: 'Sexual offences on 01/02/2025' },
+        { key: 'Offences', value: 'Criminal damage and arson on 02/03/2025' },
+      ])
+      page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
+    })
+  })
 })
