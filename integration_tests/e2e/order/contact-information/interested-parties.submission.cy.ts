@@ -158,6 +158,37 @@ context('Contact information', () => {
           }).should('be.true')
         })
 
+        it('should submit a correctly formatted interested parties submission for FELTHAM prison', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+          const formData = {
+            notifyingOrganisation: 'Prison',
+            notifyingOrganisationEmailAddress: 'notifying@organisation',
+            prison: 'Feltham Prison',
+            responsibleOrganisation: 'Police',
+            responsibleOrganisationEmailAddress: 'responsible@organisation',
+            responsibleOfficerName: 'name',
+            responsibleOfficerContactNumber: '01234567891',
+          }
+
+          page.form.fillInWith(formData)
+          page.form.saveAndContinueButton.click()
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'FELTHAM_PRISON',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: '',
+              responsibleOfficerName: 'name',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          }).should('be.true')
+        })
+
         it('should hide region input for Probation Service and submit empty string to API', () => {
           cy.task('stubCemoGetOrder', {
             httpStatus: 200,
