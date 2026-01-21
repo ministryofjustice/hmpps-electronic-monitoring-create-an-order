@@ -35,6 +35,7 @@ const prisonsDDv5: PrisonsDDv5 = {
   ERLESTOKE_PRISON: 'Erlestoke Prison',
   EXETER_PRISON: 'Exeter Prison',
   FEATHERSTONE_PRISON: 'Featherstone Prison',
+  FELTHAM: 'Feltham Prison',
   FELTHAM_YOUNG_OFFENDER_INSTITUTION: 'Feltham Young Offender Institution',
   FIVE_WELLS_PRISON: 'Five Wells Prison',
   FORD_PRISON: 'Ford Prison',
