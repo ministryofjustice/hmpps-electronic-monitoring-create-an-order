@@ -84,7 +84,7 @@ export type InterestedParties = {
   probationRegion?: string
   yjsRegion?: string
   responsibleOrganisationAddress?: Partial<Address>
-
+  policeArea?: string
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
   youthCustodyServiceRegion?: string
@@ -266,6 +266,7 @@ export const createFakeInterestedParties = (
     responsibleOrganisation,
     responsibleOrganisationRegion,
     responsibleOrganisationEmailAddress,
+    policeArea,
     probationRegion,
     yjsRegion,
     youthCustodyServiceRegion,
