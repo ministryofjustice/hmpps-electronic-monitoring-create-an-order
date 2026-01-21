@@ -310,7 +310,7 @@ export default class TaskListService {
       tasks.push({
         section: SECTIONS.riskInformation,
         name: PAGES.offence,
-        path: paths.INSTALLATION_AND_RISK.OFFENCE,
+        path: paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
         state: convertBooleanToEnum<State>(
           order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
           STATES.cantBeStarted,
