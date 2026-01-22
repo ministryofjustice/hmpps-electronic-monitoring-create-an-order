@@ -287,7 +287,7 @@ context.skip('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'Requirement of Community Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',

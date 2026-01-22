@@ -73,7 +73,7 @@ context('pilot', () => {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
       body: {
         orderType: 'COMMUNITY',
-        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        conditionType: 'REQUIREMENT_OF_COMMUNITY_ORDER',
         sentenceType: 'COMMUNITY_SDO',
         curfew: false,
         exclusionZone: false,
