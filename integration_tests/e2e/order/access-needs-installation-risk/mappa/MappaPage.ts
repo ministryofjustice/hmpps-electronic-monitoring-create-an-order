@@ -5,8 +5,8 @@ import MappaComponent from './MappaComponent'
 export default class MappaPage extends AppFormPage {
   public form = new MappaComponent()
 
-  constructor(clauseId?: boolean) {
-    let path = paths.INSTALLATION_AND_RISK.MAPPA
+  constructor() {
+    const path = paths.INSTALLATION_AND_RISK.MAPPA
 
     super('MAPPA', path)
   }
