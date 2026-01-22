@@ -250,7 +250,7 @@ context('Order type descriptions', () => {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
       body: {
         orderType: 'COMMUNITY',
-        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        conditionType: 'REQUIREMENT_OF_COMMUNITY_ORDER',
         sentenceType: 'COMMUNITY_YRO',
         curfew: false,
         exclusionZone: false,
@@ -278,7 +278,7 @@ context('Order type descriptions', () => {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
       body: {
         orderType: 'COMMUNITY',
-        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        conditionType: 'REQUIREMENT_OF_COMMUNITY_ORDER',
         sentenceType: 'COMMUNITY_SUSPENDED_SENTENCE',
         curfew: false,
         exclusionZone: false,
