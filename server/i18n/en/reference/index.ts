@@ -24,7 +24,7 @@ import disabilities from './disabilities'
 import gender from './gender'
 import languages from './languages'
 import magistratesCourts from './magistratesCourts'
-import mappaCaseType from './mappaCaseType'
+import mappaCategory from './mappaCategory'
 import mappaLevel from './mappaLevel'
 import notifyingOrganisations from './notifyingOrganisations'
 import offences from './offences'
@@ -61,7 +61,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   gender,
   languages,
   magistratesCourts,
-  mappaCaseType,
+  mappaCategory,
   mappaLevel,
   notifyingOrganisations,
   offences,
@@ -96,7 +96,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   gender,
   languages,
   magistratesCourts: magistratesCourtsDDv5,
-  mappaCaseType,
+  mappaCategory,
   mappaLevel,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,
@@ -135,7 +135,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   gender,
   languages,
   magistratesCourts: magistratesCourtsDDv5,
-  mappaCaseType,
+  mappaCategory,
   mappaLevel,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,

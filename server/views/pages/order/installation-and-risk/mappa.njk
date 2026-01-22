@@ -20,34 +20,10 @@
           isPageHeading: false
         }
       },
-      
-      items: content.reference.offences | toOptions(not isOrderEditable) | addDivider(),
-      items: [
-        {
-          value: "MAPPA 1",
-          text: "MAPPA 1",
-          hint: {
-            text: "Ordinary agency management, where the offender can be managed by the lead agency in consultation with other agencies involved."
-          }
-        },
-        {
-          value: "MAPPA 2",
-          text: "MAPPA 2",
-          hint: {
-            text: "For cases where active interagency management is required in order to manage the risk of serious harm posed."
-          }
-        },
-        {
-          value: "MAPPA 3",
-          text: "MAPPA 3",
-          hint: {
-            text: "For the most complex cases which require active interagency management by Senior Managers from the agencies involved."
-          }
-        }
-      ]
+      items: content.reference.mappaLevel | toOptions(not isOrderEditable)
     }) }}
 
-    {{govukRadios({
+    {{ govukRadios({
       name: "category",
       fieldset: {
         legend: {
@@ -56,29 +32,7 @@
           isPageHeading: false
         }
       },
-      items: [
-        {
-          value: "Category 1",
-          text: "Category 1",
-          hint: {
-            text: "All registered sexual offenders."
-          }
-        },
-        {
-          value: "Category 2",
-          text: "Category 2",
-          hint: {
-            text: "Voilent or other sex offenders not subject to notification requirements."
-          }
-        },
-        {
-          value: "Category 3",
-          text: "Category 3",
-          hint: {
-            text: "Other dangerous offenders."
-          }
-        }
-      ]
+      items: content.reference.mappaCategory | toOptions(not isOrderEditable)
     })  }}
  
 {% endblock %}

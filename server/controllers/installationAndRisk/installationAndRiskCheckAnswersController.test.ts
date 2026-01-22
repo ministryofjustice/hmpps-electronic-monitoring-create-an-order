@@ -168,7 +168,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
-        mappaCaseType: 'SOC (Serious Organised Crime)',
+        mappaCaseType: 'Category 1',
       },
     })
     const req = createMockRequest({ order })
@@ -271,7 +271,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: questions.mappaCaseType.text,
           },
           value: {
-            text: 'Serious Organised Crime',
+            text: 'Category 1',
           },
           actions: {
             items: [
@@ -295,7 +295,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
         mappaLevel: 'MAPPA 1',
-        mappaCaseType: 'SOC (Serious Organised Crime)',
+        mappaCaseType: 'Category 1',
       },
     })
     const req = createMockRequest({ order })

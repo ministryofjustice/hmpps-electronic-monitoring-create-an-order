@@ -101,7 +101,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       ),
       createAnswer(
         questions.mappaCaseType.text,
-        lookup(content.reference.mappaCaseType, order.installationAndRisk?.mappaCaseType),
+        lookup(content.reference.mappaCategory, order.installationAndRisk?.mappaCaseType),
         uri,
         answerOpts,
       ),
