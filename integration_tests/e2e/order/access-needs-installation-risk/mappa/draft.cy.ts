@@ -19,10 +19,12 @@ context('mappa page', () => {
   it('has correct elements', () => {
     const page = Page.visit(MappaPage, { orderId: mockOrderId })
 
-    page.form.levelField.shouldExist()
-    page.form.levelField.shouldNotBeDisabled()
     page.form.categoryField.shouldExist()
     page.form.categoryField.shouldNotBeDisabled()
+    page.form.categoryField.shouldHaveAllOptions()
+    page.form.levelField.shouldExist()
+    page.form.levelField.shouldNotBeDisabled()
+    page.form.levelField.shouldHaveAllOptions()
 
     page.form.saveAndContinueButton.should('exist')
     page.form.saveAsDraftButton.should('exist')

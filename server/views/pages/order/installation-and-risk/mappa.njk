@@ -16,9 +16,12 @@
       fieldset: {
         legend: {
           text: questions.mappaLevel.text,
-          classes: "govuk-fieldset__legend--s"
+          classes: "govuk-fieldset__legend--s",
+          isPageHeading: false
         }
       },
+      
+      items: content.reference.offences | toOptions(not isOrderEditable) | addDivider(),
       items: [
         {
           value: "MAPPA 1",
@@ -28,15 +31,15 @@
           }
         },
         {
-          value: "MAPPA 1",
-          text: "MAPPA 1",
+          value: "MAPPA 2",
+          text: "MAPPA 2",
           hint: {
             text: "For cases where active interagency management is required in order to manage the risk of serious harm posed."
           }
         },
         {
-          value: "MAPPA 1",
-          text: "MAPPA 1",
+          value: "MAPPA 3",
+          text: "MAPPA 3",
           hint: {
             text: "For the most complex cases which require active interagency management by Senior Managers from the agencies involved."
           }
@@ -49,7 +52,8 @@
       fieldset: {
         legend: {
           text: questions.mappaCategory.text,
-          classes: "govuk-fieldset__legend--s"
+          classes: "govuk-fieldset__legend--s",
+          isPageHeading: false
         }
       },
       items: [
