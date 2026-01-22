@@ -46,12 +46,12 @@ import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
 import pilots from './pilots'
 import policeAreas from './policeAreas'
+import policeAreasDDv6 from './ddv6/policeAreas'
 import serviceRequestTypes from './serviceRequestTypes'
 import probationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnits'
 import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import youthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
-import policeAreasDDv6 from './ddv6/policeAreas'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -82,6 +82,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
   youthCustodyServiceRegions,
 }
@@ -121,6 +122,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
   youthCustodyServiceRegions,
 }
@@ -160,6 +162,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   installationLocations,
   possibleRisks,
   policeAreas: policeAreasDDv6,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
   youthCustodyServiceRegions: youthCustodyServiceRegionsDDv6,
 }

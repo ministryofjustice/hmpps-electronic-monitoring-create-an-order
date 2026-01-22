@@ -27,7 +27,7 @@ const constructModel = (data: MonitoringConditions, errors: ValidationResult, co
 }
 
 const getItems = (content: I18n) => {
-  const entries = Object.entries(content.reference.policeAreas)
+  const entries = Object.entries(content.reference.releaseAddressPoliceAreas)
   const divider = { divider: 'or' }
 
   const mappedPoliceAreas = entries.map(policeArea => {

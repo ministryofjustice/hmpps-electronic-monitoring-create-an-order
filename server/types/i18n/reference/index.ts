@@ -65,6 +65,7 @@ type ReferenceCatalogDDv4 = {
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks
   policeAreas: PoliceAreas
+  releaseAddressPoliceAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
   deviceTypes: DeviceTypes
   youthCustodyServiceRegions: YouthCustodyServiceRegions
@@ -104,6 +105,7 @@ type ReferenceCatalogDDv5 = {
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks
   policeAreas: PoliceAreas
+  releaseAddressPoliceAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
   deviceTypes: DeviceTypes
   youthCustodyServiceRegions: YouthCustodyServiceRegions
@@ -143,6 +145,7 @@ type ReferenceCatalogDDv6 = {
   installationLocations: InstallationLocations
   possibleRisks: PossibleRisks
   policeAreas: PoliceAreas
+  releaseAddressPoliceAreas: PoliceAreas
   serviceRequestTypes: ServiceRequestTypes
   deviceTypes: DeviceTypes
   youthCustodyServiceRegions: YouthCustodyServiceRegionsDDv6
