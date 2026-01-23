@@ -4,10 +4,10 @@ const mappaPageContent: MappaPageContent = {
   helpText: '',
   legend: '',
   questions: {
-    mappaCategory: {
+    mappaLevel: {
       text: 'Which level of MAPPA applies to the device wearer? (optional)',
     },
-    mappaLevel: {
+    mappaCategory: {
       text: 'Which category of MAPPA applies to the device wearer? (optional)',
     },
   },

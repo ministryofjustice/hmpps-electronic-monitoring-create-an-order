@@ -49,7 +49,6 @@ context('mappa page', () => {
     const page = Page.visit(MappaPage, { orderId: mockOrderId })
 
     page.form.levelField.shouldHaveValue('MAPPA 1')
-
     page.form.categoryField.shouldHaveValue('Category 1')
   })
 })
