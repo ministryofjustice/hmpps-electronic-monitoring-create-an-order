@@ -68,7 +68,7 @@ export default class MonitoringConditionsStoreService {
         monitoringConditions.conditionType = 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER'
         break
       case 'COMMUNITY':
-        monitoringConditions.conditionType = 'REQUIREMENT_OF_COMMUNITY_ORDER'
+        monitoringConditions.conditionType = 'REQUIREMENT_OF_A_COMMUNITY_ORDER'
         break
       case 'CIVIL':
       case 'IMMIGRATION':
