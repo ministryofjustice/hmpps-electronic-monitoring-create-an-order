@@ -794,7 +794,7 @@ const resetDB = async () => {
   // console.log(rows)
 
   try {
-    await emptyNextTable(client)
+    //await emptyNextTable(client)
   } catch (error) {
     // quite fail
   }
