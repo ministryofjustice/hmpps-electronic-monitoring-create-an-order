@@ -19,14 +19,37 @@ context('mappa page', () => {
   it('has correct elements', () => {
     const page = Page.visit(MappaPage, { orderId: mockOrderId })
 
-    page.form.categoryField.shouldExist()
     page.form.categoryField.shouldNotBeDisabled()
     page.form.categoryField.shouldHaveAllOptions()
-    page.form.levelField.shouldExist()
+
     page.form.levelField.shouldNotBeDisabled()
     page.form.levelField.shouldHaveAllOptions()
 
     page.form.saveAndContinueButton.should('exist')
     page.form.saveAsDraftButton.should('exist')
+  })
+
+  it('shows correctly for order with data', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      order: {
+        installationAndRisk: {
+          mappaLevel: 'MAPPA 1',
+          mappaCaseType: 'Category 1',
+          offence: null,
+          offenceAdditionalDetails: null,
+          riskCategory: [],
+          riskDetails: null,
+        },
+      },
+      status: 'IN_PROGRESS',
+    })
+
+    const page = Page.visit(MappaPage, { orderId: mockOrderId })
+
+    page.form.levelField.shouldHaveValue('MAPPA 1')
+
+    page.form.categoryField.shouldHaveValue('Category 1')
   })
 })
