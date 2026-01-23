@@ -122,7 +122,7 @@ describe('prarr controller', () => {
       }
       mockStore.getMonitoringConditions.mockResolvedValue({
         orderType: 'COMMUNITY',
-        conditionType: 'REQUIREMENT_OF_COMMUNITY_ORDER',
+        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
       })
 
       await controller.update(req, res, next)

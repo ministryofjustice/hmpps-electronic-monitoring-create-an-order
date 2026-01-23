@@ -3,7 +3,7 @@ import z from 'zod'
 export const OrderTypeEnum = z.enum(['CIVIL', 'COMMUNITY', 'IMMIGRATION', 'POST_RELEASE', 'BAIL'])
 export const ConditionTypeEnum = z.enum([
   'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
-  'REQUIREMENT_OF_COMMUNITY_ORDER',
+  'REQUIREMENT_OF_A_COMMUNITY_ORDER',
   'BAIL_ORDER',
 ])
 export const SentenceTypeEnum = z.enum([
