@@ -10,6 +10,7 @@ export type InterestedPartiesFormData = {
   prison?: string
   crownCourt?: string
   magistratesCourt?: string
+  youthCourt?: string
   notifyingOrganisationEmailAddress?: string
   responsibleOrganisation?: string
   responsibleOrganisationContactNumber?: string
@@ -176,6 +177,10 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
     if (profile.magistratesCourt) {
       this.magistratesCourtField.set(profile.magistratesCourt)
+    }
+
+    if (profile.youthCourt) {
+      this.youthCourtField.set(profile.youthCourt)
     }
 
     if (profile.notifyingOrganisationEmailAddress) {

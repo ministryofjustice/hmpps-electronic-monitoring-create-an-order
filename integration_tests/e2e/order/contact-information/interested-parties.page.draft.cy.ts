@@ -144,6 +144,13 @@ context('Contact information', () => {
           page.form.youthCustodyServiceField.shouldHaveOption('Wales')
           page.form.youthCustodyServiceField.shouldHaveOption('Yorkshire and Humberside')
 
+          page.form.magistratesCourtField.shouldHaveOption('City of Westminster Magistrates Court International Office')
+
+          page.form.youthCourtField.shouldNotHaveOption('Liverpool Youth Code (Hatton Garden)')
+          page.form.youthCourtField.shouldHaveOption('Liverpool Youth Court (Hatton Garden)')
+          page.form.youthCourtField.shouldNotHaveOption('Penrith Youth Code')
+          page.form.youthCourtField.shouldHaveOption('Penrith Youth Court')
+
           cy.get('#notifyingOrgProbationRegion').should('not.exist')
           cy.get('#youthCustodyServiceRegion').should('exist')
 
