@@ -17,6 +17,7 @@ const InterestedPartiesFormDataModel = FormDataModel.extend({
   responsibleOfficerPhoneNumber: z.string().default(''),
   responsibleOrganisation: ResponsibleOrganisationEnum.nullable().default(null),
   responsibleOrgProbationRegion: z.string().default(''),
+  policeArea: z.string().default(''),
   yjsRegion: z.string().default(''),
   responsibleOrganisationEmail: z.string().default(''),
   youthCustodyServiceRegion: z.string().default(''),

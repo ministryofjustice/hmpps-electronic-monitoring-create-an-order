@@ -67,4 +67,16 @@ context('police area', () => {
       "The device wearer's release address is in a different police force area",
     )
   })
+
+  it('should not have DDv6 options', () => {
+    const page = Page.visit(PoliceAreaPage, { orderId: mockOrderId })
+
+    page.form.policeAreaField.shouldNotHaveOption('British Transport Police')
+    page.form.policeAreaField.shouldNotHaveOption('Counter Terrorism Police North West')
+    page.form.policeAreaField.shouldNotHaveOption('Merseyside')
+    page.form.policeAreaField.shouldNotHaveOption('North Yorkshire')
+    page.form.policeAreaField.shouldNotHaveOption('SO15 CTNM')
+    page.form.policeAreaField.shouldNotHaveOption('Thames Valley')
+    page.form.policeAreaField.shouldNotHaveOption('Wiltshire')
+  })
 })
