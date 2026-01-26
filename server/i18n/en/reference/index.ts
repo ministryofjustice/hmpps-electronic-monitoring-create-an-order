@@ -46,6 +46,7 @@ import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
 import pilots from './pilots'
 import policeAreas from './policeAreas'
+import policeAreasDDv6 from './ddv6/policeAreas'
 import serviceRequestTypes from './serviceRequestTypes'
 import probationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnits'
@@ -81,6 +82,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
   youthCustodyServiceRegions,
 }
@@ -120,6 +122,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
   youthCustodyServiceRegions,
 }
@@ -158,7 +161,8 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
   installationLocations,
   possibleRisks,
-  policeAreas,
+  policeAreas: policeAreasDDv6,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
   youthCustodyServiceRegions: youthCustodyServiceRegionsDDv6,
 }

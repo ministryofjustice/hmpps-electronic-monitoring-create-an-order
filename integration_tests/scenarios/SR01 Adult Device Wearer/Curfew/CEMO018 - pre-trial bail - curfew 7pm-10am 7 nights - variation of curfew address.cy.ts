@@ -81,7 +81,7 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court', 'Cheshire')
 
       const monitoringOrderTypeDescription = {
         orderType: 'Community',

@@ -9,6 +9,7 @@ import militaryCourts from '../../server/i18n/en/reference/ddv5/militaryCourts'
 import youthCourts from '../../server/i18n/en/reference/ddv5/youthCourts'
 import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegions'
 import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv6/youthCustodyServiceRegions'
+import policeAreas from '../../server/i18n/en/reference/ddv6/policeAreas'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
 
@@ -25,6 +26,7 @@ const militaryCourtTypes = extractValues(Object.values(militaryCourts))
 const prisonTypes = extractValues(Object.values(prisons)).filter(it => it !== 'Cookham Wood Young Offender Institution')
 const youthCourtTypes = extractValues(Object.values(youthCourts))
 const probationRegionTypes = extractValues(Object.values(probationRegions))
+const policeAreaTypes = extractValues(Object.values(policeAreas))
 const yjsRegionTypes = extractValues(Object.values(yjsRegions))
 const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
 
@@ -82,7 +84,7 @@ export type InterestedParties = {
   probationRegion?: string
   yjsRegion?: string
   responsibleOrganisationAddress?: Partial<Address>
-
+  policeArea?: string
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
   youthCustodyServiceRegion?: string
@@ -189,6 +191,7 @@ export const createFakeInterestedParties = (
   let prison = ''
   let youthCourt = ''
   let probationRegion = ''
+  let policeArea = ''
   let yjsRegion = ''
   let youthCustodyServiceRegion = ''
 
@@ -237,6 +240,11 @@ export const createFakeInterestedParties = (
     responsibleOrganisationRegion = probationRegion
   }
 
+  if (responsibleOrganisation === 'Police') {
+    policeArea = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(policeAreaTypes)
+    responsibleOrganisationRegion = policeArea
+  }
+
   if (responsibleOrganisation === 'YJS') {
     yjsRegion = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(yjsRegionTypes)
     responsibleOrganisationRegion = yjsRegion
@@ -258,6 +266,7 @@ export const createFakeInterestedParties = (
     responsibleOrganisation,
     responsibleOrganisationRegion,
     responsibleOrganisationEmailAddress,
+    policeArea,
     probationRegion,
     yjsRegion,
     youthCustodyServiceRegion,

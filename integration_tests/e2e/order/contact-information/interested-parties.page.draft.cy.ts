@@ -135,6 +135,8 @@ context('Contact information', () => {
           page.errorSummary.shouldNotExist()
           page.backButton.should('exist')
 
+          page.form.policeAreaField.shouldHaveOption('National Crime Agency')
+
           page.form.youthCustodyServiceField.shouldHaveOption('East and South East')
           page.form.youthCustodyServiceField.shouldHaveOption('London')
           page.form.youthCustodyServiceField.shouldHaveOption('Midlands')
