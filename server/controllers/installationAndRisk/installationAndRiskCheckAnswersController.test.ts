@@ -9,6 +9,7 @@ import installationAndRiskPageContent from '../../i18n/en/pages/installationAndR
 import config from '../../config'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
+import mappaPageContent from '../../i18n/en/pages/mappa'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -25,6 +26,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   const { questions } = installationAndRiskPageContent
+  const mappaQuestions = mappaPageContent.questions
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
@@ -123,7 +125,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.mappaLevel.text,
+            text: mappaQuestions.mappaLevel.text,
           },
           value: {
             text: '',
@@ -133,14 +135,14 @@ describe('InstallationAndRiskCheckAnswersController', () => {
               {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
+                visuallyHiddenText: mappaQuestions.mappaLevel.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.mappaCaseType.text,
+            text: mappaQuestions.mappaCategory.text,
           },
           value: {
             text: '',
@@ -150,7 +152,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
               {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
+                visuallyHiddenText: mappaQuestions.mappaCategory.text.toLowerCase(),
               },
             ],
           },
@@ -167,8 +169,12 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
-        mappaLevel: 'MAPPA 1',
-        mappaCaseType: 'Category 1',
+        mappaLevel: null,
+        mappaCaseType: null,
+      },
+      mappa: {
+        level: 'MAPPA_ONE',
+        category: 'CATEGORY_ONE',
       },
     })
     const req = createMockRequest({ order })
@@ -251,7 +257,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.mappaLevel.text,
+            text: mappaQuestions.mappaLevel.text,
           },
           value: {
             text: 'MAPPA 1',
@@ -261,14 +267,14 @@ describe('InstallationAndRiskCheckAnswersController', () => {
               {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
+                visuallyHiddenText: mappaQuestions.mappaLevel.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.mappaCaseType.text,
+            text: mappaQuestions.mappaCategory.text,
           },
           value: {
             text: 'Category 1',
@@ -278,7 +284,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
               {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
+                visuallyHiddenText: mappaQuestions.mappaCategory.text.toLowerCase(),
               },
             ],
           },

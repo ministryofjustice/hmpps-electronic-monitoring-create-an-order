@@ -2,8 +2,8 @@ import z from 'zod'
 
 const MappaFormModel = z.object({
   action: z.string(),
-  level: z.string().optional(),
-  category: z.string().optional(),
+  level: z.string(),
+  category: z.string(),
 })
 
 export type MappaInput = z.infer<typeof MappaFormModel>

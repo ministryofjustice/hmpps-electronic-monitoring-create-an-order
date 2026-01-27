@@ -12,11 +12,11 @@ describe('view model', () => {
   })
 
   it('should return values from order if there', () => {
-    const order = { installationAndRisk: { mappaLevel: 'MAPPA 1', mappaCaseType: 'Category 1' } } as Order
+    const order = { mappa: { level: 'MAPPA_ONE', category: 'CATEGORY_ONE' } } as Order
 
     const result = ViewModel.construct(order)
 
-    expect(result.level?.value).toBe(order.installationAndRisk?.mappaLevel)
-    expect(result.category?.value).toBe(order.installationAndRisk?.mappaCaseType)
+    expect(result.level?.value).toBe(order.mappa?.level)
+    expect(result.category?.value).toBe(order.mappa?.category)
   })
 })

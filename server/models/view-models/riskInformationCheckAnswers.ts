@@ -92,16 +92,17 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
 
   if (config.mappa.enabled) {
+    const mappaQuestions = content.pages.mappa.questions
     answers.push(
       createAnswer(
-        questions.mappaLevel.text,
-        lookup(content.reference.mappaLevel, order.installationAndRisk?.mappaLevel),
+        mappaQuestions.mappaLevel.text,
+        lookup(content.reference.mappaLevel, order.mappa?.level),
         uri,
         answerOpts,
       ),
       createAnswer(
-        questions.mappaCaseType.text,
-        lookup(content.reference.mappaCategory, order.installationAndRisk?.mappaCaseType),
+        mappaQuestions.mappaCategory.text,
+        lookup(content.reference.mappaCategory, order.mappa?.category),
         uri,
         answerOpts,
       ),

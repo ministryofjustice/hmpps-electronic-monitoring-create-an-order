@@ -34,13 +34,9 @@ context('mappa page', () => {
       httpStatus: 200,
       id: mockOrderId,
       order: {
-        installationAndRisk: {
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Category 1',
-          offence: null,
-          offenceAdditionalDetails: null,
-          riskCategory: [],
-          riskDetails: null,
+        mappa: {
+          level: 'MAPPA_ONE',
+          category: 'CATEGORY_ONE',
         },
       },
       status: 'IN_PROGRESS',

@@ -7,10 +7,10 @@ type MappaViewModel = ViewModel<Omit<MappaInput, 'action'>>
 const construct = (order: Order): MappaViewModel => {
   return {
     level: {
-      value: order.installationAndRisk?.mappaLevel || '',
+      value: order.mappa?.level || '',
     },
     category: {
-      value: order.installationAndRisk?.mappaCaseType || '',
+      value: order.mappa?.category || '',
     },
     errorSummary: null,
   }
