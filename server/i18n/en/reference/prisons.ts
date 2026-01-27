@@ -35,6 +35,7 @@ const prisons: Prisons = {
   ERLESTOKE_PRISON: 'Erlestoke Prison',
   EXETER_PRISON: 'Exeter Prison',
   FEATHERSTONE_PRISON: 'Featherstone Prison',
+  FELTHAM_PRISON: 'Feltham Prison',
   FELTHAM_YOUNG_OFFENDER_INSTITUTION: 'Feltham Young Offender Institution',
   FIVE_WELLS_PRISON: 'Five Wells Prison',
   FORD_PRISON: 'Ford Prison',
