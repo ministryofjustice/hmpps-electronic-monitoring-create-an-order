@@ -3,10 +3,10 @@ import { createAnswer, createDatePreview, createMultipleChoiceAnswer } from '../
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
-import config from '../../config'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
+import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -22,7 +22,9 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
           paths.INSTALLATION_AND_RISK.OFFENCE_LIST,
         ),
       )
-    } else if (order.interestedParties?.notifyingOrganisation === 'CIVIL_COUNTY_COURT') {
+    } else if (
+      notifyingOrganisationCourts.find(court => court === order.interestedParties?.notifyingOrganisation) !== undefined
+    ) {
       answers.push(
         createMultipleChoiceAnswer(
           'Offences',
@@ -37,7 +39,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answers.push(
         createAnswer(
           questions.offence.text,
-          lookup(content.reference.offences, order.offences[0].offenceType),
+          lookup(content.reference.offences, order.offences[0]?.offenceType),
           uri,
           answerOpts,
         ),
@@ -91,7 +93,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
 
   answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
 
-  if (config.mappa.enabled) {
+  if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
     const mappaQuestions = content.pages.mappa.questions
     answers.push(
       createAnswer(

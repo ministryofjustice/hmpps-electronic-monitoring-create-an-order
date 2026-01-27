@@ -64,8 +64,8 @@ context('installation and risk - check your answers', () => {
 
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'SOC (Serious Organised Crime)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
         },
       })
@@ -95,8 +95,6 @@ context('installation and risk - check your answers', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
     })
 
@@ -132,7 +130,7 @@ context('installation and risk - check your answers', () => {
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
-            mappaLevel: 'MAPPA 1',
+            mappaLevel: null,
             mappaCaseType: 'SOC (Serious Organised Crime)',
           },
           fmsResultDate: new Date('2024 12 14'),
@@ -180,8 +178,6 @@ context('installation and risk - check your answers', () => {
           value: 'History of substance abuse',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
     })
 
@@ -217,8 +213,8 @@ context('installation and risk - check your answers', () => {
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'SOC (Serious Organised Crime)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
           fmsResultDate: new Date('2024 12 14'),
         },
@@ -258,8 +254,6 @@ context('installation and risk - check your answers', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
     })
 
@@ -359,8 +353,8 @@ context('installation and risk - check your answers', () => {
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'SOC (Serious Organised Crime)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
           fmsResultDate: new Date('2024 12 14'),
           dataDictionaryVersion: 'DDV4',
@@ -383,8 +377,6 @@ context('installation and risk - check your answers', () => {
           key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Serious Organised Crime' },
       ])
       page.installationRiskSection.shouldNotHaveItem(
         'Any other information to be aware of about the offence committed? (optional)',
@@ -483,6 +475,66 @@ context('installation and risk - check your answers', () => {
         { key: 'Offences', value: 'Criminal damage and arson on 02/03/2025' },
       ])
       page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
+    })
+
+    it('home office show mappa', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+          mappa: {
+            level: 'MAPPA_ONE',
+            category: 'CATEGORY_ONE',
+          },
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        { key: 'Which level of MAPPA applies to the device wearer? (optional)', value: 'MAPPA 1' },
+        { key: 'Which category of MAPPA applies to the device wearer? (optional)', value: 'Category 1' },
+      ])
+    })
+
+    it('not home office dont show mappa', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+          mappa: {
+            level: 'MAPPA_ONE',
+            category: 'CATEGORY_ONE',
+          },
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldNotHaveItem('Which level of MAPPA applies to the device wearer? (optional)')
+      page.installationRiskSection.shouldNotHaveItem('Which category of MAPPA applies to the device wearer? (optional)')
     })
   })
 })
