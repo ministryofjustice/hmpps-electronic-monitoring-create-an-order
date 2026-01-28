@@ -354,7 +354,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(order.installationAndRisk),
+        completed: isNotNullOrUndefined(order.mappa),
       })
     }
 
