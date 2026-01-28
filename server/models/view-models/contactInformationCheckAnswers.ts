@@ -175,6 +175,17 @@ const getResponsibleOrganisationRegionAnswer = (
     ]
   }
 
+  if (responsibleOrganisation === 'POLICE') {
+    return [
+      createAnswer(
+        questions.police.text,
+        lookup(content.reference.policeAreas, order.interestedParties?.responsibleOrganisationRegion),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
   if (responsibleOrganisation === 'YJS') {
     return [
       createAnswer(

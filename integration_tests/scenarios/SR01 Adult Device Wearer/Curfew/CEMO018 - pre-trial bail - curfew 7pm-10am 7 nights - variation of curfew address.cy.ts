@@ -81,7 +81,7 @@ context('Scenarios', () => {
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court', 'Cheshire')
 
       const monitoringOrderTypeDescription = {
         orderType: 'Community',
@@ -221,7 +221,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'Requirement of Community Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
