@@ -208,6 +208,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   versionId: randomUUID(),
   dapoClauses: [],
   offences: [],
+  mappa: null,
   ...overrideProperties,
 })
 
@@ -265,9 +266,12 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   },
   orderParameters: null,
   versionId: randomUUID(),
-  // TODO: fill in with dummy data
   dapoClauses: [],
   offences: [],
+  mappa: {
+    level: 'MAPPA_ONE',
+    category: 'CATEGORY_ONE',
+  },
   ...overrideProperties,
 })
 

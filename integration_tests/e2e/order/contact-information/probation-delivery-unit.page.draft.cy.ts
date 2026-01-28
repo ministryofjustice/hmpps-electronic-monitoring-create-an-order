@@ -6,7 +6,6 @@ const mockOrderId = uuidv4()
 
 context('Contact information', () => {
   context('Probation delivery unit', () => {
-    const testFlags = { MAPPA_ENABLED: true }
     context('Viewing a draft order', () => {
       const stubGetOrderForRegion = regionName => {
         cy.task('stubCemoGetOrder', {
@@ -30,13 +29,9 @@ context('Contact information', () => {
       }
 
       beforeEach(() => {
-        cy.task('setFeatureFlags', testFlags)
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
         cy.signIn()
-      })
-      afterEach(() => {
-        cy.task('resetFeatureFlags')
       })
 
       it('Should display contents', () => {

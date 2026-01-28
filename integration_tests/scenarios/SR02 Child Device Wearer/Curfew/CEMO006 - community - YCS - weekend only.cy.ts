@@ -166,8 +166,6 @@ context.skip('Scenarios', () => {
       offence: 'Robbery',
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
-      mappaLevel: 'MAPPA 1',
-      mappaCaseType: 'Serious Organised Crime',
     }
     const monitoringOrderTypeDescription = {
       orderType: 'Post Release',
@@ -262,8 +260,8 @@ context.skip('Scenarios', () => {
           risk_serious_harm: '',
           risk_self_harm: '',
           risk_details: 'No risk',
-          mappa: 'MAPPA 1',
-          mappa_case_type: 'SOC (Serious Organised Crime)',
+          mappa: null,
+          mappa_case_type: null,
           risk_categories: [],
           responsible_adult_required: 'true',
           parent: responsibleAdultDetails.fullName,

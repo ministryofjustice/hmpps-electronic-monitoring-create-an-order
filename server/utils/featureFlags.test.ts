@@ -9,7 +9,6 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  MAPPA_ENABLED: true,
   MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATION_AS_NEW_ORDER_ENABLED: true,
   ORDER_TYPE_ENABLED: false,
@@ -61,9 +60,9 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const mappaFlag = FeatureFlags.getInstance().get('MAPPA_ENABLED')
+    const monitoringConditionTimesFlag = FeatureFlags.getInstance().get('MONITORING_CONDITION_TIMES_ENABLED')
 
-    expect(mappaFlag).toBe(true)
+    expect(monitoringConditionTimesFlag).toBe(false)
   })
 
   test('get should throw if flag is not defined', () => {

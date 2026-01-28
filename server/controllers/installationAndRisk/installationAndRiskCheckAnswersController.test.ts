@@ -6,9 +6,9 @@ import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import installationAndRiskPageContent from '../../i18n/en/pages/installationAndRisk'
-import config from '../../config'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
+import mappaPageContent from '../../i18n/en/pages/mappa'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -25,6 +25,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   const { questions } = installationAndRiskPageContent
+  const mappaQuestions = mappaPageContent.questions
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
@@ -121,40 +122,6 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             ],
           },
         },
-        {
-          key: {
-            text: questions.mappaLevel.text,
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.mappaCaseType.text,
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
-              },
-            ],
-          },
-        },
       ],
     })
   })
@@ -167,8 +134,219 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
-        mappaLevel: 'MAPPA 1',
-        mappaCaseType: 'SOC (Serious Organised Crime)',
+        mappaLevel: null,
+        mappaCaseType: null,
+      },
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
+      riskInformation: [
+        {
+          key: {
+            text: questions.offence.text,
+          },
+          value: {
+            text: 'Sexual offences',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.offence.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.possibleRisk.text,
+          },
+          value: {
+            html: 'Offensive towards someone because of their sex or gender',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskCategory.text,
+          },
+          value: {
+            html: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskDetails.text,
+          },
+          value: {
+            text: 'some risk details',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+      ],
+    })
+  })
+  it('should render the check answers page no mappa questions when not home office', async () => {
+    // Given
+    const order = getMockOrder({
+      interestedParties: {
+        notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'test@test',
+        responsibleOfficerName: 'John Smith',
+        responsibleOfficerPhoneNumber: '01234567890',
+        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOrganisationEmail: 'test@test.com',
+        responsibleOrganisationRegion: '',
+      },
+      installationAndRisk: {
+        offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
+        riskCategory: ['RISK_TO_GENDER'],
+        riskDetails: 'some risk details',
+        mappaLevel: null,
+        mappaCaseType: null,
+      },
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
+      riskInformation: [
+        {
+          key: {
+            text: questions.offence.text,
+          },
+          value: {
+            text: 'Sexual offences',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.offence.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.possibleRisk.text,
+          },
+          value: {
+            html: 'Offensive towards someone because of their sex or gender',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskCategory.text,
+          },
+          value: {
+            html: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: questions.riskDetails.text,
+          },
+          value: {
+            text: 'some risk details',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+      ],
+    })
+  })
+
+  it('should render the check answers page with mappa questions when home office', async () => {
+    // Given
+    const order = getMockOrder({
+      interestedParties: {
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'test@test',
+        responsibleOfficerName: 'John Smith',
+        responsibleOfficerPhoneNumber: '01234567890',
+        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOrganisationEmail: 'test@test.com',
+        responsibleOrganisationRegion: '',
+      },
+      installationAndRisk: {
+        offence: 'SEXUAL_OFFENCES',
+        offenceAdditionalDetails: 'some offence details',
+        riskCategory: ['RISK_TO_GENDER'],
+        riskDetails: 'some risk details',
+        mappaLevel: null,
+        mappaCaseType: null,
+      },
+      mappa: {
+        level: 'MAPPA_ONE',
+        category: 'CATEGORY_ONE',
       },
     })
     const req = createMockRequest({ order })
@@ -251,7 +429,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.mappaLevel.text,
+            text: mappaQuestions.mappaLevel.text,
           },
           value: {
             text: 'MAPPA 1',
@@ -261,124 +439,29 @@ describe('InstallationAndRiskCheckAnswersController', () => {
               {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.mappaLevel.text.toLowerCase(),
+                visuallyHiddenText: mappaQuestions.mappaLevel.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.mappaCaseType.text,
+            text: mappaQuestions.mappaCategory.text,
           },
           value: {
-            text: 'Serious Organised Crime',
+            text: 'Category 1',
           },
           actions: {
             items: [
               {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.mappaCaseType.text.toLowerCase(),
+                visuallyHiddenText: mappaQuestions.mappaCategory.text.toLowerCase(),
               },
             ],
           },
         },
       ],
     })
-  })
-  it('should render the check answers page no mappa questions when feature flag is off', async () => {
-    // Given
-    const order = getMockOrder({
-      installationAndRisk: {
-        offence: 'SEXUAL_OFFENCES',
-        offenceAdditionalDetails: 'some offence details',
-        riskCategory: ['RISK_TO_GENDER'],
-        riskDetails: 'some risk details',
-        mappaLevel: 'MAPPA 1',
-        mappaCaseType: 'SOC (Serious Organised Crime)',
-      },
-    })
-    const req = createMockRequest({ order })
-    const res = createMockResponse()
-    const next = jest.fn()
-    config.mappa.enabled = false
-
-    // When
-    controller.view(req, res, next)
-
-    // Then
-    expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
-      riskInformation: [
-        {
-          key: {
-            text: questions.offence.text,
-          },
-          value: {
-            text: 'Sexual offences',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.offence.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.possibleRisk.text,
-          },
-          value: {
-            html: 'Offensive towards someone because of their sex or gender',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.riskCategory.text,
-          },
-          value: {
-            html: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: questions.riskDetails.text,
-          },
-          value: {
-            text: 'some risk details',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
-              },
-            ],
-          },
-        },
-      ],
-    })
-    config.mappa.enabled = true
   })
 })

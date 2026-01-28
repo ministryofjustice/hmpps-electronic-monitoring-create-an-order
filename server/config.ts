@@ -119,9 +119,6 @@ export default {
   monitoringConditionTimes: {
     enabled: get('MONITORING_CONDITION_TIMES_ENABLED', 'false') === 'true',
   },
-  mappa: {
-    enabled: get('MAPPA_ENABLED', 'true') === 'true',
-  },
   tagAtSourcePilotPrions: get('TAG_AT_SOURCE_PILOT_PRISONS', ''),
   dapolPilotProbationRegions: get('DAPOL_PILOT_PROBATION_REGIONS', ''),
   licenceVariationProbationRegions: get('LICENCE_VARIATION_PROBATION_REGIONS', ''),

@@ -7,7 +7,7 @@ import FamilyCourts from './familyCourts'
 import Gender from './gender'
 import Languages from './languages'
 import MagistratesCourts, { MagistratesCourtsDDv5 } from './magistratesCourts'
-import MappaCaseType from './mappaCaseType'
+import MappaCategory from './mappaCategory'
 import MappaLevel from './mappaLevel'
 import MilitaryCourts from './militaryCourts'
 import NotifyingOrganisations, { NotifyingOrganisationsDDv5 } from './notifyingOrganisations'
@@ -46,7 +46,7 @@ type ReferenceCatalogDDv4 = {
   gender: Gender
   languages: Languages
   magistratesCourts: MagistratesCourts
-  mappaCaseType: MappaCaseType
+  mappaCategory: MappaCategory
   mappaLevel: MappaLevel
   notifyingOrganisations: NotifyingOrganisations
   offences: Offences
@@ -82,7 +82,7 @@ type ReferenceCatalogDDv5 = {
   gender: Gender
   languages: Languages
   magistratesCourts: MagistratesCourtsDDv5
-  mappaCaseType: MappaCaseType
+  mappaCategory: MappaCategory
   mappaLevel: MappaLevel
   militaryCourts: MilitaryCourts
   notifyingOrganisations: NotifyingOrganisationsDDv5
@@ -122,7 +122,7 @@ type ReferenceCatalogDDv6 = {
   gender: Gender
   languages: Languages
   magistratesCourts: MagistratesCourtsDDv5
-  mappaCaseType: MappaCaseType
+  mappaCategory: MappaCategory
   mappaLevel: MappaLevel
   militaryCourts: MilitaryCourts
   notifyingOrganisations: NotifyingOrganisationsDDv5

@@ -29,6 +29,7 @@ import HaveCourtOrderPageContent from './pages/haveCourtOrder'
 import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
 import DapoContent from './pages/dapo'
 import OffenceContent from './pages/offence'
+import MappaPageContent from './pages/mappa'
 
 type I18n = {
   pages: {
@@ -69,6 +70,7 @@ type I18n = {
     serviceRequestType: ServiceRequestTypePageContent
     dapo: DapoContent
     offence: OffenceContent
+    mappa: MappaPageContent
   }
   reference: ReferenceData
 }

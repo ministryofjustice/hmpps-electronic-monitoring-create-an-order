@@ -1,5 +1,5 @@
 import ReferenceData from './reference'
 
-type MappaLevel = ReferenceData<'MAPPA 1' | 'MAPPA 2' | 'MAPPA 3'>
+type MappaLevel = ReferenceData<'MAPPA_ONE' | 'MAPPA_TWO' | 'MAPPA_THREE'>
 
 export default MappaLevel
