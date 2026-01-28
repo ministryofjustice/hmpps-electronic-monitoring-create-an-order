@@ -62,7 +62,7 @@ const OrderModel = z.object({
   orderParameters: OrderParametersModel.nullable().optional(),
   dapoClauses: z.array(DapoClauseModel),
   offences: z.array(OffenceModel),
-  mappa: MappaModel.nullable(),
+  mappa: MappaModel.nullable().optional(),
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),
 })

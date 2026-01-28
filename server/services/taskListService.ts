@@ -38,6 +38,7 @@ const PAGES = {
   offence: 'OFFENCE',
   dapo: 'DAPO',
   installationAndRisk: 'INSTALLATION_AND_RISK',
+  mappa: 'MAPPA',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
@@ -341,6 +342,21 @@ export default class TaskListService {
       state: STATES.required,
       completed: isNotNullOrUndefined(order.installationAndRisk),
     })
+
+    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.mappa,
+        path: paths.INSTALLATION_AND_RISK.MAPPA,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.installationAndRisk),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.riskInformation,
