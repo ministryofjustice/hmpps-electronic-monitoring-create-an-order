@@ -22,7 +22,7 @@ export default class MappaController {
     await this.service.updateMappa({
       orderId: order.id,
       data: { level: data.level, category: data.category },
-      accessToken: '123',
+      accessToken: res.locals.user.token,
     })
 
     if (data.action === 'continue') {
