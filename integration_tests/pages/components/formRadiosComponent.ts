@@ -33,6 +33,10 @@ export default class FormRadiosComponent {
     this.element.getByLabel(value).should('exist')
   }
 
+  shouldHaveDescription(label: string | RegExp, description: string | RegExp): void {
+    this.element.getByLabel(label).siblings('.govuk-radios__hint').should('contain.text', description)
+  }
+
   shouldNotHaveOption(value: string | RegExp): void {
     this.element.get('label').should('not.contain', value)
   }

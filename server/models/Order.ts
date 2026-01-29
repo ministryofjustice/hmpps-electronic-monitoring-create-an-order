@@ -28,6 +28,7 @@ export const VariationTypesEnum = z.enum([
   'REINSTALL_AT_DIFFERENT_ADDRESS',
   'REINSTALL_DEVICE',
   'REVOCATION',
+  'END_MONITORING',
 ])
 export const OrderTypeEnum = z.enum(['REQUEST', 'REJECTED', 'AMEND_ORIGINAL_REQUEST', ...VariationTypesEnum.options])
 

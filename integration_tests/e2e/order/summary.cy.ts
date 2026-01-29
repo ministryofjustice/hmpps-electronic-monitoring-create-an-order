@@ -161,6 +161,21 @@ context('Order Summary', () => {
 
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
+      cy.get('.govuk-hint').contains('You are revoking monitoring for the device wearer.').should('exist')
+    })
+
+    it('should have hint text for END_MONITORING', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          type: 'END_MONITORING',
+        },
+      })
+
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
       cy.get('.govuk-hint').contains('You are ending all monitoring for the device wearer.').should('exist')
     })
 
@@ -176,9 +191,7 @@ context('Order Summary', () => {
 
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-hint')
-        .contains('You are requesting monitoring equipment to be reinstalled or checked.')
-        .should('exist')
+      cy.get('.govuk-hint').contains('You are requesting monitoring equipment to be reinstalled.').should('exist')
     })
 
     it('should have hint text for REINSTALL_AT_DIFFERENT_ADDRESS', () => {
@@ -194,7 +207,7 @@ context('Order Summary', () => {
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       cy.get('.govuk-hint')
-        .contains('You are requesting monitoring equipment to be installed at a new address.')
+        .contains('You are requesting monitoring equipment to be installed at an additional address.')
         .should('exist')
     })
 

@@ -26,7 +26,7 @@ context('order type', () => {
   it('Should call amend endpoint with service request type of REINSTALL_AT_DIFFERENT_ADDRESS', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
-    page.form.fillInWith('I need monitoring equipment installed at a new address')
+    page.form.fillInWith('I need monitoring equipment installed at an additional address')
     page.form.continueButton.click()
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
@@ -39,7 +39,7 @@ context('order type', () => {
   it('Should call amend endpoint with service request type of REINSTALL_DEVICE', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
-    page.form.fillInWith('I need monitoring equipment reinstalled or checked')
+    page.form.fillInWith('I need monitoring equipment reinstalled')
     page.form.continueButton.click()
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
@@ -52,12 +52,25 @@ context('order type', () => {
   it('Should call amend endpoint with service request type of REVOCATION', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
-    page.form.fillInWith('I need to end all monitoring for the device wearer')
+    page.form.fillInWith('I need to revoke monitoring for the device wearer')
     page.form.continueButton.click()
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/amend-order`,
       body: {
         type: 'REVOCATION',
+      },
+    }).should('be.true')
+  })
+
+  it('Should call amend endpoint with service request type of END_MONITORING', () => {
+    const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
+
+    page.form.fillInWith('I need to end all monitoring for a device wearer')
+    page.form.continueButton.click()
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}/amend-order`,
+      body: {
+        type: 'END_MONITORING',
       },
     }).should('be.true')
   })

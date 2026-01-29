@@ -5,9 +5,10 @@ export default class ServiceRequestTypeComponent extends SingleQuestionFormCompo
   get serviceRequestTypeField(): FormRadiosComponent {
     const label = 'Why are you making changes to the form?'
     return new FormRadiosComponent(this.form, label, [
-      'I need monitoring equipment installed at a new address',
-      'I need monitoring equipment reinstalled or checked',
-      'I need to end all monitoring for the device wearer',
+      'I need monitoring equipment installed at an additional address',
+      'I need monitoring equipment reinstalled',
+      'I need to revoke monitoring for the device wearer',
+      'I need to end all monitoring for a device wearer',
       'I need to change something else in the form',
     ])
   }

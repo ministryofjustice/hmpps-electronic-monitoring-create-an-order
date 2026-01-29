@@ -138,15 +138,19 @@ context('Service-Request-Types', () => {
   })
 
   it('Should able to create new REINSTALL_AT_DIFFERENT_ADDRESS', () => {
-    fillInNewOrder('I need monitoring equipment installed at a new address', 'Reinstall at different address')
+    fillInNewOrder('I need monitoring equipment installed at an additional address', 'Reinstall at different address')
   })
 
   it('Should able to create new REINSTALL_DEVICE', () => {
-    fillInNewOrder('I need monitoring equipment reinstalled or checked', 'Reinstall device')
+    fillInNewOrder('I need monitoring equipment reinstalled', 'Reinstall device')
   })
 
-  it('Should able to create new REINSTALL_AT_DIFFERENT_ADDRESS', () => {
-    fillInNewOrder('I need to end all monitoring for the device wearer', 'End all monitoring')
+  it('Should able to create new END_MONITORING', () => {
+    fillInNewOrder('I need to end all monitoring for a device wearer', 'End all monitoring')
+  })
+
+  it('Should able to make REVOCATION change', () => {
+    fillInNewOrder('I need to revoke monitoring for the device wearer', 'Revocation')
   })
 
   it('Should able to create new VARIATION', () => {
