@@ -30,7 +30,8 @@ const getOrderTypeName = (
     | 'AMEND_ORIGINAL_REQUEST'
     | 'REINSTALL_AT_DIFFERENT_ADDRESS'
     | 'REINSTALL_DEVICE'
-    | 'REVOCATION',
+    | 'REVOCATION'
+    | 'END_MONITORING',
 ) => {
   switch (type) {
     case 'REQUEST': {
@@ -52,6 +53,9 @@ const getOrderTypeName = (
       return 'Reinstall device'
     }
     case 'REVOCATION': {
+      return 'Revocation'
+    }
+    case 'END_MONITORING': {
       return 'End all monitoring'
     }
     default: {
