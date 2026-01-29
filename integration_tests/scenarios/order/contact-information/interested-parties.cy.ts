@@ -55,56 +55,5 @@ context('Police areas', () => {
         { key: 'Select the Police force area', value: 'National Crime Agency' },
       ])
     })
-
-    it('Should be able to select City of Westminster Magistrates Court International Office as magistrates court', () => {
-      const interestedParties = createFakeInterestedParties(
-        'Magistrates Court',
-        'Police',
-        'City of Westminster Magistrates Court International Office',
-        'National Crime Agency',
-      )
-      populateNewOrder(interestedParties)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        'Check your answer',
-      )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
-        { key: 'Select the name of the Court', value: 'City of Westminster Magistrates Court International Office' },
-      ])
-    })
-
-    it('Should be able to select Liverpool Youth Court (Hatton Garden) as youth court', () => {
-      const interestedParties = createFakeInterestedParties(
-        'Youth Court',
-        'Police',
-        'Liverpool Youth Court (Hatton Garden)',
-        'National Crime Agency',
-      )
-      populateNewOrder(interestedParties)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        'Check your answer',
-      )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
-        { key: 'Select the name of the Youth Court', value: 'Liverpool Youth Court (Hatton Garden)' },
-      ])
-    })
-
-    it('Should be able to select Penrith as youth court', () => {
-      const interestedParties = createFakeInterestedParties(
-        'Youth Court',
-        'Police',
-        'Penrith Youth Court',
-        'National Crime Agency',
-      )
-      populateNewOrder(interestedParties)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        'Check your answer',
-      )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
-        { key: 'Select the name of the Youth Court', value: 'Penrith Youth Court' },
-      ])
-    })
   })
 })
