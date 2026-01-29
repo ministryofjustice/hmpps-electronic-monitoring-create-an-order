@@ -186,8 +186,8 @@ context('Receipt', () => {
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
           additionalDocuments: [
             {
@@ -226,8 +226,6 @@ context('Receipt', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Terrorism Act, Counter Terrorism' },
       ])
       page.deviceWearerSection.shouldExist()
       page.contactInformationSection.shouldExist()
@@ -298,8 +296,8 @@ context('Receipt', () => {
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
           additionalDocuments: [
             {

@@ -76,4 +76,8 @@ export default class FormRadiosComponent {
   shouldHaveAllOptions(): void {
     this.options.forEach(option => this.shouldHaveOption(option))
   }
+
+  shouldHaveHint(message: string): void {
+    this.element.siblings('.govuk-hint').contains(message).should('exist')
+  }
 }
