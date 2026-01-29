@@ -41,15 +41,19 @@
          </div>
         {% elif order.type ==='REVOCATION' %}
          <div id="waste-hint" class="govuk-hint">
+            You are revoking monitoring for the device wearer.
+         </div>
+         {% elif order.type ==='END_MONITORING' %}
+         <div id="waste-hint" class="govuk-hint">
             You are ending all monitoring for the device wearer.
          </div>
         {% elif order.type ==='REINSTALL_DEVICE' %}
          <div id="waste-hint" class="govuk-hint">
-            You are requesting monitoring equipment to be reinstalled or checked.
+            You are requesting monitoring equipment to be reinstalled.
          </div>
         {% elif order.type ==='REINSTALL_AT_DIFFERENT_ADDRESS' %}
          <div id="waste-hint" class="govuk-hint">
-            You are requesting monitoring equipment to be installed at a new address.
+           You are requesting monitoring equipment to be installed at an additional address.
          </div>
         {% endif %}
       {% endif %}
