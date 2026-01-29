@@ -76,6 +76,7 @@ export default function routes({
   fmsRequestService,
   dapoService,
   offenceService,
+  mappaService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -380,7 +381,10 @@ export default function routes({
 
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
-  router.use(paths.INSTALLATION_AND_RISK.BASE_URL, createInstallationAndRiskRouter({ dapoService, offenceService }))
+  router.use(
+    paths.INSTALLATION_AND_RISK.BASE_URL,
+    createInstallationAndRiskRouter({ dapoService, offenceService, mappaService }),
+  )
   router.use(
     paths.ATTACHMENT.ATTACHMENTS,
     createAttachmentRouter({

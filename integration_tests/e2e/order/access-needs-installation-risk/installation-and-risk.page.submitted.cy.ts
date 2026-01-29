@@ -22,8 +22,8 @@ context('Access needs and installation risk information', () => {
               offenceAdditionalDetails: 'Information about offence',
               riskCategory: ['SEXUAL_OFFENCES', 'DANGEROUS_ANIMALS'],
               riskDetails: 'Information about potential risks',
-              mappaLevel: 'MAPPA 1',
-              mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
+              mappaLevel: null,
+              mappaCaseType: null,
             },
           },
         })
@@ -47,8 +47,6 @@ context('Access needs and installation risk information', () => {
         page.form.possibleRiskField.shouldHaveValue('Sex offender')
         page.form.riskCategoryField.shouldHaveValue('Animals at the property, for example dogs')
         page.form.riskDetailsField.shouldHaveValue('Information about potential risks')
-        page.form.mappaLevelField.shouldHaveValue('MAPPA 1')
-        page.form.mappaCaseTypeField.shouldHaveValue('Terrorism Act, Counter Terrorism')
 
         // Should have the correct buttons
         page.form.saveAndContinueButton.should('not.exist')

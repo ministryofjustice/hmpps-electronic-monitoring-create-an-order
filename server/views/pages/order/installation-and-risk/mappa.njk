@@ -1,0 +1,40 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.mappa.section %}
+{% set heading = content.pages.mappa.title %}
+{% set helpText = content.pages.mappa.helpText %}
+{% set questions = content.pages.mappa.questions %}
+
+
+{% block formInputs %}
+  {% set disabled = not isOrderEditable %}
+
+    {{ govukRadios({
+      name: "level",
+      value: level.value,
+      fieldset: {
+        legend: {
+          text: questions.mappaLevel.text,
+          classes: "govuk-fieldset__legend--s",
+          isPageHeading: false
+        }
+      },
+      items: content.reference.mappaLevel | toOptions(not isOrderEditable)
+    }) }}
+
+    {{ govukRadios({
+      name: "category",
+      value: category.value,
+      fieldset: {
+        legend: {
+          text: questions.mappaCategory.text,
+          classes: "govuk-fieldset__legend--s",
+          isPageHeading: false
+        }
+      },
+      items: content.reference.mappaCategory | toOptions(not isOrderEditable)
+    })  }}
+ 
+{% endblock %}

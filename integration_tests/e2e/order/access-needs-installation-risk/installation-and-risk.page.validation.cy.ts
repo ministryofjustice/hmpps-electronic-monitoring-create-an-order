@@ -34,8 +34,8 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           riskDetails: 'No Risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -53,8 +53,8 @@ context('Access needs and installation risk information', () => {
         const validFormData = {
           offence: 'Robbery',
           riskDetails: 'No Risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
         }
 
         page.form.fillInWith(validFormData)
@@ -74,8 +74,8 @@ context('Access needs and installation risk information', () => {
           offence: 'Robbery',
           riskCategory: 'History of substance abuse',
           riskDetails: 'No Risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -97,8 +97,8 @@ context('Access needs and installation risk information', () => {
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             201,
           ),
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -127,8 +127,8 @@ context('Access needs and installation risk information', () => {
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             101,
           ),
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 

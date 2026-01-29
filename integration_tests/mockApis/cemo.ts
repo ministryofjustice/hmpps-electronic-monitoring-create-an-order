@@ -89,6 +89,7 @@ export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Orde
   versionId: uuidv4(),
   dapoClauses: [],
   offences: [],
+  mappa: null,
 })
 
 type ListOrdersStubOptions = {
