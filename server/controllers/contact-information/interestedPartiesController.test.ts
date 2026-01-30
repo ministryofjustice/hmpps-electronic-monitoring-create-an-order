@@ -13,7 +13,7 @@ jest.mock('../../services/interestedPartiesService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 
-const mockOrder = getMockOrder({
+const createMockOrder = getMockOrder({
   interestedParties: {
     notifyingOrganisation: 'MAGISTRATES_COURT',
     notifyingOrganisationName: 'CITY_OF_WESTMINSTER_MAGISTRATES_COURT_INTERNATIONAL_OFFICE',
@@ -25,8 +25,6 @@ const mockOrder = getMockOrder({
     responsibleOrganisationEmail: 'test2@test.com',
   },
 })
-
-const emptyOrder = getMockOrder()
 
 describe('InterestedPartiesController', () => {
   let mockRestClient: jest.Mocked<RestClient>
@@ -61,12 +59,13 @@ describe('InterestedPartiesController', () => {
 
     jest.useFakeTimers()
     jest.setSystemTime(new Date('2020-01-01'))
+    jest.clearAllMocks()
   })
 
   describe('viewInterestedParties', () => {
     it('should render the form when there are no saved interested parties details', async () => {
       // Given
-      const req = createMockRequest({ order: emptyOrder, flash: jest.fn().mockReturnValue([]) })
+      const req = createMockRequest({ order: getMockOrder(), flash: jest.fn().mockReturnValue([]) })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -108,7 +107,7 @@ describe('InterestedPartiesController', () => {
 
     it('should render the form using saved interested parties data', async () => {
       // Given
-      const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
+      const req = createMockRequest({ order: createMockOrder, flash: jest.fn().mockReturnValue([]) })
       const res = createMockResponse()
       const next = jest.fn()
 
@@ -146,6 +145,82 @@ describe('InterestedPartiesController', () => {
           errorSummary: null,
         }),
       )
+    })
+  })
+
+  describe('updateInterestedParties', () => {
+    it('should save and redirect to the contact information check your answers page', async () => {
+      // Given
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          notifyingOrganisation: 'YOUTH_COURT',
+          youthCourt: 'PENRITH_YOUTH_COURT',
+          notifyingOrganisationEmail: 'test@test.com',
+          responsibleOfficerName: 'John Smith',
+          responsibleOfficerPhoneNumber: '01234567890',
+          responsibleOrganisation: 'PROBATION',
+          policeArea: 'GREATER_MANCHESTER',
+          responsibleOrganisationEmail: 'test2@test.com',
+          crownCourt: '',
+          civilCountyCourt: '',
+          familyCourt: '',
+          magistratesCourt: '',
+          militaryCourt: '',
+          prison: '',
+          youthCustodyServiceRegion: '',
+          yjsRegion: '',
+          responsibleOrgProbationRegion: '',
+        },
+        params: {
+          orderId: order.id,
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockInterestedPartiesService.update.mockResolvedValue({
+        ...order.deviceWearer,
+        notifyingOrganisation: 'YOUTH_COURT',
+        notifyingOrganisationName: 'PENRITH_YOUTH_COURT',
+        notifyingOrganisationEmail: 'test@test.com',
+        responsibleOfficerName: 'John Smith',
+        responsibleOfficerPhoneNumber: '01234567890',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'GREATER_MANCHESTER',
+        responsibleOrganisationEmail: 'test2@test.com',
+      })
+
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${order.id}/contact-information/check-your-answers`)
+
+      // When
+      await interestedPartiesController.update(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+
+      expect(mockInterestedPartiesService.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          orderId: order.id,
+          data: expect.objectContaining({
+            notifyingOrganisation: 'YOUTH_COURT',
+            youthCourt: 'PENRITH_YOUTH_COURT',
+            notifyingOrganisationEmail: 'test@test.com',
+            responsibleOfficerName: 'John Smith',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'PROBATION',
+            policeArea: 'GREATER_MANCHESTER',
+            responsibleOrganisationEmail: 'test2@test.com',
+          }),
+        }),
+      )
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/contact-information/check-your-answers`)
     })
   })
 })
