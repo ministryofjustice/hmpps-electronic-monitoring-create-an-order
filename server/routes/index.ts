@@ -384,7 +384,7 @@ export default function routes({
 
   router.use(
     paths.INSTALLATION_AND_RISK.BASE_URL,
-    createInstallationAndRiskRouter({ dapoService, offenceService, offenceOtherInfoService, mappaService  }),
+    createInstallationAndRiskRouter({ dapoService, offenceService, offenceOtherInfoService, mappaService }),
   )
   router.use(
     paths.ATTACHMENT.ATTACHMENTS,
