@@ -30,6 +30,7 @@ import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
 import DapoContent from './pages/dapo'
 import OffenceContent from './pages/offence'
 import MappaPageContent from './pages/mappa'
+import DetailsOfInstallationPageContent from './pages/detailsOfInstallation'
 
 type I18n = {
   pages: {
@@ -52,6 +53,7 @@ type I18n = {
     installationAndRisk: InstallationAndRiskPageContent
     installationAppointment: InstallationAppointmentPageContent
     installationLocation: InstallationLocationPageContent
+    detailsOfInstallation: DetailsOfInstallationPageContent
     interestedParties: InterestedPartiesPageContent
     probationDeliveryUnit: ProbationDeliveryUnit
     monitoringConditions: MonitoringConditionsPageContent

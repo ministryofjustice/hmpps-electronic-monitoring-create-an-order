@@ -39,6 +39,7 @@ import haveGrantOfBailPageContent from './pages/haveGrantOfBail'
 import dapoContent from './pages/dapo'
 import offenceContent from './pages/offence'
 import mappaPageContent from './pages/mappa'
+import detailsOfInstallationPageContent from './pages/details-of-installation'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -57,6 +58,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       identityNumbers: identityNumbersPageContent,
       installationAddress: installationAddressPageContent,
       installationAndRisk: installationAndRiskPageContent,
+      detailsOfInstallation: detailsOfInstallationPageContent,
       interestedParties: interestedPartiesPageContent,
       monitoringConditions: monitoringConditionsPageContent,
       noFixedAbode: noFixedAbodePageContent,
