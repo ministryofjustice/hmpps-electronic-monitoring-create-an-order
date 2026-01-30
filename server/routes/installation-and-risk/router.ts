@@ -8,14 +8,14 @@ import MappaController from './mappa/controller'
 import { Services } from '../../services'
 
 const createInstallationAndRiskRouter = (
-  services: Pick<Services, 'dapoService' | 'offenceService' | 'mappaService'>,
+  services: Pick<Services, 'dapoService' | 'offenceService' | 'offenceOtherInfoService' | 'mappaService'>,
 ): Router => {
   const router = Router()
 
-  const { dapoService, offenceService, mappaService } = services
+  const { dapoService, offenceService, offenceOtherInfoService, mappaService } = services
 
   const offenceController = new OffenceController(offenceService)
-  const offenceOtherInfoController = new OffenceOtherInfoController()
+  const offenceOtherInfoController = new OffenceOtherInfoController(offenceOtherInfoService)
   const offenceListController = new OffenceListController()
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()

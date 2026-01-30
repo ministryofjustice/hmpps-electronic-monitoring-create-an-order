@@ -1,0 +1,65 @@
+{% extends "../../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% set section = content.pages.offenceOtherInformation.section %}
+{% set heading = content.pages.offenceOtherInformation.title %}
+{% set helpText = content.pages.offenceOtherInformation.helpText %}
+
+{% block formInputs %}
+  {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
+
+  {% set visuallyHiddenHint %}
+    <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
+  {% endset %}
+
+  {% set otherInformationHtml %}
+    {{ govukCharacterCount({
+      id: "otherInformationDetails",
+      name: "otherInformationDetails",
+      maxlength: 200, 
+      label: {
+        text: content.pages.offenceOtherInformation.questions.otherInformationDetails.text
+      },
+      hint: {
+       text: content.pages.offenceOtherInformation.questions.otherInformationDetails.hint },
+      value: otherInformationDetails.value,
+      errorMessage: otherInformationDetails.error,
+      attributes: attributes,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+
+  {{ govukRadios({
+    name: "hasOtherInformation",
+    fieldset: {
+      legend: {
+        text: content.pages.offenceOtherInformation.questions.hasOtherInformation.text,
+        isPageHeading: false,
+        classes: "govuk-visually-hidden"
+      }
+    },
+    items: [
+      {
+        value: "yes",
+        text: "Yes",
+        hint: {
+          html: visuallyHiddenHint
+        },
+        conditional: {
+          html: otherInformationHtml
+        },
+        disabled: not isOrderEditable
+      },
+      {
+        value: "no",
+        text: "No",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: hasOtherInformation.value,
+    errorMessage: hasOtherInformation.error
+  }) }}
+
+{% endblock %}

@@ -536,5 +536,65 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldNotHaveItem('Which level of MAPPA applies to the device wearer? (optional)')
       page.installationRiskSection.shouldNotHaveItem('Which category of MAPPA applies to the device wearer? (optional)')
     })
+
+    it('shows offence other info details', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '1 Street',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: 'SW1A 1AA',
+            },
+          },
+          installationAndRisk: {
+            offence: 'SEXUAL_OFFENCES',
+            riskCategory: [],
+            possibleRisk: [],
+            riskDetails: 'N/A',
+            mappaLevel: 'LEVEL_1',
+            mappaCaseType: 'SOC',
+            offenceAdditionalDetails: '',
+          },
+          offences: [
+            {
+              offenceType: 'SEXUAL_OFFENCES',
+              offenceDate: new Date(2025, 1, 1),
+            },
+            {
+              offenceType: 'CRIMINAL_DAMAGE_AND_ARSON',
+              offenceDate: new Date(2025, 2, 2),
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        {
+          key: 'Any other information to be aware of about the offence committed?',
+          value: 'mock offence details',
+        },
+      ])
+    })
   })
 })
