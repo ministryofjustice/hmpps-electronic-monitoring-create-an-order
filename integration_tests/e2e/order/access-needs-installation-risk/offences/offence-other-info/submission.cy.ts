@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import OffenceOtherInfoPage from './offenceOtherInfoPage'
 import OrderTasksPage from '../../../../../pages/order/summary'
-import InstallationAndRiskCheckYourAnswersPage from '../../../../../pages/order/installation-and-risk/check-your-answers'
+import InstallationAndRiskPage from '../../../../../pages/order/installationAndRisk'
 
 const mockOrderId = uuidv4()
 const apiPath = '/offence-additional-details'
@@ -73,7 +73,7 @@ context('Offence Other Info Page', () => {
         },
       }).should('be.true')
 
-      Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
+      Page.verifyOnPage(InstallationAndRiskPage)
     })
 
     it('should return to summary page when save as draft', () => {

@@ -3,7 +3,7 @@ import FormRadiosComponent from '../../../../../pages/components/formRadiosCompo
 import FormTextareaComponent from '../../../../../pages/components/formTextareaComponent'
 
 export type OffenceOtherInfoInput = {
-  hasOtherInformation?: 'Yes' | 'No'
+  hasOtherInformation?: string
   otherInformationDetails?: string
 }
 export default class OffenceOtherInfoComponent extends FormComponent {

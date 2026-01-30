@@ -4,19 +4,20 @@ import OffenceOtherInfoPage from './offenceOtherInfoPage'
 
 const mockOrderId = uuidv4()
 
-context('Draft Offences Other Information Page', () => {
+context('offence other info page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,
+      status: 'IN_PROGRESS',
     })
 
     cy.signIn()
   })
 
-  it('Should display page correctly', () => {
+  it('should display page correctly', () => {
     const page = Page.visit(OffenceOtherInfoPage, { orderId: mockOrderId })
     page.header.userName().should('contain.text', 'J. Smith')
     page.header.phaseBanner().should('contain.text', 'dev')
@@ -38,5 +39,27 @@ context('Draft Offences Other Information Page', () => {
 
     page.form.otherInformationDetailsField.shouldExist()
     page.form.otherInformationDetailsField.shouldNotBeDisabled()
+  })
+
+  it('Should show offence additional info for order with data', () => {
+    const mockOffenceId = uuidv4()
+
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      order: {
+        offenceAdditionalDetails: {
+          id: mockOffenceId,
+          additionalDetails: 'test',
+        },
+      },
+      status: 'IN_PROGRESS',
+    })
+
+    const page = Page.visit(OffenceOtherInfoPage, { orderId: mockOrderId })
+
+    page.form.hasOtherInformationField.shouldHaveValue('Yes')
+
+    page.form.otherInformationDetailsField.shouldHaveValue('test')
   })
 })

@@ -19,6 +19,7 @@ context('offences', () => {
   }
 
   const offenceDetails = { offenceType: 'Criminal damage and arson' }
+  const offenceOtherInfo = { hasOtherInformation: 'No' }
 
   const installationAndRisk = {
     offence: 'Sexual offences',
@@ -57,7 +58,7 @@ context('offences', () => {
       interestedParties,
     })
 
-    fillInOffenceWith({ offenceDetails, installationAndRisk })
+    fillInOffenceWith({ offenceDetails, offenceOtherInfo, installationAndRisk })
 
     const mappaPage = Page.verifyOnPage(MappaPage)
     mappaPage.form.fillInWith({ level: 'MAPPA 1', category: 'Category 1' })
