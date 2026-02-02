@@ -4,11 +4,11 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
-import InstallationAndRiskPage from '../../../pages/order/installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import OffenceListDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/offenceListDeletePage'
+import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -22,11 +22,10 @@ context('offences', () => {
     hasFixedAddress: 'No',
   }
 
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
+  const detailsOfInstallation = {
+    possibleRisks: ['Violent behaviour or threats of violence'],
+    riskCategories: ['Safeguarding child'],
+    riskDetails: 'some details',
   }
 
   beforeEach(() => {
@@ -66,10 +65,10 @@ context('offences', () => {
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.hasOtherInformationField.set('No')
     offenceOtherInfoPage.form.saveAndContinueButton.click()
-    // Should go to risk and installation page
-    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    installationAndRiskPage.form.fillInWith(installationAndRisk)
-    installationAndRiskPage.form.saveAndContinueButton.click()
+    // Should go to details of installation page
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
     // CYA page
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItems([
@@ -119,10 +118,10 @@ context('offences', () => {
       otherInformationDetails: 'offender has a history of aggressive behaviour',
     })
     offenceOtherInfoPage.form.saveAndContinueButton.click()
-    // Should go to risk and installation page
-    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    installationAndRiskPage.form.fillInWith(installationAndRisk)
-    installationAndRiskPage.form.saveAndContinueButton.click()
+    // Should go to details of installation page
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
     // CYA page
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItems([
@@ -163,10 +162,10 @@ context('offences', () => {
     offenceList = Page.verifyOnPage(OffenceListPage)
     offenceList.form.fillInWith('Next')
     offenceList.form.continueButton.click()
-    // Should go to risk and installation page
-    const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-    installationAndRiskPage.form.fillInWith(installationAndRisk)
-    installationAndRiskPage.form.saveAndContinueButton.click()
+    // Should go to details of installation page
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
     // CYA page
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldExist()
