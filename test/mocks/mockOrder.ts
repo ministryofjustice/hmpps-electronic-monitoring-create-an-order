@@ -209,6 +209,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   dapoClauses: [],
   offences: [],
   mappa: null,
+  offenceAdditionalDetails: null,
   ...overrideProperties,
 })
 
@@ -272,6 +273,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
     level: 'MAPPA_ONE',
     category: 'CATEGORY_ONE',
   },
+  offenceAdditionalDetails: null,
   ...overrideProperties,
 })
 
