@@ -14,7 +14,6 @@ generic-service:
     CEMO_API_URL: "https://hmpps-electronic-monitoring-create-an-order-api-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
-    DD_V5_1_ENABLED: "false"
     ALCOHOL_MONITORING_ENABLED: "true"
     LIST_MONITORING_CONDITION_FLOW_ENABLED: "true"
     SERVICE_REQUEST_TYPE_ENABLED: 'true'

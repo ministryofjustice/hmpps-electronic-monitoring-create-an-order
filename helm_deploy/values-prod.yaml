@@ -11,7 +11,6 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     CEMO_API_URL: "https://hmpps-electronic-monitoring-create-an-order-api.hmpps.service.justice.gov.uk"
     AUDIT_ENABLED: "false"
-    DD_V5_1_ENABLED: "false"
     ALCOHOL_MONITORING_ENABLED: "true"
     LIST_MONITORING_CONDITION_FLOW_ENABLED: "true"
     TAG_AT_SOURCE_PILOT_PRISONS: "PETERBOROUGH_PRISON,FOSSE_WAY_PRISON,SUDBURY_PRISON,RANBY_PRISON,SWANSEA_PRISON,CARDIFF_PRISON"
