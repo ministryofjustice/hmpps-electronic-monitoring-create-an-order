@@ -99,6 +99,8 @@ context('Contact information', () => {
           page.form.militaryCourtField.shouldHaveOption('Catterick Military Court Centre')
 
           page.form.prisonField.shouldHaveOption('Millsike Prison')
+          page.form.prisonField.shouldHaveOption('Feltham Prison')
+          page.form.prisonField.shouldHaveOption('Feltham Young Offender Institution')
 
           page.form.youthCourtField.shouldHaveOption('Barking Youth Court')
           page.form.youthCourtField.shouldHaveOption('Llwynypia Youth Court')
@@ -152,6 +154,8 @@ context('Contact information', () => {
           page.form.youthCourtField.shouldHaveOption('Liverpool Youth Court (Hatton Garden)')
           page.form.youthCourtField.shouldNotHaveOption('Penrith Youth Code')
           page.form.youthCourtField.shouldHaveOption('Penrith Youth Court')
+          page.form.prisonField.shouldHaveOption('Feltham Prison')
+          page.form.prisonField.shouldHaveOption('Feltham Young Offender Institution')
 
           cy.get('#notifyingOrgProbationRegion').should('not.exist')
           cy.get('#youthCustodyServiceRegion').should('exist')
