@@ -22,6 +22,7 @@ import OrderParametersModel from './OrderParametersModel'
 import DapoClauseModel from './DapoClause'
 import OffenceModel from './Offence'
 import MappaModel from './MappaModel'
+import DetailsOfInstallationModel from './DetailsOfInstallation'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 export const VariationTypesEnum = z.enum([
@@ -64,6 +65,7 @@ const OrderModel = z.object({
   dapoClauses: z.array(DapoClauseModel),
   offences: z.array(OffenceModel),
   mappa: MappaModel.nullable().optional(),
+  detailsOfInstallation: DetailsOfInstallationModel.nullable().optional(),
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),
 })

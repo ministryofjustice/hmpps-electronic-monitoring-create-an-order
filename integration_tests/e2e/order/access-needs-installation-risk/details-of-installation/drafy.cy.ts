@@ -33,4 +33,25 @@ context('mappa page', () => {
     page.form.saveAndContinueButton.should('exist')
     page.form.saveAsDraftButton.should('exist')
   })
+
+  it('shows correctly for order with data', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      order: {
+        detailsOfInstallation: {
+          riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+          riskDetails: 'some risky details',
+        },
+        dataDictionaryVersion: 'DDV6',
+      },
+      status: 'IN_PROGRESS',
+    })
+
+    const page = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
+
+    page.form.possibleRiskField.shouldHaveValue('Violent behaviour or threats of violence')
+    page.form.riskCategoryField.shouldHaveValue('Safeguarding child')
+    page.form.riskDetailsField.shouldHaveValue('some risky details')
+  })
 })
