@@ -78,6 +78,7 @@ export default function routes({
   offenceService,
   mappaService,
   detailsOfInstallationService,
+  offenceOtherInfoService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -390,6 +391,7 @@ export default function routes({
       mappaService,
       detailsOfInstallationService,
       taskListService,
+      offenceOtherInfoService,
     }),
   )
   router.use(

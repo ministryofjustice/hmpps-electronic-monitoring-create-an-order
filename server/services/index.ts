@@ -45,6 +45,7 @@ import { UserCohort } from '../models/UserCohort'
 import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
 import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
+import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -86,6 +87,7 @@ export const services = () => {
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
   const dapoService = new DapoService(cemoApiClient)
   const offenceService = new OffenceService(cemoApiClient)
+  const offenceOtherInfoService = new OffenceOtherInfoService(cemoApiClient)
 
   const mappaService = new MappaService(cemoApiClient)
   const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
@@ -134,6 +136,7 @@ export const services = () => {
     fmsRequestService,
     dapoService,
     offenceService,
+    offenceOtherInfoService,
     userCohortService,
     mappaService,
     detailsOfInstallationService,
@@ -170,6 +173,7 @@ export {
   FmsRequestService,
   DapoService,
   OffenceService,
+  OffenceOtherInfoService,
   UserCohortService,
   MappaService,
 }

@@ -11,15 +11,27 @@ import DetailsOfInstallationController from './details-of-installation/controlle
 const createInstallationAndRiskRouter = (
   services: Pick<
     Services,
-    'dapoService' | 'offenceService' | 'mappaService' | 'detailsOfInstallationService' | 'taskListService'
+    | 'dapoService'
+    | 'offenceService'
+    | 'mappaService'
+    | 'offenceOtherInfoService'
+    | 'detailsOfInstallationService'
+    | 'taskListService'
   >,
 ): Router => {
   const router = Router()
 
-  const { dapoService, offenceService, mappaService, taskListService, detailsOfInstallationService } = services
+  const {
+    dapoService,
+    offenceService,
+    mappaService,
+    taskListService,
+    detailsOfInstallationService,
+    offenceOtherInfoService,
+  } = services
 
   const offenceController = new OffenceController(offenceService)
-  const offenceOtherInfoController = new OffenceOtherInfoController()
+  const offenceOtherInfoController = new OffenceOtherInfoController(offenceOtherInfoService)
   const offenceListController = new OffenceListController()
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()
