@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import DetailsOfInstallationModel from './viewModel'
-import DetailsOfInstallationFormModel from './formModel'
-import { isValidationResult } from '../../../models/Validation'
+import DetailsOfInstallationFormModel, { DetailsOfInstallationInput } from './formModel'
+import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
 import DetailsOfInstallationService from './service'
 import TaskListService from '../../../services/taskListService'
@@ -14,8 +14,10 @@ export default class DetailsOfInstallationController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const formData = req.flash('formData') as unknown as DetailsOfInstallationInput[]
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const model = DetailsOfInstallationModel.construct(order)
+    const model = DetailsOfInstallationModel.construct(order, formData[0], errors)
 
     res.render('pages/order/installation-and-risk/details-of-installation', model)
   }
