@@ -72,10 +72,16 @@ context('offences', () => {
     installationAndRiskPage.form.saveAndContinueButton.click()
     // CYA page
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
-    cyaPage.installationRiskSection.shouldHaveItem(
-      'What type of offence did the device wearer commit?',
-      'Criminal damage and arson',
-    )
+    cyaPage.installationRiskSection.shouldHaveItems([
+      {
+        key: 'What type of offence did the device wearer commit?',
+        value: 'Criminal damage and arson',
+      },
+      {
+        key: 'Any other information to be aware of about the offence committed?',
+        value: '',
+      },
+    ])
   })
 
   it('Notifying organisation is civil court, multiple offences flow', () => {
@@ -108,7 +114,10 @@ context('offences', () => {
     offenceList.form.continueButton.click()
     // Should go to offence other information page
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
-    offenceOtherInfoPage.form.hasOtherInformationField.set('No')
+    offenceOtherInfoPage.form.fillInWith({
+      hasOtherInformation: 'Yes',
+      otherInformationDetails: 'offender has a history of aggressive behaviour',
+    })
     offenceOtherInfoPage.form.saveAndContinueButton.click()
     // Should go to risk and installation page
     const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
@@ -119,6 +128,10 @@ context('offences', () => {
     cyaPage.installationRiskSection.shouldHaveItems([
       { key: 'Offences', value: 'Criminal damage and arson on 01/02/2025' },
       { key: 'Offences', value: 'Sexual offences on 02/03/2025' },
+      {
+        key: 'Any other information to be aware of about the offence committed?',
+        value: 'offender has a history of aggressive behaviour',
+      },
     ])
   })
 
