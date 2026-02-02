@@ -44,6 +44,7 @@ import RedisCacheService from './cache/redisCacheService'
 import { UserCohort } from '../models/UserCohort'
 import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
+import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -87,6 +88,7 @@ export const services = () => {
   const offenceService = new OffenceService(cemoApiClient)
 
   const mappaService = new MappaService(cemoApiClient)
+  const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
 
   const userCohortService = new UserCohortService(
     cemoApiClient,
@@ -134,6 +136,7 @@ export const services = () => {
     offenceService,
     userCohortService,
     mappaService,
+    detailsOfInstallationService,
   }
 }
 

@@ -9,11 +9,14 @@ import { Services } from '../../services'
 import DetailsOfInstallationController from './details-of-installation/controller'
 
 const createInstallationAndRiskRouter = (
-  services: Pick<Services, 'dapoService' | 'offenceService' | 'mappaService'>,
+  services: Pick<
+    Services,
+    'dapoService' | 'offenceService' | 'mappaService' | 'detailsOfInstallationService' | 'taskListService'
+  >,
 ): Router => {
   const router = Router()
 
-  const { dapoService, offenceService, mappaService } = services
+  const { dapoService, offenceService, mappaService, taskListService, detailsOfInstallationService } = services
 
   const offenceController = new OffenceController(offenceService)
   const offenceOtherInfoController = new OffenceOtherInfoController()
@@ -21,7 +24,10 @@ const createInstallationAndRiskRouter = (
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()
   const mappaController = new MappaController(mappaService)
-  const detailsOfInstallationController = new DetailsOfInstallationController()
+  const detailsOfInstallationController = new DetailsOfInstallationController(
+    detailsOfInstallationService,
+    taskListService,
+  )
 
   router.get('/offence', offenceController.view)
   router.get('/offence/:offenceId', offenceController.view)
@@ -39,7 +45,7 @@ const createInstallationAndRiskRouter = (
   router.get('/mappa', mappaController.view)
   router.post('/mappa', mappaController.update)
   router.get('/details-of-installation', detailsOfInstallationController.view)
-  // router.post('/details-of-installation', detailsOfInstallationController.update)
+  router.post('/details-of-installation', detailsOfInstallationController.update)
 
   return router
 }

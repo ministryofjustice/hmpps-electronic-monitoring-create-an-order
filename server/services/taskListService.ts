@@ -38,6 +38,7 @@ const PAGES = {
   offence: 'OFFENCE',
   dapo: 'DAPO',
   installationAndRisk: 'INSTALLATION_AND_RISK',
+  detailsOfInstallation: 'DETAILS_OF_INSTALLATION',
   mappa: 'MAPPA',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',

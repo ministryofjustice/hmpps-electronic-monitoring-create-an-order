@@ -1,4 +1,5 @@
 import z from 'zod'
+import { validationErrors } from '../../../constants/validationErrors'
 
 const DetailsOfInstallationFormModel = z.object({
   action: z.string(),
@@ -10,6 +11,17 @@ const DetailsOfInstallationFormModel = z.object({
     .transform(val => (Array.isArray(val) ? val : [val])),
   riskDetails: z.string().nullable().default(''),
 })
+
+export const DetailsOfInstallationValidator = z
+  .object({
+    possibleRisk: z.array(z.string()).nonempty(validationErrors.installationAndRisk.possibleRiskRequired),
+    riskCategory: z.array(z.string()),
+    riskDetails: z.string().max(200, validationErrors.installationAndRisk.riskDetailsTooLong),
+  })
+  .transform(({ riskCategory, possibleRisk, ...formData }) => ({
+    riskCategory: [...possibleRisk, ...riskCategory],
+    ...formData,
+  }))
 
 export type DetailsOfInstallationInput = z.infer<typeof DetailsOfInstallationFormModel>
 export default DetailsOfInstallationFormModel

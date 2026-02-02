@@ -2,6 +2,12 @@ import FormCheckboxesComponent from '../../../../pages/components/formCheckboxes
 import FormComponent from '../../../../pages/components/formComponent'
 import FormTextareaComponent from '../../../../pages/components/formTextareaComponent'
 
+type DetailsOfInstallationData = {
+  possibleRisks?: string[]
+  riskCategories?: string[]
+  riskDetails?: string
+}
+
 export default class DetailsOfInstallationComponent extends FormComponent {
   get possibleRiskField(): FormCheckboxesComponent {
     const label = "At installation what are the possible risks from the device wearer's behaviour?"
@@ -34,5 +40,17 @@ export default class DetailsOfInstallationComponent extends FormComponent {
   get riskDetailsField(): FormTextareaComponent {
     const label = 'Any other risks to be aware of? (optional)'
     return new FormTextareaComponent(this.form, label)
+  }
+
+  fillInWith(input: DetailsOfInstallationData) {
+    if (input.possibleRisks) {
+      this.possibleRiskField.set(input.possibleRisks)
+    }
+    if (input.riskCategories) {
+      this.riskCategoryField.set(input.riskCategories)
+    }
+    if (input.riskDetails) {
+      this.riskDetailsField.set(input.riskDetails)
+    }
   }
 }
