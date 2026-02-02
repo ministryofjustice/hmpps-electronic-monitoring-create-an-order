@@ -19,7 +19,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
         createMultipleChoiceAnswer(
           'DAPO order clauses',
           order.dapoClauses.map(clause => `${clause.clause} on ${createDatePreview(clause.date)}`),
-          paths.INSTALLATION_AND_RISK.OFFENCE_LIST,
+          paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
         ),
       )
     } else if (
@@ -32,7 +32,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
             offence =>
               `${lookup(content.reference.offences, offence.offenceType)} on ${createDatePreview(offence.offenceDate)}`,
           ),
-          paths.INSTALLATION_AND_RISK.OFFENCE_LIST,
+          paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
         ),
       )
     } else {
@@ -67,7 +67,20 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
     )
   }
 
-  const possibleRisks = order.installationAndRisk?.riskCategory?.filter(
+  let riskCategoriesFromOrder
+  let riskDetailsFromOrder
+  let riskDetailsUri
+  if (isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+    riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory || []
+    riskDetailsFromOrder = order.detailsOfInstallation?.riskDetails
+    riskDetailsUri = paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id)
+  } else {
+    riskCategoriesFromOrder = order.installationAndRisk?.riskCategory || []
+    riskDetailsFromOrder = order.installationAndRisk?.riskDetails
+    riskDetailsUri = uri
+  }
+
+  const possibleRisks = riskCategoriesFromOrder.filter(
     it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
   )
 
@@ -75,23 +88,23 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
     createMultipleChoiceAnswer(
       questions.possibleRisk.text,
       possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
-      uri,
+      riskDetailsUri,
       answerOpts,
     ),
   )
-  const riskCategories = order.installationAndRisk?.riskCategory?.filter(
+  const riskCategories = riskCategoriesFromOrder.filter(
     it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
   )
   answers.push(
     createMultipleChoiceAnswer(
       questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
-      uri,
+      riskDetailsUri,
       answerOpts,
     ),
   )
 
-  answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
+  answers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
 
   if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
     const mappaQuestions = content.pages.mappa.questions
@@ -99,13 +112,13 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       createAnswer(
         mappaQuestions.mappaLevel.text,
         lookup(content.reference.mappaLevel, order.mappa?.level),
-        uri,
+        paths.INSTALLATION_AND_RISK.MAPPA.replace(':orderId', order.id),
         answerOpts,
       ),
       createAnswer(
         mappaQuestions.mappaCategory.text,
         lookup(content.reference.mappaCategory, order.mappa?.category),
-        uri,
+        paths.INSTALLATION_AND_RISK.MAPPA.replace(':orderId', order.id),
         answerOpts,
       ),
     )
