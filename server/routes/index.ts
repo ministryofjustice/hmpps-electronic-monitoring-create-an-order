@@ -77,6 +77,7 @@ export default function routes({
   dapoService,
   offenceService,
   mappaService,
+  offenceOtherInfoService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -383,7 +384,7 @@ export default function routes({
 
   router.use(
     paths.INSTALLATION_AND_RISK.BASE_URL,
-    createInstallationAndRiskRouter({ dapoService, offenceService, mappaService }),
+    createInstallationAndRiskRouter({ dapoService, offenceService, offenceOtherInfoService, mappaService }),
   )
   router.use(
     paths.ATTACHMENT.ATTACHMENTS,

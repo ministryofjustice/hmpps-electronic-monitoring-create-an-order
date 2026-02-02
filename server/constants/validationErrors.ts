@@ -125,6 +125,11 @@ interface ValidationErrors {
     offenceTypeRequired: string
     offenceDate: DateErrorMessages
   }
+  offenceOtherInformation: {
+    hasOtherInformationRequired: string
+    detailsRequired: string
+    tooLong: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -368,6 +373,11 @@ const validationErrors: ValidationErrors = {
       required: 'Enter date of offence the device wearer committed',
       mustBeInPast: 'Date of offence the device wearer committed must be in the past',
     },
+  },
+  offenceOtherInformation: {
+    hasOtherInformationRequired: 'Select Yes if there is other information to be aware of about the offence committed',
+    detailsRequired: 'Enter additional information about the offence',
+    tooLong: 'Additional risk information must be 200 characters or fewer',
   },
 }
 
