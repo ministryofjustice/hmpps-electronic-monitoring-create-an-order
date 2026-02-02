@@ -1,5 +1,4 @@
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
-import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/MappaPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import IndexPage from '../../../pages'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
@@ -7,7 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
 import fillInOffenceWith from '../../../utils/scenario-flows/offence.cy'
 
-context('offences', () => {
+context('offences flow', () => {
   let orderSummaryPage: OrderSummaryPage
   const testFlags = { OFFENCE_FLOW_ENABLED: true }
 
@@ -45,8 +44,8 @@ context('offences', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('Notifying organisation is Home Office, mappa flow', () => {
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+  it('details of installation flow', () => {
+    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office')
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
@@ -62,18 +61,15 @@ context('offences', () => {
     })
     detailsOfInstallationPage.form.saveAndContinueButton.click()
 
-    const mappaPage = Page.verifyOnPage(MappaPage)
-    mappaPage.form.fillInWith({ level: 'MAPPA 1', category: 'Category 1' })
-    mappaPage.form.saveAndContinueButton.click()
-
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
     cyaPage.installationRiskSection.shouldHaveItem(
-      'Which level of MAPPA applies to the device wearer? (optional)',
-      'MAPPA 1',
+      "At installation what are the possible risks from the device wearer's behaviour?",
+      'Violent behaviour or threats of violence',
     )
     cyaPage.installationRiskSection.shouldHaveItem(
-      'Which category of MAPPA applies to the device wearer? (optional)',
-      'Category 1',
+      'What are the possible risks at the installation address? (optional)',
+      'Safeguarding child',
     )
+    cyaPage.installationRiskSection.shouldHaveItem('Any other risks to be aware of? (optional)', 'some details')
   })
 })

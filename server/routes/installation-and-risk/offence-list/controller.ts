@@ -36,7 +36,7 @@ export default class OffenceListController {
       }
     } else if (formData.branch === 'Next') {
       if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
-        res.redirect(paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id))
+        res.redirect(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
       } else {
         res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id))
       }
