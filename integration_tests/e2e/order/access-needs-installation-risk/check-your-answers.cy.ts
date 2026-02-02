@@ -551,23 +551,15 @@ context('installation and risk - check your answers', () => {
             responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
             responsibleOrganisationEmail: '',
             responsibleOrganisationRegion: '',
-            responsibleOrganisationAddress: {
-              addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: '1 Street',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: 'SW1A 1AA',
-            },
           },
           installationAndRisk: {
             offence: 'SEXUAL_OFFENCES',
             riskCategory: [],
             possibleRisk: [],
-            riskDetails: 'N/A',
-            mappaLevel: 'LEVEL_1',
-            mappaCaseType: 'SOC',
-            offenceAdditionalDetails: '',
+            riskDetails: '',
+            mappaLevel: null,
+            mappaCaseType: null,
+            offenceAdditionalDetails: 'test',
           },
           offences: [
             {
@@ -595,6 +587,9 @@ context('installation and risk - check your answers', () => {
           value: 'mock offence details',
         },
       ])
+      page.installationRiskSection.shouldNotHaveItem(
+        'Any other information to be aware of about the offence committed? (optional)',
+      )
     })
   })
 })

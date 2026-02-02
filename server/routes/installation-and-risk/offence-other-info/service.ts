@@ -1,6 +1,6 @@
 import { ZodError } from 'zod'
 import RestClient from '../../../data/restClient'
-import { OffenceOtherInfoFormValidator, OffenceOtherInfoInput } from './formModel'
+import { OffenceOtherInfoFormDataValidator, OffenceOtherInfoInput } from './formModel'
 import { SanitisedError } from '../../../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
 
@@ -15,7 +15,7 @@ export default class OffenceOtherInfoService {
 
   updateOffenceOtherInfo = async (input: Input) => {
     try {
-      const validatedData = OffenceOtherInfoFormValidator.parse(input.formData)
+      const validatedData = OffenceOtherInfoFormDataValidator.parse(input.formData)
 
       const requestBody = {
         additionalDetailsRequired: validatedData.hasOtherInformation === 'yes',

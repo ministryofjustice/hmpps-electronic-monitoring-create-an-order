@@ -1,9 +1,9 @@
-import { OffenceOtherInfoFormValidator } from './formModel'
+import { OffenceOtherInfoFormDataValidator } from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
 
 describe('offence other info form model', () => {
   describe('validator', () => {
-    const validator = OffenceOtherInfoFormValidator
+    const validator = OffenceOtherInfoFormDataValidator
     it('accepts valid data when No is selected', () => {
       const data = {
         hasOtherInformation: 'no',

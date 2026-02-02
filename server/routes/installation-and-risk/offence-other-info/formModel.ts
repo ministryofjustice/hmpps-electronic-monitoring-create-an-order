@@ -7,7 +7,7 @@ const OffenceOtherInfoFormModel = z.object({
   otherInformationDetails: z.string().default(''),
 })
 
-export const OffenceOtherInfoFormValidator = z
+export const OffenceOtherInfoFormDataValidator = z
   .object({
     hasOtherInformation: z.string().min(1, {
       message: validationErrors.offenceOtherInformation.hasOtherInformationRequired,
