@@ -11,7 +11,6 @@ const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-fea
 const mockFlags = {
   MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATION_AS_NEW_ORDER_ENABLED: true,
-  ORDER_TYPE_ENABLED: false,
   ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
   LIST_MONITORING_CONDITION_FLOW_ENABLED: false,
