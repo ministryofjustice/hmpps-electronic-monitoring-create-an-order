@@ -80,6 +80,18 @@ context('offences', () => {
         key: 'Any other information to be aware of about the offence committed?',
         value: '',
       },
+      {
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
+        value: 'Violent behaviour or threats of violence',
+      },
+      {
+        key: 'What are the possible risks at the installation address? (optional)',
+        value: 'Safeguarding child',
+      },
+      {
+        key: 'Any other risks to be aware of? (optional)',
+        value: 'some details',
+      },
     ])
   })
 
@@ -131,6 +143,18 @@ context('offences', () => {
         key: 'Any other information to be aware of about the offence committed?',
         value: 'offender has a history of aggressive behaviour',
       },
+      {
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
+        value: 'Violent behaviour or threats of violence',
+      },
+      {
+        key: 'What are the possible risks at the installation address? (optional)',
+        value: 'Safeguarding child',
+      },
+      {
+        key: 'Any other risks to be aware of? (optional)',
+        value: 'some details',
+      },
     ])
   })
 
@@ -172,6 +196,18 @@ context('offences', () => {
     cyaPage.installationRiskSection.shouldHaveItems([
       { key: 'DAPO order clauses', value: '1234 on 01/02/2025' },
       { key: 'DAPO order clauses', value: '5678 on 02/03/2025' },
+      {
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
+        value: 'Violent behaviour or threats of violence',
+      },
+      {
+        key: 'What are the possible risks at the installation address? (optional)',
+        value: 'Safeguarding child',
+      },
+      {
+        key: 'Any other risks to be aware of? (optional)',
+        value: 'some details',
+      },
     ])
   })
 
