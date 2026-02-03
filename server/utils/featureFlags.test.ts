@@ -9,7 +9,6 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATION_AS_NEW_ORDER_ENABLED: true,
   ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
@@ -59,9 +58,9 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const monitoringConditionTimesFlag = FeatureFlags.getInstance().get('MONITORING_CONDITION_TIMES_ENABLED')
+    const offenceFlowEnabledFlag = FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
 
-    expect(monitoringConditionTimesFlag).toBe(false)
+    expect(offenceFlowEnabledFlag).toBe(false)
   })
 
   test('get should throw if flag is not defined', () => {

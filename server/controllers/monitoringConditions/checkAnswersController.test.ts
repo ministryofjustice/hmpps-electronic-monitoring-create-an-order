@@ -12,7 +12,6 @@ import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import CheckAnswersController from './checkAnswersController'
-import config from '../../config'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 
@@ -45,7 +44,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
   describe('view order type description flow', () => {
     it('should render the check answers page without any answers completed', async () => {
       // Given
-      config.monitoringConditionTimes.enabled = true
       const order = getMockOrder()
       const req = createMockRequest({
         order,
@@ -95,7 +93,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed feature flag is on', async () => {
       // Given
-      config.monitoringConditionTimes.enabled = true
       const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94'
       const order = getMockOrder({
         addresses: [
@@ -931,7 +928,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed feature flag is off', async () => {
       // Given
-      config.monitoringConditionTimes.enabled = false
       const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94'
       const order = getMockOrder({
         addresses: [
