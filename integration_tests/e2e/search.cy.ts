@@ -181,6 +181,8 @@ context('Search', () => {
           dateOfBirth: mockDate,
           pncId: 'some id',
           nomisId: 'some other id',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         },
         monitoringConditions: {
           ...basicOrder.monitoringConditions,
@@ -205,25 +207,53 @@ context('Search', () => {
       beforeEach(() => {
         cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
         page = Page.visit(SearchPage)
-
-        page.searchBox.type('Bob Builder')
-        page.searchButton.click()
       })
 
-      it('should show correct headings', () => {
-        page.ordersList.contains('Name')
-        page.ordersList.contains('Date of birth')
-        page.ordersList.contains('Personal ID number')
-        page.ordersList.contains('Start date')
-        page.ordersList.contains('End date')
-        page.ordersList.contains('Last updated')
+      describe('when searching by name', () => {
+        beforeEach(() => {
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+        })
+
+        it('should show correct headings', () => {
+          page.ordersList.contains('Name')
+          page.ordersList.contains('Date of birth')
+          page.ordersList.contains('Personal ID number')
+          page.ordersList.contains('Start date')
+          page.ordersList.contains('End date')
+          page.ordersList.contains('Last updated')
+        })
+
+        it('should show correct order details', () => {
+          page.ordersList.contains('Bob Builder')
+          page.ordersList.contains('some id')
+          page.ordersList.contains('Glossop')
+          page.ordersList.contains('20/11/2000')
+        })
       })
 
-      it('should show correct order details', () => {
-        page.ordersList.contains('Bob Builder')
-        page.ordersList.contains('some id')
-        page.ordersList.contains('Glossop')
-        page.ordersList.contains('20/11/2000')
+      describe('when searching by personal ID number', () => {
+        beforeEach(() => {
+          page.searchBox.type('cepr')
+          page.searchButton.click()
+        })
+
+        it('should show correct headings', () => {
+          page.ordersList.contains('Name')
+          page.ordersList.contains('Date of birth')
+          page.ordersList.contains('Personal ID number')
+          page.ordersList.contains('Start date')
+          page.ordersList.contains('End date')
+          page.ordersList.contains('Last updated')
+        })
+
+        it('should show correct order details', () => {
+          page.ordersList.contains('Bob Builder')
+          page.ordersList.contains('cepr')
+          page.ordersList.contains('ccrn')
+          page.ordersList.contains('Glossop')
+          page.ordersList.contains('20/11/2000')
+        })
       })
     })
 
@@ -250,6 +280,7 @@ context('Search', () => {
     })
 
     context('Submitting a create variation request', () => {
+      // I think this is empty but not sure why
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
