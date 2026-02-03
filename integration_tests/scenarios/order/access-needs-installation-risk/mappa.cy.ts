@@ -1,3 +1,4 @@
+import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/MappaPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import IndexPage from '../../../pages'
@@ -20,13 +21,6 @@ context('offences', () => {
 
   const offenceDetails = { offenceType: 'Criminal damage and arson' }
   const offenceOtherInfo = { hasOtherInformation: 'No' }
-
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
-  }
 
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)
@@ -58,7 +52,15 @@ context('offences', () => {
       interestedParties,
     })
 
-    fillInOffenceWith({ offenceDetails, offenceOtherInfo, installationAndRisk })
+    fillInOffenceWith({ offenceDetails, offenceOtherInfo })
+
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith({
+      possibleRisks: ['Violent behaviour or threats of violence'],
+      riskCategories: ['Safeguarding child'],
+      riskDetails: 'some details',
+    })
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
 
     const mappaPage = Page.verifyOnPage(MappaPage)
     mappaPage.form.fillInWith({ level: 'MAPPA 1', category: 'Category 1' })

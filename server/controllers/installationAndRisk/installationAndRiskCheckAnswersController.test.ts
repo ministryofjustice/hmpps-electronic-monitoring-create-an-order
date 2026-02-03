@@ -437,7 +437,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.MAPPA.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: mappaQuestions.mappaLevel.text.toLowerCase(),
               },
@@ -454,7 +454,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.MAPPA.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: mappaQuestions.mappaCategory.text.toLowerCase(),
               },

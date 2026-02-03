@@ -22,6 +22,7 @@ import OrderParametersModel from './OrderParametersModel'
 import DapoClauseModel from './DapoClause'
 import OffenceModel from './Offence'
 import MappaModel from './MappaModel'
+import DetailsOfInstallationModel from './DetailsOfInstallation'
 import OffenceAdditionalDetailsModel from './OffenceOtherInfo'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
@@ -65,6 +66,7 @@ const OrderModel = z.object({
   dapoClauses: z.array(DapoClauseModel),
   offences: z.array(OffenceModel),
   mappa: MappaModel.nullable().optional(),
+  detailsOfInstallation: DetailsOfInstallationModel.nullable().optional(),
   offenceAdditionalDetails: OffenceAdditionalDetailsModel.nullable().optional(),
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),

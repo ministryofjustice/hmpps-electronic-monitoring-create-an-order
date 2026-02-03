@@ -35,7 +35,7 @@ export default class OffenceOtherInfoController {
       return
     }
     if (formData.action === 'continue') {
-      res.redirect(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
+      res.redirect(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     } else {
       res.redirect(res.locals.orderSummaryUri)
     }
