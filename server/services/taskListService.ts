@@ -347,9 +347,7 @@ export default class TaskListService {
         ),
         completed: isNotNullOrUndefined(order.installationAndRisk),
       })
-    }
 
-    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
       tasks.push({
         section: SECTIONS.riskInformation,
         name: PAGES.detailsOfInstallation,
@@ -357,17 +355,7 @@ export default class TaskListService {
         state: STATES.required,
         completed: isNotNullOrUndefined(order.detailsOfInstallation),
       })
-    } else {
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.installationAndRisk,
-        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.installationAndRisk),
-      })
-    }
 
-    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
       tasks.push({
         section: SECTIONS.riskInformation,
         name: PAGES.mappa,
@@ -379,6 +367,14 @@ export default class TaskListService {
           STATES.notRequired,
         ),
         completed: isNotNullOrUndefined(order.mappa),
+      })
+    } else {
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.installationAndRisk,
+        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.installationAndRisk),
       })
     }
 
