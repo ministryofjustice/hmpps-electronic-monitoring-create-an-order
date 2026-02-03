@@ -6,7 +6,6 @@ import TypesOfMonitoringNeededController from './controller'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
-import config from '../../../config'
 
 jest.mock('./viewModel')
 
@@ -69,7 +68,6 @@ describe('TypesOfMonitoringNeededController', () => {
     })
 
     it('redirects to the Check your answers page when "No" is selected', async () => {
-      config.monitoringConditionTimes.enabled = true
       req.body = { action: 'continue', addAnother: 'false' }
       mockTaskListService.getNextPage = jest
         .fn()
