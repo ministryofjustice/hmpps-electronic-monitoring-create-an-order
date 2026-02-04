@@ -221,7 +221,7 @@ context('Order type descriptions', () => {
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
-  
+
   it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     const interestedParties = createFakeInterestedParties(
       'Probation Service',
