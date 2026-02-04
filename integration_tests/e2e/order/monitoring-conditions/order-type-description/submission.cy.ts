@@ -234,8 +234,9 @@ context('Order type descriptions', () => {
       },
     }).should('be.true')
   })
-
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     stubGetOrder()
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
@@ -263,8 +264,8 @@ context('Order type descriptions', () => {
       },
     }).should('be.true')
   })
-
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     stubGetOrder()
     const monitoringOrderTypeDescription = {
       orderType: 'Community',

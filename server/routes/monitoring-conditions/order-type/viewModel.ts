@@ -13,6 +13,7 @@ type OrderTypeQuestion = {
   question: string
   hint: string
   value: string
+  disabled?: boolean
 }
 
 const contructModel = (
