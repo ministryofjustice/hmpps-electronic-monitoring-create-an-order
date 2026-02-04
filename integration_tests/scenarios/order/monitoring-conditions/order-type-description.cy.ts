@@ -221,7 +221,7 @@ context('Order type descriptions', () => {
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
-
+  
   it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     const interestedParties = createFakeInterestedParties(
       'Probation Service',
@@ -253,7 +253,8 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
@@ -273,7 +274,8 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
