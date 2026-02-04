@@ -60,9 +60,10 @@ context('Variation', () => {
           const page = Page.verifyOnPage(VariationDetailsPage)
           page.form.variationTypeField.shouldHaveOption('The device wearer’s address')
           page.form.variationTypeField.shouldHaveOption('The device wearer’s personal details')
-          page.form.variationTypeField.shouldHaveOption(' Change to add an exclusion zone(s)')
+          page.form.variationTypeField.shouldHaveOption('Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('The curfew hours')
+          page.form.variationTypeField.shouldHaveOption('Change of device type (fitted/non fitted)')
           page.form.variationTypeField.shouldHaveOption(
             'Temporary suspension of monitoring (attend a funeral or go on holiday)',
           )
@@ -97,6 +98,7 @@ context('Variation', () => {
           page.form.variationTypeField.shouldNotHaveOption('Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('The curfew hours')
+          page.form.variationTypeField.shouldNotHaveOption('Change to a device type')
           page.form.variationTypeField.shouldNotHaveOption('Change to an enforceable condition')
           page.form.variationTypeField.shouldNotHaveOption(
             'Temporary suspension of monitoring (attend a funeral or go on holiday)',
