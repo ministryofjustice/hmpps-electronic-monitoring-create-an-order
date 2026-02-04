@@ -77,6 +77,7 @@ export default function routes({
   dapoService,
   offenceService,
   mappaService,
+  detailsOfInstallationService,
   offenceOtherInfoService,
 }: Services): Router {
   const router = Router()
@@ -384,7 +385,14 @@ export default function routes({
 
   router.use(
     paths.INSTALLATION_AND_RISK.BASE_URL,
-    createInstallationAndRiskRouter({ dapoService, offenceService, offenceOtherInfoService, mappaService }),
+    createInstallationAndRiskRouter({
+      dapoService,
+      offenceService,
+      mappaService,
+      detailsOfInstallationService,
+      taskListService,
+      offenceOtherInfoService,
+    }),
   )
   router.use(
     paths.ATTACHMENT.ATTACHMENTS,

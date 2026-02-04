@@ -24,7 +24,6 @@ export default class FeatureFlags {
 
   private loadFlagsFromEnv(): FeatureFlagMap {
     return {
-      MONITORING_CONDITION_TIMES_ENABLED: process.env.MONITORING_CONDITION_TIMES_ENABLED === 'true',
       VARIATION_AS_NEW_ORDER_ENABLED: process.env.VARIATION_AS_NEW_ORDER_ENABLED === 'true',
       ALCOHOL_MONITORING_ENABLED: process.env.ALCOHOL_MONITORING_ENABLED === 'true',
       CREATE_NEW_ORDER_VERSION_ENABLED: process.env.CREATE_NEW_ORDER_VERSION_ENABLED === 'true',

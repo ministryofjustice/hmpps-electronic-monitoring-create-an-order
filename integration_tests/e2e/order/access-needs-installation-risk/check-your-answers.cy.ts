@@ -591,5 +591,36 @@ context('installation and risk - check your answers', () => {
         'Any other information to be aware of about the offence committed? (optional)',
       )
     })
+
+    it('shows risk answers', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Violent behaviour or threats of violence',
+        },
+        {
+          key: 'What are the possible risks at the installation address? (optional)',
+          value: 'Safeguarding child',
+        },
+        {
+          key: 'Any other risks to be aware of? (optional)',
+          value: 'some risk details',
+        },
+      ])
+    })
   })
 })

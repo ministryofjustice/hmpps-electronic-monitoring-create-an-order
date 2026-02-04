@@ -1,0 +1,70 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set section = content.pages.detailsOfInstallation.section %}
+{% set heading = content.pages.detailsOfInstallation.title %}
+{% set legend = content.pages.detailsOfInstallation.legend %}
+{% set helpText = content.pages.detailsOfInstallation.helpText %}
+
+{% block formInputs %}
+    {{ govukCheckboxes({
+      idPrefix: "possibleRisk",
+      name: "possibleRisk[]",
+      fieldset: {
+        legend: {
+          text: content.pages.detailsOfInstallation.questions.possibleRisk.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.detailsOfInstallation.questions.possibleRisk.hint
+      },
+      items: content.reference.possibleRisks | toOptions(not isOrderEditable, false, '', true) | addDivider(),
+      errorMessage: possibleRisk.error,
+      values: possibleRisk.values
+    }) }}
+
+    {{ govukCheckboxes({
+      idPrefix: "riskCategory",
+      name: "riskCategory[]",
+      fieldset: {
+        legend: {
+          text: content.pages.detailsOfInstallation.questions.riskCategory.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.detailsOfInstallation.questions.riskCategory.hint
+      },
+      items: content.reference.riskCategories | toOptions(not isOrderEditable),
+      errorMessage: riskCategory.error,
+      values: riskCategory.values
+    }) }}
+
+ 
+{% set isDisabled = {} if isOrderEditable else { disabled: true } %}
+  {{ govukCharacterCount({
+    name: "riskDetails",
+    id: "riskDetails",
+    maxlength: 200,
+    label: {
+      text: content.pages.detailsOfInstallation.questions.riskDetails.text,
+      classes: "govuk-label--s",
+      isPageHeading: false
+    },
+    hint: {
+      text: content.pages.detailsOfInstallation.questions.riskDetails.hint
+    },
+    value: riskDetails.value,
+    errorMessage: riskDetails.error,
+    attributes: isDisabled
+  }) }}
+
+{% endblock %}

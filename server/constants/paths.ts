@@ -52,6 +52,7 @@ const paths = {
     DAPO_ID: '/order/:orderId/installation-and-risk/dapo/:clauseId',
     DELETE: '/order/:orderId/installation-and-risk/delete',
     MAPPA: '/order/:orderId/installation-and-risk/mappa',
+    DETAILS_OF_INSTALLATION: '/order/:orderId/installation-and-risk/details-of-installation',
   },
 
   POSTCODE_LOOKUP: {
