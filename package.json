@@ -92,7 +92,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.908.0",
+    "@aws-sdk/client-sqs": "^3.974.0",
     "@ministryofjustice/frontend": "^5.2.1",
     "@secretlint/secretlint-rule-pattern": "^11.2.5",
     "@types/multer": "^2.0.0",
@@ -106,7 +106,7 @@
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.1.0",
     "csrf-sync": "^4.2.1",
-    "cypress-split": "^1.24.24",
+    "cypress-split": "^1.24.28",
     "express": "^4.21.2",
     "express-session": "^1.18.2",
     "govuk-frontend": "^5.13.0",
