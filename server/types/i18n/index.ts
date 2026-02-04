@@ -32,6 +32,7 @@ import OffenceContent from './pages/offence'
 import MappaPageContent from './pages/mappa'
 import DetailsOfInstallationPageContent from './pages/detailsOfInstallation'
 import OffenceOtherInformationPageContent from './pages/offenceOtherInformation'
+import IsMappaPageContent from './pages/isMappa'
 
 type I18n = {
   pages: {
@@ -75,6 +76,7 @@ type I18n = {
     offence: OffenceContent
     mappa: MappaPageContent
     offenceOtherInformation: OffenceOtherInformationPageContent
+    isMappa: IsMappaPageContent
   }
   reference: ReferenceData
 }

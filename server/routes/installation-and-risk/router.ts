@@ -7,6 +7,7 @@ import OffenceListDeleteController from './delete/controller'
 import MappaController from './mappa/controller'
 import { Services } from '../../services'
 import DetailsOfInstallationController from './details-of-installation/controller'
+import IsMappaController from './is-mappa/controller'
 
 const createInstallationAndRiskRouter = (
   services: Pick<
@@ -35,6 +36,7 @@ const createInstallationAndRiskRouter = (
   const offenceListController = new OffenceListController()
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()
+  const isMappaController = new IsMappaController(mappaService)
   const mappaController = new MappaController(mappaService)
   const detailsOfInstallationController = new DetailsOfInstallationController(
     detailsOfInstallationService,
@@ -54,6 +56,8 @@ const createInstallationAndRiskRouter = (
   router.post('/dapo/:clauseId', dapoController.update)
   router.get('/delete', deleteController.view)
   router.post('/delete', deleteController.update)
+  router.get('/is-mappa', isMappaController.view)
+  // router.post('/is-mappa', isMappaController.update)
   router.get('/mappa', mappaController.view)
   router.post('/mappa', mappaController.update)
   router.get('/details-of-installation', detailsOfInstallationController.view)

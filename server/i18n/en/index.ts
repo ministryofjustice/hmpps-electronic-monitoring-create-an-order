@@ -41,6 +41,7 @@ import offenceContent from './pages/offence'
 import mappaPageContent from './pages/mappa'
 import detailsOfInstallationPageContent from './pages/details-of-installation'
 import offenceOtherInformationPageContent from './pages/offenceOtherInformation'
+import isMappaPageContent from './pages/isMappa'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -85,6 +86,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       offence: offenceContent,
       mappa: mappaPageContent,
       offenceOtherInformation: offenceOtherInformationPageContent,
+      isMappa: isMappaPageContent,
     },
     reference: getReferenceData(ddVersion),
   }
