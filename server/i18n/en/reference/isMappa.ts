@@ -1,12 +1,16 @@
-import MappaCategory from '../../../types/i18n/reference/isMappa'
+import IsMappa from '../../../types/i18n/reference/isMappa'
 
-const isMappa: MappaCategory = {
+const isMappa: IsMappa = {
   YES: {
     text: 'Yes',
     description: '',
   },
   NO: {
     text: 'No',
+    description: '',
+  },
+  UNKNOWN: {
+    text: 'Not able to provide this information',
     description: '',
   },
 }

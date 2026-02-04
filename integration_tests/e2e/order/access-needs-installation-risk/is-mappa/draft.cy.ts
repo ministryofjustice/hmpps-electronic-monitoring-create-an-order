@@ -26,22 +26,22 @@ context('mappa page', () => {
     page.form.saveAsDraftButton.should('exist')
   })
 
-  // it('shows correctly for order with data', () => {
-  //   cy.task('stubCemoGetOrder', {
-  //     httpStatus: 200,
-  //     id: mockOrderId,
-  //     order: {
-  //       mappa: {
-  //         level: 'MAPPA_ONE',
-  //         category: 'CATEGORY_ONE',
-  //       },
-  //     },
-  //     status: 'IN_PROGRESS',
-  //   })
-  //
-  //   const page = Page.visit(MappaPage, { orderId: mockOrderId })
-  //
-  //   page.form.levelField.shouldHaveValue('MAPPA 1')
-  //   page.form.categoryField.shouldHaveValue('Category 1')
-  // })
+  it('shows correctly for order with data', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      order: {
+        mappa: {
+          level: null,
+          category: null,
+          isMappa: 'YES',
+        },
+      },
+      status: 'IN_PROGRESS',
+    })
+
+    const page = Page.visit(IsMappaPage, { orderId: mockOrderId })
+
+    page.form.isMappaField.shouldHaveValue('Yes')
+  })
 })

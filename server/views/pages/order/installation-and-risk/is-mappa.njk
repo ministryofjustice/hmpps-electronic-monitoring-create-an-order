@@ -20,7 +20,7 @@
           isPageHeading: true
         }
       },
-      items: content.reference.isMappa | toOptions(not isOrderEditable, true, "Radio") | addDivider()
+      items: content.reference.isMappa | toOptions(not isOrderEditable) | addDivider()
     }) }}
 
 {% endblock %}

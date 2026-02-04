@@ -1,5 +1,5 @@
 import ReferenceData from './reference'
 
-type IsMappaCategory = ReferenceData<'YES' | 'NO'>
+type IsMappa = ReferenceData<'YES' | 'NO' | 'UNKNOWN'>
 
-export default IsMappaCategory
+export default IsMappa
