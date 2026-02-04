@@ -14,29 +14,12 @@ export type OffenceListComponentModel = ViewModel<unknown> & {
   addAnother: { value: string; error?: { text: string } }
 }
 
-const getItems = (order: Order, content: I18n | undefined): Answer[] => {
+const getItems = (order: Order, content: I18n | undefined, isFamilyCourt: boolean): Answer[] => {
   const items: Answer[] = []
   const orderId = order.id
 
-  if (order.offences != null && order.offences.length > 0) {
-    for (let index = 0; index < order.offences.length; index += 1) {
-      const item = order.offences[index]
-      items.push(
-        createAnswer(
-          lookup(content!.reference.offences, item.offenceType),
-          `on ${createDatePreview(item.offenceDate!)} `,
-          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', orderId).replace(':offenceId', item.id!),
-          {
-            deleteUri: paths.INSTALLATION_AND_RISK.DELETE.replace(':orderId', orderId).replace(':offenceId', item.id!),
-          },
-        ),
-      )
-    }
-  }
-
-  if (order.dapoClauses != null && order.dapoClauses.length > 0) {
-    for (let index = 0; index < order.dapoClauses.length; index += 1) {
-      const item = order.dapoClauses[index]
+  if (isFamilyCourt) {
+    order.dapoClauses?.forEach(item => {
       items.push(
         createAnswer(
           item.clause!,
@@ -47,21 +30,36 @@ const getItems = (order: Order, content: I18n | undefined): Answer[] => {
           },
         ),
       )
-    }
+    })
+  } else {
+    order.offences?.forEach(item => {
+      items.push(
+        createAnswer(
+          lookup(content!.reference.offences, item.offenceType),
+          `on ${createDatePreview(item.offenceDate!)} `,
+          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', orderId).replace(':offenceId', item.id!),
+          {
+            deleteUri: paths.INSTALLATION_AND_RISK.DELETE.replace(':orderId', orderId).replace(':offenceId', item.id!),
+          },
+        ),
+      )
+    })
   }
 
   return items
 }
 
 const constructModel = (order: Order, content: I18n | undefined): OffenceListComponentModel => {
-  const pageHeading =
-    order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT' ? 'DAPO order clauses' : 'Offences committed'
-  const addAnotherQuestion =
-    order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT'
-      ? 'Are there any other DAPO order clauses?'
-      : 'Are there any other offences that the device wearer has committed?'
+  const isFamilyCourt = order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT'
+
+  const pageHeading = isFamilyCourt ? 'DAPO order clauses' : 'Offences committed'
+
+  const addAnotherQuestion = isFamilyCourt
+    ? 'Are there any other DAPO order clauses?'
+    : 'Are there any other offences that the device wearer has committed?'
+
   const model: OffenceListComponentModel = {
-    items: getItems(order, content),
+    items: getItems(order, content, isFamilyCourt),
     addAnother: {
       value: '',
     },
