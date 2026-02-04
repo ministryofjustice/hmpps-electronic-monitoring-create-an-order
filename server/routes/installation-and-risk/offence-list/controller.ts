@@ -1,28 +1,14 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
+import constructModel from './viewModel'
 
 export default class OffenceListController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
-      pageName: 'Offence List',
-      items: [
-        {
-          value: 'Add',
-          text: 'Add',
-        },
-        {
-          value: 'Next',
-          text: 'Next',
-        },
-        {
-          value: 'Delete',
-          text: 'Delete',
-        },
-      ],
-      errorSummary: null,
-    })
+    const order = req.order!
+
+    res.render('pages/order/installation-and-risk/offence/offence-list', constructModel(order, res.locals.content))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
