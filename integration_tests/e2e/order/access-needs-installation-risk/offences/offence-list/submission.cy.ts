@@ -64,7 +64,7 @@ context('Offence list page', () => {
       Page.verifyOnPage(OffencePage)
     })
 
-    it('Should got to offence other info page if selected no', () => {
+    it('Should go to offence other info page if selected no', () => {
       const page = Page.visit(OffenceListPage, { orderId: mockOrderId })
 
       page.header.userName().should('contain.text', 'J. Smith')
@@ -77,7 +77,7 @@ context('Offence list page', () => {
       Page.verifyOnPage(OffenceOtherInfoPage)
     })
 
-    it('Should got to order summary page if save as draft', () => {
+    it('Should go to order summary page if save as draft', () => {
       const page = Page.visit(OffenceListPage, { orderId: mockOrderId })
 
       page.header.userName().should('contain.text', 'J. Smith')
@@ -132,7 +132,7 @@ context('Offence list page', () => {
       cy.signIn()
     })
 
-    it('Should got to add new dapo clause page if selected yes', () => {
+    it('Should go to add new dapo clause page if selected yes', () => {
       const page = Page.visit(OffenceListPage, { orderId: mockOrderId }, undefined, 'DAPO order clauses')
 
       page.header.userName().should('contain.text', 'J. Smith')
@@ -145,7 +145,7 @@ context('Offence list page', () => {
       Page.verifyOnPage(DapoPage)
     })
 
-    it('Should got to details for installation page if selected No', () => {
+    it('Should go to details for installation page if selected No', () => {
       const page = Page.visit(OffenceListPage, { orderId: mockOrderId }, undefined, 'DAPO order clauses')
 
       page.header.userName().should('contain.text', 'J. Smith')
@@ -158,7 +158,7 @@ context('Offence list page', () => {
       Page.verifyOnPage(DetailsOfInstallationPage)
     })
 
-    it('Should got to order summary page if save as draft', () => {
+    it('Should go to order summary page if save as draft', () => {
       const page = Page.visit(OffenceListPage, { orderId: mockOrderId }, undefined, 'DAPO order clauses')
 
       page.header.userName().should('contain.text', 'J. Smith')
