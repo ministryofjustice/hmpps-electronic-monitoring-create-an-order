@@ -2,12 +2,14 @@ import paths from '../../../constants/paths'
 import { DapoClause } from '../../../models/DapoClause'
 import { Offence } from '../../../models/Offence'
 import { Order } from '../../../models/Order'
+import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import DapoClauseListPageConent from '../../../types/i18n/pages/dapoClauseListPage'
 import OffenceListPageContent from '../../../types/i18n/pages/offenceListPage'
 import { Answer, createAnswer, createDatePreview } from '../../../utils/checkYourAnswers'
-import { lookup } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { getError, lookup } from '../../../utils/utils'
 
 type OffenceListSummaryItem = Answer
 
@@ -20,7 +22,6 @@ export type OffenceListComponentModel = ViewModel<unknown> & {
 const getItems = (order: Order, content: I18n, isFamilyCourt: boolean): Answer[] => {
   const items: Answer[] = []
   const orderId = order.id
-
   if (isFamilyCourt) {
     order.dapoClauses?.forEach(item => {
       items.push(getDapoClauseSummaryItem(item, orderId))
@@ -30,7 +31,6 @@ const getItems = (order: Order, content: I18n, isFamilyCourt: boolean): Answer[]
       items.push(getOffentSummaryItem(item, content, orderId))
     })
   }
-
   return items
 }
 
@@ -54,7 +54,7 @@ const getOffentSummaryItem = (item: Offence, content: I18n, orderId: string): An
     },
   )
 
-const constructModel = (order: Order, content: I18n): OffenceListComponentModel => {
+const constructModel = (order: Order, content: I18n, errors: ValidationResult): OffenceListComponentModel => {
   const isFamilyCourt = order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT'
 
   const pageContent = isFamilyCourt ? content.pages.dapoClauseList : content?.pages.offenceList
@@ -68,10 +68,10 @@ const constructModel = (order: Order, content: I18n): OffenceListComponentModel 
     errorSummary: null,
   }
 
-  // if (errors && errors.length) {
-  //   model.addAnother!.error = getError(errors, 'addAnother')
-  //   model.errorSummary = createGovukErrorSummary(errors)
-  // }
+  if (errors && errors.length) {
+    model.addAnother!.error = getError(errors, 'addAnother')
+    model.errorSummary = createGovukErrorSummary(errors)
+  }
 
   return model
 }

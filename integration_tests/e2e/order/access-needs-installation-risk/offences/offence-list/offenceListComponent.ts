@@ -13,7 +13,7 @@ export default class OffenceListComponent extends SingleQuestionFormComponent {
   }
 
   get addAnotherDapoField(): FormRadiosComponent {
-    const label = 'Are there any other DAPO order?'
+    const label = 'Are there any other DAPO order clauses?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
