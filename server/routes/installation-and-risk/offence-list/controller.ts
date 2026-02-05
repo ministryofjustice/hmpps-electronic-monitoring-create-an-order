@@ -8,7 +8,7 @@ export default class OffenceListController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    res.render('pages/order/installation-and-risk/offence/offence-list', constructModel(order, res.locals.content))
+    res.render('pages/order/installation-and-risk/offence/offence-list', constructModel(order, res.locals.content!))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
