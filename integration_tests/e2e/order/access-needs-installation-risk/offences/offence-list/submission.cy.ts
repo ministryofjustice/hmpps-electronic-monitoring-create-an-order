@@ -51,7 +51,7 @@ context('Offence list page', () => {
       cy.signIn()
     })
 
-    it('Should got to add new offence page if selected yes', () => {
+    it('Should go to add new offence page if selected yes', () => {
       const page = Page.visit(OffenceListPage, { orderId: mockOrderId })
 
       page.header.userName().should('contain.text', 'J. Smith')
