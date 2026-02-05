@@ -1,8 +1,13 @@
-import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 import SummaryListComponentWithoutHeading from '../../../../../pages/components/SummaryListComponentWithoutHeading'
+import FormComponent from '../../../../../pages/components/formComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 
-export default class OffenceListComponent extends SingleQuestionFormComponent {
+export type OffenceListFormData = {
+  addOffence?: string
+  addDapoClause?: string
+}
+
+export default class OffenceListComponent extends FormComponent {
   get summaryList(): SummaryListComponentWithoutHeading {
     return new SummaryListComponentWithoutHeading()
   }
@@ -17,7 +22,12 @@ export default class OffenceListComponent extends SingleQuestionFormComponent {
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
-  fillInWith(value: string) {
-    throw new Error(`Method not implemented.${value}`)
+  fillInWith(input: OffenceListFormData) {
+    if (input.addOffence) {
+      this.addAnotherOffenceField.set(input.addOffence)
+    }
+    if (input.addDapoClause) {
+      this.addAnotherDapoField.set(input.addDapoClause)
+    }
   }
 }
