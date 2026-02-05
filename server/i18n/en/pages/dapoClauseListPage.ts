@@ -1,6 +1,6 @@
 import DapoClauseListPageConent from '../../../types/i18n/pages/dapoClauseListPage'
 
-const dapaClausePageContent: DapoClauseListPageConent = {
+const dapaClauseListPageContent: DapoClauseListPageConent = {
   helpText: '',
   legend: '',
   questions: {
@@ -12,4 +12,4 @@ const dapaClausePageContent: DapoClauseListPageConent = {
   title: 'DAPO order clauses',
 }
 
-export default dapaClausePageContent
+export default dapaClauseListPageContent

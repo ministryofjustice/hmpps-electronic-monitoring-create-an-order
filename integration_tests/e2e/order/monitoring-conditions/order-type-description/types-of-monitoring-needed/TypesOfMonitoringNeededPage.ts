@@ -1,6 +1,5 @@
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
-import { PageElement } from '../../../../../pages/page'
 import TypesOfMonitoringNeededComponent from './TypesOfMonitoringNeededComponent'
 
 export default class TypesOfMonitoringNeededPage extends AppFormPage {

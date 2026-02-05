@@ -69,7 +69,7 @@ const constructModel = (order: Order, content: I18n, errors: ValidationResult): 
   }
 
   if (errors && errors.length) {
-    model.addAnother!.error = getError(errors, 'addAnother')
+    model.addAnother.error = getError(errors, 'addAnother')
     model.errorSummary = createGovukErrorSummary(errors)
   }
 
