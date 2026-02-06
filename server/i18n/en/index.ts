@@ -42,6 +42,8 @@ import mappaPageContent from './pages/mappa'
 import detailsOfInstallationPageContent from './pages/details-of-installation'
 import offenceOtherInformationPageContent from './pages/offenceOtherInformation'
 import isMappaPageContent from './pages/isMappa'
+import offenceListPageContent from './pages/offenceListPage'
+import dapaClauseListPageContent from './pages/dapoClauseListPage'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -87,6 +89,8 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       mappa: mappaPageContent,
       offenceOtherInformation: offenceOtherInformationPageContent,
       isMappa: isMappaPageContent,
+      offenceList: offenceListPageContent,
+      dapoClauseList: dapaClauseListPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

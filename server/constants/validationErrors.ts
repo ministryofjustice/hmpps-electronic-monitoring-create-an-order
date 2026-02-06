@@ -137,6 +137,12 @@ interface ValidationErrors {
     detailsRequired: string
     tooLong: string
   }
+  offenceSummaryList: {
+    addAnotherRequired: string
+  }
+  dapoClauseSummaryList: {
+    addAnotherRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -392,6 +398,12 @@ const validationErrors: ValidationErrors = {
     hasOtherInformationRequired: 'Select Yes if there is other information to be aware of about the offence committed',
     detailsRequired: 'Enter additional information about the offence',
     tooLong: 'Additional risk information must be 200 characters or fewer',
+  },
+  offenceSummaryList: {
+    addAnotherRequired: 'Select Yes if there are any other offences the device wearer has committed',
+  },
+  dapoClauseSummaryList: {
+    addAnotherRequired: 'Select Yes if there are any other DAPO order clauses',
   },
 }
 

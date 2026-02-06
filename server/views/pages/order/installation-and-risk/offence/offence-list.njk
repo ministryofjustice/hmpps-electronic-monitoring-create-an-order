@@ -1,0 +1,40 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set section = pageContent.section %}
+{% set heading = pageContent.title %}
+
+{% block formInputs %}
+
+  {{ govukSummaryList({
+      rows: items,
+      classes: "govuk-!-margin-bottom-9"
+  }) }}
+
+  {{ govukRadios({
+      name: "addAnother",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: pageContent.questions.addAnother.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: addAnother.value,
+      errorMessage: addAnother.error
+    }) }}
+{% endblock %}
