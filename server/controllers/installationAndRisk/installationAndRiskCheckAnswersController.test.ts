@@ -9,6 +9,7 @@ import installationAndRiskPageContent from '../../i18n/en/pages/installationAndR
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 import mappaPageContent from '../../i18n/en/pages/mappa'
+import isMappaPageContent from '../../i18n/en/pages/isMappa'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -25,6 +26,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   const { questions } = installationAndRiskPageContent
+  const isMappaQuestions = isMappaPageContent.questions
   const mappaQuestions = mappaPageContent.questions
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
@@ -347,6 +349,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
       mappa: {
         level: 'MAPPA_ONE',
         category: 'CATEGORY_ONE',
+        isMappa: 'YES',
       },
     })
     const req = createMockRequest({ order })
@@ -423,6 +426,23 @@ describe('InstallationAndRiskCheckAnswersController', () => {
                 href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: isMappaQuestions.isMappa.text,
+          },
+          value: {
+            text: 'Yes',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.INSTALLATION_AND_RISK.IS_MAPPA.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: isMappaQuestions.isMappa.text.toLowerCase(),
               },
             ],
           },
