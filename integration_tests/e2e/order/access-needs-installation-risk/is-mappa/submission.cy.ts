@@ -5,7 +5,7 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../../pages/order/ins
 import MappaPage from '../mappa/MappaPage'
 
 const mockOrderId = uuidv4()
-const apiPath = '/is-mappa'
+const apiPath = '/mappa/is-mappa'
 const testFlags = { OFFENCE_FLOW_ENABLED: true }
 
 context('is mappa page', () => {
