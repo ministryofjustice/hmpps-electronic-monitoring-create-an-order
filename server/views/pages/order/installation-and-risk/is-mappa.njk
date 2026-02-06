@@ -1,0 +1,27 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.isMappa.section %}
+{% set helpText = content.pages.isMappa.helpText %}
+{% set questions = content.pages.isMappa.questions %}
+
+
+{% block formInputs %}
+  {% set disabled = not isOrderEditable %}
+
+    {{ govukRadios({
+      name: "isMappa",
+      value: isMappa.value,
+      fieldset: {
+        legend: {
+          text: questions.isMappa.text,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      },
+      items: content.reference.isMappa | toOptions(not isOrderEditable) | addDivider(),
+      errorMessage: isMappa.error 
+    }) }}
+
+{% endblock %}

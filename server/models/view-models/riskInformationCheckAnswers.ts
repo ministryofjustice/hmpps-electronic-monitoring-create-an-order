@@ -120,8 +120,15 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   answers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
 
   if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+    const isMappaQuestions = content.pages.isMappa.questions
     const mappaQuestions = content.pages.mappa.questions
     answers.push(
+      createAnswer(
+        isMappaQuestions.isMappa.text,
+        lookup(content.reference.isMappa, order.mappa?.isMappa),
+        paths.INSTALLATION_AND_RISK.IS_MAPPA.replace(':orderId', order.id),
+        answerOpts,
+      ),
       createAnswer(
         mappaQuestions.mappaLevel.text,
         lookup(content.reference.mappaLevel, order.mappa?.level),

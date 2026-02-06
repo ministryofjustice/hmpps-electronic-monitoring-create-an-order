@@ -9,6 +9,7 @@ import Languages from './languages'
 import MagistratesCourts, { MagistratesCourtsDDv5 } from './magistratesCourts'
 import MappaCategory from './mappaCategory'
 import MappaLevel from './mappaLevel'
+import IsMappa from './isMappa'
 import MilitaryCourts from './militaryCourts'
 import NotifyingOrganisations, { NotifyingOrganisationsDDv5 } from './notifyingOrganisations'
 import Offences from './offences'
@@ -48,6 +49,7 @@ type ReferenceCatalogDDv4 = {
   magistratesCourts: MagistratesCourts
   mappaCategory: MappaCategory
   mappaLevel: MappaLevel
+  isMappa: IsMappa
   notifyingOrganisations: NotifyingOrganisations
   offences: Offences
   orderTypeDescriptions: OrderTypeDescriptions
@@ -84,6 +86,7 @@ type ReferenceCatalogDDv5 = {
   magistratesCourts: MagistratesCourtsDDv5
   mappaCategory: MappaCategory
   mappaLevel: MappaLevel
+  isMappa: IsMappa
   militaryCourts: MilitaryCourts
   notifyingOrganisations: NotifyingOrganisationsDDv5
   offences: Offences
@@ -124,6 +127,7 @@ type ReferenceCatalogDDv6 = {
   magistratesCourts: MagistratesCourtsDDv5
   mappaCategory: MappaCategory
   mappaLevel: MappaLevel
+  isMappa: IsMappa
   militaryCourts: MilitaryCourts
   notifyingOrganisations: NotifyingOrganisationsDDv5
   offences: Offences
