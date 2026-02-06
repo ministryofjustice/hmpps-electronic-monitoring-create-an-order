@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderTypePage from './OrderTypePage'
 import Page from '../../../../../pages/page'
 
-const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
+const stubGetOrder = (notifyingOrg: string = 'CIVIL_COUNTY_COURT') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
@@ -54,6 +54,7 @@ context('orderType', () => {
 
     page.form.orderTypeField.shouldHaveOption('Release from prison')
     page.form.orderTypeField.shouldHaveOption('Community')
+    page.form.orderTypeField.shouldHaveDisabledOption('Community')
   })
 
   it('when notifying org is a court', () => {

@@ -69,7 +69,8 @@ context('sentenceType', () => {
     page.form.sentenceTypeField.shouldHaveOption('Section 250 / Section 91')
   })
 
-  it('when order type is Community', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('when order type is Community', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
     orderTypePage.form.fillInWith('Community')
     orderTypePage.form.continueButton.click()

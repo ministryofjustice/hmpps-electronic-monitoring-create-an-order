@@ -4,6 +4,7 @@ import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import InstallationLocationPage from '../../../../../pages/order/monitoring-conditions/installation-location'
+import PrarrPage from '../prarr/PrarrPage'
 
 const currentDate = new Date()
 const mockResponse = {
@@ -58,12 +59,16 @@ context('pilot', () => {
   it('Should submit the form', () => {
     // go through the flow
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Community')
+    orderTypePage.form.fillInWith('Release from prison')
     orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
-    sentenceTypePage.form.fillInWith('Supervision Default Order')
+    sentenceTypePage.form.fillInWith('Life Sentence')
     sentenceTypePage.form.continueButton.click()
+
+    const prarrPage = Page.verifyOnPage(PrarrPage, { orderId: mockOrderId })
+    prarrPage.form.fillInWith('No')
+    prarrPage.form.continueButton.click()
 
     const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
     monitoringTypesPage.form.fillInWith('Alcohol')
@@ -72,9 +77,9 @@ context('pilot', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
       body: {
-        orderType: 'COMMUNITY',
-        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
-        sentenceType: 'COMMUNITY_SDO',
+        orderType: 'POST_RELEASE',
+        conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+        sentenceType: 'LIFE_SENTENCE',
         curfew: false,
         exclusionZone: false,
         trail: false,
@@ -82,6 +87,7 @@ context('pilot', () => {
         alcohol: true,
         startDate: null,
         endDate: null,
+        prarr: 'NO',
       },
     }).should('be.true')
 

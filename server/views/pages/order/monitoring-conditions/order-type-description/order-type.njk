@@ -12,7 +12,7 @@
 	text: question.question,
 	hint: {text: question.hint},
 	value: question.value,
-	disabled: not isOrderEditable
+	disabled: not isOrderEditable or question.disabled
     }), items) %}
 {% endfor %}
 

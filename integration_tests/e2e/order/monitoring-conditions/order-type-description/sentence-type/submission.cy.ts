@@ -65,7 +65,8 @@ context('sentenceType form submission', () => {
     prarrPage.form.continueButton.click()
   })
 
-  it('Should submit the form and display the correct answers for a Community journey', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Should submit the form and display the correct answers for a Community journey', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
     orderTypePage.form.fillInWith('Community')
     orderTypePage.form.continueButton.click()
