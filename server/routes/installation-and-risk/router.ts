@@ -36,7 +36,7 @@ const createInstallationAndRiskRouter = (
   const offenceListController = new OffenceListController()
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController()
-  const isMappaController = new IsMappaController(mappaService)
+  const isMappaController = new IsMappaController(mappaService, taskListService)
   const mappaController = new MappaController(mappaService)
   const detailsOfInstallationController = new DetailsOfInstallationController(
     detailsOfInstallationService,
@@ -57,7 +57,7 @@ const createInstallationAndRiskRouter = (
   router.get('/delete', deleteController.view)
   router.post('/delete', deleteController.update)
   router.get('/is-mappa', isMappaController.view)
-  // router.post('/is-mappa', isMappaController.update)
+  router.post('/is-mappa', isMappaController.update)
   router.get('/mappa', mappaController.view)
   router.post('/mappa', mappaController.update)
   router.get('/details-of-installation', detailsOfInstallationController.view)
