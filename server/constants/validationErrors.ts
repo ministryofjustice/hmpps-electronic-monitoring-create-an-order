@@ -111,6 +111,9 @@ interface ValidationErrors {
     riskDetailsTooLong: string
     offenceAdditionalDetailsTooLong: string
   }
+  isMappa: {
+    required: string
+  }
   isRejection: {
     isRejectionRequired: string
   }
@@ -344,6 +347,9 @@ const validationErrors: ValidationErrors = {
     riskDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
     offenceAdditionalDetailsTooLong:
       'Any other information to be aware of about the offence committed must be 100 characters or less',
+  },
+  isMappa: {
+    required: 'Select Yes if the device wearer is a MAPPA offender',
   },
   isRejection: {
     isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",

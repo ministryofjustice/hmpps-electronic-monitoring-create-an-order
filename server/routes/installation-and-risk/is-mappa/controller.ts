@@ -3,7 +3,8 @@ import MappaService from '../mappa/service'
 import MappaViewModel from './viewModel'
 import IsMappaFormModel from './formModel'
 import TaskListService from '../../../services/taskListService'
-import { isValidationResult } from '../../../models/Validation'
+import { isValidationResult, ValidationResult } from '../../../models/Validation'
+import paths from '../../../constants/paths'
 
 export default class IsMappaController {
   constructor(
@@ -14,7 +15,9 @@ export default class IsMappaController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const model = MappaViewModel.construct(order)
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
+
+    const model = MappaViewModel.construct(order, errors)
 
     res.render('pages/order/installation-and-risk/is-mappa', model)
   }
@@ -22,15 +25,19 @@ export default class IsMappaController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const data = IsMappaFormModel.parse(req.body)
+    const formData = IsMappaFormModel.parse(req.body)
 
     const result = await this.service.updateIsMappa({
       orderId: order.id,
-      data: { isMappa: data.isMappa },
+      data: { isMappa: formData.isMappa },
       accessToken: res.locals.user.token,
     })
 
-    if (!isValidationResult(result)) {
+    if (isValidationResult(result)) {
+      req.flash('validationErrors', result)
+
+      res.redirect(paths.INSTALLATION_AND_RISK.IS_MAPPA.replace(':orderId', order.id))
+    } else {
       order.mappa = result
       res.redirect(this.taskListService.getNextPage('IS_MAPPA', order))
     }

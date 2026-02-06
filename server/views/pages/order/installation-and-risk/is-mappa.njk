@@ -20,7 +20,8 @@
           isPageHeading: true
         }
       },
-      items: content.reference.isMappa | toOptions(not isOrderEditable) | addDivider()
+      items: content.reference.isMappa | toOptions(not isOrderEditable) | addDivider(),
+      errorMessage: isMappa.error 
     }) }}
 
 {% endblock %}

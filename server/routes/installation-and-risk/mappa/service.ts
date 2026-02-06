@@ -1,10 +1,11 @@
+import { ZodError } from 'zod'
 import RestClient from '../../../data/restClient'
 import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import MappaModel, { Mappa } from '../../../models/MappaModel'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError } from '../../../utils/errors'
-import { IsMappaInput } from '../is-mappa/formModel'
+import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import { IsMappaFormValidator, IsMappaInput } from '../is-mappa/formModel'
 import { MappaInput } from './formModel'
 
 type UpdateMappaInput = AuthenticatedRequestInput & {
@@ -40,13 +41,17 @@ export default class MappaService {
 
   async updateIsMappa(input: UpdateIsMappaInput): Promise<Mappa | ValidationResult> {
     try {
+      const validatedInput = IsMappaFormValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/is-mappa`,
-        data: input.data,
+        data: validatedInput,
         token: input.accessToken,
       })
       return MappaModel.parse(result)
     } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
         return convertBackendErrorToValidationError(sanitisedError)
