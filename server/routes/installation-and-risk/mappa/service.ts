@@ -48,7 +48,7 @@ export default class MappaService {
     try {
       const validatedInput = IsMappaFormValidator.parse(input.data)
       const result = await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/is-mappa`,
+        path: `/api/orders/${input.orderId}/mappa/is-mappa`,
         data: validatedInput,
         token: input.accessToken,
       })

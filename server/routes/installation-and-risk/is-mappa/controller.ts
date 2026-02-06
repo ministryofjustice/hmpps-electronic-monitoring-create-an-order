@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import MappaService from '../mappa/service'
-import MappaViewModel from './viewModel'
+import IsMappaViewModel from './viewModel'
 import IsMappaFormModel from './formModel'
 import TaskListService from '../../../services/taskListService'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
@@ -17,7 +17,7 @@ export default class IsMappaController {
 
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const model = MappaViewModel.construct(order, errors)
+    const model = IsMappaViewModel.construct(order, errors)
 
     res.render('pages/order/installation-and-risk/is-mappa', model)
   }

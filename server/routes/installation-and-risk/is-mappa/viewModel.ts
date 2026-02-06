@@ -5,9 +5,9 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { IsMappaInput } from './formModel'
 
-type MappaViewModel = ViewModel<Omit<IsMappaInput, 'action'>>
+type IsMappaViewModel = ViewModel<Omit<IsMappaInput, 'action'>>
 
-const construct = (order: Order, errors: ValidationResult): MappaViewModel => {
+const construct = (order: Order, errors: ValidationResult): IsMappaViewModel => {
   return {
     isMappa: { value: order.mappa?.isMappa ?? '', error: getError(errors, 'isMappa') },
     errorSummary: createGovukErrorSummary(errors),
