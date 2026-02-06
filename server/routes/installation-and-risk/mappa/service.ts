@@ -6,7 +6,7 @@ import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
 import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
 import { IsMappaFormValidator, IsMappaInput } from '../is-mappa/formModel'
-import { MappaInput } from './formModel'
+import { MappaFormValidator, MappaInput } from './formModel'
 
 type UpdateMappaInput = AuthenticatedRequestInput & {
   orderId: string
@@ -23,13 +23,18 @@ export default class MappaService {
 
   async updateMappa(input: UpdateMappaInput): Promise<Mappa | ValidationResult> {
     try {
+      const validatedInput = MappaFormValidator.parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/mappa`,
-        data: input.data,
+        data: validatedInput,
         token: input.accessToken,
       })
       return MappaModel.parse(result)
     } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
+
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
         return convertBackendErrorToValidationError(sanitisedError)
@@ -52,6 +57,7 @@ export default class MappaService {
       if (e instanceof ZodError) {
         return convertZodErrorToValidationError(e)
       }
+
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {
         return convertBackendErrorToValidationError(sanitisedError)

@@ -37,9 +37,14 @@ export default class IsMappaController {
       req.flash('validationErrors', result)
 
       res.redirect(paths.INSTALLATION_AND_RISK.IS_MAPPA.replace(':orderId', order.id))
-    } else {
+      return
+    }
+
+    if (formData.action === 'continue') {
       order.mappa = result
       res.redirect(this.taskListService.getNextPage('IS_MAPPA', order))
+    } else {
+      res.redirect(res.locals.orderSummaryUri)
     }
   }
 }

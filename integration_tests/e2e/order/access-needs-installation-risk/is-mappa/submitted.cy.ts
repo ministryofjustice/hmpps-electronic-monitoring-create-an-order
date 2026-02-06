@@ -4,7 +4,7 @@ import IsMappaPage from './IsMappaPage'
 
 const mockOrderId = uuidv4()
 
-context('mappa page', () => {
+context('is mappa page', () => {
   beforeEach(() => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 

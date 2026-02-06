@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
-import IsMappaPage from './IsMappaPage'
+import MappaPage from './MappaPage'
 
 const mockOrderId = uuidv4()
-context('is mappa validation', () => {
+context('mappa validation', () => {
   beforeEach(() => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -17,10 +17,13 @@ context('is mappa validation', () => {
   })
 
   it('shows the correct errors', () => {
-    const page = Page.visit(IsMappaPage, { orderId: mockOrderId })
+    const page = Page.visit(MappaPage, { orderId: mockOrderId })
 
     page.form.saveAndContinueButton.click()
 
-    page.form.isMappaField.shouldHaveValidationMessage('Select Yes if the device wearer is a MAPPA offender')
+    page.form.levelField.shouldHaveValidationMessage('Select the level of MAPPA that applies to the device wearer')
+    page.form.categoryField.shouldHaveValidationMessage(
+      'Select the category of MAPPA that applies to the device wearer',
+    )
   })
 })

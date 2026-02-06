@@ -5,14 +5,14 @@ const mappaPageContent: MappaPageContent = {
   legend: '',
   questions: {
     mappaLevel: {
-      text: 'Which level of MAPPA applies to the device wearer? (optional)',
+      text: 'Which level of MAPPA applies to the device wearer?',
     },
     mappaCategory: {
-      text: 'Which category of MAPPA applies to the device wearer? (optional)',
+      text: 'Which category of MAPPA applies to the device wearer?',
     },
   },
   section: 'Access needs and installation risk',
-  title: 'MAPPA',
+  title: 'Multi-Agency Public Protection Arrangements (MAPPA)',
 }
 
 export default mappaPageContent

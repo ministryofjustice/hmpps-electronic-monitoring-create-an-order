@@ -114,6 +114,10 @@ interface ValidationErrors {
   isMappa: {
     required: string
   }
+  mappa: {
+    levelRequired: string
+    categoryRequired: string
+  }
   isRejection: {
     isRejectionRequired: string
   }
@@ -350,6 +354,10 @@ const validationErrors: ValidationErrors = {
   },
   isMappa: {
     required: 'Select Yes if the device wearer is a MAPPA offender',
+  },
+  mappa: {
+    levelRequired: 'Select the level of MAPPA that applies to the device wearer',
+    categoryRequired: 'Select the category of MAPPA that applies to the device wearer',
   },
   isRejection: {
     isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
