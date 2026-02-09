@@ -113,16 +113,19 @@ context('offences', () => {
     offencePage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     let offenceList = Page.verifyOnPage(OffenceListPage)
-    offenceList.form.fillInWith('Add')
-    offenceList.form.continueButton.click()
+    offenceList.form.summaryList.shouldHaveItem('Criminal damage and arson', 'on 01/02/2025')
+    offenceList.form.fillInWith({ addOffence: 'Yes' })
+    offenceList.form.saveAndContinueButton.click()
     // Should go to offence page
     offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.fillInWith(offences[1])
     offencePage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
     offenceList = Page.verifyOnPage(OffenceListPage)
-    offenceList.form.fillInWith('Next')
-    offenceList.form.continueButton.click()
+    offenceList.form.summaryList.shouldHaveItem('Criminal damage and arson', 'on 01/02/2025')
+    offenceList.form.summaryList.shouldHaveItem('Sexual offences', 'on 02/03/2025')
+    offenceList.form.fillInWith({ addOffence: 'No' })
+    offenceList.form.saveAndContinueButton.click()
     // Should go to offence other information page
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.fillInWith({
@@ -175,17 +178,20 @@ context('offences', () => {
     dapoPage.form.fillInWith(dapoClauses[0])
     dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
-    let offenceList = Page.verifyOnPage(OffenceListPage)
-    offenceList.form.fillInWith('Add')
-    offenceList.form.continueButton.click()
+    let offenceList = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    offenceList.form.summaryList.shouldHaveItem('1234', 'on 01/02/2025')
+    offenceList.form.fillInWith({ addDapoClause: 'Yes' })
+    offenceList.form.saveAndContinueButton.click()
     // Should go to dapo and date page
     dapoPage = Page.verifyOnPage(DapoPage)
     dapoPage.form.fillInWith(dapoClauses[1])
     dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
-    offenceList = Page.verifyOnPage(OffenceListPage)
-    offenceList.form.fillInWith('Next')
-    offenceList.form.continueButton.click()
+    offenceList = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    offenceList.form.summaryList.shouldHaveItem('1234', 'on 01/02/2025')
+    offenceList.form.summaryList.shouldHaveItem('5678', 'on 02/03/2025')
+    offenceList.form.fillInWith({ addDapoClause: 'No' })
+    offenceList.form.saveAndContinueButton.click()
     // Should go to details of installation page
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
@@ -223,21 +229,23 @@ context('offences', () => {
     dapoPage.form.fillInWith({ dapoClauseNumber: '1234', dapoDate: new Date(2025, 1, 1) })
     dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
-    let offenceList = Page.verifyOnPage(OffenceListPage)
-    offenceList.form.fillInWith('Add')
-    offenceList.form.continueButton.click()
+    let offenceList = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    offenceList.form.summaryList.shouldHaveItem('1234', 'on 01/02/2025')
+    offenceList.form.fillInWith({ addDapoClause: 'Yes' })
+    offenceList.form.saveAndContinueButton.click()
     // Should go to dapo and date page
     dapoPage = Page.verifyOnPage(DapoPage)
     dapoPage.form.fillInWith({ dapoClauseNumber: '5678', dapoDate: new Date(2025, 2, 2) })
     dapoPage.form.saveAndContinueButton.click()
     // Should go to offence add to list page
-    offenceList = Page.verifyOnPage(OffenceListPage)
-    offenceList.form.fillInWith('Delete')
-    offenceList.form.continueButton.click()
+    offenceList = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    offenceList.form.summaryList.shouldHaveItem('1234', 'on 01/02/2025')
+    offenceList.form.summaryList.shouldHaveItem('5678', 'on 02/03/2025')
+    offenceList.actionLinkByLabel('1234', 'Delete').click()
     // Should go to offence list delete page
     const offenceListDeletePage = Page.verifyOnPage(OffenceListDeletePage)
     offenceListDeletePage.form.continueButton.click()
     // Should go to offence add to list page
-    Page.verifyOnPage(OffenceListPage)
+    Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
   })
 })
