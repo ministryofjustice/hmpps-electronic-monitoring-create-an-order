@@ -360,6 +360,7 @@ context('Scenarios', () => {
                 pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
                 subcategory: '',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

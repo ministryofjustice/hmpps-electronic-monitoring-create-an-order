@@ -396,6 +396,7 @@ context('Scenarios', () => {
                 pilot: '',
                 subcategory: 'SR08-Amend monitoring requirements',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

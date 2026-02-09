@@ -269,7 +269,7 @@ context('The kitchen sink', () => {
             no_name: interestedParties.notifyingOrganisationName,
             no_phone_number: '',
             offence: installationAndRisk.offence,
-            offence_additional_details: 'AC Offence: Burglary in a Dwelling - Indictable only. PFA: Avon and Somerset',
+            offence_additional_details: 'PFA: Avon and Somerset',
             offence_date: '',
             order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
             order_id: orderId,
@@ -363,6 +363,12 @@ context('The kitchen sink', () => {
             pilot: 'GPS Acquisitive Crime Home Detention Curfew',
             subcategory: '',
             dapol_missed_in_error: '',
+            ac_eligible_offences: [
+              {
+                offence: 'Burglary in a Dwelling - Indictable only',
+                offence_date: '',
+              },
+            ],
           },
         }).should('be.true')
       })

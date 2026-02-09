@@ -292,6 +292,7 @@ context('Scenarios', () => {
               order_status: 'Not Started',
               subcategory: '',
               dapol_missed_in_error: '',
+              ac_eligible_offences: [],
             },
           })
           .should('be.true')
