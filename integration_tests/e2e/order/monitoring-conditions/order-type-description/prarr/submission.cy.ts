@@ -132,4 +132,24 @@ context('order type', () => {
     Page.verifyOnPage(TypesOfMonitoringNeededPage)
     cy.task('resetFeatureFlags')
   })
+
+  it('Should redirect to list monitoring page when trail monitoring already exist', () => {
+    const testFlags = { LIST_MONITORING_CONDITION_FLOW_ENABLED: true }
+    cy.task('setFeatureFlags', testFlags)
+    stubGetOrder({
+      monitoringConditions: createMonitoringConditions({ trail: true, hdc: 'YES', pilot: 'UNKNOWN' }),
+      monitoringConditionsTrail: {
+        startDate: new Date(2026, 2, 27),
+        endDate: new Date(2026, 3, 28),
+      },
+    })
+
+    const page = Page.visit(PrarrPage, { orderId: mockOrderId })
+
+    page.form.fillInWith('No')
+    page.form.continueButton.click()
+
+    Page.verifyOnPage(TypesOfMonitoringNeededPage)
+    cy.task('resetFeatureFlags')
+  })
 })
