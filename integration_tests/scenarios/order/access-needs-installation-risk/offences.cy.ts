@@ -7,7 +7,7 @@ import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-r
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
-import OffenceListDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage.ts'
+import OffenceListDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage'
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 
 context('offences', () => {

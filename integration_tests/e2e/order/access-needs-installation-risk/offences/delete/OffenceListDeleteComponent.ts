@@ -5,4 +5,8 @@ export default class OffenceListDeleteComponent extends SingleQuestionFormCompon
     // TODO implement fillInWith method
     throw new Error(`Method not implemented.${value}`)
   }
+
+  containsHint(hint: string) {
+    return cy.contains(hint)
+  }
 }

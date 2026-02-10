@@ -5,8 +5,9 @@ export default class OffenceListDeleteController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
-      pageName: 'Delete',
+    res.render('pages/order/installation-and-risk/offence/delete', {
+      question: 'Are you sure you want to delete this offence?',
+      offenceTypeReadable: '12345 on 01/01/2025',
       errorSummary: null,
     })
   }
