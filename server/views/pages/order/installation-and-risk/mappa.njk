@@ -21,7 +21,8 @@
           isPageHeading: false
         }
       },
-      items: content.reference.mappaLevel | toOptions(not isOrderEditable)
+      items: content.reference.mappaLevel | toOptions(not isOrderEditable),
+      errorMessage: level.error 
     }) }}
 
     {{ govukRadios({
@@ -34,7 +35,8 @@
           isPageHeading: false
         }
       },
-      items: content.reference.mappaCategory | toOptions(not isOrderEditable)
+      items: content.reference.mappaCategory | toOptions(not isOrderEditable),
+      errorMessage: category.error 
     })  }}
  
 {% endblock %}

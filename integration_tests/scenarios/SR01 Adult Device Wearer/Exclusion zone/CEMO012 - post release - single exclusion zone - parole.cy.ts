@@ -246,7 +246,7 @@ context('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: 'Imprisonment for Public Protection (IPP)',
+              sentence_type: 'IPP (Imprisonment for Public Protection)',
               tag_at_source: '',
               tag_at_source_details: '',
               date_and_time_installation_will_take_place: '',

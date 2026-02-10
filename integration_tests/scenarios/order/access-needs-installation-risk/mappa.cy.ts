@@ -1,4 +1,4 @@
-import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/MappaPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import IndexPage from '../../../pages'
@@ -21,6 +21,11 @@ context('offences', () => {
 
   const offenceDetails = { offenceType: 'Criminal damage and arson' }
   const offenceOtherInfo = { hasOtherInformation: 'No' }
+  const detailsOfInstallationInfo = {
+    possibleRisks: ['Violent behaviour or threats of violence'],
+    riskCategories: ['Safeguarding child'],
+    riskDetails: 'some details',
+  }
 
   beforeEach(() => {
     cy.task('setFeatureFlags', testFlags)
@@ -52,15 +57,11 @@ context('offences', () => {
       interestedParties,
     })
 
-    fillInOffenceWith({ offenceDetails, offenceOtherInfo })
+    fillInOffenceWith({ offenceDetails, offenceOtherInfo, detailsOfInstallationInfo })
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    detailsOfInstallationPage.form.fillInWith({
-      possibleRisks: ['Violent behaviour or threats of violence'],
-      riskCategories: ['Safeguarding child'],
-      riskDetails: 'some details',
-    })
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    const isMappaPage = Page.verifyOnPage(IsMappaPage)
+    isMappaPage.form.fillInWith({ isMappa: 'Yes' })
+    isMappaPage.form.saveAndContinueButton.click()
 
     const mappaPage = Page.verifyOnPage(MappaPage)
     mappaPage.form.fillInWith({ level: 'MAPPA 1', category: 'Category 1' })
@@ -68,12 +69,33 @@ context('offences', () => {
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
     cyaPage.installationRiskSection.shouldHaveItem(
-      'Which level of MAPPA applies to the device wearer? (optional)',
-      'MAPPA 1',
+      'Is the device wearer a Multi-Agency Public Protection Arrangements (MAPPA) offender?',
+      'Yes',
     )
+    cyaPage.installationRiskSection.shouldHaveItem('Which level of MAPPA applies to the device wearer?', 'MAPPA 1')
     cyaPage.installationRiskSection.shouldHaveItem(
-      'Which category of MAPPA applies to the device wearer? (optional)',
+      'Which category of MAPPA applies to the device wearer?',
       'Category 1',
+    )
+  })
+
+  it('Notifying organisation is Home Office, not mappa flow', () => {
+    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+    })
+
+    fillInOffenceWith({ offenceDetails, offenceOtherInfo, detailsOfInstallationInfo })
+
+    const isMappaPage = Page.verifyOnPage(IsMappaPage)
+    isMappaPage.form.fillInWith({ isMappa: 'No' })
+    isMappaPage.form.saveAndContinueButton.click()
+
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
+    cyaPage.installationRiskSection.shouldHaveItem(
+      'Is the device wearer a Multi-Agency Public Protection Arrangements (MAPPA) offender?',
+      'No',
     )
   })
 })
