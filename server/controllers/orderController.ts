@@ -34,7 +34,7 @@ export default class OrderController {
     const order = req.order!
 
     if (action === 'continue') {
-      if (this.shouldShowRejectionPage(order)) {
+      if (this.shouldShowIsRejectionPage(order)) {
         res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
       } else {
         await this.orderService.createVariationFromExisting({
@@ -46,7 +46,7 @@ export default class OrderController {
     }
   }
 
-  private shouldShowRejectionPage = (order: Order): boolean => {
+  private shouldShowIsRejectionPage = (order: Order): boolean => {
     const fmsResultDate = order.fmsResultDate ? new Date(order.fmsResultDate) : new Date(1900, 0, 0)
     const startDate = order.monitoringConditions.startDate
       ? new Date(order.monitoringConditions.startDate)
