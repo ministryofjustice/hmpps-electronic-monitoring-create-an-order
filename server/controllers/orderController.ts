@@ -7,6 +7,7 @@ import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
+import { Order } from '../models/Order'
 
 export default class OrderController {
   constructor(
@@ -30,10 +31,29 @@ export default class OrderController {
   createVariation: RequestHandler = async (req: Request, res: Response) => {
     const { action } = req.body
     const { orderId } = req.params
+    const order = req.order!
 
     if (action === 'continue') {
-      res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
+      if (this.shouldShowRejectionPage(order)) {
+        res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
+      } else {
+        await this.orderService.createVariationFromExisting({
+          orderId,
+          accessToken: res.locals.user.token,
+        })
+        res.redirect(`/order/${orderId}/summary`)
+      }
     }
+  }
+
+  private shouldShowRejectionPage = (order: Order): boolean => {
+    const fmsResultDate = order.fmsResultDate ? new Date(order.fmsResultDate) : new Date(1900, 0, 0)
+    const startDate = order.monitoringConditions.startDate
+      ? new Date(order.monitoringConditions.startDate)
+      : new Date(1900, 0, 0)
+    const compareDate = fmsResultDate < startDate ? fmsResultDate : startDate
+    compareDate.setDate(compareDate.getDate() + 30)
+    return new Date() < compareDate
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
