@@ -97,7 +97,7 @@ context('Variation', () => {
         Page.verifyOnPage(IsRejectionPage)
       })
 
-      it('should proceed to the order tasks page when fms result date after start date and current date is after one month of fms result date', () => {
+      it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -112,7 +112,7 @@ context('Variation', () => {
         Page.verifyOnPage(OrderTasksPage)
       })
 
-      it('should proceed to the is rejection page when fms result date after start date and current date is within one month of fms result date', () => {
+      it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -126,7 +126,7 @@ context('Variation', () => {
         Page.verifyOnPage(IsRejectionPage)
       })
 
-      it('should proceed to the order tasks page when fms result date before start date and current date is after one month of fms result date', () => {
+      it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -140,7 +140,7 @@ context('Variation', () => {
         Page.verifyOnPage(OrderTasksPage)
       })
 
-      it('should proceed to the is rejection page when fms result date after start date and current date is within one month of fms result date', () => {
+      it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
         const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).setHours(0, 0, 0, 0)) // 16 days before today
