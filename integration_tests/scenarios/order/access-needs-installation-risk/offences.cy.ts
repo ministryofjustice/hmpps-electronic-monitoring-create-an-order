@@ -7,7 +7,7 @@ import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-r
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
-import OffenceListDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage'
+import OffenceDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage'
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 
 context('offences', () => {
@@ -243,7 +243,7 @@ context('offences', () => {
     offenceList.form.summaryList.shouldHaveItem('5678', 'on 02/03/2025')
     offenceList.actionLinkByLabel('1234', 'Delete').click()
     // Should go to offence list delete page
-    const offenceListDeletePage = Page.verifyOnPage(OffenceListDeletePage)
+    const offenceListDeletePage = Page.verifyOnPage(OffenceDeletePage)
     offenceListDeletePage.form.continueButton.click()
     // Should go to offence add to list page
     Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
