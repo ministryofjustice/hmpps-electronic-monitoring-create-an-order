@@ -1,6 +1,6 @@
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
-import OffenceListDeleteComponent from './offenceListDeleteComponent'
+import OffenceListDeleteComponent from './OffenceListDeleteComponent'
 
 export default class OffenceListDeletePage extends AppFormPage {
   public form = new OffenceListDeleteComponent()
