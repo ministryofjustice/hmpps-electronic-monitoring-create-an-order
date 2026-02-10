@@ -226,6 +226,10 @@ workflows:
       - scenario_test:
           requires:
             - build
+      - hmpps/trivy_latest_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
