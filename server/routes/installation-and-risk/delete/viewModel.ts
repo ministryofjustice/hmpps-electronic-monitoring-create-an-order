@@ -2,8 +2,10 @@ import { DapoClause } from '../../../models/DapoClause'
 import { Offence } from '../../../models/Offence'
 import { Order } from '../../../models/Order'
 import { createDatePreview } from '../../../utils/checkYourAnswers'
+import I18n from '../../../types/i18n'
+import { lookup } from '../../../utils/utils'
 
-const construct = (order: Order, id: string) => {
+const construct = (order: Order, id: string, content: I18n) => {
   const matchingOffence = findOffence(order.offences, id)
   const matchingDapoClause = findDapoClause(order.dapoClauses, id)
 
@@ -11,7 +13,8 @@ const construct = (order: Order, id: string) => {
   let readableText: string = ''
   if (matchingOffence !== undefined) {
     question += 'offence?'
-    readableText = format(matchingOffence.offenceType, matchingOffence.offenceDate)
+    const name = lookup(content.reference.offences, matchingOffence.offenceType)
+    readableText = format(name, matchingOffence.offenceDate)
   } else if (matchingDapoClause) {
     question += 'DAPO order clause?'
     readableText = format(matchingDapoClause.clause, matchingDapoClause.date)
