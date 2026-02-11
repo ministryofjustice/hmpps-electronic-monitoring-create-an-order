@@ -45,7 +45,7 @@ context('offence delete page', () => {
 
   it('deletes offence correctly', () => {
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockOffenceId })
-    page.confirmRemoveButton().click()
+    page.confirmDeleteButton().click()
     Page.verifyOnPage(OffenceListPage)
 
     cy.task('stubCemoVerifyRequestReceived', {
@@ -57,7 +57,7 @@ context('offence delete page', () => {
 
   it('deletes dapo clause correctly', () => {
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockDapoId })
-    page.confirmRemoveButton().click()
+    page.confirmDeleteButton().click()
     Page.verifyOnPage(OffenceListPage)
 
     cy.task('stubCemoVerifyRequestReceived', {
@@ -72,7 +72,7 @@ context('offence delete page', () => {
     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: mockOrder })
 
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockOffenceId })
-    page.confirmRemoveButton().click()
+    page.confirmDeleteButton().click()
 
     Page.verifyOnPage(OffencePage)
   })
@@ -82,7 +82,7 @@ context('offence delete page', () => {
     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: mockOrder })
 
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockDapoId })
-    page.confirmRemoveButton().click()
+    page.confirmDeleteButton().click()
 
     Page.verifyOnPage(DapoPage)
   })

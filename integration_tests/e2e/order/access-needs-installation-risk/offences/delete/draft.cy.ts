@@ -32,7 +32,7 @@ context('delete dapo', () => {
 
     page.fullTitle.contains('Are you sure that you want to delete this DAPO order clause?')
     page.form.containsHint('12345 on 01/01/2025')
-    page.confirmRemoveButton().should('exist')
+    page.confirmDeleteButton().should('exist')
     page.cancelButton().should('exist')
   })
 })
@@ -64,7 +64,7 @@ context('delete offence', () => {
 
     page.fullTitle.contains('Are you sure that you want to delete this offence?')
     page.form.containsHint('offence type on 01/01/2025')
-    page.confirmRemoveButton().should('exist')
+    page.confirmDeleteButton().should('exist')
     page.cancelButton().should('exist')
   })
 })

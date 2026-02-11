@@ -14,7 +14,7 @@ export default class OffenceDeletePage extends AppFormPage {
     return cy.get('h1', { log: false })
   }
 
-  confirmRemoveButton = (): PageElement => cy.get('#confirm-remove-button')
+  confirmDeleteButton = (): PageElement => cy.get('#confirm-remove-button')
 
   cancelButton = (): PageElement => cy.get('#cancel-button')
 }

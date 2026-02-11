@@ -244,8 +244,49 @@ context('offences', () => {
     offenceList.actionLinkByLabel('1234', 'Delete').click()
     // Should go to offence list delete page
     const offenceListDeletePage = Page.verifyOnPage(OffenceDeletePage)
-    offenceListDeletePage.form.continueButton.click()
+    offenceListDeletePage.confirmDeleteButton().click()
     // Should go to offence add to list page
     Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    offenceList.form.summaryList.shouldNotHaveItem('1234')
+    offenceList.form.summaryList.shouldHaveItem('5678', 'on 02/03/2025')
+  })
+
+  it('Should able to delete offence', () => {
+    const interestedParties = createFakeInterestedParties('Civil & County Court', 'Home Office', null, null)
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+    })
+
+    const offences = [
+      { offenceType: 'Criminal damage and arson', offenceDate: new Date(2025, 1, 1) },
+      { offenceType: 'Sexual offences', offenceDate: new Date(2025, 2, 2) },
+    ]
+
+    // Should go to offence page
+    let offencePage = Page.verifyOnPage(OffencePage)
+    offencePage.form.fillInWith(offences[0])
+    offencePage.form.saveAndContinueButton.click()
+    // Should go to offence add to list page
+    let offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.summaryList.shouldHaveItem('Criminal damage and arson', 'on 01/02/2025')
+    offenceList.form.fillInWith({ addOffence: 'Yes' })
+    offenceList.form.saveAndContinueButton.click()
+    // Should go to offence page
+    offencePage = Page.verifyOnPage(OffencePage)
+    offencePage.form.fillInWith(offences[1])
+    offencePage.form.saveAndContinueButton.click()
+    // Should go to offence add to list page
+    offenceList = Page.verifyOnPage(OffenceListPage)
+    offenceList.form.summaryList.shouldHaveItem('Criminal damage and arson', 'on 01/02/2025')
+    offenceList.form.summaryList.shouldHaveItem('Sexual offences', 'on 02/03/2025')
+    offenceList.actionLinkByLabel('Criminal damage and arson', 'Delete').click()
+    // Should go to offence list delete page
+    const offenceListDeletePage = Page.verifyOnPage(OffenceDeletePage)
+    offenceListDeletePage.confirmDeleteButton().click()
+    // Should go to offence add to list page
+    Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    offenceList.form.summaryList.shouldNotHaveItem('Criminal damage and arson')
+    offenceList.form.summaryList.shouldHaveItem('Sexual offences', 'on 02/03/2025')
   })
 })
