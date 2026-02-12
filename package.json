@@ -128,7 +128,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.0.0",
-    "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
+    "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@secretlint/secretlint-rule-preset-recommend": "^11.2.5",
     "@types/bunyan": "^1.8.11",
@@ -161,7 +161,7 @@
     "cypress-multi-reporters": "^2.0.5",
     "cypress-parallel": "^0.15.0",
     "dotenv": "^17.2.3",
-    "esbuild": "^0.25.11",
+    "esbuild": "^0.27.3",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
