@@ -102,7 +102,7 @@ context('Variation', () => {
         const page = Page.verifyOnPage(ConfirmVariationPage)
 
         const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
-        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 33 days before today
+        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
         stubVariationOrder(fmsResultDate, startDate)
 
         page.confirmButton().should('exist')
