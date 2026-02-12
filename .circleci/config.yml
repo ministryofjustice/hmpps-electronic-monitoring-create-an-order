@@ -225,7 +225,7 @@ workflows:
             - build
       - scenario_test:
           requires:
-            - build
+            - build      
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
