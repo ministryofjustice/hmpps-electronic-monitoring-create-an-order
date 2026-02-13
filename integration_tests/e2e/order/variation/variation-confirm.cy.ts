@@ -2,6 +2,7 @@ import Page from '../../../pages/page'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import OrderTasksPage from '../../../pages/order/summary'
 import IsRejectionPage from '../edit-order/is-rejection/isRejectionPage'
+import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
@@ -151,6 +152,44 @@ context('Variation', () => {
         page.confirmButton().click()
 
         Page.verifyOnPage(IsRejectionPage)
+      })
+
+      context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
+        const testFlags = { SERVICE_REQUEST_TYPE_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+        it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
+          cy.visit(`/order/${mockOriginalId}/edit`)
+          const page = Page.verifyOnPage(ConfirmVariationPage)
+
+          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
+          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
+          stubVariationOrder(fmsResultDate, startDate)
+
+          page.confirmButton().should('exist')
+
+          page.confirmButton().click()
+
+          Page.verifyOnPage(ServiceRequestTypePage)
+        })
+
+        it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
+          cy.visit(`/order/${mockOriginalId}/edit`)
+          const page = Page.verifyOnPage(ConfirmVariationPage)
+
+          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 33).setHours(0, 0, 0, 0)) // 33 days before today
+          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
+          stubVariationOrder(fmsResultDate, startDate)
+          page.confirmButton().should('exist')
+
+          page.confirmButton().click()
+
+          Page.verifyOnPage(ServiceRequestTypePage)
+        })
       })
     })
   })
