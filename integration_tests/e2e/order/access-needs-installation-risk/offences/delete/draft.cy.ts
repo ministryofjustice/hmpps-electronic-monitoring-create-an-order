@@ -48,7 +48,7 @@ context('delete offence', () => {
       order: {
         offences: [
           {
-            offenceType: 'offence type',
+            offenceType: 'SEXUAL_OFFENCES',
             offenceDate: mockDate.toISOString(),
             id: mockOffenceId,
           },
@@ -63,7 +63,7 @@ context('delete offence', () => {
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockOffenceId })
 
     page.fullTitle.contains('Are you sure that you want to delete this offence?')
-    page.form.containsHint('offence type on 01/01/2025')
+    page.form.containsHint('Sexual offences on 01/01/2025')
     page.confirmDeleteButton().should('exist')
     page.cancelButton().should('exist')
   })
