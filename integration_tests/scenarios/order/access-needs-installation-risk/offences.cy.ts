@@ -285,7 +285,7 @@ context('offences', () => {
     const offenceListDeletePage = Page.verifyOnPage(OffenceDeletePage)
     offenceListDeletePage.confirmDeleteButton().click()
     // Should go to offence add to list page
-    Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+    Page.verifyOnPage(OffenceListPage, undefined, undefined, 'Offences committed')
     offenceList.form.summaryList.shouldNotHaveItem('Criminal damage and arson')
     offenceList.form.summaryList.shouldHaveItem('Sexual offences', 'on 02/03/2025')
   })
