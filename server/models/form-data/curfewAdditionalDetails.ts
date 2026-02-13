@@ -15,13 +15,23 @@ const CurfewAdditionalDetailsFormDataValidator = z
     details: z.string({ required_error: validationErrors.curfewAdditionalDetails.changeCurfewDetailsRequired }),
   })
   .superRefine((data, ctx) => {
-    if (data.details === 'yes' && data.curfewAdditionalDetails.length === 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: validationErrors.curfewAdditionalDetails.curfewDetailsRequired,
-        fatal: true,
-        path: ['curfewAdditionalDetails'],
-      })
+    if (data.details === 'yes') {
+      if (data.curfewAdditionalDetails.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: validationErrors.curfewAdditionalDetails.curfewDetailsRequired,
+          fatal: true,
+          path: ['curfewAdditionalDetails'],
+        })
+      }
+      if (data.curfewAdditionalDetails.length > 500) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: validationErrors.curfewAdditionalDetails.curfewDetailsTooLong,
+          fatal: true,
+          path: ['curfewAdditionalDetails'],
+        })
+      }
     }
   })
 
