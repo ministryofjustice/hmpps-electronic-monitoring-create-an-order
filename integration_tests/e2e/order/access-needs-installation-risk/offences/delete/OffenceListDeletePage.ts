@@ -1,11 +1,8 @@
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
 import { PageElement } from '../../../../../pages/page'
-import OffenceDeleteComponent from './OffenceListDeleteComponent'
 
 export default class OffenceDeletePage extends AppFormPage {
-  public form = new OffenceDeleteComponent()
-
   constructor() {
     super('Are you sure that you want to delete this', paths.INSTALLATION_AND_RISK.DELETE)
   }
@@ -17,4 +14,8 @@ export default class OffenceDeletePage extends AppFormPage {
   confirmDeleteButton = (): PageElement => cy.get('#confirm-remove-button')
 
   cancelButton = (): PageElement => cy.get('#cancel-button')
+
+  containsHint(hint: string) {
+    return cy.contains(hint)
+  }
 }

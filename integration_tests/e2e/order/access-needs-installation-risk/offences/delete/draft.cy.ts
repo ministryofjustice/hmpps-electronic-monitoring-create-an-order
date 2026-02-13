@@ -31,7 +31,7 @@ context('delete dapo', () => {
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockOffenceId })
 
     page.fullTitle.contains('Are you sure that you want to delete this DAPO order clause?')
-    page.form.containsHint('12345 on 01/01/2025')
+    page.containsHint('12345 on 01/01/2025')
     page.confirmDeleteButton().should('exist')
     page.cancelButton().should('exist')
   })
@@ -63,7 +63,7 @@ context('delete offence', () => {
     const page = Page.visit(OffenceDeletePage, { orderId: mockOrderId, offenceId: mockOffenceId })
 
     page.fullTitle.contains('Are you sure that you want to delete this offence?')
-    page.form.containsHint('Sexual offences on 01/01/2025')
+    page.containsHint('Sexual offences on 01/01/2025')
     page.confirmDeleteButton().should('exist')
     page.cancelButton().should('exist')
   })
