@@ -39,8 +39,7 @@ context('Monitoring conditions', () => {
         })
 
         page.form.fillInWith({
-          curfewAdditionalDetails: 'Yes',
-          description: 'a'.repeat(501),
+          curfewAdditionalDetails: 'a'.repeat(501),
         })
         page.form.saveAndContinueButton.click()
 

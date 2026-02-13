@@ -4,7 +4,6 @@ import FormTextareaComponent from '../../formTextareaComponent'
 
 export type CurfewAdditionalDetailsFormData = {
   curfewAdditionalDetails: string
-  description?: string
 }
 
 export default class CurfewAdditionalDetailsFormComponent extends FormComponent {
@@ -24,11 +23,9 @@ export default class CurfewAdditionalDetailsFormComponent extends FormComponent 
   fillInWith(curfewConditionDetails: CurfewAdditionalDetailsFormData) {
     if (curfewConditionDetails.curfewAdditionalDetails && curfewConditionDetails.curfewAdditionalDetails.length > 0) {
       this.curfewRadios.element.getByLabel('Yes').check()
+      this.descriptionField.set(curfewConditionDetails.curfewAdditionalDetails)
     } else {
       this.curfewRadios.element.getByLabel('No').check()
-    }
-    if (curfewConditionDetails.description) {
-      this.descriptionField.set(curfewConditionDetails.description)
     }
   }
 }
