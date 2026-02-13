@@ -292,7 +292,7 @@ const validationErrors: ValidationErrors = {
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",
     curfewDetailsRequired: 'Enter detail of the curfew address boundary',
-    curfewDetailsTooLong:  'Detail of the curfew address boundary must be 500 characters or less',
+    curfewDetailsTooLong: 'Detail of the curfew address boundary must be 500 characters or less',
   },
   enforcementZone: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('exclusion zone'),
