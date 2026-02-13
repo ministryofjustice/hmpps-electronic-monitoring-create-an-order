@@ -24,7 +24,7 @@ export const OffenceOtherInfoFormDataValidator = z
           path: ['otherInformationDetails'],
           message: validationErrors.offenceOtherInformation.detailsRequired,
         })
-      } else if (details.length > 200) {
+      } else if (details.length > 500) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['otherInformationDetails'],
