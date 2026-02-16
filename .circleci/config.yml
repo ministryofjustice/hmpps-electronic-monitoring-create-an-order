@@ -19,7 +19,7 @@ parameters:
 
   node-version:
     type: string
-    default: 20.19-browsers
+    default: 24.11-browsers
 
 executors:
   scenario-testing:
@@ -217,15 +217,15 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - unit_test:
-          requires:
-            - build
-      - integration_test:
-          requires:
-            - build
-      - scenario_test:
-          requires:
-            - build      
+      - hmpps/trivy_latest_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_pipeline_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - veracode-credentials
+            - hmpps-common-vars
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
