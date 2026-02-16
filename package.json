@@ -34,12 +34,12 @@
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
-    "node": ">=20",
+    "node": "^24",
     "npm": ">=10"
   },
   "jest": {
     "setupFiles": [
-      "<rootDir>/test/jest/jest.setup.ts"
+      "D:/Repo/hmpps-electronic-monitoring-create-an-order/test/jest/jest.setup.ts"
     ],
     "transform": {
       "^.+\\.tsx?$": [
@@ -53,7 +53,7 @@
       "server/**/*.{ts,js,jsx,mjs}"
     ],
     "testMatch": [
-      "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
+      "D:/Repo/hmpps-electronic-monitoring-create-an-order/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
     ],
     "testEnvironment": "node",
     "reporters": [
@@ -106,7 +106,7 @@
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.1.0",
     "csrf-sync": "^4.2.1",
-    "cypress-split": "^1.24.24",
+    "cypress-split": "^1.24.28",
     "express": "^4.21.2",
     "express-session": "^1.18.2",
     "govuk-frontend": "^5.13.0",
@@ -193,5 +193,16 @@
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
+  },
+  "overrides": {   
+    "cypress": {
+      "qs": "^6.15.0"
+    },
+    "find-cypress-specs":{
+      "tsx": "^4.21.0"
+    },
+    "tsx": {
+      "esbuild": "^0.27.3"
+    }
   }
 }
