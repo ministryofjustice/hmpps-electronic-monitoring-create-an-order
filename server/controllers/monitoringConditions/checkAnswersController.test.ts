@@ -254,23 +254,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/check-your-answers', {
         monitoringConditions: [
-          {
-            key: {
-              text: 'What is the order type?',
-            },
-            value: {
-              text: 'Pre-Trial',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the order type?',
-                },
-              ],
-            },
-          },
+          //   {
+          //     key: {
+          //       text: 'What is the order type?',
+          //     },
+          //     value: {
+          //       text: 'Pre-Trial',
+          //     },
+          //     actions: {
+          //       items: [
+          //         {
+          //           href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
+          //           text: 'Change',
+          //           visuallyHiddenText: 'what is the order type?',
+          //         },
+          //       ],
+          //     },
+          //   },
           {
             key: {
               text: 'What type of sentence has the device wearer been given?',
@@ -1089,23 +1089,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/check-your-answers', {
         monitoringConditions: [
-          {
-            key: {
-              text: 'What is the order type?',
-            },
-            value: {
-              text: 'Pre-Trial',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the order type?',
-                },
-              ],
-            },
-          },
+          // {
+          //   key: {
+          //     text: 'What is the order type?',
+          //   },
+          //   value: {
+          //     text: 'Pre-Trial',
+          //   },
+          //   actions: {
+          //     items: [
+          //       {
+          //         href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
+          //         text: 'Change',
+          //         visuallyHiddenText: 'what is the order type?',
+          //       },
+          //     ],
+          //   },
+          // },
           {
             key: {
               text: 'What type of sentence has the device wearer been given?',
