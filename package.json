@@ -34,12 +34,12 @@
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
-    "node": "^24",
+    "node": ">=20",
     "npm": ">=10"
   },
   "jest": {
     "setupFiles": [
-      "D:/Repo/hmpps-electronic-monitoring-create-an-order/test/jest/jest.setup.ts"
+      "<rootDir>/test/jest/jest.setup.ts"
     ],
     "transform": {
       "^.+\\.tsx?$": [
@@ -53,7 +53,7 @@
       "server/**/*.{ts,js,jsx,mjs}"
     ],
     "testMatch": [
-      "D:/Repo/hmpps-electronic-monitoring-create-an-order/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
+      "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
     ],
     "testEnvironment": "node",
     "reporters": [
