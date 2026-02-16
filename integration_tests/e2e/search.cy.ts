@@ -280,7 +280,6 @@ context('Search', () => {
     })
 
     context('Submitting a create variation request', () => {
-      // I think this is empty but not sure why
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
