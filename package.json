@@ -196,6 +196,7 @@
   },
   "overrides": {   
     "cypress": {
+      "@cypress/request":"^3.0.10",
       "qs": "^6.15.0"
     },
     "find-cypress-specs":{
