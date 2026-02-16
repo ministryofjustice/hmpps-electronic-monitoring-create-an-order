@@ -64,7 +64,8 @@ describe('order type controller', () => {
     next = jest.fn()
   })
 
-  it('should render the correct view', async () => {
+  // Currently all notifying orgs lead to a redirect so skipping model tests
+  it.skip('should render the correct view', async () => {
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
@@ -75,7 +76,7 @@ describe('order type controller', () => {
     )
   })
 
-  it('should construct the correct model when there is no data in the store', async () => {
+  it.skip('should construct the correct model when there is no data in the store', async () => {
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
@@ -86,7 +87,7 @@ describe('order type controller', () => {
     )
   })
 
-  it('should construct the correct model when there is data in the store', async () => {
+  it.skip('should construct the correct model when there is data in the store', async () => {
     const data: MonitoringConditions = { orderType: 'COMMUNITY' }
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
 
@@ -103,7 +104,7 @@ describe('order type controller', () => {
     )
   })
 
-  it('should construct the correct model when there are errors', async () => {
+  it.skip('should construct the correct model when there are errors', async () => {
     req.flash = jest.fn().mockReturnValueOnce([
       {
         error: 'Select the order type',
@@ -127,7 +128,7 @@ describe('order type controller', () => {
     )
   })
 
-  it('should construct the correct model when notifying org is probation', async () => {
+  it.skip('should construct the correct model when notifying org is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
     req.order = mockOrder
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
@@ -155,47 +156,6 @@ describe('order type controller', () => {
     expect(res.render).toHaveBeenCalledWith(expect.anything(), expectedViewObject)
   })
 
-  it.each<{ notifyingOrg: NotifyingOrganisation }>([
-    { notifyingOrg: 'CIVIL_COUNTY_COURT' },
-    { notifyingOrg: 'CROWN_COURT' },
-    { notifyingOrg: 'SCOTTISH_COURT' },
-    { notifyingOrg: 'YOUTH_COURT' },
-    { notifyingOrg: 'MILITARY_COURT' },
-    { notifyingOrg: 'FAMILY_COURT' },
-    { notifyingOrg: 'MAGISTRATES_COURT' },
-  ])('should construct the correct model when notifying org is %notifyingOrg', async ({ notifyingOrg }) => {
-    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: notifyingOrg })
-    req.order = mockOrder
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
-
-    await controller.view(req, res, next)
-
-    const expectedViewObject: OrderTypeModel = {
-      orderTypeQuestions: [
-        {
-          question: 'Community',
-          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
-          value: 'COMMUNITY',
-        },
-        {
-          question: 'Bail',
-          hint: 'Monitoring is a condition of bail.',
-          value: 'BAIL',
-        },
-        {
-          question: 'Civil',
-          hint: 'Monitoring is a condition of a civil court order, rather than a criminal one.',
-          value: 'CIVIL',
-        },
-      ],
-      orderType: { value: '' },
-      errorSummary: null,
-    }
-
-    expect(res.render).toHaveBeenCalledWith(expect.anything(), expectedViewObject)
-  })
-
-  // TODO: prison and home office redirects
   it('should save order type and redirect if notifyingOrg is prison', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PRISON' })
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
@@ -223,6 +183,44 @@ describe('order type controller', () => {
 
     expect(res.redirect).toHaveBeenCalledWith(
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrder.id),
+    )
+  })
+
+  it('should save order type and redirect if notifyingOrg is probation', async () => {
+    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
+
+    await controller.view(req, res, next)
+
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
+      orderType: 'POST_RELEASE',
+    })
+
+    expect(res.redirect).toHaveBeenCalledWith(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrder.id),
+    )
+  })
+
+  it.each<{ notifyingOrg: NotifyingOrganisation }>([
+    { notifyingOrg: 'CIVIL_COUNTY_COURT' },
+    { notifyingOrg: 'CROWN_COURT' },
+    { notifyingOrg: 'SCOTTISH_COURT' },
+    { notifyingOrg: 'YOUTH_COURT' },
+    { notifyingOrg: 'MILITARY_COURT' },
+    { notifyingOrg: 'FAMILY_COURT' },
+    { notifyingOrg: 'MAGISTRATES_COURT' },
+  ])('courts: should save order type and redirect if notifyingOrg %s', async ({ notifyingOrg }) => {
+    mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: notifyingOrg })
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
+
+    await controller.view(req, res, next)
+
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
+      orderType: 'BAIL',
+    })
+
+    expect(res.redirect).toHaveBeenCalledWith(
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', mockOrder.id),
     )
   })
 
