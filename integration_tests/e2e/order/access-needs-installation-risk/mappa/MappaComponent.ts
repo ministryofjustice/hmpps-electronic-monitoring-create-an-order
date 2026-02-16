@@ -8,12 +8,12 @@ type MappaData = {
 
 export default class MappaComponent extends FormComponent {
   get levelField(): FormRadiosComponent {
-    const label = 'Which level of MAPPA applies to the device wearer? (optional)'
+    const label = 'Which level of MAPPA applies to the device wearer?'
     return new FormRadiosComponent(this.form, label, ['MAPPA 1', 'MAPPA 2', 'MAPPA 3'])
   }
 
   get categoryField(): FormRadiosComponent {
-    const label = 'Which category of MAPPA applies to the device wearer? (optional)'
+    const label = 'Which category of MAPPA applies to the device wearer?'
     return new FormRadiosComponent(this.form, label, ['Category 1', 'Category 2', 'Category 3'])
   }
 

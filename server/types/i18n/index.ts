@@ -32,6 +32,7 @@ import OffenceContent from './pages/offence'
 import MappaPageContent from './pages/mappa'
 import DetailsOfInstallationPageContent from './pages/detailsOfInstallation'
 import OffenceOtherInformationPageContent from './pages/offenceOtherInformation'
+import IsMappaPageContent from './pages/isMappa'
 import OffenceListPageContent from './pages/offenceListPage'
 import DapoClauseListPageConent from './pages/dapoClauseListPage'
 
@@ -77,6 +78,7 @@ type I18n = {
     offence: OffenceContent
     mappa: MappaPageContent
     offenceOtherInformation: OffenceOtherInformationPageContent
+    isMappa: IsMappaPageContent
     offenceList: OffenceListPageContent
     dapoClauseList: DapoClauseListPageConent
   }

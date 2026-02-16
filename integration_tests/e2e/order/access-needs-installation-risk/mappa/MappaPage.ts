@@ -8,6 +8,6 @@ export default class MappaPage extends AppFormPage {
   constructor() {
     const path = paths.INSTALLATION_AND_RISK.MAPPA
 
-    super('MAPPA', path)
+    super('Multi-Agency Public Protection Arrangements (MAPPA)', path)
   }
 }

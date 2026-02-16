@@ -67,6 +67,7 @@ interface ValidationErrors {
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: string
     curfewDetailsRequired: string
+    curfewDetailsTooLong: string
   }
   enforcementZone: {
     descriptionRequired: string
@@ -110,6 +111,13 @@ interface ValidationErrors {
     riskDetailsRequired: string
     riskDetailsTooLong: string
     offenceAdditionalDetailsTooLong: string
+  }
+  isMappa: {
+    required: string
+  }
+  mappa: {
+    levelRequired: string
+    categoryRequired: string
   }
   isRejection: {
     isRejectionRequired: string
@@ -284,12 +292,13 @@ const validationErrors: ValidationErrors = {
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",
     curfewDetailsRequired: 'Enter detail of the curfew address boundary',
+    curfewDetailsTooLong: 'Detail of the curfew address boundary must be 500 characters or less',
   },
   enforcementZone: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('exclusion zone'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('exclusion zone', true),
     descriptionRequired: 'Enter where the exclusion zone is required',
-    descriptionTooLong: 'Where is the exclusion zone must be 200 characters or less',
+    descriptionTooLong: 'Where is the exclusion zone must be 500 characters or less',
     durationRequired: 'Enter when the exclusion zone must be followed',
     nameRequired: 'Enter the name of the exclusion zone',
     durationTooLong: 'When must the exclusion zone be followed must be 200 characters or less',
@@ -347,9 +356,16 @@ const validationErrors: ValidationErrors = {
     offenceRequired: 'Select the type of offence the device wearer committed',
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
     riskDetailsRequired: 'Enter any other risks to be aware of',
-    riskDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
+    riskDetailsTooLong: 'Any other risks to be aware of must be 500 characters or less',
     offenceAdditionalDetailsTooLong:
-      'Any other information to be aware of about the offence committed must be 100 characters or less',
+      'Any other information to be aware of about the offence committed must be 500 characters or less',
+  },
+  isMappa: {
+    required: 'Select Yes if the device wearer is a MAPPA offender',
+  },
+  mappa: {
+    levelRequired: 'Select the level of MAPPA that applies to the device wearer',
+    categoryRequired: 'Select the category of MAPPA that applies to the device wearer',
   },
   isRejection: {
     isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
@@ -383,7 +399,7 @@ const validationErrors: ValidationErrors = {
   offenceOtherInformation: {
     hasOtherInformationRequired: 'Select Yes if there is other information to be aware of about the offence committed',
     detailsRequired: 'Enter additional information about the offence',
-    tooLong: 'Additional risk information must be 200 characters or fewer',
+    tooLong: 'Additional risk information must be 500 characters or fewer',
   },
   offenceSummaryList: {
     addAnotherRequired: 'Select Yes if there are any other offences the device wearer has committed',

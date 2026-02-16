@@ -50,8 +50,9 @@ const paths = {
     OFFENCE_LIST: '/order/:orderId/installation-and-risk/offence-list',
     DAPO: '/order/:orderId/installation-and-risk/dapo',
     DAPO_ID: '/order/:orderId/installation-and-risk/dapo/:clauseId',
-    DELETE: '/order/:orderId/installation-and-risk/delete',
+    DELETE: '/order/:orderId/installation-and-risk/delete/:offenceId',
     MAPPA: '/order/:orderId/installation-and-risk/mappa',
+    IS_MAPPA: '/order/:orderId/installation-and-risk/is-mappa',
     DETAILS_OF_INSTALLATION: '/order/:orderId/installation-and-risk/details-of-installation',
   },
 

@@ -40,6 +40,7 @@ const PAGES = {
   dapo: 'DAPO',
   installationAndRisk: 'INSTALLATION_AND_RISK',
   detailsOfInstallation: 'DETAILS_OF_INSTALLATION',
+  isMappa: 'IS_MAPPA',
   mappa: 'MAPPA',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
@@ -358,15 +359,28 @@ export default class TaskListService {
 
       tasks.push({
         section: SECTIONS.riskInformation,
-        name: PAGES.mappa,
-        path: paths.INSTALLATION_AND_RISK.MAPPA,
+        name: PAGES.isMappa,
+        path: paths.INSTALLATION_AND_RISK.IS_MAPPA,
         state: convertBooleanToEnum<State>(
           order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE',
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(order.mappa),
+        completed: isNotNullOrUndefined(order.mappa?.isMappa),
+      })
+
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.mappa,
+        path: paths.INSTALLATION_AND_RISK.MAPPA,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' && order.mappa?.isMappa === 'YES',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.mappa?.level) && isNotNullOrUndefined(order.mappa?.category),
       })
     } else {
       tasks.push({

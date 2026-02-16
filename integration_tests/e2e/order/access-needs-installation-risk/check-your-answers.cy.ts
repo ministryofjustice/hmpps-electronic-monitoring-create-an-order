@@ -495,6 +495,7 @@ context('installation and risk - check your answers', () => {
           mappa: {
             level: 'MAPPA_ONE',
             category: 'CATEGORY_ONE',
+            isMappa: 'YES',
           },
           dataDictionaryVersion: 'DDV6',
         },
@@ -503,8 +504,9 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'Which level of MAPPA applies to the device wearer? (optional)', value: 'MAPPA 1' },
-        { key: 'Which category of MAPPA applies to the device wearer? (optional)', value: 'Category 1' },
+        { key: 'Is the device wearer a Multi-Agency Public Protection Arrangements (MAPPA) offender?', value: 'Yes' },
+        { key: 'Which level of MAPPA applies to the device wearer?', value: 'MAPPA 1' },
+        { key: 'Which category of MAPPA applies to the device wearer?', value: 'Category 1' },
       ])
     })
 

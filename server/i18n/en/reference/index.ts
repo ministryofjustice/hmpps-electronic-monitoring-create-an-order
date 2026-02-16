@@ -26,6 +26,7 @@ import languages from './languages'
 import magistratesCourts from './magistratesCourts'
 import mappaCategory from './mappaCategory'
 import mappaLevel from './mappaLevel'
+import isMappa from './isMappa'
 import notifyingOrganisations from './notifyingOrganisations'
 import offences from './offences'
 import orderTypeDescriptions from './orderTypeDescriptions'
@@ -64,6 +65,7 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   magistratesCourts,
   mappaCategory,
   mappaLevel,
+  isMappa,
   notifyingOrganisations,
   offences,
   orderTypeDescriptions,
@@ -100,6 +102,7 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   magistratesCourts: magistratesCourtsDDv5,
   mappaCategory,
   mappaLevel,
+  isMappa,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,
   offences,
@@ -140,6 +143,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   magistratesCourts: magistratesCourtsDDv5,
   mappaCategory,
   mappaLevel,
+  isMappa,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,
   offences,

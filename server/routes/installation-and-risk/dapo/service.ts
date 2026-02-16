@@ -10,6 +10,12 @@ type Input = {
   orderId: string
 }
 
+type RemoveDapoInput = {
+  accessToken: string
+  orderId: string
+  clauseId: string
+}
+
 export default class DapoService {
   constructor(private readonly apiClient: RestClient) {}
 
@@ -36,5 +42,12 @@ export default class DapoService {
 
       throw e
     }
+  }
+
+  deleteDapo = async (input: RemoveDapoInput) => {
+    return this.apiClient.delete({
+      path: `/api/orders/${input.orderId}/dapo/delete/${input.clauseId}`,
+      token: input.accessToken,
+    })
   }
 }
