@@ -21,6 +21,11 @@ const paths = {
     VARIATION: '/order/:orderId/variation',
   },
 
+  INTEREST_PARTIES: {
+    BASE_PATH: '/order/:orderId/interest-parties',
+    NOTIFYING_ORGANISATION: '/order/:orderId/interest-parties/notifying-organisation',
+  },
+
   ABOUT_THE_DEVICE_WEARER: {
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/about-the-device-wearer/check-your-answers',

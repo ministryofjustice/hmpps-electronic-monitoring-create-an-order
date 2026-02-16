@@ -48,9 +48,10 @@ export default class OrderTasksPage extends AppPage {
     return new Task('About the changes in this version of the form')
   }
 
-  get interestedPartiesTask(): Task{
-    return new Task('About the Notifying and Responsible Organisations')
+  get interestedPartiesTask(): Task {
+    return new Task('About the notifying and responsible organisation')
   }
+
   get aboutTheDeviceWearerTask(): Task {
     return new Task('About the device wearer')
   }
