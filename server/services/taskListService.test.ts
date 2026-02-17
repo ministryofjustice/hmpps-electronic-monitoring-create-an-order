@@ -1290,7 +1290,7 @@ describe('TaskListService', () => {
       jest.restoreAllMocks()
     })
 
-    it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in', async () => {
+    it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in, offence flow', async () => {
       const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
       const mockGetValue = jest.fn(() => '')
       jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
@@ -1306,6 +1306,35 @@ describe('TaskListService', () => {
         offences: [{ offenceType: 'offenceType', offenceDate: new Date().toISOString() }],
         detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
         offenceAdditionalDetails: { additionalDetails: 'details' },
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.completed).toBe(true)
+
+      jest.restoreAllMocks()
+    })
+
+    it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in, dapo flow', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'FAMILY_COURT',
+        }),
+        dapoClauses: [{ date: new Date().toISOString(), clause: 'clause' }],
+        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
       })
 
       const taskListService = new TaskListService(mockOrderChecklistService)
