@@ -24,6 +24,9 @@ context('Interested parties flow', () => {
 
     orderSummaryPage.interestedPartiesTask.click()
   })
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
 
   it('Notifying organisation is court', () => {
     const input = {

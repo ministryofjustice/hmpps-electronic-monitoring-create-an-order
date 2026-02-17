@@ -816,9 +816,14 @@ export default class TaskListService {
 
     return Object.values(SECTIONS)
       .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
+      .filter(
+        section =>
+          section !== SECTIONS.interestParties || FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
+      )
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)
+
         let { path } = sectionsTasks[0]
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
