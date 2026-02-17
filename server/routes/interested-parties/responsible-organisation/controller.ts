@@ -1,12 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 
-export default class NotifingOrganisationController {
+export default class ResponsibleOrganisationController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/WIP', {
-      pageName: 'Notifying Organisation',
+      pageName: 'Responsible Organisation',
       items: [
         {
           value: 'Court',
@@ -32,6 +32,6 @@ export default class NotifingOrganisationController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
+    res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
   }
 }

@@ -1,7 +1,6 @@
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer } from '../../../mockApis/faker'
 
 context('Interested parties flow', () => {
   let orderSummaryPage: OrderSummaryPage

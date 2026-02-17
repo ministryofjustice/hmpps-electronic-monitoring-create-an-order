@@ -174,7 +174,7 @@ export default class TaskListService {
       tasks.push({
         section: SECTIONS.interestParties,
         name: PAGES.interestParties,
-        path: paths.INTEREST_PARTIES.BASE_PATH,
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
         state: STATES.required,
         completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
       })
