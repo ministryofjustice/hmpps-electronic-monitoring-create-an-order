@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import SentenceTypePage from './SentenceTypePage'
-import OrderTypePage from '../order-type/OrderTypePage'
+// import OrderTypePage from '../order-type/OrderTypePage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -33,9 +33,9 @@ context('sentence type', () => {
   })
 
   it('Should show errors when I do not select a sentence type', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Release from prison')
-    orderTypePage.form.continueButton.click()
+    // const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Release from prison')
+    // orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 

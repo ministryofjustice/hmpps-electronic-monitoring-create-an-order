@@ -3,7 +3,7 @@ import MonitoringTypesPage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
 import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
-// import OrderTypePage from '../order-type/OrderTypePage'
+import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 
 const createDevicerWearer = (youth: boolean = true) => {
@@ -80,7 +80,7 @@ context('monitoring types', () => {
 
     cy.signIn()
 
-    // const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 

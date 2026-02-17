@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import OrderTypePage from '../order-type/OrderTypePage'
+// import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from './SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
@@ -44,9 +44,9 @@ context('sentenceType form submission', () => {
   })
 
   it('Should submit the form and display the correct answers for a Post Release journey', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Release from prison')
-    orderTypePage.form.continueButton.click()
+    // const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Release from prison')
+    // orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Standard Determinate Sentence')
@@ -67,9 +67,9 @@ context('sentenceType form submission', () => {
 
   // Order type communities disabled ELM-4495 skipping test until the option is enabled again
   it.skip('Should submit the form and display the correct answers for a Community journey', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Community')
-    orderTypePage.form.continueButton.click()
+    // const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Community')
+    // orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Supervision Default Order')

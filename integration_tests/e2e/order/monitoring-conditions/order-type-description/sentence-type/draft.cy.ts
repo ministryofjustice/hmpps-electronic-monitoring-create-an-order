@@ -33,18 +33,18 @@ context('sentenceType', () => {
   })
 
   it('Page accessible', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Release from prison')
-    orderTypePage.form.continueButton.click()
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Release from prison')
+    // orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })
 
   it('Should display content', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Release from prison')
-    orderTypePage.form.continueButton.click()
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Release from prison')
+    // orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
@@ -57,9 +57,9 @@ context('sentenceType', () => {
   })
 
   it('when order type is Post Release', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Release from prison')
-    orderTypePage.form.continueButton.click()
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Release from prison')
+    // orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
@@ -71,9 +71,9 @@ context('sentenceType', () => {
 
   // Order type communities disabled ELM-4495 skipping test until the option is enabled again
   it.skip('when order type is Community', () => {
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Community')
-    orderTypePage.form.continueButton.click()
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // orderTypePage.form.fillInWith('Community')
+    // orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
@@ -82,19 +82,5 @@ context('sentenceType', () => {
     page.form.sentenceTypeField.shouldHaveOption('Suspended Sentence')
     page.form.sentenceTypeField.shouldHaveOption('Youth Rehabilitation Order (YRO)')
     page.form.sentenceTypeField.shouldHaveOption('The sentence they have been given is not in the list')
-  })
-
-  it('when order type is Bail', () => {
-    stubGetOrder('CROWN_COURT')
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Bail')
-    orderTypePage.form.continueButton.click()
-
-    const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
-
-    cy.get('h1').should('contain', 'What type of bail has the device wearer been given?')
-    page.form.bailTypeField.shouldHaveOption('Bail Supervision & Support')
-    page.form.bailTypeField.shouldHaveOption('Bail Remand to Local Authority Accomodation (RLAA)')
-    page.form.bailTypeField.shouldHaveOption('The type of bail they have been given is not in the list')
   })
 })

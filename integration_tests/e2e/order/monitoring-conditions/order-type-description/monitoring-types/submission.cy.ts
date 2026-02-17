@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringTypesPage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
-// import OrderTypePage from '../order-type/OrderTypePage'
+import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import InstallationLocationPage from '../../../../../pages/order/monitoring-conditions/installation-location'
 import PrarrPage from '../prarr/PrarrPage'
@@ -58,7 +58,7 @@ context('pilot', () => {
 
   it('Should submit the form', () => {
     // go through the flow
-    // const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 
