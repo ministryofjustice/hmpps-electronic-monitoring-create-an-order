@@ -321,7 +321,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(order.installationAndRisk),
+        completed: order.offences.length > 0,
       })
       tasks.push({
         section: SECTIONS.riskInformation,
@@ -333,7 +333,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(order.installationAndRisk),
+        completed: isNotNullOrUndefined(order.offenceAdditionalDetails),
       })
 
       tasks.push({
@@ -346,7 +346,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(order.installationAndRisk),
+        completed: order.dapoClauses.length > 0,
       })
 
       tasks.push({

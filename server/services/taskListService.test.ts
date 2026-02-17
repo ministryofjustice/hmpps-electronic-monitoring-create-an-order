@@ -24,7 +24,6 @@ import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
 import FeatureFlags from '../utils/featureFlags'
-import { get } from 'node:https'
 
 describe('TaskListService', () => {
   const mockOrderChecklistService = {
@@ -1287,6 +1286,37 @@ describe('TaskListService', () => {
       expect(riskInformationSection?.path).toBe(
         paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id),
       )
+
+      jest.restoreAllMocks()
+    })
+
+    it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'CROWN_COURT',
+        }),
+        dapoClauses: [],
+        offences: [{ offenceType: 'offenceType', offenceDate: new Date().toISOString() }],
+        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        offenceAdditionalDetails: { additionalDetails: 'details' },
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.completed).toBe(true)
 
       jest.restoreAllMocks()
     })
