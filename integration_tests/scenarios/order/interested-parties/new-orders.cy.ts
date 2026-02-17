@@ -6,6 +6,7 @@ import ResponsibleOfficerPage from '../../../e2e/order/interested-parties/respon
 import ResponsibleOrganisationPage from '../../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import ProbationDeliveryUnitPage from '../../../e2e/order/interested-parties/probation-delivery-unit/probationDeliveryUnitPage'
+import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 
 context('Interested parties flow', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -36,23 +37,14 @@ context('Interested parties flow', () => {
   it('Notifying organisation is prison and resonsible organisation is probation', () => {
     const input = {
       notifyingOrganisation: 'Prison',
+      responsibleOfficer: 'mock',
       responsibleOrganisation: 'Probation',
+      pdu: 'mock'
     }
-    const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
-    notifyingOrganisationPage.form.fillInWith(input.notifyingOrganisation)
-    notifyingOrganisationPage.form.continueButton.click()
-
-    const responsibleOfficerPage = Page.verifyOnPage(ResponsibleOfficerPage)
-    responsibleOfficerPage.form.continueButton.click()
-
-    const responsibleOrganisationPage = Page.verifyOnPage(ResponsibleOrganisationPage)
-    responsibleOrganisationPage.form.fillInWith(input.responsibleOrganisation)
-    responsibleOrganisationPage.form.continueButton.click()
-
-    const pduPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
-    pduPage.form.continueButton.click()
-
-    Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    fillInInterestedPartiesWith({
+      continueOnCya:false,
+      ...input
+    })
     //TODO veriry check your answers
   })
 
