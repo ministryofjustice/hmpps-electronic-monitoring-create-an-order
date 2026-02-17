@@ -363,6 +363,7 @@ context('The kitchen sink', () => {
             pilot: 'GPS Acquisitive Crime Home Detention Curfew',
             subcategory: '',
             dapol_missed_in_error: '',
+            install_at_source_pilot: '',
             ac_eligible_offences: [
               {
                 offence: 'Burglary in a Dwelling - Indictable only',

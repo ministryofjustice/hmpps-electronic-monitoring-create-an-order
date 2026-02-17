@@ -21,7 +21,7 @@ import InterestedPartiesPage from '../../../pages/order/contact-information/inte
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {

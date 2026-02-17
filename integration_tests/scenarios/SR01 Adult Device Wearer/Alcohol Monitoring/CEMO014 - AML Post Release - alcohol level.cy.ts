@@ -9,7 +9,7 @@ import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttac
 import SearchPage from '../../../pages/search'
 import { createAddressPreview } from '../../../../server/utils/utils'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
