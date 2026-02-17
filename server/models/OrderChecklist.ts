@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 const OrderChecklistModel = z.object({
+  ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION: z.boolean().default(false),
   ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM: z.boolean().default(false),
   ABOUT_THE_DEVICE_WEARER: z.boolean().default(false),
   CONTACT_INFORMATION: z.boolean().default(false),

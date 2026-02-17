@@ -880,6 +880,7 @@ describe('TaskListService', () => {
       })
       mockOrderChecklistService.getChecklist.mockReturnValueOnce(
         Promise.resolve({
+          ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION: true,
           ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM: true,
           ABOUT_THE_DEVICE_WEARER: true,
           CONTACT_INFORMATION: true,

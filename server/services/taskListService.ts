@@ -13,6 +13,7 @@ const CYA_PREFIX = 'CHECK_ANSWERS'
 
 const SECTIONS = {
   variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+  interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
   riskInformation: 'RISK_INFORMATION',
@@ -168,6 +169,16 @@ export default class TaskListService {
       state: isVariationType(order.type) ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
     })
+
+    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.interestParties,
+        name: PAGES.interestParties,
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
@@ -805,6 +816,10 @@ export default class TaskListService {
 
     return Object.values(SECTIONS)
       .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
+      .filter(
+        section =>
+          section !== SECTIONS.interestParties || FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
+      )
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)
