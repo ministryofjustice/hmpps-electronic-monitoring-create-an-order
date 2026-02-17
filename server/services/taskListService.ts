@@ -808,9 +808,12 @@ export default class TaskListService {
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)
-        let { path } = sectionsTasks[0]
+        let path: string
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
+        } else {
+          const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task, {}))
+          path = (firstAvailableTask || sectionsTasks[0]).path
         }
 
         path = path.replace(':orderId', order.id)

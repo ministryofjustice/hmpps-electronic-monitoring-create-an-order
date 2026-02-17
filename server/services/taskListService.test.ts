@@ -23,6 +23,8 @@ import { Order } from '../models/Order'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
+import FeatureFlags from '../utils/featureFlags'
+import { get } from 'node:https'
 
 describe('TaskListService', () => {
   const mockOrderChecklistService = {
@@ -1231,6 +1233,62 @@ describe('TaskListService', () => {
       const contactInformationSection = sections.find(section => section.name === 'CONTACT_INFORMATION')
 
       expect(contactInformationSection?.completed).toBe(false)
+    })
+
+    it('should navigate to dapo page when offence flow is enabled and notifyingOrganisation is FAMILY_COURT', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'FAMILY_COURT',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.path).toBe(paths.INSTALLATION_AND_RISK.DAPO.replace(':orderId', order.id))
+
+      jest.restoreAllMocks()
+    })
+
+    it('should navigate to offence page when offence flow is enabled and notifyingOrganisation is not FAMILY_COURT', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'CROWN_COURT',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.path).toBe(
+        paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id),
+      )
+
+      jest.restoreAllMocks()
     })
   })
   describe('getNextCheckYourAnswersPage', () => {
