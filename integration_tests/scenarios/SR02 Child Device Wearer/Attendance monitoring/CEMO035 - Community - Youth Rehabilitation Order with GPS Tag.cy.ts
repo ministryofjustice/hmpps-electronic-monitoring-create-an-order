@@ -401,6 +401,7 @@ ${attendanceMonitoringOrder.address.postcode}
                 pilot: '',
                 subcategory: '',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')
