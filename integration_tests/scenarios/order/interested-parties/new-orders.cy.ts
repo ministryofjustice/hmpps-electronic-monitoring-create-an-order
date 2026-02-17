@@ -1,11 +1,6 @@
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
-import ResponsibleOfficerPage from '../../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
-import ResponsibleOrganisationPage from '../../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
-import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
-import ProbationDeliveryUnitPage from '../../../e2e/order/interested-parties/probation-delivery-unit/probationDeliveryUnitPage'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 
 context('Interested parties flow', () => {
@@ -30,23 +25,43 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
   })
 
-  // it('Notifying organisation is court', () => {})
+  it('Notifying organisation is court', () => {
+    const input = {
+      notifyingOrganisation: 'Court',
+      responsibleOrganisation: 'Probation',
+      pdu: 'mock',
+    }
+    fillInInterestedPartiesWith({
+      continueOnCya: false,
+      ...input,
+    })
+    // TODO veriry check your answers
+  })
 
-  // it('Notifying organisation is Home Office', () => {})
+  it('Notifying organisation is Home Office and responsible organisation is Home Office', () => {
+    const input = {
+      notifyingOrganisation: 'Home Office',
+      responsibleOfficer: 'mock',
+      responsibleOrganisation: 'Home Office',
+    }
+    fillInInterestedPartiesWith({
+      continueOnCya: false,
+      ...input,
+    })
+    // TODO veriry check your answers
+  })
 
   it('Notifying organisation is prison and resonsible organisation is probation', () => {
     const input = {
       notifyingOrganisation: 'Prison',
       responsibleOfficer: 'mock',
       responsibleOrganisation: 'Probation',
-      pdu: 'mock'
+      pdu: 'mock',
     }
     fillInInterestedPartiesWith({
-      continueOnCya:false,
-      ...input
+      continueOnCya: false,
+      ...input,
     })
-    //TODO veriry check your answers
+    // TODO veriry check your answers
   })
-
-  // it('Notifying organisation is probation', () => {})
 })

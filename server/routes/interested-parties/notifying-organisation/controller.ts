@@ -31,7 +31,12 @@ export default class NotifingOrganisationController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const formData = req.body
 
-    res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
+    if (formData.branch === 'Court')
+      res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
+    else {
+      res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
+    }
   }
 }

@@ -32,6 +32,12 @@ export default class ResponsibleOrganisationController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
+    const formData = req.body
+
+    if (formData.branch === 'Probation') {
+      res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
+    } else {
+      res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    }
   }
 }
