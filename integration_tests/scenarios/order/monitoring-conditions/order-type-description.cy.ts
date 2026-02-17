@@ -338,7 +338,7 @@ context('Order type descriptions', () => {
       null,
     )
     const monitoringOrderTypeDescription = {
-      orderType: 'Civil',
+      // orderType: 'Bail',
       monitoringCondition: 'Trail monitoring',
     }
 
