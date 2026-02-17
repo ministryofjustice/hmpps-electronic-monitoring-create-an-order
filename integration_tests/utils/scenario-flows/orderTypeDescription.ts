@@ -3,7 +3,7 @@ import HdcPage from '../../e2e/order/monitoring-conditions/order-type-descriptio
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
-import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
+// import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import PilotPage from '../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
 import PoliceAreaPage from '../../e2e/order/monitoring-conditions/order-type-description/police-area/PoliceAreaPage'
 import PrarrPage from '../../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
@@ -17,7 +17,7 @@ const fillinSingleQuestionFormWith = (form: SingleQuestionFormComponent, value: 
 }
 
 export default function fillInOrderTypeDescriptionsWith({
-  orderType = undefined,
+  // orderType = undefined,
   sentenceType = undefined,
   issp = undefined,
   hdc = undefined,
@@ -28,11 +28,12 @@ export default function fillInOrderTypeDescriptionsWith({
   monitoringCondition = undefined,
   dapolMissedInError = undefined,
 }): void {
+  // page is always redirected from
   // Order type page
-  if (orderType) {
-    const orderTypePage = Page.verifyOnPage(OrderTypePage)
-    fillinSingleQuestionFormWith(orderTypePage.form, orderType)
-  }
+  // if (orderType) {
+  //   const orderTypePage = Page.verifyOnPage(OrderTypePage)
+  //   fillinSingleQuestionFormWith(orderTypePage.form, orderType)
+  // }
 
   // sentence type page
   if (sentenceType) {
