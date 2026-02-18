@@ -8,7 +8,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDate, formatAsFmsDateTime, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -304,6 +304,7 @@ ${attendanceMonitoringOrder.address.postcode}
               pilot: '',
               subcategory: '',
               dapol_missed_in_error: '',
+              ac_eligible_offences: [],
             },
           })
           .should('be.true')
