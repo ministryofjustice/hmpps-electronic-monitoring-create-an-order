@@ -26,6 +26,8 @@ context('Contact information', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -63,10 +65,10 @@ context('Contact information', () => {
         })
 
         const validFormData = {
-          line1: 'line 1',
-          line2: 'line 2',
-          line3: 'line 3',
-          line4: 'line 4',
+          addressLine1: 'line 1',
+          addressLine2: 'line 2',
+          addressLine3: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'No',
         }
@@ -95,10 +97,10 @@ context('Contact information', () => {
         })
 
         const validFormData = {
-          line1: 'line 1',
-          line2: 'line 2',
-          line3: 'line 3',
-          line4: 'line 4',
+          addressLine1: 'line 1',
+          addressLine2: 'line 2',
+          addressLine3: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'Yes',
         }
@@ -116,10 +118,10 @@ context('Contact information', () => {
         })
 
         const validFormData = {
-          line1: 'line 1',
-          line2: 'line 2',
-          line3: 'line 3',
-          line4: 'line 4',
+          addressLine1: 'line 1',
+          addressLine2: 'line 2',
+          addressLine3: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'No',
         }
@@ -137,10 +139,10 @@ context('Contact information', () => {
         })
 
         const validFormData = {
-          line1: 'line 1',
-          line2: 'line 2',
-          line3: 'line 3',
-          line4: 'line 4',
+          addressLine1: 'line 1',
+          addressLine2: 'line 2',
+          addressLine3: 'line 3',
+          addressLine4: 'line 4',
           postcode: 'postcode',
           hasAnotherAddress: 'No',
         }

@@ -9,6 +9,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{%- from "moj/components/timeline/macro.njk" import mojTimeline -%}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -21,11 +22,41 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if order.status === 'SUBMITTED' else "Electronic Monitoring application form" %}
+      {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if (order.status === 'SUBMITTED') or (order.deviceWearer.firstName)  else "Electronic Monitoring application form" %}
 
       <h1 class="govuk-heading-l">
         {{ heading }}
       </h1>
+      
+      {% if not isMostRecentVersion %}
+      <p class="govuk-label-s">
+          You can't make changes to this form because there are more recent versions of it.
+      </p>
+      {% endif %}
+
+      {% if order.status == 'IN_PROGRESS' %}
+        {% if order.type ==='VARIATION' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are making changes to a submitted form.
+         </div>
+        {% elif order.type ==='REVOCATION' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are revoking monitoring for the device wearer.
+         </div>
+         {% elif order.type ==='END_MONITORING' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are ending all monitoring for the device wearer.
+         </div>
+        {% elif order.type ==='REINSTALL_DEVICE' %}
+         <div id="waste-hint" class="govuk-hint">
+            You are requesting monitoring equipment to be reinstalled.
+         </div>
+        {% elif order.type ==='REINSTALL_AT_DIFFERENT_ADDRESS' %}
+         <div id="waste-hint" class="govuk-hint">
+           You are requesting monitoring equipment to be installed at an additional address.
+         </div>
+        {% endif %}
+      {% endif %}
 
       {% if order.status === "ERROR" %}
         {% set insetHtml %}
@@ -115,24 +146,61 @@
 
       {% if order.status == "SUBMITTED" %}
         <div class="govuk-!-margin-top-5">
-	  <div class="govuk-button-group">
-            {% if createNewOrderVersionEnabled %}
-              {{ govukButton({
-                text: "Make changes to this form",
-                id: "make-changes-button",
-                href: "/order/" + order.id + "/edit"
-              }) }}
-            {% endif %}
-            {{ govukButton({
-              text: "View and download form",
-	      id: "view-and-download-button",
-              href: "/order/" + orderId + "/receipt",
-              classes: "govuk-button--secondary"
-            }) }}
-	  </div>
+      <div class="govuk-button-group">
+              {% if createNewOrderVersionEnabled %}
+                {{ govukButton({
+                  text: "Make changes to this form",
+                  id: "make-changes-button",
+                  href: "/order/" + order.id + "/edit"
+                }) }}
+              {% endif %}
+        {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
+          if versionId else "/order/" + orderId + "/receipt" %}
+        {{ govukButton({
+          text: "View and download form",
+          id: "view-and-download-button",
+          href: receiptUrl,
+          classes: "govuk-button--secondary"
+        }) }}
+      </div>
         </div>
       {% endif %}
   
     </div>
-  </div>
+
+    <div class="govuk-grid-column-one-third">
+        {% if order.status != 'IN_PROGRESS' %}
+          {% if timelineItems | length %}
+            {% set processedTimeLineItems = [] %}
+          {% for item in timelineItems %}
+            {% if item.href %}
+              {% set itemHtml %}
+                {{ item.text if item.text }}
+                <div class="govuk-!-margin-top-2">
+                  <a href="{{ item.href }}">View submitted form</a>
+                </div>
+              {% endset %}
+            {% else %}
+              {% set itemHtml %}
+                {{ item.text if item.text }}
+                <div class="govuk-!-margin-top-2">
+                  <p>You are viewing this version of the form</p>
+                </div>
+              {% endset %}
+            {% endif %}
+            {% set processedItem = {
+              label: item.label,
+              datetime: item.datetime,
+              byline: item.byline,
+              html: itemHtml
+            } %}
+            {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
+          {% endfor %}
+          {{ mojTimeline({
+              items: processedTimeLineItems
+            })}}
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
 {% endblock %}

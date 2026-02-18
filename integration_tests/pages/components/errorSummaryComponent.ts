@@ -25,6 +25,10 @@ export default class ErrorSummaryComponent {
     return this.errorList.contains(error)
   }
 
+  shouldNotHaveError(error: string) {
+    this.errorList.contains(error).should('not.exist')
+  }
+
   shouldHaveTitle(title: string) {
     return this.title.contains(title)
   }

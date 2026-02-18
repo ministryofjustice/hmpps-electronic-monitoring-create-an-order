@@ -51,6 +51,7 @@ const getIdList = (order: Order) => {
 
 const createOrderItem = (order: Order) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
+
   return {
     name: getDisplayName(order),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
@@ -94,9 +95,6 @@ const getStatusTags = (order: Order) => {
     statusTags.push({ text: 'Draft', type: 'DRAFT' })
   } else if (order.status === 'ERROR') {
     statusTags.push({ text: 'Failed to submit', type: 'FAILED' })
-  } else if (order.status === 'SUBMITTED') {
-    // Have to handle submitted orders until they are removed from list orders endpoint
-    statusTags.push({ text: 'Submitted', type: 'SUBMITTED' })
   }
 
   return statusTags

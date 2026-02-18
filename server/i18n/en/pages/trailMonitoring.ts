@@ -12,6 +12,9 @@ const trailMonitoringPageContent: TrailMonitoringPageContent = {
       text: 'What date does trail monitoring start?',
       hint: 'For example, 21 05 2025',
     },
+    deviceType: {
+      text: 'What type of trail monitoring device is needed?',
+    },
   },
   section: 'Electronic monitoring required',
   title: 'Trail monitoring',

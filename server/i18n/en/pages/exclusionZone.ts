@@ -20,6 +20,10 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
       text: 'What date does exclusion zone monitoring end?',
       hint: 'For example, 21 05 2025',
     },
+    name: {
+      text: 'What name would you give to the exclusion zone?',
+      hint: "For example, Partner's house",
+    },
     file: {
       text: 'Monitoring zone map (optional)',
     },

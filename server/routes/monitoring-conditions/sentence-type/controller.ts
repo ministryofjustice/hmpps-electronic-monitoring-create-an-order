@@ -5,19 +5,26 @@ import { ValidationResult } from '../../../models/Validation'
 import { SentenceTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
+import MonitoringConditionsBaseController from '../base/monitoringConditionBaseController'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 
-export default class SentenceTypeController {
-  constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
+export default class SentenceTypeController extends MonitoringConditionsBaseController {
+  constructor(
+    readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
+    readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+  ) {
+    super(montoringConditionsStoreService, monitoringConditionsService)
+  }
 
   view: RequestHandler = async (req: Request, res: Response): Promise<void> => {
-    const orderId = req.order!.id
-    let monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+    const order = req.order!
+    let monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
 
     if (!monitoringConditions.orderType) {
       const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisation
       if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
-        await this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'POST_RELEASE' })
-        monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+        await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'POST_RELEASE' })
+        monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
       }
     }
 
@@ -28,7 +35,7 @@ export default class SentenceTypeController {
   }
 
   update: RequestHandler = async (req: Request, res: Response): Promise<void> => {
-    const orderId = req.order!.id
+    const order = req.order!
     const formData = SentenceTypeFormDataModel.parse(req.body)
 
     if (formData.sentenceType === null || formData.sentenceType === undefined) {
@@ -39,37 +46,27 @@ export default class SentenceTypeController {
           focusTarget: 'sentenceType',
         },
       ])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id))
       return
     }
 
     if (formData.action === 'continue') {
-      await this.montoringConditionsStoreService.updateSentenceType(orderId, {
+      await this.montoringConditionsStoreService.updateSentenceType(order, {
         sentenceType: formData.sentenceType,
       })
 
-      const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+      const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
 
       if (monitoringConditions.orderType === 'POST_RELEASE') {
         switch (formData.sentenceType) {
           case 'STANDARD_DETERMINATE_SENTENCE':
-            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', orderId))
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id))
             return
           case 'DTO':
-            // update to ISS page when it is made
-            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
-            )
-
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
             return
           default:
-            // update to PRARR page when it is made
-            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', orderId))
-            // return
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
-            )
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id))
             return
         }
       }
@@ -77,30 +74,20 @@ export default class SentenceTypeController {
       if (monitoringConditions.orderType === 'COMMUNITY') {
         switch (formData.sentenceType) {
           case 'COMMUNITY_YRO':
-            // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
-            )
+            res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
             return
           default:
-            res.redirect(
-              paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId),
-            )
-            // res.redirect(
-            //   paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_DATES.replace(':orderId', orderId),
-            // )
+            await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
             return
         }
       }
 
       if (monitoringConditions.orderType === 'BAIL') {
-        // res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISS.replace(':orderId', orderId))
-        // return
-        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id))
         return
       }
 
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
     }
   }
 }

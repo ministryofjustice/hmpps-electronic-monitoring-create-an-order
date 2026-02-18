@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -23,6 +24,7 @@ context('Check your answers', () => {
         hdc: 'NO',
         prarr: 'UNKNOWN',
         pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+        offenceType: '',
       },
       curfewReleaseDateConditions: {
         curfewAddress: '',
@@ -49,6 +51,26 @@ context('Check your answers', () => {
         startDate: '2024-11-11T00:00:00Z',
         curfewAdditionalDetails: 'some additional details',
       },
+      monitoringConditionsTrail: {
+        endDate: '2024-11-11T00:00:00Z',
+        startDate: '2024-11-11T00:00:00Z',
+        deviceType: 'FITTED',
+      },
+      monitoringConditionsAlcohol: {
+        monitoringType: 'ALCOHOL_ABSTINENCE',
+        startDate: '2024-03-27T00:00:00.000Z',
+        endDate: '2025-04-28T00:00:00.000Z',
+      },
+      interestedParties: {
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: '',
+        responsibleOfficerName: '',
+        responsibleOfficerPhoneNumber: '',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: '',
+        responsibleOrganisationEmail: '',
+      },
       dataDictionaryVersion: 'DDV5',
     }
     beforeEach(() => {
@@ -73,12 +95,11 @@ context('Check your answers', () => {
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
         'What pilot project is the device wearer part of?',
-        'GPS Acquisitive Crime',
+        'GPS acquisitive crime (EMAC)',
       )
       page.installationAddressSection().shouldExist()
       page.curfewOnDayOfReleaseSection.shouldExist()
       page.curfewOnDayOfReleaseSection.shouldHaveItems([
-        { key: 'What date is the device wearer released from custody?', value: '11/05/2025' },
         { key: 'On the day of release, what time does the curfew start?', value: '19:00' },
         { key: 'On the day after release, what time does the curfew end?', value: '07:00' },
       ])
@@ -90,8 +111,11 @@ context('Check your answers', () => {
         },
       ])
       page.curfewTimetableSection().element.should('exist')
-      page.trailMonitoringConditionsSection().should('exist')
-      page.alcoholMonitoringConditionsSection().should('exist')
+      page.trailMonitoringConditionsSection().shouldExist()
+      page
+        .trailMonitoringConditionsSection()
+        .shouldHaveItem('What type of trail monitoring device is needed?', 'A fitted GPS tag')
+      page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
     it('shows installation location - Primary', () => {
@@ -357,6 +381,34 @@ context('Check your answers', () => {
         },
       ])
     })
+
+    it('notifying org is court', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          interestedParties: {
+            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.alcoholMonitoringConditionsSection().shouldExist()
+      page
+        .alcoholMonitoringConditionsSection()
+        .shouldNotHaveItem('What alcohol monitoring does the device wearer need?')
+    })
   })
 
   context('Application status is submitted', () => {
@@ -386,6 +438,7 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
+            offenceType: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -400,6 +453,15 @@ context('Check your answers', () => {
               postcode: 'SW1A 2AB',
             },
           ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
           fmsResultDate: new Date('2024 12 14'),
         },
       })
@@ -426,11 +488,8 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().shouldExist()
-      page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection.element.should('exist')
-      page.curfewTimetableSection().element.should('exist')
-      page.trailMonitoringConditionsSection().should('exist')
-      page.alcoholMonitoringConditionsSection().should('exist')
+      page.trailMonitoringConditionsSection().shouldExist()
+      page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
     it('does not show "change" links', () => {
@@ -476,6 +535,7 @@ context('Check your answers', () => {
             hdc: 'NO',
             prarr: 'UNKNOWN',
             pilot: '',
+            offenceType: '',
           },
           installationLocation: {
             location: 'INSTALLATION',
@@ -490,6 +550,15 @@ context('Check your answers', () => {
               postcode: 'SW1A 2AB',
             },
           ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
           fmsResultDate: new Date('2024 12 14'),
         },
       })
@@ -517,11 +586,9 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.installationAddressSection().shouldExist()
-      page.curfewOnDayOfReleaseSection.shouldExist()
-      page.curfewSection.element.should('exist')
-      page.curfewTimetableSection().element.should('exist')
-      page.trailMonitoringConditionsSection().should('exist')
-      page.alcoholMonitoringConditionsSection().should('exist')
+
+      page.trailMonitoringConditionsSection().shouldExist()
+      page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
     it('does not show "change" links', () => {
@@ -539,6 +606,97 @@ context('Check your answers', () => {
       page.returnButton().contains('Return to main form menu')
     })
   })
+
+  context('Viewing an old version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+            offenceType: '',
+          },
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '10 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
+          fmsResultDate: new Date('2024 12 14'),
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'View answers'
+
+    it('navigates correctly to summary', () => {
+      const page = Page.visit(
+        CheckYourAnswers,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.returnButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        CheckYourAnswers,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+  })
+
   context('when ddv4 order', () => {
     const pageHeading = 'Check your answers'
     beforeEach(() => {
@@ -566,7 +724,8 @@ context('Check your answers', () => {
             issp: 'YES',
             hdc: 'NO',
             prarr: 'UNKNOWN',
-            pilot: '',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            offenceType: '',
           },
           curfewReleaseDateConditions: {
             curfewAddress: '',
@@ -605,7 +764,7 @@ context('Check your answers', () => {
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
         'What pilot project is the device wearer part of?',
-        'GPS Acquisitive Crime',
+        'GPS acquisitive crime (EMAC)',
       )
     })
   })

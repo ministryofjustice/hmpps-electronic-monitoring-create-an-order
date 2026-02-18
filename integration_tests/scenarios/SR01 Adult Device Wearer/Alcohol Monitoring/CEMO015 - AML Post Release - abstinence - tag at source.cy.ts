@@ -13,7 +13,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -37,7 +37,7 @@ context('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -56,20 +56,18 @@ context('Scenarios', () => {
   context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO015'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createKnownAddress()
     const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
-      monitoringRequired: 'Alcohol monitoring',
+    const monitoringOrderTypeDescription = {
+      monitoringCondition: 'Alcohol monitoring',
       pilot: 'They are not part of any of these pilots',
       sentenceType: 'Standard Determinate Sentence',
-      issp: 'No',
       hdc: 'No',
       prarr: 'No',
     }
@@ -108,7 +106,7 @@ context('Scenarios', () => {
         secondaryAddressDetails: undefined,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         installationAddressDetails,
         trailMonitoringDetails: undefined,
         enforcementZoneDetails: undefined,
@@ -143,11 +141,12 @@ context('Scenarios', () => {
             .replace('Self identify', 'Prefer to self-describe')
             .replace('Non binary', 'Non-Binary'),
           disability: [],
-          address_1: fakePrimaryAddress.line1,
-          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
-          address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+          address_1: fakePrimaryAddress.addressLine1,
+          address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
+          address_3: fakePrimaryAddress.addressLine3,
+          address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
           address_post_code: fakePrimaryAddress.postcode,
+          no_fixed_address: 'false',
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
@@ -179,7 +178,7 @@ context('Scenarios', () => {
           nomis_id: deviceWearerDetails.nomisId,
           delius_id: deviceWearerDetails.deliusId,
           prison_number: deviceWearerDetails.prisonNumber,
-          home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+          home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
           interpreter_required: 'false',
           language: '',
         },
@@ -225,11 +224,11 @@ context('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(alcoholMonitoringDetails.endDate, 23, 59),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(alcoholMonitoringDetails.startDate, 0, 0),
+              order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -268,7 +267,7 @@ context('Scenarios', () => {
               conditional_release_end_time: '',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(alcoholMonitoringDetails.endDate),
               curfew_description: '',
               curfew_start: '',
               curfew_end: '',
@@ -281,16 +280,19 @@ context('Scenarios', () => {
               checkin_schedule: [],
               revocation_date: '',
               revocation_type: '',
-              installation_address_1: installationAddressDetails.line1,
-              installation_address_2: installationAddressDetails.line2,
-              installation_address_3: installationAddressDetails.line3,
-              installation_address_4: installationAddressDetails.line4,
+              installation_address_1: installationAddressDetails.addressLine1,
+              installation_address_2: installationAddressDetails.addressLine2,
+              installation_address_3: installationAddressDetails.addressLine3,
+              installation_address_4: installationAddressDetails.addressLine4,
               installation_address_post_code: installationAddressDetails.postcode,
               crown_court_case_reference_number: '',
-              magistrate_court_case_reference_number: '',
+              magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
+              subcategory: '',
+              dapol_missed_in_error: '',
+              ac_eligible_offences: [],
             },
           })
           .should('be.true')

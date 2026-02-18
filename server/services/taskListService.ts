@@ -1,15 +1,19 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrUndefined } from '../utils/utils'
+import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
+import isVariationType from '../utils/isVariationType'
+import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
+import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
 const SECTIONS = {
   variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+  interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
   riskInformation: 'RISK_INFORMATION',
@@ -32,12 +36,18 @@ const PAGES = {
   interestParties: 'INTERESTED_PARTIES',
   probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
+  offence: 'OFFENCE',
+  offenceOtherInfo: 'OFFENCE_OTHER_INFO',
+  dapo: 'DAPO',
   installationAndRisk: 'INSTALLATION_AND_RISK',
+  detailsOfInstallation: 'DETAILS_OF_INSTALLATION',
+  isMappa: 'IS_MAPPA',
+  mappa: 'MAPPA',
   checkAnswersInstallationAndRisk: 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
-  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewConditions: 'CURFEW_CONDITIONS',
+  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
   curfewAdditionalDetails: 'CURFEW_ADDITIONAL_DETAILS',
   curfewTimetable: 'CURFEW_TIMETABLE',
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
@@ -48,6 +58,10 @@ const PAGES = {
   licenceUpload: 'LICENCE_ATTACHMENT',
   photoUpload: 'PHOTO_ATTACHMENT',
   havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
+  courtOrderUpload: 'COURT_ORDER_ATTACHMENT',
+  grantOfBailUpload: 'GRANT_OF_BAIL_ATTACHMENT',
+  haveCourtOrder: 'ATTACHMENTS_HAVE_COURT_ORDER',
+  haveGrantOfBail: 'ATTACHMENTS_HAVE_GRANT_OF_BAIL',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -106,28 +120,40 @@ const canBeCompleted = (task: Task, formData: FormData): boolean => {
 
 const isCurrentPage = (task: Task, currentPage: Page): boolean => task.name === currentPage
 
+const isCompletedIDNumbers = (order: Order): boolean => {
+  return [
+    isNotNullOrUndefined(order.deviceWearer.nomisId),
+    isNotNullOrUndefined(order.deviceWearer.pncId),
+    isNotNullOrUndefined(order.deviceWearer.deliusId),
+    isNotNullOrUndefined(order.deviceWearer.prisonNumber),
+    isNotNullOrUndefined(order.deviceWearer.homeOfficeReferenceNumber),
+    isNotNullOrUndefined(order.deviceWearer.complianceAndEnforcementPersonReference),
+    isNotNullOrUndefined(order.deviceWearer.courtCaseReferenceNumber),
+  ].some(Boolean)
+}
+
 const isCompletedAddress = (order: Order, addressType: AddressType): boolean => {
   return order.addresses.find(address => address.addressType === addressType) !== undefined
 }
 
-const doesOrderHaveLicence = (order: Order): boolean => {
-  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.LICENCE) !== undefined
-}
-
-const doesOrderHavePhotoId = (order: Order): boolean => {
-  return order.additionalDocuments.find(doc => doc.fileType === AttachmentType.PHOTO_ID) !== undefined
+const doesOrderHaveDocument = (order: Order, type: AttachmentType) => {
+  return order.additionalDocuments.find(doc => doc.fileType === type) !== undefined
 }
 
 const isTagAtSourcePilotPrison = (order: Order): boolean => {
   if (order.interestedParties?.notifyingOrganisation === 'PRISON') {
     const prisons = FeatureFlags.getInstance().getValue('TAG_AT_SOURCE_PILOT_PRISONS').split(',')
-    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName) !== -1
+    return prisons?.indexOf(order.interestedParties.notifyingOrganisationName ?? '') !== -1
   }
   return false
 }
 
 const isTagAtSourceAvailable = (order: Order): boolean => {
-  return isTagAtSourcePilotPrison(order) || order.monitoringConditions.alcohol === true
+  return (
+    isTagAtSourcePilotPrison(order) ||
+    order.monitoringConditionsAlcohol?.startDate !== undefined ||
+    order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+  )
 }
 
 export default class TaskListService {
@@ -140,8 +166,26 @@ export default class TaskListService {
       section: SECTIONS.variationDetails,
       name: PAGES.variationDetails,
       path: paths.VARIATION.VARIATION_DETAILS,
-      state: order.type === 'VARIATION' ? STATES.required : STATES.disabled,
+      state: isVariationType(order.type) ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
+    })
+
+    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.interestParties,
+        name: PAGES.interestParties,
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
+      })
+    }
+
+    tasks.push({
+      section: SECTIONS.aboutTheDeviceWearer,
+      name: PAGES.identityNumbers,
+      path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
+      state: STATES.optional,
+      completed: isCompletedIDNumbers(order),
     })
 
     tasks.push({
@@ -167,14 +211,6 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
-      name: PAGES.identityNumbers,
-      path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
-      state: STATES.optional,
-      completed: isNotNullOrUndefined(order.deviceWearer.nomisId),
-    })
-
-    tasks.push({
-      section: SECTIONS.aboutTheDeviceWearer,
       name: PAGES.checkAnswersDeviceWearer,
       path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
       state: STATES.hidden,
@@ -196,55 +232,73 @@ export default class TaskListService {
       state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
     })
+    if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.primaryAddress,
+        path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'primary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.required,
+        ),
+        completed: isCompletedAddress(order, 'PRIMARY'),
+      })
+    } else {
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.primaryAddress,
+        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.required,
+        ),
+        completed: isCompletedAddress(order, 'PRIMARY'),
+      })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.primaryAddress,
-      path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.noFixedAbode,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.required,
-      ),
-      completed: isCompletedAddress(order, 'PRIMARY'),
-    })
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.secondaryAddress,
+        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.optional,
+        ),
+        completed: isCompletedAddress(order, 'SECONDARY'),
+      })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.secondaryAddress,
-      path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.noFixedAbode,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.optional,
-      ),
-      completed: isCompletedAddress(order, 'SECONDARY'),
-    })
-
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.tertiaryAddress,
-      path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.noFixedAbode,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.optional,
-      ),
-      completed: isCompletedAddress(order, 'TERTIARY'),
-    })
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.tertiaryAddress,
+        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
+        state: convertBooleanToEnum<State>(
+          order.deviceWearer.noFixedAbode,
+          STATES.cantBeStarted,
+          STATES.notRequired,
+          STATES.optional,
+        ),
+        completed: isCompletedAddress(order, 'TERTIARY'),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.contactInformation,
       name: PAGES.interestParties,
       path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
       state: STATES.required,
-      completed: isNotNullOrUndefined(order.interestedParties),
+      completed:
+        isNotNullOrUndefined(order.interestedParties) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisation) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationName) &&
+        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
     })
 
-    if (order.dataDictionaryVersion === 'DDV5') {
+    if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.probationDeliveryUnit,
@@ -267,13 +321,87 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push({
-      section: SECTIONS.riskInformation,
-      name: PAGES.installationAndRisk,
-      path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
-      state: STATES.required,
-      completed: isNotNullOrUndefined(order.installationAndRisk),
-    })
+    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.offence,
+        path: paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: order.offences.length > 0,
+      })
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.offenceOtherInfo,
+        path: paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.offenceAdditionalDetails),
+      })
+
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.dapo,
+        path: paths.INSTALLATION_AND_RISK.DAPO,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: order.dapoClauses.length > 0,
+      })
+
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.detailsOfInstallation,
+        path: paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.detailsOfInstallation),
+      })
+
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.isMappa,
+        path: paths.INSTALLATION_AND_RISK.IS_MAPPA,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.mappa?.isMappa),
+      })
+
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.mappa,
+        path: paths.INSTALLATION_AND_RISK.MAPPA,
+        state: convertBooleanToEnum<State>(
+          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' && order.mappa?.isMappa === 'YES',
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: isNotNullOrUndefined(order.mappa?.level) && isNotNullOrUndefined(order.mappa?.category),
+      })
+    } else {
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.installationAndRisk,
+        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.installationAndRisk),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.riskInformation,
@@ -286,11 +414,122 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.monitoringConditions,
-      path: paths.MONITORING_CONDITIONS.BASE_URL,
+      path: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE,
       state: STATES.required,
       completed: order.monitoringConditions.isValid,
     })
 
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.curfewConditions,
+      path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew && order.curfewConditions?.startDate === undefined,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.curfewConditions),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.curfewReleaseDate,
+      path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
+    })
+
+    if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
+      tasks.push({
+        section: SECTIONS.electronicMonitoringCondition,
+        name: PAGES.curfewAdditionalDetails,
+        path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
+        state: convertBooleanToEnum<State>(
+          order.monitoringConditions.curfew && isNullOrUndefined(order.curfewConditions?.curfewAdditionalDetails),
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed:
+          isNotNullOrUndefined(order.curfewConditions) &&
+          isNotNullOrUndefined(order.curfewConditions.curfewAdditionalDetails),
+      })
+    }
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.curfewTimetable,
+      path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.curfew &&
+          (order.curfewTimeTable?.length === 0 || order.curfewTimeTable === undefined),
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.curfewTimeTable) && order.curfewTimeTable.length > 0,
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.enforcementZoneMonitoring,
+      path: FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')
+        ? paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM
+        : paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.exclusionZone && order.enforcementZoneConditions?.length === 0,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: order.enforcementZoneConditions.length > 0,
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.trailMonitoring,
+      path: paths.MONITORING_CONDITIONS.TRAIL,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.trail && order.monitoringConditionsTrail?.startDate === undefined,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.monitoringConditionsTrail),
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.attendanceMonitoring,
+      path: paths.MONITORING_CONDITIONS.ATTENDANCE,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.mandatoryAttendance && order.mandatoryAttendanceConditions?.length === 0,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed:
+        isNotNullOrUndefined(order.mandatoryAttendanceConditions) && order.mandatoryAttendanceConditions.length > 0,
+    })
+
+    tasks.push({
+      section: SECTIONS.electronicMonitoringCondition,
+      name: PAGES.alcoholMonitoring,
+      path: paths.MONITORING_CONDITIONS.ALCOHOL,
+      state: convertBooleanToEnum<State>(
+        order.monitoringConditions.alcohol && order.monitoringConditionsAlcohol?.startDate === undefined,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
+    })
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationLocation,
@@ -309,14 +548,14 @@ export default class TaskListService {
       name: PAGES.installationAppointment,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT,
       state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order) &&
-          (order.installationLocation?.location === 'PRISON' ||
-            order.installationLocation?.location === 'PROBATION_OFFICE'),
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE' ||
+          order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE',
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
       ),
-      completed: isNotNullOrUndefined(order.installationAppointment),
+      completed: isNotNullOrUndefined(order.installationAppointment?.appointmentDate),
     })
 
     tasks.push({
@@ -324,123 +563,16 @@ export default class TaskListService {
       name: PAGES.installationAddress,
       path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: convertBooleanToEnum<State>(
-        isTagAtSourceAvailable(order) &&
-          (order.installationLocation?.location === 'PRISON' ||
-            order.installationLocation?.location === 'PROBATION_OFFICE'),
+        order.installationLocation?.location === 'PRISON' ||
+          order.installationLocation?.location === 'PROBATION_OFFICE' ||
+          order.installationLocation?.location === 'INSTALLATION' ||
+          order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE',
+
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
       ),
       completed: isCompletedAddress(order, 'INSTALLATION'),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewReleaseDate,
-      path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewConditions,
-      path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewConditions),
-    })
-
-    if (order.dataDictionaryVersion === 'DDV5') {
-      tasks.push({
-        section: SECTIONS.electronicMonitoringCondition,
-        name: PAGES.curfewAdditionalDetails,
-        path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
-        state: convertBooleanToEnum<State>(
-          order.monitoringConditions.curfew,
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: isNotNullOrUndefined(
-          order.curfewConditions && order.curfewConditions.curfewAdditionalDetails != null,
-        ),
-      })
-    }
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewTimetable,
-      path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewTimeTable) && order.curfewTimeTable.length > 0,
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.enforcementZoneMonitoring,
-      path: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0'),
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.exclusionZone,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: order.enforcementZoneConditions.length > 0,
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.trailMonitoring,
-      path: paths.MONITORING_CONDITIONS.TRAIL,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.trail,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.monitoringConditionsTrail),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.attendanceMonitoring,
-      path: paths.MONITORING_CONDITIONS.ATTENDANCE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.mandatoryAttendance,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed:
-        isNotNullOrUndefined(order.mandatoryAttendanceConditions) && order.mandatoryAttendanceConditions.length > 0,
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.alcoholMonitoring,
-      path: paths.MONITORING_CONDITIONS.ALCOHOL,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.alcohol,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
     })
 
     tasks.push({
@@ -451,13 +583,69 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push({
-      section: SECTIONS.additionalDocuments,
-      name: PAGES.licenceUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
-      state: STATES.required,
-      completed: doesOrderHaveLicence(order),
-    })
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.haveGrantOfBail,
+        path: paths.ATTACHMENT.HAVE_GRANT_OF_BAIL,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveGrantOfBail),
+      })
+
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.grantOfBailUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(
+          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          'grant_of_bail',
+        ),
+        state: convertBooleanToEnum<State>(
+          order.orderParameters?.haveGrantOfBail || null,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed:
+          doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) ||
+          order.orderParameters?.haveGrantOfBail === false,
+      })
+    } else if (
+      isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
+      (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
+    ) {
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.haveCourtOrder,
+        path: paths.ATTACHMENT.HAVE_COURT_ORDER,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
+      })
+
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.courtOrderUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(
+          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          'court_order',
+        ),
+        state: convertBooleanToEnum<State>(
+          order.orderParameters?.haveCourtOrder || null,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed:
+          doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
+      })
+    } else {
+      tasks.push({
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.licenceUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'licence'),
+        state: STATES.required,
+        completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
+      })
+    }
 
     tasks.push({
       section: SECTIONS.additionalDocuments,
@@ -470,14 +658,14 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'photo_Id'),
       state: convertBooleanToEnum<State>(
         order.orderParameters?.havePhoto || null,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
       ),
-      completed: doesOrderHavePhotoId(order) || order.orderParameters?.havePhoto === false,
+      completed: doesOrderHaveDocument(order, AttachmentType.PHOTO_ID) || order.orderParameters?.havePhoto === false,
     })
 
     tasks.push({
@@ -491,28 +679,38 @@ export default class TaskListService {
     return tasks
   }
 
-  getNextPage(currentPage: Page, order: Order, formData: FormData = {}): string {
+  getNextPage(
+    currentPage: Page,
+    order: Order,
+    formData: FormData = {},
+    versionId: string | undefined = undefined,
+  ): string {
     const availableTasks = this.getAvailableTasks(this.getTasks(order), formData, currentPage)
     const availableCurrentSectionTasks = this.getCurrentSectionTasks(availableTasks, currentPage)
     const availableNextSectionTasks = this.getNextSectionTasks(availableTasks, currentPage)
     const currentTaskIndex = this.getCurrentTaskIndex(availableTasks, currentPage)
     const nextCheckYourAnswersPageIndex = this.getNextCheckYourAnswersPageIndex(availableTasks, currentPage)
 
+    let path: string
     // If on a CYA page or the variation details page, and the next section is complete, navigate to the next section's CYA page
     if (
       (currentPage.startsWith(CYA_PREFIX) || currentPage === PAGES.variationDetails) &&
       availableNextSectionTasks.every(task => task.completed)
     ) {
-      return availableTasks[nextCheckYourAnswersPageIndex].path.replace(':orderId', order.id)
+      path = availableTasks[nextCheckYourAnswersPageIndex].path.replace(':orderId', order.id)
+    } else if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
+      // If not on a CYA page or the variation details page, and the current section is complete, navigate to the current section's CYA page
+      path = this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
+    } else {
+      // Otherwise, navigate to the next page in the task list.
+      path = availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
     }
 
-    // If not on a CYA page or the variation details page, and the current section is complete, navigate to the current section's CYA page
-    if (!currentPage.startsWith(CYA_PREFIX) && availableCurrentSectionTasks.every(task => task.completed)) {
-      return this.getCheckYourAnswersPathForSection(availableCurrentSectionTasks).replace(':orderId', order.id)
+    if (versionId) {
+      path = path.replace(`/order/${order.id}/`, `/order/${order.id}/version/${versionId}/`)
     }
 
-    // Otherwise, navigate to the next page in the task list.
-    return availableTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    return path
   }
 
   getCurrentTaskIndex(tasks: Task[], currentPage: Page): number {
@@ -548,7 +746,7 @@ export default class TaskListService {
     return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
   }
 
-  getNextCheckYourAnswersPage(currentPage: Page, order: Order) {
+  getNextCheckYourAnswersPage(currentPage: Page, order: Order, versionId?: string) {
     const tasks = this.getTasks(order)
 
     const checkYourAnswersTasks = tasks.filter(
@@ -557,11 +755,18 @@ export default class TaskListService {
 
     const currentTaskIndex = this.getCurrentTaskIndex(checkYourAnswersTasks, currentPage)
 
+    let path: string
     if (currentTaskIndex === -1 || currentTaskIndex + 1 >= checkYourAnswersTasks.length) {
-      return paths.ORDER.SUMMARY.replace(':orderId', order.id)
+      path = paths.ORDER.SUMMARY.replace(':orderId', order.id)
+    } else {
+      path = checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
     }
 
-    return checkYourAnswersTasks[currentTaskIndex + 1].path.replace(':orderId', order.id)
+    if (versionId) {
+      path = path.replace(`/order/${order.id}/`, `/order/${order.id}/version/${versionId}/`)
+    }
+
+    return path
   }
 
   getNextCheckYourAnswersPageIndex(tasks: Task[], currentPage: Page): number {
@@ -575,42 +780,69 @@ export default class TaskListService {
     return tasks.filter(task => task.section === section)
   }
 
-  isSectionComplete(tasks: Task[]): boolean {
-    return tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+  isSectionComplete(tasks: Task[], order: Order, section: Section): boolean {
+    const tasksCompleted = tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+    if (section === SECTIONS.electronicMonitoringCondition) {
+      const anyConditionCompleted =
+        order.monitoringConditionsAlcohol?.startDate !== undefined ||
+        order.curfewConditions?.startDate !== undefined ||
+        order.monitoringConditionsTrail?.startDate !== undefined ||
+        order.enforcementZoneConditions?.length !== 0 ||
+        order.mandatoryAttendanceConditions?.length !== 0
+      return tasksCompleted && anyConditionCompleted
+    }
+    return tasksCompleted
   }
 
   incompleteTask(task: Task): boolean {
     return !task.completed || task.name.startsWith(CYA_PREFIX)
   }
 
-  isSectionReady(section: Section, tasks: Task[]): boolean {
+  isSectionReady(section: Section, tasks: Task[], order: Order): boolean {
     if (section === SECTIONS.electronicMonitoringCondition) {
       const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
       const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-      return this.isSectionComplete(contactInformationTasks) && this.isSectionComplete(deviceWearerTasks)
+      return (
+        this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
+        this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
+      )
     }
     return true
   }
 
-  async getSections(order: Order): Promise<SectionBlock[]> {
+  async getSections(order: Order, versionId?: string): Promise<SectionBlock[]> {
     const tasks = this.getTasks(order)
     const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
 
     return Object.values(SECTIONS)
-      .filter(section => section !== SECTIONS.variationDetails || order.type === 'VARIATION')
+      .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
+      .filter(
+        section =>
+          section !== SECTIONS.interestParties || FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
+      )
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
-        const completed = this.isSectionComplete(sectionsTasks)
-        let { path } = sectionsTasks[0]
+        const completed = this.isSectionComplete(sectionsTasks, order, section)
+        let path: string
         if (order.status === 'SUBMITTED' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
+        } else {
+          const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task, {}))
+          path = (firstAvailableTask || sectionsTasks[0]).path
         }
+
+        path = path.replace(':orderId', order.id)
+
+        if (versionId) {
+          path = path.replace(`order/${order.id}`, `order/${order.id}/version/${versionId}`)
+        }
+
         return {
           name: section,
           completed,
           checked: checkList[section],
-          path: path.replace(':orderId', order.id),
-          isReady: this.isSectionReady(section, tasks),
+          path,
+          isReady: this.isSectionReady(section, tasks, order),
         }
       })
   }
@@ -623,4 +855,4 @@ export default class TaskListService {
   }
 }
 
-export { Page }
+export { Page, PAGES }

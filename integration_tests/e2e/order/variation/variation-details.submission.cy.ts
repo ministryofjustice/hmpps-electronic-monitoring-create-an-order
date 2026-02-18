@@ -14,7 +14,7 @@ const sampleFormData = {
 
 context('Variation', () => {
   context('Variation Details', () => {
-    context('Submitting valid data', () => {
+    context('Submitting valid data ddv4', () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -23,6 +23,7 @@ context('Variation', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          type: 'VARIATION',
           order: { dataDictionaryVersion: 'DDV4' },
         })
         cy.task('stubCemoSubmitOrder', {
@@ -69,6 +70,57 @@ context('Variation', () => {
 
         page.form.fillInWith(sampleFormData)
         page.form.saveAndReturnButton.click()
+
+        Page.verifyOnPage(OrderSummaryPage)
+      })
+    })
+
+    context('Submitting valid data ddv5', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          type: 'VARIATION',
+          order: { dataDictionaryVersion: 'DDV5' },
+        })
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: {
+            variationType: 'CHANGE_TO_DEVICE_TYPE',
+            variationDate: '2024-01-01T00:00:00.000Z',
+            variationDetails: 'Change to device type',
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('should submit "Change to device type" variation correctly', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          variationDate: new Date(2024, 0, 1),
+          variationType: 'Change of device type (fitted/non fitted)',
+          variationDetails: 'Change to device type',
+        })
+
+        page.form.saveAndReturnButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            variationType: 'CHANGE_TO_DEVICE_TYPE',
+            variationDate: '2024-01-01T00:00:00.000Z',
+            variationDetails: 'Change to device type',
+          },
+        }).should('be.true')
 
         Page.verifyOnPage(OrderSummaryPage)
       })

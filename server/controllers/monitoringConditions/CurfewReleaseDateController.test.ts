@@ -91,9 +91,6 @@ describe('CurfewReleaseDateController', () => {
       const mockFormData = {
         action: 'continue',
         curfewAddress: 'PRIMARY',
-        releaseDateDay: '11',
-        releaseDateMonth: '09',
-        releaseDateYear: '2025',
         curfewTimesStartHours: '',
         curfewTimesStartMinutes: '',
         curfewTimesEndHours: '23',
@@ -107,13 +104,6 @@ describe('CurfewReleaseDateController', () => {
           value: 'PRIMARY',
           error: {
             text: 'mockError',
-          },
-        },
-        releaseDate: {
-          value: {
-            year: '2025',
-            month: '09',
-            day: '11',
           },
         },
         curfewEndTime: {
@@ -154,9 +144,9 @@ describe('CurfewReleaseDateController', () => {
       const mockReleaseDateCondition = {
         curfewAddress: 'SECONDARY',
         orderId: mockId,
-        releaseDate: '2025-02-15',
         startTime: '19:00:00',
         endTime: '22:00:00',
+        releaseDate: null,
       }
       req.order = getMockOrder({
         id: mockId,
@@ -194,15 +184,6 @@ describe('CurfewReleaseDateController', () => {
         curfewAddress: {
           value: 'SECONDARY',
         },
-        releaseDate: {
-          value: {
-            hours: '00',
-            minutes: '00',
-            year: '2025',
-            month: '02',
-            day: '15',
-          },
-        },
         curfewEndTime: {
           value: {
             hours: '22',
@@ -228,9 +209,6 @@ describe('CurfewReleaseDateController', () => {
       req.body = {
         action: 'continue',
         curfewAddress: 'PRIMARY',
-        releaseDateDay: '11',
-        releaseDateMonth: '09',
-        releaseDateYear: '2025',
         curfewTimesStartHours: '',
         curfewTimesStartMinutes: '',
         curfewTimesEndHours: '23',
@@ -259,9 +237,6 @@ describe('CurfewReleaseDateController', () => {
       req.body = {
         action: 'continue',
         address: 'PRIMARY',
-        releaseDateDay: '11',
-        releaseDateMonth: '09',
-        releaseDateYear: '2025',
         curfewTimesStartHours: '19',
         curfewTimesStartMinutes: '00',
         curfewTimesEndHours: '23',
@@ -284,9 +259,6 @@ describe('CurfewReleaseDateController', () => {
       req.body = {
         action: 'back',
         address: 'PRIMARY',
-        releaseDateDay: '11',
-        releaseDateMonth: '09',
-        releaseDateYear: '2025',
         curfewTimesStartHours: '19',
         curfewTimesStartMinutes: '00',
         curfewTimesEndHours: '23',

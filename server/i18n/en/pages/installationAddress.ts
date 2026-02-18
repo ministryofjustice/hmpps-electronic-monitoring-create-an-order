@@ -1,23 +1,23 @@
 import AddressPageContent from '../../../types/i18n/pages/address'
 
 const installationAddressPageContent: AddressPageContent = {
-  helpText: '',
+  helpText: 'For installation at source this is the address of the prison or probation office.',
   legend: '',
   questions: {
     hasAnotherAddress: {
       text: '',
       hint: '',
     },
-    line1: {
+    addressLine1: {
       text: 'Address line 1',
     },
-    line2: {
+    addressLine2: {
       text: 'Address line 2 (optional)',
     },
-    line3: {
+    addressLine3: {
       text: 'Town or city',
     },
-    line4: {
+    addressLine4: {
       text: 'County (optional)',
     },
     postcode: {

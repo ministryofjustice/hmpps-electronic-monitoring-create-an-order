@@ -31,6 +31,7 @@ context('Monitoring conditions', () => {
               hdc: 'NO',
               prarr: 'UNKNOWN',
               pilot: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+              offenceType: '',
             },
             installationLocation: { location: 'PRISON' },
           },

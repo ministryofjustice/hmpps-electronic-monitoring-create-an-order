@@ -5,6 +5,7 @@ import paths from '../../constants/paths'
 import { validationErrors } from '../../constants/validationErrors'
 import { IsRejectionFromDataModel } from './models'
 import IsRejectionService from './service'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class IsRejectionController {
   constructor(private readonly service: IsRejectionService) {}
@@ -38,6 +39,11 @@ export default class IsRejectionController {
             accessToken: res.locals.user.token,
           })
         } else {
+          if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
+            res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
+            return
+          }
+
           await this.service.createVariationFromExisting({
             orderId,
             accessToken: res.locals.user.token,

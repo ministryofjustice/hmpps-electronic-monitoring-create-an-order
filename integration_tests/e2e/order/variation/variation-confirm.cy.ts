@@ -2,10 +2,41 @@ import Page from '../../../pages/page'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import OrderTasksPage from '../../../pages/order/summary'
 import IsRejectionPage from '../edit-order/is-rejection/isRejectionPage'
+import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
+const variationPath = '/copy-as-variation'
 
+const stubVariationOrder = (fmsResultDate: Date, startDate: Date) => {
+  cy.task('stubCemoGetOrder', {
+    httpStatus: 200,
+    id: mockOriginalId,
+    status: 'IN_PROGRESS',
+    type: 'VARIATION',
+    order: {
+      monitoringConditions: {
+        startDate,
+        endDate: '2025-02-01T00:00:00Z',
+        orderType: 'CIVIL',
+        curfew: true,
+        exclusionZone: true,
+        trail: true,
+        mandatoryAttendance: true,
+        alcohol: true,
+        conditionType: 'BAIL_ORDER',
+        orderTypeDescription: '',
+        sentenceType: 'IPP',
+        issp: 'YES',
+        hdc: 'NO',
+        prarr: 'UNKNOWN',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+        offenceType: '',
+      },
+      fmsResultDate,
+    },
+  })
+}
 context('Variation', () => {
   context('Creating a variation from an existing order', () => {
     context('Confirm Variation page', () => {
@@ -24,6 +55,13 @@ context('Variation', () => {
           httpStatus: 200,
           originalId: mockOriginalId,
           variationId: mockVariationId,
+        })
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          method: 'POST',
+          id: mockOriginalId,
+          subPath: variationPath,
+          response: [{}],
         })
         cy.signIn()
       })
@@ -46,21 +84,112 @@ context('Variation', () => {
         Page.verifyOnPage(OrderTasksPage)
       })
 
-      it('should have a button to confirm and proceed to the new form task list', () => {
+      it('should have a button to confirm and proceed to the is rejection page', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
-        cy.task('stubCemoGetOrder', {
-          httpStatus: 200,
-          id: mockVariationId,
-          status: 'IN_PROGRESS',
-          type: 'VARIATION',
-        })
+        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 32 days before today
+        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 33 days before today
+        stubVariationOrder(fmsResultDate, startDate)
 
         page.confirmButton().should('exist')
 
         page.confirmButton().click()
 
         Page.verifyOnPage(IsRejectionPage)
+      })
+
+      it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
+        cy.visit(`/order/${mockOriginalId}/edit`)
+        const page = Page.verifyOnPage(ConfirmVariationPage)
+
+        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
+        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
+        stubVariationOrder(fmsResultDate, startDate)
+
+        page.confirmButton().should('exist')
+
+        page.confirmButton().click()
+
+        Page.verifyOnPage(OrderTasksPage)
+      })
+
+      it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
+        cy.visit(`/order/${mockOriginalId}/edit`)
+        const page = Page.verifyOnPage(ConfirmVariationPage)
+
+        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).setHours(0, 0, 0, 0)) // 14 days before today
+        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
+        stubVariationOrder(fmsResultDate, startDate)
+        page.confirmButton().should('exist')
+
+        page.confirmButton().click()
+
+        Page.verifyOnPage(IsRejectionPage)
+      })
+
+      it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
+        cy.visit(`/order/${mockOriginalId}/edit`)
+        const page = Page.verifyOnPage(ConfirmVariationPage)
+
+        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 33).setHours(0, 0, 0, 0)) // 33 days before today
+        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
+        stubVariationOrder(fmsResultDate, startDate)
+        page.confirmButton().should('exist')
+
+        page.confirmButton().click()
+
+        Page.verifyOnPage(OrderTasksPage)
+      })
+
+      it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
+        cy.visit(`/order/${mockOriginalId}/edit`)
+        const page = Page.verifyOnPage(ConfirmVariationPage)
+        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).setHours(0, 0, 0, 0)) // 16 days before today
+        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
+        stubVariationOrder(fmsResultDate, startDate)
+        page.confirmButton().should('exist')
+
+        page.confirmButton().click()
+
+        Page.verifyOnPage(IsRejectionPage)
+      })
+
+      context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
+        const testFlags = { SERVICE_REQUEST_TYPE_ENABLED: true }
+        beforeEach(() => {
+          cy.task('setFeatureFlags', testFlags)
+        })
+        afterEach(() => {
+          cy.task('resetFeatureFlags')
+        })
+        it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
+          cy.visit(`/order/${mockOriginalId}/edit`)
+          const page = Page.verifyOnPage(ConfirmVariationPage)
+
+          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
+          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
+          stubVariationOrder(fmsResultDate, startDate)
+
+          page.confirmButton().should('exist')
+
+          page.confirmButton().click()
+
+          Page.verifyOnPage(ServiceRequestTypePage)
+        })
+
+        it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
+          cy.visit(`/order/${mockOriginalId}/edit`)
+          const page = Page.verifyOnPage(ConfirmVariationPage)
+
+          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 33).setHours(0, 0, 0, 0)) // 33 days before today
+          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
+          stubVariationOrder(fmsResultDate, startDate)
+          page.confirmButton().should('exist')
+
+          page.confirmButton().click()
+
+          Page.verifyOnPage(ServiceRequestTypePage)
+        })
       })
     })
   })

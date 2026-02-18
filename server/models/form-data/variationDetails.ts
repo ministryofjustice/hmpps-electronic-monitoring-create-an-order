@@ -10,18 +10,24 @@ const VariationDetailsFormDataParser = FormDataModel.extend({
   }),
   variationType: z.string().default(''),
   variationDetails: z.string().default(''),
+  orderType: z.string().optional(),
 })
-
-const VariationDetailsFormDataValidator = z.object({
-  // This might need error messages passing
-  variationDate: DateInputModel(validationErrors.variationDetails.variationDate),
-  variationType: z.string().min(1, validationErrors.variationDetails.variationTypeRequired),
-  variationDetails: z
-    .string()
-    .min(1, validationErrors.variationDetails.variationDetailsRequired)
-    .max(200, validationErrors.variationDetails.variationDetailsTooLong),
-})
+const validateVariationDetailsFormData = (formData: VariationDetailsFormData) => {
+  const { orderType } = formData
+  return z
+    .object({
+      variationDate: DateInputModel(validationErrors.variationDetails.variationDate),
+      variationType: z.string().refine(val => val.length > 1 || orderType !== 'VARIATION', {
+        message: validationErrors.variationDetails.variationTypeRequired,
+      }),
+      variationDetails: z
+        .string()
+        .min(1, validationErrors.variationDetails.variationDetailsRequired)
+        .max(200, validationErrors.variationDetails.variationDetailsTooLong),
+    })
+    .parse(formData)
+}
 
 type VariationDetailsFormData = Omit<z.infer<typeof VariationDetailsFormDataParser>, 'action'>
 
-export { VariationDetailsFormData, VariationDetailsFormDataParser, VariationDetailsFormDataValidator }
+export { VariationDetailsFormData, VariationDetailsFormDataParser, validateVariationDetailsFormData }

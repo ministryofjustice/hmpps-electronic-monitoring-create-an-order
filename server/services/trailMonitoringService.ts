@@ -6,10 +6,12 @@ import TrailMonitoringModel, { TrailMonitoring } from '../models/TrailMonitoring
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
+import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
 
 type TrailMonitoringInput = AuthenticatedRequestInput & {
   orderId: string
   data: TrailMonitoringFormData
+  notifyingOrganisation: NotifyingOrganisation | null
 }
 
 export default class TrailMonitoringService {
@@ -17,7 +19,7 @@ export default class TrailMonitoringService {
 
   async update(input: TrailMonitoringInput): Promise<TrailMonitoring | ValidationResult> {
     try {
-      const requestBody = TrailMonitoringFormDataValidator.parse(input.data)
+      const requestBody = TrailMonitoringFormDataValidator(input.notifyingOrganisation).parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-trail`,
         data: requestBody,

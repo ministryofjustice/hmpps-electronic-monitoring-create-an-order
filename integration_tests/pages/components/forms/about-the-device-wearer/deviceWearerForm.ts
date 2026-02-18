@@ -2,7 +2,7 @@ import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
 import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
-import FormSelectComponent from '../../formSelectComponent'
+import FormAutocompleteComponent from '../../formAutocompleteComponent'
 
 export type AboutDeviceWearerFormData = {
   firstNames?: string
@@ -80,7 +80,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   // Disabilities
 
   get disabilityField(): FormRadiosComponent {
-    const label = 'Does the device wearer have any of the disabilities or health conditions listed? (optional)'
+    const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
     return new FormRadiosComponent(this.form, label, [
       'Visual impairment or blindness not corrected by wearing glasses',
       'Deafness or serious hearing impairment',
@@ -97,7 +97,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   get disabilityFieldDDv5(): FormRadiosComponent {
-    const label = 'Does the device wearer have any of the disabilities or health conditions listed? (optional)'
+    const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
     return new FormRadiosComponent(this.form, label, [
       'Visual impairment or blindness not corrected by wearing glasses',
       'Deafness or serious hearing impairment',
@@ -110,6 +110,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
       'Health condition affecting stamina, breathing or causing fatigue',
       'Conditions affecting social skills and behaviour',
       'The device wearer has a disability or health condition not listed',
+      'The device wearer does not have any of the disabilities or health conditions listed',
       'Not able to provide this information',
     ])
   }
@@ -126,8 +127,8 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
-  get languageField(): FormSelectComponent {
-    return new FormSelectComponent(this.form, 'What language does the interpreter need to use? (optional)', [
+  get languageField(): FormAutocompleteComponent {
+    return new FormAutocompleteComponent(this.form, 'What language does the interpreter need to use?', [
       'British Sign',
       'Lipspeak (English)',
       'Palantypists',
@@ -309,7 +310,6 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
     this.sexField.shouldBeDisabled()
     this.genderIdentityField.shouldBeDisabled()
     this.interpreterRequiredField.shouldBeDisabled()
-    this.languageField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {

@@ -1,3 +1,4 @@
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import { createSortedGovukErrorSummary } from '../../utils/errors'
 import { getError } from '../../utils/utils'
 import { InterestedPartiesFormData } from '../form-data/interestedParties'
@@ -16,6 +17,10 @@ const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) =
     return formData.responsibleOrgProbationRegion
   }
 
+  if (formData.responsibleOrganisation === 'POLICE') {
+    return formData.policeArea
+  }
+
   if (formData.responsibleOrganisation === 'YJS') {
     return formData.yjsRegion
   }
@@ -30,7 +35,6 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
     MAGISTRATES_COURT: formData.magistratesCourt,
     MILITARY_COURT: formData.militaryCourt,
     PRISON: formData.prison,
-    PROBATION: formData.notifyingOrgProbationRegion,
     YOUTH_COURT: formData.youthCourt,
     YOUTH_CUSTODY_SERVICE: formData.youthCustodyServiceRegion,
   }
@@ -92,7 +96,7 @@ const constructFromFormData = (
       error: getError(validationErrors, fieldNames.responsibleOrganisationEmail),
     },
     errorSummary: createSortedGovukErrorSummary(validationErrors, Object.values(fieldNames)),
-    DDv5: order.dataDictionaryVersion === 'DDV5',
+    DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 
@@ -124,7 +128,7 @@ const constructFromEntity = (order: Order): InterestedPartiesViewModel => {
       value: interestedParties?.responsibleOrganisationEmail ?? '',
     },
     errorSummary: null,
-    DDv5: order.dataDictionaryVersion === 'DDV5',
+    DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 

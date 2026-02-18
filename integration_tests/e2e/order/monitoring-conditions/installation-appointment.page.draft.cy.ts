@@ -9,7 +9,9 @@ const mockDefaultOrder = {
     pncId: 'pnc',
     deliusId: 'delius',
     prisonNumber: 'prison',
-    homeOfficeReferenceNumber: 'ho',
+    homeOfficeReferenceNumber: '',
+    complianceAndEnforcementPersonReference: 'cepr',
+    courtCaseReferenceNumber: 'ccrn',
     firstName: 'test',
     lastName: 'tester',
     alias: 'tes',
@@ -37,6 +39,7 @@ const mockDefaultOrder = {
     issp: 'YES',
     hdc: 'NO',
     prarr: 'UNKNOWN',
+    offenceType: '',
   },
 }
 const stubGetOrder = order => {

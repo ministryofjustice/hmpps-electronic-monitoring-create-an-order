@@ -6,6 +6,7 @@ import TrailMonitoringService from '../../services/trailMonitoringService'
 import trailMonitoringViewModel from '../../models/view-models/trailMonitoring'
 import { TrailMonitoringFormDataModel } from '../../models/form-data/trailMonitoring'
 import TaskListService from '../../services/taskListService'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class TrailMonitoringController {
   constructor(
@@ -15,10 +16,11 @@ export default class TrailMonitoringController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
-    const { monitoringConditionsTrail, monitoringConditions } = req.order!
+    const { monitoringConditionsTrail, interestedParties } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation || undefined
+
     const viewModel = trailMonitoringViewModel.construct(
       monitoringConditionsTrail ?? {
         startDate: null,
@@ -26,23 +28,23 @@ export default class TrailMonitoringController {
       },
       errors as never,
       formData as never,
+      notifyingOrganisation,
     )
 
-    if (!monitoringConditions.trail) {
-      res.redirect(paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', orderId))
-    } else {
-      res.render(`pages/order/monitoring-conditions/trail-monitoring`, viewModel)
-    }
+    res.render(`pages/order/monitoring-conditions/trail-monitoring`, viewModel)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = TrailMonitoringFormDataModel.parse(req.body)
+    const { interestedParties } = req.order!
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation ?? null
 
     const updateMonitoringConditionsResult = await this.trailMonitoringService.update({
       accessToken: res.locals.user.token,
       orderId,
       data: formData,
+      notifyingOrganisation,
     })
 
     if (isValidationResult(updateMonitoringConditionsResult)) {
@@ -51,7 +53,13 @@ export default class TrailMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      res.redirect(this.taskListService.getNextPage('TRAIL_MONITORING', req.order!))
+      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        res.redirect(
+          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+        )
+      } else {
+        res.redirect(this.taskListService.getNextPage('TRAIL_MONITORING', req.order!))
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

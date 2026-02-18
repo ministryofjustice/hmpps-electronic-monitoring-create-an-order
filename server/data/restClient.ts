@@ -84,6 +84,29 @@ export default class RestClient {
     }
   }
 
+  async getRawResponse({ path, query = {}, headers = {}, responseType = '', token }: Request): Promise<string> {
+    logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
+    try {
+      const result = await superagent
+        .get(`${this.apiUrl()}${path}`)
+        .query(query)
+        .agent(this.agent)
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .auth(token, { type: 'bearer' })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+      return result.text
+    } catch (error) {
+      const sanitisedError = sanitiseError(error as UnsanitisedError)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+      throw sanitisedError
+    }
+  }
+
   private async requestWithBody<Response = unknown>(
     method: 'patch' | 'post' | 'put',
     {

@@ -57,6 +57,14 @@ export default class FormDateComponent {
     this.year.should('have.value', `${value.getFullYear()}`)
   }
 
+  shouldExist(): void {
+    this.element.should('exist')
+  }
+
+  shouldNotExist(): void {
+    this.element.should('not.exist')
+  }
+
   shouldBeDisabled(): void {
     this.day.should('be.disabled')
     this.month.should('be.disabled')

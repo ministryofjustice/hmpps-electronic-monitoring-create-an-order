@@ -12,48 +12,7 @@
 {% set questions = content.pages.curfewReleaseDate.questions %}
 {% block formInputs %}
 
-  {% set disabled = {} if isOrderEditable else { disabled:true } %}
-
-  {{ govukDateInput({
-    id: "releaseDate",
-    fieldset: {
-      legend: {
-        text: questions.releaseDate.text,
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: questions.releaseDate.hint
-    },
-    items: [
-      {
-        name: "releaseDateDay",
-        classes: "govuk-input--width-2",
-        label: "Day",
-        id: "releaseDate-day",
-        value: releaseDate.value.day,
-        attributes: disabled
-      },
-      {
-        name: "releaseDateMonth",
-        classes: "govuk-input--width-2",
-          label: "Month",
-          id: "releaseDate-month",
-        value: releaseDate.value.month,
-        attributes: disabled
-      },
-      {
-        name: "releaseDateYear",
-        classes: "govuk-input--width-4",
-        label: "Year",
-        id: "releaseDate-year",
-        value: releaseDate.value.year,
-        attributes: disabled
-      }
-    ],
-    errorMessage: releaseDate.error
-  }) }}
+{% set disabled = {} if isOrderEditable else { disabled:true } %}
 
 {{ timeInput({
       label: questions.startTime.text,
@@ -80,7 +39,7 @@
       fieldset: {
         legend: {
           text: questions.address.text,
-          isPageHeading: true,
+          isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }
       },

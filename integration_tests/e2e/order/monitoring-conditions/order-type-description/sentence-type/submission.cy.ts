@@ -3,7 +3,9 @@ import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from './SentenceTypePage'
 import HdcPage from '../hdc/hdcPage'
-import CheckYourAnswersPage from '../check-your-answers/CheckYourAnswersPage'
+import PilotPage from '../pilot/PilotPage'
+import PrarrPage from '../prarr/PrarrPage'
+import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -16,8 +18,8 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
         notifyingOrganisationEmail: '',
         responsibleOfficerName: '',
         responsibleOfficerPhoneNumber: '',
-        responsibleOrganisation: 'HOME_OFFICE',
-        responsibleOrganisationRegion: '',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
         responsibleOrganisationEmail: '',
       },
     },
@@ -32,6 +34,13 @@ context('sentenceType form submission', () => {
     stubGetOrder()
 
     cy.signIn()
+
+    const testFlags = {
+      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
+      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
+    }
+
+    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form and display the correct answers for a Post Release journey', () => {
@@ -47,16 +56,17 @@ context('sentenceType form submission', () => {
     hdcPage.form.fillInWith('Yes')
     hdcPage.form.continueButton.click()
 
-    const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
-    cyaPage.orderInformationSection.shouldExist()
-    cyaPage.orderInformationSection.shouldHaveItems([
-      { key: 'What is the order type?', value: 'Post Release' },
-      { key: 'What type of sentence has the device wearer been given?', value: 'Standard Determinate Sentence' },
-      { key: 'Is the device wearer on a Home Detention Curfew (HDC)?', value: 'Yes' },
-    ])
+    const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
+    pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    pilotPage.form.continueButton.click()
+
+    const prarrPage = Page.verifyOnPage(PrarrPage, { order: mockOrderId })
+    prarrPage.form.fillInWith('Yes')
+    prarrPage.form.continueButton.click()
   })
 
-  it('Should submit the form and display the correct answers for a Community journey', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Should submit the form and display the correct answers for a Community journey', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
     orderTypePage.form.fillInWith('Community')
     orderTypePage.form.continueButton.click()
@@ -65,11 +75,6 @@ context('sentenceType form submission', () => {
     sentenceTypePage.form.fillInWith('Supervision Default Order')
     sentenceTypePage.form.continueButton.click()
 
-    // TODO: Update this journey when the Monitoring Dates page is built
-    const cyaPage = Page.verifyOnPage(CheckYourAnswersPage, 'Check your answers')
-    cyaPage.orderInformationSection.shouldHaveItems([
-      { key: 'What is the order type?', value: 'Community' },
-      { key: 'What type of sentence has the device wearer been given?', value: 'Supervision Default Order' },
-    ])
+    Page.verifyOnPage(MonitoringTypePage)
   })
 })

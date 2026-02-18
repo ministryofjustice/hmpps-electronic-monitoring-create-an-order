@@ -20,6 +20,8 @@ const mockOrder = getMockOrder({
     deliusId: null,
     prisonNumber: null,
     homeOfficeReferenceNumber: null,
+    complianceAndEnforcementPersonReference: null,
+    courtCaseReferenceNumber: null,
     firstName: 'tester',
     lastName: 'testington',
     alias: 'test',
@@ -291,7 +293,9 @@ describe('DeviceWearerController', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
+          homeOfficeReferenceNumber: '',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
           firstName: 'new',
           lastName: 'name',
           alias: 'new',
@@ -317,6 +321,8 @@ describe('DeviceWearerController', () => {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'tester',
         lastName: 'testington',
         alias: 'test',
@@ -352,7 +358,9 @@ describe('DeviceWearerController', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
+          homeOfficeReferenceNumber: '',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
           firstName: 'new',
           lastName: 'name',
           alias: 'new',
@@ -378,6 +386,8 @@ describe('DeviceWearerController', () => {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'tester',
         lastName: 'testington',
         alias: 'test',
@@ -412,7 +422,9 @@ describe('DeviceWearerController', () => {
           nomisId: 'nomis',
           pncId: 'pnc',
           deliusId: 'delius',
-          homeOfficeReferenceNumber: 'homeoffice',
+          homeOfficeReferenceNumber: '',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
           prisonNumber: 'prison',
           firstName: 'new',
           lastName: 'name',
@@ -442,6 +454,8 @@ describe('DeviceWearerController', () => {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'tester',
         lastName: 'testington',
         alias: 'test',
@@ -500,93 +514,144 @@ describe('DeviceWearerController', () => {
   })
 
   describe('updateIdentityNumbers', () => {
-    it('should save and redirect to the device wearer check your answers page', async () => {
+    it('should display the form with errors if no identity numbers are selected', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
         order,
         body: {
           action: 'continue',
-          nomisId: 'nomis',
-          pncId: 'pnc',
-          deliusId: 'delius',
-          prisonNumber: 'prison',
-          homeOfficeReferenceNumber: 'homeoffice',
-          firstName: 'new',
-          lastName: 'name',
-          alias: 'new',
-          dateOfBirth: {
-            day: '02',
-            month: '03',
-            year: '1990',
-          },
-          adultAtTimeOfInstallation: 'true',
-          sex: 'FEMALE',
-          gender: 'FEMALE',
-          disabilities: ['VISION', 'MOBILITY'],
-          interpreterRequired: 'true',
-          language: 'British Sign',
         },
         flash: jest.fn(),
       })
       const res = createMockResponse()
       const next = jest.fn()
-      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
-        nomisId: 'nomis',
-        pncId: 'pnc',
-        deliusId: 'delius',
-        prisonNumber: 'prison',
-        homeOfficeReferenceNumber: 'homeoffice',
-        firstName: 'tester',
-        lastName: 'testington',
-        alias: 'test',
-        dateOfBirth: '1980-01-01T00:00:00.000Z',
-        adultAtTimeOfInstallation: true,
-        sex: 'MALE',
-        gender: 'MALE',
-        disabilities: ['VISION', 'MOBILITY'],
-        noFixedAbode: null,
-        interpreterRequired: true,
-        language: 'British Sign',
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue([
+        {
+          field: 'identityNumbers.noSelection',
+          error: 'Select all identity numbers that you have for the device wearer',
+        },
+      ])
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(req.flash).toHaveBeenCalledWith('formData', {
+        identityNumbers: [],
       })
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        {
+          field: 'identityNumbers.noSelection',
+          error: 'Select all identity numbers that you have for the device wearer',
+        },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
+    })
+
+    it('should display the form with errors if a checkbox is selected but the input is empty', async () => {
+      // Given
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['NOMIS'],
+          nomisId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue([
+        { field: 'nomisId', error: 'Enter the NOMIS ID' },
+      ])
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(req.flash).toHaveBeenCalledWith('formData', {
+        identityNumbers: ['NOMIS'],
+        nomisId: '',
+      })
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [{ field: 'nomisId', error: 'Enter the NOMIS ID' }])
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
+    })
+
+    it('should save valid data and redirect to the personal information page', async () => {
+      // Given
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: [
+            'NOMIS',
+            'PRISON_NUMBER',
+            'HOME_OFFICE',
+            'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
+            'COURT_CASE_REFERENCE_NUMBER',
+          ],
+          nomisId: 'nomis',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
+          complianceAndEnforcementPersonReference: 'compliance-ref-123',
+          courtCaseReferenceNumber: 'court-ref-456',
+          pncId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        nomisId: 'nomis',
+        prisonNumber: 'prison',
+        homeOfficeReferenceNumber: '',
+        complianceAndEnforcementPersonReference: 'compliance-ref-123',
+        courtCaseReferenceNumber: 'court-ref-456',
+        pncId: null,
+      })
+
       taskListService.getNextPage = jest
         .fn()
-        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/check-your-answers`)
+        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/device-wearer`)
 
       // When
       await deviceWearerController.updateIdentityNumbers(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/check-your-answers`)
+
+      expect(mockDeviceWearerService.updateIdentityNumbers).toHaveBeenCalledWith(
+        expect.objectContaining({
+          orderId: order.id,
+          data: expect.objectContaining({
+            nomisId: 'nomis',
+            prisonNumber: 'prison',
+            complianceAndEnforcementPersonReference: 'compliance-ref-123',
+            courtCaseReferenceNumber: 'court-ref-456',
+            pncId: '',
+          }),
+        }),
+      )
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/device-wearer`)
     })
 
-    it('should save and redirect to the order summary page if the user chooses', async () => {
+    it('should save and redirect to the order summary page if the user chooses back', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
         order,
         body: {
           action: 'back',
+          identityNumbers: ['NOMIS'],
           nomisId: 'nomis',
-          pncId: 'pnc',
-          deliusId: 'delius',
-          homeOfficeReferenceNumber: 'homeoffice',
-          prisonNumber: 'prison',
-          firstName: 'new',
-          lastName: 'name',
-          alias: 'new',
-          dateOfBirth: {
-            day: '02',
-            month: '03',
-            year: '1990',
-          },
-          adultAtTimeOfInstallation: 'true',
-          sex: 'FEMALE',
-          gender: 'FEMALE',
-          disabilities: ['VISION', 'MOBILITY'],
-          interpreterRequired: 'true',
-          language: 'British Sign',
         },
         params: {
           orderId: order.id,
@@ -595,24 +660,6 @@ describe('DeviceWearerController', () => {
       })
       const res = createMockResponse()
       const next = jest.fn()
-      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
-        nomisId: 'nomis',
-        pncId: 'pnc',
-        deliusId: 'delius',
-        homeOfficeReferenceNumber: 'homeoffice',
-        prisonNumber: 'prison',
-        firstName: 'tester',
-        lastName: 'testington',
-        alias: 'test',
-        dateOfBirth: '1980-01-01T00:00:00.000Z',
-        adultAtTimeOfInstallation: true,
-        sex: 'MALE',
-        gender: 'MALE',
-        disabilities: ['VISION', 'MOBILITY'],
-        noFixedAbode: null,
-        interpreterRequired: true,
-        language: 'British Sign',
-      })
 
       // When
       await deviceWearerController.updateIdentityNumbers(req, res, next)

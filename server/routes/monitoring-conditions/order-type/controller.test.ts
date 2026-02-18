@@ -10,6 +10,8 @@ import { InterestedParties } from '../../../models/InterestedParties'
 import { OrderTypeModel } from './viewModel'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 import paths from '../../../constants/paths'
+import RestClient from '../../../data/restClient'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 
 jest.mock('../monitoringConditionsStoreService')
 
@@ -34,6 +36,8 @@ describe('order type controller', () => {
   let req: Request
   let res: Response
   let next: NextFunction
+  let mockRestClient: jest.Mocked<RestClient>
+  let mockService: jest.Mocked<MonitoringConditionsUpdateService>
 
   beforeEach(() => {
     mockDataStore = new InMemoryStore()
@@ -44,7 +48,15 @@ describe('order type controller', () => {
 
     mockOrder = getMockOrder()
     mockOrder.interestedParties = createInterestedParties()
-
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+    mockService = new MonitoringConditionsUpdateService(
+      mockRestClient,
+    ) as jest.Mocked<MonitoringConditionsUpdateService>
+    mockService.updateMonitoringConditions = jest.fn()
     req = createMockRequest()
     req.order = mockOrder
     req.flash = jest.fn()
@@ -53,7 +65,7 @@ describe('order type controller', () => {
   })
 
   it('should render the correct view', async () => {
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
@@ -64,7 +76,7 @@ describe('order type controller', () => {
   })
 
   it('should construct the correct model when there is no data in the store', async () => {
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
@@ -78,7 +90,7 @@ describe('order type controller', () => {
     const data: MonitoringConditions = { orderType: 'COMMUNITY' }
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
 
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
@@ -99,7 +111,7 @@ describe('order type controller', () => {
         focusTarget: 'orderType',
       },
     ])
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
@@ -118,7 +130,7 @@ describe('order type controller', () => {
   it('should construct the correct model when notifying org is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
     req.order = mockOrder
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
@@ -131,8 +143,9 @@ describe('order type controller', () => {
         },
         {
           question: 'Community',
-          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
+          hint: 'Managing community orders is not currently part of the service and any notifications should continue to be submitted by email.',
           value: 'COMMUNITY',
+          disabled: true,
         },
       ],
       orderType: { value: '' },
@@ -153,7 +166,7 @@ describe('order type controller', () => {
   ])('should construct the correct model when notifying org is %notifyingOrg', async ({ notifyingOrg }) => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: notifyingOrg })
     req.order = mockOrder
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
@@ -185,11 +198,11 @@ describe('order type controller', () => {
   // TODO: prison and home office redirects
   it('should save order type and redirect if notifyingOrg is prison', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PRISON' })
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
       orderType: 'POST_RELEASE',
     })
 
@@ -200,11 +213,11 @@ describe('order type controller', () => {
 
   it('should save order type and redirect if notifyingOrg is ycs', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' })
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
       orderType: 'POST_RELEASE',
     })
 
@@ -215,15 +228,15 @@ describe('order type controller', () => {
 
   it('should save order type and redirect if notifyingOrg is home office', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' })
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder.id, {
+    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
       orderType: 'IMMIGRATION',
     })
     expect(res.redirect).toHaveBeenCalledWith(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', mockOrder.id),
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', mockOrder.id),
     )
   })
 
@@ -232,7 +245,7 @@ describe('order type controller', () => {
       action: 'continue',
       orderType: 'CIVIL',
     }
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.update(req, res, next)
 
@@ -243,7 +256,7 @@ describe('order type controller', () => {
     req.body = {
       action: 'continue',
     }
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.update(req, res, next)
 
@@ -256,7 +269,7 @@ describe('order type controller', () => {
     req.body = {
       action: 'continue',
     }
-    const controller = new OrderTypeController(mockMonitoringConditionsStoreService)
+    const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.update(req, res, next)
 

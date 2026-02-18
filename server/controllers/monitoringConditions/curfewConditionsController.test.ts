@@ -84,13 +84,9 @@ describe('CurfewConditionsController', () => {
 
   describe('View curfew conditions', () => {
     it('Should render with formdata and validation errors from flash', async () => {
-      const mockValidationError = [
-        { field: 'curfewAddress', error: 'mockError' },
-        { field: 'startDate', error: 'mock start date Error' },
-      ]
+      const mockValidationError = [{ field: 'startDate', error: 'mock start date Error' }]
       const mockFormData = {
         action: 'continue',
-        addresses: ['PRIMARY', 'SECONDARY'],
         startDate: {
           day: '11',
           month: '09',
@@ -110,12 +106,6 @@ describe('CurfewConditionsController', () => {
 
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-conditions', {
-        addresses: {
-          values: ['PRIMARY', 'SECONDARY'],
-          error: {
-            text: 'mockError',
-          },
-        },
         startDate: {
           value: {
             year: '2024',
@@ -141,19 +131,12 @@ describe('CurfewConditionsController', () => {
         errorSummary: {
           errorList: [
             {
-              href: '#curfewAddress',
-              text: 'mockError',
-            },
-            {
               href: '#startDate',
               text: 'mock start date Error',
             },
           ],
           titleText: 'There is a problem',
         },
-        primaryAddressView: { value: '' },
-        secondaryAddressView: { value: '' },
-        tertiaryAddressView: { value: '' },
       })
     })
 
@@ -198,9 +181,6 @@ describe('CurfewConditionsController', () => {
       req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
       await controller.view(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-conditions', {
-        addresses: {
-          values: ['PRIMARY', 'SECONDARY'],
-        },
         startDate: {
           value: {
             hours: '00',
@@ -219,9 +199,6 @@ describe('CurfewConditionsController', () => {
             day: '15',
           },
         },
-        primaryAddressView: { value: '10 Downing Street' },
-        secondaryAddressView: { value: '11 Downing Street' },
-        tertiaryAddressView: { value: '12 Downing Street' },
         errorSummary: null,
       })
     })
@@ -231,7 +208,6 @@ describe('CurfewConditionsController', () => {
     it('Should redirect to view and save form and validation error flash when service return validation error', async () => {
       req.body = {
         action: 'continue',
-        addresses: ['PRIMARY', 'SECONDARY'],
         startDate: {
           day: '11',
           month: '09',
@@ -247,10 +223,7 @@ describe('CurfewConditionsController', () => {
           minutes: '59',
         },
       }
-      const mockValidationError = [
-        { field: 'curfewAddress', error: 'mockError' },
-        { field: 'startDate', error: 'mock start date Error' },
-      ]
+      const mockValidationError = [{ field: 'startDate', error: 'mock start date Error' }]
       mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(mockValidationError)
 
       await controller.update(req, res, next)

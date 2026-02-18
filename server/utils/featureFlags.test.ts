@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires, global-require, @typescript-eslint/no-require-imports */
 
-// NB: Intead of importing FeatureFlags at top of file, it's is imorted with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
+// NB: Instead of importing FeatureFlags at top of file, it is imported with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
 
 import path from 'path'
 import fs from 'fs'
@@ -9,13 +9,18 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  MAPPA_ENABLED: true,
-  MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATION_AS_NEW_ORDER_ENABLED: true,
-  ORDER_TYPE_ENABLED: false,
   ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
+  LIST_MONITORING_CONDITION_FLOW_ENABLED: false,
+  POSTCODE_LOOKUP_ENABLED: false,
+  SERVICE_REQUEST_TYPE_ENABLED: false,
   TAG_AT_SOURCE_PILOT_PRISONS: '',
+  DAPOL_PILOT_PROBATION_REGIONS: '',
+  LICENCE_VARIATION_PROBATION_REGIONS: '',
+  OFFENCE_FLOW_ENABLED: false,
+  DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
+  INTERESTED_PARTIES_FLOW_ENABLED: false,
 }
 
 jest.mock('fs')
@@ -54,9 +59,9 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const mappaFlag = FeatureFlags.getInstance().get('MAPPA_ENABLED')
+    const offenceFlowEnabledFlag = FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
 
-    expect(mappaFlag).toBe(true)
+    expect(offenceFlowEnabledFlag).toBe(false)
   })
 
   test('get should throw if flag is not defined', () => {

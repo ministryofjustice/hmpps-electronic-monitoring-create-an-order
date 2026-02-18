@@ -19,10 +19,23 @@ import VariationDetailsModel from './VariationDetails'
 import InstallationLocationModel from './InstallationLocation'
 import InstallationAppointmentModel from './InstallationAppointment'
 import OrderParametersModel from './OrderParametersModel'
+import DapoClauseModel from './DapoClause'
+import OffenceModel from './Offence'
+import MappaModel from './MappaModel'
+import DetailsOfInstallationModel from './DetailsOfInstallation'
+import OffenceAdditionalDetailsModel from './OffenceOtherInfo'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
-export const OrderTypeEnum = z.enum(['REQUEST', 'VARIATION', 'REJECTED', 'AMEND_ORIGINAL_REQUEST'])
-export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5'])
+export const VariationTypesEnum = z.enum([
+  'VARIATION',
+  'REINSTALL_AT_DIFFERENT_ADDRESS',
+  'REINSTALL_DEVICE',
+  'REVOCATION',
+  'END_MONITORING',
+])
+export const OrderTypeEnum = z.enum(['REQUEST', 'REJECTED', 'AMEND_ORIGINAL_REQUEST', ...VariationTypesEnum.options])
+
+export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5', 'DDV6'])
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
@@ -50,6 +63,11 @@ const OrderModel = z.object({
   installationAppointment: InstallationAppointmentModel.nullable().optional(),
   dataDictionaryVersion: DataDictionaryVersionEnum,
   orderParameters: OrderParametersModel.nullable().optional(),
+  dapoClauses: z.array(DapoClauseModel),
+  offences: z.array(OffenceModel),
+  mappa: MappaModel.nullable().optional(),
+  detailsOfInstallation: DetailsOfInstallationModel.nullable().optional(),
+  offenceAdditionalDetails: OffenceAdditionalDetailsModel.nullable().optional(),
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),
 })
@@ -57,4 +75,5 @@ const OrderModel = z.object({
 export type Order = z.infer<typeof OrderModel>
 export type OrderStatus = z.infer<typeof OrderStatusEnum>
 export type DataDictionaryVersion = z.infer<typeof DataDictionaryVersionEnum>
+export type OrderType = z.infer<typeof OrderTypeEnum>
 export default OrderModel

@@ -6,6 +6,7 @@ import CurfewAdditionalDetailsService from '../../services/curfewAdditionalDetai
 import CurfewAdditionalDetailsViewModel from '../../models/view-models/curfewAdditionalDetails'
 import TaskListService from '../../services/taskListService'
 import { CurfewAdditionalDetailsFormDataModel } from '../../models/form-data/curfewAdditionalDetails'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class CurfewAdditionalDetailsController {
   constructor(
@@ -42,6 +43,10 @@ export default class CurfewAdditionalDetailsController {
     }
 
     if (formData.action === 'continue') {
+      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+        return
+      }
       res.redirect(this.taskListService.getNextPage('CURFEW_ADDITIONAL_DETAILS', req.order!))
       return
     }

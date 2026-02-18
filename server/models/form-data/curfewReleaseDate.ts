@@ -3,9 +3,6 @@ import { z } from 'zod'
 const CurfewReleaseDateFormDataModel = z.object({
   action: z.string().default('continue'),
   curfewAddress: z.string().optional(),
-  releaseDateDay: z.string(),
-  releaseDateMonth: z.string(),
-  releaseDateYear: z.string(),
   curfewTimesStartHours: z.string(),
   curfewTimesStartMinutes: z.string(),
   curfewTimesEndHours: z.string(),

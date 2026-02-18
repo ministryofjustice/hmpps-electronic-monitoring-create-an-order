@@ -11,6 +11,8 @@ const mockOrder = {
     deliusId: null,
     prisonNumber: null,
     homeOfficeReferenceNumber: null,
+    complianceAndEnforcementPersonReference: null,
+    courtCaseReferenceNumber: null,
     firstName: 'test',
     lastName: 'tester',
     alias: 'tes',
@@ -23,7 +25,9 @@ const mockOrder = {
     noFixedAbode: true,
     interpreterRequired: false,
   },
+  versionId: uuidv4(),
 }
+
 context('Receipt', () => {
   context('Receipt when app is submitted', () => {
     beforeEach(() => {
@@ -57,6 +61,68 @@ context('Receipt', () => {
       cy.readFile(`cypress/downloads/${filename}.pdf`).should('exist')
     })
 
+    context('Download FMS requests', () => {
+      const testFlags = { DOWNLOAD_FMS_REQUEST_JSON_ENABLED: true }
+      beforeEach(() => {
+        cy.task('setFeatureFlags', testFlags)
+      })
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+      it('Should have buttons to download fms requests', () => {
+        cy.visit(`/order/${mockOrderId}/receipt`)
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsDwRequestDownloadButton().should('exist')
+        page.fmsMoRequestDownloadButton().should('exist')
+      })
+
+      it('Should download fms device wearer request as JSON', () => {
+        cy.visit(`/order/${mockOrderId}/receipt`)
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          method: 'GET',
+          subPath: `/versions/${mockOrder.versionId}/fmsDeviceWearerRequest`,
+          response: '{"test":"json"}',
+        })
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsDwRequestDownloadButton().should('exist')
+
+        page.fmsDwRequestDownloadButton().click()
+
+        const filename = `${mockOrderId}-fms-dw-request`
+        cy.readFile(`cypress/downloads/${filename}.json`).should('exist')
+      })
+
+      it('Should download fms monitoring order request as JSON', () => {
+        cy.visit(`/order/${mockOrderId}/receipt`)
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          method: 'GET',
+          subPath: `/versions/${mockOrder.versionId}/fmsMonitoringOrderRequest`,
+          response: '{"test":"json"}',
+        })
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsMoRequestDownloadButton().should('exist')
+
+        page.fmsMoRequestDownloadButton().click()
+
+        const filename = `${mockOrderId}-fms-mo-request`
+        cy.readFile(`cypress/downloads/${filename}.json`).should('exist')
+      })
+
+      it('Should not have buttons to download fms requests when DOWNLOAD_FMS_REQUEST_JSON_ENABLED flag is set to false', () => {
+        cy.task('setFeatureFlags', { DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false })
+        cy.visit(`/order/${mockOrderId}/receipt`)
+        const page = Page.verifyOnPage(ReceiptPage)
+        page.fmsDwRequestDownloadButton().should('not.exist')
+        page.fmsMoRequestDownloadButton().should('not.exist')
+      })
+    })
+
     it('Should should show all sections', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -71,7 +137,9 @@ context('Receipt', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -87,27 +155,27 @@ context('Receipt', () => {
           addresses: [
             {
               addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: 'line1',
-              addressLine2: 'line2',
-              addressLine3: 'line3',
-              addressLine4: 'line4',
+              addressLine1: 'addressLine1',
+              addressLine2: 'addressLine2',
+              addressLine3: 'addressLine3',
+              addressLine4: 'addressLine4',
               postcode: 'postcode',
             },
           ],
           interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOrganisationAddress: {
               addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: 'line1',
-              addressLine2: 'line2',
-              addressLine3: 'line3',
-              addressLine4: 'line4',
+              addressLine1: 'addressLine1',
+              addressLine2: 'addressLine2',
+              addressLine3: 'addressLine3',
+              addressLine4: 'addressLine4',
               postcode: 'postcode',
             },
             responsibleOfficerName: 'name',
@@ -118,8 +186,8 @@ context('Receipt', () => {
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
           additionalDocuments: [
             {
@@ -158,8 +226,6 @@ context('Receipt', () => {
           value: 'Offensive towards someone because of their sex or gender',
         },
         { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
-        { key: 'Which level of MAPPA applies? (optional)', value: 'MAPPA 1' },
-        { key: 'What is the MAPPA case type? (optional)', value: 'Terrorism Act, Counter Terrorism' },
       ])
       page.deviceWearerSection.shouldExist()
       page.contactInformationSection.shouldExist()
@@ -181,7 +247,9 @@ context('Receipt', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -197,27 +265,27 @@ context('Receipt', () => {
           addresses: [
             {
               addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: 'line1',
-              addressLine2: 'line2',
-              addressLine3: 'line3',
-              addressLine4: 'line4',
+              addressLine1: 'addressLine1',
+              addressLine2: 'addressLine2',
+              addressLine3: 'addressLine3',
+              addressLine4: 'addressLine4',
               postcode: 'postcode',
             },
           ],
           interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOrganisationAddress: {
               addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: 'line1',
-              addressLine2: 'line2',
-              addressLine3: 'line3',
-              addressLine4: 'line4',
+              addressLine1: 'addressLine1',
+              addressLine2: 'addressLine2',
+              addressLine3: 'addressLine3',
+              addressLine4: 'addressLine4',
               postcode: 'postcode',
             },
             responsibleOfficerName: 'name',
@@ -228,8 +296,8 @@ context('Receipt', () => {
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'TACT (Terrorism Act, Counter Terrorism)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
           additionalDocuments: [
             {

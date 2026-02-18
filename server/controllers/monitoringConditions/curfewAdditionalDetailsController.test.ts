@@ -171,7 +171,6 @@ describe('CurfewConditionsController', () => {
       req.order!.curfewConditions = {
         startDate: '',
         endDate: '',
-        curfewAddress: '',
         curfewAdditionalDetails: 'some details',
       }
 

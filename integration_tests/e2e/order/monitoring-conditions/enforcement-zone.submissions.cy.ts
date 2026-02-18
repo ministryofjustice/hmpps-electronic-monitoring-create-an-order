@@ -43,6 +43,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
             prarr: null,
             pilot: null,
             anotherZone: null,
+            offenceType: null,
           },
         },
       })
@@ -166,6 +167,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
             prarr: null,
             pilot: null,
             anotherZone: null,
+            offenceType: null,
           },
         },
       })

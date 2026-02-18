@@ -54,8 +54,8 @@ context('Contact information', () => {
           'addressType(primary|secondary|tertiary)': 'tertiary',
         })
         const validFormData = {
-          line1: '1 Buckingham Palace',
-          line3: 'London',
+          addressLine1: '1 Buckingham Palace',
+          addressLine3: 'London',
           postcode: 'SW1A 1AA',
         }
         page.form.fillInWith(validFormData)

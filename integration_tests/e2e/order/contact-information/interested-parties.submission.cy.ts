@@ -11,6 +11,7 @@ const sampleFormData = {
   notifyingOrganisation: 'Home Office',
   notifyingOrganisationEmailAddress: 'notifying@organisation',
   responsibleOrganisation: 'Police',
+  policeArea: 'Cheshire',
   responsibleOrganisationEmailAddress: 'responsible@organisation',
   responsibleOfficerName: 'name',
   responsibleOfficerContactNumber: '01234567891',
@@ -34,7 +35,7 @@ context('Contact information', () => {
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
@@ -57,7 +58,7 @@ context('Contact information', () => {
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
@@ -133,6 +134,7 @@ context('Contact information', () => {
             notifyingOrganisationEmailAddress: 'notifying@organisation',
             prison: 'Parc Prison and Young Offender Institute',
             responsibleOrganisation: 'Police',
+            policeArea: 'Cheshire',
             responsibleOrganisationEmailAddress: 'responsible@organisation',
             responsibleOfficerName: 'name',
             responsibleOfficerContactNumber: '01234567891',
@@ -149,9 +151,220 @@ context('Contact information', () => {
               notifyingOrganisationEmail: 'notifying@organisation',
               responsibleOrganisation: 'POLICE',
               responsibleOrganisationEmail: 'responsible@organisation',
-              responsibleOrganisationRegion: '',
+              responsibleOrganisationRegion: 'CHESHIRE',
               responsibleOfficerName: 'name',
               responsibleOfficerPhoneNumber: '01234567891',
+            },
+          }).should('be.true')
+        })
+
+        it('should hide region input for Probation Service and submit empty string to API', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: {
+              dataDictionaryVersion: 'DDV5',
+              interestedParties: {
+                notifyingOrganisation: null,
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: '',
+                responsibleOfficerName: '',
+                responsibleOfficerPhoneNumber: '',
+                responsibleOrganisation: 'PROBATION',
+                responsibleOrganisationRegion: '',
+                responsibleOrganisationEmail: '',
+              },
+            },
+          })
+
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              notifyingOrganisation: 'PROBATION',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@example.com',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@example.com',
+              responsibleOrganisationRegion: 'CHESHIRE',
+              responsibleOfficerName: 'Officer Name',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          })
+
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+          page.form.notifyingOrganisationFieldDDV5.set('Probation')
+
+          const formData = {
+            notifyingOrganisationEmailAddress: 'notifying@example.com',
+            responsibleOrganisation: 'Police',
+            policeArea: 'Cheshire',
+            responsibleOrganisationEmailAddress: 'responsible@example.com',
+            responsibleOfficerName: 'Officer Name',
+            responsibleOfficerContactNumber: '01234567891',
+          }
+          page.form.fillInWith(formData)
+
+          cy.get('#notifyingOrgProbationRegion').should('not.exist')
+
+          page.form.saveAndContinueButton.click()
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              notifyingOrganisation: 'PROBATION',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@example.com',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@example.com',
+              responsibleOrganisationRegion: 'CHESHIRE',
+              responsibleOfficerName: 'Officer Name',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          }).should('be.true')
+        })
+
+        it('should show region input for YCS and submit to API', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: {
+              dataDictionaryVersion: 'DDV5',
+              interestedParties: {
+                notifyingOrganisation: null,
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: '',
+                responsibleOfficerName: '',
+                responsibleOfficerPhoneNumber: '',
+                responsibleOrganisation: 'PROBATION',
+                responsibleOrganisationRegion: '',
+                responsibleOrganisationEmail: '',
+              },
+            },
+          })
+
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+              notifyingOrganisationName: 'MIDLANDS',
+              notifyingOrganisationEmail: 'ycs@example.com',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@example.com',
+              responsibleOrganisationRegion: 'CHESHIRE',
+              responsibleOfficerName: 'YCS Officer',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          })
+
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+          page.form.notifyingOrganisationFieldDDV5.set('Youth Custody Service (YCS)')
+
+          const formData = {
+            notifyingOrganisationEmailAddress: 'ycs@example.com',
+            responsibleOrganisation: 'Police',
+            policeArea: 'Cheshire',
+            responsibleOrganisationEmailAddress: 'responsible@example.com',
+            responsibleOfficerName: 'YCS Officer',
+            responsibleOfficerContactNumber: '01234567891',
+            youthCustodyServiceRegion: 'MIDLANDS',
+          }
+          page.form.fillInWith(formData)
+
+          cy.get('#youthCustodyServiceRegion').should('exist')
+
+          page.form.saveAndContinueButton.click()
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+              notifyingOrganisationName: 'MIDLANDS',
+              notifyingOrganisationEmail: 'ycs@example.com',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@example.com',
+              responsibleOrganisationRegion: 'CHESHIRE',
+              responsibleOfficerName: 'YCS Officer',
+              responsibleOfficerPhoneNumber: '01234567891',
+            },
+          }).should('be.true')
+        })
+      })
+
+      context('DDv6 feature set to true', () => {
+        it('should show region input for Police and submit to API', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: {
+              dataDictionaryVersion: 'DDV6',
+              interestedParties: {
+                notifyingOrganisation: null,
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: '',
+                responsibleOfficerName: '',
+                responsibleOfficerPhoneNumber: '',
+                responsibleOrganisation: 'POLICE',
+                responsibleOrganisationRegion: '',
+                responsibleOrganisationEmail: '',
+              },
+            },
+          })
+
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+              notifyingOrganisationName: 'MIDLANDS',
+              notifyingOrganisationEmail: 'ycs@example.com',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@example.com',
+              responsibleOrganisationRegion: 'NATIONAL_CRIME_AGENCY',
+              responsibleOfficerName: 'Police officer',
+              responsibleOfficerPhoneNumber: '02081234567',
+            },
+          })
+
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+          page.form.notifyingOrganisationFieldDDV5.set('Youth Custody Service (YCS)')
+
+          const formData = {
+            notifyingOrganisationEmailAddress: 'ycs@example.com',
+            responsibleOrganisation: 'Police',
+            responsibleOrganisationEmailAddress: 'responsible@example.com',
+            responsibleOfficerName: 'Police officer',
+            responsibleOfficerContactNumber: '02081234567',
+            youthCustodyServiceRegion: 'MIDLANDS',
+            policeArea: 'NATIONAL_CRIME_AGENCY',
+          }
+          page.form.fillInWith(formData)
+
+          cy.get('#policeArea').should('exist')
+
+          page.form.saveAndContinueButton.click()
+
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+              notifyingOrganisationName: 'MIDLANDS',
+              notifyingOrganisationEmail: 'ycs@example.com',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@example.com',
+              responsibleOrganisationRegion: 'NATIONAL_CRIME_AGENCY',
+              responsibleOfficerName: 'Police officer',
+              responsibleOfficerPhoneNumber: '02081234567',
             },
           }).should('be.true')
         })
