@@ -8,7 +8,7 @@ type InterestedPartiesPageContent = QuestionPageContent<
   | 'magistratesCourt'
   | 'militaryCourt'
   | 'notifyingOrganisationEmail'
-  | 'notifyingOrgProbationRegion'
+  | 'police'
   | 'prison'
   | 'probationRegion'
   | 'responsibleOfficerName'

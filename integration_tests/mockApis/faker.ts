@@ -7,8 +7,9 @@ import prisons from '../../server/i18n/en/reference/ddv5/prisons'
 import probationRegions from '../../server/i18n/en/reference/probationRegions'
 import militaryCourts from '../../server/i18n/en/reference/ddv5/militaryCourts'
 import youthCourts from '../../server/i18n/en/reference/ddv5/youthCourts'
-import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv5/youthCustodyServiceRegions'
 import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegions'
+import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv6/youthCustodyServiceRegions'
+import policeAreas from '../../server/i18n/en/reference/ddv6/policeAreas'
 
 const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
 
@@ -23,10 +24,11 @@ const familyCourtTypes = extractValues(Object.values(familyCourts))
 const magistratesCourtTypes = extractValues(Object.values(magistratesCourts))
 const militaryCourtTypes = extractValues(Object.values(militaryCourts))
 const prisonTypes = extractValues(Object.values(prisons)).filter(it => it !== 'Cookham Wood Young Offender Institution')
-const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
 const youthCourtTypes = extractValues(Object.values(youthCourts))
 const probationRegionTypes = extractValues(Object.values(probationRegions))
+const policeAreaTypes = extractValues(Object.values(policeAreas))
 const yjsRegionTypes = extractValues(Object.values(yjsRegions))
+const ycsRegionTypes = extractValues(Object.values(youthCustodyServiceRegions))
 
 // https://www.ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama
 const validUkPhoneNumbers = [
@@ -50,15 +52,15 @@ const validUkPhoneNumbers = [
 
 export class Address {
   constructor(
-    public line1?: string,
-    public line2?: string,
-    public line3?: string,
-    public line4?: string,
+    public addressLine1?: string,
+    public addressLine2?: string,
+    public addressLine3?: string,
+    public addressLine4?: string,
     public postcode?: string,
   ) {}
 
   toString() {
-    return `${this.line1}, ${this.line2}, ${this.postcode}`
+    return `${this.addressLine1}, ${this.addressLine2}, ${this.postcode}`
   }
 }
 
@@ -70,7 +72,6 @@ export type InterestedParties = {
   familyCourt?: string
   magistratesCourt?: string
   militaryCourt?: string
-  notifyingOrgProbationRegion?: string
   prison?: string
   ycsRegion?: string
   youthCourt?: string
@@ -83,7 +84,7 @@ export type InterestedParties = {
   probationRegion?: string
   yjsRegion?: string
   responsibleOrganisationAddress?: Partial<Address>
-
+  policeArea?: string
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
   youthCustodyServiceRegion?: string
@@ -95,6 +96,8 @@ export type PersonOfInterest = {
   deliusId?: string
   prisonNumber?: string
   homeOfficeReferenceNumber?: string
+  complianceAndEnforcementPersonReference?: string
+  courtCaseReferenceNumber?: string
 
   firstName: string
   firstNames: string
@@ -185,12 +188,12 @@ export const createFakeInterestedParties = (
   let familyCourt = ''
   let magistratesCourt = ''
   let militaryCourt = ''
-  let notifyingOrgProbationRegion = ''
   let prison = ''
-  let youthCustodyServiceRegion = ''
   let youthCourt = ''
   let probationRegion = ''
+  let policeArea = ''
   let yjsRegion = ''
+  let youthCustodyServiceRegion = ''
 
   if (notifyingOrganisation === 'Civil & County Court') {
     civilCountyCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(civilCountyCourtTypes)
@@ -217,11 +220,6 @@ export const createFakeInterestedParties = (
     notifyingOrganisationName = militaryCourt
   }
 
-  if (notifyingOrganisation === 'Probation Service') {
-    notifyingOrgProbationRegion = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(probationRegionTypes)
-    notifyingOrganisationName = notifyingOrgProbationRegion
-  }
-
   if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
     prison = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(prisonTypes)
     notifyingOrganisationName = prison
@@ -242,6 +240,11 @@ export const createFakeInterestedParties = (
     responsibleOrganisationRegion = probationRegion
   }
 
+  if (responsibleOrganisation === 'Police') {
+    policeArea = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(policeAreaTypes)
+    responsibleOrganisationRegion = policeArea
+  }
+
   if (responsibleOrganisation === 'YJS') {
     yjsRegion = responsibleOrganisationRegionOverride ?? faker.helpers.arrayElement(yjsRegionTypes)
     responsibleOrganisationRegion = yjsRegion
@@ -258,12 +261,12 @@ export const createFakeInterestedParties = (
     civilCountyCourt,
     militaryCourt,
     youthCourt,
-    notifyingOrgProbationRegion,
     responsibleOfficerName: officerName,
     responsibleOfficerContactNumber: officerContactNumber,
     responsibleOrganisation,
     responsibleOrganisationRegion,
     responsibleOrganisationEmailAddress,
+    policeArea,
     probationRegion,
     yjsRegion,
     youthCustodyServiceRegion,
@@ -280,7 +283,7 @@ export const createFakeYouth = (firstName?: string): PersonOfInterest => {
 }
 
 export const createFakeAdult = (firstName?: string): PersonOfInterest => {
-  const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apprently considered "older"
+  const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apparently considered "older"
 
   return {
     ...createFakePerson(dob, firstName),
@@ -295,6 +298,9 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
   const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // update when we validate format of cepr, ccrn
+  const complianceAndEnforcementPersonReference = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const courtCaseReferenceNumber = faker.helpers.replaceSymbols('?####??')
 
   return {
     nomisId,
@@ -302,6 +308,8 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
     deliusId,
     prisonNumber,
     homeOfficeReferenceNumber,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
     ...fakeAdult,
   } as PersonOfInterest
 }
@@ -313,6 +321,9 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
   const homeOfficeReferenceNumber = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  // update when we validate format of cepr, ccrn
+  const complianceAndEnforcementPersonReference = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
+  const courtCaseReferenceNumber = faker.helpers.replaceSymbols('?####??')
 
   return {
     nomisId,
@@ -320,6 +331,8 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
     deliusId,
     prisonNumber,
     homeOfficeReferenceNumber,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
     ...fakeYouth,
   } as PersonOfInterest
 }

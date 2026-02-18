@@ -29,11 +29,25 @@ const construct = (
       errorSummary: createGovukErrorSummary(validationErrors),
     }
   }
+  const detailsValue = getDetailsValue(model)
   return {
     curfewAdditionalDetails: { value: model?.curfewAdditionalDetails ?? '' },
-    details: { value: model?.curfewAdditionalDetails ? 'yes' : '' },
+    details: { value: detailsValue },
     errorSummary: null,
   }
+}
+
+const getDetailsValue = (model: CurfewConditions | undefined | null) => {
+  if (model === null || model === undefined || model?.curfewAdditionalDetails === null) {
+    return ''
+  }
+  if (model?.curfewAdditionalDetails === '') {
+    return 'no'
+  }
+  if (model?.curfewAdditionalDetails.length > 0) {
+    return 'yes'
+  }
+  return ''
 }
 
 export default { construct }

@@ -1,0 +1,44 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/order/" + order.id + "/installation-and-risk/offence-list"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Access needs installation and risk</span>
+      <h1 class="govuk-heading-l">{{ question }}</h1>
+    
+      <p>{{ offenceTypeReadable }}</p>
+    
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: 'Yes, delete offence',
+            classes: "govuk-button--warning",
+            name: "action",
+            value: "continue",
+            id: "confirm-remove-button"
+          })}}
+    
+          {{ govukButton({
+            text: 'Cancel',
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "cancel",
+            id: "cancel-button"
+          })}}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

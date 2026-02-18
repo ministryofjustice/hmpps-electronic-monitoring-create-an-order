@@ -28,7 +28,7 @@ export default class FormCheckboxesComponent {
     this.element.getByLabel(value).should('be.checked')
   }
 
-  shouldNotHaveValueChekced(value: string | RegExp): void {
+  shouldNotHaveValueChecked(value: string | RegExp): void {
     this.element.getByLabel(value).should('not.be.checked')
   }
 
@@ -38,6 +38,14 @@ export default class FormCheckboxesComponent {
 
   shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
+  }
+
+  optionIsDisabled(value: string): void {
+    this.element.find(`input[type=checkbox][value=${value}]`).should('be.disabled')
+  }
+
+  optionIsEnabled(value: string): void {
+    this.element.find(`input[type=checkbox][value=${value}]`).should('be.enabled')
   }
 
   shouldNotHaveOption(value: string | RegExp): void {

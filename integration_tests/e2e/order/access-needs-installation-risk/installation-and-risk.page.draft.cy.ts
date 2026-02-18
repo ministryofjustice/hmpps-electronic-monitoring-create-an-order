@@ -46,42 +46,8 @@ context('Access needs and installation risk information', () => {
           possibleRisk: 'There are no risks that the installer should be aware of',
         })
         page.form.possibleRiskField.shouldHaveValue('There are no risks that the installer should be aware of')
-        page.form.possibleRiskField.shouldNotHaveValueChekced('Sex offender')
-        page.form.possibleRiskField.shouldNotHaveValueChekced('Violent behaviour or threats of violence')
-      })
-
-      context('With MAPPA disabled', () => {
-        const testFlags = { MAPPA_ENABLED: false }
-        beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
-        })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-
-        it('Should not render the MAPPA form sections', () => {
-          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-
-          cy.get('form').find('legend').contains('Which level of MAPPA applies? (optional)').should('not.exist')
-          cy.get('form').find('legend').contains('What is the MAPPA case type? (optional)').should('not.exist')
-        })
-      })
-
-      context('With MAPPA enabled', () => {
-        const testFlags = { MAPPA_ENABLED: true }
-        beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
-        })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-
-        it('Should render the MAPPA form sections', () => {
-          Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
-
-          cy.get('form').find('legend').contains('Which level of MAPPA applies? (optional)').should('exist')
-          cy.get('form').find('legend').contains('What is the MAPPA case type? (optional)').should('exist')
-        })
+        page.form.possibleRiskField.shouldNotHaveValueChecked('Sex offender')
+        page.form.possibleRiskField.shouldNotHaveValueChecked('Violent behaviour or threats of violence')
       })
 
       context('With DDv5 enabled', () => {

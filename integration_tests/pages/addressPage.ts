@@ -36,4 +36,8 @@ export default class AddressPage extends AppFormPage {
   saveAndContinue() {
     this.form.saveAndContinueButton.click()
   }
+
+  hasHint(hint: string) {
+    return cy.contains(hint)
+  }
 }

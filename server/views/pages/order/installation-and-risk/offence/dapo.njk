@@ -1,0 +1,44 @@
+{% extends "../../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "../../../../partials/dateTimeInput.njk" import dateTimeInput %}
+
+{% set section = content.pages.dapo.section %}
+{% set heading = content.pages.dapo.title %}
+{% set helpText = content.pages.dapo.helpText %}
+{% set questions = content.pages.dapo.questions %}
+
+
+{% block formInputs %}
+  {% set disabled = not isOrderEditable %}
+
+    {{ govukInput({
+      label: { 
+        text: questions.clause.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      id: "clause",
+      name: "clause",
+      value: clause.value,
+      errorMessage: clause.error,
+      disabled: disabled
+    }) }}
+ 
+    {{dateTimeInput({
+      id: "date",
+      name: "date",
+      date: date.value,
+      dateLabel: questions.date.text,
+      dateHint: questions.date.hint,
+      errorMessages: {
+        date: date.error,
+        time: date.error
+      },
+      disabled: disabled,
+      timesEnabled: false,
+      defaultHours: 00,
+      defaultMinutes: 00
+    })}}
+ 
+{% endblock %}

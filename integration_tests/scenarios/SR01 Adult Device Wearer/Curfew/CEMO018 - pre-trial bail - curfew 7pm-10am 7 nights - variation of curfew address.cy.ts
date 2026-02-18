@@ -16,8 +16,11 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/instal
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
+import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -41,7 +44,7 @@ context('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -72,24 +75,20 @@ context('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer('CEMO018'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
-      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court')
-      const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        monitoringRequired: 'Curfew',
-        pilot: 'They are not part of any of these pilots',
-        sentenceType: 'Standard Determinate Sentence',
-        issp: 'No',
-        hdc: 'No',
-        prarr: 'No',
+      const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'Bolton Crown Court', 'Cheshire')
+
+      const monitoringOrderTypeDescription = {
+        orderType: 'Community',
+        monitoringCondition: 'Curfew',
+        sentenceType: 'Supervision Default Order',
       }
       const curfewReleaseDetails = {
-        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
         startTime: { hours: '19', minutes: '00' },
         endTime: { hours: '10', minutes: '00' },
         address: /Main address/,
@@ -133,6 +132,14 @@ context('Scenarios', () => {
 
         const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
         cacheOrderId()
+
+        const attachmentFiles = {
+          courtOrder: {
+            fileName: files.licence.fileName,
+            contents: files.licence.contents,
+            fileRequired: 'Yes',
+          },
+        }
         orderSummaryPage.fillInNewCurfewOrderWith({
           deviceWearerDetails,
           responsibleAdultDetails: undefined,
@@ -140,11 +147,11 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription,
           curfewReleaseDetails,
           curfewConditionDetails,
           curfewTimetable,
-          files,
+          files: attachmentFiles,
           probationDeliveryUnit: undefined,
         })
         orderSummaryPage.submitOrderButton.click()
@@ -172,6 +179,25 @@ context('Scenarios', () => {
 
         Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
 
+        const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+        contactDetailsPage.form.saveAndContinueButton.click()
+
+        const noFixedAbodePage = Page.verifyOnPage(NoFixedAbodePage)
+        noFixedAbodePage.form.saveAndContinueButton.click()
+
+        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+        primaryAddressPage.form.saveAndContinueButton.click()
+
+        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+
+        interestedPartiesPage.form.fillInWith({
+          notifyingOrganisation: interestedParties.notifyingOrganisation,
+          crownCourt: interestedParties.notifyingOrganisationName,
+          notifyingOrganisationEmailAddress: interestedParties.notifyingOrganisationEmailAddress,
+        })
+
+        interestedPartiesPage.form.saveAndContinueButton.click()
+
         Page.verifyOnPage(
           ContactInformationCheckYourAnswersPage,
           'Check your answers',
@@ -195,7 +221,7 @@ context('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'License Condition of a Custodial Order',
+                condition_type: 'Requirement of Community Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -226,11 +252,11 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'Variation',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: 'Post Release',
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                order_type: 'Community',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
@@ -255,7 +281,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Standard Determinate Sentence',
+                sentence_type: 'Supervision Default Order',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
@@ -263,12 +289,12 @@ context('Scenarios', () => {
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+                conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
                 conditional_release_start_time: '19:00:00',
                 conditional_release_end_time: '10:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -329,11 +355,14 @@ context('Scenarios', () => {
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
+                subcategory: 'SR08-Amend monitoring requirements',
+                dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

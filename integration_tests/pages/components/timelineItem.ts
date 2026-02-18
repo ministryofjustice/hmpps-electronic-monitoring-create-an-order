@@ -1,0 +1,35 @@
+import { v4 as uuidv4 } from 'uuid'
+import { PageElement } from '../page'
+
+export default class TimelineItem {
+  private elementCacheId: string = uuidv4()
+
+  constructor(title: string) {
+    cy.contains('.moj-timeline__title', title).parents('.moj-timeline__item').as(`${this.elementCacheId}-element`)
+    this.element.should('exist')
+  }
+
+  get element(): PageElement {
+    return cy.get(`@${this.elementCacheId}-element`, { log: false })
+  }
+
+  usernameIs(username: string) {
+    this.element.get('.moj-timeline__byline').contains(username)
+  }
+
+  resultDateIs(time: string) {
+    this.element.get('.moj-timeline__date').contains(time)
+  }
+
+  get description(): PageElement {
+    return cy.get('.moj-timeline__description')
+  }
+
+  variationTextIs(text: string) {
+    cy.get('.moj-timeline__description').contains(text)
+  }
+
+  hasLink(href: string) {
+    cy.get('.moj-timeline__description').should('have.attr', 'href', href)
+  }
+}

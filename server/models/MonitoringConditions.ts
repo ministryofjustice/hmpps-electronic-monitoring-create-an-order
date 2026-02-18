@@ -1,7 +1,15 @@
 import { z } from 'zod'
 import { YesNoUnknownEnum } from './YesNoUnknown'
 
-export const OrderTypeEnum = z.enum(['CIVIL', 'COMMUNITY', 'IMMIGRATION', 'POST_RELEASE', 'PRE_TRIAL', 'SPECIAL'])
+export const OrderTypeEnum = z.enum([
+  'CIVIL',
+  'COMMUNITY',
+  'IMMIGRATION',
+  'POST_RELEASE',
+  'PRE_TRIAL',
+  'SPECIAL',
+  'BAIL',
+])
 
 export const SentenceTypeEnum = z.enum([
   'EXTENDED_DETERMINATE_SENTENCE',
@@ -13,6 +21,13 @@ export const SentenceTypeEnum = z.enum([
   'STANDARD_DETERMINATE_SENTENCE',
   'DTO',
   'SECTION_91',
+  'COMMUNITY_YRO',
+  'COMMUNITY_SDO',
+  'COMMUNITY_SUSPENDED_SENTENCE',
+  'COMMUNITY',
+  'BAIL_SUPERVISION_SUPPORT',
+  'BAIL_RLAA',
+  'BAIL',
 ])
 
 const MonitoringConditionsModel = z.object({
@@ -31,7 +46,10 @@ const MonitoringConditionsModel = z.object({
   hdc: YesNoUnknownEnum.nullable(),
   prarr: YesNoUnknownEnum.nullable(),
   pilot: z.string().nullable(),
+  dapolMissedInError: YesNoUnknownEnum.nullable().optional(),
   isValid: z.boolean().default(false),
+  offenceType: z.string().nullable(),
+  policeArea: z.string().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>

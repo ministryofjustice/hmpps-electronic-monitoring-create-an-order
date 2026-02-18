@@ -1,27 +1,30 @@
 import IdentityNumbersPageContent from '../../../types/i18n/pages/identityNumbers'
 
 const identityNumbersPageContent: IdentityNumbersPageContent = {
-  helpText: 'Enter all identity numbers that you have for the device wearer.',
-  legend: "What is the device wearer's identity number?",
+  helpText: 'Select and enter all identity numbers that you have for the device wearer.',
+  legend: 'What identity numbers do you have for the device wearer?',
   questions: {
     deliusId: {
-      text: 'Delius ID (optional)',
-    },
-    homeOfficeReferenceNumber: {
-      text: 'Home Office Reference Number (optional)',
+      text: 'NDelius ID',
     },
     nomisId: {
-      text: 'National Offender Management Information System (NOMIS) ID (optional)',
+      text: 'National Offender Management Information System (NOMIS)',
     },
     pncId: {
-      text: 'Police National Computer (PNC) ID (optional)',
+      text: 'Police National Computer (PNC)',
     },
     prisonNumber: {
-      text: 'Prison number (optional)',
+      text: 'Prison Number',
+    },
+    complianceAndEnforcementPersonReference: {
+      text: 'Compliance and Enforcement Person Reference (CEPR)',
+    },
+    courtCaseReferenceNumber: {
+      text: 'Court Case Reference Number (CCRN)',
     },
   },
   section: 'About the device wearer',
-  title: 'Identity numbers',
+  title: '',
 }
 
 export default identityNumbersPageContent

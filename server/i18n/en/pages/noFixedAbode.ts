@@ -6,7 +6,7 @@ const noFixedAbodePageContent: NoFixedAbodePageContent = {
     'A fixed address is required to process all monitoring orders apart from those that include Alcohol monitoring.',
   ],
   warning:
-    "Unless the order includes alcohol monitoring, wait to raise it until you have the device wearer's address. For Acquisitive Crime (EMAC) orders with no fixed address at release, probation are responsible for raising the order once an address is confirmed.",
+    "Unless the order is for an immigration case or includes alcohol monitoring, wait to raise it until you have the device wearer's address. For Acquisitive Crime (EMAC) orders with no fixed address at release, probation are responsible for raising the order once an address is confirmed.",
   legend: '',
   questions: {
     noFixedAbode: {

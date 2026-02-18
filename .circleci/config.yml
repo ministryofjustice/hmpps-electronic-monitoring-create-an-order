@@ -19,12 +19,12 @@ parameters:
 
   node-version:
     type: string
-    default: 20.17-browsers
+    default: 24.11-browsers
 
 executors:
   scenario-testing:
     docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:20.19.0-browsers
       - image: postgres:14
         environment:
           POSTGRES_PASSWORD: postgres
@@ -53,11 +53,12 @@ executors:
           SERCO_URL: http://localhost:9091/fms
           CEMO_FMS_INTEGRATION_ENABLED: true
           HMPPS_S3_BUCKETNAME: test_bucket
-          SETTINGS_DATA_DICTIONARY_VERSION: DDV5
+          SETTINGS_DATA_DICTIONARY_VERSION: DDV6
+          MANAGE_USER_URL: http://localhost:9091/manage-user
 
   intgration-testing:
      docker:
-      - image: cimg/node:20.18.0-browsers
+      - image: cimg/node:20.19.0-browsers
       - image: redis:7.2
       - image: wiremock/wiremock:latest
         environment:
@@ -82,7 +83,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: npm run setup --no-audit
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -135,7 +136,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: npm run setup --no-audit
       - run:
           command: npm run build
       - run:
@@ -171,7 +172,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
-          command: npm ci --no-audit
+          command: npm run setup --no-audit
       - run:
           command: npm run build
       - run:
@@ -194,7 +195,12 @@ jobs:
             fi
       - run:
           name: Archive requests
-          command: tar -czf integration_tests/requests.tar.gz integration_tests/requests
+          command: |
+            if [ -d integration_tests/requests ]; then
+              tar -czf integration_tests/requests.tar.gz integration_tests/requests
+            else
+              echo "No requests to archive"
+            fi 
       - store_test_results:
           path: test_results
       - store_artifacts:

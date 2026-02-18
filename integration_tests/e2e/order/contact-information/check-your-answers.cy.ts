@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import OrderTasksPage from '../../../pages/order/summary'
+import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 const pagePath = '/contact-information/check-your-answers'
@@ -71,6 +73,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -88,7 +92,7 @@ context('Contact Information - check your answers', () => {
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
@@ -118,6 +122,7 @@ context('Contact Information - check your answers', () => {
         { key: "What is the Responsible Officer's full name?", value: 'name' },
         { key: "What is the Responsible Officer's telephone number?", value: '01234567891' },
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+        { key: 'Select the Police force area', value: 'Cheshire' },
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
       ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
@@ -145,6 +150,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -163,7 +170,7 @@ context('Contact Information - check your answers', () => {
             responsibleOrganisation: 'POLICE',
             responsibleOfficerPhoneNumber: '01234567891',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
           },
         },
@@ -198,6 +205,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -215,7 +224,7 @@ context('Contact Information - check your answers', () => {
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
+            responsibleOrganisationRegion: 'CHESHIRE',
             responsibleOfficerName: 'name',
             responsibleOfficerPhoneNumber: '01234567891',
           },
@@ -251,6 +260,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -304,6 +315,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -366,6 +379,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -415,6 +430,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -478,6 +495,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -538,6 +557,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -598,6 +619,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -642,7 +665,7 @@ context('Contact Information - check your answers', () => {
         ])
       })
 
-      it('Should show the notifying organisation probation service region', () => {
+      it('Should not show the notifying organisation probation service region', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -658,6 +681,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -671,7 +696,7 @@ context('Contact Information - check your answers', () => {
             },
             interestedParties: {
               notifyingOrganisation: 'PROBATION',
-              notifyingOrganisationName: 'YORKSHIRE_AND_THE_HUMBER',
+              notifyingOrganisationName: '',
               notifyingOrganisationEmail: 'notifying@organisation',
               responsibleOrganisation: 'PROBATION',
               responsibleOrganisationEmail: 'responsible@organisation',
@@ -689,7 +714,6 @@ context('Contact Information - check your answers', () => {
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldHaveItems([
           { key: 'What organisation or related organisation are you part of?', value: 'Probation Service' },
-          { key: 'Select the Probation Service region', value: 'Yorkshire and the Humber' },
         ])
         page.deviceWearerAddressesSection.shouldNotHaveItems([
           'Select the name of the Civil and County Court',
@@ -697,6 +721,7 @@ context('Contact Information - check your answers', () => {
           'Select the name of the Family Court',
           'Select the name of the Military Court',
           'Select the name of the Prison',
+          'Select the Probation Service region',
           'Select the YCS region',
           'Select the name of the Youth Court',
         ])
@@ -718,6 +743,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -762,7 +789,7 @@ context('Contact Information - check your answers', () => {
         ])
       })
 
-      it('Should show the youth custody service (YCS) region', () => {
+      it('Should not show the youth custody service (YCS) region', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -778,6 +805,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -838,6 +867,8 @@ context('Contact Information - check your answers', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,
@@ -899,6 +930,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -935,6 +968,61 @@ context('Contact Information - check your answers', () => {
         'Select the name of the Court',
       ])
     })
+
+    it('should show Police area', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          contactDetails: {
+            contactNumber: '01234567890',
+          },
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            dateOfBirth: null,
+            disabilities: null,
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'NATIONAL_CRIME_AGENCY',
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+        },
+      })
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.organisationDetailsSection.shouldExist()
+      page.organisationDetailsSection.shouldHaveItems([
+        { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+        { key: 'Select the Police force area', value: 'National Crime Agency' },
+      ])
+      page.deviceWearerAddressesSection.shouldNotHaveItems([
+        'Select the name of the Prison',
+        'Select the name of the Crown Court',
+        'Select the name of the Court',
+      ])
+    })
   })
 
   context('Device Wearer has fixed address', () => {
@@ -961,6 +1049,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -1044,6 +1134,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -1153,6 +1245,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -1265,6 +1359,8 @@ context('Contact Information - check your answers', () => {
             deliusId: null,
             prisonNumber: null,
             homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
             firstName: null,
             lastName: null,
             alias: null,
@@ -1354,6 +1450,93 @@ context('Contact Information - check your answers', () => {
       page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
+    })
+  })
+
+  context('Viewing an old version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+          },
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            dateOfBirth: null,
+            disabilities: null,
+            noFixedAbode: true,
+            interpreterRequired: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: '',
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'View answers'
+
+    it('navigates correctly back to summary page', () => {
+      const page = Page.visit(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.returnButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
     })
   })
 

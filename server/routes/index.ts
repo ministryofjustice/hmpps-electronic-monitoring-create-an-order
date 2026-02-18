@@ -13,11 +13,12 @@ import InstallationAndRiskController from '../controllers/installationAndRisk/in
 import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
+import AttendanceMonitoringAddToListController from './monitoring-conditions/attendance-monitoring/controller'
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
-import MonitoringConditionsController from '../controllers/monitoringConditions/monitoringConditionsController'
+import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
 import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
@@ -26,20 +27,26 @@ import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
-import type { Services } from '../services'
+import { type Services } from '../services'
 import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import ReceiptController from '../controllers/receiptController'
-import AttachmentHavePhotoController from '../controllers/attachments/attachmentHavePhotoController'
 import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
+import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
+import createPostcodeLookupRouter from './postcode-lookup/router'
+import ServiceRequestTypeController from './variations/service-request-type/controller'
+import createInstallationAndRiskRouter from './installation-and-risk/router'
+import createAttachmentRouter from './attachments/router'
+import createInterestedPartiesRouter from './interested-parties/router'
 
 export default function routes({
   alcoholMonitoringService,
   attachmentService,
   attendanceMonitoringService,
+  attendanceMonitoringAddToListService,
   auditService,
   contactDetailsService,
   curfewConditionsService,
@@ -50,7 +57,6 @@ export default function routes({
   deviceWearerResponsibleAdultService,
   deviceWearerService,
   installationAndRiskService,
-  monitoringConditionsService,
   interestedPartiesService,
   orderService,
   orderSearchService,
@@ -59,12 +65,21 @@ export default function routes({
   variationService,
   probationDeliveryUnitService,
   zoneService,
+  zoneAddToListService,
   installationLocationService,
   installationAppointmentService,
   orderChecklistService,
   isRejectionService,
   monitoringConditionsStoreService,
   monitoringConditionsUpdateService,
+  removeMonitoringTypeService,
+  serviceRequestTypeService,
+  fmsRequestService,
+  dapoService,
+  offenceService,
+  mappaService,
+  detailsOfInstallationService,
+  offenceOtherInfoService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -83,14 +98,12 @@ export default function routes({
     taskListService,
     orderChecklistService,
   )
-  const attachmentsHavePhotoController = new AttachmentHavePhotoController(
-    attachmentService,
-    taskListService,
-    orderService,
-  )
   const attendanceMonitoringController = new AttendanceMonitoringController(
     attendanceMonitoringService,
     taskListService,
+  )
+  const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
+    attendanceMonitoringAddToListService,
   )
   const contactDetailsController = new ContactDetailsController(auditService, contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(
@@ -125,10 +138,7 @@ export default function routes({
     taskListService,
     orderChecklistService,
   )
-  const monitoringConditionsController = new MonitoringConditionsController(
-    monitoringConditionsService,
-    taskListService,
-  )
+  const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
   const notifyingOrganisationController = new InterestedPartiesController(
     auditService,
@@ -144,6 +154,7 @@ export default function routes({
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
   const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
+  const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
     taskListService,
@@ -160,7 +171,7 @@ export default function routes({
     taskListService,
     orderChecklistService,
   )
-  const receiptController = new ReceiptController()
+  const receiptController = new ReceiptController(fmsRequestService)
 
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     auditService,
@@ -179,6 +190,8 @@ export default function routes({
   )
 
   const isRejectionController = new IsRejectionController(isRejectionService)
+
+  const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -189,6 +202,7 @@ export default function routes({
   get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
   get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
   get(paths.ORDER.SUMMARY, orderController.summary)
+  get(paths.ORDER.SUMMARY_VERSION, orderController.summary)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
   get(paths.ORDER.IS_REJECTION, isRejectionController.view)
   post(paths.ORDER.IS_REJECTION, isRejectionController.update)
@@ -197,9 +211,13 @@ export default function routes({
   post(paths.ORDER.DELETE, orderController.delete)
   post(paths.ORDER.SUBMIT, orderController.submit)
   get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
-  get(paths.ORDER.SUBMIT_PATIAL_SUCCESS, orderController.submitPartialSuccess)
+  get(paths.ORDER.SUBMIT_PARTIAL_SUCCESS, orderController.submitPartialSuccess)
   get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
   get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
+  get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
+  get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
+  get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDeviceWearerRequest)
+  get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMonitoringOrderRequest)
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
 
   /**
@@ -221,6 +239,8 @@ export default function routes({
   // Check your answers
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.update)
+  get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.update)
 
   /**
    * CONTACT INFORMATION
@@ -249,6 +269,8 @@ export default function routes({
   // Check your answers
   get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
   post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
+  get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.view)
+  post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.update)
 
   /**
    * INSTALLATION AND RISK
@@ -258,14 +280,15 @@ export default function routes({
 
   get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.view)
   post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.update)
+  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.view)
+  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.update)
 
   /**
    * MONITORING CONDITIONS
    */
 
-  // Main monitoring conditions page
-  get(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.view)
-  post(paths.MONITORING_CONDITIONS.BASE_URL, monitoringConditionsController.update)
+  get(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.view)
+  post(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController.update)
 
   // Installation location page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController.view)
@@ -287,6 +310,12 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.view)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.update)
+
+  // Attendance monitoring page add to list
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.new)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.view)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
 
   // Alcohol monitoring page
   get(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController.view)
@@ -312,30 +341,68 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
   post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
 
+  // Exclusion Inclusion Zone Add To List
+  get(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM, zoneControllerAddToList.new)
+  get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
+  post(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.update)
+
   // Check your answers
   get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.view)
   post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.update)
+  get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.view)
+  post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.update)
 
   /**
    * ATTACHMENTS
    */
   get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
+  get(paths.ATTACHMENT.ATTACHMENTS_VERSION, attachmentsController.view)
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
-  get(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.view)
-  post(paths.ATTACHMENT.HAVE_PHOTO, attachmentsHavePhotoController.update)
 
   /**
    * VARIATIONS
    */
+  get(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.view)
+  post(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.update)
   get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
+  get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
+  post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
+  get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
+  post(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
-    createOrderTypeDescriptionRouter({ monitoringConditionsStoreService, monitoringConditionsUpdateService }),
+    createOrderTypeDescriptionRouter({
+      monitoringConditionsStoreService,
+      monitoringConditionsUpdateService,
+      taskListService,
+    }),
   )
 
+  router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
+
+  router.use(paths.INTEREST_PARTIES.BASE_PATH, createInterestedPartiesRouter())
+
+  router.use(
+    paths.INSTALLATION_AND_RISK.BASE_URL,
+    createInstallationAndRiskRouter({
+      dapoService,
+      offenceService,
+      mappaService,
+      detailsOfInstallationService,
+      taskListService,
+      offenceOtherInfoService,
+    }),
+  )
+  router.use(
+    paths.ATTACHMENT.ATTACHMENTS,
+    createAttachmentRouter({
+      attachmentService,
+      taskListService,
+    }),
+  )
   return router
 }

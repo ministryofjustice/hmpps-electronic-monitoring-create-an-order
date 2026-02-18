@@ -37,6 +37,7 @@ describe('OrderController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
+    mockOrderService.getCompleteVersions = jest.fn().mockResolvedValue([])
     taskListService = {
       getSections: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<TaskListService>
@@ -51,6 +52,7 @@ describe('OrderController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
+
       // When
       await orderController.summary(req, res, next)
 
@@ -126,15 +128,13 @@ describe('OrderController', () => {
         },
       })
       const res = createMockResponse()
-      const mockOrder = getMockOrder({ id: orderId })
-      mockOrderService.createVariationFromExisting.mockResolvedValue(mockOrder)
       const next = jest.fn()
 
       // When
       await orderController.createVariation(req, res, next)
 
       // Then
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-rejection`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
   })
 
@@ -372,7 +372,7 @@ describe('OrderController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/submit-success', {
         orderId: '123456789',
-        orderType: 'REQUEST',
+        isVariation: false,
       })
     })
   })

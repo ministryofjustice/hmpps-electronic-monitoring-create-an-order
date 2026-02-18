@@ -92,20 +92,27 @@
       {% set row = [
         {
           html: name
-        }, {
+        },
+        {
           text: order.dob
-        }, {
+        },
+        {
           html: order.pins | join('<\br>')
-        }, {
+        }, 
+        {
           text: order.location
-        }, {
+        }, 
+        {
           text: order.startDate
-        }, {
+        }, 
+        {
           text: order.endDate
-        }, {
+        }, 
+        {
           text: order.lastUpdated
         }
       ] %}
+
       {% set tableRows = (tableRows.push(row), tableRows) %}
     {% endfor %}
 
@@ -124,12 +131,13 @@
       {
         text: "Town or city"
       },
+ 
       {
         text: "Start date"
       },
       {
         text: "End date"
-      },
+      }, 
       {
         text: "Last updated"
       }

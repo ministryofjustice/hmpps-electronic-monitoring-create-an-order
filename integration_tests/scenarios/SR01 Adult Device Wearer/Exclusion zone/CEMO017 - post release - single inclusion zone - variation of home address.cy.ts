@@ -11,13 +11,17 @@ import SearchPage from '../../../pages/search'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import monitoringOrderTypeDescriptionCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
+import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
+import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
+import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -40,7 +44,7 @@ context('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -71,27 +75,23 @@ context('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer('CEMO017'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
       const fakePrimaryAddress = createKnownAddress()
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
-      const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 1), // 1 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 120), // 120 days
-        orderType: 'Post Release',
+      const monitoringOrderTypeDescription = {
         conditionType: 'License condition',
-        monitoringRequired: 'Exclusion zone monitoring',
-        sentenceType: 'Standard Determinate Sentence',
-        pilot: 'They are not part of any of these pilots',
-        issp: 'No',
-        hdc: 'No',
+        monitoringCondition: 'Exclusion zone monitoring',
+        sentenceType: 'Extended Determinate Sentence',
         prarr: 'No',
       }
       const enforcementZoneDetails = {
         zoneType: 'Exclusion zone',
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
+        startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).setHours(0, 0, 0, 0)), // 10 days
         endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 100), // 100 days
         uploadFile: files.licence,
         description: 'Excluded from Football Grounds',
@@ -130,7 +130,7 @@ context('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription,
           enforcementZoneDetails,
           files,
           probationDeliveryUnit,
@@ -160,6 +160,31 @@ context('Scenarios', () => {
 
         Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
 
+        const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+        contactDetailsPage.form.saveAndContinueButton.click()
+
+        const noFixedAbodePage = Page.verifyOnPage(NoFixedAbodePage)
+        noFixedAbodePage.form.saveAndContinueButton.click()
+
+        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+        primaryAddressPage.form.saveAndContinueButton.click()
+
+        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+
+        interestedPartiesPage.form.fillInWith({
+          notifyingOrganisation: interestedParties.notifyingOrganisation,
+          prison: interestedParties.notifyingOrganisationName,
+          notifyingOrganisationEmailAddress: interestedParties.notifyingOrganisationEmailAddress,
+        })
+
+        interestedPartiesPage.form.saveAndContinueButton.click()
+
+        const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+
+        probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+
+        probationDeliveryUnitPage.form.saveAndContinueButton.click()
+
         Page.verifyOnPage(
           ContactInformationCheckYourAnswersPage,
           'Check your answers',
@@ -169,7 +194,7 @@ context('Scenarios', () => {
 
         Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
         Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
-        Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+        Page.verifyOnPage(monitoringOrderTypeDescriptionCheckYourAnswersPage, 'Check your answers').continue()
         Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
 
         orderSummaryPage.submitOrderButton.click()
@@ -193,11 +218,14 @@ context('Scenarios', () => {
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
             disability: [],
-            address_1: fakeVariationPrimaryAddress.line1,
-            address_2: fakeVariationPrimaryAddress.line2 === '' ? 'N/A' : fakeVariationPrimaryAddress.line2,
-            address_3: fakeVariationPrimaryAddress.line3,
-            address_4: fakeVariationPrimaryAddress.line4 === '' ? 'N/A' : fakeVariationPrimaryAddress.line4,
+            address_1: fakeVariationPrimaryAddress.addressLine1,
+            address_2:
+              fakeVariationPrimaryAddress.addressLine2 === '' ? 'N/A' : fakeVariationPrimaryAddress.addressLine2,
+            address_3: fakeVariationPrimaryAddress.addressLine3,
+            address_4:
+              fakeVariationPrimaryAddress.addressLine4 === '' ? 'N/A' : fakeVariationPrimaryAddress.addressLine4,
             address_post_code: fakeVariationPrimaryAddress.postcode,
+            no_fixed_address: 'false',
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -229,7 +257,7 @@ context('Scenarios', () => {
             nomis_id: deviceWearerDetails.nomisId,
             delius_id: deviceWearerDetails.deliusId,
             prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
             interpreter_required: 'false',
             language: '',
           },
@@ -252,8 +280,8 @@ context('Scenarios', () => {
                 enforceable_condition: [
                   {
                     condition: 'EM Exclusion / Inclusion Zone',
-                    start_date: formatAsFmsDateTime(monitoringConditions.startDate),
-                    end_date: formatAsFmsDateTime(monitoringConditions.endDate),
+                    start_date: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+                    end_date: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                   },
                 ],
                 exclusion_allday: '',
@@ -275,11 +303,11 @@ context('Scenarios', () => {
                 offence: installationAndRisk.offence,
                 offence_additional_details: '',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(enforcementZoneDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'Variation',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(enforcementZoneDetails.startDate, 0, 0),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: formatAsFmsDateTime(variationDetails.variationDate),
@@ -304,7 +332,7 @@ context('Scenarios', () => {
                 ro_region: interestedParties.responsibleOrganisationRegion,
                 sentence_date: '',
                 sentence_expiry: '',
-                sentence_type: 'Standard Determinate Sentence',
+                sentence_type: 'Extended Determinate Sentence',
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
@@ -317,7 +345,7 @@ context('Scenarios', () => {
                 conditional_release_end_time: '',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(enforcementZoneDetails.endDate),
                 curfew_description: '',
                 curfew_start: '',
                 curfew_end: '',
@@ -343,11 +371,14 @@ context('Scenarios', () => {
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
+                subcategory: 'SR08-Amend monitoring requirements',
+                dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

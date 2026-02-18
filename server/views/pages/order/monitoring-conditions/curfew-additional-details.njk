@@ -2,7 +2,7 @@
 
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 {% set section = content.pages.curfewAdditionalDetails.section %}
 {% set heading = content.pages.curfewAdditionalDetails.title %}
@@ -16,9 +16,10 @@
   {% set disabled = false if isOrderEditable else true %}
 
   {% set detailsHtml %}
-  {{ govukTextarea({
+  {{ govukCharacterCount({
   name: "curfewAdditionalDetails",
   id: "additional-details",
+  maxlength: 500,
   label: {
     text: questions.curfewAdditionalDetails.text
   },
@@ -36,7 +37,7 @@
   fieldset: {
     legend: {
       text: questions.provideDetails.text,
-      isPageHeading: true,
+      isPageHeading: false,
       classes: "govuk-fieldset__legend--s"
     }
   },

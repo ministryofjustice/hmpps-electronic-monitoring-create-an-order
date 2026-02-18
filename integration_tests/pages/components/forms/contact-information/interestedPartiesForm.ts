@@ -10,18 +10,18 @@ export type InterestedPartiesFormData = {
   prison?: string
   crownCourt?: string
   magistratesCourt?: string
+  youthCourt?: string
   notifyingOrganisationEmailAddress?: string
-
   responsibleOrganisation?: string
   responsibleOrganisationContactNumber?: string
   responsibleOrganisationEmailAddress?: string
   probationRegion?: string
+  policeArea?: string
   yjsRegion?: string
   responsibleOrganisationAddress?: FormAddressData
-
   responsibleOfficerName?: string
   responsibleOfficerContactNumber?: string
-
+  civilCountyCourt?: string
   youthCustodyServiceRegion?: string
 }
 
@@ -63,24 +63,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
-  get notifyingOrgProbationField(): FormAutocompleteComponent {
-    const label = 'Select the Probation Service region'
-    return new FormAutocompleteComponent(this.form, label, [
-      'North East',
-      'North West',
-      'Yorkshire and the Humber',
-      'Greater Manchester',
-      'East Midlands',
-      'Wales',
-      'West Midlands',
-      'East of England',
-      'South West',
-      'South Central',
-      'London',
-      'Kent, Surrey & Sussex',
-    ])
-  }
-
   get civilCountyCourtField(): FormAutocompleteComponent {
     const label = 'Select the name of the Civil and County Court'
     return new FormAutocompleteComponent(this.form, label, [])
@@ -111,11 +93,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
-  get youthCustodyServiceField(): FormAutocompleteComponent {
-    const label = 'Select the YCS region'
-    return new FormAutocompleteComponent(this.form, label, [])
-  }
-
   get notifyOrganisationEmailAddressField(): FormInputComponent {
     const label = "What is your team's contact email address?"
     return new FormInputComponent(this.form, label)
@@ -129,6 +106,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   get responsibleOfficerContactNumberField(): FormInputComponent {
     const label = "What is the Responsible Officer's telephone number?"
     return new FormInputComponent(this.form, label)
+  }
+
+  get youthCustodyServiceField(): FormAutocompleteComponent {
+    const label = 'Select the YCS region'
+    return new FormAutocompleteComponent(this.form, label, [])
   }
 
   get responsibleOrganisationField(): FormRadiosComponent {
@@ -157,7 +139,11 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'London',
       'Kent, Surrey & Sussex',
     ])
-    // ,'responsibleOrganisationProbationRegion')
+  }
+
+  get policeAreaField(): FormAutocompleteComponent {
+    const label = 'Select the Police force area'
+    return new FormAutocompleteComponent(this.form, label, [])
   }
 
   get yjsRegionField(): FormSelectComponent {
@@ -198,6 +184,10 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       this.magistratesCourtField.set(profile.magistratesCourt)
     }
 
+    if (profile.youthCourt) {
+      this.youthCourtField.set(profile.youthCourt)
+    }
+
     if (profile.notifyingOrganisationEmailAddress) {
       this.notifyOrganisationEmailAddressField.set(profile.notifyingOrganisationEmailAddress)
     }
@@ -208,6 +198,10 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
     if (profile.probationRegion) {
       this.responsibleOrgProbationField.set(profile.probationRegion)
+    }
+
+    if (profile.policeArea) {
+      this.policeAreaField.set(profile.policeArea)
     }
 
     if (profile.yjsRegion) {
@@ -226,6 +220,9 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       this.responsibleOfficerContactNumberField.set(profile.responsibleOfficerContactNumber)
     }
 
+    if (profile.civilCountyCourt) {
+      this.civilCountyCourtField.set(profile.civilCountyCourt)
+    }
     if (profile.youthCustodyServiceRegion) {
       this.youthCustodyServiceField.set(profile.youthCustodyServiceRegion)
     }
@@ -237,6 +234,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
     this.notifyOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationField.shouldNotHaveValidationMessage()
     this.responsibleOrgProbationField.shouldNotHaveValidationMessage()
+    this.policeAreaField.shouldNotHaveValidationMessage()
     this.yjsRegionField.shouldNotHaveValidationMessage()
     this.responsibleOrganisationEmailAddressField.shouldNotHaveValidationMessage()
     this.responsibleOfficerNameField.shouldNotHaveValidationMessage()
@@ -275,7 +273,6 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   shouldHaveAllDDV5Options(): void {
     this.notifyingOrganisationFieldDDV5.shouldHaveAllOptions()
     this.responsibleOrganisationField.shouldHaveAllOptions()
-    this.notifyingOrgProbationField.shouldHaveAllOptions()
     this.responsibleOrgProbationField.shouldHaveAllOptions()
     this.yjsRegionField.shouldHaveAllOptions()
   }

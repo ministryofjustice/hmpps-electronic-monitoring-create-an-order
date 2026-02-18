@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import OrderTasksPage from '../../../pages/order/summary'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'
@@ -57,7 +59,9 @@ context('Device wearer - check your answers', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -90,10 +94,10 @@ context('Device wearer - check your answers', () => {
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {
-          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'Mental health',
         },
-        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.personDetailsSection.shouldNotHaveItems([
@@ -102,11 +106,12 @@ context('Device wearer - check your answers', () => {
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
-        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
-        { key: 'Delius ID (optional)', value: 'delius' },
-        { key: 'Prison number (optional)', value: 'prison' },
-        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
+        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'NDelius ID', value: 'delius' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
@@ -127,7 +132,9 @@ context('Device wearer - check your answers', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -163,20 +170,21 @@ context('Device wearer - check your answers', () => {
         { key: 'What is the sex of the device wearer?', value: 'Female' },
         { key: "What is the device wearer's gender?", value: 'Self identify' },
         {
-          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'The device wearer has a disability or health condition not listed',
         },
         { key: "What is the device wearer's disability or health condition?", value: 'Broken arm' },
-        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
-        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
-        { key: 'Delius ID (optional)', value: 'delius' },
-        { key: 'Prison number (optional)', value: 'prison' },
-        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
+        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'NDelius ID', value: 'delius' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
@@ -197,7 +205,9 @@ context('Device wearer - check your answers', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -235,19 +245,20 @@ context('Device wearer - check your answers', () => {
         { key: 'What is the sex of the device wearer?', value: 'Prefer not to say' },
         { key: "What is the device wearer's gender?", value: 'Female' },
         {
-          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'Mental health',
         },
-        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
-        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
-        { key: 'Delius ID (optional)', value: 'delius' },
-        { key: 'Prison number (optional)', value: 'prison' },
-        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
+        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'NDelius ID', value: 'delius' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldExist()
       page.responsibleAdultSection.shouldHaveItems([
@@ -274,7 +285,9 @@ context('Device wearer - check your answers', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -312,19 +325,20 @@ context('Device wearer - check your answers', () => {
         { key: 'What is the sex of the device wearer?', value: 'Not able to provide this information' },
         { key: "What is the device wearer's gender?", value: 'Not able to provide this information' },
         {
-          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'Mental health',
         },
-        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
-        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
-        { key: 'Delius ID (optional)', value: 'delius' },
-        { key: 'Prison number (optional)', value: 'prison' },
-        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
+        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'NDelius ID', value: 'delius' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldExist()
       page.responsibleAdultSection.shouldHaveItems([
@@ -351,7 +365,9 @@ context('Device wearer - check your answers', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -401,10 +417,10 @@ context('Device wearer - check your answers', () => {
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {
-          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'Mental health',
         },
-        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.personDetailsSection.shouldNotHaveItems([
@@ -413,11 +429,12 @@ context('Device wearer - check your answers', () => {
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
-        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
-        { key: 'Delius ID (optional)', value: 'delius' },
-        { key: 'Prison number (optional)', value: 'prison' },
-        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
+        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'NDelius ID', value: 'delius' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
@@ -453,7 +470,9 @@ context('Device wearer - check your answers', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -503,10 +522,10 @@ context('Device wearer - check your answers', () => {
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {
-          key: 'Does the device wearer have any of the disabilities or health conditions listed? (optional)',
+          key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'Mental health',
         },
-        { key: 'What language does the interpreter need to use? (optional)', value: '' },
+        { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
       page.personDetailsSection.shouldNotHaveItems([
@@ -515,11 +534,12 @@ context('Device wearer - check your answers', () => {
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'National Offender Management Information System (NOMIS) ID (optional)', value: 'nomis' },
-        { key: 'Police National Computer (PNC) ID (optional)', value: 'pnc' },
-        { key: 'Delius ID (optional)', value: 'delius' },
-        { key: 'Prison number (optional)', value: 'prison' },
-        { key: 'Home Office Reference Number (optional)', value: 'ho' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
+        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
+        { key: 'Prison Number', value: 'prison' },
+        { key: 'NDelius ID', value: 'delius' },
+        { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
+        { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])
       page.responsibleAdultSection.shouldNotExist()
     })
@@ -537,6 +557,82 @@ context('Device wearer - check your answers', () => {
       page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
       page.returnButton().contains('Return to main form menu')
+    })
+  })
+
+  context('Viewing an old version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'MALE',
+            gender: 'MALE',
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
+            noFixedAbode: null,
+            interpreterRequired: false,
+          },
+          DeviceWearerResponsibleAdult: null,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'View answers'
+
+    it('navigates correctly back to summary page', () => {
+      const page = Page.visit(
+        CheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.returnButton().click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+    })
+
+    it('navigates correctly to next section', () => {
+      const page = Page.visit(
+        CheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        pageHeading,
+        true,
+      )
     })
   })
 

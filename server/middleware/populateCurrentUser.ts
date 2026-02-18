@@ -2,8 +2,9 @@ import { RequestHandler } from 'express'
 import { jwtDecode } from 'jwt-decode'
 import logger from '../../logger'
 import { convertToTitleCase } from '../utils/utils'
+import UserCohortService from '../services/userCohortService'
 
-export default function populateCurrentUser(): RequestHandler {
+export default function populateCurrentUser(userCohortService: UserCohortService): RequestHandler {
   return async (req, res, next) => {
     try {
       const {
@@ -19,6 +20,7 @@ export default function populateCurrentUser(): RequestHandler {
       if (userId === undefined || name === undefined) {
         throw new Error('There was a problem decoding the JWT')
       }
+      const cohort = await userCohortService.getUserCohort(res.locals.user.token)
 
       res.locals.user = {
         ...res.locals.user,
@@ -26,6 +28,7 @@ export default function populateCurrentUser(): RequestHandler {
         name,
         displayName: convertToTitleCase(name),
         userRoles: roles.map(role => role.substring(role.indexOf('_') + 1)),
+        cohort,
       }
 
       if (res.locals.user.authSource === 'nomis') {

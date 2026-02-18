@@ -42,7 +42,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -153,6 +153,8 @@ context.skip('Scenarios', () => {
   context('Community curfew weekend only', () => {
     const deviceWearerDetails = {
       ...createFakeYouthDeviceWearer('CEMO005'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
@@ -164,12 +166,8 @@ context.skip('Scenarios', () => {
       offence: 'Robbery',
       possibleRisk: 'There are no risks that the installer should be aware of',
       riskDetails: 'No risk',
-      mappaLevel: 'MAPPA 1',
-      mappaCaseType: 'Serious Organised Crime',
     }
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
+    const monitoringOrderTypeDescription = {
       orderType: 'Post Release',
       monitoringRequired: 'Curfew',
       sentenceType: 'Standard Determinate Sentence',
@@ -180,7 +178,6 @@ context.skip('Scenarios', () => {
       prarr: 'No',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
@@ -215,7 +212,7 @@ context.skip('Scenarios', () => {
         secondaryAddressDetails: undefined,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
@@ -243,11 +240,12 @@ context.skip('Scenarios', () => {
             .replace('Self identify', 'Prefer to self-describe')
             .replace('Non binary', 'Non-Binary'),
           disability: [],
-          address_1: fakePrimaryAddress.line1,
-          address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
-          address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+          address_1: fakePrimaryAddress.addressLine1,
+          address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
+          address_3: fakePrimaryAddress.addressLine3,
+          address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
           address_post_code: fakePrimaryAddress.postcode,
+          no_fixed_address: 'false',
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
@@ -262,8 +260,8 @@ context.skip('Scenarios', () => {
           risk_serious_harm: '',
           risk_self_harm: '',
           risk_details: 'No risk',
-          mappa: 'MAPPA 1',
-          mappa_case_type: 'SOC (Serious Organised Crime)',
+          mappa: null,
+          mappa_case_type: null,
           risk_categories: [],
           responsible_adult_required: 'true',
           parent: responsibleAdultDetails.fullName,
@@ -279,7 +277,7 @@ context.skip('Scenarios', () => {
           nomis_id: deviceWearerDetails.nomisId,
           delius_id: deviceWearerDetails.deliusId,
           prison_number: deviceWearerDetails.prisonNumber,
-          home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+          home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
           interpreter_required: 'false',
           language: '',
         },
@@ -325,11 +323,11 @@ context.skip('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+              order_type: monitoringOrderTypeDescription.orderType,
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -354,7 +352,7 @@ context.skip('Scenarios', () => {
               ro_region: interestedParties.responsibleOrganisationRegion,
               sentence_date: '',
               sentence_expiry: '',
-              sentence_type: monitoringConditions.sentenceType,
+              sentence_type: monitoringOrderTypeDescription.sentenceType,
               // sentence_type: monitoringConditions.sentenceType,
               tag_at_source: '',
               tag_at_source_details: '',
@@ -363,12 +361,12 @@ context.skip('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+              conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
               conditional_release_start_time: '19:00:00',
               conditional_release_end_time: '07:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -404,11 +402,14 @@ context.skip('Scenarios', () => {
               installation_address_4: '',
               installation_address_post_code: '',
               crown_court_case_reference_number: '',
-              magistrate_court_case_reference_number: '',
+              magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
               pilot: '',
+              subcategory: '',
+              dapol_missed_in_error: '',
+              ac_eligible_offences: [],
             },
           })
           .should('be.true')

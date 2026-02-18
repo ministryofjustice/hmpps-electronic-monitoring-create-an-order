@@ -3,12 +3,26 @@ import { mockApiOrder } from '../../../mockApis/cemo'
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import Page from '../../../pages/page'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import InstallationLocationPage from '../../../pages/order/monitoring-conditions/installation-location'
 
 const mockOrderId = uuidv4()
 
+const mockInterestedParties = (notifyingOrg: string = 'PRISON') => {
+  return {
+    notifyingOrganisation: notifyingOrg,
+    notifyingOrganisationName: '',
+    notifyingOrganisationEmail: '',
+    responsibleOfficerName: '',
+    responsibleOfficerPhoneNumber: '',
+    responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+    responsibleOrganisationEmail: '',
+    responsibleOrganisationRegion: '',
+  }
+}
+
 const mockSubmittedAlcoholMonitoring = {
   ...mockApiOrder('SUBMITTED'),
+  interestedParties: mockInterestedParties(),
   monitoringConditionsAlcohol: {
     monitoringType: 'ALCOHOL_ABSTINENCE',
     startDate: '2024-03-27T00:00:00.000Z',
@@ -19,6 +33,18 @@ const mockSubmittedAlcoholMonitoring = {
 
 const mockEmptyAlcoholMonitoring = {
   ...mockApiOrder(),
+  interestedParties: mockInterestedParties(),
+  monitoringConditionsAlcohol: {
+    monitoringType: null,
+    startDate: null,
+    endDate: null,
+  },
+  id: mockOrderId,
+}
+
+const mockCourtAlcoholMonitoring = {
+  ...mockApiOrder(),
+  interestedParties: mockInterestedParties('SCOTTISH_COURT'),
   monitoringConditionsAlcohol: {
     monitoringType: null,
     startDate: null,
@@ -32,11 +58,18 @@ context('Alcohol monitoring', () => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     cy.task('stubCemoListOrders')
+
+    cy.signIn()
   })
 
   context('Draft order', () => {
     beforeEach(() => {
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: mockEmptyAlcoholMonitoring,
+      })
     })
 
     it('Should display the form', () => {
@@ -45,6 +78,45 @@ context('Alcohol monitoring', () => {
       page.header.userName().should('contain.text', 'J. Smith')
       page.errorSummary.shouldNotExist()
       page.form.shouldHaveAllOptions()
+    })
+  })
+
+  context('Notifying org is court', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: mockCourtAlcoholMonitoring,
+      })
+
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions-alcohol',
+        response: mockEmptyAlcoholMonitoring.monitoringConditionsAlcohol,
+      })
+    })
+
+    it('should not show the monitoring type question', () => {
+      const page = Page.visit(AlcoholMonitoringPage, { orderId: mockOrderId })
+
+      cy.should('not.contain.value', 'What alcohol monitoring does the device wearer need?')
+
+      page.form.fillInWith({
+        startDate: new Date('2024-03-27T00:00:00.000Z'),
+        endDate: new Date('2025-04-28T00:00:00.000Z'),
+      })
+
+      page.form.saveAndContinueButton.click()
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-alcohol`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+        expect(requests[0]).to.deep.equal({
+          monitoringType: 'ALCOHOL_ABSTINENCE',
+          startDate: '2024-03-27T00:00:00.000Z',
+          endDate: '2025-04-28T22:59:00.000Z',
+        })
+      })
+      Page.verifyOnPage(InstallationLocationPage)
     })
   })
 
@@ -63,9 +135,7 @@ context('Alcohol monitoring', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'SUBMITTED',
-        order: {
-          monitoringConditionsAlcohol: mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
-        },
+        order: mockSubmittedAlcoholMonitoring,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
@@ -82,9 +152,7 @@ context('Alcohol monitoring', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'SUBMITTED',
-        order: {
-          monitoringConditionsAlcohol: mockSubmittedAlcoholMonitoring.monitoringConditionsAlcohol,
-        },
+        order: mockSubmittedAlcoholMonitoring,
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/alcohol`)
       const page = Page.verifyOnPage(AlcoholMonitoringPage)
@@ -210,7 +278,7 @@ context('Alcohol monitoring', () => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal(baseExpectedApiRequest)
       })
-      Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers')
+      Page.verifyOnPage(InstallationLocationPage)
     })
   })
 

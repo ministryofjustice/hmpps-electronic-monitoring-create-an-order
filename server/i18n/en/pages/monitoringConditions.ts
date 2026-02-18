@@ -21,7 +21,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     },
     monitoringRequired: {
       text: 'What monitoring does the device wearer need?',
-      hint: 'Select all that apply.',
+      hint: 'Select one, if you need to you will be able to add other monitoring types later',
     },
     orderType: {
       text: 'What is the order type?',
@@ -47,6 +47,20 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
     startTime: {
       text: 'What is the start time on the first day of monitoring?',
       hint: 'Enter time using a 24 hour clock. For example 14:30 instead of 2.30pm',
+    },
+    offenceType: {
+      text: 'What type of acquisitive crime offence did the device wearer commit?',
+      hint: 'The acquisitive crime offence needs to be their longest or equal longest sentence.',
+    },
+    policeArea: {
+      text: "Which police force area is the device wearer's release address in?",
+      hint: 'Enter the full postcode of the device wearer release address in the <a href="https://www.police.uk/pu/find-a-police-force/" id="police-force-link" target="_blank" rel="noopener noreferrer" class="govuk-link">police force lookup (opens in a new tab)</a> to find the area.',
+    },
+    removeMonitoringType: {
+      text: 'Are you sure that you want to delete this electronic monitoring type?',
+    },
+    dapolMissedInError: {
+      text: 'Are you submitting this form becasue DAPOL was missed in error at point of release?',
     },
   },
   section: 'Electronic monitoring required',

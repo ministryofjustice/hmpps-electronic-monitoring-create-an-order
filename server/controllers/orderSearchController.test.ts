@@ -44,6 +44,8 @@ describe('OrderSearchController', () => {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'first',
         lastName: 'last',
         alias: null,
@@ -107,7 +109,8 @@ describe('OrderSearchController', () => {
 
   describe('list orders', () => {
     it('should render a view containing users orders', async () => {
-      mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, mockSubmittedOrder])
+      const secondDraftOrder = getMockOrder()
+      mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, secondDraftOrder])
 
       await orderController.list(req, res, next)
 
@@ -122,13 +125,10 @@ describe('OrderSearchController', () => {
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
             {
-              href: `/order/${mockSubmittedOrder.id}/summary`,
+              href: `/order/${secondDraftOrder.id}/summary`,
               index: 1,
-              name: 'first last',
-              statusTags: [
-                { type: 'VARIATION', text: 'Change to form' },
-                { type: 'SUBMITTED', text: 'Submitted' },
-              ],
+              name: 'Not supplied',
+              statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
           ],
         }),

@@ -3,6 +3,7 @@ import AddressService from './addressService'
 import AlcoholMonitoringService from './alcoholMonitoringService'
 import AttachmentService from './attachmentService'
 import AttendanceMonitoringService from './attendanceMonitoringService'
+import AttendanceMonitoringAddToListService from '../routes/monitoring-conditions/attendance-monitoring/service'
 import AuditService from './auditService'
 import ContactDetailsService from './contactDetailsService'
 import CurfewConditionsService from './curfewConditionsService'
@@ -11,8 +12,8 @@ import CurfewTimetableService from './curfewTimetableService'
 import DeviceWearerResponsibleAdultService from './deviceWearerResponsibleAdultService'
 import DeviceWearerService from './deviceWearerService'
 import EnforcementZoneService from './enforcementZoneServices'
+import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
 import InstallationAndRiskService from './installationAndRiskService'
-import MonitoringConditionsService from './monitoringConditionsService'
 import InterestedPartiesService from './interestedPartiesService'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
@@ -33,6 +34,18 @@ import MonitoringConditionsStoreService from '../routes/monitoring-conditions/mo
 import InMemoryStore from '../routes/monitoring-conditions/store/inMemoryStore'
 import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
 import RedisStore from '../routes/monitoring-conditions/store/redisStore'
+import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
+import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
+import FmsRequestService from './fmsRequestService'
+import DapoService from '../routes/installation-and-risk/dapo/service'
+import OffenceService from '../routes/installation-and-risk/offence/service'
+import UserCohortService from './userCohortService'
+import RedisCacheService from './cache/redisCacheService'
+import { UserCohort } from '../models/UserCohort'
+import InMemorCacheService from './cache/inMemoryCacheService'
+import MappaService from '../routes/installation-and-risk/mappa/service'
+import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
+import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -40,6 +53,7 @@ export const services = () => {
   const alcoholMonitoringService = new AlcoholMonitoringService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
   const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
+  const attendanceMonitoringAddToListService = new AttendanceMonitoringAddToListService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
   const curfewConditionsService = new CurfewConditionsService(cemoApiClient)
@@ -49,9 +63,9 @@ export const services = () => {
   const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
-  const monitoringConditionsService = new MonitoringConditionsService(cemoApiClient)
   const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
   const zoneService = new EnforcementZoneService(cemoApiClient)
+  const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
   const orderChecklistService = new OrderChecklistService(
@@ -69,12 +83,29 @@ export const services = () => {
     config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
   )
   const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
+  const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
+  const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
+  const dapoService = new DapoService(cemoApiClient)
+  const offenceService = new OffenceService(cemoApiClient)
+  const offenceOtherInfoService = new OffenceOtherInfoService(cemoApiClient)
 
+  const mappaService = new MappaService(cemoApiClient)
+  const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
+
+  const userCohortService = new UserCohortService(
+    cemoApiClient,
+    config.redis.enabled
+      ? new RedisCacheService<UserCohort>(createRedisClient(), 'usertoken:')
+      : new InMemorCacheService<UserCohort>(),
+  )
+
+  const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
     attachmentService,
     attendanceMonitoringService,
+    attendanceMonitoringAddToListService,
     auditService,
     contactDetailsService,
     curfewReleaseDateService,
@@ -85,7 +116,6 @@ export const services = () => {
     deviceWearerResponsibleAdultService,
     deviceWearerService,
     installationAndRiskService,
-    monitoringConditionsService,
     interestedPartiesService,
     orderSearchService,
     orderService,
@@ -93,6 +123,7 @@ export const services = () => {
     trailMonitoringService,
     variationService,
     zoneService,
+    zoneAddToListService,
     probationDeliveryUnitService,
     installationLocationService,
     installationAppointmentService,
@@ -100,6 +131,15 @@ export const services = () => {
     isRejectionService,
     monitoringConditionsStoreService,
     monitoringConditionsUpdateService,
+    removeMonitoringTypeService,
+    serviceRequestTypeService,
+    fmsRequestService,
+    dapoService,
+    offenceService,
+    offenceOtherInfoService,
+    userCohortService,
+    mappaService,
+    detailsOfInstallationService,
   }
 }
 
@@ -107,6 +147,7 @@ export type Services = ReturnType<typeof services>
 export {
   AlcoholMonitoringService,
   AttachmentService,
+  AttendanceMonitoringAddToListService,
   AuditService,
   ContactDetailsService,
   CurfewConditionsService,
@@ -116,8 +157,8 @@ export {
   DeviceWearerResponsibleAdultService,
   DeviceWearerService,
   EnforcementZoneService,
+  EnforcementZoneAddToListService,
   InstallationAndRiskService,
-  MonitoringConditionsService,
   OrderSearchService,
   OrderService,
   TrailMonitoringService,
@@ -127,4 +168,12 @@ export {
   IsRejectionService,
   MonitoringConditionsStoreService,
   MonitoringConditionsUpdateService,
+  RemoveMonitoringTypeService,
+  ServiceRequestTypeService,
+  FmsRequestService,
+  DapoService,
+  OffenceService,
+  OffenceOtherInfoService,
+  UserCohortService,
+  MappaService,
 }

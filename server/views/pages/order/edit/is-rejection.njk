@@ -3,6 +3,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set questions = content.pages.isRejection.questions %}
+{% set questionName = questions.isRejection.text %}
 
 {% block beforeContent %}
     {{ govukBackLink({
