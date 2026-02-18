@@ -128,15 +128,13 @@ describe('OrderController', () => {
         },
       })
       const res = createMockResponse()
-      const mockOrder = getMockOrder({ id: orderId })
-      mockOrderService.createVariationFromExisting.mockResolvedValue(mockOrder)
       const next = jest.fn()
 
       // When
       await orderController.createVariation(req, res, next)
 
       // Then
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-rejection`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
   })
 

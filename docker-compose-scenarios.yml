@@ -43,7 +43,7 @@ services:
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
   cemo-db:
     container_name: cemo-db
-    image: postgres:17
+    image: postgres:18
     restart: always
     networks:
       - hmpps_integration

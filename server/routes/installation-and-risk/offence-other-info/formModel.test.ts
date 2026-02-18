@@ -43,7 +43,7 @@ describe('offence other info form model', () => {
     it('error if details are too long', () => {
       const data = {
         hasOtherInformation: 'yes',
-        otherInformationDetails: 'a'.repeat(201),
+        otherInformationDetails: 'a'.repeat(501),
       }
 
       const result = validator.safeParse(data)

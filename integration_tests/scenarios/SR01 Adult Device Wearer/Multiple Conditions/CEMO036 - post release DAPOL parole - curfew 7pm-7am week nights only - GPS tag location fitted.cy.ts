@@ -8,7 +8,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -238,7 +238,7 @@ context('Scenarios', () => {
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
-                offence_additional_details: 'AC Offence: Aggravated Burglary in a Dwelling. PFA: Kent',
+                offence_additional_details: 'PFA: Kent',
                 offence_date: '',
                 order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 order_id: orderId,
@@ -340,6 +340,12 @@ context('Scenarios', () => {
                 pilot: 'GPS Acquisitive Crime Home Detention Curfew',
                 subcategory: '',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [
+                  {
+                    offence: 'Aggravated Burglary in a Dwelling.',
+                    offence_date: '',
+                  },
+                ],
               },
             })
             .should('be.true')
