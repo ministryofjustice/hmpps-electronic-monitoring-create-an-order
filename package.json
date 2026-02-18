@@ -92,7 +92,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.908.0",
+    "@aws-sdk/client-sqs": "^3.992.0",
     "@ministryofjustice/frontend": "^5.2.1",
     "@secretlint/secretlint-rule-pattern": "^11.2.5",
     "@types/multer": "^2.0.0",
@@ -194,16 +194,19 @@
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
   },
-  "overrides": {   
+  "overrides": {
     "cypress": {
-      "@cypress/request":"^3.0.10",
+      "@cypress/request": "^3.0.10",
       "qs": "^6.15.0"
     },
-    "find-cypress-specs":{
+    "find-cypress-specs": {
       "tsx": "^4.21.0"
     },
     "tsx": {
       "esbuild": "^0.27.3"
+    },
+    "@aws-sdk/client-sqs": {
+      "fast-xml-parser": "^5.3.6"
     }
   }
 }
