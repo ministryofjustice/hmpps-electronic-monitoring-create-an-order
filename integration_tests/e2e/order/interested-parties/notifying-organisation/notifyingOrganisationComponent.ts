@@ -1,8 +1,8 @@
-import SingleQuestionFormComponent from '../../../../pages/components/SingleQuestionFormComponent'
+import FormComponent from '../../../../pages/components/formComponent'
 import FormRadiosComponent from '../../../../pages/components/formRadiosComponent'
 import FormTextareaComponent from '../../../../pages/components/formTextareaComponent'
 
-export default class NotifyingOrganisationComponent extends SingleQuestionFormComponent {
+export default class NotifyingOrganisationComponent extends FormComponent {
   get organisationField(): FormRadiosComponent {
     const label = 'What organisation or related organisation are you part of?'
     return new FormRadiosComponent(this.form, label, [
@@ -24,9 +24,12 @@ export default class NotifyingOrganisationComponent extends SingleQuestionFormCo
     return new FormTextareaComponent(this.form, "What is your team's contact email address?")
   }
 
-  fillInWith(value: string) {
-    if (value) {
-      this.emailField.set(value)
+  fillInWith({ organisation, email }: { organisation: string; email: string }) {
+    if (organisation) {
+      this.organisationField.set(organisation)
+    }
+    if (email) {
+      this.emailField.set(email)
     }
   }
 }

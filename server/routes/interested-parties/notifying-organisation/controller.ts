@@ -1,9 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import isVariationType from '../../../utils/isVariationType'
+import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 
 export default class NotifingOrganisationController {
-  constructor() {}
+  constructor(private readonly store: InterestedPartiesStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render('pages/order/interested-parties/notifying-organisation', {
@@ -44,7 +45,7 @@ export default class NotifingOrganisationController {
       }
     }
 
-    if (formData.branch === 'Court')
+    if (notifyingOrganisationCourts.includes(formData.notifyingOrganisation))
       return res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
 
     return res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
