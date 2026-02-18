@@ -58,9 +58,10 @@ context('pilot', () => {
 
   it('Should submit the form', () => {
     // go through the flow
-    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Release from prison')
-    orderTypePage.form.continueButton.click()
+    Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
+    // orderTypePage.form.fillInWith('Release from prison')
+    // orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Life Sentence')

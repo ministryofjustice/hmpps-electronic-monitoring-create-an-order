@@ -7,6 +7,7 @@ import { ValidationResult } from '../../../models/Validation'
 import { validationErrors } from '../../../constants/validationErrors'
 import MonitoringConditionsBaseController from '../base/monitoringConditionBaseController'
 import MonitoringConditionsUpdateService from '../monitoringConditionsService'
+import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 
 export default class OrderTypeController extends MonitoringConditionsBaseController {
   constructor(
@@ -27,13 +28,22 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
       throw new Error('notifyingOrganisation not set')
     }
 
-    if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+    if (
+      notifyingOrganisation === 'PRISON' ||
+      notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE' ||
+      notifyingOrganisation === 'PROBATION'
+    ) {
       this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'POST_RELEASE' })
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id))
       return
     }
     if (notifyingOrganisation === 'HOME_OFFICE') {
       await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'IMMIGRATION' })
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
+      return
+    }
+    if (notifyingOrganisationCourts.includes(notifyingOrganisation)) {
+      await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'BAIL' })
       await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
       return
     }
