@@ -66,13 +66,13 @@ context('Offence Other Info Validations', () => {
 
     page.form.hasOtherInformationField.set('Yes')
 
-    const longText = 'a'.repeat(201)
+    const longText = 'a'.repeat(501)
     page.form.otherInformationDetailsField.set(longText)
 
     page.form.saveAndContinueButton.click()
 
     page.form.otherInformationDetailsField.shouldHaveValidationMessage(
-      'Additional risk information must be 200 characters or fewer',
+      'Additional risk information must be 500 characters or fewer',
     )
   })
 })
