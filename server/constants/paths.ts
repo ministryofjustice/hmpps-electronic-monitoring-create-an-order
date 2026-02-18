@@ -21,6 +21,15 @@ const paths = {
     VARIATION: '/order/:orderId/variation',
   },
 
+  INTEREST_PARTIES: {
+    BASE_PATH: '/order/:orderId/interest-parties',
+    NOTIFYING_ORGANISATION: '/order/:orderId/interest-parties/notifying-organisation',
+    RESPONSIBLE_OFFICER: '/order/:orderId/interest-parties/responsible-officer',
+    RESPONSBILE_ORGANISATION: '/order/:orderId/interest-parties/responsible-organisation',
+    PDU: '/order/:orderId/interest-parties/probation-delivery-unit',
+    CHECK_YOUR_ANSWERS: '/order/:orderId/interest-parties/check-your-answers',
+  },
+
   ABOUT_THE_DEVICE_WEARER: {
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/about-the-device-wearer/check-your-answers',
@@ -50,7 +59,7 @@ const paths = {
     OFFENCE_LIST: '/order/:orderId/installation-and-risk/offence-list',
     DAPO: '/order/:orderId/installation-and-risk/dapo',
     DAPO_ID: '/order/:orderId/installation-and-risk/dapo/:clauseId',
-    DELETE: '/order/:orderId/installation-and-risk/delete',
+    DELETE: '/order/:orderId/installation-and-risk/delete/:offenceId',
     MAPPA: '/order/:orderId/installation-and-risk/mappa',
     IS_MAPPA: '/order/:orderId/installation-and-risk/is-mappa',
     DETAILS_OF_INSTALLATION: '/order/:orderId/installation-and-risk/details-of-installation',

@@ -109,13 +109,13 @@ context('Monitoring conditions - Enforcement Zone', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: [
-            { field: 'description', error: 'Where is the exclusion zone must be 200 characters or less' },
+            { field: 'description', error: 'Where is the exclusion zone must be 500 characters or less' },
             { field: 'duration', error: 'When must the exclusion zone be followed must be 200 characters or less' },
           ],
         })
       })
 
-      it('should display error messages when exclusion zone fields (description, duration) are longer than 200 characters', () => {
+      it('should display error messages when exclusion zone fields (description, duration) are longer than 500 characters', () => {
         const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 0 })
 
         const formData = {
@@ -125,7 +125,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
           name: 'test name',
           description: faker.string.fromCharacters(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            201,
+            501,
           ),
           duration: faker.string.fromCharacters('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 201),
         }
@@ -138,13 +138,13 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
         Page.verifyOnPage(EnforcementZoneAddToListPage)
         page.form.descriptionField.shouldHaveValidationMessage(
-          'Where is the exclusion zone must be 200 characters or less',
+          'Where is the exclusion zone must be 500 characters or less',
         )
         page.form.durationField.shouldHaveValidationMessage(
           'When must the exclusion zone be followed must be 200 characters or less',
         )
         page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError('Where is the exclusion zone must be 200 characters or less')
+        page.errorSummary.shouldHaveError('Where is the exclusion zone must be 500 characters or less')
         page.errorSummary.shouldHaveError('When must the exclusion zone be followed must be 200 characters or less')
       })
     })

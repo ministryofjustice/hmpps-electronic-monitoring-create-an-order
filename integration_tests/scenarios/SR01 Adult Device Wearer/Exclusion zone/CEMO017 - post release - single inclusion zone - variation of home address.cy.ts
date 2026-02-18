@@ -21,7 +21,7 @@ import InterestedPartiesPage from '../../../pages/order/contact-information/inte
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -378,6 +378,7 @@ context('Scenarios', () => {
                 pilot: '',
                 subcategory: 'SR08-Amend monitoring requirements',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

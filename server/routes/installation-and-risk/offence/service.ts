@@ -11,6 +11,12 @@ type Input = {
   orderId: string
 }
 
+type RemoveOffenceInput = {
+  accessToken: string
+  orderId: string
+  offenceId: string
+}
+
 export default class OffenceService {
   constructor(private readonly apiClient: RestClient) {}
 
@@ -37,5 +43,12 @@ export default class OffenceService {
 
       throw e
     }
+  }
+
+  deleteOffence = async (input: RemoveOffenceInput) => {
+    return this.apiClient.delete({
+      path: `/api/orders/${input.orderId}/offence/delete/${input.offenceId}`,
+      token: input.accessToken,
+    })
   }
 }
