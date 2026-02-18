@@ -35,7 +35,7 @@ const EnforcementZoneAddToListFormDataValidator = z
     description: z
       .string()
       .min(1, validationErrors.enforcementZone.descriptionRequired)
-      .max(200, validationErrors.enforcementZone.descriptionTooLong),
+      .max(500, validationErrors.enforcementZone.descriptionTooLong),
     duration: z
       .string()
       .min(1, validationErrors.enforcementZone.durationRequired)

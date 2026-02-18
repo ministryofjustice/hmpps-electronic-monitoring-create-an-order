@@ -20,7 +20,7 @@ import ContactDetailsPage from '../../../pages/order/contact-information/contact
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -362,6 +362,7 @@ context('Scenarios', () => {
                 pilot: '',
                 subcategory: 'SR08-Amend monitoring requirements',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

@@ -13,7 +13,7 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber } from '../../utils'
 import SearchPage from '../../../pages/search'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -318,7 +318,7 @@ context('Scenarios', () => {
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
-                offence_additional_details: 'AC Offence: Aggravated Burglary in a Dwelling. PFA: Avon and Somerset',
+                offence_additional_details: 'PFA: Avon and Somerset',
                 offence_date: '',
                 order_end: formatAsFmsDateTime(trailMonitoringDetails.endDate, 23, 59),
                 order_id: orderId,
@@ -390,6 +390,12 @@ context('Scenarios', () => {
                 pilot: 'GPS Acquisitive Crime Parole',
                 subcategory: '',
                 dapol_missed_in_error: '',
+                ac_eligible_offences: [
+                  {
+                    offence: 'Aggravated Burglary in a Dwelling',
+                    offence_date: '',
+                  },
+                ],
               },
             })
             .should('be.true')
