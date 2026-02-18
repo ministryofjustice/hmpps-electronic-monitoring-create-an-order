@@ -2,6 +2,7 @@ interface ValidationErrors {
   attachments: {
     licenceRequired: string
     photoIdentityRequired: string
+    haveFileRequired: string
   }
   address: {
     addressLine1Required: string
@@ -21,6 +22,7 @@ interface ValidationErrors {
     preferredNameMaxLength: string
     responsibleAdultRequired: string
     sexRequired: string
+    disabilitiesRequired: string
   }
   monitoringConditions: {
     conditionTypeRequired: string
@@ -31,9 +33,13 @@ interface ValidationErrors {
     pilotRequired: string
     isspRequired: string
     hdcRequired: string
+    dapolMissedRequired: string
     prarrRequired: string
+    offenceTypeRequired: string
+    policeAreaRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    addAnotherRequired: string
   }
   monitoringConditionsAlcohol: {
     startDateTime: DateTimeErrorMessages
@@ -55,13 +61,13 @@ interface ValidationErrors {
     pduRequired: string
   }
   curfewConditions: {
-    addressesRequired: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: string
     curfewDetailsRequired: string
+    curfewDetailsTooLong: string
   }
   enforcementZone: {
     descriptionRequired: string
@@ -70,11 +76,17 @@ interface ValidationErrors {
     durationTooLong: string
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+    nameRequired: string
     anotherZoneRequired: string
   }
   trailMonitoring: {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
+  }
+  trailMonitoringHomeOffice: {
+    startDateTime: DateTimeErrorMessages
+    endDateTime: DateTimeErrorMessages
+    deviceTypeRequired: string
   }
   notifyingOrganisation: {
     notifyingOrganisationName: string
@@ -98,9 +110,39 @@ interface ValidationErrors {
     possibleRiskRequired: string
     riskDetailsRequired: string
     riskDetailsTooLong: string
+    offenceAdditionalDetailsTooLong: string
+  }
+  isMappa: {
+    required: string
+  }
+  mappa: {
+    levelRequired: string
+    categoryRequired: string
   }
   isRejection: {
     isRejectionRequired: string
+  }
+  serviceRequestType: {
+    serviceRequestTypeRequired: string
+  }
+  dapo: {
+    clause: string
+    date: DateErrorMessages
+  }
+  offence: {
+    offenceTypeRequired: string
+    offenceDate: DateErrorMessages
+  }
+  offenceOtherInformation: {
+    hasOtherInformationRequired: string
+    detailsRequired: string
+    tooLong: string
+  }
+  offenceSummaryList: {
+    addAnotherRequired: string
+  }
+  dapoClauseSummaryList: {
+    addAnotherRequired: string
   }
 }
 
@@ -112,6 +154,8 @@ export interface DateErrorMessages {
   mustIncludeYear: string
   required?: string
   yearMustIncludeFourNumbers: string
+  mustNoInPast?: string
+  mustAfterStartDate?: string
 }
 
 interface TimeErrorMessages {
@@ -145,7 +189,11 @@ const getMonitoringConditionStartDateTimeErrorMessages = (type: string) => {
   }
 }
 
-const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: boolean = false) => {
+const getMonitoringConditionEndDateTimeErrorMessages = (
+  type: string,
+  required: boolean = false,
+  notInPast: boolean = false,
+) => {
   return {
     date: {
       mustBeReal: `End date for ${type} must be a real date`,
@@ -154,6 +202,8 @@ const getMonitoringConditionEndDateTimeErrorMessages = (type: string, required: 
       mustIncludeYear: `End date for ${type} must include a year`,
       yearMustIncludeFourNumbers: `Year must include 4 numbers`,
       required: required ? `Enter end date for ${type}` : undefined,
+      mustNoInPast: notInPast ? `End date of  ${type} must be in the future` : undefined,
+      mustAfterStartDate: `End date must be after start date`,
     },
     time: {
       mustBeReal: `End time for ${type} must be a real time`,
@@ -168,6 +218,7 @@ const validationErrors: ValidationErrors = {
   attachments: {
     licenceRequired: 'Upload a licence or court document',
     photoIdentityRequired: 'Select the photo identification document',
+    haveFileRequired: 'Select Yes if you have a document to upload',
   },
   address: {
     addressLine1Required: 'Enter address line 1, typically the building and street',
@@ -196,19 +247,24 @@ const validationErrors: ValidationErrors = {
     preferredNameMaxLength: 'Preferred name must be 200 characters or less',
     responsibleAdultRequired: 'Select yes if a responsible adult is required',
     sexRequired: "Select the device wearer's sex, or select 'Not able to provide this information'",
+    disabilitiesRequired: 'Select if the device wearer has any disability or health conditions',
   },
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',
     monitoringTypeRequired: 'Select monitoring required',
     orderTypeDescriptionRequired: 'Select the type of pilot the device wearer is part of',
     pilotRequired: 'Select the type of pilot the device wearer is part of',
+    dapolMissedRequired: 'Select Yes if DAPOL was missed in error at the point of release',
     orderTypeRequired: 'Select the order type',
     sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
-    isspRequired: 'Select if the device wearer is on the ISSP',
+    isspRequired: 'Select Yes if the device wearer is on the ISSP',
     hdcRequired: 'Select Yes if the device wearer is on a HDC',
     prarrRequired: 'Select if the device wearer is being released on a P-RARR',
+    offenceTypeRequired: 'Select the type of offence the device wearer committed',
+    policeAreaRequired: "Select the police force area the device wearer's release address is in",
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('monitoring'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('monitoring', true, true),
+    addAnotherRequired: 'Select Yes if there are other types of monitoring needed',
   },
   monitoringConditionsAlcohol: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('alcohol monitoring'),
@@ -230,26 +286,32 @@ const validationErrors: ValidationErrors = {
     pduRequired: "Select the Responsible Organisation's PDU",
   },
   curfewConditions: {
-    addressesRequired: 'Select where the device wearer will be during curfew hours',
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
   },
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",
     curfewDetailsRequired: 'Enter detail of the curfew address boundary',
+    curfewDetailsTooLong: 'Detail of the curfew address boundary must be 500 characters or less',
   },
   enforcementZone: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('exclusion zone'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('exclusion zone', true),
     descriptionRequired: 'Enter where the exclusion zone is required',
-    descriptionTooLong: 'Where is the exclusion zone must be 200 characters or less',
+    descriptionTooLong: 'Where is the exclusion zone must be 500 characters or less',
     durationRequired: 'Enter when the exclusion zone must be followed',
+    nameRequired: 'Enter the name of the exclusion zone',
     durationTooLong: 'When must the exclusion zone be followed must be 200 characters or less',
     anotherZoneRequired: 'Select ‘Yes’ if you need to add another exclusion zone',
   },
   trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', true),
+  },
+  trailMonitoringHomeOffice: {
+    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
+    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('trail monitoring', false),
+    deviceTypeRequired: 'Select what type of device is needed',
   },
   notifyingOrganisation: {
     notifyingOrganisationName: 'Select the organisation you are part of',
@@ -294,10 +356,56 @@ const validationErrors: ValidationErrors = {
     offenceRequired: 'Select the type of offence the device wearer committed',
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
     riskDetailsRequired: 'Enter any other risks to be aware of',
-    riskDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
+    riskDetailsTooLong: 'Any other risks to be aware of must be 500 characters or less',
+    offenceAdditionalDetailsTooLong:
+      'Any other information to be aware of about the offence committed must be 500 characters or less',
+  },
+  isMappa: {
+    required: 'Select Yes if the device wearer is a MAPPA offender',
+  },
+  mappa: {
+    levelRequired: 'Select the level of MAPPA that applies to the device wearer',
+    categoryRequired: 'Select the category of MAPPA that applies to the device wearer',
   },
   isRejection: {
     isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
+  },
+  serviceRequestType: {
+    serviceRequestTypeRequired: 'Select why you are making changes to the form',
+  },
+  dapo: {
+    date: {
+      mustBeReal: 'Date of dapo requirement must be a real date',
+      mustIncludeDay: 'Date of DAPO requirement must include a day',
+      mustIncludeMonth: 'Date of DAPO requirement must include a month',
+      mustIncludeYear: 'Date of DAPO requirement must include a year',
+      yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      required: 'Enter date of DAPO requirement',
+    },
+    clause: 'Enter a DAPO order clause number',
+  },
+  offence: {
+    offenceTypeRequired: 'Select the type of offence the device wearer committed',
+    offenceDate: {
+      mustBeReal: 'Date of offence the device wearer committed must be a real date',
+      mustIncludeDay: 'Date of offence the device wearer committed must include a day',
+      mustIncludeMonth: 'Date of offence the device wearer committed must include a month',
+      mustIncludeYear: 'Date of offence the device wearer committed must include a year',
+      yearMustIncludeFourNumbers: 'Year must include 4 numbers',
+      required: 'Enter date of offence the device wearer committed',
+      mustBeInPast: 'Date of offence the device wearer committed must be in the past',
+    },
+  },
+  offenceOtherInformation: {
+    hasOtherInformationRequired: 'Select Yes if there is other information to be aware of about the offence committed',
+    detailsRequired: 'Enter additional information about the offence',
+    tooLong: 'Additional risk information must be 500 characters or fewer',
+  },
+  offenceSummaryList: {
+    addAnotherRequired: 'Select Yes if there are any other offences the device wearer has committed',
+  },
+  dapoClauseSummaryList: {
+    addAnotherRequired: 'Select Yes if there are any other DAPO order clauses',
   },
 }
 

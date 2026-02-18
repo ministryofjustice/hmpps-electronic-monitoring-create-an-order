@@ -1,6 +1,5 @@
 import FormCheckboxesComponent from '../../formCheckboxesComponent'
 import FormComponent from '../../formComponent'
-import FormRadiosComponent from '../../formRadiosComponent'
 import FormSelectComponent from '../../formSelectComponent'
 import FormTextareaComponent from '../../formTextareaComponent'
 
@@ -9,8 +8,7 @@ export type InstallationAndRiskFormData = {
   possibleRisk?: string
   riskCategory?: string
   riskDetails?: string
-  mappaLevel?: string
-  mappaCaseType?: string
+  offenceAdditionalDetails?: string
 }
 
 export default class InstallationAndRiskFormComponent extends FormComponent {
@@ -70,23 +68,6 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
     return new FormTextareaComponent(this.form, label)
   }
 
-  get mappaLevelField(): FormRadiosComponent {
-    const label = 'Which level of MAPPA applies? (optional)'
-    return new FormRadiosComponent(this.form, label, ['MAPPA 1', 'MAPPA 2', 'MAPPA 3'])
-  }
-
-  get mappaCaseTypeField(): FormRadiosComponent {
-    const label = 'What is the MAPPA case type? (optional)'
-    return new FormRadiosComponent(this.form, label, [
-      'Serious Organised Crime',
-      'Terrorism Act, Counter Terrorism',
-      'Terrorism Prevention and Investigation measures',
-      'Special Immigration Appeals Commission',
-      'High Profile Immigration',
-      'Critical Public Protection Case',
-    ])
-  }
-
   // FORM HELPERS
 
   fillInWith(profile: InstallationAndRiskFormData = {}): void {
@@ -106,12 +87,8 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
       this.riskDetailsField.set(profile.riskDetails)
     }
 
-    if (profile.mappaLevel) {
-      this.mappaLevelField.set(profile.mappaLevel)
-    }
-
-    if (profile.mappaCaseType) {
-      this.mappaCaseTypeField.set(profile.mappaCaseType)
+    if (profile.offenceAdditionalDetails) {
+      this.offenceAdditionalDetailsField.set(profile.offenceAdditionalDetails)
     }
   }
 
@@ -119,31 +96,23 @@ export default class InstallationAndRiskFormComponent extends FormComponent {
     this.offenceField.shouldNotHaveValidationMessage()
     this.riskCategoryField.shouldNotHaveValidationMessage()
     this.riskDetailsField.shouldNotHaveValidationMessage()
-    this.mappaLevelField.shouldNotHaveValidationMessage()
-    this.mappaCaseTypeField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
     this.offenceField.shouldBeDisabled()
     this.riskCategoryField.shouldBeDisabled()
     this.riskDetailsField.shouldBeDisabled()
-    this.mappaLevelField.shouldBeDisabled()
-    this.mappaCaseTypeField.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
     this.offenceField.shouldNotBeDisabled()
     this.riskCategoryField.shouldNotBeDisabled()
     this.riskDetailsField.shouldNotBeDisabled()
-    this.mappaLevelField.shouldNotBeDisabled()
-    this.mappaCaseTypeField.shouldNotBeDisabled()
   }
 
   shouldHaveAllOptions(): void {
     this.possibleRiskField.shouldHaveAllOptions()
     this.offenceField.shouldHaveAllOptions()
     this.riskCategoryField.shouldHaveAllOptions()
-    this.mappaLevelField.shouldHaveAllOptions()
-    this.mappaCaseTypeField.shouldHaveAllOptions()
   }
 }

@@ -12,9 +12,6 @@ import PrimaryAddressPage from '../pages/order/contact-information/primary-addre
 import SecondaryAddressPage from '../pages/order/contact-information/secondary-address'
 import TertiaryAddressPage from '../pages/order/contact-information/tertiary-adddress'
 import InterestedPartiesPage from '../pages/order/contact-information/interested-parties'
-import MonitoringConditionsPage from '../pages/order/monitoring-conditions'
-// Disabled as alcohol monitoring can't currently be selected as a monitoring type.
-// import AlcoholMonitoringPage from '../pages/order/monitoring-conditions/alcohol-monitoring'
 import SubmitSuccessPage from '../pages/order/submit-success'
 import CurfewReleaseDatePage from '../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewTimetablePage from '../pages/order/monitoring-conditions/curfew-timetable'
@@ -34,6 +31,13 @@ import UploadLicencePage from '../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../pages/order/attachments/havePhoto'
 import { stubAttachments } from './utils'
 import SearchPage from '../pages/search'
+import SentenceTypePage from '../e2e/order/monitoring-conditions/order-type-description/sentence-type/SentenceTypePage'
+import HdcPage from '../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
+import PilotPage from '../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
+import OffenceTypePage from '../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
+import PoliceAreaPage from '../e2e/order/monitoring-conditions/order-type-description/police-area/PoliceAreaPage'
+import PrarrPage from '../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
+import MonitoringTypesPage from '../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -52,7 +56,7 @@ context('The kitchen sink', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -71,6 +75,8 @@ context('The kitchen sink', () => {
   context('Fill in everything "including the kitchen sink" and screenshot', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: true,
       language: 'Flemish (Dutch)',
       hasFixedAddress: 'Yes',
@@ -84,31 +90,18 @@ context('The kitchen sink', () => {
       hasAnotherAddress: 'Yes',
     }
     const tertiaryAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Prison', 'Probation', null, 'North West')
+    const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
     const probationDeliveryUnit = { unit: 'Blackburn' }
     const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      isPartOfACP: 'No',
-      isPartOfDAPOL: 'No',
-      orderType: 'Post Release',
-      pilot: 'GPS Acquisitive Crime',
-      conditionType: 'Licence condition',
-      sentenceType: 'Life Sentence',
-      monitoringRequired: [
-        'Curfew',
-        'Exclusion zone monitoring',
-        'Trail monitoring',
-        // 'Mandatory attendance monitoring',
-        // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
-        // 'Alcohol monitoring',
-      ],
-      issp: 'No',
-      hdc: 'No',
+      pilot: 'GPS acquisitive crime (EMAC)',
+      sentenceType: 'Standard Determinate Sentence',
+      typeOfAcquistiveCrime: 'Aggravated Burglary',
+      policeForceArea: 'Kent',
+      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
+      hdc: 'Yes',
       prarr: 'No',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
       address: /Main address/,
@@ -181,6 +174,11 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
       orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(deviceWearerDetails)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
+
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
       aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
@@ -188,11 +186,6 @@ context('The kitchen sink', () => {
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
-      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()
@@ -276,29 +269,70 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('11. installationAndRiskCheckYourAnswersPage', { overwrite: true })
       installationAndRiskCheckYourAnswersPage.continueButton().click()
 
-      let monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      monitoringConditionsPage.form.saveAndContinueButton.click()
-      monitoringConditionsPage = Page.verifyOnPage(MonitoringConditionsPage)
-      if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage - validation', { overwrite: true })
-      monitoringConditionsPage.form.fillInWith(monitoringConditions)
-      if (takeScreenshots) cy.screenshot('12. monitoringConditionsPage', { overwrite: true })
-      monitoringConditionsPage.form.saveAndContinueButton.click()
+      let sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
+      sentenceTypePage.form.continueButton.click()
+      sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
+      if (takeScreenshots) cy.screenshot('12.a sentenceTypePage - validation', { overwrite: true })
+      sentenceTypePage.form.fillInWith(monitoringConditions.sentenceType)
+      sentenceTypePage.form.continueButton.click()
 
-      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
-      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage - validation', { overwrite: true })
-      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      if (takeScreenshots) cy.screenshot('14. curfewReleaseDatePage', { overwrite: true })
-      curfewReleaseDatePage.form.saveAndContinueButton.click()
+      let hdcPage = Page.verifyOnPage(HdcPage)
+      hdcPage.form.continueButton.click()
+      hdcPage = Page.verifyOnPage(HdcPage)
+      if (takeScreenshots) cy.screenshot('12.b hdcPage - validation', { overwrite: true })
+      hdcPage.form.fillInWith(monitoringConditions.hdc)
+      hdcPage.form.continueButton.click()
+
+      let pilotPage = Page.verifyOnPage(PilotPage)
+      pilotPage.form.continueButton.click()
+      pilotPage = Page.verifyOnPage(PilotPage)
+      if (takeScreenshots) cy.screenshot('12.c pilotPage - validation', { overwrite: true })
+      pilotPage.form.fillInWith(monitoringConditions.pilot)
+      pilotPage.form.continueButton.click()
+
+      let offenceTypePage = Page.verifyOnPage(OffenceTypePage)
+      offenceTypePage.form.continueButton.click()
+      offenceTypePage = Page.verifyOnPage(OffenceTypePage)
+      if (takeScreenshots) cy.screenshot('12.d offenceTypePage - validation', { overwrite: true })
+      offenceTypePage.form.fillInWith(monitoringConditions.typeOfAcquistiveCrime)
+      offenceTypePage.form.continueButton.click()
+
+      let policeAreaPage = Page.verifyOnPage(PoliceAreaPage)
+      policeAreaPage.form.continueButton.click()
+      policeAreaPage = Page.verifyOnPage(PoliceAreaPage)
+      if (takeScreenshots) cy.screenshot('12.d offenceTypePage - validation', { overwrite: true })
+      policeAreaPage.form.fillInWith(monitoringConditions.policeForceArea)
+      policeAreaPage.form.continueButton.click()
+
+      let prarrPage = Page.verifyOnPage(PrarrPage)
+      prarrPage.form.continueButton.click()
+      prarrPage = Page.verifyOnPage(PrarrPage)
+      if (takeScreenshots) cy.screenshot('12.e prarrPage - validation', { overwrite: true })
+      prarrPage.form.fillInWith(monitoringConditions.prarr)
+      prarrPage.form.continueButton.click()
+
+      let monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+      monitoringConditionPage.form.continueButton.click()
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+      if (takeScreenshots) cy.screenshot('12.f monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionPage.form.fillInWith(monitoringConditions.monitoringCondition)
+      monitoringConditionPage.form.continueButton.click()
 
       let curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
       curfewConditionsPage.form.saveAndContinueButton.click()
       curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - validation', { overwrite: true })
       curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      if (takeScreenshots) cy.screenshot('15. curfewConditionsPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
+
+      let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
+      curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - validation', { overwrite: true })
+      curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage', { overwrite: true })
+      curfewReleaseDatePage.form.saveAndContinueButton.click()
 
       let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
       curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
@@ -339,15 +373,6 @@ context('The kitchen sink', () => {
       trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
       if (takeScreenshots) cy.screenshot('20. trailMonitoringPage', { overwrite: true })
       trailMonitoringPage.form.saveAndContinueButton.click()
-
-      // Disabled as alcohol monitoring can't currently be selected as a monitoring type.
-      // let alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      // alcoholMonitoringPage.form.saveAndContinueButton.click()
-      // alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage)
-      // if (takeScreenshots) cy.screenshot('21. alcoholMonitoringPage - validation', { overwrite: true })
-      // alcoholMonitoringPage.form.fillInWith(alcoholMonitoringOrder)
-      // if (takeScreenshots) cy.screenshot('21. alcoholMonitoringPage', { overwrite: true })
-      // alcoholMonitoringPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,

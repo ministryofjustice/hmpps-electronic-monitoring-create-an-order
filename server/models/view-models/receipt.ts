@@ -8,6 +8,7 @@ import { createAnswer, createDateTimeAnswer } from '../../utils/checkYourAnswers
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
@@ -21,7 +22,17 @@ const createOrderStatusAnswers = (order: Order) => {
   return answers
 }
 
-const getOrderTypeName = (type: 'REQUEST' | 'VARIATION' | 'REJECTED' | 'AMEND_ORIGINAL_REQUEST') => {
+const getOrderTypeName = (
+  type:
+    | 'REQUEST'
+    | 'VARIATION'
+    | 'REJECTED'
+    | 'AMEND_ORIGINAL_REQUEST'
+    | 'REINSTALL_AT_DIFFERENT_ADDRESS'
+    | 'REINSTALL_DEVICE'
+    | 'REVOCATION'
+    | 'END_MONITORING',
+) => {
   switch (type) {
     case 'REQUEST': {
       return 'New order'
@@ -34,6 +45,18 @@ const getOrderTypeName = (type: 'REQUEST' | 'VARIATION' | 'REJECTED' | 'AMEND_OR
     }
     case 'AMEND_ORIGINAL_REQUEST': {
       return 'New order (original order was rejected)'
+    }
+    case 'REINSTALL_AT_DIFFERENT_ADDRESS': {
+      return 'Reinstall at different address'
+    }
+    case 'REINSTALL_DEVICE': {
+      return 'Reinstall device'
+    }
+    case 'REVOCATION': {
+      return 'Revocation'
+    }
+    case 'END_MONITORING': {
+      return 'End all monitoring'
     }
     default: {
       return ''
@@ -58,6 +81,7 @@ const createViewModel = (order: Order, content: I18n) => {
     ...riskDetails,
     ...variationDetails,
     additionalDocumentDetails,
+    showDownloadJsonButtons: FeatureFlags.getInstance().get('DOWNLOAD_FMS_REQUEST_JSON_ENABLED'),
   }
 }
 

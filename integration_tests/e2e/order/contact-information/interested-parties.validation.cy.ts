@@ -8,6 +8,7 @@ const apiPath = '/interested-parties'
 const expectedValidationErrors = {
   notifyingOrganisationName: 'Select the organisation you are part of',
   responsibleOrganisation: "Select the responsible officer's organisation",
+  responsibleOrganisationRegion: 'Select the responsible organisation region',
 }
 
 context('Contact information', () => {
@@ -18,6 +19,11 @@ context('Contact information', () => {
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+
+        cy.signIn()
+      })
+
+      it('Should display validation error messages if only pass notifying organisation', () => {
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 400,
           id: mockOrderId,
@@ -33,11 +39,6 @@ context('Contact information', () => {
             },
           ],
         })
-
-        cy.signIn()
-      })
-
-      it('Should display validation error messages', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
         page.form.fillInWith({
@@ -57,6 +58,33 @@ context('Contact information', () => {
           expectedValidationErrors.notifyingOrganisationName,
           expectedValidationErrors.responsibleOrganisation,
         ])
+      })
+
+      it('Should display validation error message if not passing responsible organisation region', () => {
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 400,
+          id: mockOrderId,
+          subPath: apiPath,
+          response: [
+            { field: 'responsibleOrganisationRegion', error: expectedValidationErrors.responsibleOrganisationRegion },
+          ],
+        })
+
+        const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          notifyingOrganisation: 'Prison',
+          prison: 'Ashfield Prison',
+          responsibleOrganisation: 'Police',
+        })
+
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(InterestedPartiesPage)
+
+        page.form.policeAreaField.shouldHaveValidationMessage(expectedValidationErrors.responsibleOrganisationRegion)
+        page.errorSummary.shouldExist()
+        page.errorSummary.verifyErrorSummary([expectedValidationErrors.responsibleOrganisationRegion])
       })
     })
   })

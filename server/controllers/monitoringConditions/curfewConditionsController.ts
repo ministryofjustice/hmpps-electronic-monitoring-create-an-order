@@ -6,6 +6,7 @@ import CurfewConditionsService from '../../services/curfewConditionsService'
 import { CurfewConditionsFormDataModel } from '../../models/form-data/curfewConditions'
 import CurfewConditionsViewModel from '../../models/view-models/curfewConditions'
 import TaskListService from '../../services/taskListService'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class CurfewConditionsController {
   constructor(
@@ -15,10 +16,10 @@ export default class CurfewConditionsController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { curfewConditions: model, addresses } = req.order!
+    const { curfewConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = CurfewConditionsViewModel.construct(model, addresses, errors as never, formData as never)
+    const viewModel = CurfewConditionsViewModel.construct(curfewConditions, errors as never, formData as never)
 
     res.render(`pages/order/monitoring-conditions/curfew-conditions`, viewModel)
   }
@@ -42,6 +43,10 @@ export default class CurfewConditionsController {
     }
 
     if (formData.action === 'continue') {
+      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
+        return
+      }
       res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
       return
     }

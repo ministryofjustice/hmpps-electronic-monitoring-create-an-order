@@ -34,7 +34,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -53,16 +53,16 @@ context.skip('Scenarios', () => {
   context('Pre-Trial Bail with Radio Frequency (RF) (HMU + PID) on a Curfew 7pm-10am at two addresses', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
     const fakePrimaryAddress = createFakeAddress()
     const fakeSecondaryAddress = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Crown Court', 'Police', 'York Crown Court')
-    const monitoringConditions = {
-      startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-      endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-      orderType: 'Post Release',
+
+    const monitoringOrderTypeDescription = {
       conditionType: 'Bail Order',
       monitoringRequired: 'Curfew',
       pilot: 'They are not part of any of these pilots',
@@ -71,7 +71,6 @@ context.skip('Scenarios', () => {
       prarr: 'No',
     }
     const curfewReleaseDetails = {
-      releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '10', minutes: '00' },
       address: /Main address/,
@@ -112,7 +111,7 @@ context.skip('Scenarios', () => {
         secondaryAddressDetails: fakeSecondaryAddress,
         interestedParties,
         installationAndRisk,
-        monitoringConditions,
+        monitoringOrderTypeDescription,
         curfewReleaseDetails,
         curfewConditionDetails,
         curfewTimetable,
@@ -140,15 +139,15 @@ context.skip('Scenarios', () => {
             .replace('Self identify', 'Prefer to self-describe')
             .replace('Non binary', 'Non-Binary'),
           disability: [],
-          address_1: fakePrimaryAddress.line1,
+          address_1: fakePrimaryAddress.addressLine1,
           address_2: 'N/A',
-          address_3: fakePrimaryAddress.line3,
-          address_4: fakePrimaryAddress.line4,
+          address_3: fakePrimaryAddress.addressLine3,
+          address_4: fakePrimaryAddress.addressLine4,
           address_post_code: fakePrimaryAddress.postcode,
-          secondary_address_1: fakeSecondaryAddress.line1,
+          secondary_address_1: fakeSecondaryAddress.addressLine1,
           secondary_address_2: 'N/A',
-          secondary_address_3: fakeSecondaryAddress.line3,
-          secondary_address_4: fakeSecondaryAddress.line4,
+          secondary_address_3: fakeSecondaryAddress.addressLine3,
+          secondary_address_4: fakeSecondaryAddress.addressLine4,
           secondary_address_post_code: fakeSecondaryAddress.postcode,
           phone_number: formatAsFmsPhoneNumber(deviceWearerDetails.contactNumber),
           risk_serious_harm: '',
@@ -171,7 +170,7 @@ context.skip('Scenarios', () => {
           nomis_id: deviceWearerDetails.nomisId,
           delius_id: deviceWearerDetails.deliusId,
           prison_number: deviceWearerDetails.prisonNumber,
-          home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+          home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
           interpreter_required: 'false',
           language: '',
         },
@@ -186,7 +185,7 @@ context.skip('Scenarios', () => {
               case_id: fmsCaseId,
               allday_lockdown: '',
               atv_allowance: '',
-              condition_type: monitoringConditions.conditionType,
+              condition_type: monitoringOrderTypeDescription.conditionType,
               court: '',
               court_order_email: '',
               device_type: '',
@@ -217,11 +216,11 @@ context.skip('Scenarios', () => {
               offence: installationAndRisk.offence,
               offence_additional_details: '',
               offence_date: '',
-              order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+              order_end: formatAsFmsDateTime(curfewConditionDetails.endDate),
               order_id: orderId,
               order_request_type: 'New Order',
-              order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-              order_type: monitoringConditions.orderType,
+              order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+              order_type: 'Post Release',
               order_type_description: null,
               order_type_detail: '',
               order_variation_date: '',
@@ -254,12 +253,12 @@ context.skip('Scenarios', () => {
               technical_bail: '',
               trial_date: '',
               trial_outcome: '',
-              conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+              conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
               conditional_release_start_time: '19:00:00',
               conditional_release_end_time: '10:00:00',
               reason_for_order_ending_early: '',
               business_unit: '',
-              service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+              service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
               curfew_description: '',
               curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
               curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -361,11 +360,14 @@ context.skip('Scenarios', () => {
               installation_address_4: '',
               installation_address_post_code: '',
               crown_court_case_reference_number: '',
-              magistrate_court_case_reference_number: '',
+              magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
               pilot: '',
+              subcategory: '',
+              dapol_missed_in_error: '',
+              ac_eligible_offences: [],
             },
           })
           .should('be.true')

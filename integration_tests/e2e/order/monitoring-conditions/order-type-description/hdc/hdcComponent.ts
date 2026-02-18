@@ -1,8 +1,8 @@
-import FormComponent from '../../../../../pages/components/formComponent'
+import SingleQuestionFormComponent from '../../../../../pages/components/SingleQuestionFormComponent'
 import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 import { PageElement } from '../../../../../pages/page'
 
-export default class HdcComponent extends FormComponent {
+export default class HdcComponent extends SingleQuestionFormComponent {
   get hdcField(): FormRadiosComponent {
     const label = 'Is the device wearer on a Home Detention Curfew (HDC)?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
@@ -12,9 +12,9 @@ export default class HdcComponent extends FormComponent {
     return this.form.contains('Cancel and return back to form')
   }
 
-  fillInWith(hdc: string) {
-    if (hdc) {
-      this.hdcField.set(hdc)
+  fillInWith(value: string) {
+    if (value) {
+      this.hdcField.set(value)
     }
   }
 }

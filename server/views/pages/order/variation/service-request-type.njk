@@ -1,0 +1,25 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% set isOrderEditable = true %}
+
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.serviceRequestType.questions %}
+{% set questionName = content.pages.serviceRequestType.title%}
+{% block formInputs %}
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "serviceRequestType",     
+      fieldset: {
+        legend: {
+          text: questions.serviceRequestType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: content.reference.serviceRequestTypes | toOptions(),
+      value: serviceRequestType.value,
+      errorMessage: serviceRequestType.error
+    }) }}
+
+
+{% endblock %}

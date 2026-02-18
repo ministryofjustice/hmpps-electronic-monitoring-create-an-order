@@ -6,8 +6,15 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import ErrorSummaryComponent from '../../components/errorSummaryComponent'
 
 export default class AttachmentSummaryPage extends CheckYourAnswersPage {
-  constructor(heading: string = 'Check your answers') {
-    super(heading, paths.ATTACHMENT.ATTACHMENTS, 'Additional documents')
+  constructor(heading: string = 'Check your answers', isOldVersion: boolean = false) {
+    let path: string
+    if (isOldVersion) {
+      path = paths.ATTACHMENT.ATTACHMENTS_VERSION
+    } else {
+      path = paths.ATTACHMENT.ATTACHMENTS
+    }
+
+    super(heading, path, 'Additional documents')
   }
 
   get errorSummary(): ErrorSummaryComponent {

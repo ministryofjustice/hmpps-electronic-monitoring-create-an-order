@@ -5,13 +5,21 @@ import { OrderTypeFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
 import { validationErrors } from '../../../constants/validationErrors'
+import MonitoringConditionsBaseController from '../base/monitoringConditionBaseController'
+import MonitoringConditionsUpdateService from '../monitoringConditionsService'
+import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 
-export default class OrderTypeController {
-  constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
+export default class OrderTypeController extends MonitoringConditionsBaseController {
+  constructor(
+    readonly montoringConditionsStoreService: MonitoringConditionsStoreService,
+    readonly monitoringConditionsService: MonitoringConditionsUpdateService,
+  ) {
+    super(montoringConditionsStoreService, monitoringConditionsService)
+  }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
-    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(orderId)
+    const order = req.order!
+    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
 
     const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisation
     if (!notifyingOrganisation) {
@@ -20,16 +28,23 @@ export default class OrderTypeController {
       throw new Error('notifyingOrganisation not set')
     }
 
-    if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
-      this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'POST_RELEASE' })
-      // Update to sentence page when it is made
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+    if (
+      notifyingOrganisation === 'PRISON' ||
+      notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE' ||
+      notifyingOrganisation === 'PROBATION'
+    ) {
+      this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'POST_RELEASE' })
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id))
       return
     }
     if (notifyingOrganisation === 'HOME_OFFICE') {
-      this.montoringConditionsStoreService.updateOrderType(orderId, { orderType: 'IMMIGRATION' })
-      // Update to sentence page when it is made
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+      await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'IMMIGRATION' })
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
+      return
+    }
+    if (notifyingOrganisationCourts.includes(notifyingOrganisation)) {
+      await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'BAIL' })
+      await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
       return
     }
 
@@ -40,7 +55,7 @@ export default class OrderTypeController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const orderId = req.order!.id
+    const order = req.order!
     const formData = OrderTypeFormDataModel.parse(req.body)
 
     if (formData.orderType === null || formData.orderType === undefined) {
@@ -51,15 +66,23 @@ export default class OrderTypeController {
           focusTarget: 'orderType',
         },
       ])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id))
       return
     }
+    await this.montoringConditionsStoreService.updateOrderType(order, formData)
 
-    if (formData.action === 'continue') {
-      this.montoringConditionsStoreService.updateOrderType(orderId, formData)
-
-      // continue to next page
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.CHECK_YOUR_ANSWERS.replace(':orderId', orderId))
+    switch (formData.orderType) {
+      case 'POST_RELEASE':
+      case 'COMMUNITY':
+      case 'BAIL':
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id))
+        return
+      case 'IMMIGRATION':
+      case 'CIVIL':
+        await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
+        return
+      default:
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
     }
   }
 }

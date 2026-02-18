@@ -6,6 +6,7 @@ import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateFormDataModel from '../../models/form-data/curfewReleaseDate'
 import curfewReleaseDateViewModel from '../../models/view-models/curfewReleaseDate'
 import TaskListService from '../../services/taskListService'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class CurfewReleaseDateController {
   constructor(
@@ -24,12 +25,12 @@ export default class CurfewReleaseDateController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const order = req.order!
     const formData = CurfewReleaseDateFormDataModel.parse(req.body)
 
     const updateResult = await this.curfewReleaseDateService.update({
       accessToken: res.locals.user.token,
-      orderId,
+      order,
       data: formData,
     })
 
@@ -37,15 +38,20 @@ export default class CurfewReleaseDateController {
       req.flash('formData', [formData])
       req.flash('validationErrors', updateResult)
 
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id))
       return
     }
 
     if (formData.action === 'continue') {
+      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+        return
+      }
+
       res.redirect(this.taskListService.getNextPage('CURFEW_RELEASE_DATE', req.order!))
       return
     }
 
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }
 }

@@ -9,7 +9,7 @@ type Action = {
   visuallyHiddenText: string
 }
 
-type Answer = {
+export type Answer = {
   key: {
     text: string
   }
@@ -22,10 +22,9 @@ type Answer = {
   }
 }
 
-export default Answer
-
 export interface AnswerOptions {
   ignoreActions?: boolean
+  deleteUri?: string
   valueType?: 'html' | 'text'
 }
 
@@ -53,11 +52,18 @@ export const createAnswer = (key: string, value: Optional<string>, uri: string, 
       visuallyHiddenText: key.toLowerCase(),
     })
   }
+  if (opts.deleteUri !== undefined) {
+    answer.actions.items.push({
+      href: opts.deleteUri,
+      text: 'Delete',
+      visuallyHiddenText: key.toLowerCase(),
+    })
+  }
 
   return answer
 }
 
-const createDatePreview = (value: Optional<string>) =>
+export const createDatePreview = (value: Optional<string>) =>
   isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString('en-GB')
 
 const createTimePreview = (value: Optional<string>) =>

@@ -2,7 +2,6 @@ import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import { AuditService } from '../../services'
 import TaskListService from '../../services/taskListService'
-import paths from '../../constants/paths'
 import createViewModel from '../../models/view-models/monitoringConditionsCheckAnswers'
 import OrderChecklistService from '../../services/orderChecklistService'
 
@@ -19,23 +18,25 @@ export default class CheckAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-
     res.render(`pages/order/monitoring-conditions/check-your-answers`, createViewModel(order, res.locals.content!))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ELECTRONIC_MONITORING_CONDITIONS')
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
-        res.redirect(this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order))
+        res.redirect(
+          this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order, versionId),
+        )
       } else {
-        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order))
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order, {}, versionId))
       }
     } else {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      res.redirect(res.locals.orderSummaryUri)
     }
   }
 }

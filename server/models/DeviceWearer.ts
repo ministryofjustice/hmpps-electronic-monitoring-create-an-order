@@ -12,8 +12,19 @@ export const DisabilityEnum = z.enum([
   'STAMINA_BREATHING_FATIGUE',
   'SOCIAL_BEHAVIOURAL',
   'OTHER',
+  'NO_LISTED_CONDITION',
   'NONE',
   'PREFER_NOT_TO_SAY',
+])
+
+export const IdentityNumbersEnum = z.enum([
+  'NOMIS',
+  'PNC',
+  'DELIUS',
+  'PRISON_NUMBER',
+  'HOME_OFFICE',
+  'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
+  'COURT_CASE_REFERENCE_NUMBER',
 ])
 
 export const SexEnum = z.enum(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY', 'UNKNOWN'])
@@ -24,6 +35,8 @@ const DeviceWearerModel = z.object({
   deliusId: z.string().nullable(),
   prisonNumber: z.string().nullable(),
   homeOfficeReferenceNumber: z.string().nullable(),
+  complianceAndEnforcementPersonReference: z.string().nullable(),
+  courtCaseReferenceNumber: z.string().nullable(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
   alias: z.string().nullable(),
@@ -49,5 +62,6 @@ const DeviceWearerModel = z.object({
 
 export type DeviceWearer = z.infer<typeof DeviceWearerModel>
 export type Disability = z.infer<typeof DisabilityEnum>
+export type IdentityNumberType = z.infer<typeof IdentityNumbersEnum>
 
 export default DeviceWearerModel

@@ -1,0 +1,94 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+{% set questionName = "Monitoring Type"%}
+{% block formInputs %}
+
+
+{% if message %}
+  {% set questionHeadingHtml%}
+    <h1 class="govuk-fieldset__heading">
+      {{questions.monitoringRequired.text}}
+    </h1> 
+    {{     
+      govukInsetText({
+        text: message
+      }) 
+    }}
+  {% endset %}
+{% else %}
+  {% set questionHeadingHtml%}
+    <h1 class="govuk-fieldset__heading">
+      {{questions.monitoringRequired.text}}
+    </h1>   
+  {% endset %}
+{% endif %}
+
+{{ govukCheckboxes({
+  name: "monitoringTypes",
+  fieldset: {
+    legend: {
+      html: questionHeadingHtml,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: questions.monitoringRequired.hint
+  },
+  items: [
+    {
+      value: "curfew",
+      text: "Curfew",
+      hint: {
+        text: "Monitoring the device wearer adheres to set times and days that they must remain at a location."
+      },
+      checked: curfew.value,
+      disabled: curfew.disabled
+    },
+    {
+      value: "exclusionZone",
+      text: "Exclusion zone monitoring",
+      hint: {
+        text: "Prevents the device wearer entering areas or visiting locations at set times."
+      },
+      checked: exclusionZone.value,
+      disabled: exclusionZone.disabled
+    },
+    {
+      value: "trail",
+      text: "Trail monitoring",
+      hint: {
+        text: "Recording and gathering data on movements of the device wearer throughout the day."
+      },
+      checked: trail.value,
+      disabled: trail.disabled
+    },
+    {
+      value: "mandatoryAttendance",
+      text: "Mandatory attendance monitoring",
+      hint: {
+        text: "Recording the device wearer's attendance at arranged meetings or places."
+      },
+      checked: mandatoryAttendance.value,
+      disabled: mandatoryAttendance.disabled
+    },
+    {
+      value: "alcohol",
+      text: "Alcohol monitoring",
+      hint: {
+        text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
+      },
+      checked: alcohol.value,
+      disabled: alcohol.disabled
+    }
+  ],
+  errorMessage: error,
+  disabled: not isOrderEditable
+}) }}
+
+{% endblock %}

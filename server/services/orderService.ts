@@ -1,9 +1,11 @@
+import logger from '../../logger'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
 import { CreateOrderFormData } from '../models/form-data/order'
 import OrderModel, { Order } from '../models/Order'
+import { VersionInformation, VersionInformationList } from '../models/VersionInformation'
 import { SanitisedError } from '../sanitisedError'
 
 type CreateOrderRequest = AuthenticatedRequestInput & {
@@ -39,13 +41,11 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async createVariationFromExisting(input: OrderRequestInput): Promise<Order> {
-    const result = await this.apiClient.post({
+  async createVariationFromExisting(input: OrderRequestInput): Promise<void> {
+    return this.apiClient.post({
       path: `/api/orders/${input.orderId}/copy-as-variation`,
       token: input.accessToken,
     })
-
-    return OrderModel.parse(result)
   }
 
   async getOrder(input: OrderRequestInput): Promise<Order> {
@@ -55,6 +55,28 @@ export default class OrderService {
     })
 
     return OrderModel.parse(result)
+  }
+
+  async getVersion(input: OrderRequestInput & { versionId: string }): Promise<Order> {
+    const result = await this.apiClient.get({
+      path: `/api/orders/${input.orderId}/versions/${input.versionId}`,
+      token: input.accessToken,
+    })
+
+    return OrderModel.parse(result)
+  }
+
+  async getCompleteVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
+    try {
+      const result = await this.apiClient.get({
+        path: `/api/orders/${input.orderId}/versions`,
+        token: input.accessToken,
+      })
+      return VersionInformationList.parse(result).filter(version => version.status !== 'IN_PROGRESS')
+    } catch {
+      logger.error(`No versions found for orderId: ${input.orderId}`)
+      return []
+    }
   }
 
   async deleteOrder(input: OrderRequestInput): Promise<Result<void, string>> {

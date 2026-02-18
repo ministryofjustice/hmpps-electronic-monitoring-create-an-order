@@ -8,7 +8,6 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 
-// SKIP not in phase 4 scenario pack
 context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
@@ -33,7 +32,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -54,6 +53,8 @@ context.skip('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer('CEMO036'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -61,18 +62,15 @@ context.skip('Scenarios', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'North West')
       const probationDeliveryUnit = { unit: 'Blackburn' }
       const monitoringConditions = {
-        startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10), // 10 days
-        endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 40), // 40 days
-        orderType: 'Post Release',
-        pilot: 'GPS Acquisitive Crime',
+        pilot: 'GPS acquisitive crime (EMAC)',
         sentenceType: 'Standard Determinate Sentence',
-        monitoringRequired: ['Curfew', 'Trail monitoring'],
-        issp: 'No',
-        hdc: 'No',
+        typeOfAcquistiveCrime: 'Aggravated Burglary',
+        policeForceArea: 'Kent',
+        monitoringCondition: ['Curfew', 'Trail monitoring'],
+        hdc: 'Yes',
         prarr: 'No',
       }
       const curfewReleaseDetails = {
-        releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
         startTime: { hours: '19', minutes: '00' },
         endTime: { hours: '07', minutes: '00' },
         address: /Main address/,
@@ -119,7 +117,7 @@ context.skip('Scenarios', () => {
           secondaryAddressDetails: undefined,
           interestedParties,
           installationAndRisk,
-          monitoringConditions,
+          monitoringOrderTypeDescription: monitoringConditions,
           installationAddressDetails: fakePrimaryAddress,
           trailMonitoringDetails,
           enforcementZoneDetails: undefined,
@@ -154,11 +152,12 @@ context.skip('Scenarios', () => {
               .replace('Self identify', 'Prefer to self-describe')
               .replace('Non binary', 'Non-Binary'),
             disability: [],
-            address_1: fakePrimaryAddress.line1,
-            address_2: fakePrimaryAddress.line2 === '' ? 'N/A' : fakePrimaryAddress.line2,
-            address_3: fakePrimaryAddress.line3,
-            address_4: fakePrimaryAddress.line4 === '' ? 'N/A' : fakePrimaryAddress.line4,
+            address_1: fakePrimaryAddress.addressLine1,
+            address_2: fakePrimaryAddress.addressLine2 === '' ? 'N/A' : fakePrimaryAddress.addressLine2,
+            address_3: fakePrimaryAddress.addressLine3,
+            address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
             address_post_code: fakePrimaryAddress.postcode,
+            no_fixed_address: 'false',
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -190,7 +189,7 @@ context.skip('Scenarios', () => {
             nomis_id: deviceWearerDetails.nomisId,
             delius_id: deviceWearerDetails.deliusId,
             prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
             interpreter_required: 'false',
             language: '',
           },
@@ -239,13 +238,13 @@ context.skip('Scenarios', () => {
                 no_name: interestedParties.notifyingOrganisationName,
                 no_phone_number: '',
                 offence: installationAndRisk.offence,
-                offence_additional_details: '',
+                offence_additional_details: 'PFA: Kent',
                 offence_date: '',
-                order_end: formatAsFmsDateTime(monitoringConditions.endDate),
+                order_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
                 order_id: orderId,
                 order_request_type: 'New Order',
-                order_start: formatAsFmsDateTime(monitoringConditions.startDate),
-                order_type: monitoringConditions.orderType,
+                order_start: formatAsFmsDateTime(curfewConditionDetails.startDate),
+                order_type: 'Post Release',
                 order_type_description: null,
                 order_type_detail: '',
                 order_variation_date: '',
@@ -274,16 +273,16 @@ context.skip('Scenarios', () => {
                 tag_at_source: '',
                 tag_at_source_details: '',
                 date_and_time_installation_will_take_place: '',
-                released_under_prarr: '',
+                released_under_prarr: 'false',
                 technical_bail: '',
                 trial_date: '',
                 trial_outcome: '',
-                conditional_release_date: formatAsFmsDate(curfewReleaseDetails.releaseDate),
+                conditional_release_date: formatAsFmsDate(curfewConditionDetails.startDate),
                 conditional_release_start_time: '19:00:00',
                 conditional_release_end_time: '07:00:00',
                 reason_for_order_ending_early: '',
                 business_unit: '',
-                service_end_date: formatAsFmsDate(monitoringConditions.endDate),
+                service_end_date: formatAsFmsDate(curfewConditionDetails.endDate),
                 curfew_description: '',
                 curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
                 curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
@@ -334,11 +333,19 @@ context.skip('Scenarios', () => {
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
-                hdc: 'No',
+                hdc: 'Yes',
                 order_status: 'Not Started',
-                pilot: 'GPS Acquisitive Crime Parole',
+                pilot: 'GPS Acquisitive Crime Home Detention Curfew',
+                subcategory: '',
+                dapol_missed_in_error: '',
+                ac_eligible_offences: [
+                  {
+                    offence: 'Aggravated Burglary in a Dwelling.',
+                    offence_date: '',
+                  },
+                ],
               },
             })
             .should('be.true')

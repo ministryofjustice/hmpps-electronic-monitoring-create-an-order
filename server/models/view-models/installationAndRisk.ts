@@ -1,5 +1,4 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import FeatureFlags from '../../utils/featureFlags'
 import { getError } from '../../utils/utils'
 import { InstallationAndRiskFormData } from '../form-data/installationAndRisk'
 import { InstallationAndRisk } from '../InstallationAndRisk'
@@ -8,11 +7,11 @@ import { MultipleChoiceField, ViewModel } from './utils'
 import possibleRisks from '../../i18n/en/reference/possibleRisks'
 import riskCategories from '../../i18n/en/reference/riskCategories'
 import { Order } from '../Order'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 
 type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk'>> & {
   riskCategory: MultipleChoiceField
   possibleRisk: MultipleChoiceField
-  mappaEnabled: boolean
   ddVersion5: boolean
 }
 
@@ -51,8 +50,7 @@ const constructFromFormData = (
       error: getError(validationErrors, 'mappaCaseType'),
     },
     errorSummary: createGovukErrorSummary(validationErrors),
-    mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: order.dataDictionaryVersion === 'DDV5',
+    ddVersion5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 
@@ -81,8 +79,7 @@ const createFromEntity = (order: Order): InstallationAndRiskViewModel => {
       value: installationAndRisk?.mappaCaseType || '',
     },
     errorSummary: null,
-    mappaEnabled: FeatureFlags.getInstance().get('MAPPA_ENABLED'),
-    ddVersion5: order.dataDictionaryVersion === 'DDV5',
+    ddVersion5: isOrderDataDictionarySameOrAbove('DDV5', order),
   }
 }
 

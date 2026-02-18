@@ -2,14 +2,14 @@ import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
 import { CurfewReleaseDateFormData } from '../models/form-data/curfewReleaseDate'
-import { ValidationResult, ValidationResultModel } from '../models/Validation'
+import { Order } from '../models/Order'
+import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertBackendErrorToValidationError } from '../utils/errors'
-import { serialiseDate, serialiseTime } from '../utils/utils'
-import DateValidator from '../utils/validators/dateValidator'
+import { serialiseTime } from '../utils/utils'
 
 type CurfewReleaseDateInput = AuthenticatedRequestInput & {
-  orderId: string
+  order: Order
   data: CurfewReleaseDateFormData
 }
 
@@ -17,20 +17,10 @@ export default class CurfewReleaseDateService {
   constructor(private readonly apiClient: RestClient) {}
 
   async update(input: CurfewReleaseDateInput): Promise<undefined | ValidationResult> {
-    const isReleaseDateValid = DateValidator.isValidDateFormat(
-      input.data.releaseDateDay,
-      input.data.releaseDateMonth,
-      input.data.releaseDateYear,
-      'releaseDate',
-    )
-    if (isReleaseDateValid.result === false) {
-      return ValidationResultModel.parse([isReleaseDateValid.error])
-    }
-
     try {
       await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-release-date`,
-        data: this.createApiModelFromFormData(input.data),
+        path: `/api/orders/${input.order.id}/monitoring-conditions-curfew-release-date`,
+        data: this.createApiModelFromFormData(input.data, input.order),
         token: input.accessToken,
       })
       return undefined
@@ -44,12 +34,17 @@ export default class CurfewReleaseDateService {
     }
   }
 
-  private createApiModelFromFormData(formData: CurfewReleaseDateFormData): CurfewReleaseDate {
+  private createApiModelFromFormData(formData: CurfewReleaseDateFormData, order: Order): CurfewReleaseDate {
+    if (order.curfewConditions?.startDate === null || order.curfewConditions?.startDate === undefined) {
+      throw new Error(
+        `Start date is undefined for order: ${order.id}. Order must have a curfew start date before setting release date`,
+      )
+    }
     return {
-      releaseDate: serialiseDate(formData.releaseDateYear, formData.releaseDateMonth, formData.releaseDateDay),
       startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
       endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
       curfewAddress: formData.curfewAddress ?? null,
+      releaseDate: order.curfewConditions?.startDate,
     }
   }
 }

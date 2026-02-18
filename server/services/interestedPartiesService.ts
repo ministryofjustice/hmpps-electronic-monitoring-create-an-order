@@ -29,6 +29,10 @@ export default class InterestedPartiesService {
       return data.responsibleOrgProbationRegion
     }
 
+    if (data.responsibleOrganisation === 'POLICE') {
+      return data.policeArea
+    }
+
     if (data.responsibleOrganisation === 'YJS') {
       return data.yjsRegion
     }
@@ -44,7 +48,6 @@ export default class InterestedPartiesService {
       MAGISTRATES_COURT: data.magistratesCourt,
       MILITARY_COURT: data.militaryCourt,
       PRISON: data.prison,
-      PROBATION: data.notifyingOrgProbationRegion,
       YOUTH_COURT: data.youthCourt,
       YOUTH_CUSTODY_SERVICE: data.youthCustodyServiceRegion,
     }

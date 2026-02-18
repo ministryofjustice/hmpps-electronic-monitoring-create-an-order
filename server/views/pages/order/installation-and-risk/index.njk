@@ -1,8 +1,6 @@
 {% extends "../../../partials/form-layout.njk" %}
 
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
@@ -35,20 +33,23 @@
   }) }}
 
   {% if ddVersion5 %}
-      {{ govukTextarea({
-	name: "offenceAdditionalDetails",
-	id: "offenceAdditionalDetails",
-	value: offenceAdditionalDetails.value,
-	errorMessage: offenceAdditionalDetails.error,
-	disabled: not isOrderEditable,
-	label: {
-	  text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.text,
-	  classes: "govuk-label--s"
-	},
-	hint: {
-	  text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.hint
-	}
-      }) }}
+
+   {{ govukCharacterCount({
+    name: "offenceAdditionalDetails",
+    id: "offenceAdditionalDetails",
+    maxlength: 500,
+    label: {
+      text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.text,
+      classes: "govuk-label--s",
+      isPageHeading: false
+    },
+    hint: {
+      text: content.pages.installationAndRisk.questions.offenceAdditionalDetails.hint
+    },
+    value: offenceAdditionalDetails.value,
+    errorMessage: offenceAdditionalDetails.error,
+    attributes: isDisabled
+  }) }}     
   {% endif %}
 
     {{ govukCheckboxes({
@@ -90,7 +91,7 @@
   {{ govukCharacterCount({
     name: "riskDetails",
     id: "riskDetails",
-    maxlength: 200,
+    maxlength: 500,
     label: {
       text: content.pages.installationAndRisk.questions.riskDetails.text,
       classes: "govuk-label--s",
@@ -103,47 +104,5 @@
     errorMessage: riskDetails.error,
     attributes: isDisabled
   }) }}
-
-  {% if mappaEnabled %}
-    {% call govukFieldset({
-      legend: {
-        text: "Multi-Agency Public Protection Arrangements (MAPPA)",
-        classes: "govuk-fieldset__legend--m",
-        isPageHeading: false
-      }
-    }) %}
-      <p class="govuk-body">If you are a Home Office employee, answer the below questions:</p>
-
-      {{ govukRadios({
-        name: "mappaLevel",
-        fieldset: {
-          legend: {
-            text: content.pages.installationAndRisk.questions.mappaLevel.text,
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: content.reference.mappaLevel | toOptions(not isOrderEditable),
-        value: mappaLevel.value,
-        errorMessage: mappaLevel.error,
-        disabled: not isOrderEditable
-      }) }}
-
-      {{ govukRadios({
-        name: "mappaCaseType",
-        fieldset: {
-          legend: {
-            text: content.pages.installationAndRisk.questions.mappaCaseType.text,
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: content.reference.mappaCaseType | toOptions(not isOrderEditable),
-        value: mappaCaseType.value,
-        errorMessage: mappaCaseType.error,
-        disabled: not isOrderEditable
-      }) }}
-    {% endcall %}
-  {% endif %}
 
 {% endblock %}

@@ -131,6 +131,7 @@ describe('authorised user', () => {
     it('should render order summary page', async () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      orderService.getCompleteVersions.mockResolvedValue([])
       mockOrderChecklistService.getChecklist.mockResolvedValue(OrderChecklistModel.parse({}))
       return request(app)
         .get(`/order/${mockSubmittedOrder.id}/summary`)
@@ -204,6 +205,17 @@ describe('authorised user', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Cookies')
+        })
+    })
+  })
+
+  describe('GET /accessibility', () => {
+    it('should render a successful accessibility page', () => {
+      return request(app)
+        .get('/accessibility')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Accessibility statement')
         })
     })
   })

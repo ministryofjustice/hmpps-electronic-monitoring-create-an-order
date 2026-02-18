@@ -3,6 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
+import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
 import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
 import config from '../config'
 import logger from '../../logger'
@@ -16,11 +17,12 @@ const toOptions = (
   includeEmptyOption: boolean = false,
   type: string = '',
   lastItemExclusive: boolean = false,
+  keyAsValue: boolean = true,
 ): Array<CheckboxItem | RadiosItem> => {
   const options = Object.keys(values).map(key => {
     if (typeof values[key] === 'object') {
       return {
-        value: key,
+        value: keyAsValue ? key : values[key].text,
         text: values[key].text,
         hint: {
           text: values[key].description,
@@ -30,7 +32,7 @@ const toOptions = (
     }
 
     return {
-      value: key,
+      value: keyAsValue ? key : values[key],
       text: values[key],
       disabled,
     }
@@ -103,4 +105,8 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
   njkEnv.addFilter('addDivider', addDivider)
   njkEnv.addFilter('removeOptions', removeOptions)
+  Object.entries(mojFilters()).forEach(([name, filter]) => {
+    // @ts-expect-error/filter is unknown as import does not have typing
+    njkEnv.addFilter(name, filter)
+  })
 }

@@ -1,0 +1,25 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+{% set questionName = "P-RARR"%}
+{% block formInputs %}
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "prarr",
+      fieldset: {
+        legend: {
+          text: questions.prarr.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: items,
+      value: prarr.value,
+      errorMessage: prarr.error
+    }) }}
+
+
+{% endblock %}

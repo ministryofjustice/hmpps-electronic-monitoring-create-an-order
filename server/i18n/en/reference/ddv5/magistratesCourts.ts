@@ -97,6 +97,8 @@ const magistratesCourtsDDv5: MagistratesCourtsDDv5 = {
   CHORLEY_MAGISTRATES_COURT: 'Chorley Magistrates Court',
   CIRENCESTER_MAGISTRATES_COURT: 'Cirencester Magistrates Court',
   CITY_OF_LONDON_MAGISTRATES_COURT: 'City of London Magistrates Court',
+  CITY_OF_WESTMINSTER_MAGISTRATES_COURT_INTERNATIONAL_OFFICE:
+    'City of Westminster Magistrates Court International Office',
   COALVILLE_MAGISTRATES_COURT: 'Coalville Magistrates Court',
   COLCHESTER_MAGISTRATES_COURT: 'Colchester Magistrates Court',
   COLEFORD_MAGISTRATES_COURT: 'Coleford Magistrates Court',

@@ -5,6 +5,7 @@ import AttendanceMonitoringService from '../../services/attendanceMonitoringServ
 import TaskListService from '../../services/taskListService'
 import { AttendanceMonitoringFormDataModel } from '../../models/form-data/attendanceMonitoring'
 import attendanceMonitoringViewModel from '../../models/view-models/attendanceMonitoring'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class AttendanceMonitoringController {
   constructor(
@@ -52,7 +53,11 @@ export default class AttendanceMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      if (formData.addAnother === 'true') {
+      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        res.redirect(
+          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+        )
+      } else if (formData.addAnother === 'true') {
         res.redirect(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', orderId))
       } else {
         res.redirect(this.taskListService.getNextPage('ATTENDANCE_MONITORING', req.order!))

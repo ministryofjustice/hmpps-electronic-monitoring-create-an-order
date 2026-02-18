@@ -7,8 +7,14 @@ import VariationDetailsFormComponent from '../../components/forms/variation/vari
 export default class VariationDetailsPage extends AppFormPage {
   public form = new VariationDetailsFormComponent()
 
-  constructor() {
-    super('Details of the changes', paths.VARIATION.VARIATION_DETAILS, 'About the changes in this version of the form')
+  constructor(isOldVersion?: boolean) {
+    let path: string
+    if (isOldVersion) {
+      path = paths.VARIATION.VARIATION_DETAILS_VERSION
+    } else {
+      path = paths.VARIATION.VARIATION_DETAILS
+    }
+    super('Details of the changes', path, 'About the changes in this version of the form')
   }
 
   checkOnPage(): void {

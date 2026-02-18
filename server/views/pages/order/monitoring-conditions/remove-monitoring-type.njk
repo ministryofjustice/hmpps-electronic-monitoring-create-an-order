@@ -1,0 +1,47 @@
+{% extends "../../../partials/form-layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% set pageContent = content.pages.monitoringConditions %}
+{% set question = pageContent.questions.removeMonitoringType %}
+{% set section = pageContent.section %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/order/" + order.id + "/monitoring-conditions/order-type-description/types-of-monitoring-needed"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">{{ section }}</span>
+      <h1 class="govuk-heading-l">{{ question.text }}</h1>
+    
+      <p>{{ monitoringTypeReadable }}</p>
+    
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: 'Yes, delete monitoring type',
+            classes: "govuk-button--warning",
+            name: "action",
+            value: "continue",
+            id: "confirm-remove-button"
+          })}}
+    
+          {{ govukButton({
+            text: 'cancel',
+            classes: "govuk-button--secondary",
+            name: "action",
+            value: "cancel",
+            id: "cancel-button"
+          })}}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

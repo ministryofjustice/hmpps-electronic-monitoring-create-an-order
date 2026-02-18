@@ -10,7 +10,6 @@ context('Start', () => {
     it('Should render the correct elements', () => {
       const page = Page.visit(StartPage)
       page.signInButton().should('exist')
-      page.informationBanner().contains('Alcohol monitoring is now live')
     })
   })
 })

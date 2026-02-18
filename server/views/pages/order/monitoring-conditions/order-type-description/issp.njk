@@ -1,0 +1,38 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "Electronic monitoring required" %}
+{% set singleQuestionPage = true %}
+{% set questions = content.pages.monitoringConditions.questions %}
+{% set questionName = "ISSP"%}
+{% block formInputs %}
+    {{ govukRadios({
+      classes: "govuk-radios",
+      name: "issp",
+      classes: "govuk-radios--inline",
+      hint: { text: questions.issp.hint },
+      fieldset: {
+        legend: {
+          text: questions.issp.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      items: [
+        {
+          value: "YES",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "NO",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: issp.value,
+      errorMessage: issp.error
+    }) }}
+
+
+{% endblock %}

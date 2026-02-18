@@ -12,7 +12,6 @@ import EnforcementZoneTypes from '../../models/EnforcementZoneTypes'
 import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import CheckAnswersController from './checkAnswersController'
-import config from '../../config'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 
@@ -31,7 +30,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
     updateChecklist: jest.fn(),
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
-  beforeEach(() => {
+  beforeEach(async () => {
     mockAuditClient = new HmppsAuditClient({
       queueUrl: '',
       enabled: true,
@@ -42,10 +41,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
     controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
   })
 
-  describe('view', () => {
+  describe('view order type description flow', () => {
     it('should render the check answers page without any answers completed', async () => {
       // Given
-      config.monitoringConditionTimes.enabled = true
       const order = getMockOrder()
       const req = createMockRequest({
         order,
@@ -61,162 +59,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         monitoringConditions: [
           {
             key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the start time on the first day of monitoring?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the end time on the last day of monitoring? (optional)',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What pilot project is the device wearer part of?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
-
-          {
-            key: {
-              text: 'What type of sentence has the device wearer been given?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what type of sentence has the device wearer been given?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on a Home Detention Curfew (HDC)?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
-            },
-            value: {
-              text: '',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
@@ -225,7 +67,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
@@ -248,7 +93,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed feature flag is on', async () => {
       // Given
-      config.monitoringConditionTimes.enabled = true
       const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94'
       const order = getMockOrder({
         addresses: [
@@ -287,16 +131,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           sentenceType: 'EPP',
           issp: 'NO',
           hdc: 'YES',
-          prarr: 'UNKNOWN',
+          prarr: 'YES',
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -411,92 +254,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/check-your-answers', {
         monitoringConditions: [
-          {
-            key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the start time on the first day of monitoring?',
-            },
-            value: {
-              text: '01:01',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the start time on the first day of monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the end time on the last day of monitoring? (optional)',
-            },
-            value: {
-              text: '01:01',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the end time on the last day of monitoring? (optional)',
-                },
-              ],
-            },
-          },
-
-          {
-            key: {
-              text: 'What pilot project is the device wearer part of?',
-            },
-            value: {
-              text: 'GPS Acquisitive Crime Home Detention Curfew',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
+          //   {
+          //     key: {
+          //       text: 'What is the order type?',
+          //     },
+          //     value: {
+          //       text: 'Pre-Trial',
+          //     },
+          //     actions: {
+          //       items: [
+          //         {
+          //           href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
+          //           text: 'Change',
+          //           visuallyHiddenText: 'what is the order type?',
+          //         },
+          //       ],
+          //     },
+          //   },
           {
             key: {
               text: 'What type of sentence has the device wearer been given?',
@@ -507,27 +281,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what type of sentence has the device wearer been given?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-            },
-            value: {
-              text: 'No',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
                 },
               ],
             },
@@ -542,9 +298,44 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
+            },
+            value: {
+              text: 'No',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText:
+                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'What pilot project is the device wearer part of?',
+            },
+            value: {
+              text: 'GPS acquisitive crime (EMAC)',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
@@ -554,12 +345,12 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
             },
             value: {
-              text: 'Not able to provide this information',
+              text: 'Yes',
             },
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText:
                     'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
@@ -572,12 +363,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
+              html: 'Curfew<br/>Exclusion zone monitoring<br/>Trail monitoring<br/>Mandatory attendance monitoring<br/>Alcohol monitoring',
             },
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
@@ -589,23 +383,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',
@@ -693,23 +470,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
-                },
-              ],
-            },
-          },
         ],
         curfewTimetable: [
           {
@@ -748,180 +508,186 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
         ],
         exclusionZone: [
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/11/2024',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/12/2024',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'zone.png',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
+            ],
+            zoneId: 0,
+          },
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Description here',
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'No file selected',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'zone.png',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
-              },
-              value: {
-                text: '11/11/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
-              },
-              value: {
-                text: '11/12/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
-              },
-              value: {
-                text: 'Description here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
-              },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'No file selected',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
+            ],
+            zoneId: 1,
+          },
         ],
         trail: [
           {
@@ -1162,7 +928,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
 
     it('should render the check answers with all answers completed feature flag is off', async () => {
       // Given
-      config.monitoringConditionTimes.enabled = false
       const conditionId = 'e8c7eeee-7cff-4c59-a0f2-7b8c23a82d94'
       const order = getMockOrder({
         addresses: [
@@ -1202,15 +967,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           issp: 'NO',
           hdc: 'YES',
           prarr: 'UNKNOWN',
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
         }),
         curfewReleaseDateConditions: createCurfewReleaseDateConditions({
           curfewAddress: 'PRIMARY',
           endTime: '11:11:00',
-          releaseDate: '2024-11-11T00:00:00Z',
           startTime: '11:11:00',
         }),
         curfewConditions: createCurfewConditions({
-          curfewAddress: 'PRIMARY,SECONDARY',
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',
           curfewAdditionalDetails: 'some additional curfew details',
@@ -1325,57 +1089,23 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/check-your-answers', {
         monitoringConditions: [
-          {
-            key: {
-              text: 'What is the date for the first day of all monitoring?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date for the first day of all monitoring?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What is the date when all monitoring ends?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what is the date when all monitoring ends?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'What pilot project is the device wearer part of?',
-            },
-            value: {
-              text: 'GPS Acquisitive Crime Home Detention Curfew',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
-                },
-              ],
-            },
-          },
+          // {
+          //   key: {
+          //     text: 'What is the order type?',
+          //   },
+          //   value: {
+          //     text: 'Pre-Trial',
+          //   },
+          //   actions: {
+          //     items: [
+          //       {
+          //         href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE.replace(':orderId', order.id),
+          //         text: 'Change',
+          //         visuallyHiddenText: 'what is the order type?',
+          //       },
+          //     ],
+          //   },
+          // },
           {
             key: {
               text: 'What type of sentence has the device wearer been given?',
@@ -1386,27 +1116,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'what type of sentence has the device wearer been given?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
-            },
-            value: {
-              text: 'No',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText:
-                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
                 },
               ],
             },
@@ -1421,7 +1133,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'is the device wearer on a home detention curfew (hdc)?',
                 },
@@ -1430,18 +1142,35 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'Has the device wearer been released on a Presumptive Risk Assessed Release Review (P-RARR)?',
+              text: 'Is the device wearer on the Intensive Supervision and Surveillance Programme (ISSP)?',
             },
             value: {
-              text: 'Not able to provide this information',
+              text: 'No',
             },
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText:
-                    'has the device wearer been released on a presumptive risk assessed release review (p-rarr)?',
+                    'is the device wearer on the intensive supervision and surveillance programme (issp)?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: 'What pilot project is the device wearer part of?',
+            },
+            value: {
+              text: 'GPS acquisitive crime (EMAC)',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
                 },
               ],
             },
@@ -1451,12 +1180,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Curfew<br/>Exclusion zone<br/>Trail<br/>Mandatory attendance<br/>Alcohol',
+              html: 'Curfew<br/>Exclusion zone monitoring<br/>Trail monitoring<br/>Mandatory attendance monitoring<br/>Alcohol monitoring',
             },
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.BASE_URL.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
                   visuallyHiddenText: 'what monitoring does the device wearer need?',
                 },
@@ -1468,23 +1200,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationLocation: [],
         installationAddress: [],
         curfewReleaseDate: [
-          {
-            key: {
-              text: 'What date is the device wearer released from custody?',
-            },
-            value: {
-              text: '11/11/2024',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'what date is the device wearer released from custody?',
-                },
-              ],
-            },
-          },
           {
             key: {
               text: 'On the day of release, what time does the curfew start?',
@@ -1572,23 +1287,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'Where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode<br/>Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'where will the device wearer be during curfew hours?',
-                },
-              ],
-            },
-          },
         ],
         curfewTimetable: [
           {
@@ -1627,180 +1325,186 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
         ],
         exclusionZone: [
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/11/2024',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: '11/12/2024',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'zone.png',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
+            ],
+            zoneId: 0,
+          },
+          {
+            item: [
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring start?',
+                },
+                value: {
+                  text: '11/11/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
+              {
+                key: {
+                  text: 'What date does exclusion zone monitoring end?',
+                },
+                value: {
+                  text: '11/12/2024',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Description here',
+              {
+                key: {
+                  text: 'Where is the exclusion zone?',
+                },
+                value: {
+                  text: 'Description here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'where is the exclusion zone?',
+                    },
+                  ],
+                },
               },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
+              {
+                key: {
+                  text: 'When must the exclusion zone be followed?',
+                },
+                value: {
+                  text: 'Duration here',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                    },
+                  ],
+                },
               },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
+              {
+                key: {
+                  text: 'Monitoring zone map (optional)',
+                },
+                value: {
+                  text: 'No file selected',
+                },
+                actions: {
+                  items: [
+                    {
+                      href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
+                      text: 'Change',
+                      visuallyHiddenText: 'monitoring zone map (optional)',
+                    },
+                  ],
+                },
               },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'zone.png',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
-          [
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring start?',
-              },
-              value: {
-                text: '11/11/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring start?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'What date does exclusion zone monitoring end?',
-              },
-              value: {
-                text: '11/12/2024',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'what date does exclusion zone monitoring end?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Where is the exclusion zone?',
-              },
-              value: {
-                text: 'Description here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'where is the exclusion zone?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'When must the exclusion zone be followed?',
-              },
-              value: {
-                text: 'Duration here',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'when must the exclusion zone be followed?',
-                  },
-                ],
-              },
-            },
-            {
-              key: {
-                text: 'Monitoring zone map (optional)',
-              },
-              value: {
-                text: 'No file selected',
-              },
-              actions: {
-                items: [
-                  {
-                    href: paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '1').replace(':orderId', order.id),
-                    text: 'Change',
-                    visuallyHiddenText: 'monitoring zone map (optional)',
-                  },
-                ],
-              },
-            },
-          ],
+            ],
+            zoneId: 1,
+          },
         ],
         trail: [
           {

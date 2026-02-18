@@ -1,7 +1,12 @@
 import QuestionPageContent from './questionPage'
 
 type IdentityNumbersPageContent = QuestionPageContent<
-  'deliusId' | 'homeOfficeReferenceNumber' | 'nomisId' | 'pncId' | 'prisonNumber'
+  | 'deliusId'
+  | 'nomisId'
+  | 'pncId'
+  | 'prisonNumber'
+  | 'complianceAndEnforcementPersonReference'
+  | 'courtCaseReferenceNumber'
 >
 
 export default IdentityNumbersPageContent

@@ -1,0 +1,50 @@
+{% extends "../../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../../../../partials/dateTimeInput.njk" import dateTimeInput %}
+
+{% set section = content.pages.offence.section %}
+{% set heading = content.pages.offence.title %}
+{% set helpText = content.pages.offence.helpText %}
+{% set questions = content.pages.offence.questions %}
+
+{% block formInputs %}
+  {% set disabled = not isOrderEditable %}
+
+    {{ govukRadios({
+    name: "offenceType",
+    fieldset: {
+      legend: {
+        text: content.pages.offence.questions.offenceType.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.offenceType.hint
+    },
+    items: content.reference.offences | toOptions(not isOrderEditable) | addDivider(),   
+    value: offenceType.value,
+    errorMessage: offenceType.error,
+    disabled: not isOrderEditable
+  }) }}
+  {% if showDate %}
+      {{dateTimeInput({
+        id: "offenceDate",
+        name: "offenceDate",    
+        date: offenceDate.value,
+        dateLabel: questions.offenceDate.text,
+        dateHint: questions.offenceDate.hint,   
+        errorMessages: {       
+        date: offenceDate.error,
+        time: offenceDate.error
+      },   
+        disabled: disabled,
+        timesEnabled: false,
+        defaultHours: 00,
+        defaultMinutes: 00
+      })}}
+  {% endif %}
+{% endblock %}

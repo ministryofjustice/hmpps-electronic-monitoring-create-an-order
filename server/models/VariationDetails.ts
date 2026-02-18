@@ -21,7 +21,7 @@ const VariationTypeEnum = z.enum([
 ])
 
 const VariationDetailsModel = z.object({
-  variationType: VariationTypeEnum,
+  variationType: VariationTypeEnum.optional().nullable(),
   variationDate: z.string().datetime(),
   variationDetails: z.string(),
 })
