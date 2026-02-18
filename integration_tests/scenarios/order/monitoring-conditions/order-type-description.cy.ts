@@ -233,7 +233,7 @@ context('Order type descriptions', () => {
       unit: 'Surrey',
     }
     const monitoringOrderTypeDescription = {
-      orderType: 'Release from prison',
+      // orderType: 'Release from prison',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'No',
       prarr: 'Yes',
