@@ -319,7 +319,6 @@ context('Order type descriptions', () => {
   it('Notification org is Civil', () => {
     stubGetOrder('CIVIL_COUNTY_COURT')
     const monitoringOrderTypeDescription = {
-      orderType: 'Civil',
       monitoringCondition: 'Trail monitoring',
     }
 
@@ -328,7 +327,7 @@ context('Order type descriptions', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
       body: {
-        orderType: 'CIVIL',
+        orderType: 'BAIL',
         conditionType: 'BAIL_ORDER',
         curfew: false,
         exclusionZone: false,

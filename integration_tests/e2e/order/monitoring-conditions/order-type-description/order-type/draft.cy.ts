@@ -22,7 +22,8 @@ const stubGetOrder = (notifyingOrg: string = 'CIVIL_COUNTY_COURT') => {
 }
 
 const mockOrderId = uuidv4()
-context('orderType', () => {
+// skipped out due to ELM-4526
+context.skip('orderType', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })

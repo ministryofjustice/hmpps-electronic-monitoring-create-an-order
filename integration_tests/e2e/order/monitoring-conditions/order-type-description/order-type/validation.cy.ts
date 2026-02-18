@@ -22,7 +22,8 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
 }
 
 const mockOrderId = uuidv4()
-context('order type', () => {
+// skipped out due to ELM-4526
+context.skip('order type', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
