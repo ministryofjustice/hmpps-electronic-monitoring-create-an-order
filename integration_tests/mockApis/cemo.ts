@@ -39,6 +39,8 @@ export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Orde
     deliusId: null,
     prisonNumber: null,
     homeOfficeReferenceNumber: null,
+    complianceAndEnforcementPersonReference: null,
+    courtCaseReferenceNumber: null,
     firstName: null,
     lastName: null,
     alias: null,
@@ -74,6 +76,7 @@ export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Orde
     hdc: null,
     prarr: null,
     pilot: null,
+    dapolMissedInError: null,
     offenceType: null,
     isValid: false,
   },
@@ -84,6 +87,10 @@ export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Orde
   isValid: false,
   orderParameters: null,
   versionId: uuidv4(),
+  dapoClauses: [],
+  offences: [],
+  mappa: null,
+  offenceAdditionalDetails: null,
 })
 
 type ListOrdersStubOptions = {
@@ -94,7 +101,6 @@ type ListOrdersStubOptions = {
 const defaultListOrdersOptions: ListOrdersStubOptions = {
   httpStatus: 200,
   orders: [
-    mockApiOrder('SUBMITTED'),
     {
       ...mockApiOrder(),
       deviceWearer: {
@@ -103,6 +109,8 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'test',
         lastName: 'tester',
         alias: null,
@@ -123,6 +131,8 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'Failed',
         lastName: 'request',
         alias: null,
@@ -144,6 +154,8 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
         deliusId: null,
         prisonNumber: null,
         homeOfficeReferenceNumber: null,
+        complianceAndEnforcementPersonReference: null,
+        courtCaseReferenceNumber: null,
         firstName: 'vari',
         lastName: 'ation',
         alias: null,
@@ -251,6 +263,40 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
   })
 }
 
+type GetVersionStubOptions = GetOrderStubOptions & {
+  versionId: string
+}
+
+const defaultGetVersionOptions = {
+  ...defaultGetOrderOptions,
+  versionId: uuidv4(),
+}
+
+const getSpecificVersion = (options: GetVersionStubOptions = defaultGetVersionOptions): SuperAgentRequest => {
+  const stubOptions = { ...defaultGetOrderOptions, ...options }
+
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${stubOptions.id}/versions/${stubOptions.versionId}`,
+    },
+    response: {
+      status: stubOptions.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        stubOptions.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: stubOptions.id,
+              status: stubOptions.status,
+              type: stubOptions.type,
+              ...(stubOptions.order ? stubOptions.order : {}),
+            }
+          : null,
+    },
+  })
+}
+
 type CreateOrderStubOptions = {
   httpStatus: number
   id?: string
@@ -323,10 +369,39 @@ const getOrderWithAttachments = (
     },
   })
 
+type GetVersionWithAttachmentStubOptions = GetOrderWithAttachmentStubOptions & {
+  versionId: string
+}
+
+const getVersionWithAttachments = (
+  options: GetVersionWithAttachmentStubOptions = defaultGetVersionOptions,
+): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${options.id}/versions/${options.versionId}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        options.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: options.id,
+              status: options.status,
+              additionalDocuments: options.attachments,
+              orderParameters: options.orderParameters,
+              fmsResultDate: options.fmsResultDate,
+            }
+          : null,
+    },
+  })
+
 type SubmitOrderStubOptions = {
   httpStatus: number
   method?: string
-  id: string
+  id?: string
   subPath?: string
   response: Record<string, unknown>
 }
@@ -344,6 +419,18 @@ const submitOrder = (options: SubmitOrderStubOptions) =>
     },
   })
 
+const stubCemoRequest = (options: SubmitOrderStubOptions) =>
+  stubFor({
+    request: {
+      method: options.method || 'GET',
+      urlPattern: `/cemo/api/${options.subPath ?? '/'}`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.response,
+    },
+  })
 type DeleteOrderStubOptions = {
   httpStatus: number
   id: string
@@ -486,6 +573,8 @@ const defaultPutDeviceWearerOptions = {
     deliusId: null,
     prisonNumber: null,
     homeOfficeReferenceNumber: null,
+    complianceAndEnforcementPersonReference: null,
+    courtCaseReferenceNumber: null,
     firstName: null,
     lastName: null,
     alias: null,
@@ -720,11 +809,13 @@ export default {
   stubCemoCreateOrder: createOrder,
   stubCemoCreateVariation: createVariation,
   stubCemoGetOrder: getOrder,
+  stubCemoGetVersion: getSpecificVersion,
   stubCemoPing: ping,
   stubCemoListOrders: listOrders,
   stubCemoSearchOrders: searchOrders,
   stubCemoGetVersions: getVersionInformation,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
+  stubCemoGetVersionWithAttachments: getVersionWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
   stubCemoSubmitOrder: submitOrder,
@@ -736,4 +827,5 @@ export default {
   stubCemoVerifyRequestReceived,
   stubDeleteOrder: deleteOrder,
   resetDB,
+  stubCemoRequest,
 }

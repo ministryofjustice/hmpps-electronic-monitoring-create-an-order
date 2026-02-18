@@ -116,14 +116,9 @@ export default {
   variationAsNewOrder: {
     enabled: get('VARIATION_AS_NEW_ORDER_ENABLED', 'false') === 'true',
   },
-  monitoringConditionTimes: {
-    enabled: get('MONITORING_CONDITION_TIMES_ENABLED', 'false') === 'true',
-  },
-  mappa: {
-    enabled: get('MAPPA_ENABLED', 'true') === 'true',
-  },
   tagAtSourcePilotPrions: get('TAG_AT_SOURCE_PILOT_PRISONS', ''),
   dapolPilotProbationRegions: get('DAPOL_PILOT_PROBATION_REGIONS', ''),
+  licenceVariationProbationRegions: get('LICENCE_VARIATION_PROBATION_REGIONS', ''),
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   logLevel: get('LOG_LEVEL', 'debug'),

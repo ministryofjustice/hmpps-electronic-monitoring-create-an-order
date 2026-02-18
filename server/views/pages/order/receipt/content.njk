@@ -20,8 +20,22 @@
       target: '_blank',
       id: "download-pdf"
     }) }}
+  
 {% endif %}
- 
+{% if showDownloadJsonButtons%}
+  {{ govukButton({
+      text: "Download FMS Device Wearer requests",
+      href: "/order/" + orderId + "/fmsDeviceWearerRequests",
+      target: '_blank',
+      id: "download-fms-device-wearer-requests"
+    }) }}
+  {{ govukButton({
+      text: "Download FMS Monitoring Order requests",
+      href: "/order/" + orderId + "/fmsMonitoringOrderRequests",
+      target: '_blank',
+      id: "download-fms-monitoring-order-requests"
+    }) }}
+{% endif %}
 </div>
 
 <div id="form-summary">

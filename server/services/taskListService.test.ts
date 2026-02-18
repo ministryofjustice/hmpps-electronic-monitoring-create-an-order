@@ -23,6 +23,7 @@ import { Order } from '../models/Order'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
+import FeatureFlags from '../utils/featureFlags'
 
 describe('TaskListService', () => {
   const mockOrderChecklistService = {
@@ -32,7 +33,7 @@ describe('TaskListService', () => {
 
   const monitoringConditionsPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
   describe('getNextPage', () => {
-    it('should return idenity numbers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
+    it('should return check your answers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
       // Given
       const currentPage = 'DEVICE_WEARER'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -44,7 +45,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return responsible adult if current page is device wearer and adultAtTheTimeOfInstallation is false', () => {
@@ -62,7 +63,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id))
     })
 
-    it('should return idenity numbers if current page is responsible adult', () => {
+    it('should return check your answers if current page is responsible adult', () => {
       // Given
       const currentPage = 'RESPONSIBLE_ADULT'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -72,10 +73,10 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return check your answers if current page is idenity numbers', () => {
+    it('should return device wearer page if current page is identity numbers', () => {
       // Given
       const currentPage = 'IDENTITY_NUMBERS'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -85,7 +86,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
     })
 
     it('should return contact details if current page is check your answers', () => {
@@ -687,7 +688,10 @@ describe('TaskListService', () => {
 
       // Then
       expect(nextPage).toBe(
-        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(':fileType(photo_Id|licence)', 'licence'),
+        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          'licence',
+        ),
       )
     })
 
@@ -732,7 +736,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -761,7 +765,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence)',
+            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
           isReady: true,
@@ -780,7 +784,7 @@ describe('TaskListService', () => {
         deviceWearerResponsibleAdult: createResponsibleAdult(),
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
-        interestedParties: createInterestedParties(),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
@@ -855,7 +859,7 @@ describe('TaskListService', () => {
         deviceWearerResponsibleAdult: createResponsibleAdult(),
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
-        interestedParties: createInterestedParties(),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
@@ -876,6 +880,7 @@ describe('TaskListService', () => {
       })
       mockOrderChecklistService.getChecklist.mockReturnValueOnce(
         Promise.resolve({
+          ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION: true,
           ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM: true,
           ABOUT_THE_DEVICE_WEARER: true,
           CONTACT_INFORMATION: true,
@@ -956,7 +961,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -985,7 +990,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence)',
+            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
           isReady: true,
@@ -1034,7 +1039,7 @@ describe('TaskListService', () => {
           checked: false,
           completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -1063,7 +1068,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence)',
+            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
           isReady: true,
@@ -1130,6 +1135,83 @@ describe('TaskListService', () => {
         },
       ])
     })
+
+    it('return links to version cya pages for old versions', async () => {
+      // Given
+      const order = getMockOrder({
+        status: 'SUBMITTED',
+        deviceWearer: createDeviceWearer({
+          firstName: '',
+          adultAtTimeOfInstallation: false,
+          noFixedAbode: false,
+        }),
+        monitoringConditions: createMonitoringConditions({
+          curfew: true,
+          alcohol: true,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: true,
+        }),
+      })
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order, 'someVersionId')
+
+      expect(sections).toEqual([
+        {
+          checked: false,
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'CONTACT_INFORMATION',
+          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: false,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.ATTACHMENTS_VERSION.replace(':orderId', order.id).replace(
+            ':versionId',
+            'someVersionId',
+          ),
+          isReady: true,
+        },
+      ])
+    })
+
     it('should return contact information section as incomplete if interested parties exists but notifying organisation fields are null', async () => {
       // Given
       const order = getMockOrder({
@@ -1151,6 +1233,122 @@ describe('TaskListService', () => {
       const contactInformationSection = sections.find(section => section.name === 'CONTACT_INFORMATION')
 
       expect(contactInformationSection?.completed).toBe(false)
+    })
+
+    it('should navigate to dapo page when offence flow is enabled and notifyingOrganisation is FAMILY_COURT', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'FAMILY_COURT',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.path).toBe(paths.INSTALLATION_AND_RISK.DAPO.replace(':orderId', order.id))
+
+      jest.restoreAllMocks()
+    })
+
+    it('should navigate to offence page when offence flow is enabled and notifyingOrganisation is not FAMILY_COURT', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'CROWN_COURT',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.path).toBe(
+        paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id),
+      )
+
+      jest.restoreAllMocks()
+    })
+
+    it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in, offence flow', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'CROWN_COURT',
+        }),
+        dapoClauses: [],
+        offences: [{ offenceType: 'offenceType', offenceDate: new Date().toISOString() }],
+        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        offenceAdditionalDetails: { additionalDetails: 'details' },
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.completed).toBe(true)
+
+      jest.restoreAllMocks()
+    })
+
+    it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in, dapo flow', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'FAMILY_COURT',
+        }),
+        dapoClauses: [{ date: new Date().toISOString(), clause: 'clause' }],
+        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      // When
+      const sections = await taskListService.getSections(order)
+
+      // Then
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.completed).toBe(true)
+
+      jest.restoreAllMocks()
     })
   })
   describe('getNextCheckYourAnswersPage', () => {

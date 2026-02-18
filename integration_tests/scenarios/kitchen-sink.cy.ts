@@ -56,7 +56,7 @@ context('The kitchen sink', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -75,6 +75,8 @@ context('The kitchen sink', () => {
   context('Fill in everything "including the kitchen sink" and screenshot', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: true,
       language: 'Flemish (Dutch)',
       hasFixedAddress: 'Yes',
@@ -172,6 +174,11 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage', { overwrite: true })
       orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      identityNumbersPage.form.fillInWith(deviceWearerDetails)
+      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
+      identityNumbersPage.form.saveAndContinueButton.click()
+
       let aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
       aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
@@ -179,11 +186,6 @@ context('The kitchen sink', () => {
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
       if (takeScreenshots) cy.screenshot('03. aboutDeviceWearerPage', { overwrite: true })
       aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      if (takeScreenshots) cy.screenshot('04. identityNumbersPage', { overwrite: true })
-      identityNumbersPage.form.saveAndContinueButton.click()
 
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continueButton().click()

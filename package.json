@@ -30,11 +30,12 @@
     "int-test-scenarios:parallel": "npm run cy:run -- --spec 'integration_tests/scenarios/**/*' --env split=true,spec=integration_tests/scenarios/**/*",
     "int-test-ui": "npm run cy:open",
     "clean": "rm -rf dist node_modules",
-    "rebuild": "npm run clean && npm i && npm run build"
+    "rebuild": "npm run clean && npm i && npm run build",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
-    "node": "^20",
-    "npm": "^10"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "jest": {
     "setupFiles": [
@@ -105,7 +106,7 @@
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.1.0",
     "csrf-sync": "^4.2.1",
-    "cypress-split": "^1.24.24",
+    "cypress-split": "^1.24.28",
     "express": "^4.21.2",
     "express-session": "^1.18.2",
     "govuk-frontend": "^5.13.0",
@@ -127,7 +128,8 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.0.0",
-    "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
+    "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@secretlint/secretlint-rule-preset-recommend": "^11.2.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
@@ -159,7 +161,7 @@
     "cypress-multi-reporters": "^2.0.5",
     "cypress-parallel": "^0.15.0",
     "dotenv": "^17.2.3",
-    "esbuild": "^0.25.11",
+    "esbuild": "^0.27.3",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
@@ -191,5 +193,17 @@
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
+  },
+  "overrides": {   
+    "cypress": {
+      "@cypress/request":"^3.0.10",
+      "qs": "^6.15.0"
+    },
+    "find-cypress-specs":{
+      "tsx": "^4.21.0"
+    },
+    "tsx": {
+      "esbuild": "^0.27.3"
+    }
   }
 }

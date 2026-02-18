@@ -3,6 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { PageElement } from '../page'
 
 export default class FormTextareaComponent {
+  clear() {
+    this.element.clear()
+  }
+
   private elementCacheId: string = uuidv4()
 
   constructor(
@@ -15,6 +19,14 @@ export default class FormTextareaComponent {
 
   get element(): PageElement {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
+  }
+
+  shouldExist() {
+    this.element.should('exist')
+  }
+
+  shouldNotExist() {
+    this.element.should('not.exist')
   }
 
   set(value?: string | number | boolean) {

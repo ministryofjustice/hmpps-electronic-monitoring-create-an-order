@@ -4,11 +4,14 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import fillInTagAtSourceWith from '../../../utils/scenario-flows/tag-at-source.cy'
 
 context('Order type descriptions', () => {
   const currentDate = new Date()
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
+    disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+    otherDisability: null,
     interpreterRequired: false,
     language: '',
     hasFixedAddress: 'Yes',
@@ -37,7 +40,7 @@ context('Order type descriptions', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -64,11 +67,19 @@ context('Order type descriptions', () => {
     }
   }
 
-  const verifyResult = ({ monitoringOrderTypeDescription }) => {
+  const verifyResult = ({
+    monitoringOrderTypeDescription,
+    trailMonitoring = trailMonitoringOrder,
+    installationLocation = undefined,
+    installationAppointment = undefined,
+    installationAddressDetails = undefined,
+  }) => {
     const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-    trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+    trailMonitoringPage.form.fillInWith(trailMonitoring)
     trailMonitoringPage.form.saveAndContinueButton.click()
-
+    if (installationLocation) {
+      fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
+    }
     const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
     const expectedOrderType =
       monitoringOrderTypeDescription.orderType === 'Release from prison'
@@ -123,6 +134,13 @@ context('Order type descriptions', () => {
       page,
       'What monitoring does the device wearer need?',
       monitoringOrderTypeDescription.monitoringCondition,
+    )
+
+    // Dapol missed in error
+    verifyValueInCheckYourAnswerPage(
+      page,
+      'Are you submitting this form becasue DAPOL was missed in error at point of release?',
+      monitoringOrderTypeDescription.dapolMissedInError,
     )
   }
 
@@ -208,7 +226,7 @@ context('Order type descriptions', () => {
     const interestedParties = createFakeInterestedParties(
       'Probation Service',
       'Probation',
-      'Kent, Surrey & Sussex',
+      null,
       'Kent, Surrey & Sussex',
     )
     const probationDeliveryUnit = {
@@ -221,6 +239,7 @@ context('Order type descriptions', () => {
       prarr: 'Yes',
       pilot: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
       monitoringCondition: 'Trail monitoring',
+      dapolMissedInError: 'Yes',
     }
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
@@ -234,8 +253,9 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
@@ -254,8 +274,9 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', 'London', null)
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Suspended Sentence',
@@ -273,9 +294,24 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is home office', () => {
+    const installationLocation = {
+      location: 'At a prison',
+    }
+
+    const installationAppointment = {
+      placeName: 'mock prison',
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+    }
+    const installationAddressDetails = createFakeAddress()
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       monitoringCondition: 'Trail monitoring',
+    }
+
+    const trailMonitoringOrderWithDeviceType = {
+      startDate: new Date(currentDate.getFullYear(), 11, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      deviceType: 'A fitted GPS tag',
     }
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
@@ -285,7 +321,13 @@ context('Order type descriptions', () => {
       installationAndRisk,
       monitoringOrderTypeDescription,
     })
-    verifyResult({ monitoringOrderTypeDescription })
+    verifyResult({
+      monitoringOrderTypeDescription,
+      trailMonitoring: trailMonitoringOrderWithDeviceType,
+      installationLocation,
+      installationAppointment,
+      installationAddressDetails,
+    })
   })
 
   it('Notification org is Civil', () => {

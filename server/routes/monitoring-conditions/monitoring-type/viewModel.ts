@@ -21,6 +21,7 @@ export type MonitoringTypeModel = {
   errorSummary: ErrorSummary | null
   error?: ErrorMessage
   message?: string
+  exception?: boolean
   allconditionsDisabled?: boolean
 } & {
   [K in keyof MonitoringTypes]: {
@@ -33,6 +34,7 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
 
   const model: MonitoringTypeModel = {
     message: enabled.message,
+    exception: enabled.exception,
     error: getError(errors, 'monitoringType'),
     errorSummary: createGovukErrorSummary(errors),
   }
@@ -42,8 +44,10 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
   })
 
   if (MonitoringTypesKeys.every(condition => model[condition]?.disabled)) {
+    if (model.exception !== true) {
+      model.message = 'There are no additional eligible monitoring types available to add'
+    }
     model.allconditionsDisabled = true
-    model.message = 'There are no additional eligible monitoring types available to add'
   }
 
   return model
@@ -66,7 +70,7 @@ const isConditionDisabled = (order: Order, condition: keyof MonitoringTypes) => 
   }
 }
 
-const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message?: string } => {
+const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message?: string; exception?: boolean } => {
   if (order.monitoringConditions.hdc === 'NO') {
     if (order.monitoringConditions.pilot === 'UNKNOWN') {
       return {
@@ -76,6 +80,14 @@ const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message
       }
     }
     if (order.monitoringConditions.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {
+      if (!hasFixedAddress(order)) {
+        return {
+          options: [],
+          message:
+            'No monitoring types can be selected because the device wearer is not on a Home Detention Curfew (HDC) and has no fixed address.',
+          exception: true,
+        }
+      }
       return {
         options: ['trail'],
         message:
@@ -85,6 +97,12 @@ const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message
   }
 
   if (!hasFixedAddress(order)) {
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+      return {
+        options: ['trail', 'alcohol'],
+        message: "Some monitoring types can't be selected because the device wearer has no fixed address.",
+      }
+    }
     return {
       options: ['alcohol'],
       message: "Some monitoring types can't be selected because the device wearer has no fixed address.",

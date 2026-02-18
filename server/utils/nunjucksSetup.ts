@@ -17,11 +17,12 @@ const toOptions = (
   includeEmptyOption: boolean = false,
   type: string = '',
   lastItemExclusive: boolean = false,
+  keyAsValue: boolean = true,
 ): Array<CheckboxItem | RadiosItem> => {
   const options = Object.keys(values).map(key => {
     if (typeof values[key] === 'object') {
       return {
-        value: key,
+        value: keyAsValue ? key : values[key].text,
         text: values[key].text,
         hint: {
           text: values[key].description,
@@ -31,7 +32,7 @@ const toOptions = (
     }
 
     return {
-      value: key,
+      value: keyAsValue ? key : values[key],
       text: values[key],
       disabled,
     }

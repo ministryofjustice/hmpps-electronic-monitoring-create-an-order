@@ -1,3 +1,4 @@
+import FormCheckboxesComponent from '../../formCheckboxesComponent'
 import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
 
@@ -6,58 +7,78 @@ export type IdentityNumbersFormData = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
-  homeOfficeReferenceNumber?: string
+  complianceAndEnforcementPersonReference?: string
+  courtCaseReferenceNumber?: string
 }
 
 export default class IdentityNumbersFormComponent extends FormComponent {
+  get checkboxes(): FormCheckboxesComponent {
+    return new FormCheckboxesComponent(this.form, 'What identity numbers do you have for the device wearer?', [
+      'Police National Computer (PNC)',
+      'National Offender Management Information System (NOMIS)',
+      'Prison Number',
+      'NDelius ID',
+      'Compliance and Enforcement Person Reference (CEPR)',
+      'Court Case Reference Number (CCRN)',
+    ])
+  }
   // FIELDS
 
   get nomisIdField(): FormInputComponent {
-    const label = 'National Offender Management Information System (NOMIS) ID (optional)'
-    return new FormInputComponent(this.form, label)
+    return new FormInputComponent(this.form, 'Enter NOMIS ID')
   }
 
   get pncIdField(): FormInputComponent {
-    const label = 'Police National Computer (PNC) ID (optional)'
-    return new FormInputComponent(this.form, label)
+    return new FormInputComponent(this.form, 'Enter PNC')
   }
 
   get deliusIdField(): FormInputComponent {
-    const label = 'Delius ID (optional)'
-    return new FormInputComponent(this.form, label)
+    return new FormInputComponent(this.form, 'Enter NDelius ID')
   }
 
   get prisonNumberField(): FormInputComponent {
-    const label = 'Prison number (optional)'
-    return new FormInputComponent(this.form, label)
+    return new FormInputComponent(this.form, 'Enter Prison Number')
   }
 
-  get homeOfficeReferenceNumberField(): FormInputComponent {
-    const label = 'Home Office Reference Number (optional)'
-    return new FormInputComponent(this.form, label)
+  get complianceField(): FormInputComponent {
+    return new FormInputComponent(this.form, 'Enter Compliance and Enforcement Person Reference')
+  }
+
+  get courtCaseField(): FormInputComponent {
+    return new FormInputComponent(this.form, 'Enter Court Case Reference Number')
   }
 
   // FORM HELPERS
 
   fillInWith = (profile: IdentityNumbersFormData): undefined => {
     if (profile.nomisId) {
+      this.checkboxes.set('National Offender Management Information System (NOMIS)')
       this.nomisIdField.set(profile.nomisId)
     }
 
     if (profile.pncId) {
+      this.checkboxes.set('Police National Computer (PNC)')
       this.pncIdField.set(profile.pncId)
     }
 
     if (profile.deliusId) {
+      this.checkboxes.set('NDelius ID')
       this.deliusIdField.set(profile.deliusId)
     }
 
     if (profile.prisonNumber) {
+      this.checkboxes.set('Prison Number')
       this.prisonNumberField.set(profile.prisonNumber)
     }
 
-    if (profile.homeOfficeReferenceNumber) {
-      this.homeOfficeReferenceNumberField.set(profile.homeOfficeReferenceNumber)
+    if (profile.complianceAndEnforcementPersonReference) {
+      this.checkboxes.set('Compliance and Enforcement Person Reference (CEPR)')
+      this.complianceField.set(profile.complianceAndEnforcementPersonReference)
+    }
+
+    if (profile.courtCaseReferenceNumber) {
+      this.checkboxes.set('Court Case Reference Number (CCRN)')
+      this.courtCaseField.set(profile.courtCaseReferenceNumber)
     }
   }
 
@@ -66,22 +87,15 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     this.pncIdField.shouldNotHaveValidationMessage()
     this.deliusIdField.shouldNotHaveValidationMessage()
     this.prisonNumberField.shouldNotHaveValidationMessage()
-    this.homeOfficeReferenceNumberField.shouldNotHaveValidationMessage()
+    this.complianceField.shouldNotHaveValidationMessage()
+    this.courtCaseField.shouldNotHaveValidationMessage()
   }
 
   shouldBeDisabled(): void {
-    this.nomisIdField.shouldBeDisabled()
-    this.pncIdField.shouldBeDisabled()
-    this.deliusIdField.shouldBeDisabled()
-    this.prisonNumberField.shouldBeDisabled()
-    this.homeOfficeReferenceNumberField.shouldBeDisabled()
+    this.checkboxes.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
-    this.nomisIdField.shouldNotBeDisabled()
-    this.pncIdField.shouldNotBeDisabled()
-    this.deliusIdField.shouldNotBeDisabled()
-    this.prisonNumberField.shouldNotBeDisabled()
-    this.homeOfficeReferenceNumberField.shouldNotBeDisabled()
+    this.checkboxes.shouldNotBeDisabled()
   }
 }

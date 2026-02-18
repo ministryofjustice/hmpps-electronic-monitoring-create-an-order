@@ -130,17 +130,6 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
       ]
     }
 
-    if (notifyingOrganisation === 'PROBATION') {
-      return [
-        createAnswer(
-          questions.notifyingOrgProbationRegion.text,
-          lookup(content.reference.probationRegions, order.interestedParties?.notifyingOrganisationName),
-          uri,
-          answerOpts,
-        ),
-      ]
-    }
-
     if ('youthCourts' in content.reference && notifyingOrganisation === 'YOUTH_COURT') {
       return [
         createAnswer(
@@ -151,7 +140,6 @@ const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: st
         ),
       ]
     }
-
     if ('youthCustodyServiceRegions' in content.reference && notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
       return [
         createAnswer(
@@ -181,6 +169,17 @@ const getResponsibleOrganisationRegionAnswer = (
       createAnswer(
         questions.probationRegion.text,
         lookup(content.reference.probationRegions, order.interestedParties?.responsibleOrganisationRegion),
+        uri,
+        answerOpts,
+      ),
+    ]
+  }
+
+  if (responsibleOrganisation === 'POLICE') {
+    return [
+      createAnswer(
+        questions.police.text,
+        lookup(content.reference.policeAreas, order.interestedParties?.responsibleOrganisationRegion),
         uri,
         answerOpts,
       ),

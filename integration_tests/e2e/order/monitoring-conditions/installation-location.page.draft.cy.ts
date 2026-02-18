@@ -9,7 +9,9 @@ const mockDefaultOrder = {
     pncId: 'pnc',
     deliusId: 'delius',
     prisonNumber: 'prison',
-    homeOfficeReferenceNumber: 'ho',
+    homeOfficeReferenceNumber: '',
+    complianceAndEnforcementPersonReference: 'cepr',
+    courtCaseReferenceNumber: 'ccrn',
     firstName: 'test',
     lastName: 'tester',
     alias: 'tes',
@@ -175,7 +177,9 @@ context('Monitoring conditions', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'test',
@@ -231,7 +235,9 @@ context('Monitoring conditions', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -272,7 +278,9 @@ context('Monitoring conditions', () => {
             pncId: 'pnc',
             deliusId: 'delius',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'ho',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
             lastName: 'tester',
             alias: 'tes',
@@ -330,6 +338,49 @@ context('Monitoring conditions', () => {
         })
         page.form.locationField.shouldHaveOption('At a prison')
         page.form.locationField.shouldHaveOption('At a probation office')
+        page.form.locationField.shouldNotHaveOption('At an immigration removal centre')
+      })
+
+      it('Should show immigration option if notifying organisation is home office', () => {
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        stubGetOrder({
+          ...mockDefaultOrder,
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'NORTH_EAST',
+            responsibleOfficerName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+          },
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: false,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+            offenceType: '',
+          },
+        })
+        const page = Page.visit(InstallationLocationPage, {
+          orderId: mockOrderId,
+        })
+        page.form.locationField.shouldHaveOption('At a prison')
+        page.form.locationField.shouldHaveOption('At a probation office')
+        page.form.locationField.shouldHaveOption('At an immigration removal centre')
       })
 
       it('should show at another address option', () => {

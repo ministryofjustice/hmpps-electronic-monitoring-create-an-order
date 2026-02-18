@@ -1,78 +1,141 @@
 {% extends "../../../partials/form-layout.njk" %}
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set section = content.pages.identityNumbers.section %}
-{% set heading = content.pages.identityNumbers.title %}
-{% set legend = content.pages.identityNumbers.legend %}
-{% set helpText = content.pages.identityNumbers.helpText %}
 
 {% block formInputs %}
 
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.nomisId.text,
-      classes: "govuk-fieldset__legend--s"
+  {% set pncHtml %}
+    {{ govukInput({
+      id: "pncId",
+      name: "pncId",
+      label: { text: "Enter PNC" },
+      classes: "govuk-!-width-one-half",
+      value: pncId.value,
+      errorMessage: pncId.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endset %}
 
-    },
-    classes: "govuk-input--width-10",
-    id: "nomisId",
-    name: "nomisId",
-    value: nomisId.value,
-    errorMessage: nomisId.error,
-    disabled: not isOrderEditable
-  }) }}
+  {% set nomisHtml %}
+    {{ govukInput({
+      id: "nomisId",
+      name: "nomisId",
+      label: { text: "Enter NOMIS ID" },
+      classes: "govuk-!-width-one-half",
+      value: nomisId.value,
+      errorMessage: nomisId.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endset %}
 
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.pncId.text,
-      classes: "govuk-fieldset__legend--s"
-    },
-    classes: "govuk-input--width-10",
-    id: "pncId",
-    name: "pncId",
-    value: pncId.value,
-    errorMessage: pncId.error,
-    disabled: not isOrderEditable
-  }) }}
+  {% set prisonNumberHtml %}
+    {{ govukInput({
+      id: "prisonNumber",
+      name: "prisonNumber",
+      label: { text: "Enter Prison Number" },
+      classes: "govuk-!-width-one-half",
+      value: prisonNumber.value,
+      errorMessage: prisonNumber.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endset %}
 
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.deliusId.text,
-      classes: "govuk-fieldset__legend--s"
-    },
-    classes: "govuk-input--width-10",
-    id: "deliusId",
-    name: "deliusId",
-    value: deliusId.value,
-    errorMessage: deliusId.error,
-    disabled: not isOrderEditable
-  }) }}
+  {% set deliusHtml %}
+    {{ govukInput({
+      id: "deliusId",
+      name: "deliusId",
+      label: { text: "Enter NDelius ID" },
+      classes: "govuk-!-width-one-half",
+      value: deliusId.value,
+      errorMessage: deliusId.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endset %}
 
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.prisonNumber.text,
-      classes: "govuk-fieldset__legend--s"
-    },
-    classes: "govuk-input--width-10",
-    id: "prisonNumber",
-    name: "prisonNumber",
-    value: prisonNumber.value,
-    errorMessage: prisonNumber.error,
-    disabled: not isOrderEditable
-  }) }}
+  {% set complianceHtml %}
+    {{ govukInput({
+      id: "complianceAndEnforcementPersonReference",
+      name: "complianceAndEnforcementPersonReference",
+      label: { text: "Enter Compliance and Enforcement Person Reference" },
+      classes: "govuk-!-width-one-half",
+      value: complianceAndEnforcementPersonReference.value,
+      errorMessage: complianceAndEnforcementPersonReference.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endset %}
 
-  {{ govukInput({
-    label: {
-      text: content.pages.identityNumbers.questions.homeOfficeReferenceNumber.text,
-      classes: "govuk-fieldset__legend--s"
+  {% set courtCaseHtml %}
+    {{ govukInput({
+      id: "courtCaseReferenceNumber",
+      name: "courtCaseReferenceNumber",
+      label: { text: "Enter Court Case Reference Number" },
+      classes: "govuk-!-width-one-half",
+      value: courtCaseReferenceNumber.value,
+      errorMessage: courtCaseReferenceNumber.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% endset %}
+
+  {{ govukCheckboxes({
+    name: "identityNumbers",
+    fieldset: {
+      legend: {
+        text: content.pages.identityNumbers.legend,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
     },
-    classes: "govuk-input--width-10",
-    id: "homeOfficeReferenceNumber",
-    name: "homeOfficeReferenceNumber",
-    value: homeOfficeReferenceNumber.value,
-    errorMessage: homeOfficeReferenceNumber.error,
-    disabled: not isOrderEditable
+    hint: {
+      text: content.pages.identityNumbers.helpText
+    },
+    items: [
+      {
+        value: "PNC",
+        text: content.pages.identityNumbers.questions.pncId.text,
+        conditional: { html: pncHtml },
+        checked: identityNumbers.values and "PNC" in identityNumbers.values,
+        disabled: not isOrderEditable
+      },
+      {
+        value: "NOMIS",
+        text: content.pages.identityNumbers.questions.nomisId.text,
+        conditional: { html: nomisHtml },
+        checked: identityNumbers.values and "NOMIS" in identityNumbers.values,
+        disabled: not isOrderEditable
+      },
+      {
+        value: "PRISON_NUMBER",
+        text: content.pages.identityNumbers.questions.prisonNumber.text,
+        conditional: { html: prisonNumberHtml },
+        checked: identityNumbers.values and "PRISON_NUMBER" in identityNumbers.values,
+        disabled: not isOrderEditable
+      },
+      {
+        value: "DELIUS",
+        text: content.pages.identityNumbers.questions.deliusId.text,
+        conditional: { html: deliusHtml },
+        checked: identityNumbers.values and "DELIUS" in identityNumbers.values,
+        disabled: not isOrderEditable
+      },
+      {
+        value: "COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE",
+        text: content.pages.identityNumbers.questions.complianceAndEnforcementPersonReference.text,
+        conditional: { html: complianceHtml },
+        checked: identityNumbers.values and "COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE" in identityNumbers.values,
+        disabled: not isOrderEditable
+      },
+      {
+        value: "COURT_CASE_REFERENCE_NUMBER",
+        text: content.pages.identityNumbers.questions.courtCaseReferenceNumber.text,
+        conditional: { html: courtCaseHtml },
+        checked: identityNumbers.values and "COURT_CASE_REFERENCE_NUMBER" in identityNumbers.values,
+        disabled: not isOrderEditable
+      }
+    ],
+    errorMessage: identityNumbers.error
   }) }}
 
 {% endblock %}

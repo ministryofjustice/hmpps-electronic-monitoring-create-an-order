@@ -56,7 +56,7 @@ context.skip('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -77,6 +77,8 @@ context.skip('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeYouthDeviceWearer('CEMO035'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -135,6 +137,10 @@ context.skip('Scenarios', () => {
         cacheOrderId()
         orderSummaryPage.aboutTheDeviceWearerTask.click()
 
+        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+        identityNumbersPage.form.fillInWith(deviceWearerDetails)
+        identityNumbersPage.form.saveAndContinueButton.click()
+
         const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
         aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
         aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -142,10 +148,6 @@ context.skip('Scenarios', () => {
         const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultPage)
         responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
         responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-
-        const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-        identityNumbersPage.form.fillInWith(deviceWearerDetails)
-        identityNumbersPage.form.saveAndContinueButton.click()
 
         const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(
           DeviceWearerCheckYourAnswersPage,
@@ -238,6 +240,7 @@ context.skip('Scenarios', () => {
             address_3: fakePrimaryAddress.addressLine3,
             address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
             address_post_code: fakePrimaryAddress.postcode,
+            no_fixed_address: 'false',
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -269,7 +272,7 @@ context.skip('Scenarios', () => {
             nomis_id: deviceWearerDetails.nomisId,
             delius_id: deviceWearerDetails.deliusId,
             prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
             interpreter_required: 'false',
             language: '',
           },
@@ -284,7 +287,7 @@ context.skip('Scenarios', () => {
                 case_id: fmsCaseId,
                 allday_lockdown: '',
                 atv_allowance: '',
-                condition_type: 'Requirement of a Community Order',
+                condition_type: 'Requirement of Community Order',
                 court: '',
                 court_order_email: '',
                 device_type: '',
@@ -391,12 +394,14 @@ ${attendanceMonitoringOrder.address.postcode}
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
                 subcategory: '',
+                dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

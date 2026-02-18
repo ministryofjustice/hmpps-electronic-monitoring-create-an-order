@@ -30,14 +30,26 @@ import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/
 import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendance-monitoring.cy'
 import Timeline from '../components/timeline'
+import HaveCourtOrderPage from '../../e2e/order/attachments/have-court-order/courtOrderDocumentPage'
+import UploadCourtOrderPage from '../../e2e/order/attachments/upload-court-order/uploadCourtOrderPage'
+import HaveGrantOfBailPage from '../../e2e/order/attachments/have-grant-of-bail/haveGrantOfBailPage'
+import UploadGrantOfBailPage from '../../e2e/order/attachments/upload-grant-of-bail/uploadGrantOfBailPage'
 
 export default class OrderTasksPage extends AppPage {
-  constructor() {
-    super('Electronic Monitoring application form', paths.ORDER.SUMMARY, '')
+  constructor(isOldVersionPage: boolean = false) {
+    let path: string = paths.ORDER.SUMMARY
+    if (isOldVersionPage) {
+      path = paths.ORDER.SUMMARY_VERSION
+    }
+    super('Electronic Monitoring application form', path, '')
   }
 
   get variationDetailsTask(): Task {
     return new Task('About the changes in this version of the form')
+  }
+
+  get interestedPartiesTask(): Task {
+    return new Task('About the notifying and responsible organisation')
   }
 
   get aboutTheDeviceWearerTask(): Task {
@@ -476,6 +488,10 @@ export default class OrderTasksPage extends AppPage {
     tertiaryAddressDetails = undefined,
     monitoringOrderTypeDescription = undefined,
   }): void {
+    const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+    identityNumbersPage.form.fillInWith(deviceWearerDetails)
+    identityNumbersPage.form.saveAndContinueButton.click()
+
     const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
     aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
     aboutDeviceWearerPage.form.saveAndContinueButton.click()
@@ -485,9 +501,6 @@ export default class OrderTasksPage extends AppPage {
       responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
       responsibleAdultDetailsPage.form.saveAndContinueButton.click()
     }
-    const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
-    identityNumbersPage.form.fillInWith(deviceWearerDetails)
-    identityNumbersPage.form.saveAndContinueButton.click()
 
     const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
     deviceWearerCheckYourAnswersPage.continueButton().click()
@@ -614,11 +627,41 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInAttachmentDetailsWith({ files }): void {
-    const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
-    uploadLicencePage.form.fillInWith({
-      file: files.licence,
-    })
-    uploadLicencePage.form.saveAndContinueButton.click()
+    if (files.licence !== undefined) {
+      const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
+      uploadLicencePage.form.fillInWith({
+        file: files.licence,
+      })
+      uploadLicencePage.form.saveAndContinueButton.click()
+    }
+
+    if (files.courtOrder !== undefined) {
+      const haveCourtOrderPage = Page.verifyOnPage(HaveCourtOrderPage)
+      haveCourtOrderPage.form.fillInWith(files.courtOrder.fileRequired)
+      haveCourtOrderPage.form.saveAndContinueButton.click()
+
+      if (files.courtOrder.fileRequired === 'Yes') {
+        const uploadCourtOrderPage = Page.verifyOnPage(UploadCourtOrderPage)
+        uploadCourtOrderPage.form.fillInWith({
+          file: files.courtOrder,
+        })
+        uploadCourtOrderPage.form.saveAndContinueButton.click()
+      }
+    }
+
+    if (files.grantOfBail !== undefined) {
+      const haveGrantOfBailPage = Page.verifyOnPage(HaveGrantOfBailPage)
+      haveGrantOfBailPage.form.fillInWith(files.grantOfBail.fileRequired)
+      haveGrantOfBailPage.form.saveAndContinueButton.click()
+
+      if (files.grantOfBail.fileRequired === 'Yes') {
+        const uploadGrantOfBail = Page.verifyOnPage(UploadGrantOfBailPage)
+        uploadGrantOfBail.form.fillInWith({
+          file: files.grantOfBail,
+        })
+        uploadGrantOfBail.form.saveAndContinueButton.click()
+      }
+    }
 
     if (files && files.photoId !== undefined) {
       const havePhotoPage = Page.verifyOnPage(HavePhotoPage)

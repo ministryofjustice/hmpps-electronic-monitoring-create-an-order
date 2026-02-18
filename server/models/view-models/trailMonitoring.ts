@@ -1,18 +1,22 @@
-import { DateTimeField, ViewModel } from './utils'
+import { DateTimeField, TextField, ViewModel } from './utils'
 import { ValidationResult } from '../Validation'
 import { TrailMonitoring } from '../TrailMonitoring'
 import { deserialiseDateTime, getError } from '../../utils/utils'
 import { TrailMonitoringFormData } from '../form-data/trailMonitoring'
 import { createGovukErrorSummary } from '../../utils/errors'
+import { NotifyingOrganisation } from '../NotifyingOrganisation'
 
 type TrailMonitoringViewModel = ViewModel<unknown> & {
   startDate: DateTimeField
   endDate: DateTimeField
+  deviceType: TextField
+  notifyingOrganisation: string | undefined
 }
 
 const createViewModelFromFormData = (
   formData: TrailMonitoringFormData,
   validationErrors: ValidationResult,
+  notifyingOrganisation?: NotifyingOrganisation,
 ): TrailMonitoringViewModel => {
   return {
     startDate: {
@@ -35,14 +39,24 @@ const createViewModelFromFormData = (
       },
       error: getError(validationErrors, 'endDate'),
     },
+    deviceType: {
+      value: formData.deviceType ?? '',
+      error: getError(validationErrors, 'deviceType'),
+    },
+    notifyingOrganisation,
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
-const createViewModelFromTrailMonitoring = (trailMonitoring: TrailMonitoring): TrailMonitoringViewModel => {
+const createViewModelFromTrailMonitoring = (
+  trailMonitoring: TrailMonitoring,
+  notifyingOrganisation?: NotifyingOrganisation,
+): TrailMonitoringViewModel => {
   return {
     startDate: { value: deserialiseDateTime(trailMonitoring?.startDate) },
     endDate: { value: deserialiseDateTime(trailMonitoring?.endDate) },
+    deviceType: { value: trailMonitoring?.deviceType ?? '' },
+    notifyingOrganisation,
     errorSummary: null,
   }
 }
@@ -51,12 +65,13 @@ const construct = (
   trailMonitoring: TrailMonitoring,
   validationErrors: ValidationResult,
   formData: [TrailMonitoringFormData],
+  notifyingOrganisation?: NotifyingOrganisation,
 ): TrailMonitoringViewModel => {
   if (validationErrors.length > 0 && formData.length > 0) {
-    return createViewModelFromFormData(formData[0], validationErrors)
+    return createViewModelFromFormData(formData[0], validationErrors, notifyingOrganisation)
   }
 
-  return createViewModelFromTrailMonitoring(trailMonitoring)
+  return createViewModelFromTrailMonitoring(trailMonitoring, notifyingOrganisation)
 }
 
 export default {

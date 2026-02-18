@@ -9,10 +9,7 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  MAPPA_ENABLED: true,
-  MONITORING_CONDITION_TIMES_ENABLED: false,
   VARIATION_AS_NEW_ORDER_ENABLED: true,
-  ORDER_TYPE_ENABLED: false,
   ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
   LIST_MONITORING_CONDITION_FLOW_ENABLED: false,
@@ -20,6 +17,10 @@ const mockFlags = {
   SERVICE_REQUEST_TYPE_ENABLED: false,
   TAG_AT_SOURCE_PILOT_PRISONS: '',
   DAPOL_PILOT_PROBATION_REGIONS: '',
+  LICENCE_VARIATION_PROBATION_REGIONS: '',
+  OFFENCE_FLOW_ENABLED: false,
+  DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
+  INTERESTED_PARTIES_FLOW_ENABLED: false,
 }
 
 jest.mock('fs')
@@ -58,9 +59,9 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const mappaFlag = FeatureFlags.getInstance().get('MAPPA_ENABLED')
+    const offenceFlowEnabledFlag = FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
 
-    expect(mappaFlag).toBe(true)
+    expect(offenceFlowEnabledFlag).toBe(false)
   })
 
   test('get should throw if flag is not defined', () => {

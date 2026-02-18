@@ -16,6 +16,8 @@ context('Service-Request-Types', () => {
   const currentDate = new Date()
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
+    disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+    otherDisability: null,
     interpreterRequired: false,
     language: '',
     hasFixedAddress: 'Yes',
@@ -113,7 +115,7 @@ context('Service-Request-Types', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSUpdateDeviceWearer', {
@@ -136,15 +138,19 @@ context('Service-Request-Types', () => {
   })
 
   it('Should able to create new REINSTALL_AT_DIFFERENT_ADDRESS', () => {
-    fillInNewOrder('I need monitoring equipment installed at a new address', 'Reinstall at different address')
+    fillInNewOrder('I need monitoring equipment installed at an additional address', 'Reinstall at different address')
   })
 
   it('Should able to create new REINSTALL_DEVICE', () => {
-    fillInNewOrder('I need monitoring equipment reinstalled or checked', 'Reinstall device')
+    fillInNewOrder('I need monitoring equipment reinstalled', 'Reinstall device')
   })
 
-  it('Should able to create new REINSTALL_AT_DIFFERENT_ADDRESS', () => {
-    fillInNewOrder('I need to end all monitoring for the device wearer', 'End all monitoring')
+  it('Should able to create new END_MONITORING', () => {
+    fillInNewOrder('I need to end all monitoring for a device wearer', 'End all monitoring')
+  })
+
+  it('Should able to make REVOCATION change', () => {
+    fillInNewOrder('I need to revoke monitoring for the device wearer', 'Revocation')
   })
 
   it('Should able to create new VARIATION', () => {

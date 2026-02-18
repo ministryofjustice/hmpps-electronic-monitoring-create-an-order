@@ -10,6 +10,8 @@ context('Postcode Lookup', () => {
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
+    disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+    otherDisability: null,
     interpreterRequired: false,
     language: '',
     hasFixedAddress: 'Yes',
@@ -22,7 +24,7 @@ context('Postcode Lookup', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)

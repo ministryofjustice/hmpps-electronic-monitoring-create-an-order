@@ -99,14 +99,66 @@ context('Contact information', () => {
           page.form.militaryCourtField.shouldHaveOption('Catterick Military Court Centre')
 
           page.form.prisonField.shouldHaveOption('Millsike Prison')
+          page.form.prisonField.shouldHaveOption('Feltham Prison')
+          page.form.prisonField.shouldHaveOption('Feltham Young Offender Institution')
 
           page.form.youthCourtField.shouldHaveOption('Barking Youth Court')
           page.form.youthCourtField.shouldHaveOption('Llwynypia Youth Court')
           page.form.youthCourtField.shouldHaveOption('Wrexham Youth Court')
 
-          page.form.youthCustodyServiceField.shouldHaveOption('Central')
+          cy.get('#notifyingOrgProbationRegion').should('not.exist')
+          cy.get('#youthCustodyServiceRegion').should('exist')
+
+          page.checkIsAccessible()
+        })
+      })
+
+      context('DDv6', () => {
+        beforeEach(() => {
+          cy.task('reset')
+          cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { dataDictionaryVersion: 'DDV6' },
+          })
+          cy.signIn()
+        })
+
+        it('Should display DDV6 content', () => {
+          const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
+          page.header.userName().should('contain.text', 'J. Smith')
+          page.header.phaseBanner().should('contain.text', 'dev')
+
+          page.form.saveAndContinueButton.should('exist')
+          page.form.saveAsDraftButton.should('exist')
+          page.form.shouldNotBeDisabled()
+          page.errorSummary.shouldNotExist()
+          page.backButton.should('exist')
+
+          page.form.policeAreaField.shouldHaveOption('National Crime Agency')
+
+          page.form.youthCustodyServiceField.shouldHaveOption('East and South East')
+          page.form.youthCustodyServiceField.shouldHaveOption('London')
+          page.form.youthCustodyServiceField.shouldHaveOption('Midlands')
           page.form.youthCustodyServiceField.shouldHaveOption('North East and Cumbria')
+          page.form.youthCustodyServiceField.shouldHaveOption('North West')
+          page.form.youthCustodyServiceField.shouldHaveOption('South West and South Central')
           page.form.youthCustodyServiceField.shouldHaveOption('Wales')
+          page.form.youthCustodyServiceField.shouldHaveOption('Yorkshire and Humberside')
+
+          page.form.magistratesCourtField.shouldHaveOption('City of Westminster Magistrates Court International Office')
+
+          page.form.youthCourtField.shouldNotHaveOption('Liverpool Youth Code (Hatton Garden)')
+          page.form.youthCourtField.shouldHaveOption('Liverpool Youth Court (Hatton Garden)')
+          page.form.youthCourtField.shouldNotHaveOption('Penrith Youth Code')
+          page.form.youthCourtField.shouldHaveOption('Penrith Youth Court')
+          page.form.prisonField.shouldHaveOption('Feltham Prison')
+          page.form.prisonField.shouldHaveOption('Feltham Young Offender Institution')
+
+          cy.get('#notifyingOrgProbationRegion').should('not.exist')
+          cy.get('#youthCustodyServiceRegion').should('exist')
 
           page.checkIsAccessible()
         })

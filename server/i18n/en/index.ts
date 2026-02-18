@@ -32,6 +32,18 @@ import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
 import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
+import haveCourtOrderPageContent from './pages/haveCourtOrder'
+import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
+import uploadGrantOfBailPageContent from './pages/uploadGrantOfBail'
+import haveGrantOfBailPageContent from './pages/haveGrantOfBail'
+import dapoContent from './pages/dapo'
+import offenceContent from './pages/offence'
+import mappaPageContent from './pages/mappa'
+import detailsOfInstallationPageContent from './pages/details-of-installation'
+import offenceOtherInformationPageContent from './pages/offenceOtherInformation'
+import isMappaPageContent from './pages/isMappa'
+import offenceListPageContent from './pages/offenceListPage'
+import dapaClauseListPageContent from './pages/dapoClauseListPage'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -50,6 +62,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       identityNumbers: identityNumbersPageContent,
       installationAddress: installationAddressPageContent,
       installationAndRisk: installationAndRiskPageContent,
+      detailsOfInstallation: detailsOfInstallationPageContent,
       interestedParties: interestedPartiesPageContent,
       monitoringConditions: monitoringConditionsPageContent,
       noFixedAbode: noFixedAbodePageContent,
@@ -60,13 +73,24 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       trailMonitoring: trailMonitoringPageContent,
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
+      uploadCourtOrder: uploadCourtOrderPageContent,
+      uploadGrantOfBail: uploadGrantOfBailPageContent,
       havePhoto: havePhotoPageContent,
+      haveCourtOrder: haveCourtOrderPageContent,
+      haveGrantOfBail: haveGrantOfBailPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       installationLocation: installationLocationPageContent,
       installationAppointment: installationAppointmentPageContent,
       isRejection: isRejectionPageContent,
       serviceRequestType: serviceRequestTypePageContent,
+      dapo: dapoContent,
+      offence: offenceContent,
+      mappa: mappaPageContent,
+      offenceOtherInformation: offenceOtherInformationPageContent,
+      isMappa: isMappaPageContent,
+      offenceList: offenceListPageContent,
+      dapoClauseList: dapaClauseListPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

@@ -46,8 +46,8 @@ context('Access needs and installation risk information', () => {
           possibleRisk: 'Sex offender',
           riskCategory: 'History of substance abuse',
           riskDetails: 'Mock risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
         }
 
         page.form.fillInWith(validFormData)
@@ -60,8 +60,8 @@ context('Access needs and installation risk information', () => {
             offenceAdditionalDetails: '',
             riskCategory: ['SEXUAL_OFFENCES', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'Mock risk',
-            mappaLevel: 'MAPPA 1',
-            mappaCaseType: 'SOC (Serious Organised Crime)',
+            mappaLevel: null,
+            mappaCaseType: null,
           },
         }).should('be.true')
       })
@@ -74,8 +74,8 @@ context('Access needs and installation risk information', () => {
           possibleRisk: 'Sex offender',
           riskCategory: 'History of substance abuse',
           riskDetails: 'Mock risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
         }
 
         page.form.fillInWith(validFormData)
@@ -92,8 +92,8 @@ context('Access needs and installation risk information', () => {
           possibleRisk: 'Sex offender',
           riskCategory: 'History of substance abuse',
           riskDetails: 'Mock risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
         }
 
         page.form.fillInWith(validFormData)

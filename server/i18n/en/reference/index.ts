@@ -5,6 +5,7 @@ import ReferenceCatalog, {
   ReferenceCatalogDDv6,
 } from '../../../types/i18n/reference'
 import alcoholMonitoringTypes from './alcoholMonitoringTypes'
+import deviceTypes from './deviceTypes'
 import conditionTypes from './conditionTypes'
 import crownCourts from './crownCourts'
 import civilCountyCourts from './ddv5/civilCountyCourts'
@@ -21,9 +22,11 @@ import variationTypesDDv5 from './ddv5/variationTypes'
 import youthCourts from './ddv5/youthCourts'
 import disabilities from './disabilities'
 import gender from './gender'
+import languages from './languages'
 import magistratesCourts from './magistratesCourts'
-import mappaCaseType from './mappaCaseType'
+import mappaCategory from './mappaCategory'
 import mappaLevel from './mappaLevel'
+import isMappa from './isMappa'
 import notifyingOrganisations from './notifyingOrganisations'
 import offences from './offences'
 import orderTypeDescriptions from './orderTypeDescriptions'
@@ -39,25 +42,30 @@ import sex from './sex'
 import variationTypes from './variationTypes'
 import yesNoUnknown from './yesNoUnknown'
 import youthJusticeServiceRegions from './youthJusticeServiceRegions'
-import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import probationRegionDeliveryUnits from './probationRegionDeliveryUnits'
 import installationLocations from './installationLocations'
 import possibleRisks from './possibleRisks'
 import pilots from './pilots'
 import policeAreas from './policeAreas'
+import policeAreasDDv6 from './ddv6/policeAreas'
 import serviceRequestTypes from './serviceRequestTypes'
 import probationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnits'
+import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
+import youthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
+  deviceTypes,
   conditionTypes,
   crownCourts,
   disabilities,
   gender,
+  languages,
   magistratesCourts,
-  mappaCaseType,
+  mappaCategory,
   mappaLevel,
+  isMappa,
   notifyingOrganisations,
   offences,
   orderTypeDescriptions,
@@ -76,20 +84,25 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   installationLocations,
   possibleRisks,
   policeAreas,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
+  youthCustodyServiceRegions,
 }
 
 const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   alcoholMonitoringTypes,
+  deviceTypes,
   civilCountyCourts,
   conditionTypes,
   crownCourts: crownCourtsDDv5,
   disabilities: disabilitiesDDv5,
   familyCourts,
   gender,
+  languages,
   magistratesCourts: magistratesCourtsDDv5,
-  mappaCaseType,
+  mappaCategory,
   mappaLevel,
+  isMappa,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,
   offences,
@@ -107,26 +120,30 @@ const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
-  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits,
   installationLocations,
   possibleRisks,
   policeAreas,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
+  youthCustodyServiceRegions,
 }
 
 const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   alcoholMonitoringTypes,
+  deviceTypes,
   civilCountyCourts,
   conditionTypes,
   crownCourts: crownCourtsDDv5,
   disabilities: disabilitiesDDv5,
   familyCourts,
   gender,
+  languages,
   magistratesCourts: magistratesCourtsDDv5,
-  mappaCaseType,
+  mappaCategory,
   mappaLevel,
+  isMappa,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,
   offences,
@@ -144,13 +161,14 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   variationTypes: variationTypesDDv5,
   yesNoUnknown,
   youthCourts,
-  youthCustodyServiceRegions,
   youthJusticeServiceRegions,
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
   installationLocations,
   possibleRisks,
-  policeAreas,
+  policeAreas: policeAreasDDv6,
+  releaseAddressPoliceAreas: policeAreas,
   serviceRequestTypes,
+  youthCustodyServiceRegions: youthCustodyServiceRegionsDDv6,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {

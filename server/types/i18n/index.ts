@@ -25,6 +25,16 @@ import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
+import HaveCourtOrderPageContent from './pages/haveCourtOrder'
+import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
+import DapoContent from './pages/dapo'
+import OffenceContent from './pages/offence'
+import MappaPageContent from './pages/mappa'
+import DetailsOfInstallationPageContent from './pages/detailsOfInstallation'
+import OffenceOtherInformationPageContent from './pages/offenceOtherInformation'
+import IsMappaPageContent from './pages/isMappa'
+import OffenceListPageContent from './pages/offenceListPage'
+import DapoClauseListPageConent from './pages/dapoClauseListPage'
 
 type I18n = {
   pages: {
@@ -40,11 +50,14 @@ type I18n = {
     editConfirm: ConfirmationPageContent
     exclusionZone: ExclusionZonePageContent
     havePhoto: HavePhotoPageContent
+    haveCourtOrder: HaveCourtOrderPageContent
+    haveGrantOfBail: HaveGrantOfBailPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
     installationAppointment: InstallationAppointmentPageContent
     installationLocation: InstallationLocationPageContent
+    detailsOfInstallation: DetailsOfInstallationPageContent
     interestedParties: InterestedPartiesPageContent
     probationDeliveryUnit: ProbationDeliveryUnit
     monitoringConditions: MonitoringConditionsPageContent
@@ -56,9 +69,18 @@ type I18n = {
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
+    uploadCourtOrder: UploadDocumentPageContent
+    uploadGrantOfBail: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
     serviceRequestType: ServiceRequestTypePageContent
+    dapo: DapoContent
+    offence: OffenceContent
+    mappa: MappaPageContent
+    offenceOtherInformation: OffenceOtherInformationPageContent
+    isMappa: IsMappaPageContent
+    offenceList: OffenceListPageContent
+    dapoClauseList: DapoClauseListPageConent
   }
   reference: ReferenceData
 }

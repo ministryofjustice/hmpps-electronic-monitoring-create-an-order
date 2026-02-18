@@ -26,8 +26,8 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
       text: "What is your team's contact email address?",
       hint: 'Provide the email address for a mailbox that members of your team can access. Do not provide a personal email address.',
     },
-    notifyingOrgProbationRegion: {
-      text: 'Select the Probation Service region',
+    police: {
+      text: 'Select the Police force area',
     },
     prison: {
       text: 'Select the name of the Prison',
@@ -51,14 +51,14 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
       text: "What is the Responsible Organisation's email address? (optional)",
       hint: 'Provide an email address that can be used to contact the Responsible Organisation if the Responsible Officer is unavailable. Provide a functional mailbox not a personal email.',
     },
-    youthCustodyServiceRegion: {
-      text: 'Select the YCS region',
-    },
     yjsRegion: {
       text: 'Select the Youth Justice Service region',
     },
     youthCourt: {
       text: 'Select the name of the Youth Court',
+    },
+    youthCustodyServiceRegion: {
+      text: 'Select the YCS region',
     },
   },
   section: 'Contact information',

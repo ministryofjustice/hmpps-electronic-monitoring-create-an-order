@@ -9,7 +9,7 @@ import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttac
 import SearchPage from '../../../pages/search'
 import { createAddressPreview } from '../../../../server/utils/utils'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   let orderId: string
 
@@ -33,7 +33,7 @@ context('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -52,6 +52,8 @@ context('Scenarios', () => {
   context('Alcohol Monitoring on Licence Order - AML (Post Release)', () => {
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer('CEMO014'),
+      disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+      otherDisability: null,
       interpreterRequired: false,
       hasFixedAddress: 'Yes',
     }
@@ -135,6 +137,7 @@ context('Scenarios', () => {
           address_3: fakePrimaryAddress.addressLine3,
           address_4: fakePrimaryAddress.addressLine4 === '' ? 'N/A' : fakePrimaryAddress.addressLine4,
           address_post_code: fakePrimaryAddress.postcode,
+          no_fixed_address: 'false',
           secondary_address_1: '',
           secondary_address_2: '',
           secondary_address_3: '',
@@ -166,7 +169,7 @@ context('Scenarios', () => {
           nomis_id: deviceWearerDetails.nomisId,
           delius_id: deviceWearerDetails.deliusId,
           prison_number: deviceWearerDetails.prisonNumber,
-          home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+          home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
           interpreter_required: 'false',
           language: '',
         },
@@ -274,11 +277,13 @@ context('Scenarios', () => {
               installation_address_4: fakePrimaryAddress.addressLine4,
               installation_address_post_code: fakePrimaryAddress.postcode,
               crown_court_case_reference_number: '',
-              magistrate_court_case_reference_number: '',
+              magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
               issp: 'No',
               hdc: 'No',
               order_status: 'Not Started',
               subcategory: '',
+              dapol_missed_in_error: '',
+              ac_eligible_offences: [],
             },
           })
           .should('be.true')

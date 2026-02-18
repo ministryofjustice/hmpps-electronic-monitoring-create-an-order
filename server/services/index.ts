@@ -36,6 +36,16 @@ import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/m
 import RedisStore from '../routes/monitoring-conditions/store/redisStore'
 import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
+import FmsRequestService from './fmsRequestService'
+import DapoService from '../routes/installation-and-risk/dapo/service'
+import OffenceService from '../routes/installation-and-risk/offence/service'
+import UserCohortService from './userCohortService'
+import RedisCacheService from './cache/redisCacheService'
+import { UserCohort } from '../models/UserCohort'
+import InMemorCacheService from './cache/inMemoryCacheService'
+import MappaService from '../routes/installation-and-risk/mappa/service'
+import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
+import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -75,6 +85,21 @@ export const services = () => {
   const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
   const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
+  const dapoService = new DapoService(cemoApiClient)
+  const offenceService = new OffenceService(cemoApiClient)
+  const offenceOtherInfoService = new OffenceOtherInfoService(cemoApiClient)
+
+  const mappaService = new MappaService(cemoApiClient)
+  const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
+
+  const userCohortService = new UserCohortService(
+    cemoApiClient,
+    config.redis.enabled
+      ? new RedisCacheService<UserCohort>(createRedisClient(), 'usertoken:')
+      : new InMemorCacheService<UserCohort>(),
+  )
+
+  const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -108,6 +133,13 @@ export const services = () => {
     monitoringConditionsUpdateService,
     removeMonitoringTypeService,
     serviceRequestTypeService,
+    fmsRequestService,
+    dapoService,
+    offenceService,
+    offenceOtherInfoService,
+    userCohortService,
+    mappaService,
+    detailsOfInstallationService,
   }
 }
 
@@ -138,4 +170,10 @@ export {
   MonitoringConditionsUpdateService,
   RemoveMonitoringTypeService,
   ServiceRequestTypeService,
+  FmsRequestService,
+  DapoService,
+  OffenceService,
+  OffenceOtherInfoService,
+  UserCohortService,
+  MappaService,
 }

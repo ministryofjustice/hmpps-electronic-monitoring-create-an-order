@@ -1,6 +1,7 @@
 import AppPage from './appPage'
 import ErrorSummaryComponent from './components/errorSummaryComponent'
 import FormComponent from './components/formComponent'
+import { PageElement } from './page'
 
 export default class AppFormPage extends AppPage {
   get errorSummary(): ErrorSummaryComponent {
@@ -8,6 +9,10 @@ export default class AppFormPage extends AppPage {
   }
 
   form: FormComponent
+
+  actionLinkByLabel(questionText: string, action: 'Change' | 'Delete'): PageElement {
+    return cy.contains('.govuk-summary-list__row', questionText).find('a').contains(action)
+  }
 
   checkOnPage(): void {
     if (this.title) {

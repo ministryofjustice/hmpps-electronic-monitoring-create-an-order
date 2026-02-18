@@ -25,6 +25,8 @@ context('Contact information', () => {
               deliusId: null,
               prisonNumber: null,
               homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
               firstName: null,
               lastName: null,
               alias: null,

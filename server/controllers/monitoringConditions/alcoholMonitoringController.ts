@@ -15,17 +15,23 @@ export default class AlcoholMonitoringController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { monitoringConditionsAlcohol } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+
+    const isNotifyingOrgACourt = this.alcoholMonitoringService.isNotifyingOrgACourt(
+      order.interestedParties?.notifyingOrganisation,
+    )
+
     const viewModel = alcoholMonitoringViewModel.construct(
-      monitoringConditionsAlcohol ?? {
+      order.monitoringConditionsAlcohol ?? {
         monitoringType: null,
         startDate: null,
         endDate: null,
       },
       errors as never,
       formData as never,
+      isNotifyingOrgACourt,
     )
 
     res.render(`pages/order/monitoring-conditions/alcohol-monitoring`, viewModel)
@@ -33,7 +39,12 @@ export default class AlcoholMonitoringController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
+    const order = req.order!
     const formData = AlcoholMonitoringFormDataModel.parse(req.body)
+
+    if (this.alcoholMonitoringService.isNotifyingOrgACourt(order.interestedParties?.notifyingOrganisation)) {
+      formData.monitoringType = 'ALCOHOL_ABSTINENCE'
+    }
 
     const updateResult = await this.alcoholMonitoringService.update({
       accessToken: res.locals.user.token,

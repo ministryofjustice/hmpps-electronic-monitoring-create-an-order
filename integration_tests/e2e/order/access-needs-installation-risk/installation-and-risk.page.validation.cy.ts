@@ -34,8 +34,8 @@ context('Access needs and installation risk information', () => {
 
         const validFormData = {
           riskDetails: 'No Risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -53,8 +53,8 @@ context('Access needs and installation risk information', () => {
         const validFormData = {
           offence: 'Robbery',
           riskDetails: 'No Risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
         }
 
         page.form.fillInWith(validFormData)
@@ -74,8 +74,8 @@ context('Access needs and installation risk information', () => {
           offence: 'Robbery',
           riskCategory: 'History of substance abuse',
           riskDetails: 'No Risk',
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -87,7 +87,7 @@ context('Access needs and installation risk information', () => {
         page.errorSummary.shouldHaveError(possibleRiskError)
       })
 
-      it('should display error message when risk details is longer than 200 characters', () => {
+      it('should display error message when risk details is longer than 500 characters', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
 
         const validFormData = {
@@ -95,10 +95,10 @@ context('Access needs and installation risk information', () => {
           riskCategory: 'History of substance abuse',
           riskDetails: faker.string.fromCharacters(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            201,
+            501,
           ),
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -108,12 +108,12 @@ context('Access needs and installation risk information', () => {
 
         Page.verifyOnPage(InstallationAndRiskPage)
         page.form.riskDetailsField.shouldHaveValidationMessage(
-          'Any other risks to be aware of must be 200 characters or less',
+          'Any other risks to be aware of must be 500 characters or less',
         )
-        page.errorSummary.shouldHaveError('Any other risks to be aware of must be 200 characters or less')
+        page.errorSummary.shouldHaveError('Any other risks to be aware of must be 500 characters or less')
       })
 
-      it('should display error message when offence additional details is longer than 100 characters', () => {
+      it('should display error message when offence additional details is longer than 500 characters', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
 
         const validFormData = {
@@ -125,10 +125,10 @@ context('Access needs and installation risk information', () => {
           ),
           offenceAdditionalDetails: faker.string.fromCharacters(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            101,
+            501,
           ),
-          mappaLevel: 'MAPPA 1',
-          mappaCaseType: 'Serious Organised Crime',
+          mappaLevel: null,
+          mappaCaseType: null,
           possibleRisk: 'Sex offender',
         }
 
@@ -138,10 +138,10 @@ context('Access needs and installation risk information', () => {
 
         Page.verifyOnPage(InstallationAndRiskPage)
         page.form.offenceAdditionalDetailsField.shouldHaveValidationMessage(
-          'Any other information to be aware of about the offence committed must be 100 characters or less',
+          'Any other information to be aware of about the offence committed must be 500 characters or less',
         )
         page.errorSummary.shouldHaveError(
-          'Any other information to be aware of about the offence committed must be 100 characters or less',
+          'Any other information to be aware of about the offence committed must be 500 characters or less',
         )
       })
     })

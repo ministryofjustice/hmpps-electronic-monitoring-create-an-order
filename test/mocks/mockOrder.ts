@@ -23,6 +23,8 @@ export const createDeviceWearer = (overrideProperties?: Partial<DeviceWearer>): 
   deliusId: null,
   prisonNumber: null,
   homeOfficeReferenceNumber: null,
+  complianceAndEnforcementPersonReference: null,
+  courtCaseReferenceNumber: null,
   firstName: null,
   lastName: null,
   alias: null,
@@ -114,6 +116,7 @@ export const createMonitoringConditions = (
   prarr: null,
   isValid: false,
   pilot: null,
+  dapolMissedInError: null,
   offenceType: null,
   ...overrideProperties,
 })
@@ -203,6 +206,10 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   probationDeliveryUnit: null,
   orderParameters: null,
   versionId: randomUUID(),
+  dapoClauses: [],
+  offences: [],
+  mappa: null,
+  offenceAdditionalDetails: null,
   ...overrideProperties,
 })
 
@@ -217,6 +224,8 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
     deliusId: null,
     prisonNumber: null,
     homeOfficeReferenceNumber: null,
+    complianceAndEnforcementPersonReference: null,
+    courtCaseReferenceNumber: null,
     firstName: 'Test',
     lastName: 'Testson',
     alias: 'Test',
@@ -258,6 +267,13 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   },
   orderParameters: null,
   versionId: randomUUID(),
+  dapoClauses: [],
+  offences: [],
+  mappa: {
+    level: 'MAPPA_ONE',
+    category: 'CATEGORY_ONE',
+  },
+  offenceAdditionalDetails: null,
   ...overrideProperties,
 })
 

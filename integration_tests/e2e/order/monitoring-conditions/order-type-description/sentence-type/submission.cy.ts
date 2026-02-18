@@ -35,7 +35,10 @@ context('sentenceType form submission', () => {
 
     cy.signIn()
 
-    const testFlags = { DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES' }
+    const testFlags = {
+      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
+      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
+    }
 
     cy.task('setFeatureFlags', testFlags)
   })
@@ -62,7 +65,8 @@ context('sentenceType form submission', () => {
     prarrPage.form.continueButton.click()
   })
 
-  it('Should submit the form and display the correct answers for a Community journey', () => {
+  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
+  it.skip('Should submit the form and display the correct answers for a Community journey', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
     orderTypePage.form.fillInWith('Community')
     orderTypePage.form.continueButton.click()

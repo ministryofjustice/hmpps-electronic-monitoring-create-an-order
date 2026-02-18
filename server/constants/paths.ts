@@ -6,19 +6,33 @@ const paths = {
     DELETE_FAILED: '/order/delete/failed',
     DELETE_SUCCESS: '/order/delete/success',
     SUMMARY: '/order/:orderId/summary',
+    SUMMARY_VERSION: '/order/:orderId/version/:versionId/summary',
     SUBMIT: '/order/:orderId/submit',
     SUBMIT_FAILED: '/order/:orderId/submit/failed',
-    SUBMIT_PATIAL_SUCCESS: '/order/:orderId/submit/partial-success',
+    SUBMIT_PARTIAL_SUCCESS: '/order/:orderId/submit/partial-success',
     SUBMIT_SUCCESS: '/order/:orderId/submit/success',
     RECEIPT: '/order/:orderId/receipt',
+    RECEIPT_VERSION: '/order/:orderId/version/:versionId/receipt',
     RECEIPT_DOWNLOAD: '/order/:orderId/pdf',
+    DOWNLOAD_FMS_DW_REQUEST: '/order/:orderId/fmsDeviceWearerRequests',
+    DOWNLOAD_FMS_MO_REQUEST: '/order/:orderId/fmsMonitoringOrderRequests',
     EDIT: '/order/:orderId/edit',
     IS_REJECTION: '/order/:orderId/is-rejection',
     VARIATION: '/order/:orderId/variation',
   },
 
+  INTEREST_PARTIES: {
+    BASE_PATH: '/order/:orderId/interest-parties',
+    NOTIFYING_ORGANISATION: '/order/:orderId/interest-parties/notifying-organisation',
+    RESPONSIBLE_OFFICER: '/order/:orderId/interest-parties/responsible-officer',
+    RESPONSBILE_ORGANISATION: '/order/:orderId/interest-parties/responsible-organisation',
+    PDU: '/order/:orderId/interest-parties/probation-delivery-unit',
+    CHECK_YOUR_ANSWERS: '/order/:orderId/interest-parties/check-your-answers',
+  },
+
   ABOUT_THE_DEVICE_WEARER: {
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/about-the-device-wearer/check-your-answers',
     DEVICE_WEARER: '/order/:orderId/about-the-device-wearer',
     RESPONSIBLE_ADULT: '/order/:orderId/about-the-device-wearer/responsible-adult',
     IDENTITY_NUMBERS: '/order/:orderId/about-the-device-wearer/identity-numbers',
@@ -26,6 +40,7 @@ const paths = {
 
   CONTACT_INFORMATION: {
     CHECK_YOUR_ANSWERS: '/order/:orderId/contact-information/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/contact-information/check-your-answers',
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
     NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
     ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType(primary|secondary|tertiary)',
@@ -36,6 +51,18 @@ const paths = {
   INSTALLATION_AND_RISK: {
     INSTALLATION_AND_RISK: '/order/:orderId/installation-and-risk',
     CHECK_YOUR_ANSWERS: '/order/:orderId/installation-and-risk/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/installation-and-risk/check-your-answers',
+    BASE_URL: '/order/:orderId/installation-and-risk',
+    OFFENCE_NEW_ITEM: '/order/:orderId/installation-and-risk/offence',
+    OFFENCE: '/order/:orderId/installation-and-risk/offence/:offenceId',
+    OFFENCE_OTHER_INFO: '/order/:orderId/installation-and-risk/offence-other-info',
+    OFFENCE_LIST: '/order/:orderId/installation-and-risk/offence-list',
+    DAPO: '/order/:orderId/installation-and-risk/dapo',
+    DAPO_ID: '/order/:orderId/installation-and-risk/dapo/:clauseId',
+    DELETE: '/order/:orderId/installation-and-risk/delete/:offenceId',
+    MAPPA: '/order/:orderId/installation-and-risk/mappa',
+    IS_MAPPA: '/order/:orderId/installation-and-risk/is-mappa',
+    DETAILS_OF_INSTALLATION: '/order/:orderId/installation-and-risk/details-of-installation',
   },
 
   POSTCODE_LOOKUP: {
@@ -64,6 +91,7 @@ const paths = {
     CURFEW_ADDITIONAL_DETAILS: '/order/:orderId/monitoring-conditions/curfew/additional-details',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
     CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/monitoring-conditions/check-your-answers',
     REMOVE_MONITORING_TYPE: '/order/:orderId/monitoring-condtions/remove-monitoring-type/:monitoringTypeId',
     ORDER_TYPE_DESCRIPTION: {
       BASE_PATH: '/order/:orderId/monitoring-conditions/order-type-description',
@@ -73,8 +101,8 @@ const paths = {
       ISSP: '/order/:orderId/monitoring-conditions/order-type-description/issp',
       PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
       POLICE_AREA: '/order/:orderId/monitoring-conditions/order-type-description/police-area',
-
       PILOT: '/order/:orderId/monitoring-conditions/order-type-description/pilot',
+      DAPOL_MISSED_IN_ERROR: '/order/:orderId/monitoring-conditions/order-type-description/dapol-missed-in-error',
       MONITORING_TYPES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-types',
       MONITORING_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-type',
       TYPES_OF_MONITORING_NEEDED:
@@ -86,14 +114,18 @@ const paths = {
 
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
-    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence)',
-    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/:filename',
-    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence)/delete',
+    ATTACHMENTS_VERSION: '/order/:orderId/version/:versionId/attachments',
+    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)',
+    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)/:filename',
+    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)/delete',
     HAVE_PHOTO: '/order/:orderId/attachments/have-photo',
+    HAVE_COURT_ORDER: '/order/:orderId/attachments/have-court-order',
+    HAVE_GRANT_OF_BAIL: '/order/:orderId/attachments/have-grant-of-bail',
   },
 
   VARIATION: {
     VARIATION_DETAILS: '/order/:orderId/variation/details',
+    VARIATION_DETAILS_VERSION: '/order/:orderId/version/:versionId/variation/details',
     SERVICE_REQUEST_TYPE: '/order/:orderId/service-request-type',
     CREATE_VARIATION: '/order/create-variation',
   },

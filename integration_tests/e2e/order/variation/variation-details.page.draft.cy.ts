@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import VariationDetailsPage from '../../../pages/order/variation/variationDetails'
+import OrderTasksPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
 const stubOrder = (type: string = 'VARIATION', dataDictionaryVersion: string = 'DDV5') => {
@@ -59,9 +60,10 @@ context('Variation', () => {
           const page = Page.verifyOnPage(VariationDetailsPage)
           page.form.variationTypeField.shouldHaveOption('The device wearer’s address')
           page.form.variationTypeField.shouldHaveOption('The device wearer’s personal details')
-          page.form.variationTypeField.shouldHaveOption(' Change to add an exclusion zone(s)')
+          page.form.variationTypeField.shouldHaveOption('Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldHaveOption('The curfew hours')
+          page.form.variationTypeField.shouldHaveOption('Change of device type (fitted/non fitted)')
           page.form.variationTypeField.shouldHaveOption(
             'Temporary suspension of monitoring (attend a funeral or go on holiday)',
           )
@@ -96,6 +98,7 @@ context('Variation', () => {
           page.form.variationTypeField.shouldNotHaveOption('Change to add an exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('Change to an existing exclusion zone(s)')
           page.form.variationTypeField.shouldNotHaveOption('The curfew hours')
+          page.form.variationTypeField.shouldNotHaveOption('Change to a device type')
           page.form.variationTypeField.shouldNotHaveOption('Change to an enforceable condition')
           page.form.variationTypeField.shouldNotHaveOption(
             'Temporary suspension of monitoring (attend a funeral or go on holiday)',
@@ -103,6 +106,34 @@ context('Variation', () => {
           page.form.variationTypeField.shouldNotHaveOption('I have changed something due to an administration error')
           page.form.variationTypeField.shouldNotHaveOption('I have changed something else in the form')
         })
+      })
+    })
+    context('viewing an previous version', () => {
+      const mockVersionId = uuidv4()
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetVersion', {
+          httpStatus: 200,
+          id: mockOrderId,
+          versionId: mockVersionId,
+          status: 'SUBMITTED',
+          order: {
+            type: 'VARIATION',
+            dataDictionaryVersion: 'DDV5',
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('navigates correctly back to summary page', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+
+        page.returnBackToFormSectionMenuButton.click()
+
+        Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
       })
     })
   })

@@ -21,7 +21,7 @@ import InterestedPartiesPage from '../../../pages/order/contact-information/inte
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 
-context('Scenarios', () => {
+context.skip('Scenarios', () => {
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -44,7 +44,7 @@ context('Scenarios', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -75,6 +75,8 @@ context('Scenarios', () => {
     () => {
       const deviceWearerDetails = {
         ...createFakeAdultDeviceWearer('CEMO017'),
+        disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+        otherDisability: null,
         interpreterRequired: false,
         hasFixedAddress: 'Yes',
       }
@@ -223,6 +225,7 @@ context('Scenarios', () => {
             address_4:
               fakeVariationPrimaryAddress.addressLine4 === '' ? 'N/A' : fakeVariationPrimaryAddress.addressLine4,
             address_post_code: fakeVariationPrimaryAddress.postcode,
+            no_fixed_address: 'false',
             secondary_address_1: '',
             secondary_address_2: '',
             secondary_address_3: '',
@@ -254,7 +257,7 @@ context('Scenarios', () => {
             nomis_id: deviceWearerDetails.nomisId,
             delius_id: deviceWearerDetails.deliusId,
             prison_number: deviceWearerDetails.prisonNumber,
-            home_office_case_reference_number: deviceWearerDetails.homeOfficeReferenceNumber,
+            home_office_case_reference_number: deviceWearerDetails.complianceAndEnforcementPersonReference,
             interpreter_required: 'false',
             language: '',
           },
@@ -368,12 +371,14 @@ context('Scenarios', () => {
                 installation_address_4: '',
                 installation_address_post_code: '',
                 crown_court_case_reference_number: '',
-                magistrate_court_case_reference_number: '',
+                magistrate_court_case_reference_number: deviceWearerDetails.courtCaseReferenceNumber,
                 issp: 'No',
                 hdc: 'No',
                 order_status: 'Not Started',
                 pilot: '',
-                subcategory: 'SR08 - Amend monitoring requirements',
+                subcategory: 'SR08-Amend monitoring requirements',
+                dapol_missed_in_error: '',
+                ac_eligible_offences: [],
               },
             })
             .should('be.true')

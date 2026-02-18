@@ -49,6 +49,14 @@
           disabled: not isOrderEditable
         }
     ] %}
+
+  {% if showImmigrationRemovalCentre %}
+      {% set items = items.concat([{
+      value: "IMMIGRATION_REMOVAL_CENTRE",
+      text: "At an immigration removal centre",
+      disabled: not isOrderEditable
+    }]) %}
+  {% endif %}
   {% if not fixedAddressExist %}
     {% set items = items.concat([{
       value: "INSTALLATION",

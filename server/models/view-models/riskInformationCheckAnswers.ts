@@ -1,25 +1,75 @@
-import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer, createDatePreview, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
-import config from '../../config'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
+import paths from '../../constants/paths'
+import FeatureFlags from '../../utils/featureFlags'
+import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = []
-  answers.push(
-    createAnswer(
-      questions.offence.text,
-      lookup(content.reference.offences, order.installationAndRisk?.offence),
-      uri,
-      answerOpts,
-    ),
-  )
-  if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
+
+  const isNewOffenceFlow =
+    isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
+
+  if (isNewOffenceFlow) {
+    if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
+      answers.push(
+        createMultipleChoiceAnswer(
+          'DAPO order clauses',
+          order.dapoClauses.map(clause => `${clause.clause} on ${createDatePreview(clause.date)}`),
+          paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
+        ),
+      )
+    } else if (
+      notifyingOrganisationCourts.find(court => court === order.interestedParties?.notifyingOrganisation) !== undefined
+    ) {
+      answers.push(
+        createMultipleChoiceAnswer(
+          'Offences',
+          order.offences.map(
+            offence =>
+              `${lookup(content.reference.offences, offence.offenceType)} on ${createDatePreview(offence.offenceDate)}`,
+          ),
+          paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
+        ),
+      )
+    } else {
+      answers.push(
+        createAnswer(
+          questions.offence.text,
+          lookup(content.reference.offences, order.offences[0]?.offenceType),
+          uri,
+          answerOpts,
+        ),
+      )
+    }
+
+    answers.push(
+      createAnswer(
+        'Any other information to be aware of about the offence committed?',
+        order.offenceAdditionalDetails?.additionalDetails || '',
+        paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  } else {
+    answers.push(
+      createAnswer(
+        questions.offence.text,
+        lookup(content.reference.offences, order.installationAndRisk?.offence),
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+
+  if (!isNewOffenceFlow && isOrderDataDictionarySameOrAbove('DDV5', order)) {
     answers.push(
       createAnswer(
         questions.offenceAdditionalDetails.text,
@@ -30,7 +80,20 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
     )
   }
 
-  const possibleRisks = order.installationAndRisk?.riskCategory?.filter(
+  let riskCategoriesFromOrder
+  let riskDetailsFromOrder
+  let riskDetailsUri
+  if (isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+    riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory || []
+    riskDetailsFromOrder = order.detailsOfInstallation?.riskDetails
+    riskDetailsUri = paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id)
+  } else {
+    riskCategoriesFromOrder = order.installationAndRisk?.riskCategory || []
+    riskDetailsFromOrder = order.installationAndRisk?.riskDetails
+    riskDetailsUri = uri
+  }
+
+  const possibleRisks = riskCategoriesFromOrder.filter(
     it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
   )
 
@@ -38,36 +101,44 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
     createMultipleChoiceAnswer(
       questions.possibleRisk.text,
       possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
-      uri,
+      riskDetailsUri,
       answerOpts,
     ),
   )
-  const riskCategories = order.installationAndRisk?.riskCategory?.filter(
+  const riskCategories = riskCategoriesFromOrder.filter(
     it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
   )
   answers.push(
     createMultipleChoiceAnswer(
       questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
-      uri,
+      riskDetailsUri,
       answerOpts,
     ),
   )
 
-  answers.push(createAnswer(questions.riskDetails.text, order.installationAndRisk?.riskDetails, uri, answerOpts))
+  answers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
 
-  if (config.mappa.enabled) {
+  if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+    const isMappaQuestions = content.pages.isMappa.questions
+    const mappaQuestions = content.pages.mappa.questions
     answers.push(
       createAnswer(
-        questions.mappaLevel.text,
-        lookup(content.reference.mappaLevel, order.installationAndRisk?.mappaLevel),
-        uri,
+        isMappaQuestions.isMappa.text,
+        lookup(content.reference.isMappa, order.mappa?.isMappa),
+        paths.INSTALLATION_AND_RISK.IS_MAPPA.replace(':orderId', order.id),
         answerOpts,
       ),
       createAnswer(
-        questions.mappaCaseType.text,
-        lookup(content.reference.mappaCaseType, order.installationAndRisk?.mappaCaseType),
-        uri,
+        mappaQuestions.mappaLevel.text,
+        lookup(content.reference.mappaLevel, order.mappa?.level),
+        paths.INSTALLATION_AND_RISK.MAPPA.replace(':orderId', order.id),
+        answerOpts,
+      ),
+      createAnswer(
+        mappaQuestions.mappaCategory.text,
+        lookup(content.reference.mappaCategory, order.mappa?.category),
+        paths.INSTALLATION_AND_RISK.MAPPA.replace(':orderId', order.id),
         answerOpts,
       ),
     )

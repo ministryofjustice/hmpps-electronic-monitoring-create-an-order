@@ -89,18 +89,6 @@
     }) }}
   {% endset %}
 
-  {% set notifyingOrgProbationRegionHtml %}
-    {{ accessibleAutocomplete({
-      id: "notifyingOrgProbationRegion",
-      name: "notifyingOrgProbationRegion",
-      label:content.pages.interestedParties.questions.notifyingOrgProbationRegion.text,
-      options: content.reference.probationRegions | toOptions(false, true),
-      value: notifyingOrganisationName.value,
-      errorMessage: notifyingOrganisationName.error,
-      nonce: cspNonce
-    }) }}
-  {% endset %}
-
   {% set youthCourtHtml %}
     {{ accessibleAutocomplete({
       id: 'youthCourt',
@@ -113,7 +101,7 @@
     }) }}
   {% endset %}
 
-  {% set youthCustodyServiceRegionHtml %}
+   {% set youthCustodyServiceRegionHtml %}
     {{ accessibleAutocomplete({
       id: 'youthCustodyServiceRegion',
       name: 'youthCustodyServiceRegion',
@@ -137,6 +125,18 @@
     value: responsibleOrganisationRegion.value,
     errorMessage: responsibleOrganisationRegion.error,
     disabled: not isOrderEditable
+  }) }}
+{% endset %}
+
+{% set policeAreaHtml %}
+  {{ accessibleAutocomplete({
+    id: "policeArea",
+    name: "policeArea",
+    label: content.pages.interestedParties.questions.police.text,
+    options: content.reference.policeAreas | toOptions(false, true),
+    value: responsibleOrganisationRegion.value,
+    errorMessage: responsibleOrganisationRegion.error,
+    nonce: cspNonce
   }) }}
 {% endset %}
 
@@ -229,9 +229,6 @@
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
       text: org.text,
-      conditional: {
-        html: notifyingOrgProbationRegionHtml
-      },
       disabled: org.disabled
     }), notifyingOrgOptions) %}
 
@@ -268,6 +265,15 @@
       text: org.text,
       conditional: {
         html: responsibleOrgProbationRegionHtml
+      },
+      disabled: org.disabled
+    }), responsibleOrgOptions) %}
+  {% elif org.value == 'POLICE' %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: policeAreaHtml
       },
       disabled: org.disabled
     }), responsibleOrgOptions) %}

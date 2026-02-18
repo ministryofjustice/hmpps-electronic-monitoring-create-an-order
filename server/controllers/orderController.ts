@@ -7,6 +7,7 @@ import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
+import { Order } from '../models/Order'
 
 export default class OrderController {
   constructor(
@@ -30,31 +31,60 @@ export default class OrderController {
   createVariation: RequestHandler = async (req: Request, res: Response) => {
     const { action } = req.body
     const { orderId } = req.params
+    const order = req.order!
 
     if (action === 'continue') {
-      res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
+      if (this.shouldShowIsRejectionPage(order)) {
+        res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
+      } else if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
+        res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
+      } else {
+        await this.orderService.createVariationFromExisting({
+          orderId,
+          accessToken: res.locals.user.token,
+        })
+        res.redirect(`/order/${orderId}/summary`)
+      }
     }
+  }
+
+  private shouldShowIsRejectionPage = (order: Order): boolean => {
+    const fmsResultDate = order.fmsResultDate ? new Date(order.fmsResultDate) : new Date(1900, 0, 0)
+    const startDate = order.monitoringConditions.startDate
+      ? new Date(order.monitoringConditions.startDate)
+      : new Date(1900, 0, 0)
+    const compareDate = fmsResultDate < startDate ? fmsResultDate : startDate
+    compareDate.setDate(compareDate.getDate() + 30)
+    return new Date() < compareDate
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')
 
     const [sections, completedOrderVersions] = await Promise.all([
-      this.taskListService.getSections(order),
+      this.taskListService.getSections(order, versionId),
       this.orderService.getCompleteVersions({
         orderId: order.id,
         accessToken: res.locals.user.token,
       }),
     ])
 
+    const currentVersion = order.versionId
+    let isMostRecentVersion: boolean = true
+    if (versionId && completedOrderVersions.length > 0) {
+      isMostRecentVersion = currentVersion === completedOrderVersions[0].versionId
+    }
+
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
-      createNewOrderVersionEnabled,
-      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions),
+      createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
+      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
+      isMostRecentVersion,
     })
   }
 
@@ -121,7 +151,7 @@ export default class OrderController {
     } else if (result.type === 'errorStatus') {
       res.redirect(paths.ORDER.SUBMIT_FAILED.replace(':orderId', order.id))
     } else if (result.type === 'partialSuccess') {
-      res.redirect(paths.ORDER.SUBMIT_PATIAL_SUCCESS.replace(':orderId', order.id))
+      res.redirect(paths.ORDER.SUBMIT_PARTIAL_SUCCESS.replace(':orderId', order.id))
     } else {
       req.flash('submissionError', 'Something unexpected happened. Please try again in a few minutes.')
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))

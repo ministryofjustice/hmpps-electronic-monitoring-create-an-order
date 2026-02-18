@@ -212,8 +212,8 @@ context('Search', () => {
         page.ordersList.contains('Name')
         page.ordersList.contains('Date of birth')
         page.ordersList.contains('Personal ID number')
-        // page.ordersList.contains('Start date')
-        // page.ordersList.contains('End date')
+        page.ordersList.contains('Start date')
+        page.ordersList.contains('End date')
         page.ordersList.contains('Last updated')
       })
 

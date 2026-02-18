@@ -17,6 +17,10 @@ const getResponsibleOrgansiationRegion = (formData: InterestedPartiesFormData) =
     return formData.responsibleOrgProbationRegion
   }
 
+  if (formData.responsibleOrganisation === 'POLICE') {
+    return formData.policeArea
+  }
+
   if (formData.responsibleOrganisation === 'YJS') {
     return formData.yjsRegion
   }
@@ -31,7 +35,6 @@ const getNotifyingOrganisationName = (formData: InterestedPartiesFormData) => {
     MAGISTRATES_COURT: formData.magistratesCourt,
     MILITARY_COURT: formData.militaryCourt,
     PRISON: formData.prison,
-    PROBATION: formData.notifyingOrgProbationRegion,
     YOUTH_COURT: formData.youthCourt,
     YOUTH_CUSTODY_SERVICE: formData.youthCustodyServiceRegion,
   }
