@@ -92,7 +92,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.908.0",
+    "@aws-sdk/client-sqs": "^3.992.0",
     "@ministryofjustice/frontend": "^5.2.1",
     "@secretlint/secretlint-rule-pattern": "^11.2.5",
     "@types/multer": "^2.0.0",
@@ -119,7 +119,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "redis": "^5.8.3",
+    "redis": "^5.9.0",
     "superagent": "^10.2.3",
     "tmp": "^0.2.5",
     "url-value-parser": "^2.2.0",
@@ -194,16 +194,19 @@
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
   },
-  "overrides": {   
+  "overrides": {
     "cypress": {
-      "@cypress/request":"^3.0.10",
+      "@cypress/request": "^3.0.10",
       "qs": "^6.15.0"
     },
-    "find-cypress-specs":{
+    "find-cypress-specs": {
       "tsx": "^4.21.0"
     },
     "tsx": {
       "esbuild": "^0.27.3"
+    },
+    "@aws-sdk/client-sqs": {
+      "fast-xml-parser": "^5.3.6"
     }
   }
 }
