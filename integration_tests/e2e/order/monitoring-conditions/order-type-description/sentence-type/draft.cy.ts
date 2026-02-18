@@ -34,6 +34,7 @@ context('sentenceType', () => {
 
   it('Page accessible', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 
@@ -43,6 +44,7 @@ context('sentenceType', () => {
 
   it('Should display content', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 
@@ -58,6 +60,7 @@ context('sentenceType', () => {
 
   it('when order type is Post Release', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 
@@ -72,6 +75,7 @@ context('sentenceType', () => {
   // Order type communities disabled ELM-4495 skipping test until the option is enabled again
   it.skip('when order type is Community', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Community')
     // orderTypePage.form.continueButton.click()
 

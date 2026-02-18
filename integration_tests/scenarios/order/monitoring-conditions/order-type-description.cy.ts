@@ -233,6 +233,7 @@ context('Order type descriptions', () => {
       unit: 'Surrey',
     }
     const monitoringOrderTypeDescription = {
+      // commented out due to ELM-4526
       // orderType: 'Release from prison',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'No',
@@ -338,6 +339,7 @@ context('Order type descriptions', () => {
       null,
     )
     const monitoringOrderTypeDescription = {
+      // commented out due to ELM-4526
       // orderType: 'Bail',
       monitoringCondition: 'Trail monitoring',
     }

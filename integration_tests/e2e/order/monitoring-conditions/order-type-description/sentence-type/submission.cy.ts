@@ -45,6 +45,7 @@ context('sentenceType form submission', () => {
 
   it('Should submit the form and display the correct answers for a Post Release journey', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 
@@ -68,6 +69,7 @@ context('sentenceType form submission', () => {
   // Order type communities disabled ELM-4495 skipping test until the option is enabled again
   it.skip('Should submit the form and display the correct answers for a Community journey', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Community')
     // orderTypePage.form.continueButton.click()
 

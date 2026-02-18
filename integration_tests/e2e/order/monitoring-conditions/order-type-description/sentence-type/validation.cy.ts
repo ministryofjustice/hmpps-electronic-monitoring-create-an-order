@@ -34,6 +34,7 @@ context('sentence type', () => {
 
   it('Should show errors when I do not select a sentence type', () => {
     Page.visit(OrderTypePage, { orderId: mockOrderId })
+    // commented out due to ELM-4526
     // orderTypePage.form.fillInWith('Release from prison')
     // orderTypePage.form.continueButton.click()
 

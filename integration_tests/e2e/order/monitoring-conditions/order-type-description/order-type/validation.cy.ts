@@ -22,6 +22,7 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
 }
 
 const mockOrderId = uuidv4()
+// skipped out due to ELM-4526
 context.skip('order type', () => {
   beforeEach(() => {
     cy.task('reset')
