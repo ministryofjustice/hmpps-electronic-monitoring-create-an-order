@@ -6,7 +6,7 @@ export default class NotifingOrganisationController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
+    res.render('pages/order/interested-parties/notifying-organisation', {
       pageName: 'Notifying Organisation',
       items: [
         {
