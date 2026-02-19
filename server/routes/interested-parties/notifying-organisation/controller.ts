@@ -2,38 +2,25 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import isVariationType from '../../../utils/isVariationType'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
+import InterestedPartiesStoreService from '../InterestedPartiesStoreService'
+import NotifyingOrganisationBase from './formModel'
+import ViewModel from './viewModel'
 
 export default class NotifingOrganisationController {
   constructor(private readonly store: InterestedPartiesStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/interested-parties/notifying-organisation', {
-      pageName: 'Notifying Organisation',
-      items: [
-        {
-          value: 'Court',
-          text: 'Court',
-        },
-        {
-          value: 'Prison',
-          text: 'Prison',
-        },
-        {
-          value: 'Home Office',
-          text: 'Home Office',
-        },
-        {
-          value: 'Probation',
-          text: 'Probation',
-        },
-      ],
-      errorSummary: null,
-    })
+    const order = req.order!
+    const storedData = await this.store.getInterestedParties(order)
+
+    res.render('pages/order/interested-parties/notifying-organisation', ViewModel.construct(storedData, []))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const formData = req.body
+    const formData = NotifyingOrganisationBase.parse(req.body)
+
+    await this.store.updateNotifyingOrganisation(order, formData)
 
     if (isVariationType(order.type)) {
       const startDate = order.monitoringConditions.startDate
@@ -45,9 +32,10 @@ export default class NotifingOrganisationController {
       }
     }
 
-    if (notifyingOrganisationCourts.includes(formData.notifyingOrganisation))
+    // TODO: validate before this point
+    if ((notifyingOrganisationCourts as readonly string[]).indexOf(formData.notifyingOrganisation!) > -1) {
       return res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
-
+    }
     return res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
   }
 }

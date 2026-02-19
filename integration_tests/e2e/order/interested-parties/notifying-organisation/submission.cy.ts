@@ -22,7 +22,7 @@ context('order type', () => {
   it('not a court routes to responsbile office page', () => {
     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({ organisation: 'Prison service', email: 'a@b.com' })
+    page.form.fillInWith({ notifyingOrganisation: 'Prison service', notifyingOrganisationEmailAddress: 'a@b.com' })
     page.form.continueButton.click()
 
     Page.verifyOnPage(ResponsibleOfficerPage)
@@ -31,20 +31,36 @@ context('order type', () => {
   it('a court routes to responsbile organisation page', () => {
     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({ organisation: 'Family Court', email: 'a@b.com' })
+    page.form.fillInWith({ notifyingOrganisation: 'Family Court', notifyingOrganisationEmailAddress: 'a@b.com' })
     page.form.continueButton.click()
 
     Page.verifyOnPage(ResponsibleOrganisationPage)
   })
 
-  it('navigating back to the page after submission shows values', () => {
+  it('navigating back to the page after submission shows values without org name', () => {
     let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({ organisation: 'Family Court', email: 'a@b.com' })
+    page.form.fillInWith({ notifyingOrganisation: 'Family Court', notifyingOrganisationEmailAddress: 'a@b.com' })
     page.form.continueButton.click()
 
     page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
     page.form.organisationField.shouldHaveValue('Family Court')
     page.form.emailField.shouldHaveValue('a@b.com')
+  })
+
+  it('navigating back to the page after submission shows values with org name', () => {
+    let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+    page.form.fillInWith({
+      notifyingOrganisation: 'Prison service',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+      prison: 'Altcourse Prison',
+    })
+    page.form.continueButton.click()
+
+    page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+    page.form.organisationField.shouldHaveValue('Prison service')
+    page.form.emailField.shouldHaveValue('a@b.com')
+    page.form.prisonField.shouldHaveValue('ALTCOURSE_PRISON')
   })
 })

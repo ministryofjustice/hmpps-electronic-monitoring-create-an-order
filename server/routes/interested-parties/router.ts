@@ -4,10 +4,11 @@ import ResponsibleOfficerController from './responsible-officer/controller'
 import ProbationDeliveryUnitController from './pdu/controller'
 import InterestedPartiesCheckYourAnswersController from './check-your-answers/controller'
 import ResponsibleOrganisationController from './responsible-organisation/controller'
+import { Services } from '../../services'
 
-const createInterestedPartiesRouter = (): Router => {
+const createInterestedPartiesRouter = (services: Pick<Services, 'interestedPartiesStoreService'>): Router => {
   const router = Router()
-  const notifyingOrganisationController = new NotifingOrganisationController()
+  const notifyingOrganisationController = new NotifingOrganisationController(services.interestedPartiesStoreService)
   const responsibleOfficerController = new ResponsibleOfficerController()
   const responsibleOrganisationController = new ResponsibleOrganisationController()
   const probationDeliveryUnitController = new ProbationDeliveryUnitController()

@@ -4,6 +4,10 @@ const notifyingOrganisationPageContent: NotifyingOrganisationPageContent = {
   helpText: '',
   legend: '',
   questions: {
+    prison: {
+      text: 'Select the name of the Prison',
+      hint: 'Enter the name without HMP. For example Berwyn prison.',
+    },
     civilCountyCourt: {
       text: 'Select the name of the Civil and County Court',
     },
