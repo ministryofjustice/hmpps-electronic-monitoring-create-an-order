@@ -3,8 +3,10 @@ import paths from '../../../constants/paths'
 import isVariationType from '../../../utils/isVariationType'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 import InterestedPartiesStoreService from '../InterestedPartiesStoreService'
-import NotifyingOrganisationBase from './formModel'
+import NotifyingOrganisationFormModel, { NotifyingOrganisationInput, NotifyingOrganisationValidator } from './formModel'
 import ViewModel from './viewModel'
+import { ValidationResult } from '../../../models/Validation'
+import { convertZodErrorToValidationError } from '../../../utils/errors'
 
 export default class NotifingOrganisationController {
   constructor(private readonly store: InterestedPartiesStoreService) {}
@@ -13,14 +15,29 @@ export default class NotifingOrganisationController {
     const order = req.order!
     const storedData = await this.store.getInterestedParties(order)
 
-    res.render('pages/order/interested-parties/notifying-organisation', ViewModel.construct(storedData, []))
+    const formData = req.flash('formData') as unknown as NotifyingOrganisationInput[]
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
+
+    res.render(
+      'pages/order/interested-parties/notifying-organisation',
+      ViewModel.construct(storedData, formData[0], errors, order),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const formData = NotifyingOrganisationBase.parse(req.body)
+    const formData = NotifyingOrganisationFormModel.parse(req.body)
 
-    await this.store.updateNotifyingOrganisation(order, formData)
+    const validationResult = NotifyingOrganisationValidator.safeParse(formData)
+
+    if (!validationResult.success) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', convertZodErrorToValidationError(validationResult.error))
+      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
+      return
+    }
+
+    await this.store.updateNotifyingOrganisation(order, validationResult.data)
 
     if (isVariationType(order.type)) {
       const startDate = order.monitoringConditions.startDate
@@ -28,14 +45,15 @@ export default class NotifingOrganisationController {
         : new Date(1900, 0, 0)
 
       if (startDate < new Date()) {
-        return res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+        res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+        return
       }
     }
 
-    // TODO: validate before this point
-    if ((notifyingOrganisationCourts as readonly string[]).indexOf(formData.notifyingOrganisation!) > -1) {
-      return res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
+    if ((notifyingOrganisationCourts as readonly string[]).indexOf(validationResult.data.notifyingOrganisation!) > -1) {
+      res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
+      return
     }
-    return res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
+    res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id))
   }
 }

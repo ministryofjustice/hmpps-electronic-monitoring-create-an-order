@@ -6,6 +6,7 @@ import FormTextareaComponent from '../../../../pages/components/formTextareaComp
 type formData = {
   notifyingOrganisation?: string
   prison?: string
+  familyCourt?: string
   crownCourt?: string
   magistratesCourt?: string
   youthCourt?: string
@@ -87,6 +88,9 @@ export default class NotifyingOrganisationComponent extends FormComponent {
 
     if (data.youthCourt) {
       this.youthCourtField.set(data.youthCourt)
+    }
+    if (data.familyCourt) {
+      this.familyCourtField.set(data.familyCourt)
     }
     if (data.notifyingOrganisationEmailAddress) {
       this.emailField.set(data.notifyingOrganisationEmailAddress)

@@ -22,7 +22,11 @@ context('order type', () => {
   it('not a court routes to responsbile office page', () => {
     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({ notifyingOrganisation: 'Prison service', notifyingOrganisationEmailAddress: 'a@b.com' })
+    page.form.fillInWith({
+      notifyingOrganisation: 'Prison service',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+      prison: 'Altcourse Prison',
+    })
     page.form.continueButton.click()
 
     Page.verifyOnPage(ResponsibleOfficerPage)
@@ -31,7 +35,11 @@ context('order type', () => {
   it('a court routes to responsbile organisation page', () => {
     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({ notifyingOrganisation: 'Family Court', notifyingOrganisationEmailAddress: 'a@b.com' })
+    page.form.fillInWith({
+      notifyingOrganisation: 'Family Court',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+      familyCourt: 'Aberystwyth Family Court',
+    })
     page.form.continueButton.click()
 
     Page.verifyOnPage(ResponsibleOrganisationPage)
@@ -40,11 +48,16 @@ context('order type', () => {
   it('navigating back to the page after submission shows values without org name', () => {
     let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({ notifyingOrganisation: 'Family Court', notifyingOrganisationEmailAddress: 'a@b.com' })
+    page.form.fillInWith({
+      notifyingOrganisation: 'Scottish Court',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+    })
     page.form.continueButton.click()
 
+    Page.verifyOnPage(ResponsibleOrganisationPage)
+
     page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-    page.form.organisationField.shouldHaveValue('Family Court')
+    page.form.organisationField.shouldHaveValue('Scottish Court')
     page.form.emailField.shouldHaveValue('a@b.com')
   })
 
