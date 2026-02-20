@@ -187,8 +187,9 @@ describe('OrderSearchController', () => {
       mockSubmittedOrder.deviceWearer.nomisId = 'nomisId'
       mockSubmittedOrder.deviceWearer.pncId = 'pncId'
       mockSubmittedOrder.deviceWearer.deliusId = 'deliusId'
-      mockSubmittedOrder.deviceWearer.homeOfficeReferenceNumber = 'hoRefNum'
       mockSubmittedOrder.deviceWearer.prisonNumber = 'prisNum'
+      mockSubmittedOrder.deviceWearer.complianceAndEnforcementPersonReference = 'cepr'
+      mockSubmittedOrder.deviceWearer.courtCaseReferenceNumber = 'ccrn'
       mockOrderService.searchOrders.mockResolvedValue([mockSubmittedOrder])
       req.query = { searchTerm: 'firstName' }
 
@@ -202,7 +203,7 @@ describe('OrderSearchController', () => {
               name: 'first last',
               href: `/order/${mockSubmittedOrder.id}/summary`,
               dob: '20/11/2000',
-              pins: ['nomisId', 'pncId', 'deliusId', 'hoRefNum', 'prisNum'],
+              pins: ['nomisId', 'pncId', 'deliusId', 'prisNum', 'cepr', 'ccrn'],
               location: 'Glossop',
               startDate: '20/11/2000',
               endDate: '20/11/2000',

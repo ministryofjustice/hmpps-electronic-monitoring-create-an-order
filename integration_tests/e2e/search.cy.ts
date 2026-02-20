@@ -51,7 +51,8 @@ context('Search', () => {
       page.detailsList.contains('Police National Computer (PNC)')
       page.detailsList.contains('NDelius ID')
       page.detailsList.contains('Prison Number')
-      page.detailsList.contains('Home Office Reference Number')
+      page.detailsList.contains('Compliance and Enforcement Person Reference (CEPR)')
+      page.detailsList.contains('Court Case Reference Number (CCRN)')
     })
 
     it('should navigate to index when the draft forms nav link is clicked', () => {
@@ -89,7 +90,8 @@ context('Search', () => {
       page.detailsList.contains('Police National Computer (PNC)')
       page.detailsList.contains('NDelius ID')
       page.detailsList.contains('Prison Number')
-      page.detailsList.contains('Home Office Reference Number')
+      page.detailsList.contains('Compliance and Enforcement Person Reference (CEPR)')
+      page.detailsList.contains('Court Case Reference Number (CCRN)')
     })
 
     it('should show a message when there are no results', () => {
@@ -179,6 +181,8 @@ context('Search', () => {
           dateOfBirth: mockDate,
           pncId: 'some id',
           nomisId: 'some other id',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
         },
         monitoringConditions: {
           ...basicOrder.monitoringConditions,
@@ -203,25 +207,53 @@ context('Search', () => {
       beforeEach(() => {
         cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
         page = Page.visit(SearchPage)
-
-        page.searchBox.type('Bob Builder')
-        page.searchButton.click()
       })
 
-      it('should show correct headings', () => {
-        page.ordersList.contains('Name')
-        page.ordersList.contains('Date of birth')
-        page.ordersList.contains('Personal ID number')
-        page.ordersList.contains('Start date')
-        page.ordersList.contains('End date')
-        page.ordersList.contains('Last updated')
+      describe('when searching by name', () => {
+        beforeEach(() => {
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+        })
+
+        it('should show correct headings', () => {
+          page.ordersList.contains('Name')
+          page.ordersList.contains('Date of birth')
+          page.ordersList.contains('Personal ID number')
+          page.ordersList.contains('Start date')
+          page.ordersList.contains('End date')
+          page.ordersList.contains('Last updated')
+        })
+
+        it('should show correct order details', () => {
+          page.ordersList.contains('Bob Builder')
+          page.ordersList.contains('some id')
+          page.ordersList.contains('Glossop')
+          page.ordersList.contains('20/11/2000')
+        })
       })
 
-      it('should show correct order details', () => {
-        page.ordersList.contains('Bob Builder')
-        page.ordersList.contains('some id')
-        page.ordersList.contains('Glossop')
-        page.ordersList.contains('20/11/2000')
+      describe('when searching by personal ID number', () => {
+        beforeEach(() => {
+          page.searchBox.type('cepr')
+          page.searchButton.click()
+        })
+
+        it('should show correct headings', () => {
+          page.ordersList.contains('Name')
+          page.ordersList.contains('Date of birth')
+          page.ordersList.contains('Personal ID number')
+          page.ordersList.contains('Start date')
+          page.ordersList.contains('End date')
+          page.ordersList.contains('Last updated')
+        })
+
+        it('should show correct order details', () => {
+          page.ordersList.contains('Bob Builder')
+          page.ordersList.contains('cepr')
+          page.ordersList.contains('ccrn')
+          page.ordersList.contains('Glossop')
+          page.ordersList.contains('20/11/2000')
+        })
       })
     })
 
