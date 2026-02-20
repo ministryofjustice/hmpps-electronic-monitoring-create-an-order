@@ -69,7 +69,11 @@ context('Interested parties flow', () => {
 
     orderSummaryPage.interestedPartiesTask.click()
     const input = {
-      notifyingOrganisation: 'Prison',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      },
     }
     fillInInterestedPartiesWith({
       continueOnCya: false,
@@ -91,7 +95,11 @@ context('Interested parties flow', () => {
 
     orderSummaryPage.interestedPartiesTask.click()
     const input = {
-      notifyingOrganisation: 'Prison',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      },
       responsibleOfficer: 'mock',
       responsibleOrganisation: 'Probation',
       pdu: 'mock',

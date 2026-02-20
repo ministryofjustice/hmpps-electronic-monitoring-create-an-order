@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import PilotController from './controller'
-import InMemoryMonitoringConditionsStore from '../store/inMemoryStore'
+import InMemoryMonitoringConditionsStore from '../../store/inMemoryStore'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
 import { Order } from '../../../models/Order'
 import { getMockOrder } from '../../../../test/mocks/mockOrder'

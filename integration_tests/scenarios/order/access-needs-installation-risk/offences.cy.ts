@@ -96,7 +96,7 @@ context('offences', () => {
   })
 
   it('Notifying organisation is civil court, multiple offences flow', () => {
-    const interestedParties = createFakeInterestedParties('Civil & County Court', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Home Office', null, null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
@@ -252,7 +252,7 @@ context('offences', () => {
   })
 
   it('Should able to delete offence', () => {
-    const interestedParties = createFakeInterestedParties('Civil & County Court', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Home Office', null, null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,

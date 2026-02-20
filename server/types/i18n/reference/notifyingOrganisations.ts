@@ -18,6 +18,8 @@ type NotifyingOrganisationsDDv5 = ReferenceData<
   | 'YOUTH_COURT'
 >
 
+type NotifyingOrganisationsDDv6 = NotifyingOrganisationsDDv5
+
 export default NotifyingOrganisations
 
-export { NotifyingOrganisationsDDv5 }
+export { NotifyingOrganisationsDDv5, NotifyingOrganisationsDDv6 }

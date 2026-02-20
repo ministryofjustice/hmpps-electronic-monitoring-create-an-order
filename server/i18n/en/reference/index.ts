@@ -53,6 +53,7 @@ import probationDeliveryUnitsDDv6 from './ddv6/probationDeliveryUnits'
 import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnits'
 import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import youthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
+import notifyingOrganisationsDDv6 from './ddv6/notifyingOrganisations'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -145,7 +146,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
   mappaLevel,
   isMappa,
   militaryCourts,
-  notifyingOrganisations: notifyingOrganisationsDDv5,
+  notifyingOrganisations: notifyingOrganisationsDDv6,
   offences,
   orderTypeDescriptions,
   orderTypes,

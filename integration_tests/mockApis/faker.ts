@@ -200,6 +200,11 @@ export const createFakeInterestedParties = (
     notifyingOrganisationName = civilCountyCourt
   }
 
+  if (notifyingOrganisation === 'Civil and County Court') {
+    civilCountyCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(civilCountyCourtTypes)
+    notifyingOrganisationName = civilCountyCourt
+  }
+
   if (notifyingOrganisation === 'Crown Court') {
     crownCourt = notifyingOrganisationNameOverride ?? faker.helpers.arrayElement(crownCourtTypes)
     notifyingOrganisationName = crownCourt

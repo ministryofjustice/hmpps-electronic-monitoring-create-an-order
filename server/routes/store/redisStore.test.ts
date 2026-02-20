@@ -1,7 +1,7 @@
-import { RedisClient } from '../../../data/redisClient'
+import { RedisClient } from '../../data/redisClient'
 import RedisStore from './redisStore'
 
-jest.mock('../../../data/redisClient')
+jest.mock('../../data/redisClient')
 
 describe('redis client', () => {
   let storedValue: string | null = null

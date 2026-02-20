@@ -1,5 +1,5 @@
-import logger from '../../../../logger'
-import { RedisClient } from '../../../data/redisClient'
+import logger from '../../../logger'
+import { RedisClient } from '../../data/redisClient'
 import Store from './store'
 
 export default class RedisStore implements Store {
