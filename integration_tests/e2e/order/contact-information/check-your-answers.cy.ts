@@ -462,7 +462,7 @@ context('Contact Information - check your answers', () => {
 
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldHaveItems([
-          { key: 'What organisation or related organisation are you part of?', value: 'Civil & County Court' },
+          { key: 'What organisation or related organisation are you part of?', value: 'Civil and County Court' },
           { key: 'Select the name of the Civil and County Court', value: 'Yeovil County and Civil Court' },
         ])
         page.deviceWearerAddressesSection.shouldNotHaveItems([
