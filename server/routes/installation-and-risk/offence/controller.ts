@@ -31,18 +31,23 @@ export default class OffenceController {
       }
     }
     const showDate = this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1
+
+    const isHomeOffice = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+
     res.render(
       'pages/order/installation-and-risk/offence/offence',
-      viewModel.construct(order, currentOffence, showDate, formData[0], errors),
+      viewModel.construct(order, currentOffence, showDate, formData[0], errors, isHomeOffice),
     )
   }
 
   new: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const showDate = this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1
+    const isHomeOffice = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+
     res.render(
       'pages/order/installation-and-risk/offence/offence',
-      viewModel.construct(order, undefined, showDate, undefined, []),
+      viewModel.construct(order, undefined, showDate, undefined, [], isHomeOffice),
     )
   }
 

@@ -13,6 +13,14 @@
 {% block formInputs %}
   {% set disabled = not isOrderEditable %}
 
+  {% set radioItems = content.reference.offences | toOptions(disabled) %}
+
+  {% if not isHomeOffice %}
+    {% set radioItems = radioItems | removeOptions(['NO_OFFENCE_COMMITTED']) %}
+  {% endif %}
+
+  {% set radioItems = radioItems | addDivider() %}  
+
     {{ govukRadios({
     name: "offenceType",
     fieldset: {
@@ -25,7 +33,7 @@
     hint: {
       text: content.pages.deviceWearer.questions.offenceType.hint
     },
-    items: content.reference.offences | toOptions(not isOrderEditable) | addDivider(),   
+    items: radioItems,
     value: offenceType.value,
     errorMessage: offenceType.error,
     disabled: not isOrderEditable

@@ -56,6 +56,7 @@ context('Draft Offences', () => {
       page.form.offenceTypeField.shouldExist()
       cy.get('#offenceDate').should('exist')
       page.form.shouldHaveAllOptions()
+      page.form.offenceTypeField.shouldNotHaveOption('They have not committed an offence')
     })
 
     it('Should load offence type and offence date from existing offence', () => {
@@ -93,6 +94,7 @@ context('Draft Offences', () => {
       page.form.offenceTypeField.shouldExist()
       cy.get('#offenceDate').should('not.exist')
       page.form.shouldHaveAllOptions()
+      page.form.offenceTypeField.shouldNotHaveOption('They have not committed an offence')
     })
 
     it('Should load offence type and offence date from existing offence', () => {
@@ -105,6 +107,30 @@ context('Draft Offences', () => {
       ])
       const page = Page.visit(OffenceExistingItemPage, { orderId: mockOrderId, offenceId: mockOffenceId })
       page.form.offenceTypeField.shouldHaveValue('Sexual offences')
+    })
+  })
+
+  context('Notifying organisation is home office', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      stubOrder('HOME_OFFICE')
+      cy.signIn()
+    })
+
+    it('Should display all offence options and the No Offence option, and not show date question', () => {
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.header.phaseBanner().should('contain.text', 'dev')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
+      page.form.shouldNotBeDisabled()
+      page.errorSummary.shouldNotExist()
+      page.backButton.should('exist')
+      page.checkIsAccessible()
+      page.form.offenceTypeField.shouldExist()
+      cy.get('#offenceDate').should('not.exist')
+      page.form.shouldHaveAllOptions()
+      page.form.offenceTypeField.shouldHaveOption('They have not committed an offence')
     })
   })
 })

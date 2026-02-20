@@ -14,6 +14,7 @@ type Offences = ReferenceData<
   | 'SUMMARY_NON_MOTORING'
   | 'SUMMARY_MOTORING'
   | 'OFFENCE_NOT_RECORDED'
+  | 'NO_OFFENCE_COMMITTED'
 >
 
 export default Offences
