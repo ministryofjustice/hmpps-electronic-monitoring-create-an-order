@@ -216,7 +216,51 @@ context('offences', () => {
       },
     ])
   })
+  it('Notifying organisation is Home Office, no offence committed flow', () => {
+    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+    })
 
+    const offencePage = Page.verifyOnPage(OffencePage)
+
+    // Should go to offence page and fill offence
+    offencePage.form.fillInWith({ offenceType: 'They have not committed an offence' })
+    offencePage.form.saveAndContinueButton.click()
+    // Should go to offence other info page
+    const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
+    offenceOtherInfoPage.form.hasOtherInformationField.set('No')
+    offenceOtherInfoPage.form.saveAndContinueButton.click()
+    // Should go to details of installation page
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    // CYA page
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldHaveItems([
+      {
+        key: 'What type of offence did the device wearer commit?',
+        value: 'They have not committed an offence', // verify new option for home office
+      },
+      {
+        key: 'Any other information to be aware of about the offence committed?',
+        value: '',
+      },
+      {
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
+        value: 'Violent behaviour or threats of violence',
+      },
+      {
+        key: 'What are the possible risks at the installation address? (optional)',
+        value: 'Safeguarding child',
+      },
+      {
+        key: 'Any other risks to be aware of? (optional)',
+        value: 'some details',
+      },
+    ])
+  })
   it('Should able to delete dapo', () => {
     const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({
