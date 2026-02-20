@@ -28,7 +28,6 @@ context('Responsible organisation page', () => {
     page.form.policeAreaField.shouldHaveOption('National Crime Agency')
     page.form.yjsRegionField.shouldHaveOption('Yorkshire and Humberside')
 
-    page.form.saveAndContinueButton.should('exist')
-    page.form.saveAsDraftButton.should('exist')
+    page.form.continueButton.should('exist')
   })
 })

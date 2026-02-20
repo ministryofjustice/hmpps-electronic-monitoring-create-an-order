@@ -1,6 +1,9 @@
-{% extends "../../../../partials/form-layout.njk" %}
+{% extends "../../../partials/form-layout.njk" %}
+
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
 
 {% set section = content.pages.responsibleOrganisation.section %}
 {% set heading = content.pages.responsibleOrganisation.title %}
