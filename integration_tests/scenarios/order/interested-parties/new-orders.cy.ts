@@ -30,7 +30,11 @@ context('Interested parties flow', () => {
 
   it('Notifying organisation is court', () => {
     const input = {
-      notifyingOrganisation: 'Court',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Family Court',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        familyCourt: 'Aberystwyth Family Court',
+      },
       responsibleOrganisation: 'Probation',
       pdu: 'mock',
     }
@@ -43,7 +47,10 @@ context('Interested parties flow', () => {
 
   it('Notifying organisation is Home Office and responsible organisation is Home Office', () => {
     const input = {
-      notifyingOrganisation: 'Home Office',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Home Office',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+      },
       responsibleOfficer: 'mock',
       responsibleOrganisation: 'Home Office',
     }
@@ -56,7 +63,11 @@ context('Interested parties flow', () => {
 
   it('Notifying organisation is prison and resonsible organisation is probation', () => {
     const input = {
-      notifyingOrganisation: 'Prison',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      },
       responsibleOfficer: 'mock',
       responsibleOrganisation: 'Probation',
       pdu: 'mock',
