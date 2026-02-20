@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import OffenceTypeController from './controller'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import InMemoryStore from '../store/inMemoryStore'
+import InMemoryStore from '../../store/inMemoryStore'
 import constructModel from './viewModel'
 import paths from '../../../constants/paths'
 

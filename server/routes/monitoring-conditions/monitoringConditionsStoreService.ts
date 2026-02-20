@@ -1,7 +1,7 @@
 import { Order } from '../../models/Order'
 import MonitoringConditionsModel from './model'
 import type { MonitoringConditions } from './model'
-import Store from './store/store'
+import Store from '../store/store'
 
 export default class MonitoringConditionsStoreService {
   constructor(private readonly dataStore: Store) {}

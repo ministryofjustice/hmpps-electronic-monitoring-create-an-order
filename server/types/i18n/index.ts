@@ -35,6 +35,7 @@ import OffenceOtherInformationPageContent from './pages/offenceOtherInformation'
 import IsMappaPageContent from './pages/isMappa'
 import OffenceListPageContent from './pages/offenceListPage'
 import DapoClauseListPageConent from './pages/dapoClauseListPage'
+import ResponsibleOrganisationPageContent from './pages/responsibleOrganisation'
 
 type I18n = {
   pages: {
@@ -81,6 +82,7 @@ type I18n = {
     isMappa: IsMappaPageContent
     offenceList: OffenceListPageContent
     dapoClauseList: DapoClauseListPageConent
+    responsibleOrganisation: ResponsibleOrganisationPageContent
   }
   reference: ReferenceData
 }

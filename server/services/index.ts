@@ -31,9 +31,9 @@ import config from '../config'
 import InMemoryOrderChecklistStore from '../data/orderChecklistStore/inMemoryOrderChecklistStore'
 import IsRejectionService from '../routes/is-rejection/service'
 import MonitoringConditionsStoreService from '../routes/monitoring-conditions/monitoringConditionsStoreService'
-import InMemoryStore from '../routes/monitoring-conditions/store/inMemoryStore'
+import InMemoryStore from '../routes/store/inMemoryStore'
 import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
-import RedisStore from '../routes/monitoring-conditions/store/redisStore'
+import RedisStore from '../routes/store/redisStore'
 import RemoveMonitoringTypeService from '../routes/monitoring-conditions/remove-monitoring-type/service'
 import ServiceRequestTypeService from '../routes/variations/service-request-type/service'
 import FmsRequestService from './fmsRequestService'
@@ -46,6 +46,7 @@ import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
 import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
+import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -91,6 +92,10 @@ export const services = () => {
 
   const mappaService = new MappaService(cemoApiClient)
   const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
+
+  const interestedPartiesStoreService = new InterestedPartiesStoreService(
+    config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
+  )
 
   const userCohortService = new UserCohortService(
     cemoApiClient,
@@ -140,6 +145,7 @@ export const services = () => {
     userCohortService,
     mappaService,
     detailsOfInstallationService,
+    interestedPartiesStoreService,
   }
 }
 

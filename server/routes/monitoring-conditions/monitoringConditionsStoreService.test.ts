@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import MonitoringConditionsStoreService from './monitoringConditionsStoreService'
 import { MonitoringConditions } from './model'
-import InMemoryStore from './store/inMemoryStore'
+import InMemoryStore from '../store/inMemoryStore'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import { Order } from '../../models/Order'
 
