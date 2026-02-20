@@ -81,6 +81,7 @@ export default function routes({
   detailsOfInstallationService,
   offenceOtherInfoService,
   interestedPartiesStoreService,
+  updateInterestedPartiesService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -385,7 +386,10 @@ export default function routes({
 
   router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
 
-  router.use(paths.INTEREST_PARTIES.BASE_PATH, createInterestedPartiesRouter({ interestedPartiesStoreService }))
+  router.use(
+    paths.INTEREST_PARTIES.BASE_PATH,
+    createInterestedPartiesRouter({ interestedPartiesStoreService, updateInterestedPartiesService }),
+  )
 
   router.use(
     paths.INSTALLATION_AND_RISK.BASE_URL,

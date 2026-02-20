@@ -27,7 +27,6 @@ context('notifying organisation page', () => {
 
     page.form.emailField.shouldExist()
 
-    page.form.saveAndContinueButton.should('exist')
-    page.form.saveAsDraftButton.should('exist')
+    page.form.continueButton.should('exist')
   })
 })

@@ -6,9 +6,14 @@ import InterestedPartiesCheckYourAnswersController from './check-your-answers/co
 import ResponsibleOrganisationController from './responsible-organisation/controller'
 import { Services } from '../../services'
 
-const createInterestedPartiesRouter = (services: Pick<Services, 'interestedPartiesStoreService'>): Router => {
+const createInterestedPartiesRouter = (
+  services: Pick<Services, 'interestedPartiesStoreService' | 'updateInterestedPartiesService'>,
+): Router => {
   const router = Router()
-  const notifyingOrganisationController = new NotifingOrganisationController(services.interestedPartiesStoreService)
+  const notifyingOrganisationController = new NotifingOrganisationController(
+    services.interestedPartiesStoreService,
+    services.updateInterestedPartiesService,
+  )
   const responsibleOfficerController = new ResponsibleOfficerController()
   const responsibleOrganisationController = new ResponsibleOrganisationController()
   const probationDeliveryUnitController = new ProbationDeliveryUnitController()

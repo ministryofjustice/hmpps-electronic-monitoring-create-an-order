@@ -7,9 +7,16 @@ import NotifyingOrganisationFormModel, { NotifyingOrganisationInput, NotifyingOr
 import ViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
+import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
+import UpdateInterestedPartiesService from '../interestedPartiesService'
 
-export default class NotifingOrganisationController {
-  constructor(private readonly store: InterestedPartiesStoreService) {}
+export default class NotifingOrganisationController extends InterestedPartiesBaseController {
+  constructor(
+    readonly store: InterestedPartiesStoreService,
+    readonly service: UpdateInterestedPartiesService,
+  ) {
+    super(store, service)
+  }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -45,7 +52,7 @@ export default class NotifingOrganisationController {
         : new Date(1900, 0, 0)
 
       if (startDate < new Date()) {
-        res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+        await super.SubmitInterestedPartiesAndNext(order, req, res)
         return
       }
     }

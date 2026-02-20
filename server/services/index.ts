@@ -47,6 +47,7 @@ import MappaService from '../routes/installation-and-risk/mappa/service'
 import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
 import InterestedPartiesStoreService from '../routes/interested-parties/InterestedPartiesStoreService'
+import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -97,6 +98,8 @@ export const services = () => {
     config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
   )
 
+  const updateInterestedPartiesService = new UpdateInterestedPartiesService(cemoApiClient)
+
   const userCohortService = new UserCohortService(
     cemoApiClient,
     config.redis.enabled
@@ -146,6 +149,7 @@ export const services = () => {
     mappaService,
     detailsOfInstallationService,
     interestedPartiesStoreService,
+    updateInterestedPartiesService,
   }
 }
 
