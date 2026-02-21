@@ -93,7 +93,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.992.0",
-    "@ministryofjustice/frontend": "^5.2.1",
+    "@ministryofjustice/frontend": "^8.0.1",
     "@secretlint/secretlint-rule-pattern": "^11.2.5",
     "@types/multer": "^2.0.0",
     "accessible-autocomplete": "^3.0.1",
