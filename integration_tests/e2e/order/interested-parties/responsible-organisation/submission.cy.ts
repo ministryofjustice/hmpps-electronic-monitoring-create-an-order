@@ -32,6 +32,18 @@ context('order type', () => {
     Page.verifyOnPage(ProbationDeliveryUnitPage)
   })
 
+  it('Should able to continue without responsible organisation email', () => {
+    const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
+
+    page.form.fillInWith({
+      responsibleOrganisation: 'Probation',
+      probationRegion: 'Wales'
+    })
+    page.form.continueButton.click()
+
+    Page.verifyOnPage(ProbationDeliveryUnitPage)
+  })
+
   it('if responsible organisation is not probation routes to CYA page', () => {
     const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
 

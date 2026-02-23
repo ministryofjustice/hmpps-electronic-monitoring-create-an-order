@@ -93,7 +93,10 @@ context('Interested parties flow', () => {
     const input = {
       notifyingOrganisation: 'Prison',
       responsibleOfficer: 'mock',
-      responsibleOrganisation: 'Probation',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales'
+      },
       pdu: 'mock',
     }
     fillInInterestedPartiesWith({

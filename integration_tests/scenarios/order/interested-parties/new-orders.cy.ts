@@ -31,7 +31,11 @@ context('Interested parties flow', () => {
   it('Notifying organisation is court', () => {
     const input = {
       notifyingOrganisation: 'Court',
-      responsibleOrganisation: 'Probation',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales',
+        responsibleOrganisationEmailAddress: 'a@b.com',
+      },
       pdu: 'mock',
     }
     fillInInterestedPartiesWith({
@@ -45,7 +49,10 @@ context('Interested parties flow', () => {
     const input = {
       notifyingOrganisation: 'Home Office',
       responsibleOfficer: 'mock',
-      responsibleOrganisation: 'Home Office',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Home Office',
+        responsibleOrganisationEmailAddress: 'a@b.com',
+      },
     }
     fillInInterestedPartiesWith({
       continueOnCya: false,
@@ -58,7 +65,10 @@ context('Interested parties flow', () => {
     const input = {
       notifyingOrganisation: 'Prison',
       responsibleOfficer: 'mock',
-      responsibleOrganisation: 'Probation',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales'
+      },
       pdu: 'mock',
     }
     fillInInterestedPartiesWith({
