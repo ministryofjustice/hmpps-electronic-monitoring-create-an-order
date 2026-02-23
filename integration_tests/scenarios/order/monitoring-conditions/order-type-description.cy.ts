@@ -224,7 +224,7 @@ context('Order type descriptions', () => {
 
   it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     const interestedParties = createFakeInterestedParties(
-      'Probation Service',
+      'Probation service',
       'Probation',
       null,
       'Kent, Surrey & Sussex',
@@ -256,7 +256,7 @@ context('Order type descriptions', () => {
 
   // Order type communities disabled ELM-4495 skipping test until the option is enabled again
   it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Probation service', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
@@ -277,7 +277,7 @@ context('Order type descriptions', () => {
 
   // Order type communities disabled ELM-4495 skipping test until the option is enabled again
   it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation Service', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Probation service', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Suspended Sentence',
@@ -333,7 +333,7 @@ context('Order type descriptions', () => {
 
   it('Notification org is Civil', () => {
     const interestedParties = createFakeInterestedParties(
-      'Civil & County Court',
+      'Civil and County Court',
       'Home Office',
       'Bedford County and Civil Court',
       null,

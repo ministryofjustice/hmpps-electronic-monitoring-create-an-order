@@ -30,11 +30,15 @@ context('Interested parties flow', () => {
 
   it('Notifying organisation is court', () => {
     const input = {
-      notifyingOrganisation: 'Court',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Family Court',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        familyCourt: 'Aberystwyth Family Court',
+      },
       responsibleOrganisation: {
-        responsibleOrganisation: 'Probation',
-        probationRegion: 'Wales',
-        responsibleOrganisationEmailAddress: 'a@b.com',
+          responsibleOrganisation: 'Probation',
+          probationRegion: 'Wales',
+          responsibleOrganisationEmailAddress: 'a@b.com',
       },
       pdu: 'mock',
     }
@@ -47,11 +51,14 @@ context('Interested parties flow', () => {
 
   it('Notifying organisation is Home Office and responsible organisation is Home Office', () => {
     const input = {
-      notifyingOrganisation: 'Home Office',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Home Office',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+      },
       responsibleOfficer: 'mock',
-      responsibleOrganisation: {
-        responsibleOrganisation: 'Home Office',
-        responsibleOrganisationEmailAddress: 'a@b.com',
+      responsibleOrganisation:  {
+          responsibleOrganisation: 'Home Office',
+          responsibleOrganisationEmailAddress: 'a@b.com',
       },
     }
     fillInInterestedPartiesWith({
@@ -63,11 +70,15 @@ context('Interested parties flow', () => {
 
   it('Notifying organisation is prison and resonsible organisation is probation', () => {
     const input = {
-      notifyingOrganisation: 'Prison',
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      },
       responsibleOfficer: 'mock',
       responsibleOrganisation: {
-        responsibleOrganisation: 'Probation',
-        probationRegion: 'Wales'
+          responsibleOrganisation: 'Probation',
+          probationRegion: 'Wales'
       },
       pdu: 'mock',
     }
