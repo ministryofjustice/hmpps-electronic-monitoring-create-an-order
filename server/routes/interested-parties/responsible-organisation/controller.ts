@@ -8,9 +8,16 @@ import ResponsibleOrganisationFormModel, {
 } from './formModel'
 import ViewModel from './viewModel'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
+import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
+import UpdateInterestedPartiesService from '../interestedPartiesService'
 
-export default class ResponsibleOrganisationController {
-  constructor(private readonly store: InterestedPartiesStoreService) {}
+export default class ResponsibleOrganisationController extends InterestedPartiesBaseController {
+  constructor(
+    readonly store: InterestedPartiesStoreService,
+    readonly service: UpdateInterestedPartiesService,
+  ) {
+    super(store, service)
+  }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -40,11 +47,6 @@ export default class ResponsibleOrganisationController {
     }
 
     await this.store.updateResponsibleOrganisation(order, validationResult.data)
-
-    if (formData.responsibleOrganisation === 'PROBATION') {
-      res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
-    } else {
-      res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    }
+    await super.SubmitInterestedPartiesAndNext(order, req, res)
   }
 }

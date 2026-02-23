@@ -6,6 +6,7 @@ import InterestedPartiesCheckYourAnswersPage from '../check-your-answers/interes
 
 const mockOrderId = uuidv4()
 context('order type', () => {
+  const submitPath = '/interested-parties'
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -14,6 +15,17 @@ context('order type', () => {
       id: mockOrderId,
       order: {
         dataDictionaryVersion: 'DDV6',
+      },
+    })
+
+    cy.task('stubCemoSubmitOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      subPath: submitPath,
+      method: 'PUT',
+      response: {
+        notifyingOrganisation: 'PRISON',
+        responsibleOrganisation: 'PROBATION',
       },
     })
     cy.signIn()
@@ -29,6 +41,14 @@ context('order type', () => {
     })
     page.form.continueButton.click()
 
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${submitPath}`,
+      body: {
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'WALES',
+        responsibleOrganisationEmail: 'a@b.com',
+      },
+    }).should('be.true')
     Page.verifyOnPage(ProbationDeliveryUnitPage)
   })
 
@@ -41,6 +61,14 @@ context('order type', () => {
     })
     page.form.continueButton.click()
 
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${submitPath}`,
+      body: {
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'WALES',
+        responsibleOrganisationEmail: '',
+      },
+    }).should('be.true')
     Page.verifyOnPage(ProbationDeliveryUnitPage)
   })
 
@@ -54,6 +82,14 @@ context('order type', () => {
     })
     page.form.continueButton.click()
 
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${submitPath}`,
+      body: {
+        responsibleOrganisation: 'POLICE',
+        responsibleOrganisationRegion: 'LANCASHIRE',
+        responsibleOrganisationEmail: 'a@b.com',
+      },
+    }).should('be.true')
     Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
   })
 
@@ -65,7 +101,14 @@ context('order type', () => {
       responsibleOrganisationEmailAddress: 'a@b.com',
     })
     page.form.continueButton.click()
-
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${submitPath}`,
+      body: {
+        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOrganisationRegion: '',
+        responsibleOrganisationEmail: 'a@b.com',
+      },
+    }).should('be.true')
     Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
 
     Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
@@ -84,6 +127,14 @@ context('order type', () => {
     })
     page.form.continueButton.click()
 
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${submitPath}`,
+      body: {
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'WALES',
+        responsibleOrganisationEmail: 'a@b.com',
+      },
+    }).should('be.true')
     Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
     page.form.responsibleOrganisationField.shouldHaveValue('Probation')
     page.form.responsibleOrgProbationField.shouldHaveValue('WALES')
