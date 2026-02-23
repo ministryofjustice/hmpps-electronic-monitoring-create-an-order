@@ -37,7 +37,7 @@ context('order type', () => {
 
     page.form.fillInWith({
       responsibleOrganisation: 'Probation',
-      probationRegion: 'Wales'
+      probationRegion: 'Wales',
     })
     page.form.continueButton.click()
 

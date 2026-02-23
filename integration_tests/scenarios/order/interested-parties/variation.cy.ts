@@ -103,7 +103,7 @@ context('Interested parties flow', () => {
       responsibleOfficer: 'mock',
       responsibleOrganisation: {
         responsibleOrganisation: 'Probation',
-        probationRegion: 'Wales'
+        probationRegion: 'Wales',
       },
       pdu: 'mock',
     }

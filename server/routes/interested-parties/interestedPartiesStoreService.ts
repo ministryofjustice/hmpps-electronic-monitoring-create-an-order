@@ -41,6 +41,19 @@ export default class InterestedPartiesStoreService {
     await this.updateInterestedParties(order, interestedParties)
   }
 
+  public async updateNotifyingOrganisation(
+    order: Order,
+    data: Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>,
+  ) {
+    const interestedParties = await this.getInterestedParties(order)
+
+    interestedParties.notifyingOrganisation = data.notifyingOrganisation
+    interestedParties.notifyingOrganisationName = data.notifyingOrganisationName
+    interestedParties.notifyingOrganisationEmail = data.notifyingOrganisationEmail
+
+    await this.updateInterestedParties(order, interestedParties)
+  }
+
   public async updateResponsibleOrganisation(
     order: Order,
     data: Pick<
