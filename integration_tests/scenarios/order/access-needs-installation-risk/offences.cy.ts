@@ -225,18 +225,14 @@ context('offences', () => {
 
     const offencePage = Page.verifyOnPage(OffencePage)
 
-    // Should go to offence page and fill offence
     offencePage.form.fillInWith({ offenceType: 'They have not committed an offence' })
     offencePage.form.saveAndContinueButton.click()
-    // Should go to offence other info page
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.hasOtherInformationField.set('No')
     offenceOtherInfoPage.form.saveAndContinueButton.click()
-    // Should go to details of installation page
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
     detailsOfInstallationPage.form.saveAndContinueButton.click()
-    // CYA page
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItems([
       {

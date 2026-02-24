@@ -62,8 +62,9 @@ const construct = (
   showDate: boolean,
   formData: OffenceInput | undefined,
   errors: ValidationResult,
-  isHomeOffice: boolean,
 ): OffenceViewModel => {
+  const isHomeOffice = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+
   if (errors.length > 0 && formData !== undefined) {
     return constructFromFormData(formData, errors, showDate, isHomeOffice)
   }
