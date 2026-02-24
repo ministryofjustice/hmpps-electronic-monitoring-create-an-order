@@ -286,7 +286,7 @@ context('The kitchen sink', () => {
             pdu_responsible: 'Blackburn',
             pdu_responsible_email: '',
             planned_order_end_date: '',
-            responsible_officer_details_received: '',
+            responsible_officer_details_received: 'Yes',
             responsible_officer_email: '',
             responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
             responsible_officer_name: interestedParties.responsibleOfficerName,
