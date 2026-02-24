@@ -46,7 +46,7 @@ import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
 import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
-import InterestedPartiesStoreService from '../routes/interested-parties/InterestedPartiesStoreService'
+import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
 
 export const services = () => {

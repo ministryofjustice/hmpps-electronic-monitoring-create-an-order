@@ -45,6 +45,7 @@ import isMappaPageContent from './pages/isMappa'
 import offenceListPageContent from './pages/offenceListPage'
 import dapaClauseListPageContent from './pages/dapoClauseListPage'
 import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
+import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -93,6 +94,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       offenceList: offenceListPageContent,
       dapoClauseList: dapaClauseListPageContent,
       notifyingOrganisation: notifyingOrganisationPageContent,
+      responsibleOrganisation: responsibleOrganisationPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

@@ -35,7 +35,11 @@ context('Interested parties flow', () => {
         notifyingOrganisationEmailAddress: 'a@b.com',
         familyCourt: 'Aberystwyth Family Court',
       },
-      responsibleOrganisation: 'Probation',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales',
+        responsibleOrganisationEmailAddress: 'a@b.com',
+      },
       pdu: 'mock',
     }
     fillInInterestedPartiesWith({
@@ -52,7 +56,10 @@ context('Interested parties flow', () => {
         notifyingOrganisationEmailAddress: 'a@b.com',
       },
       responsibleOfficer: 'mock',
-      responsibleOrganisation: 'Home Office',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Home Office',
+        responsibleOrganisationEmailAddress: 'a@b.com',
+      },
     }
     fillInInterestedPartiesWith({
       continueOnCya: false,
@@ -69,7 +76,10 @@ context('Interested parties flow', () => {
         prison: 'Altcourse Prison',
       },
       responsibleOfficer: 'mock',
-      responsibleOrganisation: 'Probation',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales',
+      },
       pdu: 'mock',
     }
     fillInInterestedPartiesWith({

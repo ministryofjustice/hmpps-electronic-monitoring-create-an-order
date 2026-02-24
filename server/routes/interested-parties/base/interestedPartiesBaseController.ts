@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
-import InterestedPartiesStoreService from '../InterestedPartiesStoreService'
+import InterestedPartiesStoreService from '../interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 
 export default abstract class InterestedPartiesBaseController {

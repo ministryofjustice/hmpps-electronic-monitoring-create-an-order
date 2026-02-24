@@ -54,6 +54,22 @@ export default class InterestedPartiesStoreService {
     await this.updateInterestedParties(order, interestedParties)
   }
 
+  public async updateResponsibleOrganisation(
+    order: Order,
+    data: Pick<
+      InterestedParties,
+      'responsibleOrganisation' | 'responsibleOrganisationRegion' | 'responsibleOrganisationEmail'
+    >,
+  ) {
+    const interestedParties = await this.getInterestedParties(order)
+
+    interestedParties.responsibleOrganisation = data.responsibleOrganisation
+    interestedParties.responsibleOrganisationRegion = data.responsibleOrganisationRegion
+    interestedParties.responsibleOrganisationEmail = data.responsibleOrganisationEmail
+
+    await this.updateInterestedParties(order, interestedParties)
+  }
+
   private getClearedData(currentData: InterestedParties, updatedField: keyof InterestedParties) {
     const updatedIndex = this.FIELD_HIERARCHY.indexOf(updatedField)
 
