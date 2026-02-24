@@ -1,0 +1,54 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
+{% set section = content.pages.responsibleOfficer.section %}
+{% set heading = content.pages.responsibleOfficer.title %}
+{% set legend = content.pages.responsibleOfficer.legend %}
+{% set helpText = content.pages.responsibleOfficer.helpText %}
+{% set questions = content.pages.responsibleOfficer.questions %}
+{% set singleQuestionPage = true %}
+{% block formInputs %}
+
+{{ govukInput({
+      label: {
+        text: questions.firstName.text,
+        classes: "govuk-label--s"
+      },
+     
+      classes: "govuk-!-width-one-half",
+      id: "firstName",
+      name: "firstName",
+      value: firstName.value,
+      errorMessage: firstName.error,
+      disabled: not isOrderEditable
+    }) }}
+
+{{ govukInput({
+      label: {
+        text: questions.lastName.text,
+        classes: "govuk-label--s"
+      },
+     
+      classes: "govuk-!-width-one-half",
+      id: "lastName",
+      name: "lastName",
+      value: lastName.value,
+      errorMessage: lastName.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: questions.email.text,
+        classes: "govuk-label--s"
+      },
+     
+      classes: "govuk-!-width-one-half",
+      id: "email",
+      name: "email",
+      value: email.value,
+      errorMessage: email.error,
+      disabled: not isOrderEditable
+    }) }}
+{% endblock %}

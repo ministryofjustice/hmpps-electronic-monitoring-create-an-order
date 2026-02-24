@@ -5,10 +5,7 @@ export default class ResponsibleOfficerController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
-      pageName: 'Responsible Officer',
-      errorSummary: null,
-    })
+    res.render('pages/order/interested-parties/responsible-officer')
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

@@ -26,5 +26,9 @@ export default class AppFormPage extends AppPage {
     if (this.form) {
       this.form.checkHasForm()
     }
+
+    if (this.helpText) {
+      cy.get('p', { log: false }).contains(this.helpText)
+    }
   }
 }

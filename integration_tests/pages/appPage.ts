@@ -3,10 +3,13 @@ import Page, { PageElement } from './page'
 import PageHeaderComponent from './components/PageHeaderComponent'
 
 export default class AppPage extends Page {
+  protected helpText
+
   header = new PageHeaderComponent()
 
-  constructor(title: string, uri?: string | RegExp, subtitle?: string) {
+  constructor(title: string, uri?: string | RegExp, subtitle?: string, helpText?: string) {
     super(title, uri, subtitle)
+    this.helpText = helpText
   }
 
   get backButton(): PageElement {
