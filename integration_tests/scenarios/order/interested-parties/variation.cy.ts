@@ -104,7 +104,7 @@ context('Interested parties flow', () => {
         firstName: 'John',
         lastName: 'Smith',
         email: 'John@Smith.com',
-      },
+      }
       responsibleOrganisation: {
         responsibleOrganisation: 'Probation',
         probationRegion: 'Wales',

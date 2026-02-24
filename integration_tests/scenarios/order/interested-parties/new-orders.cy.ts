@@ -59,7 +59,7 @@ context('Interested parties flow', () => {
         firstName: 'John',
         lastName: 'Smith',
         email: 'John@Smith.com',
-      },
+      }
       responsibleOrganisation: {
         responsibleOrganisation: 'Home Office',
         responsibleOrganisationEmailAddress: 'a@b.com',
@@ -83,7 +83,7 @@ context('Interested parties flow', () => {
         firstName: 'John',
         lastName: 'Smith',
         email: 'John@Smith.com',
-      },
+      }
       responsibleOrganisation: {
         responsibleOrganisation: 'Probation',
         probationRegion: 'Wales',
