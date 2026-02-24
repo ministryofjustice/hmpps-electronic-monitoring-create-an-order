@@ -1,0 +1,132 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
+
+{% set section = content.pages.responsibleOrganisation.section %}
+{% set heading = content.pages.responsibleOrganisation.title %}
+{% set legend = content.pages.responsibleOrganisation.legend %}
+{% set helpText = content.pages.responsibleOrganisation.helpText %}
+{% set questions = content.pages.responsibleOrganisation.questions %}
+{% set singleQuestionPage = true %}
+
+{% set responsibleOrgProbationRegionHtml %}
+  {{ govukSelect({
+    id: "responsibleOrgProbationRegion",
+    name: "responsibleOrgProbationRegion",
+    label: {
+      text: questions.probationRegion.text
+    },
+    items: content.reference.probationRegions | toOptions(false, true),
+    value: responsibleOrganisationRegion.value,
+    errorMessage: responsibleOrganisationRegion.error,
+    disabled: not isOrderEditable
+  }) }}
+{% endset %}
+
+{% set policeAreaHtml %}
+  {{ accessibleAutocomplete({
+    id: "policeArea",
+    name: "policeArea",
+    label: questions.police.text,
+    options: content.reference.policeAreas | toOptions(false, true),
+    value: responsibleOrganisationRegion.value,
+    errorMessage: responsibleOrganisationRegion.error,
+    nonce: cspNonce
+  }) }}
+{% endset %}
+
+{% set yjsRegionHtml %}
+  {{ govukSelect({
+    id: "yjsRegion",
+    name: "yjsRegion",
+    label: {
+      text: questions.yjsRegion.text
+    },
+    items: content.reference.youthJusticeServiceRegions | toOptions(false, true),
+    value: responsibleOrganisationRegion.value,
+    errorMessage: responsibleOrganisationRegion.error,
+    disabled: not isOrderEditable
+  }) }}
+{% endset %}
+
+{% set responsibleOrgOptions = [] %}
+{% for org in content.reference.responsibleOrganisations | toOptions(not isOrderEditable) %}
+  {% if org.value == 'PROBATION' %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: responsibleOrgProbationRegionHtml
+      },
+      disabled: org.disabled
+    }), responsibleOrgOptions) %}
+  {% elif org.value == 'POLICE' %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: policeAreaHtml
+      },
+      disabled: org.disabled
+    }), responsibleOrgOptions) %}
+  {% elif org.value == 'YJS' %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push({
+      value: org.value,
+      text: org.text,
+      conditional: {
+        html: yjsRegionHtml
+      },
+      disabled: org.disabled
+    }), responsibleOrgOptions) %}
+  {% else %}
+    {% set responsibleOrgOptions = (responsibleOrgOptions.push(org), responsibleOrgOptions) %}
+  {% endif %}
+{% endfor %}
+
+
+{% block formInputs %}
+    {% call govukFieldset({
+        legend: {
+          text: "Responsible Organisation",
+          classes: "govuk-fieldset__legend--m",
+          isPageHeading: false
+        }
+      }) %}
+        <p>
+          {{questions.responsibleOrganisation.hint}}
+        </p>
+        {{ govukRadios({
+          name: "responsibleOrganisation",
+          fieldset: {
+            legend: {
+              text: questions.responsibleOrganisation.text,
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          value: responsibleOrganisation.value,
+          errorMessage: responsibleOrganisation.error,
+          items: responsibleOrgOptions
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: questions.responsibleOrganisationEmail.text,
+            classes: "govuk-label--s"
+          },
+          hint: {
+            html: questions.responsibleOrganisationEmail.hint
+          },
+          classes: "govuk-!-width-one-half",
+          id: "responsibleOrganisationEmail",
+          name: "responsibleOrganisationEmail",
+          value: responsibleOrganisationEmail.value,
+          errorMessage: responsibleOrganisationEmail.error,
+          disabled: not isOrderEditable
+        }) }}
+      {% endcall %}
+
+{% endblock %}

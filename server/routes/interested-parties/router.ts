@@ -15,7 +15,10 @@ const createInterestedPartiesRouter = (
     services.updateInterestedPartiesService,
   )
   const responsibleOfficerController = new ResponsibleOfficerController()
-  const responsibleOrganisationController = new ResponsibleOrganisationController()
+  const responsibleOrganisationController = new ResponsibleOrganisationController(
+    services.interestedPartiesStoreService,
+    services.updateInterestedPartiesService,
+  )
   const probationDeliveryUnitController = new ProbationDeliveryUnitController()
   const checkYourAnswers = new InterestedPartiesCheckYourAnswersController()
 

@@ -101,7 +101,10 @@ context('Interested parties flow', () => {
         prison: 'Altcourse Prison',
       },
       responsibleOfficer: 'mock',
-      responsibleOrganisation: 'Probation',
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales',
+      },
       pdu: 'mock',
     }
     fillInInterestedPartiesWith({
