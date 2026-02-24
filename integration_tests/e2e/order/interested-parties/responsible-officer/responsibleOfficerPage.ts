@@ -7,7 +7,7 @@ export default class ResponsibleOfficerPage extends AppFormPage {
 
   constructor() {
     const helpText =
-      "The Responsible Officer checks the device wearer follows the electornic monitoring order. For example, a Responsible Officer is the device wearer's proabtion office"
+      "The Responsible Officer checks the device wearer follows the electornic monitoring order. For example, a Responsible Officer is the device wearer's proabtion officer"
     super(
       'Contact details for the Responsible Officer',
       paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,

@@ -2,7 +2,7 @@ import ResponsibleOfficerPageContent from '../../../types/i18n/pages/responsible
 
 const responsibleOfficerPageContent: ResponsibleOfficerPageContent = {
   helpText:
-    "The Responsible Officer checks the device wearer follows the electornic monitoring order. For example, a Responsible Officer is the device wearer's proabtion office",
+    "The Responsible Officer checks the device wearer follows the electornic monitoring order. For example, a Responsible Officer is the device wearer's proabtion officer",
   legend: '',
   questions: {
     firstName: {
