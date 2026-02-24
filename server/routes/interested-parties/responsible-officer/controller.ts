@@ -14,7 +14,9 @@ export default class ResponsibleOfficerController {
     const storedData = await this.store.getInterestedParties(order)
     const formData = req.flash('formData') as unknown as ResponsibleOfficer[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
+
     const viewModel = ViewModel.construct(storedData, formData[0], errors)
+
     res.render('pages/order/interested-parties/responsible-officer', viewModel)
   }
 
@@ -30,6 +32,7 @@ export default class ResponsibleOfficerController {
       return
     }
 
+    await this.store.UpdateResponsibleOfficer(order, formData)
     res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
   }
 }

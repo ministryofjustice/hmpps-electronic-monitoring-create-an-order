@@ -16,10 +16,10 @@ const construct = (
 ): ResponsibleOfficerViewModel => {
   if (formData) return constructFromFormData(formData, errors)
 
-  return constructFromData(data)
+  return constructFromStoredData(data)
 }
 
-const constructFromData = (data: InterestedParties): ResponsibleOfficerViewModel => {
+const constructFromStoredData = (data: InterestedParties): ResponsibleOfficerViewModel => {
   return {
     responsibleOfficerFirstName: {
       value: data.responsibleOfficerFirstName || '',

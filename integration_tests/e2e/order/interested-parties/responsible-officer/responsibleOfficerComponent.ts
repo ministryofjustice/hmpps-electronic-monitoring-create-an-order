@@ -1,7 +1,14 @@
-import SingleQuestionFormComponent from '../../../../pages/components/SingleQuestionFormComponent'
+import FormComponent from '../../../../pages/components/formComponent'
 import FormInputComponent from '../../../../pages/components/formInputComponent'
 
-export default class ResponsibleOfficerComponent extends SingleQuestionFormComponent {
+type ResponsibleOfficerPageInput = {
+  firstName?: string
+
+  lastName?: string
+
+  email?: string
+}
+export default class ResponsibleOfficerComponent extends FormComponent {
   get firstNameField(): FormInputComponent {
     const label = "What is the Responsible Officer's first name?"
     return new FormInputComponent(this.form, label)
@@ -17,8 +24,17 @@ export default class ResponsibleOfficerComponent extends SingleQuestionFormCompo
     return new FormInputComponent(this.form, label)
   }
 
-  fillInWith(value: string) {
-    // TODO implement fillInWith method
-    throw new Error(`Method not implemented.${value}`)
+  fillInWith(input: ResponsibleOfficerPageInput) {
+    if (input.firstName) {
+      this.firstNameField.set(input.firstName)
+    }
+
+    if (input.lastName) {
+      this.lastNameField.set(input.lastName)
+    }
+
+    if (input.email) {
+      this.emailField.set(input.email)
+    }
   }
 }
