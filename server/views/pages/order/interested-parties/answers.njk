@@ -1,0 +1,15 @@
+ <h2 class="govuk-heading-m">Organisation details</h2>
+
+{{ govukSummaryList({
+  classes: "govuk-!-margin-bottom-9",
+  rows: interestedParties
+}) }}
+
+{% if probationDeliveryUnit | length > 0%}
+  <h2 class="govuk-heading-m">Probation delivery unit</h2>
+
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: probationDeliveryUnit
+  }) }}
+{% endif%}

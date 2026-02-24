@@ -1,11 +1,14 @@
 import paths from '../../../../../server/constants/paths'
-import AppFormPage from '../../../../pages/appFormPage'
-import InterestedPartiesCheckYourAnswersComponent from './interestedPartiesCheckYourAnswersComponent'
+import CheckYourAnswersPage from '../../../../pages/checkYourAnswersPage'
+import SummaryListComponent from '../../../../pages/components/summaryListComponent'
 
-export default class InterestedPartiesCheckYourAnswersPage extends AppFormPage {
-  public form = new InterestedPartiesCheckYourAnswersComponent()
-
+export default class InterestedPartiesCheckYourAnswersPage extends CheckYourAnswersPage {
   constructor() {
-    super('WIP Check Your Answers', paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION)
+    super('Check your answers', paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS)
+  }
+
+  get organisationDetailsSection(): SummaryListComponent {
+    const label = 'Organisation details'
+    return new SummaryListComponent(label)
   }
 }
