@@ -19,6 +19,7 @@ export default function fillInInterestedPartiesWith({
 
   if (responsibleOfficer) {
     const responsibleOfficerPage = Page.verifyOnPage(ResponsibleOfficerPage)
+    responsibleOfficerPage.form.fillInWith(responsibleOfficer)
     responsibleOfficerPage.form.continueButton.click()
   }
 
