@@ -18,9 +18,9 @@
      
       classes: "govuk-!-width-one-half",
       id: "firstName",
-      name: "firstName",
-      value: firstName.value,
-      errorMessage: firstName.error,
+      name: "responsibleOfficerFirstName",
+      value: responsibleOfficerFirstName.value,
+      errorMessage: responsibleOfficerFirstName.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -32,9 +32,9 @@
      
       classes: "govuk-!-width-one-half",
       id: "lastName",
-      name: "lastName",
-      value: lastName.value,
-      errorMessage: lastName.error,
+      name: "responsibleOfficerLastName",
+      value: responsibleOfficerLastName.value,
+      errorMessage: responsibleOfficerLastName.error,
       disabled: not isOrderEditable
     }) }}
 
@@ -46,9 +46,9 @@
      
       classes: "govuk-!-width-one-half",
       id: "email",
-      name: "email",
-      value: email.value,
-      errorMessage: email.error,
+      name: "responsibleOfficerEmail",
+      value: responsibleOfficerEmail.value,
+      errorMessage: responsibleOfficerEmail.error,
       disabled: not isOrderEditable
     }) }}
 {% endblock %}

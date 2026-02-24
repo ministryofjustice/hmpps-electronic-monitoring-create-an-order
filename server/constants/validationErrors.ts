@@ -144,6 +144,11 @@ interface ValidationErrors {
   dapoClauseSummaryList: {
     addAnotherRequired: string
   }
+  responsibleOfficer: {
+    firstNameRequired: string
+    lastNameRequired: string
+    emailRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -406,6 +411,11 @@ const validationErrors: ValidationErrors = {
   },
   dapoClauseSummaryList: {
     addAnotherRequired: 'Select Yes if there are any other DAPO order clauses',
+  },
+  responsibleOfficer: {
+    firstNameRequired: "Enter the Responsible Officer's first name",
+    lastNameRequired: "Enter the Responsible Officer's last name",
+    emailRequired: "Enter the Responsible Officer's email address",
   },
 }
 
