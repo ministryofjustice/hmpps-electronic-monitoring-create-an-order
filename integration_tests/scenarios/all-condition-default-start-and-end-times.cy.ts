@@ -270,7 +270,7 @@ context('The kitchen sink', () => {
             no_name: interestedParties.notifyingOrganisationName,
             no_phone_number: '',
             offence: installationAndRisk.offence,
-            offence_additional_details: 'AC Offence: Burglary in a Dwelling - Indictable only. PFA: Avon and Somerset',
+            offence_additional_details: 'PFA: Avon and Somerset',
             offence_date: '',
             order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
             order_id: orderId,
@@ -286,7 +286,7 @@ context('The kitchen sink', () => {
             pdu_responsible: 'Blackburn',
             pdu_responsible_email: '',
             planned_order_end_date: '',
-            responsible_officer_details_received: '',
+            responsible_officer_details_received: 'Yes',
             responsible_officer_email: '',
             responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
             responsible_officer_name: interestedParties.responsibleOfficerName,
@@ -365,7 +365,12 @@ context('The kitchen sink', () => {
             subcategory: '',
             dapol_missed_in_error: '',
             install_at_source_pilot: '',
-            ac_eligible_offences: [],
+            ac_eligible_offences: [
+              {
+                offence: 'Burglary in a Dwelling - Indictable only',
+                offence_date: '',
+              },
+            ],
           },
         }).should('be.true')
       })
