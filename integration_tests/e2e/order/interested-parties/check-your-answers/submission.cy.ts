@@ -17,9 +17,9 @@ context('interested parties check answers page', () => {
     cy.signIn()
   })
 
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
+  // afterEach(() => {
+  //   cy.task('resetFeatureFlags')
+  // })
 
   context('in progress order', () => {
     beforeEach(() => {
@@ -47,7 +47,7 @@ context('interested parties check answers page', () => {
     })
 
     it('navigates correctly to summary', () => {
-      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.returnButton().click()
 
@@ -55,7 +55,7 @@ context('interested parties check answers page', () => {
     })
 
     it('navigates correctly to next section', () => {
-      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.continueButton().click()
 
@@ -89,6 +89,48 @@ context('interested parties check answers page', () => {
 
     it('navigates to next cya when submitted order', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
+
+      page.continueButton().click()
+
+      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
+    })
+  })
+
+  context('variation in progress', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('stubCemoGetVersion', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'SUBMITTED',
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: 'officer',
+            responsibleOfficerLastName: 'name',
+            responsibleOfficerEmail: 'officer@email',
+
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'CHESHIRE',
+          },
+        },
+      })
+    })
+
+    it('navigates to next cya when submitted order', () => {
+      const page = Page.visit(
+        InterestedPartiesCheckYourAnswersPage,
+        { orderId: mockOrderId, versionId: mockVersionId },
+        {},
+        'View answers',
+        true,
+      )
 
       page.continueButton().click()
 

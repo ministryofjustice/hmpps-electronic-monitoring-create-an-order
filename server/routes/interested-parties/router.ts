@@ -2,17 +2,14 @@ import { Router } from 'express'
 import NotifingOrganisationController from './notifying-organisation/controller'
 import ResponsibleOfficerController from './responsible-officer/controller'
 import ProbationDeliveryUnitController from './pdu/controller'
-import InterestedPartiesCheckYourAnswersController from './check-your-answers/controller'
 import ResponsibleOrganisationController from './responsible-organisation/controller'
 import { Services } from '../../services'
 
 const createInterestedPartiesRouter = (
-  services: Pick<
-    Services,
-    'interestedPartiesStoreService' | 'updateInterestedPartiesService' | 'taskListService' | 'orderChecklistService'
-  >,
+  services: Pick<Services, 'interestedPartiesStoreService' | 'updateInterestedPartiesService'>,
 ): Router => {
-  const router = Router()
+  const router = Router({ mergeParams: true })
+
   const notifyingOrganisationController = new NotifingOrganisationController(
     services.interestedPartiesStoreService,
     services.updateInterestedPartiesService,
@@ -23,10 +20,6 @@ const createInterestedPartiesRouter = (
     services.updateInterestedPartiesService,
   )
   const probationDeliveryUnitController = new ProbationDeliveryUnitController()
-  const checkYourAnswers = new InterestedPartiesCheckYourAnswersController(
-    services.taskListService,
-    services.orderChecklistService,
-  )
 
   router.get('/notifying-organisation', notifyingOrganisationController.view)
   router.post('/notifying-organisation', notifyingOrganisationController.update)
@@ -39,9 +32,6 @@ const createInterestedPartiesRouter = (
 
   router.get('/probation-delivery-unit', probationDeliveryUnitController.view)
   router.post('/probation-delivery-unit', probationDeliveryUnitController.update)
-
-  router.get('/check-your-answers', checkYourAnswers.view)
-  router.post('/check-your-answers', checkYourAnswers.update)
 
   return router
 }

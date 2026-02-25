@@ -41,6 +41,7 @@ import ServiceRequestTypeController from './variations/service-request-type/cont
 import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
+import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -189,6 +190,11 @@ export default function routes({
   const installationAppointmentController = new InstallationAppointmentController(
     installationAppointmentService,
     taskListService,
+  )
+
+  const interestedPartiesController = new InterestedPartiesCheckYourAnswersController(
+    taskListService,
+    orderChecklistService,
   )
 
   const isRejectionController = new IsRejectionController(isRejectionService)
@@ -375,6 +381,11 @@ export default function routes({
   get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
   post(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.update)
 
+  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.view)
+  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.update)
+  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesController.view)
+  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesController.update)
+
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
     createOrderTypeDescriptionRouter({
@@ -391,8 +402,6 @@ export default function routes({
     createInterestedPartiesRouter({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
-      taskListService,
-      orderChecklistService,
     }),
   )
 
