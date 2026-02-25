@@ -6,6 +6,6 @@ export default class ProbationDeliveryUnitPage extends AppFormPage {
   public form = new ProbationDeliveryUnitComponent()
 
   constructor() {
-    super('WIP Probation Delivery Unit', paths.INTEREST_PARTIES.PDU)
+    super("What is the Responsible Organisation's Probation Delivery Unit (PDU)?", paths.INTEREST_PARTIES.PDU)
   }
 }
