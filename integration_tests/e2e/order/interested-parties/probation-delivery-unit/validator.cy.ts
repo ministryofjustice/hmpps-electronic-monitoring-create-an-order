@@ -35,7 +35,7 @@ context('Probation delivery unit validation', () => {
 
     page.form.saveAndContinueButton.click()
     Page.verifyOnPage(ProbationDeliveryUnitPage)
-    
+
     page.errorSummary.shouldExist()
     page.errorSummary.shouldHaveError("Select the Responsible Organisation's PDU")
   })
