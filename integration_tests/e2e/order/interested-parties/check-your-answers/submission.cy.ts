@@ -17,9 +17,9 @@ context('interested parties check answers page', () => {
     cy.signIn()
   })
 
-  // afterEach(() => {
-  //   cy.task('resetFeatureFlags')
-  // })
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
 
   context('in progress order', () => {
     beforeEach(() => {
