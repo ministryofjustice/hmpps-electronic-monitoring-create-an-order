@@ -90,12 +90,6 @@ context('interested parties check answers page', () => {
         'Select the Police force area',
         "What is the Responsible Organisation's email address? (optional)",
       ])
-
-      page.changeLinks.should('exist')
-      page.continueButton().should('exist')
-      page.continueButton().contains('Save and go to next section')
-      page.returnButton().should('exist')
-      page.returnButton().contains('Save as draft')
     })
   })
 
@@ -123,7 +117,7 @@ context('interested parties check answers page', () => {
         },
       })
     })
-    it('shows answers for without responsible organisation', () => {
+    it('shows answers for without responsible officer', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
 
       page.organisationDetailsSection.shouldExist()
@@ -132,12 +126,45 @@ context('interested parties check answers page', () => {
         "What is the Responsible Officer's last name?",
         "What is the Responsible Officer's email address?",
       ])
+    })
+  })
 
-      page.changeLinks.should('exist')
-      page.continueButton().should('exist')
-      page.continueButton().contains('Save and go to next section')
-      page.returnButton().should('exist')
-      page.returnButton().contains('Save as draft')
+  context('shows pdu if visited', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: null,
+            responsibleOfficerEmail: null,
+
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'NORTH_WEST',
+          },
+          probationDeliveryUnit: {
+            unit: 'COUNTY_DURHAM_AND_DARLINGTON',
+          },
+        },
+      })
+    })
+    it('shows pdu answers', () => {
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
+
+      page.probationDeliveryUnitSection.shouldHaveItems([
+        {
+          key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
+          value: 'County Durham and Darlington',
+        },
+      ])
     })
   })
 })

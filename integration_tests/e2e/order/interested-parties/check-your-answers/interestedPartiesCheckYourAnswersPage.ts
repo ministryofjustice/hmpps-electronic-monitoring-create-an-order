@@ -11,4 +11,9 @@ export default class InterestedPartiesCheckYourAnswersPage extends CheckYourAnsw
     const label = 'Organisation details'
     return new SummaryListComponent(label)
   }
+
+  get probationDeliveryUnitSection(): SummaryListComponent {
+    const label = 'Probation delivery unit'
+    return new SummaryListComponent(label)
+  }
 }

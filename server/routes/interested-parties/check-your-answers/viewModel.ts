@@ -1,6 +1,7 @@
 import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
+import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
 import { lookup } from '../../../utils/utils'
@@ -219,12 +220,34 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
   return answers
 }
 
+const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id)
+
+  const { questions } = content.pages.probationDeliveryUnit
+  const answers = []
+  if (
+    isOrderDataDictionarySameOrAbove('DDV5', order) &&
+    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+  ) {
+    answers.push(
+      createAnswer(
+        questions.unit.text,
+        lookup((<ReferenceCatalogDDv6>content.reference).probationDeliveryUnits, order.probationDeliveryUnit?.unit),
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+  return answers
+}
+
 const construct = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
   return {
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
+    probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
   }
 }
 
