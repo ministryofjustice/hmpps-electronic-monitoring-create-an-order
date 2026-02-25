@@ -149,6 +149,9 @@ interface ValidationErrors {
     lastNameRequired: string
     emailRequired: string
   }
+  probationDeliveryUnit: {
+    pduRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -416,6 +419,9 @@ const validationErrors: ValidationErrors = {
     firstNameRequired: "Enter the Responsible Officer's first name",
     lastNameRequired: "Enter the Responsible Officer's last name",
     emailRequired: "Enter the Responsible Officer's email address",
+  },
+  probationDeliveryUnit: {
+    pduRequired: "Select the Responsible Organisation's PDU",
   },
 }
 
