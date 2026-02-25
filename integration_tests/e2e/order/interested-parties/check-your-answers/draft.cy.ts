@@ -23,8 +23,9 @@ context('interested parties check answers page', () => {
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
             notifyingOrganisationEmail: 'notifying@organisation',
 
-            responsibleOfficerName: 'officer name',
-            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOfficerFirstName: 'officer',
+            responsibleOfficerLastName: 'name',
+            responsibleOfficerEmail: 'officer@email',
 
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
@@ -41,8 +42,9 @@ context('interested parties check answers page', () => {
         { key: 'What organisation or related organisation are you part of?', value: 'Prison Service' },
         { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
         { key: "What is your team's contact email address?", value: 'notifying@organisation' },
-        { key: "What is the Responsible Officer's full name?", value: 'officer name' },
-        { key: "What is the Responsible Officer's telephone number?", value: '01234567891' },
+        { key: "What is the Responsible Officer's first name?", value: 'officer' },
+        { key: "What is the Responsible Officer's last name?", value: 'name' },
+        { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
         { key: 'Select the Police force area', value: 'Cheshire' },
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
@@ -68,8 +70,9 @@ context('interested parties check answers page', () => {
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
             notifyingOrganisationEmail: 'notifying@organisation',
 
-            responsibleOfficerName: 'officer name',
-            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOfficerFirstName: 'officer',
+            responsibleOfficerLastName: 'name',
+            responsibleOfficerEmail: 'officer@email',
 
             responsibleOrganisation: null,
             responsibleOrganisationEmail: null,
@@ -109,8 +112,9 @@ context('interested parties check answers page', () => {
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
             notifyingOrganisationEmail: 'notifying@organisation',
 
-            responsibleOfficerName: null,
-            responsibleOfficerPhoneNumber: null,
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: null,
+            responsibleOfficerEmail: null,
 
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationEmail: 'responsible@organisation',
@@ -124,8 +128,9 @@ context('interested parties check answers page', () => {
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldNotHaveItems([
-        "What is the Responsible Officer's full name?",
-        "What is the Responsible Officer's telephone number?",
+        "What is the Responsible Officer's first name?",
+        "What is the Responsible Officer's last name?",
+        "What is the Responsible Officer's email address?",
       ])
 
       page.changeLinks.should('exist')

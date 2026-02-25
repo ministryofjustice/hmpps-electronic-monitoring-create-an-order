@@ -147,39 +147,49 @@ const getResponsibleOrganisationRegionAnswer = (
 }
 
 const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id)
+  const notifyingOrgUri = paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id)
+  const resOfficerUri = paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id)
+  const resOrgUri = paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id)
 
-  const { questions } = content.pages.interestedParties
+  const notifyingOrgQuestions = content.pages.notifyingOrganisation.questions
+  const responsibleOfficerQuestions = content.pages.responsibleOfficer.questions
+  const responsibleOrganisationQuestions = content.pages.responsibleOrganisation.questions
 
   const answers = [
     createAnswer(
-      questions.notifyingOrganisation.text,
+      notifyingOrgQuestions.notifyingOrganisation.text,
       lookup(content.reference.notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
-      uri,
+      notifyingOrgUri,
       answerOpts,
     ),
-    ...getNotifyingOrganisationNameAnswer(order, content, uri, answerOpts),
+    ...getNotifyingOrganisationNameAnswer(order, content, notifyingOrgUri, answerOpts),
     createAnswer(
-      questions.notifyingOrganisationEmail.text,
+      notifyingOrgQuestions.notifyingOrganisationEmail.text,
       order.interestedParties?.notifyingOrganisationEmail,
-      uri,
+      notifyingOrgUri,
       answerOpts,
     ),
   ]
 
-  if (order.interestedParties?.responsibleOfficerName) {
+  if (order.interestedParties?.responsibleOfficerFirstName) {
     answers.push(
       ...[
         createAnswer(
-          questions.responsibleOfficerName.text,
-          order.interestedParties?.responsibleOfficerName,
-          uri,
+          responsibleOfficerQuestions.firstName.text,
+          order.interestedParties?.responsibleOfficerFirstName,
+          resOfficerUri,
           answerOpts,
         ),
         createAnswer(
-          questions.responsibleOfficerPhoneNumber.text,
-          order.interestedParties?.responsibleOfficerPhoneNumber,
-          uri,
+          responsibleOfficerQuestions.lastName.text,
+          order.interestedParties?.responsibleOfficerLastName,
+          resOfficerUri,
+          answerOpts,
+        ),
+        createAnswer(
+          responsibleOfficerQuestions.email.text,
+          order.interestedParties?.responsibleOfficerEmail,
+          resOfficerUri,
           answerOpts,
         ),
       ],
@@ -190,16 +200,16 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
     answers.push(
       ...[
         createAnswer(
-          questions.responsibleOrganisation.text,
+          responsibleOrganisationQuestions.responsibleOrganisation.text,
           lookup(content.reference.responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
-          uri,
+          resOrgUri,
           answerOpts,
         ),
-        ...getResponsibleOrganisationRegionAnswer(order, content, uri, answerOpts),
+        ...getResponsibleOrganisationRegionAnswer(order, content, resOrgUri, answerOpts),
         createAnswer(
-          questions.responsibleOrganisationEmail.text,
+          responsibleOrganisationQuestions.responsibleOrganisationEmail.text,
           order.interestedParties?.responsibleOrganisationEmail,
-          uri,
+          resOrgUri,
           answerOpts,
         ),
       ],
