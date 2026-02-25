@@ -3,8 +3,12 @@ import CheckYourAnswersPage from '../../../../pages/checkYourAnswersPage'
 import SummaryListComponent from '../../../../pages/components/summaryListComponent'
 
 export default class InterestedPartiesCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor() {
-    super('Check your answers', paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS)
+  constructor(heading?: string) {
+    let text = 'Check your answers'
+    if (heading) {
+      text = heading
+    }
+    super(text, paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS)
   }
 
   get organisationDetailsSection(): SummaryListComponent {

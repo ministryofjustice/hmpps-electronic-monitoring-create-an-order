@@ -388,7 +388,12 @@ export default function routes({
 
   router.use(
     paths.INTEREST_PARTIES.BASE_PATH,
-    createInterestedPartiesRouter({ interestedPartiesStoreService, updateInterestedPartiesService }),
+    createInterestedPartiesRouter({
+      interestedPartiesStoreService,
+      updateInterestedPartiesService,
+      taskListService,
+      orderChecklistService,
+    }),
   )
 
   router.use(

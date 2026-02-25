@@ -1,9 +1,18 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../../constants/paths'
+import z from 'zod'
 import ViewModel from './viewModel'
+import TaskListService from '../../../services/taskListService'
+import { OrderChecklistService } from '../../../services'
+
+const CheckYourAnswersFormModel = z.object({
+  action: z.string().default('continue'),
+})
 
 export default class InterestedPartiesCheckYourAnswersController {
-  constructor() {}
+  constructor(
+    private readonly taskListService: TaskListService,
+    private readonly checklistService: OrderChecklistService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     res.render(
@@ -14,7 +23,20 @@ export default class InterestedPartiesCheckYourAnswersController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { versionId } = req.params
+    const { action } = CheckYourAnswersFormModel.parse(req.body)
 
-    res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ELECTRONIC_MONITORING_CONDITIONS')
+    if (action === 'continue') {
+      if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
+        res.redirect(
+          this.taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_INTERESTED_PARTIES', order, versionId),
+        )
+      } else {
+        res.redirect(this.taskListService.getNextPage('CHECK_ANSWERS_INTERESTED_PARTIES', order, {}, versionId))
+      }
+    } else {
+      res.redirect(res.locals.orderSummaryUri)
+    }
   }
 }

@@ -7,7 +7,10 @@ import ResponsibleOrganisationController from './responsible-organisation/contro
 import { Services } from '../../services'
 
 const createInterestedPartiesRouter = (
-  services: Pick<Services, 'interestedPartiesStoreService' | 'updateInterestedPartiesService'>,
+  services: Pick<
+    Services,
+    'interestedPartiesStoreService' | 'updateInterestedPartiesService' | 'taskListService' | 'orderChecklistService'
+  >,
 ): Router => {
   const router = Router()
   const notifyingOrganisationController = new NotifingOrganisationController(
@@ -20,7 +23,10 @@ const createInterestedPartiesRouter = (
     services.updateInterestedPartiesService,
   )
   const probationDeliveryUnitController = new ProbationDeliveryUnitController()
-  const checkYourAnswers = new InterestedPartiesCheckYourAnswersController()
+  const checkYourAnswers = new InterestedPartiesCheckYourAnswersController(
+    services.taskListService,
+    services.orderChecklistService,
+  )
 
   router.get('/notifying-organisation', notifyingOrganisationController.view)
   router.post('/notifying-organisation', notifyingOrganisationController.update)

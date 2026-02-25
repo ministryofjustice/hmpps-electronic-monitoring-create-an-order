@@ -34,6 +34,7 @@ const PAGES = {
   secondaryAddress: 'SECONDARY_ADDRESS',
   tertiaryAddress: 'TERTIARY_ADDRESS',
   interestParties: 'INTERESTED_PARTIES',
+  interestPartiesCheckYourAnswers: 'CHECK_ANSWERS_INTERESTED_PARTIES',
   probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
   offence: 'OFFENCE',
@@ -177,6 +178,14 @@ export default class TaskListService {
         path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
         state: STATES.required,
         completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
+      })
+
+      tasks.push({
+        section: SECTIONS.interestParties,
+        name: PAGES.interestPartiesCheckYourAnswers,
+        path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS,
+        state: STATES.hidden,
+        completed: true,
       })
     }
 
