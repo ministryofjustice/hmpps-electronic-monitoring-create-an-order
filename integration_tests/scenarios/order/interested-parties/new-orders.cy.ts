@@ -55,7 +55,11 @@ context('Interested parties flow', () => {
         notifyingOrganisation: 'Home Office',
         notifyingOrganisationEmailAddress: 'a@b.com',
       },
-      responsibleOfficer: 'mock',
+      responsibleOfficer: {
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'John@Smith.com',
+      },
       responsibleOrganisation: {
         responsibleOrganisation: 'Home Office',
         responsibleOrganisationEmailAddress: 'a@b.com',
@@ -75,7 +79,11 @@ context('Interested parties flow', () => {
         notifyingOrganisationEmailAddress: 'a@b.com',
         prison: 'Altcourse Prison',
       },
-      responsibleOfficer: 'mock',
+      responsibleOfficer: {
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'John@Smith.com',
+      },
       responsibleOrganisation: {
         responsibleOrganisation: 'Probation',
         probationRegion: 'Wales',

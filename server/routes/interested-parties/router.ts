@@ -14,7 +14,7 @@ const createInterestedPartiesRouter = (
     services.interestedPartiesStoreService,
     services.updateInterestedPartiesService,
   )
-  const responsibleOfficerController = new ResponsibleOfficerController()
+  const responsibleOfficerController = new ResponsibleOfficerController(services.interestedPartiesStoreService)
   const responsibleOrganisationController = new ResponsibleOrganisationController(
     services.interestedPartiesStoreService,
     services.updateInterestedPartiesService,
