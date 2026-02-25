@@ -40,7 +40,7 @@ context('Interested parties flow', () => {
         probationRegion: 'Wales',
         responsibleOrganisationEmailAddress: 'a@b.com',
       },
-      pdu: 'mock',
+      pdu: 'Dyfed Powys',
     }
     fillInInterestedPartiesWith({
       continueOnCya: false,
@@ -88,7 +88,7 @@ context('Interested parties flow', () => {
         responsibleOrganisation: 'Probation',
         probationRegion: 'Wales',
       },
-      pdu: 'mock',
+      pdu: 'Dyfed Powys',
     }
     fillInInterestedPartiesWith({
       continueOnCya: false,

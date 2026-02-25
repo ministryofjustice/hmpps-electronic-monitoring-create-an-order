@@ -17,7 +17,7 @@ context('probation delivery unit page', () => {
         interestedParties: {
           notifyingOrganisation: 'PRISON',
           notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
-          notifyingOrganisationEmail: 'notifying@organisation.com',
+          notifyingOrganisationEmail: 'notifying@organisation',
           responsibleOrganisation: 'PROBATION',
           responsibleOrganisationRegion: 'GREATER_MANCHESTER',
           responsibleOrganisationEmail: 'responsible@organisation',
