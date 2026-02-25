@@ -7,7 +7,7 @@ export type ProbationDeliveryUnitFormData = {
 
 export default class ProbationDeliveryUnitFormComponent extends FormComponent {
   get unitField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, "What is the Responsible Organisation's Probation Delivery Unit (PDU)", [
+    return new FormRadiosComponent(this.form, "What is the Responsible Organisation's Probation Delivery Unit (PDU)?", [
       'Not able to provide this information',
     ])
   }

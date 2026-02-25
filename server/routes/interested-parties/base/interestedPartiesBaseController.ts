@@ -10,7 +10,7 @@ export default abstract class InterestedPartiesBaseController {
     protected readonly service: UpdateInterestedPartiesService,
   ) {}
 
-  async SubmitInterestedPartiesAndNext(order: Order, req: Request, res: Response) {
+  async SubmitInterestedPartiesAndNext(order: Order, req: Request, res: Response, nextPath?: string) {
     const data = await this.store.getInterestedParties(order)
 
     await this.service.update({
@@ -19,10 +19,14 @@ export default abstract class InterestedPartiesBaseController {
       orderId: order.id,
     })
 
+    if (nextPath) {
+      return res.redirect(nextPath)
+    }
+
     if (data.responsibleOrganisation === 'PROBATION') {
-      res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
+      return res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
     } else {
-      res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      return res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     }
   }
 }

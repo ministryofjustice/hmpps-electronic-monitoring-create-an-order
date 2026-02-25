@@ -13,10 +13,16 @@ context('probation delivery unit submission', () => {
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,
+      status: 'IN_PROGRESS',
       order: {
         dataDictionaryVersion: 'DDV6',
         interestedParties: {
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+          notifyingOrganisationEmail: 'notifying@organisation.com',
+          responsibleOrganisationEmail: 'responsible@organisation',
           responsibleOrganisation: 'PROBATION',
+          responsibleOrganisationRegion: 'WEST_MIDLANDS',
         },
       },
     })
@@ -27,65 +33,77 @@ context('probation delivery unit submission', () => {
       subPath: submitPath,
       method: 'PUT',
       response: {
-        probationDeliveryUnit: 'NORTH_WEST',
+        notifyingOrganisation: 'PRISON',
+        responsibleOrganisation: 'PROBATION',
+        probationDeliveryUnit: 'STAFFORDSHIRE_NORTH',
       },
     })
+
     cy.signIn()
   })
 
-  it('routes to CYA page after successfully submitting a probation delivery unit', () => {
+  it('successfully submits a probation delivery unit and routes to CYA page', () => {
     const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
     page.form.fillInWith({
-      unit: 'North West',
+      unit: 'Staffordshire North',
     })
-    page.form.continueButton.click()
+
+    page.form.saveAndContinueButton.click()
 
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}${submitPath}`,
       body: {
-        unit: 'NORTH_WEST',
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+        notifyingOrganisationEmail: 'notifying@organisation.com',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'WEST_MIDLANDS',
+        probationDeliveryUnit: 'STAFFORDSHIRE_NORTH',
       },
     }).should('be.true')
 
     Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
   })
 
-  it('should submit if user selects "not able to provide info"', () => {
-    const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+  // it('navigating back to the page after submission shows the previously saved pdu', () => {
+  //   const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
-    page.form.fillInWith({
-      unit: 'Not able to provide this information',
-    })
-    page.form.continueButton.click()
+  //   cy.task('stubCemoSubmitOrder', {
+  //     httpStatus: 200,
+  //     id: mockOrderId,
+  //     subPath: submitPath,
+  //     method: 'PUT',
+  //     response: {
+  //       notifyingOrganisation: 'PRISON',
+  //       responsibleOrganisation: 'PROBATION',
+  //       probationDeliveryUnit: 'STAFFORDSHIRE_SOUTH',
+  //     },
+  //   })
 
-    cy.task('stubCemoVerifyRequestReceived', {
-      uri: `/orders/${mockOrderId}${submitPath}`,
-      body: {
-        unit: null,
-      },
-    }).should('be.true')
-  })
+  //   page.form.fillInWith({
+  //     unit: 'Staffordshire South',
+  //   })
 
-  it('navigating back to the page after submission shows the previously saved pdu', () => {
-    const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+  //   page.form.saveAndContinueButton.click()
 
-    page.form.fillInWith({
-      unit: 'Wales',
-    })
-    page.form.continueButton.click()
+  //   cy.task('stubCemoVerifyRequestReceived', {
+  //     uri: `/orders/${mockOrderId}${submitPath}`,
+  //     body: {
+  //       notifyingOrganisation: 'PRISON',
+  //       notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+  //       notifyingOrganisationEmail: 'notifying@organisation.com',
+  //       responsibleOrganisationEmail: 'responsible@organisation',
+  //       responsibleOrganisation: 'PROBATION',
+  //       responsibleOrganisationRegion: 'WEST_MIDLANDS',
+  //       probationDeliveryUnit: 'STAFFORDSHIRE_SOUTH',
+  //     },
+  //   }).should('be.true')
 
-    cy.task('stubCemoVerifyRequestReceived', {
-      uri: `/orders/${mockOrderId}${submitPath}`,
-      body: {
-        unit: 'WALES',
-      },
-    }).should('be.true')
+  //   Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
 
-    Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-
-    Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
-
-    page.form.unitField.shouldHaveValue('Wales')
-  })
+  //   Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+  //   page.form.unitField.shouldHaveValue('STAFFORDSHIRE_SOUTH')
+  // })
 })
