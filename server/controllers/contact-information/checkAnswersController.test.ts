@@ -44,7 +44,10 @@ describe('ContactDetailsCheckAnswersController', () => {
 
   it('should render the check answers page without any answers completed', async () => {
     // Given
-    const order = getMockOrder({ dataDictionaryVersion: 'DDV5' })
+    const order = getMockOrder({
+      contactDetails: { contactNumber: '', phoneNumberAvailable: false },
+      dataDictionaryVersion: 'DDV5',
+    })
     const req = createMockRequest({ order })
     const res = createMockResponse()
     const next = jest.fn()
@@ -57,7 +60,24 @@ describe('ContactDetailsCheckAnswersController', () => {
       contactDetails: [
         {
           key: {
-            text: "What is the device wearer's telephone number? (optional)",
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: 'No',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
           },
           value: {
             text: '',
@@ -67,7 +87,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: "what is the device wearer's telephone number? (optional)",
+                visuallyHiddenText: "what is the device wearer's telephone number?",
               },
             ],
           },
@@ -240,7 +260,24 @@ describe('ContactDetailsCheckAnswersController', () => {
       contactDetails: [
         {
           key: {
-            text: "What is the device wearer's telephone number? (optional)",
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: 'Yes',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
           },
           value: {
             text: '01234567890',
@@ -250,7 +287,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: "what is the device wearer's telephone number? (optional)",
+                visuallyHiddenText: "what is the device wearer's telephone number?",
               },
             ],
           },
@@ -446,7 +483,24 @@ describe('ContactDetailsCheckAnswersController', () => {
       contactDetails: [
         {
           key: {
-            text: "What is the device wearer's telephone number? (optional)",
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: 'Yes',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
           },
           value: {
             text: '01234567890',
@@ -456,7 +510,7 @@ describe('ContactDetailsCheckAnswersController', () => {
               {
                 href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: "what is the device wearer's telephone number? (optional)",
+                visuallyHiddenText: "what is the device wearer's telephone number?",
               },
             ],
           },
