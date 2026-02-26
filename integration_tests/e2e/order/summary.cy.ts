@@ -11,6 +11,8 @@ import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 import { Order } from '../../../server/models/Order'
 import paths from '../../../server/constants/paths'
+import NotifyingOrganisationPage from './interested-parties/notifying-organisation/notifyingOrganisationPage'
+import InterestedPartiesCheckYourAnswersPage from './interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 let mockOrderId = uuidv4()
 
@@ -36,6 +38,9 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
     it('Display the common page elements and the submit order button', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.header.userName().should('contain.text', 'J. Smith')
@@ -72,6 +77,26 @@ context('Order Summary', () => {
       cy.get('.govuk-task-list__item').should('not.contain', 'Variation details')
 
       page.submitOrderButton.should('be.disabled')
+    })
+
+    it('Should have interested parties section at top of section list', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      cy.get('.govuk-task-list__item')
+        .first()
+        .contains('.govuk-task-list__name-and-hint', 'About the notifying and responsible organisation')
+        .should('exist')
+    })
+
+    it('Interested parties section link should go to notifying organisation page if not completed', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.interestedPartiesTask.shouldHaveStatus('Incomplete')
+      page.interestedPartiesTask.click()
+
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
 
     it('Should be accessible', () => {
@@ -591,6 +616,16 @@ context('Order Summary', () => {
       page = Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
 
       page.submitOrderButton.should('not.be.disabled')
+    })
+
+    it('Interested parties section link should go to check your answer page if  completed', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.interestedPartiesTask.shouldHaveStatus('To check')
+      page.interestedPartiesTask.click()
+
+      Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     })
 
     it('does not show the timeline', () => {
