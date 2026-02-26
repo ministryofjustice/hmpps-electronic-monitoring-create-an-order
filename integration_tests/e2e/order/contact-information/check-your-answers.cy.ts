@@ -1431,7 +1431,8 @@ context('Contact Information - check your answers', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
-        { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
+        { key: "What is the device wearer's telephone number?", value: '01234567890' },
+        { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
       ])
 
       page.deviceWearerAddressesSection.shouldExist()
@@ -1491,6 +1492,7 @@ context('Contact Information - check your answers', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
