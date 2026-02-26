@@ -12,7 +12,7 @@ export const ContactDetailsFormDataValidator = z
     phoneNumberAvailable: z.string({
       required_error: validationErrors.contactInformation.phoneNumberAvailableRequired,
     }),
-    contactNumber: z.string().optional(),
+    contactNumber: z.string().nullable().optional().default(null),
   })
   .superRefine((data, ctx) => {
     if (data.phoneNumberAvailable === 'true') {

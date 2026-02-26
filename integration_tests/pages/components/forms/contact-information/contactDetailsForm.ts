@@ -22,11 +22,11 @@ export default class ContactDetailsFormComponent extends FormComponent {
   // FORM HELPERS
 
   fillInWith(profile: ContactDetailsFormData): void {
-    if (profile.contactNumber) {
+    if (profile.contactNumber && profile.contactNumber.length > 0) {
       this.contactNumberAvailableField.set('Yes')
       this.contactNumberField.set(profile.contactNumber)
     } else {
-      this.contactNumberField.set('No')
+      this.contactNumberAvailableField.set('No')
     }
   }
 
