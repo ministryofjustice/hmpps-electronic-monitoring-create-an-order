@@ -16,6 +16,10 @@ const constructFromFormData = (
       value: formData.contactNumber || '',
       error: getError(validationErrors, 'contactNumber'),
     },
+    phoneNumberAvailable: {
+      value: formData.phoneNumberAvailable || '',
+      error: getError(validationErrors, 'phoneNumberAvailable'),
+    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -26,11 +30,17 @@ const constructFromEntity = (contactDetails: ContactDetails): ContactDetailsView
       contactNumber: {
         value: contactDetails.contactNumber ?? '',
       },
+      phoneNumberAvailable: {
+        value: contactDetails.phoneNumberAvailable || '',
+      },
       errorSummary: null,
     }
   }
   return {
     contactNumber: {
+      value: '',
+    },
+    phoneNumberAvailable: {
       value: '',
     },
     errorSummary: null,

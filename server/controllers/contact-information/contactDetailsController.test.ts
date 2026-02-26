@@ -69,7 +69,7 @@ describe('ContactDetailsController', () => {
 
     it('should render the form using the saved contact details data', async () => {
       // Given
-      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890' } })
+      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: 'yes' } })
       const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
       const res = createMockResponse()
       const next = jest.fn()
@@ -90,7 +90,7 @@ describe('ContactDetailsController', () => {
 
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
-      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890' } })
+      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: 'yes' } })
       const req = createMockRequest({
         order: mockOrder,
         flash: jest
@@ -166,6 +166,7 @@ describe('ContactDetailsController', () => {
       const next = jest.fn()
       mockContactDetailsService.updateContactDetails.mockResolvedValue({
         contactNumber: '01234567890',
+        phoneNumberAvailable: 'yes',
       })
       taskListService.getNextPage = jest
         .fn()
@@ -196,6 +197,7 @@ describe('ContactDetailsController', () => {
       }
       mockContactDetailsService.updateContactDetails.mockResolvedValue({
         contactNumber: '01234567890',
+        phoneNumberAvailable: 'yes',
       })
 
       // When

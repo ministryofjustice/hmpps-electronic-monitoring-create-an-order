@@ -1,14 +1,18 @@
 {% extends "../../../partials/form-layout.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set section = content.pages.contactDetails.section %}
 {% set heading = content.pages.contactDetails.title %}
 {% set legend = content.pages.contactDetails.legend %}
 {% set helpText = content.pages.contactDetails.helpText %}
 
-{% block formInputs %}
+{% set visuallyHiddenHint %}
+  <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
+{% endset %}
 
+{% set contactNumberHtml %}
   {{ govukInput({
     label: {
       classes: "govuk-label--s",
@@ -25,5 +29,41 @@
     errorMessage: contactNumber.error,
     disabled: not isOrderEditable
   }) }}
+{% endset %}
+{% block formInputs %}
+
+ {{ govukRadios({
+      name: "phoneNumberAvailable",
+      fieldset:{
+        legend: {
+          text: content.pages.contactDetails.questions.phoneNumberAvailable.text,
+          classes: "govuk-visually-hidden"
+        }
+      },
+      hint:{
+        text: content.pages.contactDetails.questions.phoneNumberAvailable.hint
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          hint: {
+            html: visuallyHiddenHint
+          },
+          conditional: {
+            html: contactNumberHtml
+          },
+          disabled: not isOrderEditable
+        },
+        {
+          value: "no",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: phoneNumberAvailable.value,
+      errorMessage: phoneNumberAvailable.error,
+      disabled: not isOrderEditable
+    }) }}
 
 {% endblock %}

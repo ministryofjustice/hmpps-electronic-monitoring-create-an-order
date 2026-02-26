@@ -50,6 +50,7 @@ export const createResponsibleAdult = (
 
 export const createContactDetails = (overrideProperties?: Partial<ContactDetails>): ContactDetails => ({
   contactNumber: '',
+  phoneNumberAvailable: '',
   ...overrideProperties,
 })
 
@@ -240,6 +241,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   deviceWearerResponsibleAdult: null,
   contactDetails: {
     contactNumber: '07123456489',
+    phoneNumberAvailable: 'yes',
   },
   installationAndRisk: null,
   interestedParties: createInterestedParties(),

@@ -22,11 +22,21 @@ context('Contact details - Contact information', () => {
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
 
+      page.form.contactNumberAvailableField.shouldExist()
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAsDraftButton.should('exist')
 
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
+    })
+
+    it('Should show contact number input when Yes is selected', () => {
+      const page = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
+
+      page.form.contactNumberAvailableField.set('Yes')
+
+      page.form.contactNumberField.shouldExist()
+      page.form.contactNumberField.shouldNotBeDisabled()
     })
 
     // TODO: FAIL issue determining if autocomplete is valid

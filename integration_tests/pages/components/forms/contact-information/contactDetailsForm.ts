@@ -1,5 +1,6 @@
 import FormComponent from '../../formComponent'
 import FormInputComponent from '../../formInputComponent'
+import FormRadiosComponent from '../../formRadiosComponent'
 
 export type ContactDetailsFormData = {
   contactNumber?: string
@@ -7,6 +8,11 @@ export type ContactDetailsFormData = {
 
 export default class ContactDetailsFormComponent extends FormComponent {
   // FIELDS
+
+  get contactNumberAvailableField(): FormRadiosComponent {
+    const label = 'Does the device wearer have a contact telephone number?'
+    return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
+  }
 
   get contactNumberField(): FormInputComponent {
     const label = "What is the device wearer's telephone number?"
@@ -17,7 +23,10 @@ export default class ContactDetailsFormComponent extends FormComponent {
 
   fillInWith(profile: ContactDetailsFormData): void {
     if (profile.contactNumber) {
+      this.contactNumberAvailableField.set('Yes')
       this.contactNumberField.set(profile.contactNumber)
+    } else {
+      this.contactNumberField.set('No')
     }
   }
 

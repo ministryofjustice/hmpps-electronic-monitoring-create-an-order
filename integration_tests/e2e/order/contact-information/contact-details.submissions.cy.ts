@@ -41,6 +41,7 @@ context('Contact details - Contact information', () => {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
           contactNumber: '01234567890',
+          phoneNumberAvailable: 'yes',
         },
       }).should('be.true')
     })
