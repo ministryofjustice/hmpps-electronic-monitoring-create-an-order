@@ -9,6 +9,7 @@ import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/o
 import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import OffenceDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage'
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -233,6 +234,9 @@ context('offences', () => {
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
     detailsOfInstallationPage.form.saveAndContinueButton.click()
+    const isMappaPage = Page.verifyOnPage(IsMappaPage)
+    isMappaPage.form.fillInWith({ isMappa: 'No' })
+    isMappaPage.form.saveAndContinueButton.click()
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItems([
       {
@@ -254,6 +258,11 @@ context('offences', () => {
       {
         key: 'Any other risks to be aware of? (optional)',
         value: 'some details',
+      },
+      {
+        key: 'Is the device wearer a Multi-Agency Public Protection Arrangements (MAPPA) offender?',
+
+        value: 'No',
       },
     ])
   })
