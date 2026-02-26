@@ -15,7 +15,7 @@ export const ContactDetailsFormDataValidator = z
     contactNumber: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.phoneNumberAvailable === 'yes') {
+    if (data.phoneNumberAvailable === 'true') {
       const contactNumber = data.contactNumber?.trim() || ''
       if (contactNumber.length === 0) {
         ctx.addIssue({

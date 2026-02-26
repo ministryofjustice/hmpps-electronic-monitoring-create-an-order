@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
+import { convertBooleanToEnum, getError } from '../../utils/utils'
 import { ContactDetails } from '../ContactDetails'
 import { ContactDetailsFormData } from '../form-data/contactDetails'
 import { ValidationResult } from '../Validation'
@@ -31,7 +31,7 @@ const constructFromEntity = (contactDetails: ContactDetails): ContactDetailsView
         value: contactDetails.contactNumber ?? '',
       },
       phoneNumberAvailable: {
-        value: contactDetails.phoneNumberAvailable || '',
+        value: convertBooleanToEnum(contactDetails.phoneNumberAvailable, '', 'true', 'false'),
       },
       errorSummary: null,
     }

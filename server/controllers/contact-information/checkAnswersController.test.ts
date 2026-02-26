@@ -206,7 +206,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     // Given
     const order = getMockOrder({
       deviceWearer: createDeviceWearer({ noFixedAbode: true }),
-      contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: 'yes' },
+      contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: true },
       interestedParties: {
         notifyingOrganisation: 'HOME_OFFICE',
         notifyingOrganisationName: '',
@@ -390,7 +390,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     const order = getMockOrder({
       dataDictionaryVersion: 'DDV5',
       deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-      contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: 'yes' },
+      contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: true },
       interestedParties: {
         notifyingOrganisation: 'PRISON',
         notifyingOrganisationName: 'CARDIFF_PRISON',

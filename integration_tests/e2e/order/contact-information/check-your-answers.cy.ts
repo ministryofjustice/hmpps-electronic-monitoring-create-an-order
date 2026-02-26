@@ -66,6 +66,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -102,7 +103,8 @@ context('Contact Information - check your answers', () => {
 
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
-        { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
+        { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
+        { key: "What is the device wearer's telephone number?", value: '01234567890' },
       ])
 
       page.deviceWearerAddressesSection.shouldExist()
@@ -143,6 +145,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -198,6 +201,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -253,6 +257,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -308,6 +313,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV5',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -372,6 +378,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV4',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -423,6 +430,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -488,6 +496,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -550,6 +559,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -612,6 +622,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -674,6 +685,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -736,6 +748,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -798,6 +811,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -860,6 +874,7 @@ context('Contact Information - check your answers', () => {
             dataDictionaryVersion: 'DDV5',
             contactDetails: {
               contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
             deviceWearer: {
               nomisId: null,
@@ -923,6 +938,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV4',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -978,6 +994,7 @@ context('Contact Information - check your answers', () => {
           dataDictionaryVersion: 'DDV6',
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -1042,6 +1059,7 @@ context('Contact Information - check your answers', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -1088,7 +1106,8 @@ context('Contact Information - check your answers', () => {
 
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
-        { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
+        { key: "What is the device wearer's telephone number?", value: '01234567890' },
+        { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
       ])
 
       page.deviceWearerAddressesSection.shouldExist()
@@ -1127,6 +1146,7 @@ context('Contact Information - check your answers', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -1189,7 +1209,8 @@ context('Contact Information - check your answers', () => {
 
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
-        { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
+        { key: "What is the device wearer's telephone number?", value: '01234567890' },
+        { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
       ])
 
       page.deviceWearerAddressesSection.shouldExist()
@@ -1238,6 +1259,7 @@ context('Contact Information - check your answers', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,
@@ -1293,7 +1315,8 @@ context('Contact Information - check your answers', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.contactDetailsSection.shouldExist()
       page.contactDetailsSection.shouldHaveItems([
-        { key: "What is the device wearer's telephone number? (optional)", value: '01234567890' },
+        { key: "What is the device wearer's telephone number?", value: '01234567890' },
+        { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
       ])
 
       page.deviceWearerAddressesSection.shouldExist()
@@ -1352,6 +1375,7 @@ context('Contact Information - check your answers', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: null,

@@ -6,7 +6,7 @@ const ContactDetailsModel = z
       .string()
       .nullable()
       .transform(val => (val === null ? '' : val)),
-    phoneNumberAvailable: z.string().default(''),
+    phoneNumberAvailable: z.boolean().nullable(),
   })
 
   .nullable()

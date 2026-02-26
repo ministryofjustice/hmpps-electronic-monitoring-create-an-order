@@ -51,7 +51,17 @@ context('Contact details - Contact information', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+            phoneNumberAvailable: true,
+          },
+        },
+      })
 
       cy.signIn()
     })
@@ -65,6 +75,8 @@ context('Contact details - Contact information', () => {
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist').should('have.attr', 'href', '#')
 
+      page.form.contactNumberAvailableField.shouldHaveValue('Yes')
+      page.form.contactNumberField.shouldHaveValue('01234567890')
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()
     })
