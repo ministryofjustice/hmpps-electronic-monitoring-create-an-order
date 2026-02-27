@@ -87,6 +87,7 @@ type I18n = {
     notifyingOrganisation: NotifyingOrganisationPageContent
     responsibleOrganisation: ResponsibleOrganisationPageContent
     responsibleOfficer: ResponsibleOfficerPageContent
+    pdu: ProbationDeliveryUnit
   }
   reference: ReferenceData
 }

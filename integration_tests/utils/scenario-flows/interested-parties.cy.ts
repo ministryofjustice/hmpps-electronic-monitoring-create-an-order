@@ -31,7 +31,8 @@ export default function fillInInterestedPartiesWith({
 
   if (pdu) {
     const pduPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
-    pduPage.form.continueButton.click()
+    pduPage.form.fillInWith({ unit: pdu })
+    pduPage.form.saveAndContinueButton.click()
   }
 
   const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)

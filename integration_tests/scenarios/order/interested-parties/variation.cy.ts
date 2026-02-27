@@ -121,7 +121,7 @@ context('Interested parties flow', () => {
         responsibleOrganisation: 'Probation',
         probationRegion: 'Wales',
       },
-      pdu: 'mock',
+      pdu: 'Swansea',
     }
     fillInInterestedPartiesWith({
       continueOnCya: false,
