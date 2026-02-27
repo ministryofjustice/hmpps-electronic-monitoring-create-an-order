@@ -20,6 +20,7 @@ context('Contact details - Contact information', () => {
         subPath: apiPath,
         response: {
           contactNumber: '01234567890',
+          phoneNumberAvailable: true,
         },
       })
 
@@ -41,6 +42,7 @@ context('Contact details - Contact information', () => {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
           contactNumber: '01234567890',
+          phoneNumberAvailable: 'true',
         },
       }).should('be.true')
     })

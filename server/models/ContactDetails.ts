@@ -6,7 +6,9 @@ const ContactDetailsModel = z
       .string()
       .nullable()
       .transform(val => (val === null ? '' : val)),
+    phoneNumberAvailable: z.boolean().nullable(),
   })
+
   .nullable()
 
 export type ContactDetails = z.infer<typeof ContactDetailsModel>

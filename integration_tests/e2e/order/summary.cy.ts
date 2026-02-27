@@ -308,7 +308,10 @@ context('Order Summary', () => {
             otherRelationshipDetails: null,
             relationship: null,
           },
-          contactDetails: { contactNumber: '' },
+          contactDetails: {
+            contactNumber: '',
+            phoneNumberAvailable: false,
+          },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -678,7 +681,7 @@ context('Order Summary', () => {
             otherRelationshipDetails: null,
             relationship: null,
           },
-          contactDetails: { contactNumber: '' },
+          contactDetails: { contactNumber: '', phoneNumberAvailable: false },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -1068,7 +1071,7 @@ context('Order Summary', () => {
             otherRelationshipDetails: null,
             relationship: null,
           },
-          contactDetails: { contactNumber: '' },
+          contactDetails: { contactNumber: '', phoneNumberAvailable: false },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -1151,7 +1154,7 @@ context('Order Summary', () => {
             otherRelationshipDetails: null,
             relationship: null,
           },
-          contactDetails: { contactNumber: '' },
+          contactDetails: { contactNumber: '', phoneNumberAvailable: false },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
@@ -1396,7 +1399,7 @@ context('Order Summary', () => {
             otherRelationshipDetails: null,
             relationship: null,
           },
-          contactDetails: { contactNumber: '' },
+          contactDetails: { contactNumber: '', phoneNumberAvailable: false },
           installationAndRisk: {
             mappaCaseType: null,
             mappaLevel: null,
