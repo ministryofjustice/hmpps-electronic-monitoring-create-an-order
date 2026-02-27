@@ -33,7 +33,7 @@ const PAGES = {
   primaryAddress: 'PRIMARY_ADDRESS',
   secondaryAddress: 'SECONDARY_ADDRESS',
   tertiaryAddress: 'TERTIARY_ADDRESS',
-  interestParties: 'INTERESTED_PARTIES',  
+  interestParties: 'INTERESTED_PARTIES',
   checkAnswersInterestParties: 'CHECK_ANSWERS_INTERESTED_PARTIES',
   probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
@@ -181,7 +181,7 @@ export default class TaskListService {
       })
 
       tasks.push({
-        section: SECTIONS.interestParties,       
+        section: SECTIONS.interestParties,
         name: PAGES.checkAnswersInterestParties,
         path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS,
         state: STATES.hidden,
