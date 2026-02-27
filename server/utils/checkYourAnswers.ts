@@ -87,7 +87,7 @@ export const createDateTimeAnswer = (
 
 export const createBooleanAnswer = (
   key: string,
-  value: boolean | null,
+  value: boolean | null | undefined,
   uri: string,
   opts: AnswerOptions = {},
 ): Answer => createAnswer(key, convertBooleanToEnum(value, '', 'Yes', 'No'), uri, opts)

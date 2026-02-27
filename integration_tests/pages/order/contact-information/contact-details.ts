@@ -8,7 +8,7 @@ export default class ContactDetailsPage extends AppFormPage {
   public form = new ContactDetailsFormComponent()
 
   constructor() {
-    super('Telephone number', paths.CONTACT_INFORMATION.CONTACT_DETAILS, 'Contact information')
+    super('', paths.CONTACT_INFORMATION.CONTACT_DETAILS, 'Contact information')
   }
 
   checkOnPage(): void {

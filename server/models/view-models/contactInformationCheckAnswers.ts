@@ -9,6 +9,12 @@ import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionC
 const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
   return [
+    createBooleanAnswer(
+      content.pages.contactDetails.questions.phoneNumberAvailable.text,
+      order.contactDetails?.phoneNumberAvailable,
+      uri,
+      answerOpts,
+    ),
     createAnswer(
       content.pages.contactDetails.questions.contactNumber.text,
       order.contactDetails?.contactNumber,

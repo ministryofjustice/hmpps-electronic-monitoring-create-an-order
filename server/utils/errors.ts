@@ -9,7 +9,6 @@ export const convertZodErrorToValidationError = (error: ZodError): ValidationRes
       focusPath?: string
     }
   }
-
   return error.issues.reduce((acc, issue) => {
     const fieldPath = issue.path.join('-').toString()
     const focusPath = (issue as ZodIssueWithParams).params?.focusPath

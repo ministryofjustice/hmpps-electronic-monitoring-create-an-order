@@ -198,6 +198,7 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage - validation', { overwrite: true })
       contactDetailsPage.form.fillInWith({ contactNumber: '{selectall}{del}' })
       contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+      contactDetailsPage.form.fillInWith({ contactNumber: '01234567890' })
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage', { overwrite: true })
       contactDetailsPage.form.saveAndContinueButton.click()
 
@@ -523,6 +524,7 @@ context('Mandatory fields only', () => {
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage - validation', { overwrite: true })
       contactDetailsPage.form.fillInWith({ contactNumber: '{selectall}{del}' })
       contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+      contactDetailsPage.form.fillInWith({ contactNumber: '01234567890' })
       if (takeScreenshots) cy.screenshot('05. contactDetailsPage', { overwrite: true })
       contactDetailsPage.form.saveAndContinueButton.click()
 

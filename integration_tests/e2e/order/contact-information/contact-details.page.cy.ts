@@ -22,11 +22,21 @@ context('Contact details - Contact information', () => {
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
 
+      page.form.contactNumberAvailableField.shouldExist()
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAsDraftButton.should('exist')
 
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
+    })
+
+    it('Should show contact number input when Yes is selected', () => {
+      const page = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
+
+      page.form.contactNumberAvailableField.set('Yes')
+
+      page.form.contactNumberField.shouldExist()
+      page.form.contactNumberField.shouldNotBeDisabled()
     })
 
     // TODO: FAIL issue determining if autocomplete is valid
@@ -41,7 +51,17 @@ context('Contact details - Contact information', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+            phoneNumberAvailable: true,
+          },
+        },
+      })
 
       cy.signIn()
     })
@@ -55,6 +75,8 @@ context('Contact details - Contact information', () => {
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist').should('have.attr', 'href', '#')
 
+      page.form.contactNumberAvailableField.shouldHaveValue('Yes')
+      page.form.contactNumberField.shouldHaveValue('01234567890')
       // Verify all form elements are disabled
       page.form.shouldBeDisabled()
     })

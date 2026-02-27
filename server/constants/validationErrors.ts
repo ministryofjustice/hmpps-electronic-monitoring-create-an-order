@@ -58,6 +58,8 @@ interface ValidationErrors {
     addAnotherRequired: string
   }
   contactInformation: {
+    phoneNumberAvailableRequired: string
+    phoneNumberRequired: string
     pduRequired: string
   }
   curfewConditions: {
@@ -288,6 +290,8 @@ const validationErrors: ValidationErrors = {
     addAnotherRequired: 'Select yes if you need to add another appointment',
   },
   contactInformation: {
+    phoneNumberAvailableRequired: 'Select Yes if the device wearer has a contact telephone number',
+    phoneNumberRequired: 'Enter the device wearer’s telephone number',
     pduRequired: "Select the Responsible Organisation's PDU",
   },
   curfewConditions: {

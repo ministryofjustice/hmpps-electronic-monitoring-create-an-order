@@ -131,6 +131,7 @@ context('Receipt', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: 'nomis',
@@ -241,6 +242,7 @@ context('Receipt', () => {
         order: {
           contactDetails: {
             contactNumber: '01234567890',
+            phoneNumberAvailable: true,
           },
           deviceWearer: {
             nomisId: 'nomis',

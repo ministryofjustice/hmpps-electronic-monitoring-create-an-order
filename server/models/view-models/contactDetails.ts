@@ -1,5 +1,5 @@
 import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
+import { convertBooleanToEnum, getError } from '../../utils/utils'
 import { ContactDetails } from '../ContactDetails'
 import { ContactDetailsFormData } from '../form-data/contactDetails'
 import { ValidationResult } from '../Validation'
@@ -16,6 +16,10 @@ const constructFromFormData = (
       value: formData.contactNumber || '',
       error: getError(validationErrors, 'contactNumber'),
     },
+    phoneNumberAvailable: {
+      value: formData.phoneNumberAvailable || '',
+      error: getError(validationErrors, 'phoneNumberAvailable'),
+    },
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -26,11 +30,17 @@ const constructFromEntity = (contactDetails: ContactDetails): ContactDetailsView
       contactNumber: {
         value: contactDetails.contactNumber ?? '',
       },
+      phoneNumberAvailable: {
+        value: convertBooleanToEnum(contactDetails.phoneNumberAvailable, '', 'true', 'false'),
+      },
       errorSummary: null,
     }
   }
   return {
     contactNumber: {
+      value: '',
+    },
+    phoneNumberAvailable: {
       value: '',
     },
     errorSummary: null,
