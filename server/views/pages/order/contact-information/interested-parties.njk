@@ -263,6 +263,9 @@
     {% set responsibleOrgOptions = (responsibleOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: responsibleOrgProbationRegionHtml
       },
@@ -272,6 +275,9 @@
     {% set responsibleOrgOptions = (responsibleOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: policeAreaHtml
       },
@@ -281,6 +287,9 @@
     {% set responsibleOrgOptions = (responsibleOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: yjsRegionHtml
       },
