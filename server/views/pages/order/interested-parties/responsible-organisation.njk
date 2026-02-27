@@ -12,6 +12,10 @@
 {% set questions = content.pages.responsibleOrganisation.questions %}
 {% set singleQuestionPage = true %}
 
+{% set visuallyHiddenHint %}
+  <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
+{% endset %}
+
 {% set responsibleOrgProbationRegionHtml %}
   {{ govukSelect({
     id: "responsibleOrgProbationRegion",
@@ -58,6 +62,9 @@
     {% set responsibleOrgOptions = (responsibleOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: responsibleOrgProbationRegionHtml
       },
@@ -67,6 +74,9 @@
     {% set responsibleOrgOptions = (responsibleOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: policeAreaHtml
       },
@@ -76,6 +86,9 @@
     {% set responsibleOrgOptions = (responsibleOrgOptions.push({
       value: org.value,
       text: org.text,
+      hint: {
+        html: visuallyHiddenHint
+      },
       conditional: {
         html: yjsRegionHtml
       },
