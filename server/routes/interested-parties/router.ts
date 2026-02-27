@@ -24,9 +24,6 @@ const createInterestedPartiesRouter = (
     services.updateInterestedPartiesService,
   )
 
-  const checkYourAnswers = new InterestedPartiesCheckYourAnswersController()
-  const probationDeliveryUnitController = new ProbationDeliveryUnitController()
-
   router.get('/notifying-organisation', notifyingOrganisationController.view)
   router.post('/notifying-organisation', notifyingOrganisationController.update)
 
