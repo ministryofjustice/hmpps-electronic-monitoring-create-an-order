@@ -9,6 +9,7 @@ import OffenceListPage from '../../../e2e/order/access-needs-installation-risk/o
 import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import OffenceDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage'
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -216,7 +217,55 @@ context('offences', () => {
       },
     ])
   })
+  it('Notifying organisation is Home Office, no offence committed flow', () => {
+    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+    })
 
+    const offencePage = Page.verifyOnPage(OffencePage)
+
+    offencePage.form.fillInWith({ offenceType: 'They have not committed an offence' })
+    offencePage.form.saveAndContinueButton.click()
+    const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
+    offenceOtherInfoPage.form.hasOtherInformationField.set('No')
+    offenceOtherInfoPage.form.saveAndContinueButton.click()
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    const isMappaPage = Page.verifyOnPage(IsMappaPage)
+    isMappaPage.form.fillInWith({ isMappa: 'No' })
+    isMappaPage.form.saveAndContinueButton.click()
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldHaveItems([
+      {
+        key: 'What type of offence did the device wearer commit?',
+        value: 'They have not committed an offence', // verify new option for home office
+      },
+      {
+        key: 'Any other information to be aware of about the offence committed?',
+        value: '',
+      },
+      {
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
+        value: 'Violent behaviour or threats of violence',
+      },
+      {
+        key: 'What are the possible risks at the installation address? (optional)',
+        value: 'Safeguarding child',
+      },
+      {
+        key: 'Any other risks to be aware of? (optional)',
+        value: 'some details',
+      },
+      {
+        key: 'Is the device wearer a Multi-Agency Public Protection Arrangements (MAPPA) offender?',
+
+        value: 'No',
+      },
+    ])
+  })
   it('Should able to delete dapo', () => {
     const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
     orderSummaryPage.fillInGeneralOrderDetailsWith({

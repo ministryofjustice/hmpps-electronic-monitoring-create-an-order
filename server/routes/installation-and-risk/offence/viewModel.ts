@@ -9,9 +9,15 @@ import { OffenceInput } from './formModel'
 type OffenceViewModel = ViewModel<Pick<OffenceInput, 'offenceType'>> & {
   offenceDate: DateField
   showDate: boolean
+  isHomeOffice: boolean
 }
 
-const contructFromOrder = (order: Order, offence: Offence | undefined, showDate: boolean): OffenceViewModel => {
+const contructFromOrder = (
+  order: Order,
+  offence: Offence | undefined,
+  showDate: boolean,
+  isHomeOffice: boolean,
+): OffenceViewModel => {
   return {
     offenceType: {
       value: offence?.offenceType || '',
@@ -20,6 +26,7 @@ const contructFromOrder = (order: Order, offence: Offence | undefined, showDate:
       value: deserialiseDateTime(offence?.offenceDate),
     },
     showDate,
+    isHomeOffice,
     errorSummary: null,
   }
 }
@@ -28,6 +35,7 @@ const constructFromFormData = (
   formData: OffenceInput,
   errors: ValidationResult,
   showDate: boolean,
+  isHomeOffice: boolean,
 ): OffenceViewModel => {
   return {
     offenceType: {
@@ -43,6 +51,7 @@ const constructFromFormData = (
       error: getError(errors, 'offenceDate'),
     },
     showDate,
+    isHomeOffice,
     errorSummary: createGovukErrorSummary(errors),
   }
 }
@@ -54,10 +63,12 @@ const construct = (
   formData: OffenceInput | undefined,
   errors: ValidationResult,
 ): OffenceViewModel => {
+  const isHomeOffice = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+
   if (errors.length > 0 && formData !== undefined) {
-    return constructFromFormData(formData, errors, showDate)
+    return constructFromFormData(formData, errors, showDate, isHomeOffice)
   }
-  return contructFromOrder(order, offence, showDate)
+  return contructFromOrder(order, offence, showDate, isHomeOffice)
 }
 
 export default { construct }
