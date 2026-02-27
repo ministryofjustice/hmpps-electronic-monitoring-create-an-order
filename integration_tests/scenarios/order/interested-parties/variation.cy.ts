@@ -6,6 +6,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
+import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Interested parties flow', () => {
   const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
@@ -79,6 +80,17 @@ context('Interested parties flow', () => {
       continueOnCya: false,
       ...input,
     })
+
+    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    cyaPage.organisationDetailsSection.shouldHaveItems([
+      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
+      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
+      { key: "What is your team's contact email address?", value: 'a@b.com' },
+    ])
+    cyaPage.organisationDetailsSection.shouldNotHaveItems([
+      "What is the Responsible Officer's organisation?",
+      "What is the Responsible Organisation's email address? (optional)",
+    ])
   })
 
   it('Order start date is in the future', () => {
@@ -115,5 +127,17 @@ context('Interested parties flow', () => {
       continueOnCya: false,
       ...input,
     })
+
+    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    cyaPage.organisationDetailsSection.shouldHaveItems([
+      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
+      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
+      { key: "What is your team's contact email address?", value: 'a@b.com' },
+      { key: "What is the Responsible Officer's first name?", value: 'John' },
+      { key: "What is the Responsible Officer's last name?", value: 'Smith' },
+      { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
+      { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
+      { key: 'Select the Probation region', value: 'Wales' },
+    ])
   })
 })

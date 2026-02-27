@@ -28,6 +28,7 @@ const paths = {
     RESPONSBILE_ORGANISATION: '/order/:orderId/interest-parties/responsible-organisation',
     PDU: '/order/:orderId/interest-parties/probation-delivery-unit',
     CHECK_YOUR_ANSWERS: '/order/:orderId/interest-parties/check-your-answers',
+    CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/interest-parties/check-your-answers',
   },
 
   ABOUT_THE_DEVICE_WEARER: {
