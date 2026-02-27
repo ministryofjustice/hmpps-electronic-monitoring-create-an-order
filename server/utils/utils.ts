@@ -165,12 +165,12 @@ export const isEmpty = (input: unknown): boolean => {
 }
 
 export const convertBooleanToEnum = <T extends string>(
-  value: boolean | null,
+  value: boolean | null | undefined,
   nullValue: T,
   truthyValue: T,
   falsyValue: T,
 ) => {
-  if (value === null) {
+  if (value === null || value === undefined) {
     return nullValue
   }
 
