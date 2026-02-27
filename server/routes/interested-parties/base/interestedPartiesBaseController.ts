@@ -12,7 +12,6 @@ export default abstract class InterestedPartiesBaseController {
 
   async SubmitInterestedPartiesAndNext(order: Order, req: Request, res: Response, nextPath?: string) {
     const data = await this.store.getInterestedParties(order)
-
     await this.service.update({
       data,
       accessToken: res.locals.user.token,

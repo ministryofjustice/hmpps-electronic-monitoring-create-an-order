@@ -6,7 +6,7 @@ const InterestedPartiesModel = z.object({
   notifyingOrganisation: NotifyingOrganisationEnum.nullable().optional(),
   notifyingOrganisationName: z.string().nullable().optional(),
   notifyingOrganisationEmail: z.string().nullable().optional(),
-  responsibleOrganisation: ResponsibleOrganisationEnum.optional(),
+  responsibleOrganisation: ResponsibleOrganisationEnum.nullable().optional(),
   responsibleOrganisationRegion: z.string().optional(),
   responsibleOrganisationEmail: z.string().optional(),
   responsibleOfficerFirstName: z.string().nullable().optional(),
