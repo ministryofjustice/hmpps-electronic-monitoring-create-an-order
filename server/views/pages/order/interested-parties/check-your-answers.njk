@@ -1,0 +1,11 @@
+{% extends "../../../partials/check-your-answers-layout.njk" %}
+
+{% set section = content.pages.notifyingOrganisation.section %}
+{% set pageTitle = "Interested parties - Check your answers - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% set section = "Contact information" %}
+{% block answers %}
+    {% include "./answers.njk" %} 
+{% endblock %}

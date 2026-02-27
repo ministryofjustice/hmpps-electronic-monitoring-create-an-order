@@ -36,6 +36,6 @@ export default function fillInInterestedPartiesWith({
 
   const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
   if (continueOnCya === true) {
-    cyaPage.form.continueButton.click()
+    cyaPage.continueButton().click()
   }
 }
