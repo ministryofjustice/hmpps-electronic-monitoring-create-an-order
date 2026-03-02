@@ -8,6 +8,7 @@ export default class InterestedPartiesStoreService {
   private readonly FIELD_HIERARCHY: (keyof InterestedParties)[] = [
     'notifyingOrganisation',
     'responsibleOrganisationEmail',
+    'probationDeliveryUnit',
   ]
 
   private keyFromOrder(order: Order): string {
