@@ -218,9 +218,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
     })
 
-
-
-    if(FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')){
+    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
       tasks.push({
         section: SECTIONS.aboutTheDeviceWearer,
         name: PAGES.contactDetails,
@@ -281,8 +279,7 @@ export default class TaskListService {
         state: STATES.hidden,
         completed: true,
       })
-    }
-    else{
+    } else {
       tasks.push({
         section: SECTIONS.aboutTheDeviceWearer,
         name: PAGES.checkAnswersDeviceWearer,
@@ -298,7 +295,7 @@ export default class TaskListService {
         state: STATES.optional,
         completed: isNotNullOrUndefined(order.contactDetails),
       })
-  
+
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.noFixedAbode,
@@ -332,7 +329,7 @@ export default class TaskListService {
           ),
           completed: isCompletedAddress(order, 'PRIMARY'),
         })
-  
+
         tasks.push({
           section: SECTIONS.contactInformation,
           name: PAGES.secondaryAddress,
@@ -345,7 +342,7 @@ export default class TaskListService {
           ),
           completed: isCompletedAddress(order, 'SECONDARY'),
         })
-  
+
         tasks.push({
           section: SECTIONS.contactInformation,
           name: PAGES.tertiaryAddress,
@@ -359,7 +356,7 @@ export default class TaskListService {
           completed: isCompletedAddress(order, 'TERTIARY'),
         })
       }
-  
+
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.interestParties,
@@ -371,7 +368,7 @@ export default class TaskListService {
           isNotNullOrUndefined(order.interestedParties.notifyingOrganisationName) &&
           isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
       })
-  
+
       if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
         tasks.push({
           section: SECTIONS.contactInformation,
@@ -386,7 +383,7 @@ export default class TaskListService {
           completed: isNotNullOrUndefined(order.probationDeliveryUnit),
         })
       }
-  
+
       tasks.push({
         section: SECTIONS.contactInformation,
         name: PAGES.checkAnswersContactInformation,
@@ -395,7 +392,6 @@ export default class TaskListService {
         completed: true,
       })
     }
-
 
     if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
       tasks.push({
@@ -794,8 +790,6 @@ export default class TaskListService {
   }
 
   getCurrentSection(tasks: Task[], currentPage: Page): Section {
-    console.log(tasks)
-    console.log(currentPage)
     return tasks.find(task => task.name === currentPage)!.section
   }
 
@@ -878,18 +872,17 @@ export default class TaskListService {
 
   isSectionReady(section: Section, tasks: Task[], order: Order): boolean {
     if (section === SECTIONS.electronicMonitoringCondition) {
-      if(FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')){
-      const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-      return this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
-      }
-      else{
-        const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
+      if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
         const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-        return (
-          this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
-          this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
-        )
+        return this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
       }
+
+      const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
+      const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
+      return (
+        this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
+        this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
+      )
     }
     return true
   }
@@ -913,7 +906,6 @@ export default class TaskListService {
         const completed = this.isSectionComplete(sectionsTasks, order, section)
         let path: string
         if (order.status === 'SUBMITTED' || completed) {
-          console.log(section)
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         } else {
           const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task, {}))
@@ -937,7 +929,6 @@ export default class TaskListService {
   }
 
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
-    console.log(sectionTasks)
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
     }
