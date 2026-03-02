@@ -218,45 +218,25 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
     })
 
-    tasks.push({
-      section: SECTIONS.aboutTheDeviceWearer,
-      name: PAGES.checkAnswersDeviceWearer,
-      path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
-      state: STATES.hidden,
-      completed: true,
-    })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.contactDetails,
-      path: paths.CONTACT_INFORMATION.CONTACT_DETAILS,
-      state: STATES.optional,
-      completed: isNotNullOrUndefined(order.contactDetails),
-    })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.noFixedAbode,
-      path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE,
-      state: STATES.required,
-      completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
-    })
-    if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
+    if(FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')){
       tasks.push({
-        section: SECTIONS.contactInformation,
-        name: PAGES.primaryAddress,
-        path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'primary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.required,
-        ),
-        completed: isCompletedAddress(order, 'PRIMARY'),
+        section: SECTIONS.aboutTheDeviceWearer,
+        name: PAGES.contactDetails,
+        path: paths.CONTACT_INFORMATION.CONTACT_DETAILS,
+        state: STATES.optional,
+        completed: isNotNullOrUndefined(order.contactDetails),
       })
-    } else {
       tasks.push({
-        section: SECTIONS.contactInformation,
+        section: SECTIONS.aboutTheDeviceWearer,
+        name: PAGES.noFixedAbode,
+        path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
+      })
+      tasks.push({
+        section: SECTIONS.aboutTheDeviceWearer,
         name: PAGES.primaryAddress,
         path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
         state: convertBooleanToEnum<State>(
@@ -269,7 +249,7 @@ export default class TaskListService {
       })
 
       tasks.push({
-        section: SECTIONS.contactInformation,
+        section: SECTIONS.aboutTheDeviceWearer,
         name: PAGES.secondaryAddress,
         path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
         state: convertBooleanToEnum<State>(
@@ -282,7 +262,7 @@ export default class TaskListService {
       })
 
       tasks.push({
-        section: SECTIONS.contactInformation,
+        section: SECTIONS.aboutTheDeviceWearer,
         name: PAGES.tertiaryAddress,
         path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
         state: convertBooleanToEnum<State>(
@@ -293,42 +273,129 @@ export default class TaskListService {
         ),
         completed: isCompletedAddress(order, 'TERTIARY'),
       })
+
+      tasks.push({
+        section: SECTIONS.aboutTheDeviceWearer,
+        name: PAGES.checkAnswersDeviceWearer,
+        path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
+        state: STATES.hidden,
+        completed: true,
+      })
     }
+    else{
+      tasks.push({
+        section: SECTIONS.aboutTheDeviceWearer,
+        name: PAGES.checkAnswersDeviceWearer,
+        path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
+        state: STATES.hidden,
+        completed: true,
+      })
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.interestParties,
-      path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
-      state: STATES.required,
-      completed:
-        isNotNullOrUndefined(order.interestedParties) &&
-        isNotNullOrUndefined(order.interestedParties.notifyingOrganisation) &&
-        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationName) &&
-        isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
-    })
-
-    if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
       tasks.push({
         section: SECTIONS.contactInformation,
-        name: PAGES.probationDeliveryUnit,
-        path: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
-        state: convertBooleanToEnum<State>(
-          order.interestedParties?.responsibleOrganisation === 'PROBATION',
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: isNotNullOrUndefined(order.probationDeliveryUnit),
+        name: PAGES.contactDetails,
+        path: paths.CONTACT_INFORMATION.CONTACT_DETAILS,
+        state: STATES.optional,
+        completed: isNotNullOrUndefined(order.contactDetails),
+      })
+  
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.noFixedAbode,
+        path: paths.CONTACT_INFORMATION.NO_FIXED_ABODE,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
+      })
+      if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
+        tasks.push({
+          section: SECTIONS.contactInformation,
+          name: PAGES.primaryAddress,
+          path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'primary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.required,
+          ),
+          completed: isCompletedAddress(order, 'PRIMARY'),
+        })
+      } else {
+        tasks.push({
+          section: SECTIONS.contactInformation,
+          name: PAGES.primaryAddress,
+          path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.required,
+          ),
+          completed: isCompletedAddress(order, 'PRIMARY'),
+        })
+  
+        tasks.push({
+          section: SECTIONS.contactInformation,
+          name: PAGES.secondaryAddress,
+          path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.optional,
+          ),
+          completed: isCompletedAddress(order, 'SECONDARY'),
+        })
+  
+        tasks.push({
+          section: SECTIONS.contactInformation,
+          name: PAGES.tertiaryAddress,
+          path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.optional,
+          ),
+          completed: isCompletedAddress(order, 'TERTIARY'),
+        })
+      }
+  
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.interestParties,
+        path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
+        state: STATES.required,
+        completed:
+          isNotNullOrUndefined(order.interestedParties) &&
+          isNotNullOrUndefined(order.interestedParties.notifyingOrganisation) &&
+          isNotNullOrUndefined(order.interestedParties.notifyingOrganisationName) &&
+          isNotNullOrUndefined(order.interestedParties.notifyingOrganisationEmail),
+      })
+  
+      if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
+        tasks.push({
+          section: SECTIONS.contactInformation,
+          name: PAGES.probationDeliveryUnit,
+          path: paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
+          state: convertBooleanToEnum<State>(
+            order.interestedParties?.responsibleOrganisation === 'PROBATION',
+            STATES.cantBeStarted,
+            STATES.required,
+            STATES.notRequired,
+          ),
+          completed: isNotNullOrUndefined(order.probationDeliveryUnit),
+        })
+      }
+  
+      tasks.push({
+        section: SECTIONS.contactInformation,
+        name: PAGES.checkAnswersContactInformation,
+        path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
+        state: STATES.hidden,
+        completed: true,
       })
     }
 
-    tasks.push({
-      section: SECTIONS.contactInformation,
-      name: PAGES.checkAnswersContactInformation,
-      path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
-      state: STATES.hidden,
-      completed: true,
-    })
 
     if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
       tasks.push({
@@ -727,6 +794,8 @@ export default class TaskListService {
   }
 
   getCurrentSection(tasks: Task[], currentPage: Page): Section {
+    console.log(tasks)
+    console.log(currentPage)
     return tasks.find(task => task.name === currentPage)!.section
   }
 
@@ -809,12 +878,18 @@ export default class TaskListService {
 
   isSectionReady(section: Section, tasks: Task[], order: Order): boolean {
     if (section === SECTIONS.electronicMonitoringCondition) {
-      const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
+      if(FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')){
       const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-      return (
-        this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
-        this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
-      )
+      return this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
+      }
+      else{
+        const contactInformationTasks = this.findTaskBySection(tasks, SECTIONS.contactInformation)
+        const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
+        return (
+          this.isSectionComplete(contactInformationTasks, order, SECTIONS.contactInformation) &&
+          this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
+        )
+      }
     }
     return true
   }
@@ -829,11 +904,16 @@ export default class TaskListService {
         section =>
           section !== SECTIONS.interestParties || FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
       )
+      .filter(
+        section =>
+          section !== SECTIONS.contactInformation || !FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
+      )
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)
         let path: string
         if (order.status === 'SUBMITTED' || completed) {
+          console.log(section)
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         } else {
           const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task, {}))
@@ -857,6 +937,7 @@ export default class TaskListService {
   }
 
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
+    console.log(sectionTasks)
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
     }

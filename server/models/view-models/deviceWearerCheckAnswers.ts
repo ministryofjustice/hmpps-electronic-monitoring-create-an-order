@@ -6,6 +6,7 @@ import {
   createMultipleChoiceAnswer,
   createAnswer,
   AnswerOptions,
+  createAddressAnswer,
 } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
@@ -148,6 +149,65 @@ const createResponsibeAdultAnswers = (order: Order, content: I18n, answerOpts: A
   ]
 }
 
+const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
+  return [
+    createBooleanAnswer(
+      content.pages.contactDetails.questions.phoneNumberAvailable.text,
+      order.contactDetails?.phoneNumberAvailable,
+      uri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.contactDetails.questions.contactNumber.text,
+      order.contactDetails?.contactNumber,
+      uri,
+      answerOpts,
+    ),
+  ]
+}
+
+const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
+  const addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
+  const primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
+  const secondaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
+  const tertiaryddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
+
+  const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
+  const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
+  const tertiaryAddress = order.addresses.find(({ addressType }) => addressType === 'TERTIARY')
+
+  const answers = [
+    createBooleanAnswer(
+      content.pages.noFixedAbode.questions.noFixedAbode.text,
+      order.deviceWearer.noFixedAbode === null ? null : !order.deviceWearer.noFixedAbode,
+      noFixedAbodeUri,
+      answerOpts,
+    ),
+  ]
+
+  if (primaryAddress) {
+    answers.push(
+      createAddressAnswer(content.pages.primaryAddress.legend, primaryAddress, primaryAddressUri, answerOpts),
+    )
+  }
+
+  if (secondaryAddress) {
+    answers.push(
+      createAddressAnswer(content.pages.secondaryAddress.legend, secondaryAddress, secondaryAddressUri, answerOpts),
+    )
+  }
+
+  if (tertiaryAddress) {
+    answers.push(
+      createAddressAnswer(content.pages.tertiaryAddress.legend, tertiaryAddress, tertiaryddressUri, answerOpts),
+    )
+  }
+
+  return answers
+}
+
 const createViewModel = (order: Order, content: I18n) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
@@ -157,6 +217,8 @@ const createViewModel = (order: Order, content: I18n) => {
     personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions),
     responsibleAdult: createResponsibeAdultAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    contactDetails: createContactDetailsAnswers(order, content, ignoreActions),
+    addresses: createAddressAnswers(order, content, ignoreActions),
   }
 }
 

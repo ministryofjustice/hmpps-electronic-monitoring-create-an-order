@@ -22,4 +22,21 @@
       rows: responsibleAdult
     }) }}
 
+
   {% endif %}
+  {% if contactDetails | length > 0 %}
+   <h2 class="govuk-heading-m">Telephone number</h2>
+
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: contactDetails
+  }) }}
+  {% endif %}
+    {% if addresses | length > 0 %}
+   <h2 class="govuk-heading-m">Device wearer's addresses</h2>
+
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: addresses
+  }) }}
+    {% endif %}

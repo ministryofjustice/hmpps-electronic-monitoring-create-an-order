@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
+import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 
 const mockOrderId = uuidv4()
@@ -93,6 +94,7 @@ context('Contact information', () => {
 
         Page.verifyOnPage(OrderSummaryPage)
       })
+    
     })
   })
 })
