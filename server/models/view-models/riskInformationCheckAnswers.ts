@@ -44,7 +44,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
         createAnswer(
           questions.offence.text,
           lookup(content.reference.offences, order.offences[0]?.offenceType),
-          uri,
+          paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
           answerOpts,
         ),
       )
