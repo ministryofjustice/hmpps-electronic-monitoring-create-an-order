@@ -90,9 +90,9 @@ export default class InterestedPartiesStoreService {
   private getClearedData(currentData: InterestedParties, updatedField: keyof InterestedParties) {
     const updatedIndex = this.FIELD_HIERARCHY.indexOf(updatedField)
 
-    if (updatedIndex === -1) {
-      return currentData
-    }
+    // if (updatedIndex === -1) {
+    //   return currentData
+    // }
 
     const fieldsToClear = this.FIELD_HIERARCHY.slice(updatedIndex + 1)
 
