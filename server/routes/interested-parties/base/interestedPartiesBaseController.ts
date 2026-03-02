@@ -10,17 +10,13 @@ export default abstract class InterestedPartiesBaseController {
     protected readonly service: UpdateInterestedPartiesService,
   ) {}
 
-  async SubmitInterestedPartiesAndNext(order: Order, req: Request, res: Response, nextPath?: string) {
+  async SubmitInterestedPartiesAndNext(order: Order, req: Request, res: Response) {
     const data = await this.store.getInterestedParties(order)
     await this.service.update({
       data,
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-
-    if (nextPath) {
-      return res.redirect(nextPath)
-    }
 
     if (data.responsibleOrganisation === 'PROBATION') {
       return res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))

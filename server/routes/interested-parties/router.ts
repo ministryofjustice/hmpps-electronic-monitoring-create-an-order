@@ -7,7 +7,10 @@ import { Services } from '../../services'
 import InterestedPartiesCheckYourAnswersController from './check-your-answers/controller'
 
 const createInterestedPartiesRouter = (
-  services: Pick<Services, 'interestedPartiesStoreService' | 'updateInterestedPartiesService'>,
+  services: Pick<
+    Services,
+    'interestedPartiesStoreService' | 'updateInterestedPartiesService' | 'probationDeliveryUnitService'
+  >,
 ): Router => {
   const router = Router({ mergeParams: true })
 
@@ -23,6 +26,7 @@ const createInterestedPartiesRouter = (
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     services.interestedPartiesStoreService,
     services.updateInterestedPartiesService,
+    services.probationDeliveryUnitService,
   )
 
   router.get('/notifying-organisation', notifyingOrganisationController.view)

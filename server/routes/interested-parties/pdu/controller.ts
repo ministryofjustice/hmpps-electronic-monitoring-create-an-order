@@ -1,19 +1,21 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
-import { ValidationResult } from '../../../models/Validation'
+import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import InterestedPartiesStoreService from '../interestedPartiesStoreService'
-import ProbationDeliveryUnitFormModel, { ProbationDeliveryUnitInput, ProbationDeliveryUnitValidator } from './formModel'
+import { ProbationDeliveryUnitInput, ProbationDeliveryUnitValidator } from './formModel'
 import ViewModel from './viewModel'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { ReferenceCatalogDDv5, ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import ProbationRegionDeliveryUnits from '../../../types/i18n/reference/probationRegionDeliveryUnits'
+import { ProbationDeliveryUnitService } from '../../../services'
 
 export default class ProbationDeliveryUnitController extends InterestedPartiesBaseController {
   constructor(
     readonly store: InterestedPartiesStoreService,
     readonly service: UpdateInterestedPartiesService,
+    private readonly pduService: ProbationDeliveryUnitService,
   ) {
     super(store, service)
   }
@@ -39,11 +41,10 @@ export default class ProbationDeliveryUnitController extends InterestedPartiesBa
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const formData = ProbationDeliveryUnitFormModel.parse(req.body)
-    const validationResult = ProbationDeliveryUnitValidator.safeParse(formData)
+    const validationResult = ProbationDeliveryUnitValidator.safeParse(req.body)
 
     if (!validationResult.success) {
-      req.flash('formData', formData)
+      req.flash('formData', req.body)
       req.flash('validationErrors', convertZodErrorToValidationError(validationResult.error))
       res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
       return
@@ -51,11 +52,19 @@ export default class ProbationDeliveryUnitController extends InterestedPartiesBa
 
     await this.store.updateField(order, 'probationDeliveryUnit', validationResult.data.unit)
 
-    await super.SubmitInterestedPartiesAndNext(
-      order,
-      req,
-      res,
-      paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-    )
+    const result = await this.pduService.update({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+      data: { unit: validationResult.data.unit },
+    })
+
+    if (isValidationResult(result)) {
+      req.flash('formData', req.body)
+      req.flash('validationErrors', result)
+      res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
+      return
+    }
+
+    res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
   }
 }

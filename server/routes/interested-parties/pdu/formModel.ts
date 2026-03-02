@@ -3,22 +3,16 @@ import { validationErrors } from '../../../constants/validationErrors'
 
 const ProbationDeliveryUnitFormModel = z.object({
   action: z.string().default('continue'),
-  unit: z.string().optional(),
+  unit: z.string().nullable().default(null),
 })
 
-export const ProbationDeliveryUnitValidator = ProbationDeliveryUnitFormModel.superRefine((data, ctx) => {
-  if (!data.unit) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: validationErrors.probationDeliveryUnit.pduRequired,
-      path: ['unit'],
-    })
-  }
-}).transform(data => {
-  return {
-    unit: data.unit === '' ? null : data.unit,
-  }
-})
+export const ProbationDeliveryUnitValidator = z
+  .object({
+    unit: z.string({ message: validationErrors.contactInformation.pduRequired }),
+  })
+  .transform(({ unit }) => ({
+    unit: unit === '' ? null : unit,
+  }))
 
 export type ProbationDeliveryUnitInput = z.output<typeof ProbationDeliveryUnitValidator>
 
