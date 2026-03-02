@@ -20,7 +20,6 @@ context('Probation delivery unit validation', () => {
           notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
           notifyingOrganisationEmail: 'notifying@organisation',
           responsibleOrganisationEmail: 'responsible@organisation',
-          // Your existing mock data
           responsibleOrganisation: 'PROBATION',
           responsibleOrganisationRegion: 'WEST_MIDLANDS',
         },
