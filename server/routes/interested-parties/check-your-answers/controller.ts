@@ -26,7 +26,10 @@ export default class InterestedPartiesCheckYourAnswersController {
     const { versionId } = req.params
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
-    this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ELECTRONIC_MONITORING_CONDITIONS')
+    this.checklistService.updateChecklist(
+      `${order.id}-${order.versionId}`,
+      'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION',
+    )
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
         res.redirect(
