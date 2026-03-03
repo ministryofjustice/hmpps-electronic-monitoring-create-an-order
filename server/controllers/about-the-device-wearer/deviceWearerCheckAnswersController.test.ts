@@ -356,6 +356,61 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
       ],
       responsibleAdult: [],
+      contactDetails: [
+        {
+          key: {
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's telephone number?",
+              },
+            ],
+          },
+        },
+      ],
+      addresses: [
+        {
+          key: {
+            text: 'Does the device wearer have a fixed address?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a fixed address?',
+              },
+            ],
+          },
+        },
+      ],
     })
   })
 
@@ -648,6 +703,61 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
       ],
       responsibleAdult: [],
+      contactDetails: [
+        {
+          key: {
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's telephone number?",
+              },
+            ],
+          },
+        },
+      ],
+      addresses: [
+        {
+          key: {
+            text: 'Does the device wearer have a fixed address?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a fixed address?',
+              },
+            ],
+          },
+        },
+      ],
     })
   })
 
@@ -987,6 +1097,61 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the responsible adult's telephone number? (optional)",
+              },
+            ],
+          },
+        },
+      ],
+      contactDetails: [
+        {
+          key: {
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's telephone number?",
+              },
+            ],
+          },
+        },
+      ],
+      addresses: [
+        {
+          key: {
+            text: 'Does the device wearer have a fixed address?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a fixed address?',
               },
             ],
           },
