@@ -3,6 +3,7 @@ import Page from '../../../pages/page'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import paths from '../../../../server/constants/paths'
 
 const mockOrderId = uuidv4()
 
@@ -623,6 +624,42 @@ context('installation and risk - check your answers', () => {
           value: 'some risk details',
         },
       ])
+    })
+
+    it('change links to correct page for non court', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              offenceType: 'SEXUAL_OFFENCES',
+              offenceDate: new Date(2025, 1, 1),
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.changeLinks.should('exist')
+      page
+        .changeLinkByQuestion('What type of offence did the device wearer commit?')
+        .should('have.attr', 'href', paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', mockOrderId))
     })
   })
 })
