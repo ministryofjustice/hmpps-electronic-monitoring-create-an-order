@@ -5,7 +5,8 @@ import InterestedPartiesCheckYourAnswersPage from '../check-your-answers/interes
 
 const mockOrderId = uuidv4()
 context('probation delivery unit submission', () => {
-  const submitPath = '/interested-parties'
+  const submitPath = '/probation-delivery-unit'
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -31,11 +32,8 @@ context('probation delivery unit submission', () => {
       httpStatus: 200,
       id: mockOrderId,
       subPath: submitPath,
-      method: 'PUT',
       response: {
-        notifyingOrganisation: 'PRISON',
-        responsibleOrganisation: 'PROBATION',
-        probationDeliveryUnit: 'STAFFORDSHIRE_NORTH',
+        unit: 'STAFFORDSHIRE_NORTH',
       },
     })
 
@@ -54,13 +52,7 @@ context('probation delivery unit submission', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}${submitPath}`,
       body: {
-        notifyingOrganisation: 'PRISON',
-        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
-        notifyingOrganisationEmail: 'notifying@organisation',
-        responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationRegion: 'WEST_MIDLANDS',
-        probationDeliveryUnit: 'STAFFORDSHIRE_NORTH',
+        unit: 'STAFFORDSHIRE_NORTH',
       },
     }).should('be.true')
 
@@ -74,11 +66,8 @@ context('probation delivery unit submission', () => {
       httpStatus: 200,
       id: mockOrderId,
       subPath: submitPath,
-      method: 'PUT',
       response: {
-        notifyingOrganisation: 'PRISON',
-        responsibleOrganisation: 'PROBATION',
-        probationDeliveryUnit: 'STAFFORDSHIRE_SOUTH',
+        unit: 'STAFFORDSHIRE_SOUTH',
       },
     })
 
@@ -91,13 +80,7 @@ context('probation delivery unit submission', () => {
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}${submitPath}`,
       body: {
-        notifyingOrganisation: 'PRISON',
-        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
-        notifyingOrganisationEmail: 'notifying@organisation',
-        responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationRegion: 'WEST_MIDLANDS',
-        probationDeliveryUnit: 'STAFFORDSHIRE_SOUTH',
+        unit: 'STAFFORDSHIRE_SOUTH',
       },
     }).should('be.true')
 
