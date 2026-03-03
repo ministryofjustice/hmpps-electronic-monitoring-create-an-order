@@ -402,6 +402,7 @@ export default function routes({
     createInterestedPartiesRouter({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
+      probationDeliveryUnitService,
     }),
   )
 
