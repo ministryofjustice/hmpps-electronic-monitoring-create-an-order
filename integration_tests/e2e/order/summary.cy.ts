@@ -103,6 +103,15 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.checkIsAccessible()
     })
+
+    it('Should not show contact information section if INTERESTED_PARTIES_FLOW_ENABLED flag is true', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      cy.get('.govuk-task-list__item')
+        .contains('.govuk-task-list__name-and-hint', 'Contact information')
+        .should('not.exist')
+    })
   })
 
   context('Variation', () => {

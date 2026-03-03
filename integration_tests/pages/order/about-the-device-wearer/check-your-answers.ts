@@ -30,4 +30,14 @@ export default class DeviceWearerCheckYourAnswersPage extends CheckYourAnswersPa
     const label = 'Responsible adult details'
     return new SummaryListComponent(label)
   }
+
+  get contactDetailsSection(): SummaryListComponent {
+    const label = 'Telephone number'
+    return new SummaryListComponent(label)
+  }
+
+  get deviceWearerAddressesSection(): SummaryListComponent {
+    const label = "Device wearer's addresses"
+    return new SummaryListComponent(label)
+  }
 }
