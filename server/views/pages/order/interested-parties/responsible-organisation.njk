@@ -101,45 +101,34 @@
 
 
 {% block formInputs %}
-    {% call govukFieldset({
+    {{ govukRadios({
+      name: "responsibleOrganisation",
+      fieldset: {
         legend: {
-          text: "Responsible Organisation",
-          classes: "govuk-fieldset__legend--m",
-          isPageHeading: false
+          text: questions.responsibleOrganisation.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
         }
-      }) %}
-        <p>
-          {{questions.responsibleOrganisation.hint}}
-        </p>
-        {{ govukRadios({
-          name: "responsibleOrganisation",
-          fieldset: {
-            legend: {
-              text: questions.responsibleOrganisation.text,
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          value: responsibleOrganisation.value,
-          errorMessage: responsibleOrganisation.error,
-          items: responsibleOrgOptions
-        }) }}
+      },
+      value: responsibleOrganisation.value,
+      errorMessage: responsibleOrganisation.error,
+      items: responsibleOrgOptions
+    }) }}
 
-        {{ govukInput({
-          label: {
-            text: questions.responsibleOrganisationEmail.text,
-            classes: "govuk-label--s"
-          },
-          hint: {
-            html: questions.responsibleOrganisationEmail.hint
-          },
-          classes: "govuk-!-width-one-half",
-          id: "responsibleOrganisationEmail",
-          name: "responsibleOrganisationEmail",
-          value: responsibleOrganisationEmail.value,
-          errorMessage: responsibleOrganisationEmail.error,
-          disabled: not isOrderEditable
-        }) }}
-      {% endcall %}
+    {{ govukInput({
+      label: {
+        text: questions.responsibleOrganisationEmail.text,
+        classes: "govuk-label--s"
+      },
+      hint: {
+        html: questions.responsibleOrganisationEmail.hint
+      },
+      classes: "govuk-!-width-one-half",
+      id: "responsibleOrganisationEmail",
+      name: "responsibleOrganisationEmail",
+      value: responsibleOrganisationEmail.value,
+      errorMessage: responsibleOrganisationEmail.error,
+      disabled: not isOrderEditable
+    }) }}
 
 {% endblock %}

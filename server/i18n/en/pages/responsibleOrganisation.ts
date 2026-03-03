@@ -1,7 +1,8 @@
 import ResponsibleOrganisationPageContent from '../../../types/i18n/pages/responsibleOrganisation'
 
 const responsibleOrganisationPageContent: ResponsibleOrganisationPageContent = {
-  helpText: '',
+  helpText:
+    'The Responsible Organisation is the service the Responsible Officer is part of. For example, the Responsible Organisation for a probation officer is the Probation Service.',
   legend: '',
   questions: {
     police: {
@@ -12,7 +13,6 @@ const responsibleOrganisationPageContent: ResponsibleOrganisationPageContent = {
     },
     responsibleOrganisation: {
       text: "What is the Responsible Officer's organisation?",
-      hint: 'The Responsible Organisation is the service the Responsible Officer is part of. For example, the Responsible Organisation for a probation officer is the Probation Service.',
     },
     responsibleOrganisationEmail: {
       text: "What is the Responsible Organisation's email address? (optional)",
