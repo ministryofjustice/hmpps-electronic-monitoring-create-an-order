@@ -1,8 +1,22 @@
-import SingleQuestionFormComponent from '../../../../pages/components/SingleQuestionFormComponent'
+import FormComponent from '../../../../pages/components/formComponent'
+import FormRadiosComponent from '../../../../pages/components/formRadiosComponent'
 
-export default class ProbationDeliveryUnitComponent extends SingleQuestionFormComponent {
-  fillInWith(value: string) {
-    // TODO implement fillInWith method
-    throw new Error(`Method not implemented.${value}`)
+export type ProbationDeliveryUnitFormData = {
+  unit?: string
+}
+
+export default class ProbationDeliveryUnitFormComponent extends FormComponent {
+  get unitField(): FormRadiosComponent {
+    return new FormRadiosComponent(
+      this.form,
+      "What is the Responsible Organisation's Probation Delivery Unit (PDU)?",
+      [],
+    )
+  }
+
+  fillInWith(profile: ProbationDeliveryUnitFormData) {
+    if (profile.unit) {
+      this.unitField.set(profile.unit)
+    }
   }
 }
