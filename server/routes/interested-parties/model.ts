@@ -12,7 +12,6 @@ const InterestedPartiesModel = z.object({
   responsibleOfficerFirstName: z.string().nullable().optional(),
   responsibleOfficerLastName: z.string().nullable().optional(),
   responsibleOfficerEmail: z.string().nullable().optional(),
-  probationDeliveryUnit: z.string().nullable().optional(),
 })
 
 export type InterestedParties = z.infer<typeof InterestedPartiesModel>

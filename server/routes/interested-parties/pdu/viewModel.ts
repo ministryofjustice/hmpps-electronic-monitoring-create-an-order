@@ -1,26 +1,28 @@
-import { InterestedParties } from '../model'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import { getError } from '../../../utils/utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { ProbationDeliveryUnitInput } from './formModel'
+import { ProbationDeliveryUnit } from '../../../models/ProbationDeliveryUnit'
 
-type ProbationDeliveryUnitViewModel = ViewModel<Pick<InterestedParties, 'probationDeliveryUnit'>>
+type ProbationDeliveryUnitViewModel = ViewModel<ProbationDeliveryUnitInput>
 
 const construct = (
-  data: InterestedParties,
+  data: ProbationDeliveryUnit,
   formData: ProbationDeliveryUnitInput | undefined,
   errors: ValidationResult,
 ): ProbationDeliveryUnitViewModel => {
-  if (formData) return constructFromFormData(formData, errors)
+  if (errors && errors.length > 0 && formData) {
+    return constructFromFormData(formData, errors)
+  }
 
   return constructFromData(data)
 }
 
-const constructFromData = (data: InterestedParties): ProbationDeliveryUnitViewModel => {
+const constructFromData = (data: ProbationDeliveryUnit): ProbationDeliveryUnitViewModel => {
   return {
-    probationDeliveryUnit: {
-      value: data.probationDeliveryUnit || '',
+    unit: {
+      value: data?.unit || '',
     },
     errorSummary: null,
   }
@@ -31,7 +33,7 @@ const constructFromFormData = (
   errors: ValidationResult,
 ): ProbationDeliveryUnitViewModel => {
   return {
-    probationDeliveryUnit: {
+    unit: {
       value: formData?.unit || '',
       error: getError(errors, 'unit'),
     },
