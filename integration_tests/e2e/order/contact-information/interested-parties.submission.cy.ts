@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
+import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/interested-parties'
