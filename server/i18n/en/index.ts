@@ -48,6 +48,7 @@ import dapaClauseListPageContent from './pages/dapoClauseListPage'
 import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import responsibleOfficerPageContent from './pages/responsibleOfficer'
+import deviceWearerAddressPageContent from './pages/deviceWearerAddress'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -99,6 +100,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       notifyingOrganisation: notifyingOrganisationPageContent,
       responsibleOrganisation: responsibleOrganisationPageContent,
       responsibleOfficer: responsibleOfficerPageContent,
+      deviceWearerAddress: deviceWearerAddressPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

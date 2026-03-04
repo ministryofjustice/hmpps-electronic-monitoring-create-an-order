@@ -1,9 +1,11 @@
+import getContent from '../../../i18n'
 import ViewModel from './viewModel'
 
 describe('view model', () => {
   describe('address type is device wearer', () => {
+    const content = getContent('en', 'DDV6')
     it('content has correct headings', () => {
-      const model = ViewModel.construct()
+      const model = ViewModel.construct(content)
 
       expect(model.content).toEqual({
         section: 'About the device wearer',
@@ -15,7 +17,7 @@ describe('view model', () => {
     })
 
     it('content has correct questions', () => {
-      const model = ViewModel.construct()
+      const model = ViewModel.construct(content)
 
       expect(model.content.questions).toEqual({
         postcode: {
