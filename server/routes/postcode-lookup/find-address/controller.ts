@@ -1,11 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
+import ViewModel from './viewModel'
 
 export default class FindAddressController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/postcode-lookup/find-address', {})
+    res.render('pages/order/postcode-lookup/find-address', ViewModel.construct())
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

@@ -2,21 +2,21 @@
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% set section = "About the device wearer" %}
-{% set heading = "Find the device wearer's address" %}
-{% set questions = content.pages.dapo.questions %}
+{% set section = content.section %}
+{% set heading = content.title %}
+{% set questions = content.questions %}
 
 
 {% block formInputs %}
     {{ govukInput({
       label: { 
-        text: "Postcode",
+        text: questions.postcode.text,
         classes: "govuk-fieldset__legend--s"
       },
       id: "postcode",
       name: "postcode",
       hint: {
-	text: "For example, AA3 1AB."
+	text: questions.postcode.hint
       },
       value: "",
       errorMessage: "",
@@ -25,13 +25,13 @@
  
     {{ govukInput({
       label: { 
-        text: "Building number or name (optional)",
+        text: questions.buildingId.text,
         classes: "govuk-fieldset__legend--s"
       },
       id: "buildingId",
       name: "buildingId",
       hint: {
-	text: "For example, 15 or Prospect Cottage."
+	text: questions.buildingId.hint
       },
       value: "",
       errorMessage: "",
