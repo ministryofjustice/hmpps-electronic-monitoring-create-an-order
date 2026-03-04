@@ -4,7 +4,7 @@ import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
-import { lookup } from '../../../utils/utils'
+import { formatDateTime, lookup } from '../../../utils/utils'
 
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
@@ -269,6 +269,7 @@ const construct = (order: Order, content: I18n) => {
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
     probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     containsResponsibleOrgDetails: createContainsResponsibleOrgDetailsAnswer(order, content, answerOpts),
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
   }
 }
 
