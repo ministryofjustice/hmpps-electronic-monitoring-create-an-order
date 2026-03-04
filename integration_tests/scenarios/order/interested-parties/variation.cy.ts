@@ -91,22 +91,6 @@ context('Interested parties flow', () => {
       "What is the Responsible Officer's organisation?",
       "What is the Responsible Organisation's email address? (optional)",
     ])
-
-    cy.contains('How do I change the Responsible Officer or Responsible Organisation?').click()
-
-    cy.get('.govuk-details__text')
-      .contains(
-        "Use the service request portal if you have access. If you don't have access, download and complete the Post release orders - NAT Probation Practitioner Notification Form to EMS and email it to EMSEnforcement@ems.co.uk",
-      )
-      .should('be.visible')
-
-    cy.contains('Post release orders - NAT Probation Practitioner Notification Form to EMS')
-      .should('be.visible')
-      .and(
-        'have.attr',
-        'href',
-        './documents/post-release-orders-NAT-probation-practitioner-notification-form-to-EMS.doc',
-      )
   })
 
   it('Order start date is in the future', () => {

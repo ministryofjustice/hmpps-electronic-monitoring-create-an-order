@@ -80,15 +80,10 @@ context('interested parties check answers page', () => {
       cy.contains('How do I change the Responsible Officer or Responsible Organisation?').click()
 
       cy.get('.govuk-details__text').contains('Use the service request portal if you have access.')
-      cy.get('.govuk-details__text').contains("If you don't have access:")
-      cy.get('.govuk-details__text').contains('download and complete the notification form')
-      cy.get('.govuk-details__text').contains('email it to EMSEnforcement@ems.co.uk')
 
-      cy.contains('notification form').and(
-        'have.attr',
-        'href',
-        './documents/post-release-orders-NAT-probation-practitioner-notification-form-to-EMS.doc',
-      )
+      cy.get('.govuk-details__text').contains("If you don't have access:")
+      cy.get('.govuk-details__text').contains("complete the 'Responsible Officer Notification to EMS' form")
+      cy.get('.govuk-details__text').contains('email it to EMSEnforcement@ems.co.uk')
 
       cy.contains('EMSEnforcement@ems.co.uk').and('have.attr', 'href', 'mailto:EMSEnforcement@ems.co.uk')
     })
