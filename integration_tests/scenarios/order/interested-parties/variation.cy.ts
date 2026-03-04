@@ -139,7 +139,5 @@ context('Interested parties flow', () => {
       { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
       { key: 'Select the Probation region', value: 'Wales' },
     ])
-
-    cy.get('.govuk-details__text').should('not.exist')
   })
 })

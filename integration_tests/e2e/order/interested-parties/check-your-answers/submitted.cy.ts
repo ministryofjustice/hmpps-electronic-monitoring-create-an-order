@@ -55,6 +55,7 @@ context('interested parties check answers page', () => {
         },
       })
     })
+
     it('shows notification answers for checking if start date of order in past', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
@@ -134,6 +135,7 @@ context('interested parties check answers page', () => {
         },
       })
     })
+
     it('shows all interested parties answers and pdu for checking if start date of order in future', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
