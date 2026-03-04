@@ -6,6 +6,6 @@ export default class FindAddressPage extends AppFormPage {
   public form = new FindAddressComponent()
 
   constructor() {
-    super('WIP Find Address', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
+    super("Find the device wearer's address", paths.POSTCODE_LOOKUP.FIND_ADDRESS)
   }
 }
