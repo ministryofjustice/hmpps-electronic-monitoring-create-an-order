@@ -18,6 +18,7 @@ export type OrderSearchViewModel = {
     name: string
     href: string
     dob: string
+    youth?: string
     pins: string[]
     location: string
     startDate: string
@@ -43,6 +44,13 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
+const getYouthStatus = (order: Order) => {
+  if (order.interestedParties?.notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
+    return 'Youth'
+  }
+  return ''
+}
+
 const getIdList = (order: Order) => {
   const { nomisId, pncId, deliusId, prisonNumber, complianceAndEnforcementPersonReference, courtCaseReferenceNumber } =
     order.deviceWearer
@@ -64,6 +72,7 @@ const createOrderItem = (order: Order) => {
     name: getDisplayName(order),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
+    youth: getYouthStatus(order),
     pins: getIdList(order),
     location: currentAddress?.addressLine3 ?? '',
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
