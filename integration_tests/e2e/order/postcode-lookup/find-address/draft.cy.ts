@@ -28,7 +28,7 @@ context('find address page', () => {
       page.form.buildingIdField.shouldExist()
       page.form.buildingIdField.shouldHaveHint('For example, 15 or Prospect Cottage')
 
-      cy.contains('a', 'Enter address manually').and(
+      page.form.manualAddressLink.and(
         'have.attr',
         'href',
         paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'device-wearer'),

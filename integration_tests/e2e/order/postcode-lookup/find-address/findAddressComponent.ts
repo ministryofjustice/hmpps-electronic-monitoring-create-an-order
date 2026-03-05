@@ -13,7 +13,7 @@ export default class FindAddressComponent extends FormComponent {
     return new FormTextareaComponent(this.form, label)
   }
 
-  fillInWith({ postcode, id }) {
+  fillInWith({ postcode, id }: { postcode?: string; id?: string }) {
     if (postcode) {
       this.postcodeField.set(postcode)
     }
@@ -24,5 +24,9 @@ export default class FindAddressComponent extends FormComponent {
 
   get findAddressButton(): PageElement {
     return this.form.contains('Find address')
+  }
+
+  get manualAddressLink(): PageElement {
+    return cy.contains('a', 'Enter address manually')
   }
 }
