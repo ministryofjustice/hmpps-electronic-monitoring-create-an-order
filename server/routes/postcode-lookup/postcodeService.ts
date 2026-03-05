@@ -1,0 +1,17 @@
+import { ValidationResult } from '../../models/Validation'
+import { FindAddressData, FindAddressValidator } from './find-address/formModel'
+import { convertZodErrorToValidationError } from '../../utils/errors'
+
+export default class PostcodeService {
+  constructor() {}
+
+  validateFindAddressData = (data: FindAddressData): FindAddressData | ValidationResult => {
+    const result = FindAddressValidator.safeParse(data)
+
+    if (!result.success) {
+      return convertZodErrorToValidationError(result.error)
+    }
+
+    return data
+  }
+}
