@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import FindAddressPage from './findAddressPage'
+import paths from '../../../../../server/constants/paths'
 
 context('find address page', () => {
   context('device wearer address', () => {
@@ -26,6 +27,15 @@ context('find address page', () => {
 
       page.form.buildingIdField.shouldExist()
       page.form.buildingIdField.shouldHaveHint('For example, 15 or Prospect Cottage')
+
+      cy.contains('a', 'Enter address manually').and(
+        'have.attr',
+        'href',
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'device-wearer'),
+      )
+
+      page.form.findAddressButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
     })
   })
 })

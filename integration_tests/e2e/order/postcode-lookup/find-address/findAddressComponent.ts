@@ -1,5 +1,6 @@
 import FormComponent from '../../../../pages/components/formComponent'
 import FormTextareaComponent from '../../../../pages/components/formTextareaComponent'
+import { PageElement } from '../../../../pages/page'
 
 export default class FindAddressComponent extends FormComponent {
   get postcodeField(): FormTextareaComponent {
@@ -19,5 +20,9 @@ export default class FindAddressComponent extends FormComponent {
     if (id) {
       this.buildingIdField.set(id)
     }
+  }
+
+  get findAddressButton(): PageElement {
+    return this.form.contains('Find address')
   }
 }

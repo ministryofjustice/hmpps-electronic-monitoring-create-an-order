@@ -6,7 +6,7 @@ export default class FindAddressController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/postcode-lookup/find-address', ViewModel.construct(res.locals.content!))
+    res.render('pages/order/postcode-lookup/find-address', ViewModel.construct(req.order!, res.locals.content!))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

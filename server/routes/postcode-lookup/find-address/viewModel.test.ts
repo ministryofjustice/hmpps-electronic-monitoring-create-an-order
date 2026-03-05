@@ -1,12 +1,15 @@
+import { v4 as uuidv4 } from 'uuid'
+import paths from '../../../constants/paths'
 import getContent from '../../../i18n'
+import { Order } from '../../../models/Order'
 import ViewModel from './viewModel'
 
 describe('view model', () => {
   describe('address type is device wearer', () => {
     const content = getContent('en', 'DDV6')
+    const mockOrder = { id: uuidv4() } as Order
+    const model = ViewModel.construct(mockOrder, content)
     it('content has correct headings', () => {
-      const model = ViewModel.construct(content)
-
       expect(model.content).toEqual({
         section: 'About the device wearer',
         title: "Find the device wearer's address",
@@ -17,8 +20,6 @@ describe('view model', () => {
     })
 
     it('content has correct questions', () => {
-      const model = ViewModel.construct(content)
-
       expect(model.content.questions).toEqual({
         postcode: {
           text: 'Postcode',
@@ -29,6 +30,12 @@ describe('view model', () => {
           hint: 'For example, 15 or Prospect Cottage',
         },
       })
+    })
+
+    it('manual address link is correct', () => {
+      expect(model.manualAddressLink).toBe(
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrder.id).replace(':addressType', 'device-wearer'),
+      )
     })
   })
 })
