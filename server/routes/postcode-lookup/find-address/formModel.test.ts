@@ -1,3 +1,4 @@
+import { validationErrors } from '../../../constants/validationErrors'
 import { FindAddressValidator } from './formModel'
 
 describe('validator', () => {
@@ -15,6 +16,6 @@ describe('validator', () => {
     const result = FindAddressValidator.safeParse(data)
 
     expect(result.success).toBe(false)
-    expect(result.error?.errors[0].message).toBe('Enter the postcode')
+    expect(result.error?.errors[0].message).toBe(validationErrors.postcodeLookup.postcodeRequired)
   })
 })

@@ -4,16 +4,22 @@ import getContent from '../../../i18n'
 import { Order } from '../../../models/Order'
 import ViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
+import { validationErrors } from '../../../constants/validationErrors'
 
 describe('view model', () => {
   describe('errors', () => {
     const content = getContent('en', 'DDV6')
     const mockOrder = { id: uuidv4() } as Order
-    const mockErrors: ValidationResult = [{ error: 'Enter the postcode', field: 'postcode' }]
+    const mockErrors: ValidationResult = [
+      { error: validationErrors.postcodeLookup.postcodeRequired, field: 'postcode' },
+    ]
+
     const model = ViewModel.construct(mockOrder, content, mockErrors)
+
     it('sets error text if postcode error', () => {
-      expect(model.postcode.error?.text).toBe('Enter the postcode')
+      expect(model.postcode.error?.text).toBe(validationErrors.postcodeLookup.postcodeRequired)
     })
+
     it('error summary exists', () => {
       expect(model.errorSummary).not.toBeNull()
     })

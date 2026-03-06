@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { validationErrors } from '../../../constants/validationErrors'
 
 const FindAddressFormData = z.object({
   action: z.string(),
@@ -7,7 +8,7 @@ const FindAddressFormData = z.object({
 })
 
 export const FindAddressValidator = z.object({
-  postcode: z.string().min(1, 'Enter the postcode'),
+  postcode: z.string().min(1, validationErrors.postcodeLookup.postcodeRequired),
   id: z.string().optional(),
 })
 
