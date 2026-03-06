@@ -44,11 +44,17 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
-const getYouthStatus = (order: Order) => {
-  if (order.interestedParties?.notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
-    return 'Youth'
-  }
-  return ''
+const getYouthStatus = (order: Order): string => {
+  const { notifyingOrganisation: notifyingOrg, notifyingOrganisationName: notifyingOrgName } =
+    order.interestedParties || {}
+
+  const isYouthCustody = notifyingOrg === 'YOUTH_CUSTODY_SERVICE'
+  const isYoungOffenderInst =
+    notifyingOrg === 'PRISON' &&
+    notifyingOrgName?.endsWith('YOUNG_OFFENDER_INSTITUTION') &&
+    order.deviceWearer?.adultAtTimeOfInstallation === false
+
+  return isYouthCustody || isYoungOffenderInst ? 'Youth' : ''
 }
 
 const getIdList = (order: Order) => {

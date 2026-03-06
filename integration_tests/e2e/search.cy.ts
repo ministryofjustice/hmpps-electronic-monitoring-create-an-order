@@ -292,6 +292,71 @@ context('Search', () => {
           cy.get('.govuk-table__cell').contains('Youth').should('exist')
         })
       })
+
+      describe('when showing search results for non-YOI prison', () => {
+        const ycsMockOrder = {
+          ...mockOrder,
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'BEDFORD_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'CHESHIRE',
+            responsibleOfficerName: 'name',
+          },
+        }
+
+        it('should show correct headings', () => {
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [ycsMockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+
+          page.ordersList.contains('Youth')
+          cy.get('.govuk-table__cell').contains('Youth').should('not.exist')
+        })
+      })
+
+      describe('when showing search results for YOI prison', () => {
+        const ycsMockOrder = {
+          ...mockOrder,
+          deviceWearer: {
+            ...mockOrder.deviceWearer,
+            dateOfBirth: new Date(2010, 10, 20).toISOString(),
+            adultAtTimeOfInstallation: false,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'WERRINGTON_YOUNG_OFFENDER_INSTITUTION',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'CHESHIRE',
+            responsibleOfficerName: 'name',
+          },
+          deviceWearerResponsibleAdult: {
+            relationship: 'other',
+            otherRelationshipDetails: 'Parent',
+            fullName: 'Audrey Builder',
+            contactNumber: '07101 123 456',
+          },
+        }
+
+        it('should show correct headings', () => {
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [ycsMockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+
+          page.ordersList.contains('Youth')
+          cy.get('.govuk-table__cell').contains('Youth').should('exist')
+        })
+      })
     })
 
     context('Submitting a create order request', () => {
