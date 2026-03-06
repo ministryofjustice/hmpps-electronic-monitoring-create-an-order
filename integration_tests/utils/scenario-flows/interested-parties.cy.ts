@@ -1,4 +1,5 @@
 import InterestedPartiesCheckYourAnswersPage from '../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
+import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
 import NotifyingOrganisationPage from '../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import ProbationDeliveryUnitPage from '../../e2e/order/interested-parties/probation-delivery-unit/probationDeliveryUnitPage'
 import ResponsibleOfficerPage from '../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
@@ -27,6 +28,12 @@ export default function fillInInterestedPartiesWith({
     const responsibleOrganisationPage = Page.verifyOnPage(ResponsibleOrganisationPage)
     responsibleOrganisationPage.form.fillInWith(responsibleOrganisation)
     responsibleOrganisationPage.form.continueButton.click()
+
+    if (responsibleOrganisation.responsibleOrganisation === 'Probation') {
+      const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+      nationalSecurityDirectoratePage.form.fillInWith('No')
+      nationalSecurityDirectoratePage.form.continueButton.click()
+    }
   }
 
   if (pdu) {
