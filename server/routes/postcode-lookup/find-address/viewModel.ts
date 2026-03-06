@@ -9,7 +9,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { FindAddress, FindAddressForm } from './formModel'
 
-export type AddressType = 'device-wearer' | 'tag-at-source' | 'curfew' | 'appointment'
+export type AddressType = 'primary' | 'tag-at-source' | 'curfew' | 'appointment'
 
 type FindAddressViewModel = ViewModel<FindAddress> & {
   content: QuestionPageContent<'postcode' | 'buildingId'>
@@ -42,7 +42,7 @@ const construct = (
 
 function getContent(content: I18n, addressType: AddressType): PostcodeLookupPageContent {
   const mapping: Record<AddressType, PostcodeLookupPageContent> = {
-    'device-wearer': content.pages.deviceWearerAddress,
+    primary: content.pages.deviceWearerAddress,
     'tag-at-source': content.pages.tagAtSourceAddress,
     curfew: content.pages.curfewAddress,
     appointment: content.pages.appointmentAddress,

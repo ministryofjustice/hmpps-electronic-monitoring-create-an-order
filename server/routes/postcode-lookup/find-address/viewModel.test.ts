@@ -16,7 +16,7 @@ describe('view model', () => {
     ]
     const mockFormData = {} as FindAddressForm
 
-    const model = ViewModel.construct(mockOrder, content, mockErrors, 'device-wearer', mockFormData)
+    const model = ViewModel.construct(mockOrder, content, mockErrors, 'primary', mockFormData)
 
     it('sets error text if postcode error', () => {
       expect(model.postcode.error?.text).toBe(validationErrors.postcodeLookup.postcodeRequired)
@@ -29,7 +29,7 @@ describe('view model', () => {
     it('id has a value when one is given', () => {
       const formData = { buildingId: 'some id' } as FindAddressForm
 
-      const modelWithFormData = ViewModel.construct(mockOrder, content, mockErrors, 'device-wearer', formData)
+      const modelWithFormData = ViewModel.construct(mockOrder, content, mockErrors, 'primary', formData)
 
       expect(modelWithFormData.buildingId?.value).toBe('some id')
     })
@@ -41,14 +41,14 @@ describe('view model', () => {
     const mockErrors: ValidationResult = []
     const mockFormData = {} as FindAddressForm
 
-    const model = ViewModel.construct(mockOrder, content, mockErrors, 'device-wearer', mockFormData)
+    const model = ViewModel.construct(mockOrder, content, mockErrors, 'primary', mockFormData)
     it('content has correct headings', () => {
       expect(model.content).toEqual(content.pages.deviceWearerAddress)
     })
 
     it('manual address link is correct', () => {
       expect(model.manualAddressLink).toBe(
-        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrder.id).replace(':addressType', 'device-wearer'),
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrder.id).replace(':addressType', 'primary'),
       )
     })
   })

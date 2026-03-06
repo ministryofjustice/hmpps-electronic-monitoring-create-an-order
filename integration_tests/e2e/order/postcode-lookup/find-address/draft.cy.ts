@@ -20,7 +20,7 @@ context('find address page', () => {
 
   context('device wearer address', () => {
     it('has the correct elements', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'device-wearer' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
 
       page.form.postcodeField.shouldExist()
       page.form.postcodeField.shouldHaveHint('For example, AA3 1AB')
@@ -31,7 +31,7 @@ context('find address page', () => {
       page.form.manualAddressLink.and(
         'have.attr',
         'href',
-        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'device-wearer'),
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'primary'),
       )
 
       page.form.findAddressButton.should('exist')

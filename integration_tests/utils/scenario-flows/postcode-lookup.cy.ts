@@ -7,13 +7,17 @@ import Page from '../../pages/page'
 
 export default function fillinAddress({ findAddress }) {
   const findAddressPage = Page.verifyOnPage(FindAddressPage)
-  findAddressPage.form.fillInWith(findAddress)
-  findAddressPage.form.continueButton.click()
+  if (findAddress.postcode) {
+    findAddressPage.form.fillInWith(findAddress)
+    findAddressPage.form.findAddressButton.click()
+  } else {
+    findAddressPage.form.manualAddressLink.click()
+  }
 
-  if (findAddress === 'Search') {
+  if (findAddress.postcode) {
     const addressResultPage = Page.verifyOnPage(AddressResultPage)
     addressResultPage.form.continueButton.click()
-  } else if (findAddress === 'Manual') {
+  } else {
     const enterAddressPage = Page.verifyOnPage(EnterAddressPage)
     enterAddressPage.form.continueButton.click()
   }
