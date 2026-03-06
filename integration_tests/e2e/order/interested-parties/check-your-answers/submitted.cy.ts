@@ -82,9 +82,7 @@ context('interested parties check answers page', () => {
 
       cy.get('.govuk-details__text').contains('Use the service request portal if you have access.')
 
-      cy.get('.govuk-details__text').contains("If you don't have access:")
-      cy.get('.govuk-details__text').contains("complete the 'Responsible Officer Notification to EMS' form")
-      cy.get('.govuk-details__text').contains('email it to EMSEnforcement@ems.co.uk')
+      cy.get('.govuk-details__text').contains("If you don't have access email EMSEnforcement@ems.co.uk")
 
       cy.contains('EMSEnforcement@ems.co.uk').and('have.attr', 'href', 'mailto:EMSEnforcement@ems.co.uk')
     })
