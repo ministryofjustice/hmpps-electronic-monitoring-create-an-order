@@ -49,6 +49,9 @@ import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import responsibleOfficerPageContent from './pages/responsibleOfficer'
 import deviceWearerAddressPageContent from './pages/deviceWearerAddress'
+import tagAtSourceAddressPageContent from './pages/tagAtSourceAddress'
+import curfewAddressPageContent from './pages/curfewAddress'
+import appointmentAddressPageContent from './pages/appointmentAddress'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -101,6 +104,9 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       responsibleOrganisation: responsibleOrganisationPageContent,
       responsibleOfficer: responsibleOfficerPageContent,
       deviceWearerAddress: deviceWearerAddressPageContent,
+      tagAtSourceAddress: tagAtSourceAddressPageContent,
+      curfewAddress: curfewAddressPageContent,
+      appointmentAddress: appointmentAddressPageContent,
     },
     reference: getReferenceData(ddVersion),
   }

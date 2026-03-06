@@ -90,6 +90,9 @@ type I18n = {
     responsibleOfficer: ResponsibleOfficerPageContent
     pdu: ProbationDeliveryUnit
     deviceWearerAddress: PostcodeLookupPageContent
+    tagAtSourceAddress: PostcodeLookupPageContent
+    curfewAddress: PostcodeLookupPageContent
+    appointmentAddress: PostcodeLookupPageContent
   }
   reference: ReferenceData
 }
