@@ -1,0 +1,43 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = "Application submission failed - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "#"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">{{ section }}</span>
+      <h1 class="govuk-heading-l">This is a Special order</h1>
+
+      <p class="govuk-body">Special orders require higher security clearance must not be sent through the EMO service.</p>
+
+      <p class="govuk-body">
+        You can't continue and must:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+          <li>complete the EMS NSD CPPC SOC order from</li>
+          <li>send the completed fomr by email to <a href="mailto:emCCSpecialCase@ems.co.uk">emCCSpecialCase@ems.co.uk</a></li>
+      </ul>
+     
+
+     {{ govukButton({
+        text: "Return to form",
+        href: "/order/" + orderId + "/summary",
+        classes: "govuk-button--secondary",
+        id: "back-to-order-button"
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}

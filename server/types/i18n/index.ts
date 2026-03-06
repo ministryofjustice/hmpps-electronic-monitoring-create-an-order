@@ -38,6 +38,7 @@ import DapoClauseListPageConent from './pages/dapoClauseListPage'
 import NotifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import ResponsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import ResponsibleOfficerPageContent from './pages/responsibleOfficer'
+import NationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 
 type I18n = {
   pages: {
@@ -88,6 +89,7 @@ type I18n = {
     responsibleOrganisation: ResponsibleOrganisationPageContent
     responsibleOfficer: ResponsibleOfficerPageContent
     pdu: ProbationDeliveryUnit
+    nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
   }
   reference: ReferenceData
 }
