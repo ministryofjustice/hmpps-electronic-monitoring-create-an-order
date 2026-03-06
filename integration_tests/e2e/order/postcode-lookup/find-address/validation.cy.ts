@@ -26,5 +26,15 @@ context('find address page', () => {
       page.form.postcodeField.shouldHaveValidationMessage('Enter the postcode')
       page.errorSummary.shouldHaveError('Enter the postcode')
     })
+
+    it('still shows the building id if entered', () => {
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'device-wearer' })
+
+      page.form.fillInWith({ id: 'some id' })
+
+      page.form.findAddressButton.click()
+
+      page.form.buildingIdField.shouldHaveValue('some id')
+    })
   })
 })

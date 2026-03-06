@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import ViewModel, { AddressType } from './viewModel'
-import FindAddressFormData from './formModel'
+import FindAddressFormData, { FindAddressForm } from './formModel'
 import PostcodeService from '../postcodeService'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 
@@ -12,13 +12,12 @@ export default class FindAddressController {
     const order = req.order!
     const { addressType } = req.params
 
-    // const formData = req.flash('formData') as unknown as FindAddressData[]
+    const formData = req.flash('formData')[0] as unknown as FindAddressForm | undefined
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    res.render(
-      'pages/order/postcode-lookup/find-address',
-      ViewModel.construct(order, res.locals.content!, errors, addressType as AddressType),
-    )
+    const model = ViewModel.construct(order, res.locals.content!, errors, addressType as AddressType, formData)
+
+    res.render('pages/order/postcode-lookup/find-address', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

@@ -7,7 +7,7 @@ import PostcodeLookupPageContent from '../../../types/i18n/pages/postcodeLookup'
 import QuestionPageContent from '../../../types/i18n/pages/questionPage'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
-import { FindAddress } from './formModel'
+import { FindAddress, FindAddressForm } from './formModel'
 
 export type AddressType = 'device-wearer' | 'tag-at-source' | 'curfew' | 'appointment'
 
@@ -21,11 +21,15 @@ const construct = (
   content: I18n,
   errors: ValidationResult,
   addressType: AddressType,
+  formData: FindAddressForm | undefined,
 ): FindAddressViewModel => {
   return {
     postcode: {
-      value: '',
+      value: formData?.postcode || '',
       error: getError(errors, 'postcode'),
+    },
+    buildingId: {
+      value: formData?.buildingId || '',
     },
     content: getContent(content, addressType),
     manualAddressLink: paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', order.id).replace(
