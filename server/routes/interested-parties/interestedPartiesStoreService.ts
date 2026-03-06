@@ -46,6 +46,14 @@ export default class InterestedPartiesStoreService {
     data: Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>,
   ) {
     const interestedParties = await this.getInterestedParties(order)
+    if (data.notifyingOrganisation && interestedParties.notifyingOrganisation !== data.notifyingOrganisation) {
+      delete interestedParties.responsibleOrganisation
+      delete interestedParties.responsibleOrganisationRegion
+      delete interestedParties.responsibleOrganisationEmail
+      delete interestedParties.responsibleOfficerFirstName
+      delete interestedParties.responsibleOfficerLastName
+      delete interestedParties.responsibleOfficerEmail
+    }
 
     interestedParties.notifyingOrganisation = data.notifyingOrganisation
     interestedParties.notifyingOrganisationName = data.notifyingOrganisationName
