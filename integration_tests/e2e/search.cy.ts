@@ -259,69 +259,8 @@ context('Search', () => {
         })
       })
 
-      describe('when showing search results for YCS', () => {
-        const ycsMockOrder = {
-          ...mockOrder,
-          interestedParties: {
-            notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: 'test@test',
-            responsibleOfficerName: 'John Smith',
-            responsibleOfficerPhoneNumber: '01234567890',
-            responsibleOrganisation: 'HOME_OFFICE',
-            responsibleOrganisationEmail: 'test@test.com',
-            responsibleOrganisationRegion: '',
-          },
-        }
-
-        it('should show correct headings', () => {
-          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [ycsMockOrder] })
-          page = Page.visit(SearchPage)
-
-          page.searchBox.type('Bob Builder')
-          page.searchButton.click()
-
-          page.ordersList.contains('Name')
-          page.ordersList.contains('Date of birth')
-          page.ordersList.contains('Youth')
-          page.ordersList.contains('Personal ID number')
-          page.ordersList.contains('Start date')
-          page.ordersList.contains('End date')
-          page.ordersList.contains('Last updated')
-
-          cy.get('.govuk-table__cell').contains('Youth').should('exist')
-        })
-      })
-
-      describe('when showing search results for non-YOI prison', () => {
-        const ycsMockOrder = {
-          ...mockOrder,
-          interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'BEDFORD_PRISON',
-            notifyingOrganisationEmail: 'notifying@organisation',
-            responsibleOrganisation: 'POLICE',
-            responsibleOfficerPhoneNumber: '01234567891',
-            responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: 'CHESHIRE',
-            responsibleOfficerName: 'name',
-          },
-        }
-
-        it('should show correct headings', () => {
-          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [ycsMockOrder] })
-          page = Page.visit(SearchPage)
-
-          page.searchBox.type('Bob Builder')
-          page.searchButton.click()
-
-          page.ordersList.contains('Youth')
-          cy.get('.govuk-table__cell').contains('Youth').should('not.exist')
-        })
-      })
-
-      describe('when showing search results for YOI prison', () => {
-        const ycsMockOrder = {
+      describe('when showing search results for different organisations', () => {
+        const youthMockOrder = {
           ...mockOrder,
           deviceWearer: {
             ...mockOrder.deviceWearer,
@@ -329,14 +268,14 @@ context('Search', () => {
             adultAtTimeOfInstallation: false,
           },
           interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'WERRINGTON_YOUNG_OFFENDER_INSTITUTION',
-            notifyingOrganisationEmail: 'notifying@organisation',
-            responsibleOrganisation: 'POLICE',
-            responsibleOfficerPhoneNumber: '01234567891',
-            responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: 'CHESHIRE',
-            responsibleOfficerName: 'name',
+            notifyingOrganisation: '',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'test@test',
+            responsibleOfficerName: 'John Smith',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'HOME_OFFICE',
+            responsibleOrganisationEmail: 'test@test.com',
+            responsibleOrganisationRegion: '',
           },
           deviceWearerResponsibleAdult: {
             relationship: 'other',
@@ -346,7 +285,15 @@ context('Search', () => {
           },
         }
 
-        it('should show correct headings', () => {
+        it('should show youth status for YCS', () => {
+          const ycsMockOrder = {
+            ...youthMockOrder,
+            interestedParties: {
+              ...youthMockOrder.interestedParties,
+              notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+            },
+          }
+
           cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [ycsMockOrder] })
           page = Page.visit(SearchPage)
 
@@ -355,6 +302,44 @@ context('Search', () => {
 
           page.ordersList.contains('Youth')
           cy.get('.govuk-table__cell').contains('Youth').should('exist')
+        })
+
+        it('should show youth status for YOI prison', () => {
+          const yoiMockOrder = {
+            ...youthMockOrder,
+            interestedParties: {
+              ...youthMockOrder.interestedParties,
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'WERRINGTON_YOUNG_OFFENDER_INSTITUTION',
+            },
+          }
+
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [yoiMockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+
+          cy.get('.govuk-table__cell').contains('Youth').should('exist')
+        })
+
+        it('should not show youth status for non-YOI prison', () => {
+          const yoiMockOrder = {
+            ...youthMockOrder,
+            interestedParties: {
+              ...youthMockOrder.interestedParties,
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'BEDFORD_PRISON',
+            },
+          }
+
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [yoiMockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+
+          cy.get('.govuk-table__cell').contains('Youth').should('not.exist')
         })
       })
     })
