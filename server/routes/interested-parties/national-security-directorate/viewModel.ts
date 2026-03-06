@@ -13,7 +13,7 @@ const construct = (errors: ValidationResult): NationalSecurityDirectorateViewMod
   }
 
   return {
-    nsd: {
+    nationalSecurityDirectorate: {
       value: '',
     },
     errorSummary: null,
@@ -22,9 +22,9 @@ const construct = (errors: ValidationResult): NationalSecurityDirectorateViewMod
 
 const constructFromFormData = (errors: ValidationResult): NationalSecurityDirectorateViewModel => {
   return {
-    nsd: {
+    nationalSecurityDirectorate: {
       value: '',
-      error: getError(errors, 'nsd'),
+      error: getError(errors, 'nationalSecurityDirectorate'),
     },
     errorSummary: createGovukErrorSummary(errors),
   }

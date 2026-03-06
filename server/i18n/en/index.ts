@@ -100,7 +100,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       notifyingOrganisation: notifyingOrganisationPageContent,
       responsibleOrganisation: responsibleOrganisationPageContent,
       responsibleOfficer: responsibleOfficerPageContent,
-      nsd: nationalSecurityDirectoratePageConetent,
+      nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
     },
     reference: getReferenceData(ddVersion),
   }

@@ -89,7 +89,7 @@ type I18n = {
     responsibleOrganisation: ResponsibleOrganisationPageContent
     responsibleOfficer: ResponsibleOfficerPageContent
     pdu: ProbationDeliveryUnit
-    nsd: NationalSecurityDirectoratePageConetent
+    nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
   }
   reference: ReferenceData
 }

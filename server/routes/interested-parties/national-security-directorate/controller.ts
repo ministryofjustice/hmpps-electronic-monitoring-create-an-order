@@ -16,17 +16,17 @@ export default class NationalSecurityDirectorateController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const formData = NationalSecurityDirectorateFormModel.parse(req.body)
-    if (formData.nsd === null || formData.nsd === undefined) {
+    if (formData.nationalSecurityDirectorate === null || formData.nationalSecurityDirectorate === undefined) {
       req.flash('validationErrors', [
         {
           error: validationErrors.nationalSecurityDirectorate.nationalSecurityDirectorateRequired,
-          field: 'nsd',
-          focusTarget: 'nsd',
+          field: 'nationalSecurityDirectorate',
+          focusTarget: 'nationalSecurityDirectorate',
         },
       ])
       res.redirect(paths.INTEREST_PARTIES.NSD.replace(':orderId', order.id))
-    } else if (formData.nsd === 'YES') {
-      req.flash('SpecialOrderSection', res.locals.content?.pages.nsd.section)
+    } else if (formData.nationalSecurityDirectorate === 'YES') {
+      req.flash('SpecialOrderSection', res.locals.content?.pages.nationalSecurityDirectorate.section)
       res.redirect(paths.ORDER.SPECIAL_ORDER.replace(':orderId', order.id))
     } else {
       res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))

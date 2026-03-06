@@ -1,14 +1,14 @@
 {% extends "../../../partials/form-layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set section = content.pages.nsd.section %}
+{% set section = content.pages.nationalSecurityDirectorate.section %}
 {% set singleQuestionPage = true %}
-{% set questions = content.pages.nsd.questions %}
+{% set questions = content.pages.nationalSecurityDirectorate.questions %}
 {% set questionName = "HDC"%}
 {% block formInputs %}
     {{ govukRadios({
       classes: "govuk-radios",
-      name: "nsd",
+      name: "nationalSecurityDirectorate",
       classes: "govuk-radios--inline",
       fieldset: {
         legend: {
@@ -32,8 +32,8 @@
           disabled: not isOrderEditable
         }
       ],
-      value: nsd.value,
-      errorMessage: nsd.error
+      value: nationalSecurityDirectorate.value,
+      errorMessage: nationalSecurityDirectorate.error
     }) }}
 
 
