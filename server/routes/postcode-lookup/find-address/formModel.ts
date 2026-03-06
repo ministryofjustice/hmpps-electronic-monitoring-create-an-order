@@ -11,5 +11,6 @@ export const FindAddressValidator = z.object({
   id: z.string().optional(),
 })
 
-export type FindAddressData = z.infer<typeof FindAddressFormData>
+export type FindAddressForm = z.infer<typeof FindAddressFormData>
+export type FindAddress = z.infer<typeof FindAddressValidator>
 export default FindAddressFormData

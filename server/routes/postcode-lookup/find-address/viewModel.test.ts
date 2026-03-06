@@ -3,12 +3,26 @@ import paths from '../../../constants/paths'
 import getContent from '../../../i18n'
 import { Order } from '../../../models/Order'
 import ViewModel from './viewModel'
+import { ValidationResult } from '../../../models/Validation'
 
 describe('view model', () => {
+  describe('errors', () => {
+    const content = getContent('en', 'DDV6')
+    const mockOrder = { id: uuidv4() } as Order
+    const mockErrors: ValidationResult = [{ error: 'Enter the postcode', field: 'postcode' }]
+    const model = ViewModel.construct(mockOrder, content, mockErrors)
+    it('sets error text if postcode error', () => {
+      expect(model.postcode.error?.text).toBe('Enter the postcode')
+    })
+    it('error summary exists', () => {
+      expect(model.errorSummary).not.toBeNull()
+    })
+  })
   describe('address type is device wearer', () => {
     const content = getContent('en', 'DDV6')
     const mockOrder = { id: uuidv4() } as Order
-    const model = ViewModel.construct(mockOrder, content)
+    const mockErrors: ValidationResult = []
+    const model = ViewModel.construct(mockOrder, content, mockErrors)
     it('content has correct headings', () => {
       expect(model.content).toEqual({
         section: 'About the device wearer',
