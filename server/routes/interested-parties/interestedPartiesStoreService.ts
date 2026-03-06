@@ -7,6 +7,13 @@ export default class InterestedPartiesStoreService {
 
   private readonly FIELD_HIERARCHY: (keyof InterestedParties)[] = [
     'notifyingOrganisation',
+    'notifyingOrganisationName',
+    'notifyingOrganisationEmail',
+    'responsibleOfficerFirstName',
+    'responsibleOfficerLastName',
+    'responsibleOfficerEmail',
+    'responsibleOrganisation',
+    'responsibleOrganisationRegion',
     'responsibleOrganisationEmail',
   ]
 
@@ -45,7 +52,10 @@ export default class InterestedPartiesStoreService {
     order: Order,
     data: Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>,
   ) {
-    const interestedParties = await this.getInterestedParties(order)
+    let interestedParties = await this.getInterestedParties(order)
+    if (data.notifyingOrganisation && interestedParties.notifyingOrganisation !== data.notifyingOrganisation) {
+      interestedParties = this.getClearedData(interestedParties, 'notifyingOrganisation')
+    }
 
     interestedParties.notifyingOrganisation = data.notifyingOrganisation
     interestedParties.notifyingOrganisationName = data.notifyingOrganisationName

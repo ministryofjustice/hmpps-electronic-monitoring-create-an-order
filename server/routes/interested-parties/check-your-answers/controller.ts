@@ -28,7 +28,7 @@ export default class InterestedPartiesCheckYourAnswersController {
 
     this.checklistService.updateChecklist(
       `${order.id}-${order.versionId}`,
-      'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATION',
+      'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
     )
     if (action === 'continue') {
       if (order.status === 'SUBMITTED' || order.status === 'ERROR') {
