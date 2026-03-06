@@ -1,15 +1,32 @@
-import SingleQuestionFormComponent from '../../../../pages/components/SingleQuestionFormComponent'
-import FormRadiosComponent from '../../../../pages/components/formRadiosComponent'
+import FormComponent from '../../../../pages/components/formComponent'
+import FormTextareaComponent from '../../../../pages/components/formTextareaComponent'
+import { PageElement } from '../../../../pages/page'
 
-export default class FindAddressComponent extends SingleQuestionFormComponent {
-  get branchField(): FormRadiosComponent {
-    const label = 'WIP Find Address'
-    return new FormRadiosComponent(this.form, label, [])
+export default class FindAddressComponent extends FormComponent {
+  get postcodeField(): FormTextareaComponent {
+    const label = 'Postcode'
+    return new FormTextareaComponent(this.form, label)
   }
 
-  fillInWith(value: string) {
-    if (value) {
-      this.branchField.set(value)
+  get buildingIdField(): FormTextareaComponent {
+    const label = 'Building number or name (optional)'
+    return new FormTextareaComponent(this.form, label)
+  }
+
+  fillInWith({ postcode, id }: { postcode?: string; id?: string }) {
+    if (postcode) {
+      this.postcodeField.set(postcode)
     }
+    if (id) {
+      this.buildingIdField.set(id)
+    }
+  }
+
+  get findAddressButton(): PageElement {
+    return this.form.contains('Find address')
+  }
+
+  get manualAddressLink(): PageElement {
+    return cy.contains('a', 'Enter address manually')
   }
 }

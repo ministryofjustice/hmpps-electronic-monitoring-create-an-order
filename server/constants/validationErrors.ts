@@ -154,6 +154,9 @@ interface ValidationErrors {
   probationDeliveryUnit: {
     pduRequired: string
   }
+  postcodeLookup: {
+    postcodeRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -426,6 +429,9 @@ const validationErrors: ValidationErrors = {
   },
   probationDeliveryUnit: {
     pduRequired: "Select the Responsible Organisation's PDU",
+  },
+  postcodeLookup: {
+    postcodeRequired: 'Enter the postcode',
   },
 }
 

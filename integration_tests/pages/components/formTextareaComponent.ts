@@ -56,4 +56,8 @@ export default class FormTextareaComponent {
   shouldNotHaveValidationMessage(): void {
     this.validationMessage.should('not.exist')
   }
+
+  shouldHaveHint(message: string): void {
+    this.element.siblings('.govuk-hint').contains(message).should('exist')
+  }
 }

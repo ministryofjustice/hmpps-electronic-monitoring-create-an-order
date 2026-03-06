@@ -44,7 +44,7 @@ context('Postcode Lookup', () => {
       deviceWearerDetails,
     })
 
-    fillinAddress({ findAddress: 'Search' })
+    fillinAddress({ findAddress: { postcode: 'SA11 1AA' } })
     // TODO Check answer
   })
 
@@ -53,7 +53,7 @@ context('Postcode Lookup', () => {
       deviceWearerDetails,
     })
 
-    fillinAddress({ findAddress: 'Manual' })
+    fillinAddress({ findAddress: {} })
     // TODO Check answer
   })
 })
