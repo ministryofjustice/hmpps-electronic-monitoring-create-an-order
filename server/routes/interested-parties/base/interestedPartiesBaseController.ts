@@ -19,7 +19,7 @@ export default abstract class InterestedPartiesBaseController {
     })
 
     if (data.responsibleOrganisation === 'PROBATION') {
-      return res.redirect(paths.INTEREST_PARTIES.PDU.replace(':orderId', order.id))
+      return res.redirect(paths.INTEREST_PARTIES.NSD.replace(':orderId', order.id))
     }
     return res.redirect(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
   }
