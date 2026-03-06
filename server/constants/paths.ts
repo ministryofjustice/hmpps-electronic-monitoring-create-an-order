@@ -19,6 +19,7 @@ const paths = {
     EDIT: '/order/:orderId/edit',
     IS_REJECTION: '/order/:orderId/is-rejection',
     VARIATION: '/order/:orderId/variation',
+    SPECIAL_ORDER: '/order/:orderId/special-order',
   },
 
   INTEREST_PARTIES: {
