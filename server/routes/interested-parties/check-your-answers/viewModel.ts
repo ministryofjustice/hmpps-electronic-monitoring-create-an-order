@@ -255,20 +255,20 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
-const createContainsResponsibleOrgDetailsAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
-
-  return interestedParties.some(item => item.key?.text === "What is the Responsible Officer's organisation?")
-}
-
 const construct = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
+
+  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
+  const probationDeliveryUnit = createProbationDeliveryUnitAnswer(order, content, answerOpts)
+
   return {
-    interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
-    probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
-    containsResponsibleOrgDetails: createContainsResponsibleOrgDetailsAnswer(order, content, answerOpts),
+    interestedParties,
+    probationDeliveryUnit,
+    containsResponsibleOrgDetails: interestedParties.some(
+      item => item.key?.text === "What is the Responsible Officer's organisation?",
+    ),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
   }
 }
