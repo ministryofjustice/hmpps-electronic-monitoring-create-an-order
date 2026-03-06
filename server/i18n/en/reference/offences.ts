@@ -13,6 +13,7 @@ const offences: Offences = {
   FRAUD_OFFENCES: 'Fraud Offences',
   SUMMARY_NON_MOTORING: 'Summary Non-Motoring',
   SUMMARY_MOTORING: 'Summary motoring',
+  TERRORISM_OFFENCE: 'Terrorism offence',
   OFFENCE_NOT_RECORDED: 'Offence not recorded',
   NO_OFFENCE_COMMITTED: 'They have not committed an offence',
 }
