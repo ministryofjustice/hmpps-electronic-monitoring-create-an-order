@@ -299,6 +299,13 @@ context('Search', () => {
           page.searchBox.type('Bob Builder')
           page.searchButton.click()
 
+          cy.contains('Showing: HMP ABC').should('be.visible')
+          cy.contains('a', 'Change location').should(
+            'have.attr',
+            'href',
+            'https://digital.prison.service.justice.gov.uk/change-caseload',
+          )
+
           page.ordersList.contains('Youth')
           cy.get('.govuk-table__cell').contains('Youth').should('exist')
         })

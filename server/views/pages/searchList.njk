@@ -11,6 +11,13 @@
 </ul>
 {% endset %}
 
+{% set showYouth = false %}
+{% for order in orders %}
+  {% if order.isYouthRelatedOrg %}
+    {% set showYouth = true %}
+  {% endif %}
+{% endfor %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {{ search({
@@ -37,6 +44,15 @@
   </div>
 </div>
 
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">
+        Showing: <span class="govuk-!-font-weight-bold">{{  user.cohort.activeCaseLoad  }}</span>
+        <a href="https://digital.prison.service.justice.gov.uk/change-caseload" class="govuk-link">Change location</a>
+    </p>
+  </div>
+</div>
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
 <div id="ordersList">
@@ -82,14 +98,6 @@
     </div>
 
   {% elif orders.length > 0 %}
-
-    {% set showYouth = false %}
-    {% for order in orders %}
-      {% if order.isYouthRelatedOrg %}
-        {% set showYouth = true %}
-      {% endif %}
-    {% endfor %}
-
     {% set tableRows = [] %}
     {% for order in orders %}
 

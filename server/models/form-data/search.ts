@@ -18,7 +18,6 @@ export type OrderSearchViewModel = {
     name: string
     href: string
     dob: string
-    youth?: string
     pins: string[]
     location: string
     startDate: string
@@ -53,7 +52,7 @@ const isYouthRelatedOrg = (order: Order): boolean => {
   return !!(isYCS || isYOI)
 }
 
-export const getYouthStatus = (order: Order): string => {
+const getYouthStatus = (order: Order): string => {
   const isMinor = order.deviceWearer?.adultAtTimeOfInstallation === false
   return isYouthRelatedOrg(order) && isMinor ? 'Youth' : ''
 }
