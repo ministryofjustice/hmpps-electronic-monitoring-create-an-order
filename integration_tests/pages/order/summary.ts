@@ -49,7 +49,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   get interestedPartiesTask(): Task {
-    return new Task('About the notifying and responsible organisation')
+    return new Task('About the Notifying and Responsible Organisations')
   }
 
   get aboutTheDeviceWearerTask(): Task {
