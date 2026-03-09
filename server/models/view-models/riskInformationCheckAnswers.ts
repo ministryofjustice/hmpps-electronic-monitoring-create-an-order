@@ -17,6 +17,11 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const isNewOffenceFlow =
     isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
 
+  const firstOffence = order.offences?.[0]
+  const offencePath = firstOffence?.id
+    ? paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id).replace(':offenceId', firstOffence.id)
+    : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id)
+
   if (isNewOffenceFlow) {
     if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
       answers.push(
@@ -43,8 +48,8 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       answers.push(
         createAnswer(
           questions.offence.text,
-          lookup(content.reference.offences, order.offences[0]?.offenceType),
-          paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id),
+          lookup(content.reference.offences, firstOffence?.offenceType),
+          offencePath,
           answerOpts,
         ),
       )

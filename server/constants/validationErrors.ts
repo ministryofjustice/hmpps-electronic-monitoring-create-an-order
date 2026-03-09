@@ -154,6 +154,9 @@ interface ValidationErrors {
   probationDeliveryUnit: {
     pduRequired: string
   }
+  nationalSecurityDirectorate: {
+    nationalSecurityDirectorateRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -426,6 +429,9 @@ const validationErrors: ValidationErrors = {
   },
   probationDeliveryUnit: {
     pduRequired: "Select the Responsible Organisation's PDU",
+  },
+  nationalSecurityDirectorate: {
+    nationalSecurityDirectorateRequired: 'Select yes if the device wearer is being managed by the NSD',
   },
 }
 

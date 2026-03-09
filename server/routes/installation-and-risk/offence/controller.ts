@@ -53,6 +53,11 @@ export default class OffenceController {
     const { offenceId } = req.params
     req.body.id = offenceId
     const formData = OffenceFormModel.parse(req.body)
+    if (formData.offenceType === 'TERRORISM_OFFENCE') {
+      req.flash('SpecialOrderSection', res.locals.content!.pages.offence.section)
+      res.redirect(paths.ORDER.SPECIAL_ORDER.replace(':orderId', order.id))
+      return
+    }
     const dateRequired = this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1
     const result = await this.service.updateOffence({
       formData,

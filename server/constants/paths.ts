@@ -19,6 +19,7 @@ const paths = {
     EDIT: '/order/:orderId/edit',
     IS_REJECTION: '/order/:orderId/is-rejection',
     VARIATION: '/order/:orderId/variation',
+    SPECIAL_ORDER: '/order/:orderId/special-order',
   },
 
   INTEREST_PARTIES: {
@@ -26,6 +27,7 @@ const paths = {
     NOTIFYING_ORGANISATION: '/order/:orderId/interest-parties/notifying-organisation',
     RESPONSIBLE_OFFICER: '/order/:orderId/interest-parties/responsible-officer',
     RESPONSBILE_ORGANISATION: '/order/:orderId/interest-parties/responsible-organisation',
+    NSD: '/order/:orderId/interest-parties/national-security-directorate',
     PDU: '/order/:orderId/interest-parties/probation-delivery-unit',
     CHECK_YOUR_ANSWERS: '/order/:orderId/interest-parties/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/interest-parties/check-your-answers',
