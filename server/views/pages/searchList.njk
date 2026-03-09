@@ -11,12 +11,7 @@
 </ul>
 {% endset %}
 
-{% set showYouth = false %}
-{% for order in orders %}
-  {% if order.isYouthRelatedOrg %}
-    {% set showYouth = true %}
-  {% endif %}
-{% endfor %}
+{% set showYouth = user.cohort.cohort == 'PRISON' %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

@@ -218,7 +218,6 @@ context('Search', () => {
         it('should show correct headings', () => {
           page.ordersList.contains('Name')
           page.ordersList.contains('Date of birth')
-          page.ordersList.should('not.contain', 'Youth')
           page.ordersList.contains('Personal ID number')
           page.ordersList.contains('Start date')
           page.ordersList.contains('End date')
@@ -246,7 +245,6 @@ context('Search', () => {
           page.ordersList.contains('Start date')
           page.ordersList.contains('End date')
           page.ordersList.contains('Last updated')
-          page.ordersList.contains('Youth').should('not.exist')
         })
 
         it('should show correct order details', () => {

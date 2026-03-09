@@ -43,18 +43,14 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
-const isYouthRelatedOrg = (order: Order): boolean => {
+const getYouthStatus = (order: Order): string => {
   const { notifyingOrganisation: org, notifyingOrganisationName: orgName } = order.interestedParties || {}
 
   const isYCS = org === 'YOUTH_CUSTODY_SERVICE'
   const isYOI = org === 'PRISON' && orgName?.endsWith('YOUNG_OFFENDER_INSTITUTION')
-
-  return !!(isYCS || isYOI)
-}
-
-const getYouthStatus = (order: Order): string => {
   const isMinor = order.deviceWearer?.adultAtTimeOfInstallation === false
-  return isYouthRelatedOrg(order) && isMinor ? 'Youth' : ''
+
+  return !!(isYCS || isYOI) && isMinor ? 'Youth' : ''
 }
 
 const getIdList = (order: Order) => {
@@ -79,7 +75,6 @@ const createOrderItem = (order: Order) => {
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
     youth: getYouthStatus(order),
-    isYouthRelatedOrg: isYouthRelatedOrg(order),
     pins: getIdList(order),
     location: currentAddress?.addressLine3 ?? '',
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
